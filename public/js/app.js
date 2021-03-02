@@ -20842,7 +20842,7 @@ var _hoisted_7 = {
   "class": "max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8"
 };
 var _hoisted_8 = {
-  "class": "hidden sm:flex sm:items-center sm:ml-6"
+  "class": "hidden md:flex md:items-center md:ml-6"
 };
 var _hoisted_9 = {
   "class": "ml-3 relative"
@@ -20962,7 +20962,7 @@ var _hoisted_30 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Log Out ");
 
 var _hoisted_32 = {
-  "class": "-mr-2 flex items-center sm:hidden"
+  "class": "-mr-2 flex items-center md:hidden"
 };
 var _hoisted_33 = {
   "class": "h-6 w-6",
@@ -21385,7 +21385,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])])], 2
   /* CLASS */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_54, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_sidebar, {
-    "class": "bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5"
+    "class": "bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {

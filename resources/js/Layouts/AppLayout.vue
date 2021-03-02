@@ -19,7 +19,7 @@
               </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden md:flex md:items-center md:ml-6">
               <div class="ml-3 relative">
                 <!-- Teams Dropdown -->
                 <jet-dropdown
@@ -185,7 +185,7 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
+            <div class="-mr-2 flex items-center md:hidden">
               <button
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
@@ -350,7 +350,7 @@
 
       <div class="flex">
         <sidebar
-          class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5"
+          class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
         >
           <jet-nav-link
             :href="route('dashboard')"
