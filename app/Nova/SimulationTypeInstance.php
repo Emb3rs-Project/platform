@@ -4,6 +4,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -48,7 +49,7 @@ class SimulationTypeInstance extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'),'name'),
             
-            BelongsTo::make(__('SIMULATIONMANAGER'),'simulationManager', SimulationManager::class ),
+            HasMany::make(__('SIMULATIONMANAGERS'),'simulationManagers', SimulationManager::class ),
             BelongsTo::make(__('SIMULATIONTYPE'),'simulationType', SimulationType::class ),
             BelongsTo::make(__('UNIT'),'unit', Unit::class ),
             
