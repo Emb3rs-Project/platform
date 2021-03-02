@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Embers\LocationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -22,3 +23,8 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+
+Route::middleware(['middleware' => config('jetstream.middleware', ['web'])], function () {
+    Route::get('objects/location', [LocationController::class, 'index'])->name('objects.location.index');
+});
