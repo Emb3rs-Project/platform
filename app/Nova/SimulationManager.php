@@ -56,8 +56,8 @@ class SimulationManager extends Resource
             HasMany::make(__('SIMULATIONMANAGERGEOAREAS'),'simulationManagerGeoAreas', SimulationManagerGeoArea::class ),
             HasMany::make(__('SIMULATIONMANAGEROBJECTINSTANCES'),'simulationManagerObjectInstances', SimulationManagerObjectInstance::class ),
             HasMany::make(__('SIMULATIONCONSTRAINTINSTANCES'),'simulationConstraintInstances', SimulationConstraintInstance::class ),
-            HasMany::make(__('SIMULATIONTARGETINSTANCES'),'simulationTargetInstances', SimulationTargetInstance::class ),
-            HasMany::make(__('SIMULATIONTYPEINSTANCES'),'simulationTypeInstances', SimulationTypeInstance::class ),
+            BelongsTo::make(__('SIMULATIONTARGETINSTANCE'),'simulationTargetInstance', SimulationTargetInstance::class ),
+            BelongsTo::make(__('SIMULATIONTYPEINSTANCE'),'simulationTypeInstance', SimulationTypeInstance::class ),
             HasMany::make(__('SIMULATIONMANAGERSHARINGTYPES'),'simulationManagerSharingTypes', SimulationManagerSharingType::class ),
             
         ];

@@ -20,8 +20,8 @@ class Membership extends Resource
      *
      * @var  string
      */
-    public static $title = 'id';
-
+        public static $title = 'id';
+    
     /**
      * The columns that should be searched.
      *
@@ -45,9 +45,9 @@ class Membership extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('ROLE'), 'role'),
-
-
+            Text::make(__('ROLE'),'role'),
+            
+            
         ];
     }
 

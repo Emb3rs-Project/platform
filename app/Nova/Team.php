@@ -21,8 +21,8 @@ class Team extends Resource
      *
      * @var  string
      */
-    public static $title = 'id';
-
+        public static $title = 'id';
+    
     /**
      * The columns that should be searched.
      *
@@ -47,10 +47,10 @@ class Team extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('NAME'), 'name'),
-            Boolean::make(__('PERSONAL_TEAM'), 'personal_team'),
-
-
+            Text::make(__('NAME'),'name'),
+            Boolean::make(__('PERSONAL_TEAM'),'personal_team'),
+            
+            
         ];
     }
 
