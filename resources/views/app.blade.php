@@ -13,6 +13,9 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
+        @env('local')
+            <script src="http://localhost:{{env('MIX_LIVERELOAD')}}/livereload.js"></script>
+        @endenv
         <!-- Scripts -->
         @routes
         <script src="{{ mix('js/app.js') }}" defer></script>

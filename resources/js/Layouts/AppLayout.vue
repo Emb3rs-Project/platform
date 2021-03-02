@@ -2,10 +2,10 @@
   <div>
     <jet-banner />
 
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-white">
       <nav class="bg-white border-b border-gray-100">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-3 px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
             <div class="flex">
               <!-- Logo -->
@@ -13,6 +13,9 @@
                 <inertia-link :href="route('dashboard')">
                   <jet-application-mark class="block h-9 w-auto" />
                 </inertia-link>
+              </div>
+              <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                <slot name="header"></slot>
               </div>
             </div>
 
@@ -345,17 +348,86 @@
         </div>
       </nav>
 
-      <!-- Page Heading -->
-      <header class="bg-white shadow" v-if="$slots.header">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <slot name="header"></slot>
-        </div>
-      </header>
+      <div class="flex">
+        <sidebar
+          class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5"
+        >
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Dashboard
+          </jet-nav-link>
 
-      <!-- Page Content -->
-      <main>
-        <slot></slot>
-      </main>
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Institution
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Objects
+          </jet-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Locations
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Sources
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Sinks
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Links
+          </jet-sub-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Simulations
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Challenge
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Help
+          </jet-nav-link>
+        </sidebar>
+
+        <!-- Page Content -->
+        <main class="flex-1">
+          <slot></slot>
+        </main>
+      </div>
     </div>
   </div>
 </template>
@@ -367,6 +439,7 @@ import JetDropdown from "@/Jetstream/Dropdown";
 import JetDropdownLink from "@/Jetstream/DropdownLink";
 import JetNavLink from "@/Jetstream/NavLink";
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
+import JetSubNavLink from "@/Jetstream/SubNavLink";
 
 export default {
   components: {
@@ -376,6 +449,7 @@ export default {
     JetDropdownLink,
     JetNavLink,
     JetResponsiveNavLink,
+    JetSubNavLink,
   },
 
   data() {
