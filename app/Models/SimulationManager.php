@@ -76,19 +76,19 @@ class SimulationManager extends Model
     }
 
     /**
-     * Get the simulationTargetInstances for the simulationManager.
+     * Get the simulationTargetInstance that owns the simulationManager.
      */
-    public function simulationTargetInstances(): HasMany
+    public function simulationTargetInstance(): BelongsTo
     {
-        return $this->hasMany(SimulationTargetInstance::class);
+        return $this->belongsTo(SimulationTargetInstance::class);
     }
 
     /**
-     * Get the simulationTargetInstances for the simulationManager.
-     */
-    public function simulationTypeInstances(): HasMany
+    * Get the simulationTypeInstance that owns the simulationManager.
+    */
+    public function simulationTypeInstance(): BelongsTo
     {
-        return $this->hasMany(SimulationTypeInstance::class);
+        return $this->belongsTo(SimulationTypeInstance::class);
     }
 
     /**
