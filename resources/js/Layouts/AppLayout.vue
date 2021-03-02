@@ -228,7 +228,7 @@
             block: showingNavigationDropdown,
             hidden: !showingNavigationDropdown,
           }"
-          class="sm:hidden"
+          class="md:hidden"
         >
           <div class="pt-2 pb-3 space-y-1">
             <jet-responsive-nav-link
@@ -349,7 +349,7 @@
       </nav>
 
       <div class="flex">
-        <sidebar
+        <section
           class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
         >
           <jet-nav-link
@@ -421,7 +421,7 @@
           >
             Help
           </jet-nav-link>
-        </sidebar>
+        </section>
 
         <!-- Page Content -->
         <main class="flex-1">
