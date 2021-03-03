@@ -24,7 +24,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-
-Route::middleware(['middleware' => config('jetstream.middleware', ['web'])], function () {
-    Route::get('objects/location', [LocationController::class, 'index'])->name('objects.location.index');
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/objects/location', [LocationController::class, 'index'])->name('objects.location');
 });

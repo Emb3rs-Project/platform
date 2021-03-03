@@ -2,7 +2,7 @@
   <div>
     <jet-banner />
 
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen bg-gray-50 flex-col flex">
       <nav class="bg-white border-b border-gray-100">
         <!-- Primary Navigation Menu -->
         <div class="mx-3 px-4 sm:px-6 lg:px-8">
@@ -271,14 +271,6 @@
                 Profile
               </jet-responsive-nav-link>
 
-              <jet-responsive-nav-link
-                :href="route('api-tokens.index')"
-                :active="route().current('api-tokens.index')"
-                v-if="$page.props.jetstream.hasApiFeatures"
-              >
-                API Tokens
-              </jet-responsive-nav-link>
-
               <!-- Authentication -->
               <form method="POST" @submit.prevent="logout">
                 <jet-responsive-nav-link as="button">
@@ -348,7 +340,7 @@
         </div>
       </nav>
 
-      <div class="flex">
+      <div class="flex flex-1">
         <section
           class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
         >
@@ -374,8 +366,8 @@
           </jet-nav-link>
 
           <jet-sub-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('objects.location')"
+            :active="route().current('objects.location')"
           >
             Locations
           </jet-sub-nav-link>

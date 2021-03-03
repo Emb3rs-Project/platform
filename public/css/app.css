@@ -32718,6 +32718,10 @@ select {
           animation: bounce 1s infinite;
 }
 
+.min-h-map {
+  min-height: 10em;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
