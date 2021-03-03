@@ -10,6 +10,6 @@ class LocationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Objects/LocationIndex');
+        return Inertia::render('Objects/Locations/LocationIndex');
     }
 }

@@ -35,7 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix'=>'objects','as'=>'objects.'], function () {
-        Route::get('/location', [LocationController::class, 'index'])->name('location');
+        Route::get('/locations', [LocationController::class, 'index'])->name('locations');
         Route::get('/sources', [SourceController::class, 'index'])->name('sources');
         Route::get('/sinks', [SinkController::class, 'index'])->name('sinks');
         Route::get('/links', [LinkController::class, 'index'])->name('links');
