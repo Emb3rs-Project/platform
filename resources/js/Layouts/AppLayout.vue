@@ -2,10 +2,10 @@
   <div>
     <jet-banner />
 
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-gray-50 flex-col flex">
       <nav class="bg-white border-b border-gray-100">
         <!-- Primary Navigation Menu -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-3 px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between h-16">
             <div class="flex">
               <!-- Logo -->
@@ -14,9 +14,12 @@
                   <jet-application-mark class="block h-9 w-auto" />
                 </inertia-link>
               </div>
+              <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
+                <slot name="header"></slot>
+              </div>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden md:flex md:items-center md:ml-6">
               <div class="ml-3 relative">
                 <!-- Teams Dropdown -->
                 <jet-dropdown
@@ -182,7 +185,7 @@
             </div>
 
             <!-- Hamburger -->
-            <div class="-mr-2 flex items-center sm:hidden">
+            <div class="-mr-2 flex items-center md:hidden">
               <button
                 @click="showingNavigationDropdown = !showingNavigationDropdown"
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out"
@@ -225,7 +228,7 @@
             block: showingNavigationDropdown,
             hidden: !showingNavigationDropdown,
           }"
-          class="sm:hidden"
+          class="md:hidden"
         >
           <div class="pt-2 pb-3 space-y-1">
             <jet-responsive-nav-link
@@ -266,14 +269,6 @@
                 :active="route().current('profile.show')"
               >
                 Profile
-              </jet-responsive-nav-link>
-
-              <jet-responsive-nav-link
-                :href="route('api-tokens.index')"
-                :active="route().current('api-tokens.index')"
-                v-if="$page.props.jetstream.hasApiFeatures"
-              >
-                API Tokens
               </jet-responsive-nav-link>
 
               <!-- Authentication -->
@@ -345,17 +340,86 @@
         </div>
       </nav>
 
-      <!-- Page Heading -->
-      <header class="bg-white shadow" v-if="$slots.header">
-        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <slot name="header"></slot>
-        </div>
-      </header>
+      <div class="flex flex-1">
+        <section
+          class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
+        >
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Dashboard
+          </jet-nav-link>
 
-      <!-- Page Content -->
-      <main>
-        <slot></slot>
-      </main>
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Institution
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Objects
+          </jet-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('objects.location')"
+            :active="route().current('objects.location')"
+          >
+            Locations
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Sources
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Sinks
+          </jet-sub-nav-link>
+
+          <jet-sub-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Links
+          </jet-sub-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Simulations
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Challenge
+          </jet-nav-link>
+
+          <jet-nav-link
+            :href="route('dashboard')"
+            :active="route().current('dashboard')"
+          >
+            Help
+          </jet-nav-link>
+        </section>
+
+        <!-- Page Content -->
+        <main class="flex-1">
+          <slot></slot>
+        </main>
+      </div>
     </div>
   </div>
 </template>
@@ -367,6 +431,7 @@ import JetDropdown from "@/Jetstream/Dropdown";
 import JetDropdownLink from "@/Jetstream/DropdownLink";
 import JetNavLink from "@/Jetstream/NavLink";
 import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
+import JetSubNavLink from "@/Jetstream/SubNavLink";
 
 export default {
   components: {
@@ -376,6 +441,7 @@ export default {
     JetDropdownLink,
     JetNavLink,
     JetResponsiveNavLink,
+    JetSubNavLink,
   },
 
   data() {
