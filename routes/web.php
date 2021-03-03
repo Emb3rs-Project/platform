@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\Embers\InstitutionController;
+use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
+use App\Http\Controllers\Embers\SinkController;
+use App\Http\Controllers\Embers\SourceController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,10 +24,20 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/objects/location', [LocationController::class, 'index'])->name('objects.location');
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    // Institution
+    Route::get('/institution', [InstitutionController::class, 'index'])->name('institution');
+
+    // Objects.["locations", "sources", "sinks", "links"]
+    Route::group(['prefix'=>'objects','as'=>'objects.'], function () {
+        Route::get('/location', [LocationController::class, 'index'])->name('location');
+        Route::get('/sources', [SourceController::class, 'index'])->name('sources');
+        Route::get('/sinks', [SinkController::class, 'index'])->name('sinks');
+        Route::get('/links', [LinkController::class, 'index'])->name('links');
+    });
 });
