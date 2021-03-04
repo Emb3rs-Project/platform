@@ -51,7 +51,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix'=>'objects','as'=>'objects.'], function () {
         // Locations
-        Route::resource('/location', [LocationController::class])->names(createResourceNames('location'));
+        Route::resource('/location', LocationController::class)->names(createResourceNames('location'));
         // Sources
         Route::get('/sources', [SourceController::class, 'index'])->name('sources');
 
