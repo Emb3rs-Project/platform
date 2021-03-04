@@ -78,7 +78,6 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .leaflet-popup-close-button {
   display: none;
