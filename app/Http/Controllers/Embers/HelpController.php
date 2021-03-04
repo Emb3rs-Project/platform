@@ -10,6 +10,6 @@ class HelpController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Help');
+        return Inertia::render('Help/HelpIndex');
     }
 }

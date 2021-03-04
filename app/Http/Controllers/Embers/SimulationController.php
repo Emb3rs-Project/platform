@@ -10,6 +10,6 @@ class SimulationController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Simulations');
+        return Inertia::render('Simulations/SimulationIndex');
     }
 }
