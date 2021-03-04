@@ -17,10 +17,20 @@
           Location Name
         </input-row>
 
-        <input-row desc="Choose how you want to define your Location">
+        <input-row
+          desc="Choose how you want to define your Location"
+          class="mt-10"
+        >
           What type of location?
         </input-row>
+
+        <input-row desc="Description" class="mt-10"> Label </input-row>
+        <input-row desc="Description" class="mt-10"> Label </input-row>
+        <input-row desc="Description" class="mt-10"> Label </input-row>
+        <input-row desc="Description" class="mt-10"> Label </input-row>
+        <input-row desc="Description" class="mt-10"> Label </input-row>
       </div>
+
       <div class="w-6/12">
         <leaflet-map></leaflet-map>
       </div>
