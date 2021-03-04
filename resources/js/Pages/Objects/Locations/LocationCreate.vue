@@ -5,21 +5,26 @@
         Objects | Locations
       </h2>
     </template>
-    <div class="grid grid-col-2">
-      <div>
-        <h2>New Location</h2>
+    <div class="p-5">
+      <h1 class="text-lg font-bold">New Location</h1>
+    </div>
+    <div class="flex p-5">
+      <div class="flex w-6/12"></div>
+      <div class="flex w-6/12">
+        <leaflet-map></leaflet-map>
       </div>
-      <div></div>
     </div>
   </app-layout>
 </template>
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import LeafletMap from "@/Components/LeafletMap";
 
 export default {
   components: {
     AppLayout,
+    LeafletMap,
   },
 };
 </script>

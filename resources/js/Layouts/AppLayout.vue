@@ -286,7 +286,7 @@
               :href="route('dashboard')"
               :active="route().current('dashboard')"
             >
-              Simulations
+              Projects
             </jet-responsive-nav-link>
 
             <jet-responsive-nav-link
@@ -467,7 +467,7 @@
             :href="route('simulations.index')"
             :active="route().current('simulations.index')"
           >
-            Simulations
+            Projects
           </jet-nav-link>
 
           <jet-nav-link
