@@ -21353,7 +21353,7 @@ var _hoisted_61 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(
 );
 
 var _hoisted_62 = {
-  "class": "flex flex-1 w-100vw"
+  "class": "flex flex-1"
 };
 var _hoisted_63 = {
   "class": "bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
