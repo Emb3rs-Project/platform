@@ -9,8 +9,19 @@
       <h1 class="text-lg font-bold">New Location</h1>
     </div>
     <div class="flex p-5">
-      <div class="flex w-6/12"></div>
-      <div class="flex w-6/12">
+      <div class="w-6/12">
+        <input-row
+          heading="Details | Location"
+          desc="Enter a name for your location"
+        >
+          Location Name
+        </input-row>
+
+        <input-row desc="Choose how you want to define your Location">
+          What type of location?
+        </input-row>
+      </div>
+      <div class="w-6/12">
         <leaflet-map></leaflet-map>
       </div>
     </div>
@@ -20,11 +31,13 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
+import InputRow from "@/Components/InputRow";
 
 export default {
   components: {
     AppLayout,
     LeafletMap,
+    InputRow,
   },
 };
 </script>
