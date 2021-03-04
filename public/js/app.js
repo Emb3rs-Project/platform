@@ -21583,8 +21583,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_responsive_nav_link, {
-    href: _ctx.route('institution'),
-    active: _ctx.route().current('institution')
+    href: _ctx.route('institution.index'),
+    active: _ctx.route().current('institution.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_36];
@@ -21619,8 +21619,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.sources'),
-    active: _ctx.route().current('objects.sources')
+    href: _ctx.route('objects.sources.index'),
+    active: _ctx.route().current('objects.sources.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_39];
@@ -21631,8 +21631,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.sinks'),
-    active: _ctx.route().current('objects.sinks')
+    href: _ctx.route('objects.sinks.index'),
+    active: _ctx.route().current('objects.sinks.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_40];
@@ -21643,8 +21643,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.links'),
-    active: _ctx.route().current('objects.links')
+    href: _ctx.route('objects.links.index'),
+    active: _ctx.route().current('objects.links.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_41];
@@ -21795,8 +21795,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
-    href: _ctx.route('institution'),
-    active: _ctx.route().current('institution')
+    href: _ctx.route('institution.index'),
+    active: _ctx.route().current('institution.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_65];
@@ -21808,7 +21808,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
     href: _ctx.route('objects.locations.index'),
-    active: _ctx.route().current('objects.locations.index') || _ctx.route().current('objects.sources') || _ctx.route().current('objects.sinks') || _ctx.route().current('objects.links')
+    active: _ctx.route().current('objects.locations.index') || _ctx.route().current('objects.sources.index') || _ctx.route().current('objects.sinks.index') || _ctx.route().current('objects.links.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_66];
@@ -21831,8 +21831,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.sources'),
-    active: _ctx.route().current('objects.sources')
+    href: _ctx.route('objects.sources.index'),
+    active: _ctx.route().current('objects.sources.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_68];
@@ -21843,8 +21843,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.sinks'),
-    active: _ctx.route().current('objects.sinks')
+    href: _ctx.route('objects.sinks.index'),
+    active: _ctx.route().current('objects.sinks.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_69];
@@ -21855,8 +21855,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_sub_nav_link, {
-    href: _ctx.route('objects.links'),
-    active: _ctx.route().current('objects.links')
+    href: _ctx.route('objects.links.index'),
+    active: _ctx.route().current('objects.links.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_70];
@@ -21867,8 +21867,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
-    href: _ctx.route('simulations'),
-    active: _ctx.route().current('simulations')
+    href: _ctx.route('simulations.index'),
+    active: _ctx.route().current('simulations.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_71];
@@ -21879,8 +21879,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
-    href: _ctx.route('challenge'),
-    active: _ctx.route().current('challenge')
+    href: _ctx.route('challenge.index'),
+    active: _ctx.route().current('challenge.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_72];
@@ -21891,8 +21891,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["href", "active"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_jet_nav_link, {
-    href: _ctx.route('help'),
-    active: _ctx.route().current('help')
+    href: _ctx.route('help.index'),
+    active: _ctx.route().current('help.index')
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [_hoisted_73];

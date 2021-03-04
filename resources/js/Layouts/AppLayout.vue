@@ -241,8 +241,8 @@
             </jet-responsive-nav-link>
 
             <jet-responsive-nav-link
-              :href="route('institution')"
-              :active="route().current('institution')"
+              :href="route('institution.index')"
+              :active="route().current('institution.index')"
             >
               Institution
             </jet-responsive-nav-link>
@@ -262,22 +262,22 @@
             </jet-sub-nav-link>
 
             <jet-sub-nav-link
-              :href="route('objects.sources')"
-              :active="route().current('objects.sources')"
+              :href="route('objects.sources.index')"
+              :active="route().current('objects.sources.index')"
             >
               Sources
             </jet-sub-nav-link>
 
             <jet-sub-nav-link
-              :href="route('objects.sinks')"
-              :active="route().current('objects.sinks')"
+              :href="route('objects.sinks.index')"
+              :active="route().current('objects.sinks.index')"
             >
               Sinks
             </jet-sub-nav-link>
 
             <jet-sub-nav-link
-              :href="route('objects.links')"
-              :active="route().current('objects.links')"
+              :href="route('objects.links.index')"
+              :active="route().current('objects.links.index')"
             >
               Links
             </jet-sub-nav-link>
@@ -405,7 +405,7 @@
         </div>
       </nav>
 
-      <div class="flex flex-1 w-100vw">
+      <div class="flex flex-1">
         <section
           class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
         >
@@ -417,8 +417,8 @@
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('institution')"
-            :active="route().current('institution')"
+            :href="route('institution.index')"
+            :active="route().current('institution.index')"
           >
             Institution
           </jet-nav-link>
@@ -427,9 +427,9 @@
             :href="route('objects.locations.index')"
             :active="
               route().current('objects.locations.index') ||
-              route().current('objects.sources') ||
-              route().current('objects.sinks') ||
-              route().current('objects.links')
+              route().current('objects.sources.index') ||
+              route().current('objects.sinks.index') ||
+              route().current('objects.links.index')
             "
           >
             Objects
@@ -443,41 +443,44 @@
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('objects.sources')"
-            :active="route().current('objects.sources')"
+            :href="route('objects.sources.index')"
+            :active="route().current('objects.sources.index')"
           >
             Sources
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('objects.sinks')"
-            :active="route().current('objects.sinks')"
+            :href="route('objects.sinks.index')"
+            :active="route().current('objects.sinks.index')"
           >
             Sinks
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('objects.links')"
-            :active="route().current('objects.links')"
+            :href="route('objects.links.index')"
+            :active="route().current('objects.links.index')"
           >
             Links
           </jet-sub-nav-link>
 
           <jet-nav-link
-            :href="route('simulations')"
-            :active="route().current('simulations')"
+            :href="route('simulations.index')"
+            :active="route().current('simulations.index')"
           >
             Simulations
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('challenge')"
-            :active="route().current('challenge')"
+            :href="route('challenge.index')"
+            :active="route().current('challenge.index')"
           >
             Challenge
           </jet-nav-link>
 
-          <jet-nav-link :href="route('help')" :active="route().current('help')">
+          <jet-nav-link
+            :href="route('help.index')"
+            :active="route().current('help.index')"
+          >
             Help
           </jet-nav-link>
         </section>

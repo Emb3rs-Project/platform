@@ -46,28 +46,32 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Institution
-    Route::get('/institution', [InstitutionController::class, 'index'])->name('institution');
+    Route::resource('/institution', InstitutionController::class)->names(createResourceNames('institution'));
 
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix'=>'objects','as'=>'objects.'], function () {
         // Locations
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
+
         // Sources
-        Route::get('/sources', [SourceController::class, 'index'])->name('sources');
+        // Route::get('/sources', [SourceController::class, 'index'])->name('sources');
+        Route::resource('/sources', SourceController::class)->names(createResourceNames('sources'));
 
         // Sinks
-        Route::get('/sinks', [SinkController::class, 'index'])->name('sinks');
+        // Route::get('/sinks', [SinkController::class, 'index'])->name('sinks');
+        Route::resource('/sinks', SinkController::class)->names(createResourceNames('sinks'));
 
         // Links
-        Route::get('/links', [LinkController::class, 'index'])->name('links');
+        // Route::get('/links', [LinkController::class, 'index'])->name('links');
+        Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
     });
 
     // Simulations
-    Route::get('/simulations', [SimulationController::class, 'index'])->name('simulations');
+    Route::resource('/simulations', SimulationController::class)->names(createResourceNames('simulations'));
 
     // Challenge
-    Route::get('/chalenge', [ChallengeController::class, 'index'])->name('challenge');
+    Route::resource('/chalenge', ChallengeController::class)->names(createResourceNames('challenge'));
 
     // Help
-    Route::get('/help', [HelpController::class, 'index'])->name('help');
+    Route::resource('/help', HelpController::class)->names(createResourceNames('help'));
 });
