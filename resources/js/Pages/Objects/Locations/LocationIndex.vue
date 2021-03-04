@@ -11,16 +11,22 @@
                 style="height: 70vh"
             ></div>
         </div>
+        <jet-button @click="create()">
+            Create new Location
+        </jet-button>
     </app-layout>
 </template>
 
 <script>
 import L from "leaflet";
+import { Inertia } from '@inertiajs/inertia'
 import AppLayout from "@/Layouts/AppLayout";
+import JetButton from "@/Jetstream/Button";
 
 export default {
     components: {
         AppLayout,
+        JetButton
     },
     data() {
         return {};
@@ -68,6 +74,11 @@ export default {
             markers.push(marker);
         });
     },
+    methods: {
+        create() {
+            this.$inertia.get(route('objects.locations.create'));
+        }
+    }
 };
 </script>
 
