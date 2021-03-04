@@ -17,13 +17,9 @@
       <div id="map" style="height: 70vh"></div>
     </div>
     <div class="w-full my-5 px-10 flex justify-end">
-      <inertia-link
-        as="button"
-        :href="route('register')"
-        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
-      >
+      <jet-link-button path="objects.locations.create">
         Create New Location
-      </inertia-link>
+      </jet-link-button>
     </div>
   </app-layout>
 </template>
@@ -32,15 +28,15 @@
 import L from "leaflet";
 import AppLayout from "@/Layouts/AppLayout";
 import JetInput from "@/Jetstream/Input";
+import JetLinkButton from "@/Jetstream/LinkButton";
 import JetLabel from "@/Jetstream/Label";
-import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 
 export default {
   components: {
     AppLayout,
-    JetResponsiveNavLink,
     JetInput,
     JetLabel,
+    JetLinkButton,
   },
   data() {
     return {
@@ -92,11 +88,7 @@ export default {
       markers.push(marker);
     });
   },
-  methods: {
-    create() {
-      this.$inertia.get(route("objects.locations.create"));
-    },
-  },
+  methods: {},
 };
 </script>
 
