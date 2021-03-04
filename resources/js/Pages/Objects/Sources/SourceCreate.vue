@@ -2,26 +2,26 @@
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Objects | Locations
+        Objects | Sources
       </h2>
     </template>
     <div class="p-5">
-      <h1 class="text-lg font-bold">New Location</h1>
+      <h1 class="text-lg font-bold">New Source</h1>
     </div>
     <div class="flex p-5">
       <div class="w-6/12">
         <input-row
-          heading="Details | Location"
-          desc="Enter a name for your location"
+          heading="Details | Source"
+          desc="Enter a name for your source"
         >
-          Location Name
+          Source Name
         </input-row>
 
         <input-row
-          desc="Choose how you want to define your Location"
+          desc="Choose how you want to define your Source"
           class="mt-10"
         >
-          What type of location?
+          What type of Source?
         </input-row>
 
         <input-row desc="Description" class="mt-10"> Label </input-row>

@@ -25,7 +25,7 @@ class SinkController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Objects/Sinks/SinkCreate');
     }
 
     /**

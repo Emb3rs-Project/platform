@@ -2,26 +2,20 @@
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Objects | Locations
+        Objects | Sink
       </h2>
     </template>
     <div class="p-5">
-      <h1 class="text-lg font-bold">New Location</h1>
+      <h1 class="text-lg font-bold">New Sink</h1>
     </div>
     <div class="flex p-5">
       <div class="w-6/12">
-        <input-row
-          heading="Details | Location"
-          desc="Enter a name for your location"
-        >
-          Location Name
+        <input-row heading="Details | Sink" desc="Enter a name for your sink">
+          Sink Name
         </input-row>
 
-        <input-row
-          desc="Choose how you want to define your Location"
-          class="mt-10"
-        >
-          What type of location?
+        <input-row desc="Choose how you want to define your Sink" class="mt-10">
+          What type of Sink?
         </input-row>
 
         <input-row desc="Description" class="mt-10"> Label </input-row>
@@ -36,7 +30,7 @@
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
-      <jet-link-button path="objects.sources.create"> Create </jet-link-button>
+      <jet-link-button path="objects.sinks.create"> Create </jet-link-button>
     </div>
   </app-layout>
 </template>
