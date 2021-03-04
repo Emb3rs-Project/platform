@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import L from "leaflet";
 import AppLayout from "@/Layouts/AppLayout";
 import JetInput from "@/Jetstream/Input";
 import JetLinkButton from "@/Jetstream/LinkButton";

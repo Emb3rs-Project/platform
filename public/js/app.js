@@ -17298,18 +17298,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
+/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
-    var map = L.map("map").setView([51.505, -0.09], 13);
+    var map = leaflet__WEBPACK_IMPORTED_MODULE_0___default().map("map").setView([51.505, -0.09], 13);
     map.doubleClickZoom.disable();
-    var popup = L.popup();
-    var fontAwesomeIcon = L.divIcon({
+    var popup = leaflet__WEBPACK_IMPORTED_MODULE_0___default().popup();
+    var fontAwesomeIcon = leaflet__WEBPACK_IMPORTED_MODULE_0___default().divIcon({
       html: '<i class="fas fa-circle fa-2x"><b>S</b></i>',
       iconSize: [20, 20],
       className: "sourceIcon",
       iconAnchor: [10, 20]
     });
-    L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    leaflet__WEBPACK_IMPORTED_MODULE_0___default().tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       maxZoom: 18,
       id: "mapbox/streets-v11",
@@ -17319,7 +17322,7 @@ __webpack_require__.r(__webpack_exports__);
     }).addTo(map);
     var markers = [];
     map.on("dblclick", function (e) {
-      var marker = L.marker(e.latlng, {
+      var marker = leaflet__WEBPACK_IMPORTED_MODULE_0___default().marker(e.latlng, {
         draggable: true,
         icon: fontAwesomeIcon
       }).addTo(map);
@@ -18824,14 +18827,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! leaflet */ "./node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
-/* harmony import */ var _Jetstream_Input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Jetstream/Input */ "./resources/js/Jetstream/Input.vue");
-/* harmony import */ var _Jetstream_LinkButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/LinkButton */ "./resources/js/Jetstream/LinkButton.vue");
-/* harmony import */ var _Jetstream_Label__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Jetstream/Label */ "./resources/js/Jetstream/Label.vue");
-/* harmony import */ var _Components_LeafletMap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/LeafletMap */ "./resources/js/Components/LeafletMap.vue");
-
+/* harmony import */ var _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout */ "./resources/js/Layouts/AppLayout.vue");
+/* harmony import */ var _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Jetstream/Input */ "./resources/js/Jetstream/Input.vue");
+/* harmony import */ var _Jetstream_LinkButton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Jetstream/LinkButton */ "./resources/js/Jetstream/LinkButton.vue");
+/* harmony import */ var _Jetstream_Label__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Jetstream/Label */ "./resources/js/Jetstream/Label.vue");
+/* harmony import */ var _Components_LeafletMap__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/LeafletMap */ "./resources/js/Components/LeafletMap.vue");
 
 
 
@@ -18839,11 +18839,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_1__.default,
-    JetInput: _Jetstream_Input__WEBPACK_IMPORTED_MODULE_2__.default,
-    JetLabel: _Jetstream_Label__WEBPACK_IMPORTED_MODULE_4__.default,
-    JetLinkButton: _Jetstream_LinkButton__WEBPACK_IMPORTED_MODULE_3__.default,
-    LeafletMap: _Components_LeafletMap__WEBPACK_IMPORTED_MODULE_5__.default
+    AppLayout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__.default,
+    JetInput: _Jetstream_Input__WEBPACK_IMPORTED_MODULE_1__.default,
+    JetLabel: _Jetstream_Label__WEBPACK_IMPORTED_MODULE_3__.default,
+    JetLinkButton: _Jetstream_LinkButton__WEBPACK_IMPORTED_MODULE_2__.default,
+    LeafletMap: _Components_LeafletMap__WEBPACK_IMPORTED_MODULE_4__.default
   },
   data: function data() {
     return {
