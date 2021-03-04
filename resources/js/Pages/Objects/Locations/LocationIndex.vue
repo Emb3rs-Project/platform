@@ -5,25 +5,47 @@
         Objects | Locations
       </h2>
     </template>
-    <div class="max-w-2xl w-full mx-auto min-h-map">
+
+    <div class="w-full my-5 px-10 flex justify-end">
+      <input
+        class="border rounded-full bg-gray-200 border-gray-200 outline-none pl-5 leading-3"
+        placeholder="search..."
+      />
+    </div>
+
+    <div class="w-full px-10 min-h-map">
       <div id="map" style="height: 70vh"></div>
     </div>
-    <jet-button @click="create()"> Create new Location </jet-button>
+    <div class="w-full my-5 px-10 flex justify-end">
+      <inertia-link
+        as="button"
+        :href="route('register')"
+        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
+      >
+        Create New Location
+      </inertia-link>
+    </div>
   </app-layout>
 </template>
 
 <script>
 import L from "leaflet";
 import AppLayout from "@/Layouts/AppLayout";
-import JetButton from "@/Jetstream/Button";
+import JetInput from "@/Jetstream/Input";
+import JetLabel from "@/Jetstream/Label";
+import JetResponsiveNavLink from "@/Jetstream/ResponsiveNavLink";
 
 export default {
   components: {
     AppLayout,
-    JetButton,
+    JetResponsiveNavLink,
+    JetInput,
+    JetLabel,
   },
   data() {
-    return {};
+    return {
+      search: "",
+    };
   },
   mounted() {
     const map = L.map("map").setView([51.505, -0.09], 13);

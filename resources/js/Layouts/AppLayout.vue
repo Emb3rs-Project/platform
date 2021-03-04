@@ -405,7 +405,7 @@
         </div>
       </nav>
 
-      <div class="flex flex-1">
+      <div class="flex flex-1 w-100vw">
         <section
           class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
         >

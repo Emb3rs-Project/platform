@@ -32722,6 +32722,14 @@ select {
   min-height: 10em;
 }
 
+.w-100vw {
+  width: 100vw;
+}
+
+.max-w-100vw {
+  max-width: 100vw;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
