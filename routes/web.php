@@ -24,6 +24,19 @@ use Inertia\Inertia;
 |
 */
 
+function createResourceNames($prefix)
+{
+    return [
+        'index' => "$prefix.index",
+        'create' => "$prefix.create",
+        'store' => "$prefix.store",
+        'show' => "$prefix.show",
+        'edit' => "$prefix.edit",
+        'update' => "$prefix.update",
+        'destroy' => "$prefix.destroy"
+    ];
+}
+
 Route::get('/', function () {
     return redirect('/login');
 });
@@ -38,10 +51,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix'=>'objects','as'=>'objects.'], function () {
         // Locations
-        Route::get('/locations', [LocationController::class, 'index'])->name('locations');
-        Route::get('/locations/create', [LocationController::class, 'create'])->name('locations.create');
-        Route::post('/locations', [LocationController::class, 'store'])->name('locations.store');
-
+        Route::resource('/location', [LocationController::class])->names(createResourceNames('location'));
         // Sources
         Route::get('/sources', [SourceController::class, 'index'])->name('sources');
 
