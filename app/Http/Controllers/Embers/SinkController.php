@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class LocationController extends Controller
+class SinkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +15,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Objects/Locations/LocationIndex');
+        return Inertia::render('Objects/Sinks/SinkIndex');
     }
 
     /**
@@ -25,7 +25,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Objects/Locations/LocationCreate');
+        return Inertia::render('Objects/Sinks/SinkCreate');
     }
 
     /**

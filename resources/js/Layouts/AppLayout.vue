@@ -105,7 +105,9 @@
                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                                   ></path>
                                 </svg>
-                                <div>{{ team.name }}</div>
+                                <div>
+                                  {{ team.name }}
+                                </div>
                               </div>
                             </jet-dropdown-link>
                           </form>
@@ -237,6 +239,69 @@
             >
               Dashboard
             </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('institution.index')"
+              :active="route().current('institution.index')"
+            >
+              Institution
+            </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('dashboard')"
+              :active="route().current('dashboard')"
+            >
+              Objects
+            </jet-responsive-nav-link>
+
+            <jet-sub-nav-link
+              :href="route('objects.locations.index')"
+              :active="route().current('objects.locations.index')"
+            >
+              Locations
+            </jet-sub-nav-link>
+
+            <jet-sub-nav-link
+              :href="route('objects.sources.index')"
+              :active="route().current('objects.sources.index')"
+            >
+              Sources
+            </jet-sub-nav-link>
+
+            <jet-sub-nav-link
+              :href="route('objects.sinks.index')"
+              :active="route().current('objects.sinks.index')"
+            >
+              Sinks
+            </jet-sub-nav-link>
+
+            <jet-sub-nav-link
+              :href="route('objects.links.index')"
+              :active="route().current('objects.links.index')"
+            >
+              Links
+            </jet-sub-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('dashboard')"
+              :active="route().current('dashboard')"
+            >
+              Projects
+            </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('dashboard')"
+              :active="route().current('dashboard')"
+            >
+              Challenge
+            </jet-responsive-nav-link>
+
+            <jet-responsive-nav-link
+              :href="route('dashboard')"
+              :active="route().current('dashboard')"
+            >
+              Help
+            </jet-responsive-nav-link>
           </div>
 
           <!-- Responsive Settings Options -->
@@ -352,64 +417,69 @@
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('institution.index')"
+            :active="route().current('institution.index')"
           >
             Institution
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('objects.locations.index')"
+            :active="
+              route().current('objects.locations.index') ||
+              route().current('objects.sources.index') ||
+              route().current('objects.sinks.index') ||
+              route().current('objects.links.index')
+            "
           >
             Objects
           </jet-nav-link>
 
           <jet-sub-nav-link
-            :href="route('objects.location')"
-            :active="route().current('objects.location')"
+            :href="route('objects.locations.index')"
+            :active="route().current('objects.locations.index')"
           >
             Locations
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('objects.sources.index')"
+            :active="route().current('objects.sources.index')"
           >
             Sources
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('objects.sinks.index')"
+            :active="route().current('objects.sinks.index')"
           >
             Sinks
           </jet-sub-nav-link>
 
           <jet-sub-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('objects.links.index')"
+            :active="route().current('objects.links.index')"
           >
             Links
           </jet-sub-nav-link>
 
           <jet-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('simulations.index')"
+            :active="route().current('simulations.index')"
           >
-            Simulations
+            Projects
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('challenge.index')"
+            :active="route().current('challenge.index')"
           >
             Challenge
           </jet-nav-link>
 
           <jet-nav-link
-            :href="route('dashboard')"
-            :active="route().current('dashboard')"
+            :href="route('help.index')"
+            :active="route().current('help.index')"
           >
             Help
           </jet-nav-link>

@@ -1,31 +1,18 @@
 <template>
-  <app-layout>
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Dashboard teste 4
-      </h2>
-    </template>
-    <div class="max-w-2xl w-full mx-auto min-h-map">
-      <div id="map" style="height: 70vh"></div>
-    </div>
-  </app-layout>
+  <div class="w-full px-10 min-h-map">
+    <div id="map" style="height: 70vh"></div>
+  </div>
 </template>
 
 <script>
 import L from "leaflet";
-import AppLayout from "@/Layouts/AppLayout";
 
 export default {
-  components: {
-    AppLayout,
-  },
-  data() {
-    return {};
-  },
   mounted() {
-    var map = L.map("map").setView([51.505, -0.09], 13);
+    const map = L.map("map").setView([51.505, -0.09], 13);
     map.doubleClickZoom.disable();
-    var popup = L.popup();
+
+    const popup = L.popup();
 
     const fontAwesomeIcon = L.divIcon({
       html: '<i class="fas fa-circle fa-2x"><b>S</b></i>',
@@ -51,22 +38,23 @@ export default {
     const markers = [];
 
     map.on("dblclick", (e) => {
-      var marker = L.marker(e.latlng, {
+      const marker = L.marker(e.latlng, {
         draggable: true,
         icon: fontAwesomeIcon,
       }).addTo(map);
+
       marker.on("move", (e) => {
         popup
           .setLatLng(e.latlng)
           .setContent("Moving to " + e.latlng.toString())
           .openOn(map);
       });
+
       markers.push(marker);
     });
   },
 };
 </script>
-
 
 <style>
 .leaflet-popup-close-button {
