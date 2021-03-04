@@ -12,4 +12,14 @@ class LocationController extends Controller
     {
         return Inertia::render('Objects/Locations/LocationIndex');
     }
+
+    public function create()
+    {
+        return Inertia::render('Objects/Locations/LocationCreate');
+    }
+
+    public function store(Request $request)
+    {
+        var_dump($request);
+    }
 }

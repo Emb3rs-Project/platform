@@ -11,14 +11,10 @@
                             <!-- Logo -->
                             <div class="flex-shrink-0 flex items-center">
                                 <inertia-link :href="route('dashboard')">
-                                    <jet-application-mark
-                                        class="block h-9 w-auto"
-                                    />
+                                    <jet-application-mark class="block h-9 w-auto" />
                                 </inertia-link>
                             </div>
-                            <div
-                                class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8"
-                            >
+                            <div class="max-w-7xl mx-auto py-5 px-4 sm:px-6 lg:px-8">
                                 <slot name="header"></slot>
                             </div>
                         </div>
@@ -61,28 +57,22 @@
                                     <template #content>
                                         <div class="w-60">
                                             <!-- Team Management -->
-                                            <template
-                                                v-if="
+                                            <template v-if="
                                                     $page.props.jetstream
                                                         .hasTeamFeatures
-                                                "
-                                            >
-                                                <div
-                                                    class="block px-4 py-2 text-xs text-gray-400"
-                                                >
+                                                ">
+                                                <div class="block px-4 py-2 text-xs text-gray-400">
                                                     Manage Team
                                                 </div>
 
                                                 <!-- Team Settings -->
-                                                <jet-dropdown-link
-                                                    :href="
+                                                <jet-dropdown-link :href="
                                                         route(
                                                             'teams.show',
                                                             $page.props.user
                                                                 .current_team
                                                         )
-                                                    "
-                                                >
+                                                    ">
                                                     Team Settings
                                                 </jet-dropdown-link>
 
@@ -98,14 +88,10 @@
                                                     Create New Team
                                                 </jet-dropdown-link>
 
-                                                <div
-                                                    class="border-t border-gray-100"
-                                                ></div>
+                                                <div class="border-t border-gray-100"></div>
 
                                                 <!-- Team Switcher -->
-                                                <div
-                                                    class="block px-4 py-2 text-xs text-gray-400"
-                                                >
+                                                <div class="block px-4 py-2 text-xs text-gray-400">
                                                     Switch Teams
                                                 </div>
 
@@ -114,17 +100,11 @@
                                                         .user.all_teams"
                                                     :key="team.id"
                                                 >
-                                                    <form
-                                                        @submit.prevent="
+                                                    <form @submit.prevent="
                                                             switchToTeam(team)
-                                                        "
-                                                    >
-                                                        <jet-dropdown-link
-                                                            as="button"
-                                                        >
-                                                            <div
-                                                                class="flex items-center"
-                                                            >
+                                                        ">
+                                                        <jet-dropdown-link as="button">
+                                                            <div class="flex items-center">
                                                                 <svg
                                                                     v-if="
                                                                         team.id ==
@@ -141,9 +121,7 @@
                                                                     stroke="currentColor"
                                                                     viewBox="0 0 24 24"
                                                                 >
-                                                                    <path
-                                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                                    ></path>
+                                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                                 </svg>
                                                                 <div>
                                                                     {{
@@ -162,7 +140,10 @@
 
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
-                                <jet-dropdown align="right" width="48">
+                                <jet-dropdown
+                                    align="right"
+                                    width="48"
+                                >
                                     <template #trigger>
                                         <button
                                             v-if="
@@ -209,15 +190,11 @@
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div
-                                            class="block px-4 py-2 text-xs text-gray-400"
-                                        >
+                                        <div class="block px-4 py-2 text-xs text-gray-400">
                                             Manage Account
                                         </div>
 
-                                        <jet-dropdown-link
-                                            :href="route('profile.show')"
-                                        >
+                                        <jet-dropdown-link :href="route('profile.show')">
                                             Profile
                                         </jet-dropdown-link>
 
@@ -231,9 +208,7 @@
                                             API Tokens
                                         </jet-dropdown-link>
 
-                                        <div
-                                            class="border-t border-gray-100"
-                                        ></div>
+                                        <div class="border-t border-gray-100"></div>
 
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
@@ -383,9 +358,7 @@
                             </div>
 
                             <div>
-                                <div
-                                    class="font-medium text-base text-gray-800"
-                                >
+                                <div class="font-medium text-base text-gray-800">
                                     {{ $page.props.user.name }}
                                 </div>
                                 <div class="font-medium text-sm text-gray-500">
@@ -403,21 +376,20 @@
                             </jet-responsive-nav-link>
 
                             <!-- Authentication -->
-                            <form method="POST" @submit.prevent="logout">
+                            <form
+                                method="POST"
+                                @submit.prevent="logout"
+                            >
                                 <jet-responsive-nav-link as="button">
                                     Log Out
                                 </jet-responsive-nav-link>
                             </form>
 
                             <!-- Team Management -->
-                            <template
-                                v-if="$page.props.jetstream.hasTeamFeatures"
-                            >
+                            <template v-if="$page.props.jetstream.hasTeamFeatures">
                                 <div class="border-t border-gray-200"></div>
 
-                                <div
-                                    class="block px-4 py-2 text-xs text-gray-400"
-                                >
+                                <div class="block px-4 py-2 text-xs text-gray-400">
                                     Manage Team
                                 </div>
 
@@ -444,9 +416,7 @@
                                 <div class="border-t border-gray-200"></div>
 
                                 <!-- Team Switcher -->
-                                <div
-                                    class="block px-4 py-2 text-xs text-gray-400"
-                                >
+                                <div class="block px-4 py-2 text-xs text-gray-400">
                                     Switch Teams
                                 </div>
 
@@ -471,9 +441,7 @@
                                                     stroke="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
-                                                    <path
-                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                                                    ></path>
+                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                                 <div>{{ team.name }}</div>
                                             </div>
@@ -487,9 +455,7 @@
             </nav>
 
             <div class="flex flex-1">
-                <section
-                    class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden"
-                >
+                <section class="bg-white max-w-max flex-col flex-1 min-h-full border-r pt-5 md:flex hidden">
                     <jet-nav-link
                         :href="route('dashboard')"
                         :active="route().current('dashboard')"
@@ -505,8 +471,11 @@
                     </jet-nav-link>
 
                     <jet-nav-link
-                        :href="route('dashboard')"
-                        :active="route().current('dashboard')"
+                        :href="route('objects.locations')"
+                        :active="route().current('objects.locations') ||
+                            route().current('objects.sources') ||
+                            route().current('objects.sinks') ||
+                            route().current('objects.links')"
                     >
                         Objects
                     </jet-nav-link>
@@ -540,22 +509,22 @@
                     </jet-sub-nav-link>
 
                     <jet-nav-link
-                        :href="route('dashboard')"
-                        :active="route().current('dashboard')"
+                        :href="route('simulations')"
+                        :active="route().current('simulations')"
                     >
                         Simulations
                     </jet-nav-link>
 
                     <jet-nav-link
-                        :href="route('dashboard')"
-                        :active="route().current('dashboard')"
+                        :href="route('challenge')"
+                        :active="route().current('challenge')"
                     >
                         Challenge
                     </jet-nav-link>
 
                     <jet-nav-link
-                        :href="route('dashboard')"
-                        :active="route().current('dashboard')"
+                        :href="route('help')"
+                        :active="route().current('help')"
                     >
                         Help
                     </jet-nav-link>
