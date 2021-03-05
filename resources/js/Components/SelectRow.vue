@@ -10,20 +10,22 @@
         </div>
         <div class="w-full md:w-6/12 pl-0 md:pl-4">
             <label
-                for="name"
+                for="shape"
                 class="block text-sm text-indigo-400 mb-2"
             >
                 <slot></slot>
             </label>
-            <input
-                name="name"
-                type="text"
+            <select
+                name="shape"
                 class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
-                :placeholder="placeholder"
-                :value="modelValue"
-                @input="$emit('update:modelValue', $event.target.value)"
-                ref="input"
-            />
+            >
+                <option
+                    v-for="option in options"
+                    :key="option"
+                >
+                    {{ option }}
+                </option>
+            </select>
         </div>
     </div>
 </template>
@@ -33,7 +35,9 @@ export default {
     props: {
         heading: String,
         desc: String,
+        options: Array,
         placeholder: String,
+        // TODO: We need to get back the selected option
         modelValue: String
     },
     emits: ["update:modelValue"],

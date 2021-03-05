@@ -17,12 +17,13 @@
                     Location Name
                 </input-row>
 
-                <input-row
+                <select-row
                     desc="Choose how you want to define your Location"
+                    :options="selectOptions"
                     class="mt-5"
                 >
                     What type of location?
-                </input-row>
+                </select-row>
 
                 <radio-row
                     desc="Select how you want to share your Location"
@@ -48,6 +49,7 @@ import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
 import RadioRow from "@/Components/RadioRow";
+import SelectRow from "@/Components/SelectRow";
 import JetLinkButton from "@/Jetstream/LinkButton";
 
 export default {
@@ -56,10 +58,16 @@ export default {
         LeafletMap,
         InputRow,
         RadioRow,
+        SelectRow,
         JetLinkButton,
     },
     data() {
         return {
+            selectOptions: [
+                'Polygon',
+                'Rectangle',
+                'Circle'
+            ],
             radioOptions: [
                 'I want to share my Location with my Institution',
                 'I want to share my Location with everyone'
