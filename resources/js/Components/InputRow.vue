@@ -4,20 +4,21 @@
             <h3 class="font-bold">
                 {{ heading }}
             </h3>
-            <p class="text-xs text-gray-400 mt-3">
+            <p class="text-sm text-gray-500 mt-3">
                 {{ desc }}
             </p>
         </div>
-        <div class="w-full md:w-6/12">
+        <div class="w-full md:w-6/12 pl-0 md:pl-4">
             <label
                 for="name"
-                class="block text-xs text-gray-400"
+                class="block text-sm text-indigo-400"
             >
                 <slot></slot>
             </label>
             <input
                 name="name"
-                class="border bg-gray-200 border-gray-200 outline-none pl-5 text-sm w-full leading-6 mt-4"
+                type="text"
+                class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 mt-2 rounded"
                 :placeholder="placeholder"
                 :value="modelValue"
                 @input="$emit('update:modelValue', $event.target.value)"
