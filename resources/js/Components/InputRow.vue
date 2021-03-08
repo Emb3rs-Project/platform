@@ -20,8 +20,7 @@
                 type="text"
                 class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
                 :placeholder="placeholder"
-                :value="modelValue"
-                @input="$emit('update:modelValue', $event.target.value)"
+                v-model="value"
                 ref="input"
             />
         </div>
@@ -42,8 +41,15 @@ export default {
             this.$refs.input.focus();
         },
     },
+    computed: {
+        value: {
+            get() {
+                return this.modelValue
+            },
+            set(value) {
+                this.$emit('update:modelValue', value)
+            }
+        }
+    }
 };
 </script>
-
-<style>
-</style>
