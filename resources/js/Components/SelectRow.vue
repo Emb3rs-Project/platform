@@ -18,6 +18,7 @@
             <select
                 name="shape"
                 class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                v-model="value"
             >
                 <option
                     v-for="option in options"
@@ -37,15 +38,24 @@ export default {
         desc: String,
         options: Array,
         placeholder: String,
-        // TODO: We need to get back the selected option
         modelValue: String
     },
-    emits: ["update:modelValue"],
+    emits: ['update:modelValue'],
     methods: {
         focus() {
             this.$refs.input.focus();
         },
     },
+    computed: {
+        value: {
+            get() {
+                return this.modelValue
+            },
+            set(value) {
+                this.$emit('update:modelValue', value);
+            }
+        }
+    }
 };
 </script>
 
