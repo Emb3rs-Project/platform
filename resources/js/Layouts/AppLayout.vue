@@ -487,7 +487,7 @@
                 </section>
 
                 <!-- Page Content -->
-                <main class="flex-1 bg-white-gray">
+                <main class="flex-1 bg-content-background-bluish">
                     <slot></slot>
                 </main>
             </div>

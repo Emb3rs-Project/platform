@@ -22,9 +22,5 @@
     </head>
     <body class="font-sans antialiased">
         @inertia
-
-        @env('local')
-            <script src="http://localhost:{{ env('MIX_LIVERELOAD') }}/livereload.js"></script>
-        @endenv
     </body>
 </html>
