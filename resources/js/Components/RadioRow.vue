@@ -16,25 +16,23 @@
                 <slot></slot>
             </label>
             <div
-                class="flex items-start"
+                class="flex items-center"
                 v-for="option in options"
                 :key="option"
             >
-                <div class="flex items-center h-5">
-                    <input
-                        name="option"
-                        type="radio"
-                        class="outline-none focus:ring h-4 w-4 text-indigo-400 border-gray-300"
-                    >
-                </div>
-                <div class="ml-3 text-sm">
-                    <label
-                        for="option"
-                        class="font-medium text-gray-700"
-                    >
-                        {{option}}
-                    </label>
-                </div>
+                <input
+                    :name="option"
+                    type="radio"
+                    class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                    :value="option"
+                    v-model="value"
+                >
+                <label
+                    :for="option"
+                    class="ml-3 block text-sm font-medium text-gray-700"
+                >
+                    {{option}}
+                </label>
             </div>
         </div>
     </div>
@@ -47,7 +45,6 @@ export default {
         desc: String,
         options: Array,
         placeholder: String,
-        // TODO: We need to get back the selected option
         modelValue: String
     },
     emits: ["update:modelValue"],
@@ -56,6 +53,16 @@ export default {
             this.$refs.input.focus();
         },
     },
+    computed: {
+        value: {
+            get() {
+                return this.modelValue;
+            },
+            set(value) {
+                this.$emit('update:modelValue', value)
+            }
+        }
+    }
 };
 </script>
 
