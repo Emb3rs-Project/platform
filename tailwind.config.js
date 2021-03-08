@@ -18,6 +18,9 @@ module.exports = {
                 'content-background': {
                     bluish: '#F7F8FF'
                 }
+            },
+            spacing: {
+                'content': '70vh',
             }
         },
     },

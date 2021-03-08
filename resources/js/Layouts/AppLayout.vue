@@ -427,11 +427,11 @@
                     <jet-nav-link
                         :href="route('objects.locations.index')"
                         :active="
-              route().current('objects.locations.index') ||
-              route().current('objects.sources.index') ||
-              route().current('objects.sinks.index') ||
-              route().current('objects.links.index')
-            "
+                            route().current('objects.locations.index') ||
+                            route().current('objects.sources.index') ||
+                            route().current('objects.sinks.index') ||
+                            route().current('objects.links.index')
+                        "
                     >
                         Objects
                     </jet-nav-link>
@@ -487,7 +487,7 @@
                 </section>
 
                 <!-- Page Content -->
-                <main class="flex-1 bg-content-background-bluish">
+                <main class="flex-1 bg-content-background-bluish h-full">
                     <slot></slot>
                 </main>
             </div>
