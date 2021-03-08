@@ -35,7 +35,7 @@ export default {
         placeholder: String,
         modelValue: String
     },
-    emits: ["update:modelValue"],
+    emits: ['update:modelValue'],
     methods: {
         focus() {
             this.$refs.input.focus();
