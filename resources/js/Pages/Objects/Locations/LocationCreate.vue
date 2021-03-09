@@ -74,6 +74,7 @@ export default {
         JetButton,
         JetInputError,
     },
+
     setup() {
         const form = useForm({
             locationName: '',
