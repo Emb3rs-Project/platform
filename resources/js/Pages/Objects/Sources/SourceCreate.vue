@@ -84,7 +84,9 @@
                 </div>
             </div>
             <div class="w-full my-5 px-16 flex justify-end">
-                <jet-button :disabled="form.processing">Create Location</jet-button>
+                <jet-button :disabled="form.processing">
+                    Create Source
+                </jet-button>
             </div>
         </form>
     </app-layout>
