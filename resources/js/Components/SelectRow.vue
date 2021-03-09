@@ -37,7 +37,6 @@ export default {
         heading: String,
         desc: String,
         options: Array,
-        placeholder: String,
         modelValue: String
     },
     emits: ['update:modelValue'],
