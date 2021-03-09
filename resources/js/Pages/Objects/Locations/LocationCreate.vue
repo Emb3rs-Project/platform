@@ -51,8 +51,6 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia'
 import { useForm } from '@inertiajs/inertia-vue3'
 
 import AppLayout from "@/Layouts/AppLayout";
