@@ -17,10 +17,6 @@
                 >
                     Location Name
                 </input-row>
-                <jet-input-error
-                    :message="form.errors.locationName"
-                    class="mt-2"
-                />
 
                 <select-row
                     class="mt-5"
@@ -30,10 +26,6 @@
                 >
                     What type of location?
                 </select-row>
-                <jet-input-error
-                    :message="form.errors.locationType"
-                    class="mt-2"
-                />
 
                 <radio-row
                     class="mt-5"
@@ -43,10 +35,6 @@
                 >
                     Location sharing options
                 </radio-row>
-                <jet-input-error
-                    :message="form.errors.locationSharing"
-                    class="mt-2"
-                />
             </div>
 
             <div class=" w-6/12">
@@ -60,6 +48,9 @@
 </template>
 
 <script>
+import { ref, watch } from 'vue';
+import { Inertia } from '@inertiajs/inertia'
+
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
@@ -67,6 +58,7 @@ import RadioRow from "@/Components/RadioRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from '@/Jetstream/InputError'
+
 
 export default {
     components: {
@@ -76,52 +68,56 @@ export default {
         RadioRow,
         SelectRow,
         JetButton,
-        JetInputError
+        JetInputError,
     },
-    setup() { }, // TODO: use tthe composition api
-    data() {
-        return {
-            locationName: '',
-            locationType: 'Point',
-            locationSharing: '',
+    setup() {
+        const locationName = ref('');
+        const locationType = ref('Point');
+        const locationSharing = ref('');
 
-            locationTypes: [
-                'Point',
-                'Circle',
-                'Polygon',
-            ],
-            locationSharingOptions: [
-                'I want to share my Location with my Institution',
-                'I want to share my Location with everyone'
-            ],
+        const locationTypes = [
+            'Point',
+            'Circle',
+            'Polygon',
+        ];
+        const locationSharingOptions = [
+            'I want to share my Location with my Institution',
+            'I want to share my Location with everyone'
+        ];
 
-            form: this.$inertia.form({
-                locationName: null,
-                locationType: null,
-                locationSharing: null,
-            }),
-        }
-    },
-    methods: {
-        createLocation() {
-            this.form.post(route(''), {
+        const createLocation = () => {
+            Inertia.post(route(''), {
+                name: locationName.value,
+                type: locationType.value,
+                sharing: locationSharing.value,
+            }, {
                 errorBag: 'createLocation',
                 preserveScroll: true
-            });
+            })
         }
-    },
-    watch: {
-        locationName(newLocationName, oldLocationName) {
-            console.log(newLocationName);
-        },
-        locationType(newLocationType, oldlocationType) {
-            console.log(oldlocationType, newLocationType);
-        },
-        locationSharing(newLocationSharing, oldLocationSharing) {
-            console.log(oldLocationSharing, newLocationSharing);
-        },
-    }
 
+        watch(locationName, (locationName, oldLocationName) => {
+            console.log(locationName);
+        });
+
+        watch(locationType, (locationType, oldLocationType) => {
+            console.log(locationType);
+        });
+
+        watch(locationSharing, (locationSharing, oldLocationSharing) => {
+            console.log(locationSharing);
+        });
+
+        return {
+            locationName,
+            locationType,
+            locationSharing,
+            locationTypes,
+            locationSharingOptions,
+            form,
+            createLocation
+        }
+    }
 };
 </script>
 
