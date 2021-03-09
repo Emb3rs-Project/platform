@@ -44,15 +44,9 @@ export default {
         heading: String,
         desc: String,
         options: Array,
-        placeholder: String,
         modelValue: String
     },
     emits: ["update:modelValue"],
-    methods: {
-        focus() {
-            this.$refs.input.focus();
-        },
-    },
     computed: {
         value: {
             get() {
