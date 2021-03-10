@@ -9,7 +9,7 @@
             <h1 class="text-lg font-bold">New Source</h1>
         </div>
         <form @submit.prevent="submit">
-            <div class="flex p-5 h-content gap-2">
+            <div class="flex p-5 h-screen md:h-content gap-2">
                 <div class="w-6/12 md:overflow-y-auto md:pr-4">
                     <input-row
                         heading="Details | Source"
@@ -79,7 +79,7 @@
                     </select-row>
                 </div>
 
-                <div class=" w-6/12">
+                <div class="w-6/12">
                     <leaflet-map></leaflet-map>
                 </div>
             </div>
