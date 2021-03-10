@@ -17,7 +17,10 @@ class CreateCategoriesTable extends Migration
             $table->id();
 
             $table->string('name');
-            $table->enum('type', ['Sink', 'Source']);
+            $table->enum('type', ['Sink', 'Source'])->nullable();
+
+            $table->foreignId('parent_id');
+
 
             $table->softDeletes();
             $table->timestamps();
