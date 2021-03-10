@@ -22,4 +22,9 @@ class Template extends Model
     {
         return $this->hasMany(Instance::class);
     }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
+    }
 }
