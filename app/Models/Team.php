@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -42,9 +43,33 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
-
-    public function projects()
+    public function instances(): BelongsToMany
     {
-        return $this->belongsToMany(Project::class, 'team_project', 'team_id', 'project_id');
+        return $this->belongsToMany(
+            Instance::class,
+            'team_instance',
+            'team_id',
+            'instance_id'
+        );
+    }
+
+    public function links(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Link::class,
+            'team_link',
+            'team_id',
+            'link_id'
+        );
+    }
+
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Project::class,
+            'team_project',
+            'team_id',
+            'project_id'
+        );
     }
 }

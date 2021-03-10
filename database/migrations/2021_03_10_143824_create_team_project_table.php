@@ -13,7 +13,7 @@ class CreateTeamProjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('team_projects', function (Blueprint $table) {
+        Schema::create('team_project', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('team_id');
@@ -30,6 +30,6 @@ class CreateTeamProjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('team_projects');
+        Schema::dropIfExists('team_project');
     }
 }

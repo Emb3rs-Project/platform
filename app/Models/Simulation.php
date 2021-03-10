@@ -16,13 +16,13 @@ class Simulation extends Model
         return $this->belongsTo(Project::class, 'project_id');
     }
 
+    public function target() : BelongsTo
+    {
+        return $this->belongsTo(Target::class, 'target_id');
+    }
+
     public function simulationType() : BelongsTo
     {
         return $this->belongsTo(SimulationType::class, 'simulation_type_id');
-    }
-
-    public function target() : BelongsTo
-    {
-        return $this->belongsTo(Target::class, 'targeT_id');
     }
 }

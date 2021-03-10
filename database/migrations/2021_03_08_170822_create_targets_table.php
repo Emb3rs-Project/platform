@@ -19,6 +19,7 @@ class CreateTargetsTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->string('value');
+
             $table->foreignId('default_unit_id');
 
             $table->softDeletes();

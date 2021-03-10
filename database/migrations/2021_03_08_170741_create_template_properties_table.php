@@ -16,9 +16,10 @@ class CreateTemplatePropertiesTable extends Migration
         Schema::create('template_properties', function (Blueprint $table) {
             $table->id();
 
+            $table->boolean('required')->default(true);
+
             $table->foreignId('template_id');
             $table->foreignId('property_id');
-            $table->boolean('required')->default(true);
             $table->foreignId('default_unit_id');
 
             $table->softDeletes();
