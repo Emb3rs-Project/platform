@@ -19,7 +19,6 @@ class CreateSimulationsTable extends Migration
             $table->enum('status', ['NEW','IN PREPARATION', 'READY', 'ANALYSING', 'STOPPED', 'ERROR'])->default('NEW');
             $table->jsonb('targetData');
 
-
             $table->foreignId('project_id');
             $table->foreignId('target_id');
             $table->foreignId('simulation_type_id');
