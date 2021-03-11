@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCategoriesTable extends Migration
+class CreateInstanceGroupingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('instance_grouping', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->enum('type', ['sink', 'source','equipment'])
-                ->nullable();
+            $table->foreignId('parent_instance_id');
+            $table->foreignId('instance_id');
 
-            $table->foreignId('parent_id')->nullable();
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('instance_grouping');
     }
 }

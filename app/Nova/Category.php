@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Category extends Resource
@@ -49,13 +50,16 @@ class Category extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
-            Text::make(__('TYPE'), 'type'),
+            Select::make(__('TYPE'), 'type')->options([
+                'sink' => __('sink'),
+                'source' => __('source'),
+                'equipment' => __('equipment'),
+                ]),
 
             BelongsTo::make(__('PARENT'), 'parent', Category::class)
                 ->nullable(),
             HasMany::make(__('TEMPLATES'), 'templates', Template::class),
             HasMany::make(__('CHILDREN'), 'children', Category::class),
-
         ];
     }
 
