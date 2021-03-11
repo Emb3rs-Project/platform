@@ -25,4 +25,14 @@ class Properties extends Model
     {
         return $this->hasMany(TemplateProperties::class, 'property_id');
     }
+
+    public function units()
+    {
+        return $this->belongsToMany(
+            Unit::class,
+            'unit_property',
+            'property_id',
+            'unit_id'
+        );
+    }
 }

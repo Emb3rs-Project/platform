@@ -41,4 +41,15 @@ class Unit extends Model
     {
         return $this->hasMany(SimulationType::class, 'default_unit_id');
     }
+
+
+    public function properties()
+    {
+        return $this->belongsToMany(
+            Properties::class,
+            'unit_property',
+            'unit_id',
+            'property_id'
+        );
+    }
 }

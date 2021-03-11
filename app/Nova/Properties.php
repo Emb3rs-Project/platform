@@ -2,6 +2,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -57,7 +58,7 @@ class Properties extends Resource
             Code::make(__('DATA'), 'data')->json()->rules('json'),
 
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
-
+            BelongsToMany::make(__('UNITPROPERTY'), 'units', Unit::class),
         ];
     }
 
