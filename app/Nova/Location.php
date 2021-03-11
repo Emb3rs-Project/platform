@@ -52,7 +52,7 @@ class Location extends Resource
             Text::make(__('DESCRIPTION'), 'description'),
 
             BelongsTo::make(__('GEOOBJECT'), 'geoObject', GeoObject::class),
-            BelongsTo::make(__('PROJECT'), 'project', Project::class),
+            BelongsTo::make(__('PROJECT'), 'project', Project::class)->nullable(),
             HasMany::make(__('PROJECTS'), 'projects', Project::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),
 

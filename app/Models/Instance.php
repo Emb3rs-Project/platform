@@ -43,4 +43,14 @@ class Instance extends Model
             'team_id'
         );
     }
+
+    public function grouping(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Instance::class,
+            'instance_grouping',
+            'instance_id',
+            'parent_instance_id'
+        );
+    }
 }

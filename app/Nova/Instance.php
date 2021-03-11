@@ -57,6 +57,7 @@ class Instance extends Resource
             BelongsTo::make(__('LOCATION'), 'location', Location::class),
             BelongsToMany::make(__('TEAMS'), 'teams', Team::class),
 
+            BelongsToMany::make(__('GROUPING'), 'grouping', Instance::class)
         ];
     }
 

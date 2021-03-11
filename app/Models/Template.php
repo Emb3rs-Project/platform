@@ -38,9 +38,4 @@ class Template extends Model
     {
         return $this->hasMany(TemplateProperties::class, 'template_id');
     }
-
-    public function unit(): BelongsTo
-    {
-        return $this->belongsTo(Unit::class);
-    }
 }
