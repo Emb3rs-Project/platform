@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->enum('type', ['Sink', 'Source'])->nullable();
 
-            $table->foreignId('parent_id');
+            $table->foreignId('parent_id')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
