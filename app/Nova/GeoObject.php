@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GeoObject extends Resource
@@ -48,9 +49,17 @@ class GeoObject extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('TYPE'), 'type'),
-            Code::make(__('DATA'), 'data')->json()->default([]),
+            ID::make(__('ID'), 'id')
+                ->sortable(),
+            Select::make(__('TYPE'), 'type')
+                ->options([
+                    'point' => __('point'),
+                    'circle' => __('circle'),
+                    'polygon' => __('polygon')
+                    ]),
+            Code::make(__('DATA'), 'data')
+                ->json()
+                ->rules('json'),
 
             HasMany::make(__('LOCATIONS'), 'locations', Location::class),
 
