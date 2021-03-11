@@ -10,71 +10,7 @@
     </div>
     <form @submit.prevent="submit">
       <div class="flex p-5 h-screen md:h-content gap-2">
-        <div class="w-6/12 md:overflow-y-auto md:pr-4">
-          <input-row
-            heading="Details | Source"
-            desc="Enter a name for your Source"
-            v-model="form.sourceName"
-          >
-            Source Name
-          </input-row>
-          <jet-input-error :message="form.errors.sourceName" class="mt-2" />
-
-          <select-row
-            class="mt-5"
-            desc="Choose how you want to define your Source. Dont worry if you cant find a prefect match. Choose the one that best describes your source."
-            :options="sourceTypes"
-            v-model="form.sourceType"
-          >
-            Source Type
-          </select-row>
-
-          <select-row
-            class="mt-5"
-            desc="Try to idetify the size of the Source"
-            :options="sourceSizes"
-            v-model="form.sourceSize"
-          >
-            Source Size
-          </select-row>
-
-          <select-row
-            class="mt-5"
-            desc="Try to idetify the fluid of the Source"
-            :options="sourceFluids"
-            v-model="form.sourceFluid"
-          >
-            Source Fluid Type
-          </select-row>
-
-          <select-row
-            class="mt-5"
-            desc="Try to idetify the temperature of the Source"
-            :options="sourceTemperatures"
-            v-model="form.sourceTemperature"
-          >
-            Source Temperature
-          </select-row>
-
-          <select-row
-            class="mt-5"
-            desc="Try to idetify the presure of the Source"
-            :options="sourcePressures"
-            v-model="form.sourcePressure"
-          >
-            Source Presure
-          </select-row>
-
-          <select-row
-            class="mt-14"
-            heading="Details | Source + Location"
-            desc="Associate this Source with a Location"
-            :options="sourceLocations"
-            v-model="form.sourceLocation"
-          >
-            Location Name
-          </select-row>
-        </div>
+        <div class="w-6/12 md:overflow-y-auto md:pr-4"></div>
 
         <div class="w-6/12">
           <leaflet-map></leaflet-map>

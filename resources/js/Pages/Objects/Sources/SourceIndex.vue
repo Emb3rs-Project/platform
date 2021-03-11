@@ -24,7 +24,19 @@
                   scope="col"
                   class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
+                  Template
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
                   Category
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                >
+                  Location
                 </th>
                 <th scope="col" class="relative px-6 py-3">
                   <span class="sr-only">Edit</span>
@@ -33,10 +45,10 @@
             </thead>
             <tbody>
               <tr
-                v-for="(i, index) in []"
+                v-for="(i, index) in sources"
                 :key="index"
                 :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                class="hover:bg-gray-700 hover:text-white pt-3 pb-3 rounded"
+                class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
               >
                 <!-- bg-white is on odd rows -->
                 <!-- bg-gray is on even rows -->
@@ -44,10 +56,16 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                 >
-                  Source {{ i }}
+                  {{ i.name }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  Metallurgy {{ i }}
+                  {{ i.template.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ i.template.category.name }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  {{ i.location.name }}
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
@@ -88,10 +106,10 @@
         <!-- </div> -->
       </div>
       <div class="w-6/12">
-        <leaflet-map></leaflet-map>
+        <leaflet-map :markers="markers"></leaflet-map>
       </div>
     </div>
-    {{ cats }}
+    <pre></pre>
     <div class="w-full my-5 px-16 flex justify-end">
       <jet-link-button path="objects.sources.create">
         Create New Source
@@ -104,6 +122,7 @@
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
 import JetLinkButton from "@/Jetstream/LinkButton";
+import { ref } from "@vue/reactivity";
 
 export default {
   components: {
@@ -111,7 +130,26 @@ export default {
     LeafletMap,
     JetLinkButton,
   },
-  props: ["cats"],
+  props: {
+    sources: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const markers = ref([]);
+
+    for (const source of props.sources) {
+      markers.value.push(source.data);
+    }
+
+    return {
+      markers,
+    };
+  },
+
+  mounted: () => {},
 };
 </script>
 
