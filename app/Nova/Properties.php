@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Properties extends Resource
@@ -55,8 +56,23 @@ class Properties extends Resource
             Text::make(__('NAME'), 'name'),
             Text::make(__('SYMBOLICNAME'), 'symbolic_name'),
             Text::make(__('DESCRIPTION'), 'description'),
-            Text::make(__('DATATYPE'), 'dataType'),
-            Text::make(__('INPUTTYPE'), 'inputType'),
+            Select::make(__('DATATYPE'), 'dataType')
+            ->options(
+                [
+                    "number" => __('Number'),
+                    "datetime" => __('DateTime'),
+                    "string" => __('String'),
+                    "float" => __('Float')
+                ]
+            ),
+            Select::make(__('INPUTTYPE'), 'inputType')
+            ->options(
+                [
+                    "text" => __('Text Input'),
+                    "datetime" => __('Date Input'),
+                    "select" => __('Select / ComboBox')
+                ]
+            ),
             Code::make(__('DATA'), 'data')->json()->rules('json'),
 
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
