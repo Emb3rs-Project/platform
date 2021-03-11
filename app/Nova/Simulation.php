@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Simulation extends Resource
@@ -49,7 +50,7 @@ class Simulation extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('STATUS'), 'status'),
-            KeyValue::make(__('TARGETDATA'), 'targetData'),
+            Code::make(__('TARGETDATA'), 'targetData')->json()->rules('json'),
 
             BelongsTo::make(__('PROJECT'), 'project', Project::class),
             BelongsTo::make(__('TARGET'), 'target', Target::class),

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GeoSegment extends Resource
@@ -46,7 +47,7 @@ class GeoSegment extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            KeyValue::make(__('DATA'), 'data'),
+            Code::make(__('DATA'), 'data')->json()->rules('json'),
 
             BelongsToMany::make(__('LINKS'), 'links', Link::class),
 

@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Instance extends Resource
@@ -50,7 +51,7 @@ class Instance extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
-            KeyValue::make(__('VALUES'), 'values'),
+            Code::make(__('VALUES'), 'values')->json()->rules('json'),
 
             BelongsTo::make(__('TEMPLATE'), 'template', Template::class),
             BelongsTo::make(__('LOCATION'), 'location', Location::class),

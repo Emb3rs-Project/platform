@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -50,7 +51,7 @@ class Template extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
-            KeyValue::make(__('VALUES'), 'values'),
+            Code::make(__('VALUES'), 'values')->json()->rules('json'),
 
             BelongsTo::make(__('CATEGORY'), 'category', Category::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),

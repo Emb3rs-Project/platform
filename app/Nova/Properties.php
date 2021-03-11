@@ -2,6 +2,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
@@ -53,7 +54,7 @@ class Properties extends Resource
             Text::make(__('NAME'), 'name'),
             Text::make(__('DATATYPE'), 'dataType'),
             Text::make(__('INPUTTYPE'), 'inputType'),
-            KeyValue::make(__('DATA'), 'data'),
+            Code::make(__('DATA'), 'data')->json()->rules('json'),
 
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
 
