@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,11 @@ class SinkController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Objects/Sinks/SinkIndex');
+        $sinks = Category::where('type', 'like', 'sink')->get();
+
+        return Inertia::render('Objects/Sinks/SinkIndex', [
+            'sinks' => $sinks
+        ]);
     }
 
     /**
