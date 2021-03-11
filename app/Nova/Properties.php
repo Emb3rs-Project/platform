@@ -53,6 +53,8 @@ class Properties extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
+            Text::make(__('SYMBOLICNAME'), 'symbolic_name'),
+            Text::make(__('DESCRIPTION'), 'description'),
             Text::make(__('DATATYPE'), 'dataType'),
             Text::make(__('INPUTTYPE'), 'inputType'),
             Code::make(__('DATA'), 'data')->json()->rules('json'),
