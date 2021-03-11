@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Instance;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,6 +17,10 @@ class SourceController extends Controller
      */
     public function index()
     {
+        $sourceCategories = Category::whereType('source')
+            ->with(['templates', 'children'])
+            ->get();
+
         return Inertia::render('Objects/Sources/SourceIndex');
     }
 
