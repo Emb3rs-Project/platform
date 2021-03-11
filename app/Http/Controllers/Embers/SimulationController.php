@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,11 @@ class SimulationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Simulations/SimulationIndex');
+        $simulations = Simulation::with(['project', 'target','simulationType'])->get();
+
+        return Inertia::render('Simulations/SimulationIndex', [
+            'simulations' => $simulations
+        ]);
     }
 
     /**

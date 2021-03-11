@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Team extends Resource
@@ -21,8 +22,8 @@ class Team extends Resource
      *
      * @var  string
      */
-        public static $title = 'id';
-    
+    public static $title = 'name';
+
     /**
      * The columns that should be searched.
      *
@@ -47,10 +48,13 @@ class Team extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('NAME'),'name'),
-            Boolean::make(__('PERSONAL_TEAM'),'personal_team'),
-            
-            
+            Text::make(__('NAME'), 'name'),
+            Boolean::make(__('PERSONAL_TEAM'), 'personal_team'),
+
+            BelongsToMany::make(__('INSTANCES'), 'instances', Instance::class),
+            BelongsToMany::make(__('LINKS'), 'links', Link::class),
+            BelongsToMany::make(__('PROJECTS'), 'projects', Project::class),
+
         ];
     }
 

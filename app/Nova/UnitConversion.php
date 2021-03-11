@@ -21,8 +21,8 @@ class UnitConversion extends Resource
      *
      * @var  string
      */
-        public static $title = 'id';
-    
+    public static $title = 'id';
+
     /**
      * The columns that should be searched.
      *
@@ -46,11 +46,11 @@ class UnitConversion extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('EXPRESSION'),'expression'),
-            
-            BelongsTo::make(__('TARGETUNIT'),'targetUnit', Unit::class ),
-            BelongsTo::make(__('SOURCEUNIT'),'sourceUnit', Unit::class ),
-            
+            Text::make(__('EXPRESSION'), 'expression'),
+
+            BelongsTo::make(__('FROM'), 'from', Unit::class),
+            BelongsTo::make(__('TO'), 'to', Unit::class),
+
         ];
     }
 

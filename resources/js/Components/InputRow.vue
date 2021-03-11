@@ -1,36 +1,55 @@
 <template>
-  <div class="flex flex-1">
-    <div class="w-6/12">
-      <h3 class="font-bold">{{ heading }}</h3>
-      <p class="text-xs text-gray-400 mt-3">{{ desc }}</p>
+    <div class="flex flex-1 flex-col md:flex-row">
+        <div class="w-full md:w-6/12">
+            <h3 class="font-bold">
+                {{ heading }}
+            </h3>
+            <p class="text-sm text-gray-500 mt-3">
+                {{ desc }}
+            </p>
+        </div>
+        <div class="w-full md:w-6/12 pl-0 md:pl-4">
+            <label
+                for="name"
+                class="block text-sm text-indigo-400 mb-2"
+            >
+                <slot></slot>
+            </label>
+            <input
+                name="name"
+                type="text"
+                class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                :placeholder="placeholder"
+                v-model="value"
+                ref="input"
+            />
+        </div>
     </div>
-    <div class="w-6/12">
-      <label for="name" class="block text-xs text-gray-400"
-        ><slot></slot
-      ></label>
-      <input
-        name="name"
-        class="border bg-gray-200 border-gray-200 outline-none pl-5 text-sm w-full leading-6 mt-4"
-        :placeholder="placeholder"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        ref="input"
-      />
-    </div>
-  </div>
 </template>
 
 <script>
 export default {
-  props: ["heading", "desc", "placeholder", "modelValue"],
-  emits: ["update:modelValue"],
-  methods: {
-    focus() {
-      this.$refs.input.focus();
+    props: {
+        heading: String,
+        desc: String,
+        placeholder: String,
+        modelValue: String
     },
-  },
+    emits: ['update:modelValue'],
+    methods: {
+        focus() {
+            this.$refs.input.focus();
+        },
+    },
+    computed: {
+        value: {
+            get() {
+                return this.modelValue
+            },
+            set(value) {
+                this.$emit('update:modelValue', value)
+            }
+        }
+    }
 };
 </script>
-
-<style>
-</style>

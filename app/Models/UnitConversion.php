@@ -11,20 +11,13 @@ class UnitConversion extends Model
 {
     use HasFactory, SoftDeletes;
 
-
-    /**
-     * Target unit for conversion
-     */
-    public function targetUnit(): BelongsTo
+    public function from() : BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'target_unit_id');
+        return $this->belongsTo(Unit::class, 'from_id');
     }
 
-    /**
-     * Source unit for conversion
-     */
-    public function sourceUnit(): BelongsTo
+    public function to(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'source_unit_id');
+        return $this->belongsTo(Unit::class, 'to_id');
     }
 }

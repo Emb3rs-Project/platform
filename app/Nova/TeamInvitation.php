@@ -21,8 +21,8 @@ class TeamInvitation extends Resource
      *
      * @var  string
      */
-        public static $title = 'id';
-    
+    public static $title = 'id';
+
     /**
      * The columns that should be searched.
      *
@@ -47,11 +47,11 @@ class TeamInvitation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('EMAIL'),'email'),
-            Text::make(__('ROLE'),'role'),
-            
-            BelongsTo::make(__('TEAM'),'team', Team::class ),
-            
+            Text::make(__('EMAIL'), 'email'),
+            Text::make(__('ROLE'), 'role'),
+
+            BelongsTo::make(__('TEAM'), 'team', Team::class),
+
         ];
     }
 

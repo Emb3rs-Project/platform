@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -11,76 +12,44 @@ class Unit extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'name',
-        'symbol',
-        'quantity',
-    ];
-
-    /**
-     * Get the SimulationConstraint for the unit.
-     */
-    public function simulationConstraints(): HasMany
+    // Table unit_conversions
+    public function unitCoversionsFrom(): HasMany
     {
-        return $this->hasMany(SimulationConstraint::class);
+        return $this->hasMany(UnitConversion::class, 'from_id');
     }
 
-    /**
-     * Get the simulationTarget for the unit.
-     */
-    public function simulationTargets(): HasMany
+    // Table unit_conversions
+    public function unitCoversionsTo(): HasMany
     {
-        return $this->hasMany(SimulationTarget::class);
+        return $this->hasMany(UnitConversion::class, 'to_id');
     }
 
-    /**
-     * Get the simulationType for the unit.
-     */
+    // Table template_properties
+    public function templateProperties(): HasMany
+    {
+        return $this->hasMany(TemplateProperties::class, 'default_unit_id');
+    }
+
+    // Table targets
+    public function targets(): HasMany
+    {
+        return $this->hasMany(Target::class, 'default_unit_id');
+    }
+
+    // Table simulation_types
     public function simulationTypes(): HasMany
     {
-        return $this->hasMany(SimulationType::class);
+        return $this->hasMany(SimulationType::class, 'default_unit_id');
     }
 
-    /**
-     * Get the simulationConstraintInstances for the unit.
-     */
-    public function simulationConstraintInstances(): HasMany
-    {
-        return $this->hasMany(SimulationConstraintInstance::class);
-    }
 
-    /**
-     * Get the simulationTargetInstances for the unit.
-     */
-    public function simulationTargetInstances(): HasMany
+    public function properties()
     {
-        return $this->hasMany(SimulationTargetInstance::class);
-    }
-
-    /**
-     * Get the simulationTargetInstances for the unit.
-     */
-    public function simulationTypeInstances(): HasMany
-    {
-        return $this->hasMany(SimulationTypeInstance::class);
-    }
-
-    /**
-     * Get the simulation for the unit as Source.
-     */
-    public function conversionAsSource(): HasMany
-    {
-        return $this->hasMany(UnitConversion::class, 'source_unit_id');
-    }
-
-    /**
-     * Get the conversion for the unit as Target.
-     */
-    public function conversionAsTarget(): HasMany
-    {
-        return $this->hasMany(UnitConversion::class, 'target_unit_id');
+        return $this->belongsToMany(
+            Properties::class,
+            'unit_property',
+            'unit_id',
+            'property_id'
+        );
     }
 }

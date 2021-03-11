@@ -21,8 +21,8 @@ class Unit extends Resource
      *
      * @var  string
      */
-        public static $title = 'id';
-    
+    public static $title = 'name';
+
     /**
      * The columns that should be searched.
      *
@@ -34,8 +34,6 @@ class Unit extends Resource
 
 // You can add any of this to your Laravel Nova Search
 //    'name',
-//    'symbol',
-//    'quantity',
     ];
 
     /**
@@ -48,19 +46,14 @@ class Unit extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('NAME'),'name'),
-            Text::make(__('SYMBOL'),'symbol'),
-            Text::make(__('QUANTITY'),'quantity'),
-            
-            HasMany::make(__('SIMULATIONCONSTRAINTS'),'simulationConstraints', SimulationConstraint::class ),
-            HasMany::make(__('SIMULATIONTARGETS'),'simulationTargets', SimulationTarget::class ),
-            HasMany::make(__('SIMULATIONTYPES'),'simulationTypes', SimulationType::class ),
-            HasMany::make(__('SIMULATIONCONSTRAINTINSTANCES'),'simulationConstraintInstances', SimulationConstraintInstance::class ),
-            HasMany::make(__('SIMULATIONTARGETINSTANCES'),'simulationTargetInstances', SimulationTargetInstance::class ),
-            HasMany::make(__('SIMULATIONTYPEINSTANCES'),'simulationTypeInstances', SimulationTypeInstance::class ),
-            HasMany::make(__('CONVERSIONASSOURCE'),'conversionAsSource', UnitConversion::class ),
-            HasMany::make(__('CONVERSIONASTARGET'),'conversionAsTarget', UnitConversion::class ),
-            
+            Text::make(__('NAME'), 'name'),
+
+            HasMany::make(__('UNITCOVERSIONSFROM'), 'unitCoversionsFrom', UnitConversion::class),
+            HasMany::make(__('UNITCOVERSIONSTO'), 'unitCoversionsTo', UnitConversion::class),
+            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
+            HasMany::make(__('TARGETS'), 'targets', Target::class),
+            HasMany::make(__('SIMULATIONTYPES'), 'simulationTypes', SimulationType::class),
+
         ];
     }
 

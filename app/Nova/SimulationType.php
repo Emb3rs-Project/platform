@@ -4,8 +4,8 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class SimulationType extends Resource
@@ -22,8 +22,8 @@ class SimulationType extends Resource
      *
      * @var  string
      */
-        public static $title = 'id';
-    
+    public static $title = 'name';
+
     /**
      * The columns that should be searched.
      *
@@ -49,13 +49,13 @@ class SimulationType extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Text::make(__('NAME'),'name'),
-            Text::make(__('DESCRIPTION'),'description'),
-            Text::make(__('VALUE'),'value'),
-            
-            BelongsTo::make(__('UNIT'),'unit', Unit::class ),
-            HasMany::make(__('SIMULATIONTYPEINSTANCES'),'SimulationTypeInstances', SimulationTypeInstance::class ),
-            
+            Text::make(__('NAME'), 'name'),
+            Text::make(__('DESCRIPTION'), 'description'),
+            Text::make(__('VALUE'), 'value'),
+
+            HasMany::make(__('SIMULATIONS'), 'simulations', Simulation::class),
+            BelongsTo::make(__('UNIT'), 'unit', Unit::class),
+
         ];
     }
 

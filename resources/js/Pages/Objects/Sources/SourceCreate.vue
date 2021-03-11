@@ -8,54 +8,107 @@
     <div class="p-5">
       <h1 class="text-lg font-bold">New Source</h1>
     </div>
-    <div class="flex p-5">
-      <div class="w-6/12">
-        <input-row
-          heading="Details | Source"
-          desc="Enter a name for your source"
-        >
-          Source Name
-        </input-row>
+    <form @submit.prevent="submit">
+      <div class="flex p-5 h-screen md:h-content gap-2">
+        <div class="w-6/12 md:overflow-y-auto md:pr-4">
+          <select-row
+            class="mt-5"
+            desc="Source Templates"
+            :options="templateNames"
+            v-model="form.sourceTemplate"
+          >
+            Template
+          </select-row>
 
-        <input-row
-          desc="Choose how you want to define your Source"
-          class="mt-10"
-        >
-          What type of Source?
-        </input-row>
+          {{ templateInfo }}
+        </div>
 
-        <input-row desc="Description" class="mt-10"> Label </input-row>
-        <input-row desc="Description" class="mt-10"> Label </input-row>
-        <input-row desc="Description" class="mt-10"> Label </input-row>
-        <input-row desc="Description" class="mt-10"> Label </input-row>
-        <input-row desc="Description" class="mt-10"> Label </input-row>
+        <div class="w-6/12">
+          <leaflet-map></leaflet-map>
+        </div>
       </div>
-
-      <div class="w-6/12">
-        <leaflet-map></leaflet-map>
+      <div class="w-full my-5 px-16 flex justify-end">
+        <jet-button :disabled="form.processing"> Create Source </jet-button>
       </div>
-    </div>
-    <div class="w-full my-5 px-16 flex justify-end">
-      <jet-link-button path="objects.sources.create"> Create </jet-link-button>
-    </div>
+    </form>
   </app-layout>
 </template>
 
 <script>
+import { useForm } from "@inertiajs/inertia-vue3";
+
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
-import JetLinkButton from "@/Jetstream/LinkButton";
+import RadioRow from "@/Components/RadioRow";
+import SelectRow from "@/Components/SelectRow";
+import JetButton from "@/Jetstream/Button";
+import JetInputError from "@/Jetstream/InputError";
+
+import { ref, watch } from "vue";
 
 export default {
   components: {
     AppLayout,
     LeafletMap,
     InputRow,
-    JetLinkButton,
+    RadioRow,
+    SelectRow,
+    JetButton,
+    JetInputError,
+  },
+  props: {
+    templates: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
+    const templateNames = props.templates.map((t) => t.name);
+    const templateInfo = ref();
+    const form = useForm({
+      sourceTemplate: null,
+    });
+
+    watch(form.value, ({ sourceTemplate }) => {
+      templateInfo.value = props.templates.find(
+        (t) => t.name === sourceTemplate
+      );
+    });
+
+    return {
+      form,
+      templateNames,
+      templateInfo,
+    };
   },
 };
+
+//  const form = useForm({
+//       sourceName: "",
+//       sourceType: "Metallurgy",
+//       sourceSize: "Small",
+//       sourceFluid: "Water",
+//       sourceTemperature: "Cold",
+//       sourcePressure: "Low",
+//       sourceLocation: "Greece",
+//     });
+
+//     const sourceTypes = ["Metallurgy", "Timber"];
+//     const sourceSizes = ["Small", "Medium", "Normal", "Big", "Very Big"];
+//     const sourceFluids = ["Water", "Steam", "Petrolium"];
+//     const sourceTemperatures = ["Cold", "Little Hot", "Very Hot"];
+//     const sourcePressures = ["Low", "Normal", "High"];
+//     const sourceLocations = ["Greece", "Portugal"];
+
+//     const submit = () => {
+//       console.log("submitting");
+//       // TODO: Uncomment when backend is ready to accept data
+//       // form.value.post(route('objects.locations.create'));
+//     };
 </script>
 
 <style>
 </style>
+
+

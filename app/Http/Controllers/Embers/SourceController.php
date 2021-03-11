@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Instance;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +18,30 @@ class SourceController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Objects/Sources/SourceIndex');
+        $sourceCategories = Category::whereType('source')
+            ->get()
+            ->pluck('id');
+
+        $templates = Template::whereIn('category_id', $sourceCategories)
+            ->get();
+
+        $instances = Instance::whereIn('template_id', $templates)
+            ->with(['template', 'template.category', 'location.geoObject'])
+            ->get();
+
+        $output = $instances->map(function ($item) {
+            $item['data'] = $item->location->geoObject;
+
+            return $item;
+        });
+
+
+        return Inertia::render(
+            'Objects/Sources/SourceIndex',
+            [
+            'sources' => $output
+            ]
+        );
     }
 
     /**
@@ -25,7 +51,15 @@ class SourceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Objects/Sources/SourceCreate');
+        $sourceCategories = Category::whereType('source')
+            ->get()
+            ->pluck('id');
+
+        $templates = Template::whereIn('category_id', $sourceCategories)
+            ->with(['templateProperties','templateProperties.unit'])
+            ->get();
+
+        return Inertia::render('Objects/Sources/SourceCreate', ["templates" => $templates]);
     }
 
     /**

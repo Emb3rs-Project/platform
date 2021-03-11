@@ -12,27 +12,15 @@ class SimulationType extends Model
 {
     use HasFactory, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'name',
-        'description',
-    ];
-
-    /**
-     * Get the unit that owns the simulationConstraint.
-     */
-    public function unit(): BelongsTo
+    // Table simulations
+    public function simulations() : HasMany
     {
-        return $this->belongsTo(Unit::class);
+        return $this->hasMany(Simulation::class, 'simulation_type_id');
     }
 
-    /**
-     * Get the SimulationTargetInstances for the simulationType.
-     */
-    public function SimulationTypeInstances(): HasMany
+    // Table simulation_types
+    public function unit(): BelongsTo
     {
-        return $this->hasMany(SimulationTypeInstance::class);
+        return $this->belongsTo(Unit::class, 'default_unit_id');
     }
 }

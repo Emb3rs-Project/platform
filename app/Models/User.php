@@ -32,7 +32,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'username',
     ];
 
     /**
@@ -64,84 +63,4 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
-
-    /**
-     * Get the goeAreas for the user.
-     */
-    public function geoAreas(): HasMany
-    {
-        return $this->hasMany(GeoArea::class);
-    }
-
-    /**
-     * Get the locale for the user.
-     */
-    public function locale(): HasOne
-    {
-        return $this->hasOne(Locale::class);
-    }
-
-    /**
-     * Get the userLogs for the user.
-     */
-    public function userLogs(): HasMany
-    {
-        return $this->hasMany(UserLog::class);
-    }
-
-    /**
-     * Get the userRegistrationRequests for the user.
-     */
-    public function userRegistrationRequests(): HasMany
-    {
-        return $this->hasMany(UserRegistrationRequest::class);
-    }
-
-    /**
-     * Get the userProfiles for the user.
-     */
-    public function userProfiles(): HasMany
-    {
-        return $this->hasMany(UserProfile::class);
-    }
-
-    /**
-     * Get the userEntities for the user.
-     */
-    public function userEntities(): HasMany
-    {
-        return $this->hasMany(UserEntity::class);
-    }
-
-    /**
-     * Get the objectInstances for the user.
-     */
-    public function objectInstances(): HasMany
-    {
-        return $this->hasMany(ObjectInstance::class);
-    }
-
-    /**
-     * Get the objectInstanceSharingTypes for the user.
-     */
-    public function objectInstanceSharingTypes(): HasMany
-    {
-        return $this->hasMany(ObjectInstanceSharingType::class);
-    }
-
-    /**
-     * Get the simulationManagers for the user.
-     */
-    public function simulationManagers(): HasMany
-    {
-        return $this->hasMany(SimulationManager::class);
-    }
-
-    /**
-     * Get the simulationManagerSharingTypes for the user.
-     */
-    public function simulationManagerSharingTypes(): HasMany
-    {
-        return $this->hasMany(SimulationManagerSharingType::class);
-    }
 }
