@@ -47,6 +47,7 @@ class Unit extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
+            Text::make(__('SYMBOL'), 'symbol'),
 
             HasMany::make(__('UNITCOVERSIONSFROM'), 'unitCoversionsFrom', UnitConversion::class),
             HasMany::make(__('UNITCOVERSIONSTO'), 'unitCoversionsTo', UnitConversion::class),
