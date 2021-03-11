@@ -21,7 +21,12 @@ class SourceController extends Controller
             ->with(['templates', 'children'])
             ->get();
 
-        return Inertia::render('Objects/Sources/SourceIndex');
+        $templates = $sourceCategories->map(function () {
+        });
+
+        return Inertia::render('Objects/Sources/SourceIndex', [
+            'cats' => $sourceCategories
+        ]);
     }
 
     /**
