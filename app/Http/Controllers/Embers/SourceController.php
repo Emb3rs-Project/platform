@@ -23,8 +23,7 @@ class SourceController extends Controller
             ->pluck('id');
 
         $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get()
-            ->pluck('id');
+            ->get();
 
         $instances = Instance::whereIn('template_id', $templates)
             ->with(['template', 'template.category', 'location.geoObject'])
@@ -52,7 +51,15 @@ class SourceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Objects/Sources/SourceCreate');
+        $sourceCategories = Category::whereType('source')
+            ->get()
+            ->pluck('id');
+
+        $templates = Template::whereIn('category_id', $sourceCategories)
+            ->with(['templateProperties','templateProperties.unit'])
+            ->get();
+
+        return Inertia::render('Objects/Sources/SourceCreate', ["templates" => $templates]);
     }
 
     /**
