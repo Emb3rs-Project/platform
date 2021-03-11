@@ -2,6 +2,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
@@ -49,7 +50,7 @@ class GeoObject extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('TYPE'), 'type'),
-            KeyValue::make(__('DATA'), 'data'),
+            Code::make(__('DATA'), 'data')->json()->default([]),
 
             HasMany::make(__('LOCATIONS'), 'locations', Location::class),
 
