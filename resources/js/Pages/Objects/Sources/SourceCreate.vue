@@ -19,8 +19,17 @@
           >
             Template
           </select-row>
+          <div v-for="prop in properties" :key="prop.id">Hey</div>
 
-          {{ templateInfo }}
+          <input-row
+            heading="Details | Sink"
+            desc="Input a name for your Sink"
+            v-model="form.sinkName"
+          >
+            {{ prop }}
+          </input-row>
+          <jet-input-error :message="form.errors.sinkName" class="mt-2" />
+          {{ properties }}
         </div>
 
         <div class="w-6/12">
@@ -81,6 +90,11 @@ export default {
       templateNames,
       templateInfo,
     };
+  },
+  computed: {
+    properties() {
+      return Object.assign([], this.templateInfo?.template_properties);
+    },
   },
 };
 
