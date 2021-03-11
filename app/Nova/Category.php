@@ -51,7 +51,8 @@ class Category extends Resource
             Text::make(__('NAME'), 'name'),
             Text::make(__('TYPE'), 'type'),
 
-            BelongsTo::make(__('PARENT'), 'parent', Category::class),
+            BelongsTo::make(__('PARENT'), 'parent', Category::class)
+                ->nullable(),
             HasMany::make(__('TEMPLATES'), 'templates', Template::class),
             HasMany::make(__('CHILDREN'), 'children', Category::class),
 
