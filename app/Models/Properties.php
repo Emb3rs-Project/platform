@@ -11,6 +11,15 @@ class Properties extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+    * The attributes that should be cast.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'data' => 'array',
+    ];
+
     // Table template_properties
     public function templateProperties(): HasMany
     {

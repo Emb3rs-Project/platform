@@ -12,6 +12,15 @@ class Template extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+    * The attributes that should be cast.
+    *
+    * @var array
+    */
+    protected $casts = [
+        'values' => 'array',
+    ];
+
     // Table templates
     public function category(): BelongsTo
     {
