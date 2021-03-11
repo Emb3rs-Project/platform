@@ -16,7 +16,7 @@ class SinkController extends Controller
      */
     public function index()
     {
-        $sinks = Category::where('type', 'like', 'sink')->get();
+        $sinks = Category::whereType('sink')->get();
 
         return Inertia::render('Objects/Sinks/SinkIndex', [
             'sinks' => $sinks

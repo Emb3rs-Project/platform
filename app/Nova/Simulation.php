@@ -52,12 +52,18 @@ class Simulation extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Select::make(__('STATUS'), 'status')
                 ->options([
-                    'NEW' => __('NEW'),
-                    'IN PREPARATION' => __('IN PREPARATION'),
-                    'READY' => __('READY'),
-                    'ANALYSING' => __('ANALYSING'),
-                    'STOPPED' => __('STOPPED'),
-                    'ERROR' => __('ERROR')
+                    'NEW' => __('New'),
+                    'IN PREPARATION' => __('In Prepation'),
+                    'READY' => __('Ready'),
+                    'ANALYSING' => __('Analysing'),
+                    'STOPPED' => __('Stopped'),
+                    'ERROR' => __('Error')
+                    // 'new' => __('New'),
+                    // 'in-preparation' => __('In Prepation'),
+                    // 'ready' => __('Ready'),
+                    // 'analysing' => __('Analysing'),
+                    // 'stopped' => __('Stopped'),
+                    // 'error' => __('Error')
                     ]),
             Code::make(__('TARGETDATA'), 'targetData')->json()->rules('json'),
 
