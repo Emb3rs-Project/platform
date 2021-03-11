@@ -9,7 +9,7 @@
             <h1 class="text-lg font-bold">Sinks</h1>
         </div>
         <div class="flex p-5 h-screen md:h-content gap-2">
-            <div class="w-6/12 md:overflow-y-auto bg-green-500">
+            <div class="w-6/12 md:overflow-y-auto">
                 <!-- <div class="flex flex-col"> -->
                 <div class="overflow-x bg-red-500">
                     <!-- <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"> -->
@@ -21,37 +21,25 @@
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
+                                    ID
+                                </th>
+                                <th
+                                    scope="col"
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                >
                                     Name
                                 </th>
                                 <th
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Sector
+                                    Type
                                 </th>
                                 <th
                                     scope="col"
                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                 >
-                                    Subsector
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Fluid
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Temperature
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                >
-                                    Presure
+                                    Parent Category (Sink, Source or Equipment)
                                 </th>
                                 <th
                                     scope="col"
@@ -63,31 +51,21 @@
                         </thead>
                         <tbody>
                             <tr
-                                v-for="(i, index) in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15]"
+                                v-for="(sink, index) in sinks"
                                 :key="index"
                                 :class="(index % 2) ? 'bg-gray-50' : 'bg-white'"
-                                class="hover:bg-gray-700 hover:text-white pt-3 pb-3 rounded"
                             >
-                                <!-- bg-white is on odd rows -->
-                                <!-- bg-gray is on even rows -->
-
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    Source {{ i }}
+                                    {{ sink.id }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Sector {{ i }}
+                                    {{ sink.name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    Subsector {{ i }}
+                                    {{ sink.type }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ index % 2 ? "Water" : "Petrolium" }}
-                                </td>
-                                <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                                    {{ index % 2 ? "700 C" : "1500C" }}
-                                </td>
-                                <td class="px-6 py-4 text-right whitespace-nowrap text-sm text-gray-500">
-                                    {{ index % 2 ? "1 PSI" : "10 PSI" }}
+                                    {{ sink.parent_id ?  sink.parent_id : 'None' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
                                     <a href="#">
@@ -132,70 +110,6 @@
                 Create New Sink
             </jet-link-button>
         </div>
-        <!-- OLD -->
-        <!-- <div class="flex p-5">
-            <div class="w-6/12">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Name
-                            </th>
-                            <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Type
-                            </th>
-                            <th
-                                scope="col"
-                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                            >
-                                Sector
-                            </th>
-                            <th
-                                scope="col"
-                                class="relative px-6 py-3"
-                            >
-                                <span class="sr-only"></span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        <tr
-                            v-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-                            :key="i"
-                        >
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                Sink Name {{ i }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                Type {{ i }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                Sector {{ i % 2 }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <a
-                                    href="#"
-                                    class="text-indigo-600 hover:text-indigo-900 text-gray-700"
-                                >
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="w-6/12">
-                <leaflet-map></leaflet-map>
-            </div>
-        </div> -->
-        <!-- OLD -->
     </app-layout>
 </template>
 
@@ -210,6 +124,12 @@ export default {
         LeafletMap,
         JetLinkButton,
     },
+
+    props: ['sinks'],
+
+    setup(props, context) {
+        console.log(props.sinks);
+    }
 };
 </script>
 
