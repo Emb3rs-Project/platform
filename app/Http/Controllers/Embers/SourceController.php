@@ -23,7 +23,8 @@ class SourceController extends Controller
             ->pluck('id');
 
         $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get();
+            ->get()
+            ->pluck('id');
 
         $instances = Instance::whereIn('template_id', $templates)
             ->with(['template', 'template.category', 'location.geoObject'])
