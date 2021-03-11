@@ -2,11 +2,11 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Simulations
+                Projects
             </h2>
         </template>
         <div class="p-5">
-            <h1 class="text-lg font-bold">New Simulation</h1>
+            <h1 class="text-lg font-bold">New Project</h1>
         </div>
         <form @submit.prevent="submit">
             <div class="flex p-5 h-screen md:h-content gap-2">
@@ -16,7 +16,7 @@
                         desc="Enter a name for the Simulation"
                         v-model="form.sourceName"
                     >
-                        Simulation Name
+                        Project Name
                     </input-row>
                     <jet-input-error
                         :message="form.errors.sourceName"
