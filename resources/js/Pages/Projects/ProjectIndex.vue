@@ -2,11 +2,11 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Simulations
+                Projects
             </h2>
         </template>
         <div class="p-5">
-            <h1 class="text-lg font-bold">Simulations</h1>
+            <h1 class="text-lg font-bold">Projects</h1>
         </div>
         <div class="flex p-5 h-screen md:h-content gap-2">
             <div class="w-6/12 md:overflow-y-auto bg-green-500">
@@ -128,8 +128,8 @@
             </div>
         </div>
         <div class="w-full my-5 px-16 flex justify-end">
-            <jet-link-button path="simulations.create">
-                Create New Simulation
+            <jet-link-button path="projects.create">
+                Create New Project
             </jet-link-button>
         </div>
     </app-layout>

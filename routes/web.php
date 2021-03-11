@@ -6,6 +6,7 @@ use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
+use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\SimulationController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
@@ -65,6 +66,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         // Route::get('/links', [LinkController::class, 'index'])->name('links');
         Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
     });
+
+    // Projects
+    Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
 
     // Simulations
     Route::resource('/simulations', SimulationController::class)->names(createResourceNames('simulations'));
