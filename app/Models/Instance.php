@@ -22,8 +22,13 @@ class Instance extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function (): BelongsToMany
+    public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, 'team_instance', 'instance_id', 'team_id');
+        return $this->belongsToMany(
+            Team::class,
+            'team_instance',
+            'instance_id',
+            'team_id'
+        );
     }
 }
