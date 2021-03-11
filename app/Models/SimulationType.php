@@ -12,11 +12,13 @@ class SimulationType extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Table simulations
     public function simulations() : HasMany
     {
         return $this->hasMany(Simulation::class, 'simulation_type_id');
     }
 
+    // Table simulation_types
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'default_unit_id');

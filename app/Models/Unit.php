@@ -12,21 +12,31 @@ class Unit extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function coversions(): HasMany
+    // Table unit_conversions
+    public function unitCoversionsFrom(): HasMany
     {
         return $this->hasMany(UnitConversion::class, 'from_id');
     }
 
+    // Table unit_conversions
+    public function unitCoversionsTo(): HasMany
+    {
+        return $this->hasMany(UnitConversion::class, 'to_id');
+    }
+
+    // Table template_properties
     public function templateProperties(): HasMany
     {
         return $this->hasMany(TemplateProperties::class, 'default_unit_id');
     }
 
-    public function target(): HasMany
+    // Table targets
+    public function targets(): HasMany
     {
         return $this->hasMany(Target::class, 'default_unit_id');
     }
 
+    // Table simulation_types
     public function simulationTypes(): HasMany
     {
         return $this->hasMany(SimulationType::class, 'default_unit_id');

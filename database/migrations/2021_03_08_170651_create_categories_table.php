@@ -21,7 +21,6 @@ class CreateCategoriesTable extends Migration
 
             $table->foreignId('parent_id');
 
-
             $table->softDeletes();
             $table->timestamps();
         });

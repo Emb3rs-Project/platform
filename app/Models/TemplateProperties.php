@@ -11,9 +11,21 @@ class TemplateProperties extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Table template_properties
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(Template::class, 'template_id');
+    }
 
+    // Table template_properties
+    public function property(): BelongsTo
+    {
+        return $this->belongsTo(Properties::class, 'property_id');
+    }
+
+    // Table template_properties
     public function unit(): BelongsTo
     {
-        return $this->belongsTo(Unit::class);
+        return $this->belongsTo(Unit::class, 'default_unit_id');
     }
 }

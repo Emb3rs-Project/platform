@@ -11,6 +11,7 @@ class Link extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Table geo_segment_link
     public function geoSegments() : BelongsToMany
     {
         return $this->belongsToMany(
@@ -21,6 +22,7 @@ class Link extends Model
         );
     }
 
+    // Table team_link
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(

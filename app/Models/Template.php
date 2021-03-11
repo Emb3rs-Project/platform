@@ -12,15 +12,22 @@ class Template extends Model
 {
     use HasFactory, SoftDeletes;
 
-
+    // Table templates
     public function category(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
+    // Table instances
     public function instances(): HasMany
     {
-        return $this->hasMany(Instance::class);
+        return $this->hasMany(Instance::class, 'template_id');
+    }
+
+    // Table template_properties
+    public function templateProperties(): HasMany
+    {
+        return $this->hasMany(TemplateProperties::class, 'template_id');
     }
 
     public function unit(): BelongsTo

@@ -12,13 +12,14 @@ class Target extends Model
 {
     use HasFactory, SoftDeletes;
 
-
+    // Table simulations
     public function simulations() : HasMany
     {
         return $this->hasMany(Simulation::class, 'target_id');
     }
 
-    public function units(): BelongsTo
+    // Table targets
+    public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'default_unit_id');
     }

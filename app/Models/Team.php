@@ -43,6 +43,7 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
+    // Table team_instance
     public function instances(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -53,6 +54,7 @@ class Team extends JetstreamTeam
         );
     }
 
+    // Table team_link
     public function links(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -63,6 +65,7 @@ class Team extends JetstreamTeam
         );
     }
 
+    // Table team_project
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(

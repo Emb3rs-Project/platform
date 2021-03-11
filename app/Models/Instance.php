@@ -12,16 +12,19 @@ class Instance extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Table instances
     public function template(): BelongsTo
     {
-        return $this->belongsTo(Template::class);
+        return $this->belongsTo(Template::class, 'template_id');
     }
 
+    // Table instances
     public function location(): BelongsTo
     {
-        return $this->belongsTo(Location::class);
+        return $this->belongsTo(Location::class, 'location_id');
     }
 
+    // Table team_instance
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(

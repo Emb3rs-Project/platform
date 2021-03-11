@@ -11,6 +11,7 @@ class GeoSegment extends Model
 {
     use HasFactory,SoftDeletes;
 
+    // Table geo_segment_link
     public function links() : BelongsToMany
     {
         return $this->belongsToMany(

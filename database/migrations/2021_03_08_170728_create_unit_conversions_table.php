@@ -16,9 +16,10 @@ class CreateUnitConversionsTable extends Migration
         Schema::create('unit_conversions', function (Blueprint $table) {
             $table->id();
 
+            $table->string('expression');
+
             $table->foreignId('from_id');
             $table->foreignId('to_id');
-            $table->string('expression');
 
             $table->softDeletes();
             $table->timestamps();

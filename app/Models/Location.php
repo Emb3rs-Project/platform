@@ -12,18 +12,26 @@ class Location extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function instances(): HasMany
-    {
-        return $this->hasMany(Instance::class);
-    }
-
+    // Table locations
     public function geoObject(): BelongsTo
     {
         return $this->belongsTo(GeoObject::class, 'geo_object_id');
     }
 
+    // Table locations
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class, 'project_id');
+    }
+
+    // Table projects
     public function projects(): HasMany
     {
-        return $this->hasMany(Project::class, 'location_id')
+        return $this->hasMany(Project::class, 'location_id');
+    }
+
+    public function instances(): HasMany
+    {
+        return $this->hasMany(Instance::class, 'location_id');
     }
 }

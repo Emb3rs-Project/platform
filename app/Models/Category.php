@@ -12,15 +12,16 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-
-    public function templates() : HasMany
-    {
-        return $this->hasMany(Template::class, 'category_id');
-    }
-
+    // Table categories
     public function parent() : BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+    // Table templates
+    public function templates() : HasMany
+    {
+        return $this->hasMany(Template::class, 'category_id');
     }
 
     public function children() : HasMany

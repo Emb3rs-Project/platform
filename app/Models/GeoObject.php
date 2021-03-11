@@ -11,6 +11,7 @@ class GeoObject extends Model
 {
     use HasFactory, SoftDeletes;
 
+    // Table locations
     public function locations() : HasMany
     {
         return $this->hasMany(Location::class, 'geo_object_id');

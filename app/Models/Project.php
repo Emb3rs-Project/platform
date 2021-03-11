@@ -13,16 +13,25 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
-    public function locations() : BelongsTo
+    // Table locations
+    public function locations() : HasMany
+    {
+        return $this->hasMany(Location::class, 'project_id');
+    }
+
+    //Table projects
+    public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
 
+    // Table simulations
     public function simulations() : HasMany
     {
         return $this->hasMany(Simulation::class, 'project_id');
     }
 
+    // Table team_project
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(
