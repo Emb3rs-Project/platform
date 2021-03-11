@@ -57,22 +57,24 @@ class Properties extends Resource
             Text::make(__('SYMBOLICNAME'), 'symbolic_name'),
             Text::make(__('DESCRIPTION'), 'description'),
             Select::make(__('DATATYPE'), 'dataType')
-            ->options(
-                [
-                    "number" => __('Number'),
-                    "datetime" => __('DateTime'),
-                    "string" => __('String'),
-                    "float" => __('Float')
-                ]
-            ),
+                ->options(
+                    [
+                        "number" => __('Number'),
+                        "datetime" => __('DateTime'),
+                        "string" => __('String'),
+                        "float" => __('Float')
+                    ]
+                )
+                ->displayUsingLabels(),
             Select::make(__('INPUTTYPE'), 'inputType')
-            ->options(
-                [
-                    "text" => __('Text Input'),
-                    "datetime" => __('Date Input'),
-                    "select" => __('Select / ComboBox')
-                ]
-            ),
+                ->options(
+                    [
+                        "text" => __('Text Input'),
+                        "datetime" => __('Date Input'),
+                        "select" => __('Select / ComboBox')
+                    ]
+                )
+                ->displayUsingLabels(),
             Code::make(__('DATA'), 'data')->json()->rules('json'),
 
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
