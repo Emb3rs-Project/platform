@@ -65,7 +65,7 @@
                   {{ i.template.category.name }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ i.location.name }}
+                  {{ i.location ? i.location.name : "Not Assigned" }}
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
@@ -109,7 +109,6 @@
         <leaflet-map :markers="markers"></leaflet-map>
       </div>
     </div>
-    <pre></pre>
     <div class="w-full my-5 px-16 flex justify-end">
       <jet-link-button path="objects.sources.create">
         Create New Source

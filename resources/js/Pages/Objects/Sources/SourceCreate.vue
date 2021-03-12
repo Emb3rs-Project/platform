@@ -8,21 +8,68 @@
     <div class="p-5">
       <h1 class="text-lg font-bold">New Source</h1>
     </div>
-    <form @submit.prevent="submit">
-      <div class="flex p-5 gap-2">
-        <div class="w-6/12 md:min-h-content md:pr-4">
-          <select-row
-            class="mt-5"
-            desc="Source Templates"
-            :options="mainTemplates"
-            v-model="selectedTemplate"
+    <div class="flex p-5 gap-2">
+      <div class="w-6/12 md:min-h-content md:pr-4">
+        <select-row
+          class="mt-5"
+          desc="Source Templates"
+          :options="mainTemplates"
+          v-model="selectedTemplate"
+        >
+          Template
+        </select-row>
+        <select-row
+          class="mt-5"
+          :options="equipTemplates"
+          v-model="selectedEquipment"
+          v-if="selectedTemplate"
+        >
+          Add Equipment
+          <button
+            class="inline-flex items-center bg-gray-300 p-2"
+            @click="addEquipment"
+            :disabled="!selectedEquipment"
           >
-            Template
+            +
+          </button>
+        </select-row>
+        <hr class="my-5" />
+        <!-- Source -->
+        <h1 v-if="selectedTemplate">Source</h1>
+        <div v-for="prop in properties" :key="prop.id" class="my-4">
+          <input-row
+            :desc="prop.property.description"
+            v-model="form.source[prop.property.symbolic_name]"
+            v-if="prop.property.inputType === 'text'"
+            :required="prop.required"
+          >
+            {{ prop.property.name }}
+            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
+          </input-row>
+
+          <select-row
+            :desc="prop.property.description"
+            :options="prop.property.data.options"
+            v-model="form.source[prop.property.symbolic_name]"
+            v-if="prop.property.inputType === 'select'"
+            :required="prop.required"
+          >
+            {{ prop.property.name }}
+            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
           </select-row>
-          <div v-for="prop in properties" :key="prop.id" class="my-4">
+        </div>
+        <!-- Equipments -->
+        <h1 v-if="selectedTemplate">Equipments</h1>
+        <div v-for="equip in form.equipments" :key="equip.id">
+          <h2 class="text-right">{{ equip.template.name }}</h2>
+          <div
+            v-for="prop in equip.template.template_properties"
+            :key="prop.id"
+            class="my-4"
+          >
             <input-row
               :desc="prop.property.description"
-              v-model="form.source[prop.property.symbolic_name]"
+              v-model="equip[prop.property.symbolic_name]"
               v-if="prop.property.inputType === 'text'"
               :required="prop.required"
             >
@@ -33,7 +80,7 @@
             <select-row
               :desc="prop.property.description"
               :options="prop.property.data.options"
-              v-model="form.source[prop.property.symbolic_name]"
+              v-model="equip[prop.property.symbolic_name]"
               v-if="prop.property.inputType === 'select'"
               :required="prop.required"
             >
@@ -41,24 +88,17 @@
               <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
             </select-row>
           </div>
-          <select-row
-            class="mt-5"
-            desc="Template"
-            :options="equipTemplates"
-            v-model="selectedEquipment"
-          >
-            Add Equipment
-          </select-row>
-        </div>
-        <div class="w-6/12 max-h-screen">
-          <leaflet-map></leaflet-map>
         </div>
       </div>
-
-      <div class="w-full my-5 px-16 flex justify-end">
-        <jet-button :disabled="form.processing"> Create Source </jet-button>
+      <div class="w-6/12 max-h-screen">
+        <leaflet-map></leaflet-map>
       </div>
-    </form>
+    </div>
+    <div class="w-full my-5 px-16 flex justify-end">
+      <jet-button :disabled="form.processing" @click="submit()">
+        Create Source
+      </jet-button>
+    </div>
   </app-layout>
 </template>
 
@@ -102,6 +142,7 @@ export default {
     const form = useForm({
       source: {},
       equipments: [],
+      template_id: null,
     });
 
     const mainTemplates = props.templates.map((t) => ({
@@ -115,10 +156,19 @@ export default {
 
     watch(selectedTemplate, (template) => {
       templateInfo.value = props.templates.find((t) => t.id === template);
-    });
+      form.value.equipments = [];
+      form.value.template_id = template;
 
-    watch(selectedEquipment, (template) => {
-      templateInfo.value = props.equipments.find((t) => t.id === template);
+      if (templateInfo.value.values.children)
+        for (const child of templateInfo.value.values.children) {
+          const equipment = props.equipments.find((t) => t.id === child);
+
+          form.value.equipments.push({
+            id: child,
+            data: {},
+            template: equipment,
+          });
+        }
     });
 
     return {
@@ -133,6 +183,23 @@ export default {
   computed: {
     properties() {
       return Object.assign([], this.templateInfo?.template_properties);
+    },
+  },
+  methods: {
+    addEquipment() {
+      const equipment = this.equipments.find(
+        (t) => t.id === this.selectedEquipment
+      );
+
+      this.form.equipments.push({
+        id: this.selectedEquipment,
+        data: {},
+        template: equipment,
+      });
+    },
+    submit() {
+      console.log("saving ", this.form);
+      this.form.post(route("objects.sources.store"));
     },
   },
 };

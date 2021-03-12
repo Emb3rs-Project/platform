@@ -8,6 +8,7 @@ use App\Models\Instance;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Redirect;
 
 class SourceController extends Controller
 {
@@ -31,7 +32,9 @@ class SourceController extends Controller
             ->get();
 
         $output = $instances->map(function ($item) {
-            $item['data'] = $item->location->geoObject;
+            if (isset($item->location)) {
+                $item['data'] = $item->location->geoObject;
+            }
 
             return $item;
         });
@@ -92,7 +95,28 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $source = $request->get('source');
+        $equipments = $request->get('equipments');
+        foreach ($equipments as $key => $value) {
+            unset($equipments[$key]['template']);
+        }
+
+        $name = 'Not Defined';
+        if ($source['name']) {
+            $name = $source['name'];
+        }
+
+
+        Instance::create([
+            "name" => $name,
+            "values" => [
+                "equipments" => $equipments
+            ],
+            "template_id" => $request->get('template_id')
+        ]);
+
+
+        return Redirect::route('objects.sources.index');
     }
 
     /**

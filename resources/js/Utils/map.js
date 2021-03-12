@@ -42,18 +42,22 @@ export default {
                         fillOpacity: 0.2,
                         radius: data.radius
                     }).addTo(map))
+                    console.log('Added Circle', data.center)
                     break;
                 case "polygon":
                     objects.push(L.polygon(data.points, {
                         color: 'blue',
                         fillColor: 'blue',
-                        fillOpacity: 0.2,
+                        fillOpacity: 0.5,
                     }).addTo(map))
+                    console.log('Added Polygon', data.points)
                     break;
                 case "point":
                     objects.push(L.marker(data.center, {
                         icon: this.fontAwesomeIcon
                     }).addTo(map))
+                    console.log('Added Point', data.center)
+                    break;
             }
         }
 
