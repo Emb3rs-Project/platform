@@ -494,7 +494,7 @@
                 </section>
 
                 <!-- Page Content -->
-                <main class="flex-1 bg-content-background-bluish h-full">
+                <main class="flex-1 bg-content-background-bluish min-h-ful">
                     <slot></slot>
                 </main>
             </div>
