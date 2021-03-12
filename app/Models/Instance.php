@@ -29,7 +29,8 @@ class Instance extends Model
     protected $fillable = [
         'name',
         'values',
-        'template_id'
+        'template_id',
+        'location_id'
     ];
 
 

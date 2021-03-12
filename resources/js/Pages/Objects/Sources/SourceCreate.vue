@@ -33,6 +33,15 @@
             +
           </button>
         </select-row>
+        <select-row
+          class="my-5"
+          desc="Source Templates"
+          :options="locationSelects"
+          v-model="form.source.location_id"
+          v-if="selectedTemplate"
+        >
+          Location
+        </select-row>
         <hr class="my-5" />
         <!-- Source -->
         <h1 v-if="selectedTemplate">Source</h1>
@@ -89,9 +98,10 @@
             </select-row>
           </div>
         </div>
+        <pre>{{ form }}</pre>
       </div>
       <div class="w-6/12 max-h-screen">
-        <leaflet-map></leaflet-map>
+        <leaflet-map ref="map" :marker="marker"></leaflet-map>
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
@@ -134,11 +144,17 @@ export default {
       type: Array,
       required: true,
     },
+    locations: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
     const templateInfo = ref();
     const selectedTemplate = ref();
     const selectedEquipment = ref();
+    const selectedLocation = ref();
+    const marker = ref();
     const form = useForm({
       source: {
         data: {},
@@ -152,6 +168,10 @@ export default {
       value: t.name,
     }));
     const equipTemplates = props.equipments.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+    const locationSelects = props.locations.map((t) => ({
       key: t.id,
       value: t.name,
     }));
@@ -188,6 +208,12 @@ export default {
         }
     });
 
+    watch(selectedLocation, (locId) => {
+      const location = props.locations.find((l) => l.id === locId);
+      marker.value = location.geo_object;
+      //this.$refs.map.centerAtLocation(marker);
+    });
+
     return {
       form,
       mainTemplates,
@@ -195,6 +221,9 @@ export default {
       equipTemplates,
       selectedTemplate,
       selectedEquipment,
+      locationSelects,
+      selectedLocation,
+      marker,
     };
   },
   computed: {
@@ -225,6 +254,7 @@ export default {
       console.log("saving ", this.form);
       this.form.post(route("objects.sources.store"));
     },
+    onLocationSelect(locId) {},
   },
 };
 </script>

@@ -7,13 +7,17 @@
 <script>
 import L from "leaflet";
 import mapUtils from "@/Utils/map.js";
-import { onMounted, ref } from "@vue/runtime-core";
+import { onMounted, ref, watch } from "vue";
 
 export default {
   props: {
     markers: {
       type: Array,
       required: true,
+    },
+    marker: {
+      type: Object,
+      required: false,
     },
   },
   setup(props) {
@@ -25,6 +29,8 @@ export default {
       mapUtils.loadMarkers(map.value, props.markers);
       window.map = map.value;
     });
+
+    watch("marker", (val) => console.log(val));
 
     return {
       map,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
+use App\Models\Location;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -79,11 +80,15 @@ class SourceController extends Controller
             ])
             ->get();
 
+        $locations = Location::with(['geoObject'])->get();
+
         return Inertia::render(
             'Objects/Sources/SourceCreate',
             [
             "templates" => $sourceTemplates,
-            "equipments" => $equipmentTemplates]
+            "equipments" => $equipmentTemplates,
+            "locations" => $locations
+            ]
         );
     }
 
@@ -101,20 +106,28 @@ class SourceController extends Controller
             unset($equipments[$key]['template']);
         }
 
-        $name = 'Not Defined';
-        if (isset($source['data']['name'])) {
-            $name = $source['data']['name'];
-        }
-
-
-        Instance::create([
-            "name" => $name,
+        $newInstance = [
+            "name" => 'Not Defined',
             "values" => [
                 "equipments" => $equipments
             ],
-            "template_id" => $request->get('template_id')
-        ]);
+            "template_id" => $request->get('template_id'),
+            "location_id" => null
+        ];
 
+        // Check if Property Name Exists
+        if (isset($source['data']['name'])) {
+            $newInstance['name'] = $source['data']['name'];
+        }
+
+        // Check if Location is Set
+        if (isset($source['location_id'])) {
+            $newInstance['location_id'] = $source['location_id'];
+        }
+
+
+
+        Instance::create($newInstance);
 
         return Redirect::route('objects.sources.index');
     }
