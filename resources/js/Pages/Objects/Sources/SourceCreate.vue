@@ -98,7 +98,6 @@
             </select-row>
           </div>
         </div>
-        <pre>{{ form }}</pre>
       </div>
       <div class="w-6/12 max-h-screen">
         <leaflet-map ref="map" :marker="marker"></leaflet-map>
