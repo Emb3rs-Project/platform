@@ -39,7 +39,7 @@
         <div v-for="prop in properties" :key="prop.id" class="my-4">
           <input-row
             :desc="prop.property.description"
-            v-model="form.source[prop.property.symbolic_name]"
+            v-model="form.source.data[prop.property.symbolic_name]"
             v-if="prop.property.inputType === 'text'"
             :required="prop.required"
           >
@@ -50,7 +50,7 @@
           <select-row
             :desc="prop.property.description"
             :options="prop.property.data.options"
-            v-model="form.source[prop.property.symbolic_name]"
+            v-model="form.source.data[prop.property.symbolic_name]"
             v-if="prop.property.inputType === 'select'"
             :required="prop.required"
           >
@@ -69,7 +69,7 @@
           >
             <input-row
               :desc="prop.property.description"
-              v-model="equip[prop.property.symbolic_name]"
+              v-model="equip.data[prop.property.symbolic_name]"
               v-if="prop.property.inputType === 'text'"
               :required="prop.required"
             >
@@ -80,7 +80,7 @@
             <select-row
               :desc="prop.property.description"
               :options="prop.property.data.options"
-              v-model="equip[prop.property.symbolic_name]"
+              v-model="equip.data[prop.property.symbolic_name]"
               v-if="prop.property.inputType === 'select'"
               :required="prop.required"
             >
@@ -94,6 +94,7 @@
         <leaflet-map></leaflet-map>
       </div>
     </div>
+    <pre>{{ form }}</pre>
     <div class="w-full my-5 px-16 flex justify-end">
       <jet-button :disabled="form.processing" @click="submit()">
         Create Source
@@ -140,7 +141,9 @@ export default {
     const selectedTemplate = ref();
     const selectedEquipment = ref();
     const form = useForm({
-      source: {},
+      source: {
+        data: {},
+      },
       equipments: [],
       template_id: null,
     });
@@ -159,15 +162,30 @@ export default {
       form.value.equipments = [];
       form.value.template_id = template;
 
+      // Check if there are Children
       if (templateInfo.value.values.children)
         for (const child of templateInfo.value.values.children) {
           const equipment = props.equipments.find((t) => t.id === child);
-
-          form.value.equipments.push({
+          const equip = {
             id: child,
             data: {},
             template: equipment,
-          });
+          };
+          // Load Default Values
+          for (const prop of equip.template.template_properties) {
+            equip.data[prop.property.symbolic_name] = prop.default_value
+              ? prop.default_value
+              : "";
+          }
+
+          form.value.equipments.push(equip);
+        }
+
+      if (templateInfo.value?.template_properties)
+        for (const prop of templateInfo.value?.template_properties) {
+          form.value.source.data[
+            prop.property.symbolic_name
+          ] = prop.default_value ? prop.default_value : "";
         }
     });
 
@@ -190,12 +208,19 @@ export default {
       const equipment = this.equipments.find(
         (t) => t.id === this.selectedEquipment
       );
-
-      this.form.equipments.push({
-        id: this.selectedEquipment,
+      const equip = {
+        id: child,
         data: {},
         template: equipment,
-      });
+      };
+      // Load Default Values
+      for (const prop of equip.template.template_properties) {
+        equip.data[prop.property.symbolic_name] = prop.default_value
+          ? prop.default_value
+          : "";
+      }
+
+      form.equipments.push(equip);
     },
     submit() {
       console.log("saving ", this.form);

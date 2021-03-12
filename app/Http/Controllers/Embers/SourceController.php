@@ -102,8 +102,8 @@ class SourceController extends Controller
         }
 
         $name = 'Not Defined';
-        if ($source['name']) {
-            $name = $source['name'];
+        if (isset($source['data']['name'])) {
+            $name = $source['data']['name'];
         }
 
 
