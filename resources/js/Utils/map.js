@@ -70,7 +70,7 @@ export default {
                 map.flyTo(data.center);
                 break;
             case "polygon":
-                map.flyTo(data.points[0][0])
+                map.flyTo(data.points[0])
                 break;
             case "point":
                 map.flyTo(data.center);
