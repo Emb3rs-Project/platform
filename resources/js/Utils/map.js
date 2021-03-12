@@ -2,7 +2,7 @@ import L from "leaflet";
 
 export default {
     fontAwesomeIcon: L.divIcon({
-        html: '<i class="fas fa-circle fa-2x"><b>S</b></i>',
+        html: '<i class="fas fa-industry fa-2x"></i>',
         iconSize: [20, 20],
         className: "sourceIcon",
         iconAnchor: [10, 20],

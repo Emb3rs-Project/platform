@@ -56,7 +56,7 @@ export default {
 }
 
 .sourceIcon i {
-  color: white;
+  color: green;
   text-shadow: 0 0 3px #000;
 }
 
