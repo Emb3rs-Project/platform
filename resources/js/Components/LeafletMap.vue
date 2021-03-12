@@ -22,7 +22,8 @@ export default {
 
     onMounted(() => {
       map.value = mapUtils.init("map");
-      mapObjects.value = mapUtils.loadMarkers(map.value, props.markers);
+      mapUtils.loadMarkers(map.value, props.markers);
+      window.map = map.value;
     });
 
     return {
@@ -30,7 +31,11 @@ export default {
       mapObjects,
     };
   },
-  mounted() {},
+  methods: {
+    centerAtLocation(location) {
+      mapUtils.centerAtLocation(this.map, location);
+    },
+  },
 };
 </script>
 
