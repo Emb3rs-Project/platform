@@ -94,7 +94,6 @@
         <leaflet-map></leaflet-map>
       </div>
     </div>
-    <pre>{{ form }}</pre>
     <div class="w-full my-5 px-16 flex justify-end">
       <jet-button :disabled="form.processing" @click="submit()">
         Create Source
