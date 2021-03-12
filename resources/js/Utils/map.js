@@ -33,7 +33,9 @@ export default {
         const objects = []
 
 
-        for (const { type, data } of markers) {
+        for (const marker of markers) {
+            const type = marker.type;
+            const data = marker.data;
             switch (type) {
                 case "circle":
                     objects.push(L.circle(data.center, {
