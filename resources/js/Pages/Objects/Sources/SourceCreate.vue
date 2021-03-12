@@ -9,33 +9,52 @@
       <h1 class="text-lg font-bold">New Source</h1>
     </div>
     <form @submit.prevent="submit">
-      <div class="flex p-5 h-screen md:h-content gap-2">
-        <div class="w-6/12 md:overflow-y-auto md:pr-4">
+      <div class="flex p-5 gap-2">
+        <div class="w-6/12 md:min-h-content md:pr-4">
           <select-row
             class="mt-5"
             desc="Source Templates"
-            :options="templateNames"
-            v-model="form.sourceTemplate"
+            :options="mainTemplates"
+            v-model="selectedTemplate"
           >
             Template
           </select-row>
-          <div v-for="prop in properties" :key="prop.id">Hey</div>
+          <div v-for="prop in properties" :key="prop.id" class="my-4">
+            <input-row
+              :desc="prop.property.description"
+              v-model="form.source[prop.property.symbolic_name]"
+              v-if="prop.property.inputType === 'text'"
+              :required="prop.required"
+            >
+              {{ prop.property.name }}
+              <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
+            </input-row>
 
-          <input-row
-            heading="Details | Sink"
-            desc="Input a name for your Sink"
-            v-model="form.sinkName"
+            <select-row
+              :desc="prop.property.description"
+              :options="prop.property.data.options"
+              v-model="form.source[prop.property.symbolic_name]"
+              v-if="prop.property.inputType === 'select'"
+              :required="prop.required"
+            >
+              {{ prop.property.name }}
+              <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
+            </select-row>
+          </div>
+          <select-row
+            class="mt-5"
+            desc="Template"
+            :options="equipTemplates"
+            v-model="selectedEquipment"
           >
-            {{ prop }}
-          </input-row>
-          <jet-input-error :message="form.errors.sinkName" class="mt-2" />
-          {{ properties }}
+            Add Equipment
+          </select-row>
         </div>
-
-        <div class="w-6/12">
+        <div class="w-6/12 max-h-screen">
           <leaflet-map></leaflet-map>
         </div>
       </div>
+
       <div class="w-full my-5 px-16 flex justify-end">
         <jet-button :disabled="form.processing"> Create Source </jet-button>
       </div>
@@ -71,24 +90,44 @@ export default {
       type: Array,
       required: true,
     },
+    equipments: {
+      type: Array,
+      required: true,
+    },
   },
   setup(props) {
-    const templateNames = props.templates.map((t) => t.name);
     const templateInfo = ref();
+    const selectedTemplate = ref();
+    const selectedEquipment = ref();
     const form = useForm({
-      sourceTemplate: null,
+      source: {},
+      equipments: [],
     });
 
-    watch(form.value, ({ sourceTemplate }) => {
-      templateInfo.value = props.templates.find(
-        (t) => t.name === sourceTemplate
-      );
+    const mainTemplates = props.templates.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+    const equipTemplates = props.equipments.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+
+    watch(selectedTemplate, (template) => {
+      templateInfo.value = props.templates.find((t) => t.id === template);
+    });
+
+    watch(selectedEquipment, (template) => {
+      templateInfo.value = props.equipments.find((t) => t.id === template);
     });
 
     return {
       form,
-      templateNames,
+      mainTemplates,
       templateInfo,
+      equipTemplates,
+      selectedTemplate,
+      selectedEquipment,
     };
   },
   computed: {
@@ -97,29 +136,6 @@ export default {
     },
   },
 };
-
-//  const form = useForm({
-//       sourceName: "",
-//       sourceType: "Metallurgy",
-//       sourceSize: "Small",
-//       sourceFluid: "Water",
-//       sourceTemperature: "Cold",
-//       sourcePressure: "Low",
-//       sourceLocation: "Greece",
-//     });
-
-//     const sourceTypes = ["Metallurgy", "Timber"];
-//     const sourceSizes = ["Small", "Medium", "Normal", "Big", "Very Big"];
-//     const sourceFluids = ["Water", "Steam", "Petrolium"];
-//     const sourceTemperatures = ["Cold", "Little Hot", "Very Hot"];
-//     const sourcePressures = ["Low", "Normal", "High"];
-//     const sourceLocations = ["Greece", "Portugal"];
-
-//     const submit = () => {
-//       console.log("submitting");
-//       // TODO: Uncomment when backend is ready to accept data
-//       // form.value.post(route('objects.locations.create'));
-//     };
 </script>
 
 <style>

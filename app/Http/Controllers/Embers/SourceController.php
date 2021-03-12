@@ -56,11 +56,32 @@ class SourceController extends Controller
             ->get()
             ->pluck('id');
 
-        $templates = Template::whereIn('category_id', $sourceCategories)
-            ->with(['templateProperties','templateProperties.unit'])
+        $equipmentCategories = Category::whereType('equipment')
+            ->get()
+            ->pluck('id');
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
             ->get();
 
-        return Inertia::render('Objects/Sources/SourceCreate', ["templates" => $templates]);
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
+        return Inertia::render(
+            'Objects/Sources/SourceCreate',
+            [
+            "templates" => $sourceTemplates,
+            "equipments" => $equipmentTemplates]
+        );
     }
 
     /**
