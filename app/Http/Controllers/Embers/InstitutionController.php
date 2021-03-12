@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Instance;
+use App\Models\Location;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +19,32 @@ class InstitutionController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Institution/InstitutionIndex');
+        $sourceCategories = Category::whereType('source')
+            ->get()
+            ->pluck('id');
+
+        $templates = Template::whereIn('category_id', $sourceCategories)
+            ->get()
+            ->pluck('id');
+
+        $instances = Instance::whereIn('template_id', $templates)
+            ->with(['template', 'template.category', 'location.geoObject'])
+            ->get();
+
+        $sources = $instances->map(function ($item) {
+            if (isset($item->location)) {
+                $item['data'] = $item->location->geoObject;
+            }
+
+            return $item;
+        });
+
+        return Inertia::render(
+            'Institution/InstitutionIndex',
+            [
+            'sources' => $sources
+            ]
+        );
     }
 
     /**

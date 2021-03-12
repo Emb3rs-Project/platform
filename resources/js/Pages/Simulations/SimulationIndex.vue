@@ -109,7 +109,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- </div> -->
             </div>
             <div class="w-6/12">
                 <leaflet-map></leaflet-map>
