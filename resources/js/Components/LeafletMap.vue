@@ -7,13 +7,17 @@
 <script>
 import L from "leaflet";
 import mapUtils from "@/Utils/map.js";
-import { onMounted, ref } from "@vue/runtime-core";
+import { onMounted, ref, watch } from "vue";
 
 export default {
   props: {
     markers: {
       type: Array,
       required: true,
+    },
+    marker: {
+      type: Object,
+      required: false,
     },
   },
   setup(props) {
@@ -22,15 +26,22 @@ export default {
 
     onMounted(() => {
       map.value = mapUtils.init("map");
-      mapObjects.value = mapUtils.loadMarkers(map.value, props.markers);
+      mapUtils.loadMarkers(map.value, props.markers);
+      window.map = map.value;
     });
+
+    watch("marker", (val) => console.log(val));
 
     return {
       map,
       mapObjects,
     };
   },
-  mounted() {},
+  methods: {
+    centerAtLocation(location) {
+      mapUtils.centerAtLocation(this.map, location);
+    },
+  },
 };
 </script>
 
@@ -53,5 +64,9 @@ export default {
   color: black;
   position: relative;
   left: -50%;
+}
+
+#map {
+  min-height: 70vh;
 }
 </style>

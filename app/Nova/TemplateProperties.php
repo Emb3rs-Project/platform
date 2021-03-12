@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class TemplateProperties extends Resource
@@ -50,6 +51,7 @@ class TemplateProperties extends Resource
 
             BelongsTo::make(__('TEMPLATE'), 'template', Template::class),
             BelongsTo::make(__('PROPERTY'), 'property', Properties::class),
+            Text::make(__('DEFAULT_VALUE'), 'default_value'),
             BelongsTo::make(__('UNIT'), 'unit', Unit::class),
 
         ];

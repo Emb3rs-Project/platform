@@ -21,6 +21,19 @@ class Instance extends Model
         'values' => 'array',
     ];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'values',
+        'template_id',
+        'location_id'
+    ];
+
+
     // Table instances
     public function template(): BelongsTo
     {

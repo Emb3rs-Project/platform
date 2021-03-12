@@ -30,36 +30,54 @@ export default {
     },
     loadMarkers(map, markers = []) {
 
-        const objects = []
 
 
-        for (const { type, data } of markers) {
+        for (const marker of markers) {
+            const type = marker.type;
+            const data = marker.data;
             switch (type) {
                 case "circle":
-                    objects.push(L.circle(data.center, {
+                    L.circle(data.center, {
                         color: 'red',
                         fillColor: 'red',
                         fillOpacity: 0.2,
                         radius: data.radius
-                    }).addTo(map))
+                    }).addTo(map)
+                    console.log('Added Circle', data.center)
                     break;
                 case "polygon":
-                    objects.push(L.polygon(data.points, {
+                    L.polygon(data.points, {
                         color: 'blue',
                         fillColor: 'blue',
-                        fillOpacity: 0.2,
-                    }).addTo(map))
+                        fillOpacity: 0.5,
+                    }).addTo(map)
+                    console.log('Added Polygon', data.points)
                     break;
                 case "point":
-                    objects.push(L.marker(data.center, {
+                    L.marker(data.center, {
                         icon: this.fontAwesomeIcon
-                    }).addTo(map))
+                    }).addTo(map)
+                    console.log('Added Point', data.center)
+                    break;
             }
         }
 
-        return objects;
 
+    },
+    centerAtLocation(map, { type, data }) {
+        switch (type) {
+            case "circle":
+                map.flyTo(data.center);
+                break;
+            case "polygon":
+                map.flyTo(data.points[0][0])
+                break;
+            case "point":
+                map.flyTo(data.center);
+                break;
+        }
     }
+
 }
 
 

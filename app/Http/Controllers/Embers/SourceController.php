@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
+use App\Models\Location;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Redirect;
 
 class SourceController extends Controller
 {
@@ -31,7 +33,9 @@ class SourceController extends Controller
             ->get();
 
         $output = $instances->map(function ($item) {
-            $item['data'] = $item->location->geoObject;
+            if (isset($item->location)) {
+                $item['data'] = $item->location->geoObject;
+            }
 
             return $item;
         });
@@ -56,11 +60,36 @@ class SourceController extends Controller
             ->get()
             ->pluck('id');
 
-        $templates = Template::whereIn('category_id', $sourceCategories)
-            ->with(['templateProperties','templateProperties.unit'])
+        $equipmentCategories = Category::whereType('equipment')
+            ->get()
+            ->pluck('id');
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
             ->get();
 
-        return Inertia::render('Objects/Sources/SourceCreate', ["templates" => $templates]);
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
+        $locations = Location::with(['geoObject'])->get();
+
+        return Inertia::render(
+            'Objects/Sources/SourceCreate',
+            [
+            "templates" => $sourceTemplates,
+            "equipments" => $equipmentTemplates,
+            "locations" => $locations
+            ]
+        );
     }
 
     /**
@@ -71,7 +100,36 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $source = $request->get('source');
+        $equipments = $request->get('equipments');
+        foreach ($equipments as $key => $value) {
+            unset($equipments[$key]['template']);
+        }
+
+        $newInstance = [
+            "name" => 'Not Defined',
+            "values" => [
+                "equipments" => $equipments
+            ],
+            "template_id" => $request->get('template_id'),
+            "location_id" => null
+        ];
+
+        // Check if Property Name Exists
+        if (isset($source['data']['name'])) {
+            $newInstance['name'] = $source['data']['name'];
+        }
+
+        // Check if Location is Set
+        if (isset($source['location_id'])) {
+            $newInstance['location_id'] = $source['location_id'];
+        }
+
+
+
+        Instance::create($newInstance);
+
+        return Redirect::route('objects.sources.index');
     }
 
     /**
@@ -116,6 +174,7 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Instance::destroy($id);
+        return redirect::route('objects.sources.index');
     }
 }
