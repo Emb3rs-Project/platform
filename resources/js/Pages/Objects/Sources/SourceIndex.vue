@@ -65,7 +65,15 @@
                   {{ i.template.category.name }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{ i.location ? i.location.name : "Not Assigned" }}
+                  <a
+                    :class="{
+                      'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                        i.location,
+                    }"
+                    @click="centerAtLocation(i.location)"
+                  >
+                    {{ i.location ? i.location.name : "Not Assigned" }}
+                  </a>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
@@ -90,7 +98,7 @@
         <!-- </div> -->
       </div>
       <div class="w-6/12">
-        <leaflet-map :markers="markers"></leaflet-map>
+        <leaflet-map :markers="markers" ref="map"></leaflet-map>
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
@@ -139,6 +147,10 @@ export default {
   methods: {
     onDelete(source) {
       this.$inertia.delete(route("objects.sources.destroy", source.id));
+    },
+    centerAtLocation(location) {
+      const marker = this.markers.find((m) => m.id === location.geo_object.id);
+      this.$refs.map.centerAtLocation(marker);
     },
   },
 };
