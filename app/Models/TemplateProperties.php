@@ -28,4 +28,9 @@ class TemplateProperties extends Model
     {
         return $this->belongsTo(Unit::class, 'default_unit_id');
     }
+
+    public function templateGroup() : BelongsTo
+    {
+        return $this->belongsTo(TemplateGrouping::class, 'grouping_id');
+    }
 }

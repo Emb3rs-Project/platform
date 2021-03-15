@@ -5,19 +5,140 @@
         Objects | Sources
       </h2>
     </template>
+    <!-- Source Configuration -->
+    <div class="mt-10 sm:mt-0 p-10">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Source</h3>
+            <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <select-row
+                    class="mt-5"
+                    desc="Source Templates"
+                    :options="mainTemplates"
+                    v-model="selectedTemplate"
+                  >
+                    Template
+                  </select-row>
+                </div>
+                <div class="col-span-12">
+                  <select-row
+                    class="my-5"
+                    desc="Source Templates"
+                    :options="locationSelects"
+                    v-model="form.source.location_id"
+                    v-if="selectedTemplate"
+                  >
+                    Location
+                  </select-row>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Source Properties -->
+    <div class="sm:mt-0 p-10">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <p class="mt-1 text-sm text-gray-600">Source Properties</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <div v-for="prop in properties" :key="prop.id" class="my-4">
+                    <input-row
+                      :desc="prop.property.description"
+                      v-model="form.source.data[prop.property.symbolic_name]"
+                      v-if="prop.property.inputType === 'text'"
+                      :required="prop.required"
+                    >
+                      {{ prop.property.name }}
+                      <span v-if="prop.unit.symbol"
+                        >({{ prop.unit.symbol }})</span
+                      >
+                    </input-row>
+
+                    <select-row
+                      :desc="prop.property.description"
+                      :options="prop.property.data.options"
+                      v-model="form.source.data[prop.property.symbolic_name]"
+                      v-if="prop.property.inputType === 'select'"
+                      :required="prop.required"
+                    >
+                      {{ prop.property.name }}
+                      <span v-if="prop.unit.symbol"
+                        >({{ prop.unit.symbol }})</span
+                      >
+                    </select-row>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Equipment Configuration -->
+    <div class="mt-10 sm:mt-0 p-10">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Source</h3>
+            <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <select-row
+                    class="mt-5"
+                    desc="Source Templates"
+                    :options="mainTemplates"
+                    v-model="selectedTemplate"
+                  >
+                    Template
+                  </select-row>
+                </div>
+                <div class="col-span-12">
+                  <select-row
+                    class="my-5"
+                    desc="Source Templates"
+                    :options="locationSelects"
+                    v-model="form.source.location_id"
+                    v-if="selectedTemplate"
+                  >
+                    Location
+                  </select-row>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="p-5">
       <h1 class="text-lg font-bold">New Source</h1>
     </div>
     <div class="flex p-5 gap-2">
       <div class="w-6/12 md:min-h-content md:pr-4">
-        <select-row
-          class="mt-5"
-          desc="Source Templates"
-          :options="mainTemplates"
-          v-model="selectedTemplate"
-        >
-          Template
-        </select-row>
         <select-row
           class="mt-5"
           :options="equipTemplates"
@@ -33,15 +154,7 @@
             +
           </button>
         </select-row>
-        <select-row
-          class="my-5"
-          desc="Source Templates"
-          :options="locationSelects"
-          v-model="form.source.location_id"
-          v-if="selectedTemplate"
-        >
-          Location
-        </select-row>
+
         <hr class="my-5" />
         <!-- Source -->
         <h1 v-if="selectedTemplate">Source properties</h1>
