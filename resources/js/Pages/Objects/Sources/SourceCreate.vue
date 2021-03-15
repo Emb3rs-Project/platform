@@ -39,6 +39,23 @@
                     Location
                   </select-row>
                 </div>
+                <!-- <div class="col-span-12">
+                  <select-row
+                    class="mt-5"
+                    :options="equipTemplates"
+                    v-model="selectedEquipment"
+                    v-if="selectedTemplate"
+                  >
+                    Add Equipment
+                    <button
+                      class="inline-flex items-center bg-gray-300 p-2"
+                      @click="addEquipment()"
+                      :disabled="!selectedEquipment"
+                    >
+                      +
+                    </button>
+                  </select-row>
+                </div> -->
               </div>
             </div>
           </div>
@@ -47,7 +64,7 @@
     </div>
 
     <!-- Source Properties -->
-    <div class="sm:mt-0 p-10">
+    <div class="sm:mt-0 p-10" v-if="selectedTemplate">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <div class="px-4 sm:px-0">
@@ -94,126 +111,58 @@
     </div>
 
     <!-- Equipment Configuration -->
-    <div class="mt-10 sm:mt-0 p-10">
+    <div
+      class="mt-10 sm:mt-0 p-10"
+      v-for="equip in form.equipments"
+      :key="equip.id"
+    >
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Source</h3>
-            <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              {{ equip.template.name }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-600">Equipment Properties</p>
           </div>
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
           <div class="shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 bg-white sm:p-6">
               <div class="grid grid-cols-6 gap-6">
-                <div class="col-span-12">
-                  <select-row
-                    class="mt-5"
-                    desc="Source Templates"
-                    :options="mainTemplates"
-                    v-model="selectedTemplate"
+                <div
+                  v-for="prop in equip.template.template_properties"
+                  :key="prop.id"
+                  class="my-4 col-span-12"
+                >
+                  <input-row
+                    :desc="prop.property.description"
+                    v-model="equip.data[prop.property.symbolic_name]"
+                    v-if="prop.property.inputType === 'text'"
+                    :required="prop.required"
                   >
-                    Template
-                  </select-row>
-                </div>
-                <div class="col-span-12">
+                    {{ prop.property.name }}
+                    <span v-if="prop.unit.symbol"
+                      >({{ prop.unit.symbol }})</span
+                    >
+                  </input-row>
+
                   <select-row
-                    class="my-5"
-                    desc="Source Templates"
-                    :options="locationSelects"
-                    v-model="form.source.location_id"
-                    v-if="selectedTemplate"
+                    :desc="prop.property.description"
+                    :options="prop.property.data.options"
+                    v-model="equip.data[prop.property.symbolic_name]"
+                    v-if="prop.property.inputType === 'select'"
+                    :required="prop.required"
                   >
-                    Location
+                    {{ prop.property.name }}
+                    <span v-if="prop.unit.symbol"
+                      >({{ prop.unit.symbol }})</span
+                    >
                   </select-row>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    <div class="p-5">
-      <h1 class="text-lg font-bold">New Source</h1>
-    </div>
-    <div class="flex p-5 gap-2">
-      <div class="w-6/12 md:min-h-content md:pr-4">
-        <select-row
-          class="mt-5"
-          :options="equipTemplates"
-          v-model="selectedEquipment"
-          v-if="selectedTemplate"
-        >
-          Add Equipment
-          <button
-            class="inline-flex items-center bg-gray-300 p-2"
-            @click="addEquipment"
-            :disabled="!selectedEquipment"
-          >
-            +
-          </button>
-        </select-row>
-
-        <hr class="my-5" />
-        <!-- Source -->
-        <h1 v-if="selectedTemplate">Source properties</h1>
-        <div v-for="prop in properties" :key="prop.id" class="my-4">
-          <input-row
-            :desc="prop.property.description"
-            v-model="form.source.data[prop.property.symbolic_name]"
-            v-if="prop.property.inputType === 'text'"
-            :required="prop.required"
-          >
-            {{ prop.property.name }}
-            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-          </input-row>
-
-          <select-row
-            :desc="prop.property.description"
-            :options="prop.property.data.options"
-            v-model="form.source.data[prop.property.symbolic_name]"
-            v-if="prop.property.inputType === 'select'"
-            :required="prop.required"
-          >
-            {{ prop.property.name }}
-            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-          </select-row>
-        </div>
-        <!-- Equipments -->
-        <h1 v-if="selectedTemplate">Equipment properties</h1>
-        <div v-for="equip in form.equipments" :key="equip.id">
-          <h2 class="text-right">{{ equip.template.name }}</h2>
-          <div
-            v-for="prop in equip.template.template_properties"
-            :key="prop.id"
-            class="my-4"
-          >
-            <input-row
-              :desc="prop.property.description"
-              v-model="equip.data[prop.property.symbolic_name]"
-              v-if="prop.property.inputType === 'text'"
-              :required="prop.required"
-            >
-              {{ prop.property.name }}
-              <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-            </input-row>
-
-            <select-row
-              :desc="prop.property.description"
-              :options="prop.property.data.options"
-              v-model="equip.data[prop.property.symbolic_name]"
-              v-if="prop.property.inputType === 'select'"
-              :required="prop.required"
-            >
-              {{ prop.property.name }}
-              <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-            </select-row>
-          </div>
-        </div>
-      </div>
-      <div class="w-6/12 max-h-screen">
-        <leaflet-map ref="map" :marker="marker"></leaflet-map>
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
