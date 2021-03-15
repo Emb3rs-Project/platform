@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -15,7 +16,10 @@ class LocationController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Objects/Locations/LocationIndex');
+        $locations = Location::with(['geoObject'])->get();
+
+
+        return Inertia::render('Objects/Locations/LocationIndex', ['locations' => $locations]);
     }
 
     /**

@@ -1,30 +1,30 @@
 <template>
-    <app-layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Objects | Locations
-            </h2>
-        </template>
+  <app-layout>
+    <template #header>
+      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        Objects | Locations
+      </h2>
+    </template>
 
-        <div class="w-full my-5 px-10 flex justify-end">
-            <input
-                type="text"
-                class="border rounded-full bg-gray-200 border-gray-200 outline-none pl-5 leading-3"
-                placeholder="search..."
-            />
-        </div>
-        <div class="flex p-5 h-screen md:h-content">
-            <div class=" w-full">
-                <leaflet-map></leaflet-map>
-            </div>
-        </div>
+    <div class="w-full my-5 px-10 flex justify-end">
+      <input
+        type="text"
+        class="border rounded-full bg-gray-200 border-gray-200 outline-none pl-5 leading-3"
+        placeholder="search..."
+      />
+    </div>
+    <div class="flex p-5 h-screen md:h-content">
+      <div class="w-full">
+        <leaflet-map :markers="markers"></leaflet-map>
+      </div>
+    </div>
 
-        <div class="w-full my-5 px-10 flex justify-end">
-            <jet-link-button path="objects.locations.create">
-                Create New Location
-            </jet-link-button>
-        </div>
-    </app-layout>
+    <div class="w-full my-5 px-10 flex justify-end">
+      <jet-link-button path="objects.locations.create">
+        Create New Location
+      </jet-link-button>
+    </div>
+  </app-layout>
 </template>
 
 <script>
@@ -33,22 +33,33 @@ import JetInput from "@/Jetstream/Input";
 import JetLinkButton from "@/Jetstream/LinkButton";
 import JetLabel from "@/Jetstream/Label";
 import LeafletMap from "@/Components/LeafletMap";
+import { ref } from "@vue/reactivity";
 
 export default {
-    components: {
-        AppLayout,
-        JetInput,
-        JetLabel,
-        JetLinkButton,
-        LeafletMap,
+  components: {
+    AppLayout,
+    JetInput,
+    JetLabel,
+    JetLinkButton,
+    LeafletMap,
+  },
+  props: {
+    locations: {
+      type: Array,
+      required: true,
     },
-    data() {
-        return {
-            search: "",
-        };
-    },
+  },
+  setup(props) {
+    const markers = ref([]);
 
-    methods: {},
+    for (const loc of props.locations) {
+      markers.value.push(loc.geo_object);
+    }
+
+    return { markers };
+  },
+
+  methods: {},
 };
 </script>
 
