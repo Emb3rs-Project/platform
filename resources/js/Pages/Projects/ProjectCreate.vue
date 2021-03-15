@@ -74,6 +74,7 @@ export default {
     const form = useForm({
       name: "",
       description: "",
+      location_id: "",
     });
 
     const locationSelects = props.locations.map((t) => ({
