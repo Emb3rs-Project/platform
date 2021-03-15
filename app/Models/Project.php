@@ -13,6 +13,17 @@ class Project extends Model
 {
     use HasFactory, SoftDeletes;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'location_id'
+    ];
+
     // Table locations
     public function locations() : HasMany
     {

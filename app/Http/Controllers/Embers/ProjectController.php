@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Redirect;
 
 class ProjectController extends Controller
 {
@@ -41,7 +42,11 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Project::create([
+            'name' => $request->get('name'),
+            'description' => $request->get('description')
+        ]);
+        return Redirect::route('projects.index');
     }
 
     /**
@@ -86,6 +91,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Project::destroy($id);
+        return Redirect::route('projects.index');
     }
 }
