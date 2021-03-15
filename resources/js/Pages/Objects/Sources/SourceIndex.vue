@@ -78,7 +78,7 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
                 >
-                  <a href="#">
+                  <a :href="route('objects.sources.edit', i.id)">
                     <edit-icon
                       class="text-gray-600 font-medium text-sm w-5"
                     ></edit-icon>
