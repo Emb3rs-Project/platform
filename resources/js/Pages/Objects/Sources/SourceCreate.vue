@@ -44,7 +44,7 @@
         </select-row>
         <hr class="my-5" />
         <!-- Source -->
-        <h1 v-if="selectedTemplate">Source</h1>
+        <h1 v-if="selectedTemplate">Source properties</h1>
         <div v-for="prop in properties" :key="prop.id" class="my-4">
           <input-row
             :desc="prop.property.description"
@@ -68,7 +68,7 @@
           </select-row>
         </div>
         <!-- Equipments -->
-        <h1 v-if="selectedTemplate">Equipments</h1>
+        <h1 v-if="selectedTemplate">Equipment properties</h1>
         <div v-for="equip in form.equipments" :key="equip.id">
           <h2 class="text-right">{{ equip.template.name }}</h2>
           <div
