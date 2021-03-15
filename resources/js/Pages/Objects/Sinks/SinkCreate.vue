@@ -12,7 +12,6 @@
       <div class="w-6/12 md:min-h-content md:pr-4">
         <select-row
           class="mt-5"
-          desc="Sink Templates"
           :options="mainTemplates"
           v-model="selectedTemplate"
         >
@@ -20,7 +19,6 @@
         </select-row>
         <select-row
           class="my-5"
-          desc="sink Templates"
           :options="locationSelects"
           v-model="form.sink.location_id"
           v-if="selectedTemplate"
