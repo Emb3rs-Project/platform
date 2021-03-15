@@ -68,9 +68,17 @@
                   {{ project.description }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {{
-                    project.location ? project.location?.name : "Not Assigned"
-                  }}
+                  <a
+                    :class="{
+                      'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                        project.location,
+                    }"
+                    @click="centerAtLocation(project.location)"
+                  >
+                    {{
+                      project.location ? project.location.name : "Not Assigned"
+                    }}
+                  </a>
                 </td>
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
@@ -95,7 +103,7 @@
         <!-- </div> -->
       </div>
       <div class="w-6/12">
-        <leaflet-map></leaflet-map>
+        <leaflet-map ref="map" :makers="markers"></leaflet-map>
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
@@ -112,6 +120,7 @@ import LeafletMap from "@/Components/LeafletMap";
 import JetLinkButton from "@/Jetstream/LinkButton";
 import TrashIcon from "@/Icons/TrashIcon.vue";
 import EditIcon from "@/Icons/EditIcon.vue";
+import { ref } from "@vue/reactivity";
 
 export default {
   components: {
@@ -124,12 +133,24 @@ export default {
 
   props: ["projects"],
 
-  setup(props, context) {
-    console.log(props.projects);
+  setup(props) {
+    const markers = ref([]);
+
+    for (const project of props.projects) {
+      if (project.data) markers.value.push(project.data);
+    }
+
+    return {
+      markers,
+    };
   },
   methods: {
     onDelete(project) {
       this.$inertia.delete(route("projects.destroy", project.id));
+    },
+    centerAtLocation(location) {
+      const marker = this.markers.find((m) => m.id === location.geo_object.id);
+      this.$refs.map.centerAtLocation(marker);
     },
   },
 };

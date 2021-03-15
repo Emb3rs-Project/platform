@@ -20,8 +20,16 @@ class ProjectController extends Controller
     {
         $projects = Project::with(['location'])->get();
 
+        $output = $projects->map(function ($item) {
+            if (isset($item->location)) {
+                $item['data'] = $item->location->geoObject;
+            }
+
+            return $item;
+        });
+
         return Inertia::render('Projects/ProjectIndex', [
-            'projects' => $projects
+            'projects' => $output
         ]);
     }
 
