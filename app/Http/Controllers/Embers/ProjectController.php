@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Location;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,7 +32,9 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Projects/ProjectCreate');
+        $locations = Location::with(['geoObject'])->get();
+
+        return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
     }
 
     /**
@@ -42,10 +45,13 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        Project::create([
+        $newProject = [
             'name' => $request->get('name'),
-            'description' => $request->get('description')
-        ]);
+            'description' => $request->get('description'),
+            'location_id' => $request->get('location_id')
+        ];
+
+        Project::create($newProject);
         return Redirect::route('projects.index');
     }
 

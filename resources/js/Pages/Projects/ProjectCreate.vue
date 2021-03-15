@@ -16,6 +16,15 @@
         <input-row desc="" v-model="form.description" class="mt-5">
           Description
         </input-row>
+        <select-row
+          class="my-5"
+          desc="sink Templates"
+          :options="locationSelects"
+          v-model="form.location_id"
+        >
+          Location
+        </select-row>
+        <hr class="my-5" />
       </div>
 
       <div class="w-6/12">
@@ -51,12 +60,26 @@ export default {
     JetButton,
     JetInputError,
   },
-
-  setup() {
+  props: {
+    locations: {
+      type: Array,
+      required: true,
+    },
+    projects: {
+      type: Array,
+      required: true,
+    },
+  },
+  setup(props) {
     const form = useForm({
       name: "",
       description: "",
     });
+
+    const locationSelects = props.locations.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
 
     const submit = () => {
       form.value.post(route("projects.store"));
@@ -65,6 +88,7 @@ export default {
     return {
       form,
       submit,
+      locationSelects,
     };
   },
 };
