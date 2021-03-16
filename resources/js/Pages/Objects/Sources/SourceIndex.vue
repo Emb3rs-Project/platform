@@ -78,6 +78,11 @@
                 <td
                   class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
                 >
+                  <a :href="route('objects.sources.show', i.id)">
+                    <detail-icon
+                      class="text-gray-600 font-medium text-sm w-5"
+                    ></detail-icon>
+                  </a>
                   <a :href="route('objects.sources.edit', i.id)">
                     <edit-icon
                       class="text-gray-600 font-medium text-sm w-5"
@@ -116,6 +121,7 @@ import LeafletMap from "@/Components/LeafletMap";
 import JetLinkButton from "@/Jetstream/LinkButton";
 import TrashIcon from "@/Icons/TrashIcon.vue";
 import EditIcon from "@/Icons/EditIcon.vue";
+import DetailIcon from "@/Icons/DetailIcon.vue";
 
 export default {
   components: {
@@ -124,6 +130,7 @@ export default {
     JetLinkButton,
     TrashIcon,
     EditIcon,
+    DetailIcon,
   },
   props: {
     sources: {

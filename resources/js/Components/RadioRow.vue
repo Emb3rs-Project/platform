@@ -22,6 +22,7 @@
           type="radio"
           class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
           v-model="value.key"
+          :disabled="disabled"
         />
         <label
           :for="option.key"
@@ -41,6 +42,7 @@ export default {
     desc: String,
     options: Array,
     modelValue: String,
+    disabled: Boolean,
   },
   emits: ["update:modelValue"],
   computed: {

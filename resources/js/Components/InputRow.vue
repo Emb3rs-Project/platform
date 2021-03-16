@@ -20,6 +20,7 @@
         v-model="value"
         ref="input"
         :required="required"
+        :disabled="disabled"
       />
     </div>
   </div>
@@ -33,6 +34,7 @@ export default {
     placeholder: String,
     modelValue: String,
     required: Boolean,
+    disabled: Boolean,
   },
   emits: ["update:modelValue"],
   methods: {

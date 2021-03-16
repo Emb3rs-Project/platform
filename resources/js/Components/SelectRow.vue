@@ -17,6 +17,7 @@
         class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
         v-model="value"
         :required="required"
+        :disabled="disabled"
       >
         <option v-for="option in options" :key="option" :value="option.key">
           {{ option.value }}
@@ -34,6 +35,7 @@ export default {
     options: Array,
     modelValue: String,
     required: Boolean,
+    disabled: Boolean,
   },
   emits: ["update:modelValue"],
   methods: {
