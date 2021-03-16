@@ -11,30 +11,34 @@ import { onMounted, ref, watch } from "vue";
 
 export default {
   props: {
-    markers: {
-      type: Array,
-      required: true,
-    },
     marker: {
       type: Object,
+      required: false,
+    },
+    markerType: {
+      type: String,
       required: false,
     },
   },
   setup(props) {
     const map = ref();
     const mapObjects = ref();
+    const data = ref({});
 
     onMounted(() => {
       map.value = mapUtils.init("map");
-      mapUtils.loadMarkers(map.value, props.markers);
       window.map = map.value;
     });
 
-    watch("marker", (val) => console.log(val));
+    watch(
+      () => props.markerType,
+      (v) => (data.value = {})
+    );
 
     return {
       map,
       mapObjects,
+      data,
     };
   },
   methods: {

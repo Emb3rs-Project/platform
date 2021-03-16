@@ -39,23 +39,6 @@
                     Location
                   </select-row>
                 </div>
-                <!-- <div class="col-span-12">
-                  <select-row
-                    class="mt-5"
-                    :options="equipTemplates"
-                    v-model="selectedEquipment"
-                    v-if="selectedTemplate"
-                  >
-                    Add Equipment
-                    <button
-                      class="inline-flex items-center bg-gray-300 p-2"
-                      @click="addEquipment()"
-                      :disabled="!selectedEquipment"
-                    >
-                      +
-                    </button>
-                  </select-row>
-                </div> -->
               </div>
             </div>
           </div>
@@ -184,7 +167,7 @@ import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
 
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 export default {
   components: {
@@ -207,6 +190,10 @@ export default {
     },
     locations: {
       type: Array,
+      required: true,
+    },
+    instance: {
+      type: Object,
       required: true,
     },
   },
@@ -235,6 +222,19 @@ export default {
     const locationSelects = props.locations.map((t) => ({
       key: t.id,
       value: t.name,
+    }));
+
+    //  Set Instance Values
+    selectedTemplate.value = props.instance.template_id;
+    templateInfo.value = props.templates.find(
+      (t) => t.id === props.instance.template_id
+    );
+    form.value.source.data.name = props.instance.name;
+
+    form.value.source.location_id = props.instance.location_id;
+    form.value.equipments = props.instance.values.equipments.map((e) => ({
+      ...e,
+      template: props.equipments.find((_e) => _e.id === e.id),
     }));
 
     watch(selectedTemplate, (template) => {

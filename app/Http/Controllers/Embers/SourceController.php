@@ -151,7 +151,43 @@ class SourceController extends Controller
      */
     public function edit($id)
     {
-        //
+        $sourceCategories = Category::whereType('source')
+        ->get()
+        ->pluck('id');
+
+        $equipmentCategories = Category::whereType('equipment')
+        ->get()
+        ->pluck('id');
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        ->with([
+            'templateProperties',
+            'templateProperties.unit',
+            'templateProperties.property'
+        ])
+        ->get();
+
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+        ->with([
+            'templateProperties',
+            'templateProperties.unit',
+            'templateProperties.property'
+        ])
+        ->get();
+
+        $locations = Location::with(['geoObject'])->get();
+
+        $instance = Instance::whereId($id)->with(['location','template','template.category', 'location.geoObject'])->first();
+
+        return Inertia::render(
+            'Objects/Sources/SourceEdit',
+            [
+            "templates" => $sourceTemplates,
+            "equipments" => $equipmentTemplates,
+            "locations" => $locations,
+            "instance" => $instance
+            ]
+        );
     }
 
     /**

@@ -2,7 +2,7 @@ import L from "leaflet";
 
 export default {
     fontAwesomeIcon: L.divIcon({
-        html: '<i class="fas fa-circle fa-2x"><b>S</b></i>',
+        html: '<i class="fas fa-industry fa-2x"></i>',
         iconSize: [20, 20],
         className: "sourceIcon",
         iconAnchor: [10, 20],
@@ -70,7 +70,7 @@ export default {
                 map.flyTo(data.center);
                 break;
             case "polygon":
-                map.flyTo(data.points[0][0])
+                map.flyTo(data.points[0])
                 break;
             case "point":
                 map.flyTo(data.center);
