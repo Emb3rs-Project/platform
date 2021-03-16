@@ -7,6 +7,8 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use Auth;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,30 +21,47 @@ class InstitutionController extends Controller
      */
     public function index()
     {
+        $currentTeam = Auth::user()->currentTeam;
+        $users = $currentTeam->allUsers();
+
         $sourceCategories = Category::whereType('source')
             ->get()
             ->pluck('id');
-
         $templates = Template::whereIn('category_id', $sourceCategories)
             ->get()
             ->pluck('id');
-
         $instances = Instance::whereIn('template_id', $templates)
             ->with(['template', 'template.category', 'location.geoObject'])
             ->get();
-
         $sources = $instances->map(function ($item) {
             if (isset($item->location)) {
                 $item['data'] = $item->location->geoObject;
             }
+            return $item;
+        });
 
+        $sinkCategories = Category::whereType('sink')
+            ->get()
+            ->pluck('id');
+        $templates = Template::whereIn('category_id', $sinkCategories)
+            ->get()
+            ->pluck('id');
+        $instances = Instance::whereIn('template_id', $templates)
+            ->with(['template', 'template.category', 'location.geoObject'])
+            ->get();
+        $sinks = $instances->map(function ($item) {
+            if (isset($item->location)) {
+                $item['data'] = $item->location->geoObject;
+            }
             return $item;
         });
 
         return Inertia::render(
             'Institution/InstitutionIndex',
             [
-            'sources' => $sources
+                'users' => $users,
+                'sources' => $sources,
+                'sinks' => $sinks,
             ]
         );
     }

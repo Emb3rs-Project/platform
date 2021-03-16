@@ -3176,16 +3176,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "3.0.5",
+            "version": "3.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "7c751ea006577e4c2e83326d90c8b1e8c11b8ede"
+                "reference": "906a5fafabe5e6ba51ef3dc65b2722a677908837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/7c751ea006577e4c2e83326d90c8b1e8c11b8ede",
-                "reference": "7c751ea006577e4c2e83326d90c8b1e8c11b8ede",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/906a5fafabe5e6ba51ef3dc65b2722a677908837",
+                "reference": "906a5fafabe5e6ba51ef3dc65b2722a677908837",
                 "shasum": ""
             },
             "require": {
@@ -3267,7 +3267,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpseclib/phpseclib/issues",
-                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.5"
+                "source": "https://github.com/phpseclib/phpseclib/tree/3.0.6"
             },
             "funding": [
                 {
@@ -3283,7 +3283,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-12T16:18:16+00:00"
+            "time": "2021-03-10T13:58:31+00:00"
         },
         {
             "name": "pragmarx/google2fa",
@@ -3643,16 +3643,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.10.6",
+            "version": "v0.10.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "6f990c19f91729de8b31e639d6e204ea59f19cf3"
+                "reference": "a395af46999a12006213c0c8346c9445eb31640c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/6f990c19f91729de8b31e639d6e204ea59f19cf3",
-                "reference": "6f990c19f91729de8b31e639d6e204ea59f19cf3",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/a395af46999a12006213c0c8346c9445eb31640c",
+                "reference": "a395af46999a12006213c0c8346c9445eb31640c",
                 "shasum": ""
             },
             "require": {
@@ -3713,9 +3713,9 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
-                "source": "https://github.com/bobthecow/psysh/tree/v0.10.6"
+                "source": "https://github.com/bobthecow/psysh/tree/v0.10.7"
             },
-            "time": "2021-01-18T15:53:43+00:00"
+            "time": "2021-03-14T02:14:56+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -6750,16 +6750,16 @@
     "packages-dev": [
         {
             "name": "barryvdh/laravel-ide-helper",
-            "version": "v2.9.0",
+            "version": "v2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/barryvdh/laravel-ide-helper.git",
-                "reference": "64a6b902583802c162cdccf7e76dc8619368bf1a"
+                "reference": "8d8302ff6adb55f8b844c798b8b1ffdee142f7e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/64a6b902583802c162cdccf7e76dc8619368bf1a",
-                "reference": "64a6b902583802c162cdccf7e76dc8619368bf1a",
+                "url": "https://api.github.com/repos/barryvdh/laravel-ide-helper/zipball/8d8302ff6adb55f8b844c798b8b1ffdee142f7e5",
+                "reference": "8d8302ff6adb55f8b844c798b8b1ffdee142f7e5",
                 "shasum": ""
             },
             "require": {
@@ -6770,6 +6770,7 @@
                 "illuminate/console": "^8",
                 "illuminate/filesystem": "^8",
                 "illuminate/support": "^8",
+                "nikic/php-parser": "^4.7",
                 "php": "^7.3 || ^8.0",
                 "phpdocumentor/type-resolver": "^1.1.0"
             },
@@ -6783,6 +6784,9 @@
                 "phpunit/phpunit": "^8.5 || ^9",
                 "spatie/phpunit-snapshot-assertions": "^3 || ^4",
                 "vimeo/psalm": "^3.12"
+            },
+            "suggest": {
+                "illuminate/events": "Required for automatic helper generation (^6|^7|^8)."
             },
             "type": "library",
             "extra": {
@@ -6824,7 +6828,7 @@
             ],
             "support": {
                 "issues": "https://github.com/barryvdh/laravel-ide-helper/issues",
-                "source": "https://github.com/barryvdh/laravel-ide-helper/tree/v2.9.0"
+                "source": "https://github.com/barryvdh/laravel-ide-helper/tree/v2.9.1"
             },
             "funding": [
                 {
@@ -6832,7 +6836,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-29T10:11:05+00:00"
+            "time": "2021-03-15T19:22:08+00:00"
         },
         {
             "name": "barryvdh/reflection-docblock",
@@ -10111,16 +10115,16 @@
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
-            "version": "v2.10.2",
+            "version": "v2.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sirbrillig/phpcs-variable-analysis.git",
-                "reference": "0775e0c683badad52c03b11c2cd86a9fdecb937a"
+                "reference": "e76e816236f401458dd8e16beecab905861b5867"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/0775e0c683badad52c03b11c2cd86a9fdecb937a",
-                "reference": "0775e0c683badad52c03b11c2cd86a9fdecb937a",
+                "url": "https://api.github.com/repos/sirbrillig/phpcs-variable-analysis/zipball/e76e816236f401458dd8e16beecab905861b5867",
+                "reference": "e76e816236f401458dd8e16beecab905861b5867",
                 "shasum": ""
             },
             "require": {
@@ -10160,7 +10164,7 @@
                 "source": "https://github.com/sirbrillig/phpcs-variable-analysis",
                 "wiki": "https://github.com/sirbrillig/phpcs-variable-analysis/wiki"
             },
-            "time": "2021-01-08T16:31:05+00:00"
+            "time": "2021-03-09T22:32:14+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
