@@ -25,26 +25,29 @@ export default {
     const mapObjects = ref();
     const data = ref({});
 
-    onMounted(() => {
-      map.value = mapUtils.init("map");
-      window.map = map.value;
-    });
-
     watch(
       () => props.markerType,
       (v) => (data.value = {})
     );
 
+    const centerAtLocation = (location) =>
+      mapUtils.centerAtLocation(map.value, location);
+
     return {
       map,
       mapObjects,
       data,
+      centerAtLocation,
     };
   },
   methods: {
-    centerAtLocation(location) {
-      mapUtils.centerAtLocation(this.map, location);
+    onMapDoubleClick(e) {
+      console.log(e);
     },
+  },
+  mounted() {
+    this.map = mapUtils.init("map");
+    this.map.on("dblclick", (e) => this.onMapDoubleClick(e));
   },
 };
 </script>
