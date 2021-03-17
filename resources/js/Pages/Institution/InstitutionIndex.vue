@@ -13,7 +13,7 @@
                         Users
                     </h3>
                     <p class="text-sm text-gray-500">
-                        A list of all the Users that belong to this Team
+                        A list of all the Users that belong to this Institution
                     </p>
                 </div>
                 <div class="w-full max-h-96 bg-white shadow overflow-y-auto sm:rounded-b-md">
@@ -106,168 +106,183 @@
             </div>
             <!-- /List Users -->
 
-            <!-- List Sources -->
+            <!-- List Sources and Sinks w/Map -->
             <div class="flex gap-5">
-                <!-- <div class="w-full md:w-8/12">
-                    <leaflet-map :markers="sourcesMapData"></leaflet-map>
-                </div> -->
-
-                <div class="w-full  max-h-96 overflow-y-auto">
-                    <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-                        <h3 class="text-lg leading-6 font-bold text-gray-900">
-                            Sources
-                        </h3>
-                        <p class="text-sm text-gray-500">
-                            A list of all the Sources that belong to this Team
-                        </p>
-                    </div>
-                    <div class="md:overflow-y-auto">
-                        <div class="overflow-x">
-                            <table class="min-w-full divide-y divide-gray-200 shadow">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Name
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Template
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Category
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Location
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="(i, index) in sources"
-                                        :key="index"
-                                        :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                                    >
-                                        <!-- bg-white is on odd rows -->
-                                        <!-- bg-gray is on even rows -->
-
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {{ i.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ i.template.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ i.template.category.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <a :class="{
-                                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                i.location,
-                                             }">
-                                                {{ i.location ? i.location.name : "Not Assigned" }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                <div class="flex flex-col gap-5 sm:w-full md:w-6/12">
+                    <!-- List Sources -->
+                    <div>
+                        <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+                            <h3 class="text-lg leading-6 font-bold text-gray-900">
+                                Sources
+                            </h3>
+                            <p class="text-sm text-gray-500">
+                                A list of all the Sources that belong to this Institution
+                            </p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <!-- /List Sources -->
-
-            <!-- List Sinks -->
-            <div class="flex gap-5">
-                <!-- <div class="w-full md:w-8/12 max-h-96">
-                    <leaflet-map :markers="sinksMapData"></leaflet-map>
-                </div> -->
-
-                <div class="w-full max-h-96 overflow-y-auto">
-                    <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-                        <h3 class="text-lg leading-6 font-bold text-gray-900">
-                            Sinks
-                        </h3>
-                        <p class="text-sm text-gray-500">
-                            A list of all the Sinks that belong to this Team
-                        </p>
-                    </div>
-                    <div class="md:overflow-y-auto">
-                        <div class="overflow-x">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                            <div v-if="sources.length">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Template
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Category
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Location
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="(source, index) in sources"
+                                            :key="index"
+                                            :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                                         >
-                                            Name
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Template
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Category
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                        >
-                                            Location
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr
-                                        v-for="(i, index) in sinks"
-                                        :key="index"
-                                        :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                                        class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
-                                    >
-                                        <!-- bg-white is on odd rows -->
-                                        <!-- bg-gray is on even rows -->
-
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                            {{ i.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ i.template.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {{ i.template.category.name }}
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            <a :class="{
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ source.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ source.template.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ source.template.category.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <a
+                                                    :class="{
                                                     'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                        i.location,
-                                                }">
-                                                {{ i.location ? i.location.name : "Not Assigned" }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                                        source.location,
+                                                }"
+                                                    @click="centerAtLocation(source.location)"
+                                                >
+                                                    {{ source.location ? source.location.name : "Not Assigned" }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div
+                                v-else
+                                class="flex items-center place-content-center bg-gray-50 h-64"
+                            >
+                                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
+                            </div>
+
                         </div>
                     </div>
+                    <!-- /List Sources -->
+
+                    <!-- List Sinks -->
+                    <div>
+                        <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+                            <h3 class="text-lg leading-6 font-bold text-gray-900">
+                                Sinks
+                            </h3>
+                            <p class="text-sm text-gray-500">
+                                A list of all the Sinks that belong to this Institution
+                            </p>
+                        </div>
+                        <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                            <div v-if="sinks.length">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Template
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Category
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Location
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="(sink, index) in sinks"
+                                            :key="index"
+                                            :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
+                                            class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
+                                        >
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ sink.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ sink.template.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ sink.template.category.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                <a
+                                                    :class="{
+                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                                        sink.location,
+                                                    }"
+                                                    @click="centerAtLocation(sink.location)"
+                                                >
+
+                                                    {{ sink.location ? sink.location.name : "Not Assigned" }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div
+                                v-else
+                                class="flex items-center place-content-center bg-gray-50 h-64"
+                            >
+                                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sinks Found</h1>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /List Sinks -->
+                </div>
+
+                <div class="sm:w-full md:w-6/12">
+                    <leaflet-map
+                        :markers="locations"
+                        ref="map"
+                    ></leaflet-map>
                 </div>
             </div>
-            <!-- /List Sinks -->
+            <!-- /List Sources and Sinks w/Map -->
         </div>
 
     </app-layout>
@@ -291,21 +306,59 @@
         ],
 
         setup(props) {
-            const sourcesMapData = ref([]);
-            const sinksMapData = ref([]);
+            const locations = ref([]);
+            const locationIds = ref([]);
 
             for (const source of props.sources) {
-                if (source.data) sourcesMapData.value.push(source.data);
+                if (source.data) {
+                    if (!locationIds.value.length) {
+                        locations.value.push(source.data);
+
+                        locationIds.value.push(source.data.location_id);
+
+                        break;
+                    }
+
+                    for (const locationid of locationIds.value) {
+                        if (locationid !== source.location_id) {
+                            locations.value.push(source.data);
+
+                            locationIds.value.push(source.data.location_id);
+                        }
+                    }
+                }
             }
 
             for (const sink of props.sinks) {
-                if (sink.data) sinksMapData.value.push(sink.data);
+                if (sink.data) {
+                    if (!locationIds.value.length) {
+                        locations.value.push(sink.data);
+
+                        locationIds.value.push(sink.data.location_id);
+
+                        break;
+                    }
+
+                    for (const locationid of locationIds.value) {
+                        if (locationid !== sink.location_id) {
+                            locations.value.push(sink.data);
+
+                            locationIds.value.push(sink.data.location_id);
+                        }
+                    }
+                }
             }
-            console.log("SINKS:", sinksMapData.value);
+
             return {
-                sourcesMapData,
-                sinksMapData
+                locations
             };
+        },
+
+        methods: {
+            centerAtLocation(location) {
+                const locationMarker = this.locations.find((m) => m.id === location.geo_object.id);
+                this.$refs.map.centerAtLocation(locationMarker);
+            }
         }
     };
 </script>
