@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
+use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
@@ -42,7 +43,9 @@ class ProjectController extends Controller
     {
         $locations = Location::with(['geoObject'])->get();
 
-        return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
+        return Inertia::render('Projects/ProjectCreate', [
+            'locations' => $locations
+        ]);
     }
 
     /**
@@ -71,7 +74,16 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::whereId($id)->first();
+
+        $projectId = $project->id;
+
+        $simulations = Simulation::whereProjectId($projectId)->get();
+
+        return Inertia::render('Projects/ProjectDetails', [
+            'project' => $project,
+            'simulation' => $simulations
+        ]);
     }
 
     /**
