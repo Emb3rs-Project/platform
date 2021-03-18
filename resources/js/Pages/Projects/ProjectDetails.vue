@@ -5,40 +5,223 @@
                 Project
             </h2>
         </template>
-        <!-- Source Configuration -->
-        <div class="mt-10 sm:mt-0 p-10">
-            <div class="md:grid md:grid-cols-3 md:gap-6">
-                <div class="md:col-span-1">
-                    <div class="px-4 sm:px-0">
+
+        <div class="grid grid-cols-1 p-5 gap-y-10">
+            <div>
+                <div class="grid grid-cols-3">
+                    <div>
                         <h3 class="text-lg font-medium leading-6 text-gray-900">Project</h3>
                         <p class="mt-1 text-sm text-gray-600">Project Configuration</p>
                     </div>
-                </div>
-                <div class="mt-5 md:mt-0 md:col-span-2">
-                    <div class="shadow overflow-hidden sm:rounded-md">
-                        <div class="px-4 py-5 bg-white sm:p-6">
-                            <div class="grid grid-cols-6 gap-6">
-                                <div class="col-span-12">
-                                    <!-- Name -->
-                                </div>
-                                <div class="col-span-12">
-                                    <!-- Description -->
-                                </div>
+                    <div class="col-span-2">
+                        <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <input-row
+                                    heading="Project"
+                                    desc="The name of the Project"
+                                    v-model="project.name"
+                                    :disabled="true"
+                                >
+                                    Name
+                                </input-row>
+
+                                <input-row
+                                    desc="The description of the Project"
+                                    v-model="project.description"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Description
+                                </input-row>
+
+                                <input-row
+                                    desc="The Project's creation date"
+                                    v-model="project.created_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Created at
+                                </input-row>
+
+                                <input-row
+                                    desc="The Project's last update date"
+                                    v-model="project.updated_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Updated At
+                                </input-row>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div v-if="project.location">
+                <div class="grid grid-cols-3">
+                    <div>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">Location</h3>
+                        <p class="mt-1 text-sm text-gray-600">Project Location Configuration</p>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <input-row
+                                    heading="Location"
+                                    desc="The name of the Location of this Project"
+                                    v-model="project.location.name"
+                                    :disabled="true"
+                                >
+                                    Name
+                                </input-row>
+
+                                <input-row
+                                    desc="The description of the Location of this Project"
+                                    v-model="project.description"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Description
+                                </input-row>
+
+                                <input-row
+                                    desc="The Locations Project's creation date"
+                                    v-model="project.location.created_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Created at
+                                </input-row>
+
+                                <input-row
+                                    desc="The Project's last update date"
+                                    v-model="project.location.updated_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Updated At
+                                </input-row>
+                                <pre>{{project.location}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                v-for="(simulation, index) in simulations"
+                :key="index"
+            >
+                <div class="grid grid-cols-3">
+                    <div>
+                        <div v-if="index == 0">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Simulation(s)</h3>
+                            <p class="mt-1 text-sm text-gray-600">Project Simulation Configuration(s)</p>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="bg-white overflow-hidden shadow sm:rounded-lg">
+                            <div class="px-4 py-5 sm:p-6">
+                                <input-row
+                                    heading="Simulation"
+                                    desc="The status of the Simulation of this Project"
+                                    v-model="simulation.status"
+                                    :disabled="true"
+                                >
+                                    Status
+                                </input-row>
+
+                                <input-row
+                                    desc="The Simulation's creation date"
+                                    v-model="simulation.created_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Created at
+                                </input-row>
+
+                                <input-row
+                                    desc="The Simulation's last update date"
+                                    v-model="simulation.updated_at"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Updated At
+                                </input-row>
+
+                                <input-row
+                                    heading="Simulation Target"
+                                    desc="The Simulation's Target"
+                                    v-model="simulation.targetData"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Target
+                                </input-row>
+
+                                <input-row
+                                    heading="Simulation Type"
+                                    desc="The name of the Simulation Type of this Project"
+                                    v-model="simulation.simulation_type.name"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Name
+                                </input-row>
+
+                                <input-row
+                                    desc="The description of the Simulation Type of this Project"
+                                    v-model="simulation.simulation_type.description"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Description
+                                </input-row>
+
+                                <input-row
+                                    desc="The value of the Simulation Type of this Project"
+                                    v-model="simulation.simulation_type.value"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Value
+                                </input-row>
+
+                                <input-row
+                                    desc="The unit of the Simulation Type of this Project"
+                                    v-model="simulation.simulation_type.unit.name"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Unit
+                                </input-row>
+
+                                <input-row
+                                    desc="The symbol of the Simulation Type of this Project"
+                                    v-model="simulation.simulation_type.unit.symbol"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    Symbol
+                                </input-row>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
-        <div class="w-full my-5 px-16 flex justify-end">
-            <!-- <inertia-link
-                as="button"
-                :href="route('objects.sources.edit', instance.id)"
-                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray transition ease-in-out duration-150"
+        <div class="w-full my-5 px-16 flex justify-end gap-x-10">
+            <secondary-button :path="'simulations.create'">
+                Create simulation
+            </secondary-button>
+            <primary-button
+                :path="'projects.edit'"
+                :parameter="project.id"
             >
-                Save
-            </inertia-link> -->
+                Edit Project
+            </primary-button>
         </div>
     </app-layout>
 </template>
@@ -49,23 +232,18 @@
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
     import InputRow from "@/Components/InputRow";
-    import RadioRow from "@/Components/RadioRow";
-    import SelectRow from "@/Components/SelectRow";
-    import JetButton from "@/Jetstream/Button";
-    import JetInputError from "@/Jetstream/InputError";
-
-    import { onMounted, ref, watch } from "vue";
+    import PrimaryButton from "@/Components/PrimaryButton";
+    import SecondaryButton from "@/Components/SecondaryButton";
 
     export default {
         components: {
             AppLayout,
             LeafletMap,
             InputRow,
-            RadioRow,
-            SelectRow,
-            JetButton,
-            JetInputError,
+            PrimaryButton,
+            SecondaryButton
         },
+
         props: {
             project: {
                 type: Object,
@@ -76,6 +254,7 @@
                 required: true,
             },
         },
+
         setup(props) {
 
             const form = useForm({
@@ -86,103 +265,9 @@
                 template_id: null,
             });
 
-            // const mainTemplates = props.templates.map((t) => ({
-            //     key: t.id,
-            //     value: t.name,
-            // }));
-            // const equipTemplates = props.equipments.map((t) => ({
-            //     key: t.id,
-            //     value: t.name,
-            // }));
-            // const locationSelects = props.locations.map((t) => ({
-            //     key: t.id,
-            //     value: t.name,
-            // }));
-
-            //  Set Instance Values
-            // selectedTemplate.value = props.instance.template_id;
-            // templateInfo.value = props.templates.find(
-            //     (t) => t.id === props.instance.template_id
-            // );
-            // form.value.source.data.name = props.instance.name;
-
-            // form.value.source.location_id = props.instance.location_id;
-            // form.value.equipments = props.instance.values.equipments.map((e) => ({
-            //     ...e,
-            //     template: props.equipments.find((_e) => _e.id === e.id),
-            // }));
-
-            // watch(selectedTemplate, (template) => {
-            //     templateInfo.value = props.templates.find((t) => t.id === template);
-            //     form.value.equipments = [];
-            //     form.value.template_id = template;
-
-            //     // Check if there are Children
-            //     if (templateInfo.value.values.children)
-            //         for (const child of templateInfo.value.values.children) {
-            //             const equipment = props.equipments.find((t) => t.id === child);
-            //             const equip = {
-            //                 id: child,
-            //                 data: {},
-            //                 template: equipment,
-            //             };
-            //             // Load Default Values
-            //             for (const prop of equip.template.template_properties) {
-            //                 equip.data[prop.property.symbolic_name] = prop.default_value
-            //                     ? prop.default_value
-            //                     : "";
-            //             }
-
-            //             form.value.equipments.push(equip);
-            //         }
-
-            //     if (templateInfo.value?.template_properties)
-            //         for (const prop of templateInfo.value?.template_properties) {
-            //             form.value.source.data[
-            //                 prop.property.symbolic_name
-            //             ] = prop.default_value ? prop.default_value : "";
-            //         }
-            // });
-
-            // watch(selectedLocation, (locId) => {
-            //     const location = props.locations.find((l) => l.id === locId);
-            //     marker.value = location.geo_object;
-            //     //this.$refs.map.centerAtLocation(marker);
-            // });
-
             return {
                 form,
             };
-        },
-        computed: {
-            properties() {
-                return Object.assign([], this.templateInfo?.template_properties);
-            },
-        },
-        methods: {
-            addEquipment() {
-                const equipment = this.equipments.find(
-                    (t) => t.id === this.selectedEquipment
-                );
-                const equip = {
-                    id: child,
-                    data: {},
-                    template: equipment,
-                };
-                // Load Default Values
-                for (const prop of equip.template.template_properties) {
-                    equip.data[prop.property.symbolic_name] = prop.default_value
-                        ? prop.default_value
-                        : "";
-                }
-
-                form.equipments.push(equip);
-            },
-            submit() {
-                console.log("saving ", this.form);
-                this.form.post(route("projects.store"));
-            },
-            onLocationSelect(locId) { },
         },
     };
 </script>

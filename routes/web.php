@@ -55,15 +55,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
 
         // Sources
-        // Route::get('/sources', [SourceController::class, 'index'])->name('sources');
         Route::resource('/sources', SourceController::class)->names(createResourceNames('sources'));
 
         // Sinks
-        // Route::get('/sinks', [SinkController::class, 'index'])->name('sinks');
         Route::resource('/sinks', SinkController::class)->names(createResourceNames('sinks'));
 
         // Links
-        // Route::get('/links', [LinkController::class, 'index'])->name('links');
         Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
     });
 

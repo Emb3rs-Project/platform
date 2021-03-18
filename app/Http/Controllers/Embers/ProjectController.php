@@ -74,15 +74,15 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::whereId($id)->first();
+        $project = Project::whereId($id)->with(['location'])->first();
 
         $projectId = $project->id;
 
-        $simulations = Simulation::whereProjectId($projectId)->get();
+        $simulations = Simulation::whereProjectId($projectId)->with(['simulationType', 'simulationType.unit'])->get();
 
         return Inertia::render('Projects/ProjectDetails', [
             'project' => $project,
-            'simulation' => $simulations
+            'simulations' => $simulations
         ]);
     }
 
