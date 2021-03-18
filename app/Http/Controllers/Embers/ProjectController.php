@@ -94,7 +94,14 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        //
+        $project = Project::whereId($id)->with(['location'])->first();
+
+        $locations = Location::all();
+
+        return Inertia::render('Projects/ProjectEdit', [
+            'project' => $project,
+            'locations' => $locations
+        ]);
     }
 
     /**
@@ -106,7 +113,13 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Project::findOrFail($id)->update([
+            'name' => $request->get('name'),
+            'description' => $request->get('description'),
+            'location_id' => $request->get('location_id')
+        ]);
+
+        return Redirect::route('projects.index');
     }
 
     /**

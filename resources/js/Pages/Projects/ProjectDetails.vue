@@ -67,7 +67,7 @@
                         <div class="bg-white overflow-hidden shadow sm:rounded-lg">
                             <div class="px-4 py-5 sm:p-6">
                                 <input-row
-                                    heading="Location"
+                                    heading="Project's Location"
                                     desc="The name of the Location of this Project"
                                     v-model="project.location.name"
                                     :disabled="true"
@@ -101,7 +101,6 @@
                                 >
                                     Updated At
                                 </input-row>
-                                <pre>{{project.location}}</pre>
                             </div>
                         </div>
                     </div>
@@ -213,35 +212,33 @@
         </div>
 
         <div class="w-full my-5 px-16 flex justify-end gap-x-10">
-            <secondary-button :path="'simulations.create'">
+            <secondary-link-button :path="'simulations.create'">
                 Create simulation
-            </secondary-button>
-            <primary-button
+            </secondary-link-button>
+            <primary-link-button
                 :path="'projects.edit'"
                 :parameter="project.id"
             >
                 Edit Project
-            </primary-button>
+            </primary-link-button>
         </div>
     </app-layout>
 </template>
 
 <script>
-    import { useForm } from "@inertiajs/inertia-vue3";
-
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
     import InputRow from "@/Components/InputRow";
-    import PrimaryButton from "@/Components/PrimaryButton";
-    import SecondaryButton from "@/Components/SecondaryButton";
+    import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+    import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
 
     export default {
         components: {
             AppLayout,
             LeafletMap,
             InputRow,
-            PrimaryButton,
-            SecondaryButton
+            PrimaryLinkButton,
+            SecondaryLinkButton
         },
 
         props: {
@@ -253,21 +250,6 @@
                 type: Array,
                 required: true,
             },
-        },
-
-        setup(props) {
-
-            const form = useForm({
-                source: {
-                    data: {},
-                },
-                equipments: [],
-                template_id: null,
-            });
-
-            return {
-                form,
-            };
         },
     };
 </script>

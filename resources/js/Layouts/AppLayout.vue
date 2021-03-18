@@ -465,13 +465,6 @@
                     </jet-sub-nav-link>
 
                     <jet-nav-link
-                        :href="route('simulations.index')"
-                        :active="route().current('simulations.index')"
-                    >
-                        Simulations
-                    </jet-nav-link>
-
-                    <jet-nav-link
                         :href="route('projects.index')"
                         :active="route().current('projects.index')"
                     >

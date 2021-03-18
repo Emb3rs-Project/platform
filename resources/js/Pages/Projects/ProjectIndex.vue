@@ -87,8 +87,11 @@
                                                 <inertia-link :href="route('projects.show', project.id)">
                                                     <detail-icon class="text-gray-600 font-medium text-sm w-5"></detail-icon>
                                                 </inertia-link>
-                                                <a href="#">
+                                                <inertia-link :href="route('projects.edit', project.id)">
                                                     <edit-icon class="text-gray-600 font-medium text-sm w-5"></edit-icon>
+                                                </inertia-link>
+                                                <a href="#">
+
                                                 </a>
                                                 <a
                                                     href="#"
