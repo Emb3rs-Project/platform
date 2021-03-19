@@ -21,7 +21,8 @@ module.exports = {
             },
             spacing: {
                 'content': '70vh',
-            }
+                'table-and-map': '80vh',
+            },
         },
     },
 
