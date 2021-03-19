@@ -85,7 +85,7 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
                                                 <inertia-link :href="route('projects.show', project.id)">
-                                                    <detail-icon class="text-indigo-600 font-medium text-sm w-5"></detail-icon>
+                                                    <detail-icon class="text-gray-600 font-medium text-sm w-5"></detail-icon>
                                                 </inertia-link>
                                                 <inertia-link :href="route('projects.edit', project.id)">
                                                     <edit-icon class="text-gray-600 font-medium text-sm w-5"></edit-icon>
@@ -139,7 +139,6 @@
 
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
-    // import JetLinkButton from "@/Jetstream/LinkButton";
     import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
     import TrashIcon from "@/Icons/TrashIcon.vue";
     import EditIcon from "@/Icons/EditIcon.vue";
@@ -155,7 +154,12 @@
             DetailIcon
         },
 
-        props: ["projects"],
+        props: {
+            projects: {
+                type: Array,
+                required: true
+            }
+        },
 
         setup(props) {
             const map = ref(null);

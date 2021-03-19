@@ -277,7 +277,7 @@
 
                 <div class="sm:w-full md:w-6/12">
                     <leaflet-map
-                        :markers="locations"
+                        :markers="markers"
                         ref="map"
                     ></leaflet-map>
                 </div>
@@ -288,9 +288,12 @@
 </template>
 
 <script>
+    import { ref } from 'vue';
+
+    import useUniqueLocations from "@/Composables/useUniqueLocations";
+
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
-    import { ref } from 'vue';
 
     export default {
         components: {
@@ -298,58 +301,33 @@
             LeafletMap,
         },
 
-        props: [
-            'users',
-            'sources',
-            'sinks',
-        ],
+        props: {
+            users: {
+                type: Array,
+                required: true
+            },
+            sources: {
+                type: Array,
+                required: true
+            },
+            sinks: {
+                type: Array,
+                required: true
+            },
+        },
 
         setup(props) {
-            const locations = ref([]);
-            const locationIds = ref([]);
+            const markers = ref([]);
+            const locations = props.sources.concat(props.sinks);
 
-            for (const source of props.sources) {
-                if (source.data) {
-                    if (!locationIds.value.length) {
-                        locations.value.push(source.data);
+            const uniqueLocations = useUniqueLocations(locations);
 
-                        locationIds.value.push(source.data.location_id);
-
-                        break;
-                    }
-
-                    for (const locationid of locationIds.value) {
-                        if (locationid !== source.location_id) {
-                            locations.value.push(source.data);
-
-                            locationIds.value.push(source.data.location_id);
-                        }
-                    }
-                }
-            }
-
-            for (const sink of props.sinks) {
-                if (sink.data) {
-                    if (!locationIds.value.length) {
-                        locations.value.push(sink.data);
-
-                        locationIds.value.push(sink.data.location_id);
-
-                        break;
-                    }
-
-                    for (const locationid of locationIds.value) {
-                        if (locationid !== sink.location_id) {
-                            locations.value.push(sink.data);
-
-                            locationIds.value.push(sink.data.location_id);
-                        }
-                    }
-                }
+            for (const source of uniqueLocations.value) {
+                markers.value.push(source.data)
             }
 
             return {
-                locations
+                markers
             };
         },
 
