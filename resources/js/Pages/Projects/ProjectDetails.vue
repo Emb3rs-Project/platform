@@ -26,6 +26,15 @@
                                 </input-row>
 
                                 <input-row
+                                    desc="The ID of the Project"
+                                    v-model="project.id"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                    ID
+                                </input-row>
+
+                                <input-row
                                     desc="The description of the Project"
                                     v-model="project.description"
                                     :disabled="true"

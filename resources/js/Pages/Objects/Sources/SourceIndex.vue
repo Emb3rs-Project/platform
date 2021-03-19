@@ -5,7 +5,124 @@
                 Objects | Sources
             </h2>
         </template>
-        <div class="p-5">
+
+        <div class="grid grid-cols-2 p-5 gap-5">
+            <div>
+                <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+                    <h3 class="text-lg leading-6 font-bold text-gray-900">
+                        Sources
+                    </h3>
+                    <p class="text-sm text-gray-500">
+                        A list of all the Sources
+                    </p>
+                </div>
+                <div class="min-w-full max-h-96 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                    <div v-if="sources.length">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        ID
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Name
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Template
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Category
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    >
+                                        Location
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="relative px-6 py-3"
+                                    >
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(source, index) in sources"
+                                    :key="index"
+                                    :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
+                                >
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        {{ source.id }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ source.name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ source.template.name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ source.template.category.name }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <a
+                                            :class="{
+                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                                        source.location,
+                                                }"
+                                            @click="centerAtLocation(source.location)"
+                                        >
+                                            {{ source.location ? source.location.name : "Not Assigned" }}
+                                        </a>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                                        <inertia-link :href="route('objects.sources.show', source.id)">
+                                            <detail-icon class="text-gray-600 font-medium text-sm w-5"></detail-icon>
+                                        </inertia-link>
+                                        <inertia-link :href="route('objects.sources.edit', source.id)">
+                                            <edit-icon class="text-gray-600 font-medium text-sm w-5"></edit-icon>
+                                        </inertia-link>
+                                        <button
+                                            class="focus:outline-none"
+                                            @click="onDelete(source)"
+                                        >
+                                            <trash-icon class="text-red-600 font-medium text-sm w-5"></trash-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div
+                        v-else
+                        class="flex items-center place-content-center bg-gray-50 h-64"
+                    >
+                        <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <leaflet-map
+                    :markers="markers"
+                    ref="map"
+                ></leaflet-map>
+            </div>
+        </div>
+        <!-- <div class="p-5">
             <h1 class="text-lg font-bold">Sources</h1>
         </div>
         <div class="flex p-5 h-screen md:h-content gap-2">
@@ -53,9 +170,6 @@
                                 :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                                 class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
                             >
-                                <!-- bg-white is on odd rows -->
-                                <!-- bg-gray is on even rows -->
-
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                     {{ i.name }}
                                 </td>
@@ -93,10 +207,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- </div> -->
-                    <!-- </div> -->
                 </div>
-                <!-- </div> -->
             </div>
             <div class="w-6/12">
                 <leaflet-map
@@ -104,7 +215,7 @@
                     ref="map"
                 ></leaflet-map>
             </div>
-        </div>
+        </div> -->
         <div class="w-full my-5 px-16 flex justify-end">
             <jet-link-button
                 path="objects.sources.create"
