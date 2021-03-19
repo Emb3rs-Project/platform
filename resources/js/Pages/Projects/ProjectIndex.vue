@@ -122,9 +122,10 @@
             </div>
             <!-- /List Projects w/Map -->
             <div class="w-full px-10 flex justify-end">
-                <jet-link-button path="projects.create">
+                <primary-link-button :path="'projects.create'">
                     Create New Project
-                </jet-link-button>
+                </primary-link-button>
+
             </div>
         </div>
 
@@ -134,9 +135,12 @@
 <script>
     import { ref } from "vue";
 
+    import useUniqueLocations from "@/Composables/useUniqueLocations";
+
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
-    import JetLinkButton from "@/Jetstream/LinkButton";
+    // import JetLinkButton from "@/Jetstream/LinkButton";
+    import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
     import TrashIcon from "@/Icons/TrashIcon.vue";
     import EditIcon from "@/Icons/EditIcon.vue";
     import DetailIcon from "@/Icons/DetailIcon.vue";
@@ -145,7 +149,7 @@
         components: {
             AppLayout,
             LeafletMap,
-            JetLinkButton,
+            PrimaryLinkButton,
             TrashIcon,
             EditIcon,
             DetailIcon
@@ -157,8 +161,10 @@
             const map = ref(null);
             const markers = ref([]);
 
-            for (const project of props.projects) {
-                if (project.data) markers.value.push(project.data);
+            const uniqueProjects = useUniqueLocations(props.projects);
+
+            for (const project of uniqueProjects.value) {
+                markers.value.push(project.data);
             }
 
             function onDelete(project) {
