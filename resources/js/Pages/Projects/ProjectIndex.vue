@@ -85,20 +85,17 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
                                                 <inertia-link :href="route('projects.show', project.id)">
-                                                    <detail-icon class="text-gray-600 font-medium text-sm w-5"></detail-icon>
+                                                    <detail-icon class="text-indigo-600 font-medium text-sm w-5"></detail-icon>
                                                 </inertia-link>
                                                 <inertia-link :href="route('projects.edit', project.id)">
                                                     <edit-icon class="text-gray-600 font-medium text-sm w-5"></edit-icon>
                                                 </inertia-link>
-                                                <a href="#">
-
-                                                </a>
-                                                <a
-                                                    href="#"
+                                                <button
+                                                    class="focus:outline-none"
                                                     @click="onDelete(project)"
                                                 >
-                                                    <trash-icon class="text-gray-600 font-medium text-sm w-5"></trash-icon>
-                                                </a>
+                                                    <trash-icon class="text-red-600 font-medium text-sm w-5"></trash-icon>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -135,13 +132,14 @@
 </template>
 
 <script>
+    import { ref } from "vue";
+
     import AppLayout from "@/Layouts/AppLayout";
     import LeafletMap from "@/Components/LeafletMap";
     import JetLinkButton from "@/Jetstream/LinkButton";
     import TrashIcon from "@/Icons/TrashIcon.vue";
     import EditIcon from "@/Icons/EditIcon.vue";
     import DetailIcon from "@/Icons/DetailIcon.vue";
-    import { ref } from "@vue/reactivity";
 
     export default {
         components: {
@@ -156,24 +154,29 @@
         props: ["projects"],
 
         setup(props) {
+            const map = ref(null);
             const markers = ref([]);
 
             for (const project of props.projects) {
                 if (project.data) markers.value.push(project.data);
             }
 
-            return {
-                markers,
-            };
-        },
-        methods: {
-            onDelete(project) {
+            function onDelete(project) {
+                // we need to diplay a modal here
                 this.$inertia.delete(route("projects.destroy", project.id));
-            },
-            centerAtLocation(location) {
+            };
+
+            function centerAtLocation(location) {
                 const marker = this.markers.find((m) => m.id === location.geo_object.id);
-                this.$refs.map.centerAtLocation(marker);
-            },
+                map.value.centerAtLocation(marker);
+            }
+
+            return {
+                map,
+                markers,
+                onDelete,
+                centerAtLocation
+            };
         },
     };
 </script>
