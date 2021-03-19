@@ -2,7 +2,7 @@
     <inertia-link
         as="button"
         :href="route(path, parameter)"
-        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white uppercase bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white uppercase bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
     >
         <slot></slot>
     </inertia-link>
