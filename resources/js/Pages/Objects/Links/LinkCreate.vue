@@ -2,37 +2,28 @@
   <app-layout>
     <template #header>
       <h2 class="font-semibold text-lg text-gray-800 leading-tight">
-        Objects | Locations
+        Objects | Links
       </h2>
     </template>
     <div class="p-5">
-      <h1 class="text-lg font-bold">New Location</h1>
+      <h1 class="text-lg font-bold">New Link</h1>
     </div>
     <div class="flex p-5 h-content gap-2">
       <div class="w-6/12 md:overflow-y-auto md:pr-4">
         <input-row
-          heading="Details | Location"
-          desc="Enter a name for your location"
-          v-model="form.locationName"
+          heading="Details | Link"
+          desc="Enter a name for your link"
+          v-model="form.name"
         >
-          Location Name
+          Link Name
         </input-row>
-
-        <select-row
-          class="mt-5"
-          desc="Choose how you want to define your Location"
-          :options="locationTypes"
-          v-model="form.locationType"
-        >
-          What type of location?
-        </select-row>
 
         <input-row
           class="mt-5"
-          v-model="form.locationRadius"
-          v-if="form.locationType === 'circle'"
+          desc="Enter a description for your link"
+          v-model="form.description"
         >
-          Circle Radius
+          Link Description
         </input-row>
 
         <select-row
@@ -46,11 +37,10 @@
       </div>
 
       <div class="w-6/12">
-        <leaflet-map-create
-          :markerType="form.locationType"
+        <leaflet-map-create-link
           :radius="form.locationRadius"
           v-model="form.locationData"
-        ></leaflet-map-create>
+        ></leaflet-map-create-link>
       </div>
     </div>
     <div class="w-full my-5 px-16 flex justify-end">
@@ -65,7 +55,7 @@
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
-import LeafletMapCreate from "@/Components/LeafletMapCreate";
+import LeafletMapCreateLink from "@/Components/LeafletMapCreateLink";
 import InputRow from "@/Components/InputRow";
 import RadioRow from "@/Components/RadioRow";
 import SelectRow from "@/Components/SelectRow";
@@ -75,7 +65,7 @@ import JetInputError from "@/Jetstream/InputError";
 export default {
   components: {
     AppLayout,
-    LeafletMapCreate,
+    LeafletMapCreateLink,
     InputRow,
     RadioRow,
     SelectRow,
@@ -85,18 +75,11 @@ export default {
 
   setup() {
     const form = useForm({
-      locationName: "",
-      locationType: "Point",
+      name: "",
+      description: "",
       locationSharing: "",
       locationData: {},
-      locationRadius: 100,
     });
-
-    const locationTypes = [
-      { key: "point", value: "Point" },
-      { key: "circle", value: "Circle" },
-      { key: "polygon", value: "Polygon" },
-    ];
 
     const locationSharingOptions = [
       { key: "no", value: "I don't want to share my Location" },
@@ -106,13 +89,12 @@ export default {
 
     return {
       form,
-      locationTypes,
       locationSharingOptions,
     };
   },
   methods: {
     submit() {
-      this.form.post(route("objects.locations.store"));
+      this.form.post(route("objects.links.store"));
     },
   },
 };

@@ -12,6 +12,13 @@ class Location extends Model
 {
     use HasFactory, SoftDeletes;
 
+
+    protected $fillable = [
+        'name',
+        'geo_object_id'
+    ];
+
+
     // Table locations
     public function geoObject(): BelongsTo
     {

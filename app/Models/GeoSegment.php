@@ -20,6 +20,10 @@ class GeoSegment extends Model
         'data' => 'array',
     ];
 
+    protected $fillable = [
+        'data'
+    ];
+
     // Table geo_segment_link
     public function links() : BelongsToMany
     {

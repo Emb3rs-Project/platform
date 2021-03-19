@@ -20,6 +20,11 @@ class GeoObject extends Model
         'data' => 'array',
     ];
 
+    protected $fillable = [
+        'type',
+        'data'
+    ];
+
     // Table locations
     public function locations() : HasMany
     {

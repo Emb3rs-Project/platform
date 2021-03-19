@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\GeoSegment;
+use App\Models\Link;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Redirect;
 
 class LinkController extends Controller
 {
@@ -15,7 +18,9 @@ class LinkController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Objects/Links/LinkIndex');
+        $links = Link::with(['geoSegments'])->get();
+
+        return Inertia::render('Objects/Links/LinkIndex', ['links' => $links]);
     }
 
     /**
@@ -25,7 +30,7 @@ class LinkController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Objects/Links/LinkCreate');
     }
 
     /**
@@ -36,7 +41,25 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $segments = $request->get('locationData')['segments'];
+
+        $link = Link::create([
+            'name' => $request->get('name'),
+            'description' => $request->get('description')
+            ]);
+
+
+        foreach ($segments as $data) {
+            $segment = GeoSegment::create([
+                'data' => $data
+            ]);
+
+            $link->geoSegments()->attach($segment);
+        }
+
+
+
+        return Redirect::route('objects.links.index');
     }
 
     /**

@@ -64,6 +64,13 @@ export default {
 
 
     },
+    loadLinks(map, markers = []) {
+        for (const marker of markers) {
+            if (marker.to)
+                L.polyline([marker.from, marker.to], { color: 'green' }).addTo(map);
+        }
+
+    },
     centerAtLocation(map, { type, data }) {
         switch (type) {
             case "circle":
