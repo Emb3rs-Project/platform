@@ -43,7 +43,9 @@ class SinkController extends Controller
 
         return Inertia::render(
             'Objects/Sinks/SinkIndex',
-            ['sinks' => $output]
+            [
+                'sinks' => $output
+            ]
         );
     }
 
@@ -173,6 +175,7 @@ class SinkController extends Controller
     public function destroy($id)
     {
         Instance::destroy($id);
+
         return redirect::route('objects.sinks.index');
     }
 }

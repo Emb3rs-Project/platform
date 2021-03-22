@@ -9,7 +9,10 @@
       </p>
     </div>
     <div class="w-full md:w-6/12 pl-0 md:pl-4">
-      <label for="name" class="block text-sm text-indigo-400 mb-2">
+      <label
+        for="name"
+        class="block text-sm text-indigo-400 mb-2"
+      >
         <slot></slot>
       </label>
       <input
@@ -27,30 +30,30 @@
 </template>
 
 <script>
-export default {
-  props: {
-    heading: String,
-    desc: String,
-    placeholder: String,
-    modelValue: String,
-    required: Boolean,
-    disabled: Boolean,
-  },
-  emits: ["update:modelValue"],
-  methods: {
-    focus() {
-      this.$refs.input.focus();
+  export default {
+    props: {
+      heading: String,
+      desc: String,
+      placeholder: String,
+      modelValue: String,
+      required: Boolean,
+      disabled: Boolean,
     },
-  },
-  computed: {
-    value: {
-      get() {
-        return this.modelValue;
-      },
-      set(value) {
-        this.$emit("update:modelValue", value);
+    emits: ["update:modelValue"],
+    methods: {
+      focus() {
+        this.$refs.input.focus();
       },
     },
-  },
-};
+    computed: {
+      value: {
+        get() {
+          return this.modelValue;
+        },
+        set(value) {
+          this.$emit("update:modelValue", value);
+        },
+      },
+    },
+  };
 </script>

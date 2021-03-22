@@ -18,8 +18,7 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = Location::with(['geoObject'])->get();
-
+        $locations = Location::with(['project','geoObject'])->get();
 
         return Inertia::render('Objects/Locations/LocationIndex', ['locations' => $locations]);
     }
@@ -99,6 +98,8 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Location::destroy($id);
+
+        return redirect::route('objects.locations.index');
     }
 }
