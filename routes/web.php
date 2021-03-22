@@ -7,7 +7,7 @@ use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
 use App\Http\Controllers\Embers\ProjectController;
-use App\Http\Controllers\Embers\SimulationController;
+use App\Http\Controllers\Embers\ProjectSimulationController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use Illuminate\Foundation\Application;
@@ -68,7 +68,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
 
     // Simulations
-    Route::resource('/simulations', SimulationController::class)->names(createResourceNames('simulations'));
+    Route::resource('/projects.simulations', ProjectSimulationController::class)->names(createResourceNames('projects.simulations'));
 
     // Challenge
     Route::resource('/chalenge', ChallengeController::class)->names(createResourceNames('challenge'));
