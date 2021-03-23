@@ -5,125 +5,331 @@
         Institution
       </h2>
     </template>
-    <div class="flex flex-col p-5 h-full gap-5">
-      <!-- List Users -->
-      <div>
-        <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-          <h3 class="text-lg leading-6 font-bold text-gray-900">
-            Users
-          </h3>
-          <p class="text-sm text-gray-500">
-            A list of all the Users that belong to this Institution
-          </p>
-        </div>
-        <div class="w-full max-h-96 bg-white shadow overflow-y-auto sm:rounded-b-md">
-          <ul class="divide-y divide-gray-200">
-            <li
-              v-for="(user, index) in users"
-              :key="index"
-            >
-              <div class="flex items-center px-4 py-4 sm:px-6">
-                <div class="min-w-0 flex-1 flex items-center">
-                  <div class="flex-shrink-0">
-                    <img
-                      class="h-12 w-12 rounded-full"
-                      :src="user.profile_photo_url"
-                      alt=""
-                    >
-                  </div>
-                  <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 gap-4">
-                    <div>
-                      <p class="text-sm font-medium text-indigo-600 truncate">
-                        {{ user.name }}
-                      </p>
-                      <p class="mt-2 flex items-center text-sm text-gray-500">
-                        <svg
-                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M6.625 2.655A9 9 0 0119 11a1 1 0 11-2 0 7 7 0 00-9.625-6.492 1 1 0 11-.75-1.853zM4.662 4.959A1 1 0 014.75 6.37 6.97 6.97 0 003 11a1 1 0 11-2 0 8.97 8.97 0 012.25-5.953 1 1 0 011.412-.088z"
-                            clip-rule="evenodd"
-                          />
-                          <path
-                            fill-rule="evenodd"
-                            d="M5 11a5 5 0 1110 0 1 1 0 11-2 0 3 3 0 10-6 0c0 1.677-.345 3.276-.968 4.729a1 1 0 11-1.838-.789A9.964 9.964 0 005 11zm8.921 2.012a1 1 0 01.831 1.145 19.86 19.86 0 01-.545 2.436 1 1 0 11-1.92-.558c.207-.713.371-1.445.49-2.192a1 1 0 011.144-.83z"
-                            clip-rule="evenodd"
-                          />
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 10a1 1 0 011 1c0 2.236-.46 4.368-1.29 6.304a1 1 0 01-1.838-.789A13.952 13.952 0 009 11a1 1 0 011-1z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                        <span class="truncate">
-                          {{ user.id }}
-                        </span>
-                      </p>
-                      <p class="mt-2 flex items-center text-sm text-gray-500">
 
+    <div class="flex flex-col p-5 min-h-full gap-5">
+      <div class="w-full max-h-96">
+        <div class="flex flex-col max-h-full">
+          <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+            <h3 class="text-lg leading-6 font-bold text-gray-900">
+              Users
+            </h3>
+            <p class="text-sm text-gray-500">
+              A list of all the Users that belong in this Institution
+            </p>
+          </div>
+          <div class="max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+            <div v-if="users.length">
+              <ul class="divide-y divide-gray-200 bg-white">
+                <li
+                  v-for="(user, index) in users"
+                  :key="index"
+                >
+                  <inertia-link
+                    href="#"
+                    class="block hover:bg-gray-50"
+                  >
+                    <div class="flex items-center px-4 py-4 sm:px-6">
+                      <div class="min-w-0 flex-1 flex items-center">
+                        <div class="flex-shrink-0">
+                          <img
+                            class="h-12 w-12 rounded-full"
+                            :src="user.profile_photo_url"
+                            alt=""
+                          >
+                        </div>
+                        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                          <div>
+                            <p class="text-sm font-medium text-indigo-600 truncate">
+                              {{ user.name }}
+                            </p>
+                            <p class="mt-2 flex items-center text-sm text-gray-500">
+                              <!-- Heroicon name: solid/mail -->
+                              <svg
+                                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                aria-hidden="true"
+                              >
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                              </svg>
+                              <span class="truncate">
+                                {{ user.email }}
+                              </span>
+                            </p>
+                          </div>
+                          <div class="hidden md:block">
+                            <div>
+                              <p class="text-sm text-gray-900">
+                                Member since
+                                <time datetime="2020-01-07">
+                                  {{ user.created_at }}
+                                </time>
+                              </p>
+                              <pre>{{user.email_verified_at}}</pre>
+                              <div v-if="user.email_verified_at != 'null'">
+                                <p class="mt-2 flex items-center text-sm text-gray-500">
+                                  <svg
+                                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                  Email has not been verified
+                                </p>
+                              </div>
+                              <div v-else>
+                                <p class="mt-2 flex items-center text-sm text-gray-500">
+                                  <!-- Heroicon name: solid/check-circle -->
+                                  <svg
+                                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                      clip-rule="evenodd"
+                                    />
+                                  </svg>
+                                  Email verified at {{ user.email_verified_at }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <!-- Heroicon name: solid/chevron-right -->
                         <svg
-                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg>
-                        <span class="truncate">
-                          {{ user.email }}
-                        </span>
-                      </p>
-                      <p class="mt-2 flex items-centertext-sm text-gray-500">
-                        <svg
-                          class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                          class="h-5 w-5 text-gray-400"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                           aria-hidden="true"
                         >
                           <path
-                            fillRule="evenodd"
-                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                            clipRule="evenodd"
+                            fill-rule="evenodd"
+                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                            clip-rule="evenodd"
                           />
                         </svg>
-                        {{ user.created_at }}
-                      </p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </li>
-          </ul>
+                  </inertia-link>
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- /List Users -->
 
-      <!-- List Sources and Sinks w/Map -->
-      <div class="flex gap-5">
-        <div class="flex flex-col gap-5 sm:w-full md:w-6/12">
-          <!-- List Sources -->
-          <div>
+      <div class="flex flex-col p-5 h-full gap-5">
+        <div class="flex gap-5">
+          <div class="flex flex-col gap-5 sm:w-full md:w-6/12">
+            <div>
+              <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+                <h3 class="text-lg leading-6 font-bold text-gray-900">
+                  Sources
+                </h3>
+                <p class="text-sm text-gray-500">
+                  A list of all the Sources that belong to this Institution
+                </p>
+              </div>
+              <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                <div v-if="sources.length">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Name
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Template
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Category
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Location
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(source, index) in sources"
+                        :key="index"
+                        :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
+                      >
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {{ source.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ source.template.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ source.template.category.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <a
+                            :class="{
+                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                                        source.location,
+                                                }"
+                            @click="centerAtLocation(source.location)"
+                          >
+                            {{ source.location ? source.location.name : "Not Assigned" }}
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  v-else
+                  class="flex items-center place-content-center bg-gray-50 h-64"
+                >
+                  <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
+                </div>
+
+              </div>
+            </div>
+
+            <div>
+              <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
+                <h3 class="text-lg leading-6 font-bold text-gray-900">
+                  Sinks
+                </h3>
+                <p class="text-sm text-gray-500">
+                  A list of all the Sinks that belong to this Institution
+                </p>
+              </div>
+              <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                <div v-if="sinks.length">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Name
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Template
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Category
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Location
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(sink, index) in sinks"
+                        :key="index"
+                        :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
+                        class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
+                      >
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {{ sink.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ sink.template.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ sink.template.category.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <a
+                            :class="{
+                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                                        sink.location,
+                                                    }"
+                            @click="centerAtLocation(sink.location)"
+                          >
+
+                            {{ sink.location ? sink.location.name : "Not Assigned" }}
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  v-else
+                  class="flex items-center place-content-center bg-gray-50 h-64"
+                >
+                  <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sinks Found</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sm:w-full md:w-6/12">
+            <leaflet-map
+              :markers="markers"
+              ref="map"
+            ></leaflet-map>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="flex w-full h-screen md:h-table-and-map gap-5">
+        <div class="flex md:flex-col w-1/2 h-full gap-5">
+          <div class="bg-red-500 h-1/2">
             <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
               <h3 class="text-lg leading-6 font-bold text-gray-900">
                 Sources
               </h3>
               <p class="text-sm text-gray-500">
-                A list of all the Sources that belong to this Institution
+                A list of all the Sources
               </p>
             </div>
-            <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+            <div></div>
+            <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
               <div v-if="sources.length">
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50">
                     <tr>
+                      <th
+                        scope="col"
+                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        ID
+                      </th>
                       <th
                         scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -148,6 +354,12 @@
                       >
                         Location
                       </th>
+                      <th
+                        scope="col"
+                        class="relative px-6 py-3"
+                      >
+                        <span class="sr-only">Edit</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -156,7 +368,10 @@
                       :key="index"
                       :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                     >
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ source.id }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ source.name }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -168,97 +383,71 @@
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <a
                           :class="{
-                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                        source.location,
-                                                }"
+                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                source.location,
+                        }"
                           @click="centerAtLocation(source.location)"
                         >
                           {{ source.location ? source.location.name : "Not Assigned" }}
                         </a>
                       </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                        <inertia-link :href="route('objects.sources.show', source.id)">
+                          <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                        </inertia-link>
+                        <inertia-link :href="route('objects.sources.edit', source.id)">
+                          <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                        </inertia-link>
+                        <button
+                          class="focus:outline-none"
+                          @click="onDelete(source.location)"
+                        >
+                          <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
+                        </button>
+                      </td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div
-                v-else
-                class="flex items-center place-content-center bg-gray-50 h-64"
-              >
-                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
-              </div>
 
-            </div>
-          </div>
-          <!-- /List Sources -->
-
-          <!-- List Sinks -->
-          <div>
-            <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-              <h3 class="text-lg leading-6 font-bold text-gray-900">
-                Sinks
-              </h3>
-              <p class="text-sm text-gray-500">
-                A list of all the Sinks that belong to this Institution
-              </p>
-            </div>
-            <div class="min-w-full max-h-64 overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
-              <div v-if="sinks.length">
-                <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Template
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Location
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
                     <tr
-                      v-for="(sink, index) in sinks"
+                      v-for="(source, index) in sources"
                       :key="index"
                       :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                      class="hover:bg-gray-300 hover:text-white pt-3 pb-3 rounded"
                     >
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ sink.name }}
+                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
+                        {{ source.id }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ sink.template.name }}
+                        {{ source.name }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ sink.template.category.name }}
+                        {{ source.template.name }}
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {{ source.template.category.name }}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <a
                           :class="{
-                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                        sink.location,
-                                                    }"
-                          @click="centerAtLocation(sink.location)"
+                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                source.location,
+                        }"
+                          @click="centerAtLocation(source.location)"
                         >
-
-                          {{ sink.location ? sink.location.name : "Not Assigned" }}
+                          {{ source.location ? source.location.name : "Not Assigned" }}
                         </a>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                        <inertia-link :href="route('objects.sources.show', source.id)">
+                          <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                        </inertia-link>
+                        <inertia-link :href="route('objects.sources.edit', source.id)">
+                          <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                        </inertia-link>
+                        <button
+                          class="focus:outline-none"
+                          @click="onDelete(source.location)"
+                        >
+                          <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
@@ -266,23 +455,22 @@
               </div>
               <div
                 v-else
-                class="flex items-center place-content-center bg-gray-50 h-64"
+                class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
               >
-                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sinks Found</h1>
+                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
               </div>
             </div>
           </div>
-          <!-- /List Sinks -->
+          <div class="bg-green-500 h-1/2">2</div>
         </div>
 
-        <div class="sm:w-full md:w-6/12">
+        <div class="w-1/2">
           <leaflet-map
             :markers="markers"
             ref="map"
           ></leaflet-map>
         </div>
-      </div>
-      <!-- /List Sources and Sinks w/Map -->
+      </div> -->
     </div>
   </app-layout>
 </template>
@@ -294,11 +482,13 @@
 
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
+  import DetailIcon from "@/Icons/DetailIcon.vue";
 
   export default {
     components: {
       AppLayout,
       LeafletMap,
+      DetailIcon
     },
 
     props: {
@@ -320,6 +510,7 @@
       const markers = ref([]);
       const locations = props.sources.concat(props.sinks);
 
+      console.log(props.users);
       const uniqueLocations = useUniqueLocations(locations);
 
       for (const source of uniqueLocations.value) {

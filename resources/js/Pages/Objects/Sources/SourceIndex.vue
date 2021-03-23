@@ -17,7 +17,7 @@
               A list of all the Sources
             </p>
           </div>
-          <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md ">
+          <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
             <div v-if="sources.length">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
