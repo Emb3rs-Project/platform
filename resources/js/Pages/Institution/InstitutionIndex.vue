@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col p-5 h-full gap-5">
+      <div class="flex flex-col  h-full gap-5">
         <div class="flex gap-5">
           <div class="flex flex-col gap-5 sm:w-full md:w-6/12">
             <div>
