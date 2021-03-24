@@ -313,7 +313,7 @@ export default {
     },
     submit() {
       console.log("saving ", this.form);
-      this.form.post(route("objects.sources.store"));
+      this.form.patch(route("objects.sources.update", this.instance.id));
     },
     onLocationSelect(locId) {},
   },

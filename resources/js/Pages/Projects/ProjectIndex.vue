@@ -6,18 +6,16 @@
       </h2>
     </template>
 
-    <div class="flex flex-col md:flex-row h-screen md:h-table-and-map p-5 gap-5">
+    <div
+      class="flex flex-col md:flex-row h-screen md:h-table-and-map p-5 gap-5"
+    >
       <div class="w-full h-96 md:h-full md:w-1/2">
         <div class="flex flex-col max-h-full">
           <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-            <h3 class="text-lg leading-6 font-bold text-gray-900">
-              Locations
-            </h3>
-            <p class="text-sm text-gray-500">
-              A list of all the Locations
-            </p>
+            <h3 class="text-lg leading-6 font-bold text-gray-900">Projects</h3>
+            <p class="text-sm text-gray-500">A list of all the Projects</p>
           </div>
-          <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md ">
+          <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
             <div v-if="projects.length">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -46,10 +44,7 @@
                     >
                       Location
                     </th>
-                    <th
-                      scope="col"
-                      class="relative px-6 py-3"
-                    >
+                    <th scope="col" class="relative px-6 py-3">
                       <span class="sr-only">Edit</span>
                     </th>
                   </tr>
@@ -60,38 +55,62 @@
                     :key="index"
                     :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                   >
-                    <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td
+                      class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900"
+                    >
                       {{ project.id }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
                       {{ project.name }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{ project.description ? project.description : "Not Provided" }}
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
+                      {{
+                        project.description
+                          ? project.description
+                          : "Not Provided"
+                      }}
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    >
                       <a
                         :class="{
-                            'font-bold text-green-600 cursor-pointer hover:text-green-700':
-                                project.location.name,
+                          'font-bold text-green-600 cursor-pointer hover:text-green-700':
+                            project.location.name,
                         }"
                         @click="centerAtLocation(project.location)"
                       >
-                        {{ project.location ? project.location.name : "Not Assigned" }}
+                        {{
+                          project.location
+                            ? project.location.name
+                            : "Not Assigned"
+                        }}
                       </a>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                    <td
+                      class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
+                    >
                       <inertia-link :href="route('projects.show', project.id)">
-                        <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                        <detail-icon
+                          class="text-gray-500 font-medium text-sm w-5"
+                        ></detail-icon>
                       </inertia-link>
                       <inertia-link :href="route('projects.edit', project.id)">
-                        <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                        <edit-icon
+                          class="text-gray-500 font-medium text-sm w-5"
+                        ></edit-icon>
                       </inertia-link>
                       <button
                         class="focus:outline-none"
                         @click="onDelete(project)"
                       >
-                        <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
+                        <trash-icon
+                          class="text-red-500 font-medium text-sm w-5"
+                        ></trash-icon>
                       </button>
                     </td>
                   </tr>
@@ -102,17 +121,16 @@
               v-else
               class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
             >
-              <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Locations Found</h1>
+              <h1 class="text-2xl font-extrabold text-gray-300 uppercase">
+                No Projects Found
+              </h1>
             </div>
           </div>
         </div>
       </div>
 
       <div class="w-full h-full md:w-1/2">
-        <leaflet-map
-          :markers="markers"
-          ref="map"
-        ></leaflet-map>
+        <leaflet-map :markers="markers" ref="map"></leaflet-map>
       </div>
     </div>
 
@@ -125,63 +143,63 @@
 </template>
 
 <script>
-  import { ref } from "vue";
-  import { Inertia } from '@inertiajs/inertia'
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
-  import useUniqueLocations from "@/Composables/useUniqueLocations";
+import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-  import AppLayout from "@/Layouts/AppLayout";
-  import LeafletMap from "@/Components/LeafletMap";
-  import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
-  import TrashIcon from "@/Icons/TrashIcon.vue";
-  import EditIcon from "@/Icons/EditIcon.vue";
-  import DetailIcon from "@/Icons/DetailIcon.vue";
+import AppLayout from "@/Layouts/AppLayout";
+import LeafletMap from "@/Components/LeafletMap";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+import TrashIcon from "@/Icons/TrashIcon.vue";
+import EditIcon from "@/Icons/EditIcon.vue";
+import DetailIcon from "@/Icons/DetailIcon.vue";
 
-  export default {
-    components: {
-      AppLayout,
-      LeafletMap,
-      PrimaryLinkButton,
-      TrashIcon,
-      EditIcon,
-      DetailIcon
+export default {
+  components: {
+    AppLayout,
+    LeafletMap,
+    PrimaryLinkButton,
+    TrashIcon,
+    EditIcon,
+    DetailIcon,
+  },
+
+  props: {
+    projects: {
+      type: Array,
+      required: true,
     },
+  },
 
-    props: {
-      projects: {
-        type: Array,
-        required: true
-      }
-    },
+  setup(props) {
+    const map = ref(null);
+    const markers = ref([]);
 
-    setup(props) {
-      const map = ref(null);
-      const markers = ref([]);
+    const uniqueProjects = useUniqueLocations(props.projects);
 
-      const uniqueProjects = useUniqueLocations(props.projects);
+    for (const project of uniqueProjects.value) {
+      markers.value.push(project.data);
+    }
 
-      for (const project of uniqueProjects.value) {
-        markers.value.push(project.data);
-      }
+    function onDelete(project) {
+      // we need to diplay a modal here
+      Inertia.delete(route("projects.destroy", project.id));
+    }
 
-      function onDelete(project) {
-        // we need to diplay a modal here
-        Inertia.delete(route("projects.destroy", project.id));
-      };
+    function centerAtLocation(location) {
+      const marker = markers.value.find((m) => m.id === location.geo_object.id);
+      map.value.centerAtLocation(marker);
+    }
 
-      function centerAtLocation(location) {
-        const marker = markers.value.find((m) => m.id === location.geo_object.id);
-        map.value.centerAtLocation(marker);
-      }
-
-      return {
-        map,
-        markers,
-        onDelete,
-        centerAtLocation
-      };
-    },
-  };
+    return {
+      map,
+      markers,
+      onDelete,
+      centerAtLocation,
+    };
+  },
+};
 </script>
 
 <style>

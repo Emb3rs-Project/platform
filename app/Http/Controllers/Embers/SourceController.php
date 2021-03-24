@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
@@ -28,7 +29,10 @@ class SourceController extends Controller
             ->get()
             ->pluck('id');
 
+        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+
         $instances = Instance::whereIn('template_id', $templates)
+            ->whereIn('id', $teamInstances)
             ->with(['template', 'template.category', 'location.geoObject'])
             ->get();
 
@@ -127,9 +131,10 @@ class SourceController extends Controller
 
 
 
-        Instance::create($newInstance);
+        $instace = Instance::create($newInstance);
+        $instace->teams()->attach(Auth::user()->currentTeam);
 
-        return Redirect::route('objects.sources.index');
+        return Redirect::route('objects.sources.show', $instace->id);
     }
 
     /**
@@ -163,6 +168,7 @@ class SourceController extends Controller
             'templateProperties.property'
         ])
         ->get();
+
 
         $locations = Location::with(['geoObject'])->get();
 
@@ -235,7 +241,29 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $source = $request->get('source');
+        $equipments = $request->get('equipments');
+        foreach ($equipments as $key => $value) {
+            unset($equipments[$key]['template']);
+        }
+
+        $instance = Instance::find($id);
+
+        // Check if Property Name Exists
+        if (isset($source['data']['name'])) {
+            $instance->name = $source['data']['name'];
+        }
+
+        // Check if Location is Set
+        if (isset($source['location_id'])) {
+            $instance->location_id = $source['location_id'];
+        } else {
+            $instance->location()->disassociate();
+        }
+
+        $instance->save();
+
+        return Redirect::route('objects.sources.show', $instance->id);
     }
 
     /**

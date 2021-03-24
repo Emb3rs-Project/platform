@@ -240,6 +240,7 @@ export default {
       (t) => t.id === props.instance.template_id
     );
     form.value.source.data.name = props.instance.name;
+    form.value.template_id = props.instance.template_id;
 
     form.value.source.location_id = props.instance.location_id;
     form.value.equipments = props.instance.values.equipments.map((e) => ({

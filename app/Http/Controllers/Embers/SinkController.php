@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
@@ -28,7 +29,9 @@ class SinkController extends Controller
         ->get()
         ->pluck('id');
 
+        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
         $instances = Instance::whereIn('template_id', $templates)
+        ->whereIn('id', $teamInstances)
         ->with(['template', 'template.category', 'location.geoObject'])
         ->get();
 
@@ -63,6 +66,7 @@ class SinkController extends Controller
         $equipmentCategories = Category::whereType('equipment')
             ->get()
             ->pluck('id');
+
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([
@@ -127,7 +131,8 @@ class SinkController extends Controller
 
 
 
-        Instance::create($newInstance);
+        $instace = Instance::create($newInstance);
+        $instace->teams()->attach(Auth::user()->currentTeam);
 
         return Redirect::route('objects.sinks.index');
     }

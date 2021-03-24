@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
@@ -19,7 +20,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with(['location'])->get();
+        $teamProjects = Auth::user()->currentTeam->projects->pluck('id');
+        $projects = Project::whereIn('id', $teamProjects)
+            ->with(['location'])
+            ->get();
 
         $output = $projects->map(function ($item) {
             if (isset($item->location)) {
@@ -62,7 +66,9 @@ class ProjectController extends Controller
             'location_id' => $request->get('location_id')
         ];
 
-        Project::create($newProject);
+        $project = Project::create($newProject);
+        $project->teams()->attach(Auth::user()->currentTeam);
+
         return Redirect::route('projects.index');
     }
 

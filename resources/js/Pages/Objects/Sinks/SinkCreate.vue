@@ -5,56 +5,94 @@
         Objects | Sinks
       </h2>
     </template>
-    <div class="p-5">
-      <h1 class="text-lg font-bold">New Sink</h1>
-    </div>
-    <div class="flex p-5 gap-2">
-      <div class="w-6/12 md:min-h-content md:pr-4">
-        <select-row
-          class="mt-5"
-          :options="mainTemplates"
-          v-model="selectedTemplate"
-        >
-          Template
-        </select-row>
-        <select-row
-          class="my-5"
-          :options="locationSelects"
-          v-model="form.sink.location_id"
-          v-if="selectedTemplate"
-        >
-          Location
-        </select-row>
-        <hr class="my-5" />
-        <!-- sink -->
-        <h1 v-if="selectedTemplate">Sink properties</h1>
-        <div v-for="prop in properties" :key="prop.id" class="my-4">
-          <input-row
-            :desc="prop.property.description"
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            v-if="prop.property.inputType === 'text'"
-            :required="prop.required"
-          >
-            {{ prop.property.name }}
-            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-          </input-row>
-
-          <select-row
-            :desc="prop.property.description"
-            :options="prop.property.data.options"
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            v-if="prop.property.inputType === 'select'"
-            :required="prop.required"
-          >
-            {{ prop.property.name }}
-            <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
-          </select-row>
+    <!-- Sink Template -->
+    <div class="mt-10 sm:mt-0 p-10">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Sink</h3>
+            <p class="mt-1 text-sm text-gray-600">Sink Configuration</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <select-row
+                    class="mt-5"
+                    desc="Sink Templates"
+                    :options="mainTemplates"
+                    v-model="selectedTemplate"
+                  >
+                    Template
+                  </select-row>
+                </div>
+                <div class="col-span-12">
+                  <select-row
+                    class="my-5"
+                    desc="sink Templates"
+                    :options="locationSelects"
+                    v-model="form.sink.location_id"
+                    v-if="selectedTemplate"
+                  >
+                    Location
+                  </select-row>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="w-6/12 max-h-screen">
-        <leaflet-map ref="map" :marker="marker"></leaflet-map>
+    </div>
+
+    <!-- sink Properties -->
+    <div class="sm:mt-0 p-10" v-if="selectedTemplate">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <p class="mt-1 text-sm text-gray-600">sink Properties</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <div v-for="prop in properties" :key="prop.id" class="my-4">
+                    <input-row
+                      :desc="prop.property.description"
+                      v-model="form.sink.data[prop.property.symbolic_name]"
+                      v-if="prop.property.inputType === 'text'"
+                      :required="prop.required"
+                    >
+                      {{ prop.property.name }}
+                      <span v-if="prop.unit.symbol"
+                        >({{ prop.unit.symbol }})</span
+                      >
+                    </input-row>
+
+                    <select-row
+                      :desc="prop.property.description"
+                      :options="prop.property.data.options"
+                      v-model="form.sink.data[prop.property.symbolic_name]"
+                      v-if="prop.property.inputType === 'select'"
+                      :required="prop.required"
+                    >
+                      {{ prop.property.name }}
+                      <span v-if="prop.unit.symbol"
+                        >({{ prop.unit.symbol }})</span
+                      >
+                    </select-row>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+
     <div class="w-full my-5 px-16 flex justify-end">
       <jet-button :disabled="form.processing" @click="submit()">
         Create Sink
