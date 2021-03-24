@@ -20,7 +20,7 @@
             :key="ne.id"
           >
             <span class="leading-4 font-bold block">{{ ne.title }}</span>
-            <span class="text-sm text-justify">{{ ne.content }}</span>
+            <span class="text-sm text-justify" v-html="ne.content"></span>
           </div>
         </div>
         <div class="h-56 my-5 p-3 border border-gray-200 shadow">
@@ -32,7 +32,7 @@
             :key="not.id"
           >
             <span class="leading-4 font-bold block">{{ not.title }}</span>
-            <span class="text-sm text-justify">{{ not.content }}</span>
+            <span class="text-sm text-justify" v-html="not.content"></span>
           </div>
         </div>
       </div>
