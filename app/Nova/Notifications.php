@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -44,7 +45,9 @@ class Notifications extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('TITLE'), 'title'),
-            Trix::make(__('CONTENT'), 'content')
+            Trix::make(__('CONTENT'), 'content'),
+
+            BelongsTo::make(__('TEAM'), 'team', Team::class)
         ];
     }
 

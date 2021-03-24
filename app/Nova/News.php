@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Trix;
@@ -44,7 +45,9 @@ class News extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('TITLE'), 'title'),
-            Trix::make(__('CONTENT'), 'content')
+            Trix::make(__('CONTENT'), 'content'),
+
+            BelongsTo::make(__('TEAM'), 'team', Team::class)
         ];
     }
 
