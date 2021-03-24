@@ -45,6 +45,32 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\FAQ
+ *
+ * @property int $id
+ * @property string $question
+ * @property string|null $answer
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ newQuery()
+ * @method static \Illuminate\Database\Query\Builder|FAQ onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereAnswer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereQuestion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FAQ whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|FAQ withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|FAQ withoutTrashed()
+ */
+	class FAQ extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\GeoObject
  *
  * @property int $id
@@ -220,6 +246,52 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUserId($value)
  */
 	class Membership extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\News
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $content
+ * @property int $team_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|News newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|News newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|News query()
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|News whereUpdatedAt($value)
+ */
+	class News extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Notifications
+ *
+ * @property int $id
+ * @property string $title
+ * @property string|null $content
+ * @property int $team_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereUpdatedAt($value)
+ */
+	class Notifications extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -524,7 +596,7 @@ namespace App\Models{
  * @property int $property_group_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\PropertyGroups $group
+ * @property-read \App\Models\PropertyGroups $propertyGroup
  * @property-read \App\Models\Template $template
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperties[] $templateProperties
  * @property-read int|null $template_properties_count
