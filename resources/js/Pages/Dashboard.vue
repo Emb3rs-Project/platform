@@ -10,24 +10,30 @@
       <div class="w-8/12">
         <leaflet-map></leaflet-map>
       </div>
-      <div class="w-4/12 text-gray-700">
+      <div class="w-4/12 text-gray-700 p-5">
         <div class="h-56 mb-5 p-3 border border-gray-200 shadow">
           <h1 class="leading-5 font-bold mb-3">Latest news</h1>
-          <span
-            >Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-            Temporibus fugit non repellat iure ex alias delectus similique.
-            Similique ab obcaecati, ut accusamus quam, cupiditate placeat minima
-            neque eum delectus itaque.</span
+          <span v-if="news.length == 0">No News</span>
+          <div
+            class="border-t border-gray-400 mt-2 p-2"
+            v-for="ne of news"
+            :key="ne.id"
           >
+            <span class="leading-4 font-bold block">{{ ne.title }}</span>
+            <span class="text-sm text-justify">{{ ne.content }}</span>
+          </div>
         </div>
         <div class="h-56 my-5 p-3 border border-gray-200 shadow">
           <h1 class="leading-5 font-bold mb-3">Latest notifications</h1>
-          <span
-            >Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
-            inventore incidunt harum autem consectetur commodi, doloremque error
-            corrupti, doloribus cum quasi. Culpa provident quis facilis est.
-            Aspernatur explicabo sapiente velit?</span
+          <span v-if="notifications.length == 0">No New Notifications</span>
+          <div
+            class="border-t border-gray-400 mt-2 p-2"
+            v-for="not of notifications"
+            :key="not.id"
           >
+            <span class="leading-4 font-bold block">{{ not.title }}</span>
+            <span class="text-sm text-justify">{{ not.content }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -44,6 +50,10 @@ export default {
     AppLayout,
     JetLabel,
     LeafletMap,
+  },
+  props: {
+    notifications: Array,
+    news: Array,
   },
 };
 </script>

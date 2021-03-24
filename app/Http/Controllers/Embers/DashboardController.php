@@ -13,8 +13,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $news = News::whereIn('team_id', Auth::user()->teams->pluck('id'));
-        $notifications = Notifications::whereIn('team_id', Auth::user()->teams->pluck('id'));
+        $news = News::whereIn('team_id', Auth::user()->teams->pluck('id'))->get();
+        $notifications = Notifications::whereIn('team_id', Auth::user()->teams->pluck('id'))->get();
         return Inertia::render('Dashboard', [
             'news' => $news,
             'notifications' => $notifications
