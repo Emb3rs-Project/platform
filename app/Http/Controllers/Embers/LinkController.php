@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\GeoSegment;
 use App\Models\Link;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Redirect;
@@ -18,7 +19,8 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $links = Link::with(['geoSegments'])->get();
+        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
 
         return Inertia::render('Objects/Links/LinkIndex', ['links' => $links]);
     }
@@ -43,11 +45,14 @@ class LinkController extends Controller
     {
         $segments = $request->get('locationData')['segments'];
 
+
+
         $link = Link::create([
             'name' => $request->get('name'),
             'description' => $request->get('description')
             ]);
 
+        $link->teams()->attach(Auth::user()->currentTeam);
 
         foreach ($segments as $data) {
             $segment = GeoSegment::create([

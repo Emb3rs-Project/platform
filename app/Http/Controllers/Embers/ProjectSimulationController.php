@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
+use App\Models\Link;
 use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
@@ -74,12 +75,16 @@ class ProjectSimulationController extends Controller
         // Get Simulation Types
         $simulationTypes = SimulationType::all();
 
+        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $links = Link::whereIn('id', $teamLinks)->get();
+
 
         return Inertia::render('Simulations/SimulationCreate', [
             'sources' => $sources,
             'sinks' => $sinks,
             'locations' => $locations,
-            'simulation_types' => $simulationTypes
+            'simulation_types' => $simulationTypes,
+            'links' => $links
         ]);
     }
 

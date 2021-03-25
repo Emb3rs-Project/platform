@@ -323,6 +323,130 @@
               <div class="text-right">
                 <jet-button
                   :disabled="form.processing"
+                  @click="setStep(5)"
+                  class="mt-5"
+                >
+                  Next
+                </jet-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Step 5 -->
+        <div class="mt-5 md:mt-0 md:col-span-2" v-if="currentStep.id === 5">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <h3 class="font-bold">Links</h3>
+                </div>
+              </div>
+
+              <!-- Source -->
+              <div class="col-span-12" v-for="link of links" :key="link.id">
+                <div class="flex items-center justify-between my-2">
+                  <span class="flex-grow flex flex-col" id="availability-label">
+                    <span class="text-sm font-medium text-gray-900">{{
+                      link.name
+                    }}</span>
+                    <span class="text-sm text-gray-500">{{
+                      link.description
+                    }}</span>
+                  </span>
+                  <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+                  <button
+                    @click="checkLink(link.id)"
+                    type="button"
+                    v-bind:class="{
+                      'bg-indigo-600': form.links[link.id],
+                      'bg-gray-200': !form.links[link.id],
+                    }"
+                    class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    aria-pressed="false"
+                    aria-labelledby="availability-label"
+                  >
+                    <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+                    <span
+                      v-bind:class="{
+                        'translate-x-5': form.links[link.id],
+                        'translate-x-0': !form.links[link.id],
+                      }"
+                      aria-hidden="true"
+                      class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                    ></span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="text-right">
+                <jet-button
+                  :disabled="form.processing"
+                  @click="setStep(6)"
+                  class="mt-5"
+                >
+                  Next
+                </jet-button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Step 6 -->
+        <div class="mt-5 md:mt-0 md:col-span-2" v-if="currentStep.id === 6">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <h3 class="font-bold">Simulators</h3>
+                </div>
+                <!-- Source -->
+                <div
+                  class="col-span-12"
+                  v-for="simulator of simulators"
+                  :key="simulator.id"
+                >
+                  <div class="flex items-center justify-between">
+                    <span
+                      class="flex-grow flex flex-col"
+                      id="availability-label"
+                    >
+                      <span class="text-sm font-medium text-gray-900">{{
+                        simulator.name
+                      }}</span>
+                      <span class="text-sm text-gray-500">{{
+                        simulator.description
+                      }}</span>
+                    </span>
+                    <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
+                    <button
+                      @click="checkSimulator(simulator.id)"
+                      type="button"
+                      v-bind:class="{
+                        'bg-indigo-600': form.simulators[simulator.id],
+                        'bg-gray-200': !form.simulators[simulator.id],
+                      }"
+                      class="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      aria-pressed="false"
+                      aria-labelledby="availability-label"
+                    >
+                      <!-- Enabled: "translate-x-5", Not Enabled: "translate-x-0" -->
+                      <span
+                        v-bind:class="{
+                          'translate-x-5': form.simulators[simulator.id],
+                          'translate-x-0': !form.simulators[simulator.id],
+                        }"
+                        aria-hidden="true"
+                        class="pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
+                      ></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-right">
+                <jet-button
+                  :disabled="form.processing"
                   @click="setStep(4)"
                   class="mt-5"
                 >
@@ -367,6 +491,7 @@ export default {
     sinks: Array,
     sources: Array,
     simulation_types: Array,
+    links: Array,
   },
   setup(props) {
     const form = useForm({
@@ -379,6 +504,8 @@ export default {
       constraint_value: {},
       sources: {},
       sinks: {},
+      simulators: {},
+      links: {},
     });
 
     const currentStep = computed({
@@ -468,6 +595,34 @@ export default {
       value: s.name,
     }));
 
+    const simulators = [
+      {
+        id: "prc",
+        name: "Process",
+        description: "Small description about the simulator",
+      },
+      {
+        id: "gis",
+        name: "GIS",
+        description: "Small description about the simulator",
+      },
+      {
+        id: "teo",
+        name: "Techno-Economic",
+        description: "Small description about the simulator",
+      },
+      {
+        id: "mkt",
+        name: "Market",
+        description: "Small description about the simulator",
+      },
+      {
+        id: "bus",
+        name: "Business",
+        description: "Small description about the simulator",
+      },
+    ];
+
     const submit = () => {
       console.log("submitting");
       // TODO: Uncomment when backend is ready to accept data
@@ -483,6 +638,7 @@ export default {
       locationSelect,
       simulation_types_select,
       targets,
+      simulators,
     };
   },
   methods: {
@@ -494,6 +650,12 @@ export default {
     },
     checkSink(id) {
       this.form.sinks[id] = !this.form.sinks[id];
+    },
+    checkSimulator(id) {
+      this.form.simulators[id] = !this.form.simulators[id];
+    },
+    checkLink(id) {
+      this.form.links[id] = !this.form.links[id];
     },
   },
 };
