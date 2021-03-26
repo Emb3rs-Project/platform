@@ -3,8 +3,15 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Instance;
+use App\Models\Link;
+use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
+use App\Models\SimulationType;
+use App\Models\Template;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -19,7 +26,6 @@ class ProjectSimulationController extends Controller
     {
         $simulations = $project->simulations()->with(['target','simulationType'])->get();
 
-        dd($simulations);
 
         return Inertia::render('Simulations/SimulationIndex', [
             'simulations' => $simulations
@@ -33,7 +39,53 @@ class ProjectSimulationController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Simulations/SimulationCreate');
+        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+
+        // Get Locations
+        $locations = Location::all();
+
+        // Get Sinks
+        $sourceCategories = Category::whereType('sink')
+        ->get()
+        ->pluck('id');
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        ->get()
+        ->pluck('id');
+
+        $sinks = Instance::whereIn('template_id', $sourceTemplates)
+        ->whereIn('id', $teamInstances)
+        ->with(['template', 'template.category', 'location.geoObject'])
+        ->get();
+
+        // Get Sources
+        $sourceCategories = Category::whereType('source')
+        ->get()
+        ->pluck('id');
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        ->get()
+        ->pluck('id');
+
+        $sources = Instance::whereIn('template_id', $sourceTemplates)
+        ->whereIn('id', $teamInstances)
+        ->with(['template', 'template.category', 'location.geoObject'])
+        ->get();
+
+        // Get Simulation Types
+        $simulationTypes = SimulationType::all();
+
+        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $links = Link::whereIn('id', $teamLinks)->get();
+
+
+        return Inertia::render('Simulations/SimulationCreate', [
+            'sources' => $sources,
+            'sinks' => $sinks,
+            'locations' => $locations,
+            'simulation_types' => $simulationTypes,
+            'links' => $links
+        ]);
     }
 
     /**
