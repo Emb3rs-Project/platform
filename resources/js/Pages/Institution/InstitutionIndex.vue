@@ -133,7 +133,7 @@
         </div>
       </div>
 
-      <div class="flex flex-col  h-full gap-5">
+      <div class="flex flex-col h-full gap-5">
         <div class="flex gap-5">
           <div class="flex flex-col gap-5 sm:w-full md:w-6/12">
             <div>
@@ -194,9 +194,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <a
                             :class="{
-                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                        source.location,
-                                                }"
+                                'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                    source.location,
+                            }"
                             @click="centerAtLocation(source.location)"
                           >
                             {{ source.location ? source.location.name : "Not Assigned" }}
@@ -275,9 +275,9 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <a
                             :class="{
-                                                    'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                                        sink.location,
-                                                    }"
+                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
+                                sink.location,
+                            }"
                             @click="centerAtLocation(sink.location)"
                           >
 
@@ -307,170 +307,6 @@
         </div>
       </div>
 
-      <!-- <div class="flex w-full h-screen md:h-table-and-map gap-5">
-        <div class="flex md:flex-col w-1/2 h-full gap-5">
-          <div class="bg-red-500 h-1/2">
-            <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
-              <h3 class="text-lg leading-6 font-bold text-gray-900">
-                Sources
-              </h3>
-              <p class="text-sm text-gray-500">
-                A list of all the Sources
-              </p>
-            </div>
-            <div></div>
-            <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
-              <div v-if="sources.length">
-                <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        ID
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Name
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Template
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Category
-                      </th>
-                      <th
-                        scope="col"
-                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Location
-                      </th>
-                      <th
-                        scope="col"
-                        class="relative px-6 py-3"
-                      >
-                        <span class="sr-only">Edit</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="(source, index) in sources"
-                      :key="index"
-                      :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                    >
-                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ source.id }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.template.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.template.category.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <a
-                          :class="{
-                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                source.location,
-                        }"
-                          @click="centerAtLocation(source.location)"
-                        >
-                          {{ source.location ? source.location.name : "Not Assigned" }}
-                        </a>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
-                        <inertia-link :href="route('objects.sources.show', source.id)">
-                          <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
-                        </inertia-link>
-                        <inertia-link :href="route('objects.sources.edit', source.id)">
-                          <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
-                        </inertia-link>
-                        <button
-                          class="focus:outline-none"
-                          @click="onDelete(source.location)"
-                        >
-                          <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
-                        </button>
-                      </td>
-                    </tr>
-
-                    <tr
-                      v-for="(source, index) in sources"
-                      :key="index"
-                      :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
-                    >
-                      <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ source.id }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.template.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ source.template.category.name }}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <a
-                          :class="{
-                            'font-bold text-green-700 cursor-pointer hover:text-green-500':
-                                source.location,
-                        }"
-                          @click="centerAtLocation(source.location)"
-                        >
-                          {{ source.location ? source.location.name : "Not Assigned" }}
-                        </a>
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
-                        <inertia-link :href="route('objects.sources.show', source.id)">
-                          <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
-                        </inertia-link>
-                        <inertia-link :href="route('objects.sources.edit', source.id)">
-                          <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
-                        </inertia-link>
-                        <button
-                          class="focus:outline-none"
-                          @click="onDelete(source.location)"
-                        >
-                          <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div
-                v-else
-                class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
-              >
-                <h1 class="text-2xl font-extrabold text-gray-300 uppercase">No Sources Found</h1>
-              </div>
-            </div>
-          </div>
-          <div class="bg-green-500 h-1/2">2</div>
-        </div>
-
-        <div class="w-1/2">
-          <leaflet-map
-            :markers="markers"
-            ref="map"
-          ></leaflet-map>
-        </div>
-      </div> -->
     </div>
   </app-layout>
 </template>
@@ -507,6 +343,7 @@
     },
 
     setup(props) {
+      const map = ref(null);
       const markers = ref([]);
       const locations = props.sources.concat(props.sinks);
 
@@ -517,16 +354,16 @@
         markers.value.push(source.data)
       }
 
-      return {
-        markers
-      };
-    },
-
-    methods: {
-      centerAtLocation(location) {
-        const locationMarker = this.locations.find((m) => m.id === location.geo_object.id);
-        this.$refs.map.centerAtLocation(locationMarker);
+      function centerAtLocation(location) {
+        const locationMarker = markers.value.find((m) => m.id === location.geo_object.id);
+        map.value.centerAtLocation(locationMarker);
       }
+
+      return {
+        map,
+        markers,
+        centerAtLocation
+      };
     }
   };
 </script>

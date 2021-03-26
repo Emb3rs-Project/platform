@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
-use App\Models\Location;
+use App\Models\Team;
 use App\Models\Template;
 use Auth;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -23,6 +22,7 @@ class InstitutionController extends Controller
     {
         $currentTeam = Auth::user()->currentTeam;
         $users = $currentTeam->allUsers();
+        $teamInstances = $currentTeam->instances()->get()->pluck('id');
 
         $sourceCategories = Category::whereType('source')
             ->get()
@@ -31,6 +31,7 @@ class InstitutionController extends Controller
             ->get()
             ->pluck('id');
         $instances = Instance::whereIn('template_id', $templates)
+            ->whereIn('id', $teamInstances)
             ->with(['template', 'template.category', 'location.geoObject'])
             ->get();
         $sources = $instances->map(function ($item) {
@@ -47,6 +48,7 @@ class InstitutionController extends Controller
             ->get()
             ->pluck('id');
         $instances = Instance::whereIn('template_id', $templates)
+            ->whereIn('id', $teamInstances)
             ->with(['template', 'template.category', 'location.geoObject'])
             ->get();
         $sinks = $instances->map(function ($item) {
