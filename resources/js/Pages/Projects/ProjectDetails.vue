@@ -99,106 +99,107 @@
         </div>
       </div>
 
-      <div
-        v-for="(simulation, index) in simulations"
-        :key="index"
-      >
+      <div>
         <div class="grid grid-cols-3">
           <div>
-            <div v-if="index == 0">
-              <h3 class="text-lg font-medium leading-6 text-gray-900">Simulation(s)</h3>
-              <p class="mt-1 text-sm text-gray-600">Project Simulation Configuration(s)</p>
-            </div>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Simulation(s)</h3>
+            <p class="mt-1 text-sm text-gray-600">Project Simulation Configuration(s)</p>
           </div>
           <div class="col-span-2">
-            <div class="bg-white overflow-hidden shadow sm:rounded-lg">
-              <div class="px-4 py-5 sm:p-6">
-                <input-row
-                  heading="Simulation"
-                  desc="The status of the Simulation of this Project"
-                  v-model="simulation.status"
-                  :disabled="true"
+            <div class="flex flex-col max-h-full">
+              <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+                <div v-if="simulations.length">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          ID
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Status
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Target
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Simulation Type
+                        </th>
+                        <th
+                          scope="col"
+                          class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                          Simulation Type Description
+                        </th>
+                        <th
+                          scope="col"
+                          class="relative px-6 py-3"
+                        >
+                          <span class="sr-only">Edit</span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="(simulation, index) in simulations"
+                        :key="index"
+                        :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
+                      >
+                        <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
+                          {{ simulation.id }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ simulation.status }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ simulation.targetData }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ simulation.simulation_type.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {{ simulation.simulation_type.description ? simulation.simulation_type.description : "Not defined" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
+                          <inertia-link :href="route('projects.simulations.show', [project.id, simulation.id])">
+                            <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                          </inertia-link>
+                          <inertia-link :href="route('projects.simulations.edit', [project.id, simulation.id])">
+                            <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                          </inertia-link>
+                          <button
+                            class="focus:outline-none"
+                            @click="onSimulationDelete(project, simulation)"
+                          >
+                            <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div
+                  v-else
+                  class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
                 >
-                  Status
-                </input-row>
-
-                <input-row
-                  desc="The Simulation's creation date"
-                  v-model="simulation.created_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Created at
-                </input-row>
-
-                <input-row
-                  desc="The Simulation's last update date"
-                  v-model="simulation.updated_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Updated At
-                </input-row>
-
-                <input-row
-                  heading="Simulation Target"
-                  desc="The Simulation's Target"
-                  v-model="simulation.targetData"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Target
-                </input-row>
-
-                <input-row
-                  heading="Simulation Type"
-                  desc="The name of the Simulation Type of this Project"
-                  v-model="simulation.simulation_type.name"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Name
-                </input-row>
-
-                <input-row
-                  desc="The description of the Simulation Type of this Project"
-                  v-model="simulation.simulation_type.description"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Description
-                </input-row>
-
-                <input-row
-                  desc="The value of the Simulation Type of this Project"
-                  v-model="simulation.simulation_type.value"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Value
-                </input-row>
-
-                <input-row
-                  desc="The unit of the Simulation Type of this Project"
-                  v-model="simulation.simulation_type.unit.name"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Unit
-                </input-row>
-
-                <input-row
-                  desc="The symbol of the Simulation Type of this Project"
-                  v-model="simulation.simulation_type.unit.symbol"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Symbol
-                </input-row>
+                  <h1 class="text-2xl font-extrabold text-gray-300 uppercase">
+                    No Simulations Found
+                  </h1>
+                </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -222,6 +223,7 @@
 
 <script>
   import { ref, onMounted } from "vue";
+  import { Inertia } from '@inertiajs/inertia'
 
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
@@ -230,6 +232,9 @@
   import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
   import SecondaryButton from "@/Components/SecondaryButton";
   import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
+  import TrashIcon from "@/Icons/TrashIcon.vue";
+  import EditIcon from "@/Icons/EditIcon.vue";
+  import DetailIcon from "@/Icons/DetailIcon.vue";
 
 
   export default {
@@ -240,7 +245,10 @@
       DateInput,
       PrimaryLinkButton,
       SecondaryButton,
-      SecondaryLinkButton
+      SecondaryLinkButton,
+      TrashIcon,
+      EditIcon,
+      DetailIcon,
     },
 
     props: {
@@ -270,18 +278,17 @@
         map.value.centerAtLocation(marker.value[0]);
       }
 
+      function onSimulationDelete(project, simulation) {
+        // we need to diplay a modal here
+        Inertia.delete(route("projects.simulations.destroy", [project.id, simulation.id]));
+      }
+
       return {
         map,
         marker,
-        centerAtLocation
+        centerAtLocation,
+        onSimulationDelete
       }
     }
   };
-
-
 </script>
-
-<style scoped>
-</style>
-
-

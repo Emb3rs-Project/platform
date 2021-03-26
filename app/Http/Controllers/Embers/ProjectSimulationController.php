@@ -26,6 +26,7 @@ class ProjectSimulationController extends Controller
     {
         $simulations = $project->simulations()->with(['target','simulationType'])->get();
 
+        dd($project);
 
         return Inertia::render('Simulations/SimulationIndex', [
             'simulations' => $simulations
@@ -105,9 +106,9 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Project $project, Simulation $simulation)
     {
-        //
+        dd($project, $simulation);
     }
 
     /**
@@ -116,9 +117,9 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Project $project, Simulation $simulation)
     {
-        //
+        dd($project, $simulation);
     }
 
     /**
@@ -139,8 +140,8 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project, Simulation $simulation)
     {
-        //
+        dd($project, $simulation);
     }
 }
