@@ -265,7 +265,7 @@
     setup(props) {
       const map = ref(null);
       const marker = ref([]);
-      console.log(props.simulations);
+
       if (props.project.location.geo_object) {
         marker.value.push(props.project.location.geo_object);
       }
