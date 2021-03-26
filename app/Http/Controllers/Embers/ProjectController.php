@@ -80,7 +80,7 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::whereId($id)->with(['location'])->first();
+        $project = Project::whereId($id)->with(['location', 'location.geoObject'])->first();
 
         $projectId = $project->id;
 

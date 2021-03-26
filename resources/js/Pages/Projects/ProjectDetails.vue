@@ -26,15 +26,6 @@
                 </input-row>
 
                 <input-row
-                  desc="The ID of the Project"
-                  v-model="project.id"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  ID
-                </input-row>
-
-                <input-row
                   desc="The description of the Project"
                   v-model="project.description"
                   :disabled="true"
@@ -43,23 +34,30 @@
                   Description
                 </input-row>
 
-                <input-row
-                  desc="The Project's creation date"
-                  v-model="project.created_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Created at
-                </input-row>
+                <div class="grid grid-cols-2 items-center mt-10">
+                  <div>
+                    <p class="text-sm text-gray-500">
+                      The creation and update dates
+                    </p>
+                  </div>
+                  <div class="flex">
+                    <date-input
+                      desc="Creation Date"
+                      v-model="project.created_at"
+                      :disabled="true"
+                    >
+                      Created at
+                    </date-input>
 
-                <input-row
-                  desc="The Project's last update date"
-                  v-model="project.updated_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Updated At
-                </input-row>
+                    <date-input
+                      desc="Update Date"
+                      v-model="project.updated_at"
+                      :disabled="true"
+                    >
+                      Updated At
+                    </date-input>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -84,32 +82,17 @@
                   Name
                 </input-row>
 
-                <input-row
-                  desc="The description of the Location of this Project"
-                  v-model="project.description"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Description
-                </input-row>
+                <leaflet-map
+                  class="mt-5"
+                  :markers="marker"
+                  ref="map"
+                ></leaflet-map>
+                <div class="flex justify-end mt-5">
+                  <secondary-button @click="centerAtLocation">
+                    Center at Location
+                  </secondary-button>
+                </div>
 
-                <input-row
-                  desc="The Locations Project's creation date"
-                  v-model="project.location.created_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Created at
-                </input-row>
-
-                <input-row
-                  desc="The Project's last update date"
-                  v-model="project.location.updated_at"
-                  :disabled="true"
-                  class="mt-14"
-                >
-                  Updated At
-                </input-row>
               </div>
             </div>
           </div>
@@ -238,18 +221,25 @@
 </template>
 
 <script>
+  import { ref, onMounted } from "vue";
+
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
   import InputRow from "@/Components/InputRow";
+  import DateInput from "@/Components/DateInput";
   import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+  import SecondaryButton from "@/Components/SecondaryButton";
   import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
+
 
   export default {
     components: {
       AppLayout,
       LeafletMap,
       InputRow,
+      DateInput,
       PrimaryLinkButton,
+      SecondaryButton,
       SecondaryLinkButton
     },
 
@@ -263,7 +253,32 @@
         required: true,
       },
     },
+
+    setup(props) {
+      const map = ref(null);
+      const marker = ref([]);
+      console.log(props.simulations);
+      if (props.project.location.geo_object) {
+        marker.value.push(props.project.location.geo_object);
+      }
+
+      onMounted(() => {
+        centerAtLocation();
+      })
+
+      function centerAtLocation() {
+        map.value.centerAtLocation(marker.value[0]);
+      }
+
+      return {
+        map,
+        marker,
+        centerAtLocation
+      }
+    }
   };
+
+
 </script>
 
 <style scoped>
