@@ -24,6 +24,19 @@
                   <tr>
                     <th
                       scope="col"
+                      class="relative px-6 py-3"
+                    >
+                      <div class="flex justify-center items-center h-5">
+                        <input
+                          name="comments"
+                          type="checkbox"
+                          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                          v-model="massAction"
+                        >
+                      </div>
+                    </th>
+                    <th
+                      scope="col"
                       class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
                     >
                       ID
@@ -66,6 +79,18 @@
                     :key="index"
                     :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                   >
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <div class="flex justify-center items-center h-5">
+                        <input
+                          :name="source.name"
+                          :value="source"
+                          v-model="selected"
+                          type="checkbox"
+                          class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:opacity-50"
+                          :disabled="source.location ? false : true"
+                        >
+                      </div>
+                    </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
                       {{ source.id }}
                     </td>
@@ -115,6 +140,8 @@
             </div>
           </div>
         </div>
+        <pre>{{ markers }}</pre>
+        <pre>{{ selected }}</pre>
       </div>
 
       <div class="w-full h-full md:w-1/2">
@@ -134,7 +161,7 @@
 </template>
 
 <script>
-  import { ref } from "vue";
+  import { watch, ref, onMounted } from "vue";
   import { Inertia } from '@inertiajs/inertia'
 
   import useUniqueLocations from "@/Composables/useUniqueLocations";
@@ -166,12 +193,53 @@
     setup(props) {
       const map = ref(null);
       const markers = ref([]);
+      const selected = ref([]);
+      const massAction = ref(true);
 
-      const uniqueSources = useUniqueLocations(props.sources)
+      const uniqueSourceLocations = useUniqueLocations(props.sources)
 
-      for (const source of uniqueSources.value) {
-        markers.value.push(source.data);
+      // Populate the map with unique locations only.
+      for (const _source of uniqueSourceLocations.value) {
+        markers.value.push(_source.data);
       }
+
+      onMounted(() => {
+        selectAll();
+      });
+
+      function selectAll() {
+        // Select (checked) all the applicable sources
+        for (const _source of props.sources) {
+          if (!_source.location) continue;
+          selected.value.push(_source);
+        }
+      };
+
+      function deSelectAll() {
+        selected.value = [];
+      };
+
+      watch(massAction, (selected) => {
+        if (selected) {
+          selectAll();
+          return;
+        }
+        deSelectAll();
+      });
+
+      watch(selected, (selected, prevSelected) => {
+        // massAction.value = false;
+        if (!selected.length) {
+          markers.value = [];
+          return
+        };
+
+        for (const _source of selected) {
+          const marker = uniqueSourceLocations.value.find((location) => location.id === _source.id);
+          if (marker) continue;
+          markers.value.push(_source.data);
+        }
+      });
 
       function onDelete(source) {
         // show modal here
@@ -179,6 +247,8 @@
       };
 
       function centerAtLocation(location) {
+        if (!markers.value.length) return;
+
         const marker = markers.value.find((m) => m.id === location.geo_object.id);
         map.value.centerAtLocation(marker);
       };
@@ -186,12 +256,11 @@
       return {
         map,
         markers,
+        selected,
+        massAction,
         onDelete,
         centerAtLocation
       };
     }
   };
 </script>
-
-<style>
-</style>
