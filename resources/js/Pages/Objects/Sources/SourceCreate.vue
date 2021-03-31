@@ -101,6 +101,54 @@
                         >({{ prop.unit.symbol }})</span
                       >
                     </select-row>
+
+                    <div
+                      v-if="prop.property.inputType === 'week_schedule'"
+                      class="grid grid-cols-7 gap-2"
+                    >
+                      <div class="col-span-7">
+                        <p class="text-indigo-400 text-sm mb-2 mx-5">
+                          {{ prop.property.name }}
+                        </p>
+                      </div>
+                      <div
+                        class="col-span-1"
+                        v-for="i of [
+                          'Monday',
+                          'Tuesday',
+                          'Wednesday',
+                          'Thursday',
+                          'Friday',
+                          'Saturday',
+                          'Sunday',
+                        ]"
+                        :key="i"
+                      >
+                        <div class="text-center text-indigo-400 text-sm">
+                          <p>{{ i }}</p>
+                        </div>
+                        <div class="mt-2">
+                          <input
+                            type="text"
+                            class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                            v-model="
+                              form.source.data[prop.property.symbolic_name][i]
+                                .start
+                            "
+                          />
+                        </div>
+                        <div class="mt-2">
+                          <input
+                            type="text"
+                            class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                            v-model="
+                              form.source.data[prop.property.symbolic_name][i]
+                                .end
+                            "
+                          />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -262,6 +310,8 @@ export default {
       form.value.equipments = [];
       form.value.template_id = template;
 
+      console.log(form.value.source);
+
       // Check if there are Children
       if (templateInfo.value.values.children)
         for (const child of templateInfo.value.values.children) {
@@ -273,9 +323,21 @@ export default {
           };
           // Load Default Values
           for (const prop of equip.template.template_properties) {
-            equip.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
+            if (prop.property.inputType === "week_schedule") {
+              equip.data[prop.property.symbolic_name] = {
+                Monday: {},
+                Tuesday: {},
+                Wednesday: {},
+                Thursday: {},
+                Friday: {},
+                Saturday: {},
+                Sunday: {},
+              };
+            } else {
+              equip.data[prop.property.symbolic_name] = prop.default_value
+                ? prop.default_value
+                : "";
+            }
           }
 
           form.value.equipments.push(equip);
@@ -283,9 +345,21 @@ export default {
 
       if (templateInfo.value?.template_properties)
         for (const prop of templateInfo.value?.template_properties) {
-          form.value.source.data[
-            prop.property.symbolic_name
-          ] = prop.default_value ? prop.default_value : "";
+          if (prop.property.inputType === "week_schedule") {
+            form.value.source.data[prop.property.symbolic_name] = {
+              Monday: {},
+              Tuesday: {},
+              Wednesday: {},
+              Thursday: {},
+              Friday: {},
+              Saturday: {},
+              Sunday: {},
+            };
+          } else {
+            form.value.source.data[
+              prop.property.symbolic_name
+            ] = prop.default_value ? prop.default_value : "";
+          }
         }
     });
 
