@@ -83,7 +83,6 @@
                         /> -->
                         <!-- This example requires Tailwind CSS v2.0+ -->
                         <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
-                        <tris-checkbox></tris-checkbox>
                       </div>
                     </td>
                     <td
@@ -186,7 +185,6 @@ import useUniqueLocations from "@/Composables/useUniqueLocations";
 
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
-import TrisCheckbox from "@/Components/Forms/TrisCheckbox";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
 import TrashIcon from "@/Icons/TrashIcon.vue";
 import EditIcon from "@/Icons/EditIcon.vue";
@@ -200,7 +198,6 @@ export default {
     TrashIcon,
     EditIcon,
     DetailIcon,
-    TrisCheckbox,
   },
 
   props: {
