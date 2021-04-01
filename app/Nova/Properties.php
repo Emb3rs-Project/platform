@@ -71,7 +71,8 @@ class Properties extends Resource
                     [
                         "text" => __('Text Input'),
                         "datetime" => __('Date Input'),
-                        "select" => __('Select / ComboBox')
+                        "select" => __('Select / ComboBox'),
+                        "week_schedule" => __('Week Schedule Input')
                     ]
                 )
                 ->displayUsingLabels(),

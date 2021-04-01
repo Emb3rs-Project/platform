@@ -87,10 +87,16 @@
                         />
                         <!-- This example requires Tailwind CSS v2.0+ -->
                         <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
-                        <!-- <tris-checkbox
+                        <<<<<<<
+                          HEAD
+                          <!--
+                          <tris-checkbox
                           :state="source.enabled"
                           @state="onElementStateChanged"
-                        ></tris-checkbox> -->
+                        >
+                          </tris-checkbox> -->
+                          =======
+                          >>>>>>> 5ec99d6d05947cdf9714af0b0319c0f5b34c02fe
                       </div>
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
