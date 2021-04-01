@@ -25,13 +25,9 @@ export default {
             }
         ).addTo(map);
 
-
         return map;
     },
     loadMarkers(map, markers = []) {
-
-
-
         for (const marker of markers) {
             const type = marker.type;
             const data = marker.data;
@@ -61,15 +57,29 @@ export default {
                     break;
             }
         }
-
-
+    },
+    removeMarkers(map, markers) {
+        for (const marker of markers) {
+            const type = marker.type;
+            const data = marker.data;
+            switch (type) {
+                case "circle":
+                    console.log('TODO: Remove Circle', data.center)
+                    break;
+                case "polygon":
+                    console.log('TODO: Remove Polygon', data.points)
+                    break;
+                case "point":
+                    console.log('TODO: Remove Point', data.center)
+                    break;
+            }
+        }
     },
     loadLinks(map, markers = []) {
         for (const marker of markers) {
             if (marker.to)
                 L.polyline([marker.from, marker.to], { color: 'green' }).addTo(map);
         }
-
     },
     centerAtLocation(map, { type, data }) {
         switch (type) {
@@ -84,35 +94,4 @@ export default {
                 break;
         }
     }
-
-
 }
-
-
-
-// const _markers = [];
-
-// map.on("dblclick", (e) => {
-//   const marker = L.marker(e.latlng, {
-//     draggable: true,
-//     icon: fontAwesomeIcon,
-//   }).addTo(map);
-
-//   marker.on("move", (e) => {
-//     popup
-//       .setLatLng(e.latlng)
-//       .setContent("Moving to " + e.latlng.toString())
-//       .openOn(map);
-//   });
-
-//   _markers.push(marker);
-// });
-
-// // for (var mark of this.markers) {
-// //   const point = mark.data.points[0];
-
-// //   const marker = L.marker(point, {
-// //     draggable: true,
-// //     icon: fontAwesomeIcon,
-// //   }).addTo(map);
-// // }

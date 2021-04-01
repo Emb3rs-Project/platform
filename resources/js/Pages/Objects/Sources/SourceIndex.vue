@@ -85,18 +85,6 @@
                           class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:opacity-50"
                           :disabled="source.location ? false : true"
                         />
-                        <!-- This example requires Tailwind CSS v2.0+ -->
-                        <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
-                        <<<<<<<
-                          HEAD
-                          <!--
-                          <tris-checkbox
-                          :state="source.enabled"
-                          @state="onElementStateChanged"
-                        >
-                          </tris-checkbox> -->
-                          =======
-                          >>>>>>> 5ec99d6d05947cdf9714af0b0319c0f5b34c02fe
                       </div>
                     </td>
                     <td class="px-6 py-4 text-right whitespace-nowrap text-sm font-medium text-gray-900">
@@ -154,7 +142,7 @@
             </div>
           </div>
         </div>
-        <pre>{{ selected }}</pre>
+        <!-- <pre>{{selected}}</pre> -->
       </div>
 
       <div class="w-full h-full md:w-1/2">
@@ -174,14 +162,13 @@
 </template>
 
 <script>
-  import { watch, ref, onMounted } from "vue";
+  import { watch, ref, onBeforeMount } from "vue";
   import { Inertia } from "@inertiajs/inertia";
 
   import useUniqueLocations from "@/Composables/useUniqueLocations";
 
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
-  import TrisCheckbox from "@/Components/Forms/TrisCheckbox";
   import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
   import TrashIcon from "@/Icons/TrashIcon.vue";
   import EditIcon from "@/Icons/EditIcon.vue";
@@ -194,8 +181,7 @@
       PrimaryLinkButton,
       TrashIcon,
       EditIcon,
-      DetailIcon,
-      TrisCheckbox
+      DetailIcon
     },
 
     props: {
@@ -208,23 +194,21 @@
     setup(props) {
       const map = ref(null);
       const markers = ref([]);
+      const massSelection = ref(true);
+      const massSelectionIndeterminated = ref(false);
+      const selected = ref([]);
+      let allSelectedLength;
 
       const uniqueSourceLocations = useUniqueLocations(props.sources);
+
+      onBeforeMount(() => {
+        selectAll();
+      });
 
       // Populate the map with unique locations only.
       for (const _source of uniqueSourceLocations.value) {
         markers.value.push(_source.data);
       }
-
-      const massSelection = ref(true);
-      const massSelectionIndeterminated = ref(false);
-      const selected = ref([]);
-
-      let allSelectedLength;
-
-      onMounted(() => {
-        selectAll();
-      });
 
       function selectAll() {
         // Select (checked) all the applicable sources
@@ -237,6 +221,7 @@
 
       function deSelectAll() {
         selected.value = [];
+        markers.value = [];
       }
 
       watch(selected, (current) => {
@@ -273,6 +258,16 @@
         }
       });
 
+      watch(selected, (current, previous) => {
+        // a row was removed
+        if (current.length < previous.length) {
+
+        } else {
+
+        }
+      });
+
+
       function onDelete(source) {
         // show modal here
         Inertia.delete(route("objects.sources.destroy", source.id));
@@ -286,14 +281,11 @@
       }
 
       return {
-
-        massSelectionIndeterminated,
-        massSelection,
-        selected,
-
         map,
         markers,
-
+        massSelection,
+        massSelectionIndeterminated,
+        selected,
         onDelete,
         centerAtLocation,
       };
