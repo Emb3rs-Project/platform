@@ -78,7 +78,6 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                       <div class="flex justify-center items-center h-5">
                         <input
-                          :name="source.name"
                           :value="source"
                           v-model="selected"
                           type="checkbox"
@@ -162,7 +161,7 @@
 </template>
 
 <script>
-  import { watch, ref, onBeforeMount, onMounted } from "vue";
+  import { watch, ref, onBeforeMount, onMounted, onRenderTriggered, onRenderTracked } from "vue";
   import { Inertia } from "@inertiajs/inertia";
 
   import useUniqueLocations from "@/Composables/useUniqueLocations";
@@ -199,20 +198,17 @@
       const selected = ref([]);
       let allSelectedLength;
 
-      onBeforeMount(() => {
-        selectAll();
-      });
-
-      onMounted(() => {
-        console.log("MOUNTED!");
-      })
+      selectAll();
 
       // Select (checked) all the applicable sources
       function selectAll() {
+        const temp = [];
         for (const _source of props.sources) {
           if (!_source.location) continue;
-          selected.value.push(_source);
+          temp.push(_source);
         }
+
+        selected.value = temp;
         populateMarkers(selected.value);
 
         allSelectedLength = selected.value.length;
@@ -224,32 +220,47 @@
       }
 
       watch(selected, (current, previous) => {
-        // An iteam was removed from the selected sources
+        // An iteam was removed from the selected entries
         if (current.length < previous.length) {
+          // Since we "touched" the selected items, on the next mass selection
+          // user action, we must select them all
+          massSelection.value = false;
+
+          // If the removed item was the last selected item, update mass action
+          // to be empty.
+          // Else, update mass action to the indeterminated state.
+          if (!current.length) {
+            massSelectionIndeterminated.value = false;
+          } else {
+            massSelectionIndeterminated.value = true;
+          }
+
+          // Remove the entry from the selected items
           removeEntry(current, previous);
+          return;
         }
 
-        // an item was added to the selected sources
-        else if (current.length > previous.length) {
+        // An item was added to the selected entries
+        if (current.length > previous.length) {
+          // If the added item was the last selected item for array fulliness,
+          // update mass action to be selected.
+          // Else, update mass action to the indeterminated state.
+          if (current.length === allSelectedLength) {
+            massSelection.value = true;
+            massSelectionIndeterminated.value = false;
+          } else {
+            massSelection.value = false;
+            massSelectionIndeterminated.value = true;
+          }
+
+          // Add the entry to the selected items
           addEntry(current, previous);
-        }
-
-        if (current.length === allSelectedLength) {
-          massSelection.value = true;
-          massSelectionIndeterminated.value = false;
           return;
         }
-
-        if (!current.length) {
-          massSelectionIndeterminated.value = false;
-          return;
-        }
-
-        massSelection.value = false;
-        massSelectionIndeterminated.value = true;
       });
 
       watch(massSelection, (current, previous) => {
+        // All the entries are selected, so, if pressesed, deselect them all.
         if (previous && selected.value.length === allSelectedLength) {
           deSelectAll();
           return;
@@ -261,8 +272,8 @@
         }
 
         if (current && selected.value.length && selected.value.length !== allSelectedLength) {
-          selectAll();
           massSelectionIndeterminated.value = false;
+          selectAll();
           return;
         }
       });
@@ -277,6 +288,9 @@
       }
 
       function removeEntry(currentSelections, previousSelections) {
+        // we must find the removed entry and check if its location already exists in the markers array
+        // if it does, remove it
+        // if it does not, do nothing
         for (const _previousSelection of previousSelections) {
           const entry = currentSelections.find((element) => element.id === _previousSelection.id);
 
@@ -288,7 +302,7 @@
 
             if (marker) {
               const markerIndex = markers.value.indexOf(marker);
-              console.log("will delete entry", markerIndex, "from the markers", [...markers.value]);
+              //   console.log("will delete entry", markerIndex, "from the markers", [...markers.value]);
               markers.value.splice(markerIndex, 1);
             }
             // we found the element that was removed, so stop the itteration
@@ -305,7 +319,7 @@
       }
 
       function addEntry(currentSelections, previousSelections) {
-        // we must find the new entry and check if its location already exists in the markers array
+        // We must find the new entry and check if its location already exists in the markers array
         // if it does, do nothing
         // if it does not, add it
         for (const _currentSelection of currentSelections) {
