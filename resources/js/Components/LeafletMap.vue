@@ -36,9 +36,9 @@
 
 
       watch(() => props.markers, (current, previous) => {
-        console.log("Map received those new markers", current);
-        console.log("Map must remove old markers", previous);
-        mapUtils.removeMarkers(map.value, previous);
+        // console.log("Map received those new markers", current);
+        // console.log("Map must remove old markers", previous);
+        // mapUtils.removeMarkers(map.value, previous);
         // mapUtils.loadMarkers(map.value, current);
       });
 
