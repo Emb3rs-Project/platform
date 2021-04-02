@@ -36,16 +36,15 @@
 
 
       watch(() => props.markers, (current, previous) => {
+        console.log("Map received those new markers", current);
+        console.log("Map must remove old markers", previous);
         mapUtils.removeMarkers(map.value, previous);
-        mapUtils.loadMarkers(map.value, current);
+        // mapUtils.loadMarkers(map.value, current);
       });
 
       function centerAtLocation(location) {
         mapUtils.centerAtLocation(this.map, location);
       }
-
-      // commented by geocfu to prevent vue warnings in console
-      // watch("marker", (val) => console.log(val));
 
       return {
         map,

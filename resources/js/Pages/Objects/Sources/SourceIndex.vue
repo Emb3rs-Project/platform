@@ -142,7 +142,7 @@
             </div>
           </div>
         </div>
-        <!-- <pre>{{selected}}</pre> -->
+        <pre>{{markers}}</pre>
       </div>
 
       <div class="w-full h-full md:w-1/2">
@@ -162,7 +162,7 @@
 </template>
 
 <script>
-  import { watch, ref, onBeforeMount } from "vue";
+  import { watch, ref, onBeforeMount, onMounted } from "vue";
   import { Inertia } from "@inertiajs/inertia";
 
   import useUniqueLocations from "@/Composables/useUniqueLocations";
@@ -199,32 +199,41 @@
       const selected = ref([]);
       let allSelectedLength;
 
-      const uniqueSourceLocations = useUniqueLocations(props.sources);
-
       onBeforeMount(() => {
         selectAll();
       });
 
-      // Populate the map with unique locations only.
-      for (const _source of uniqueSourceLocations.value) {
-        markers.value.push(_source.data);
-      }
+      onMounted(() => {
+        console.log("MOUNTED!");
+      })
 
+      // Select (checked) all the applicable sources
       function selectAll() {
-        // Select (checked) all the applicable sources
         for (const _source of props.sources) {
           if (!_source.location) continue;
           selected.value.push(_source);
         }
+        populateMarkers(selected.value);
+
         allSelectedLength = selected.value.length;
       }
 
       function deSelectAll() {
         selected.value = [];
-        markers.value = [];
+        removeMarkers();
       }
 
-      watch(selected, (current) => {
+      watch(selected, (current, previous) => {
+        // An iteam was removed from the selected sources
+        if (current.length < previous.length) {
+          removeEntry(current, previous);
+        }
+
+        // an item was added to the selected sources
+        else if (current.length > previous.length) {
+          addEntry(current, previous);
+        }
+
         if (current.length === allSelectedLength) {
           massSelection.value = true;
           massSelectionIndeterminated.value = false;
@@ -258,15 +267,67 @@
         }
       });
 
-      watch(selected, (current, previous) => {
-        // a row was removed
-        if (current.length < previous.length) {
+      function populateMarkers(locations) {
+        const uniqueLocations = useUniqueLocations(locations);
+        markers.value = uniqueLocations.value.map((element) => element.data);
+      }
 
-        } else {
+      function removeMarkers() {
+        markers.value = [];
+      }
 
+      function removeEntry(currentSelections, previousSelections) {
+        for (const _previousSelection of previousSelections) {
+          const entry = currentSelections.find((element) => element.id === _previousSelection.id);
+
+          // Current (_previousSelection) entry does not exist in the currentSelections, which means, that
+          // this entry was removed from the array of selected entries.
+          // For that reason, we must remove its marker (location) from the map.
+          if (!entry) {
+            const marker = markers.value.find((element) => element.id === _previousSelection.data.id);
+
+            if (marker) {
+              const markerIndex = markers.value.indexOf(marker);
+              console.log("will delete entry", markerIndex, "from the markers", [...markers.value]);
+              markers.value.splice(markerIndex, 1);
+            }
+            // we found the element that was removed, so stop the itteration
+            break;
+          }
         }
-      });
+        // Because there is a posibility that the removed marker (location)
+        // was belonging to another entry that is still selected, we must repopulate
+        // the markers(locations) array.
+        //
+        // In the end, we will end up with the NEW unique locations for the
+        // currently selected entries
+        populateMarkers(currentSelections);
+      }
 
+      function addEntry(currentSelections, previousSelections) {
+        // we must find the new entry and check if its location already exists in the markers array
+        // if it does, do nothing
+        // if it does not, add it
+        for (const _currentSelection of currentSelections) {
+          const entry = previousSelections.find((element) => element.id === _currentSelection.id);
+
+          // Current (_currentSelection) entry does not exist in the previousSelections, which means, that
+          // this entry was added to the array of selected entries.
+          // For that reason, we must add its marker (location) to the map.
+          if (!entry) {
+            const marker = markers.value.find((element) => element.id === _currentSelection.data.id);
+
+            // This entry's location does not exist in the already displaying
+            // markers (locations). For that reason, we must include it in it
+            if (!marker) {
+              markers.value.push(_currentSelection.data);
+            }
+
+            // we found the element that was added, so stop the itteration
+            break;
+          }
+        }
+      }
 
       function onDelete(source) {
         // show modal here
