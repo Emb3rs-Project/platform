@@ -7,9 +7,7 @@
     role="dialog"
     aria-modal="true"
   >
-    <div
-      class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-    >
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
       <!--
       Background overlay, show/hide based on modal state.
 
@@ -39,8 +37,7 @@
       <span
         class="hidden sm:inline-block sm:align-middle sm:h-screen"
         aria-hidden="true"
-        >&#8203;</span
-      >
+      >&#8203;</span>
 
       <!--
       Modal panel, show/hide based on modal state.
@@ -65,9 +62,7 @@
           class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6"
         >
           <div>
-            <div
-              class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100"
-            >
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
               <!-- Heroicon name: outline/check -->
               <svg
                 class="w-6 h-6"
@@ -166,73 +161,75 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
-export default {
-  props: {
-    categories: {
-      type: Array,
-      required: true,
-    },
-    equipments: {
-      type: Array,
-      required: true,
-    },
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
-  setup(props, { emit }) {
-    const selectedCategory = ref();
-    const availableEquipments = ref([]);
-    const selectedEquipment = ref();
-
-    const categorySelect = props.categories.map((c) => ({
-      key: c.id,
-      value: c.name,
-    }));
-
-    const equipmentSelect = props.equipments.map((e) => ({
-      key: e.id,
-      value: e.name,
-      parent: e.category_id,
-    }));
-
-    watch(
-      () => selectedCategory.value,
-      (category) => {
-        availableEquipments.value = equipmentSelect.filter(
-          (e) => e.parent == category
-        );
-      }
-    );
-
-    const value = computed({
-      get() {
-        return props.modelValue;
+  import { ref, computed, watch } from "vue";
+  export default {
+    props: {
+      categories: {
+        type: Array,
+        required: true,
       },
-      set(value) {
-        emit("update:modelValue", value);
+      equipments: {
+        type: Array,
+        required: true,
       },
-    });
+      modelValue: {
+        type: Boolean,
+        required: true,
+      },
+    },
 
-    const onAddEquipment = () => {
-      emit("add", selectedEquipment.value);
-      value.value = false;
-    };
+    emits: ["update:modelValue", "add"],
 
-    return {
-      categorySelect,
-      equipmentSelect,
-      selectedCategory,
-      selectedEquipment,
-      availableEquipments,
-      value,
-      onAddEquipment,
-    };
-  },
-};
+    setup(props, { emit }) {
+      const selectedCategory = ref();
+      const availableEquipments = ref([]);
+      const selectedEquipment = ref();
+
+      const categorySelect = props.categories.map((c) => ({
+        key: c.id,
+        value: c.name,
+      }));
+
+      const equipmentSelect = props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+      }));
+
+      watch(
+        () => selectedCategory.value,
+        (category) => {
+          availableEquipments.value = equipmentSelect.filter(
+            (e) => e.parent == category
+          );
+        }
+      );
+
+      const value = computed({
+        get() {
+          return props.modelValue;
+        },
+        set(value) {
+          emit("update:modelValue", value);
+        },
+      });
+
+      const onAddEquipment = () => {
+        emit("add", selectedEquipment.value);
+        value.value = false;
+      };
+
+      return {
+        categorySelect,
+        equipmentSelect,
+        selectedCategory,
+        selectedEquipment,
+        availableEquipments,
+        value,
+        onAddEquipment,
+      };
+    },
+  };
 </script>
 
 <style>

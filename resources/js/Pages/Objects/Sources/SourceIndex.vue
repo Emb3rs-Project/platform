@@ -161,7 +161,7 @@
 </template>
 
 <script>
-  import { watch, ref, onBeforeMount, onMounted, onRenderTriggered, onRenderTracked } from "vue";
+  import { watch, ref } from "vue";
   import { Inertia } from "@inertiajs/inertia";
 
   import useUniqueLocations from "@/Composables/useUniqueLocations";
