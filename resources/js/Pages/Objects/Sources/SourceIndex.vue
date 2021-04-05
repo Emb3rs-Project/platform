@@ -122,7 +122,7 @@
                       </inertia-link>
                       <button
                         class="focus:outline-none"
-                        @click="onDelete(source.location)"
+                        @click="deleteEntry(source)"
                       >
                         <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
                       </button>
@@ -141,7 +141,6 @@
             </div>
           </div>
         </div>
-        <pre>{{markers}}</pre>
       </div>
 
       <div class="w-full h-full md:w-1/2">
@@ -157,6 +156,20 @@
         Create New Source
       </primary-link-button>
     </div>
+
+    <deletion-modal
+      v-show="deletionModalIsVisible"
+      @deleteEntry="onDelete"
+      @close="deletionModalIsVisible = !deletionModalIsVisible"
+    >
+      <template #header>
+        Delete Source
+      </template>
+
+      <template #body>
+        Are you sure you want to delete this Source? This action is ireversible.
+      </template>
+    </deletion-modal>
   </app-layout>
 </template>
 
@@ -172,6 +185,7 @@
   import TrashIcon from "@/Icons/TrashIcon.vue";
   import EditIcon from "@/Icons/EditIcon.vue";
   import DetailIcon from "@/Icons/DetailIcon.vue";
+  import DeletionModal from "@/Components/Modals/DeletionModal";
 
   export default {
     components: {
@@ -180,7 +194,8 @@
       PrimaryLinkButton,
       TrashIcon,
       EditIcon,
-      DetailIcon
+      DetailIcon,
+      DeletionModal
     },
 
     props: {
@@ -197,6 +212,8 @@
       const massSelectionIndeterminated = ref(false);
       const selected = ref([]);
       let allSelectedLength;
+      const entryToDelete = ref({});
+      const deletionModalIsVisible = ref(false);
 
       selectAll();
 
@@ -343,9 +360,16 @@
         }
       }
 
-      function onDelete(source) {
-        // show modal here
-        Inertia.delete(route("objects.sources.destroy", source.id));
+      function deleteEntry(entry) {
+        entryToDelete.value = entry;
+        deletionModalIsVisible.value = true;
+      }
+
+      async function onDelete() {
+        await Inertia.delete(route("objects.sources.destroy", entryToDelete.value.id));
+
+        // close the modal after the deletion
+        deletionModalIsVisible.value = false;
       }
 
       function centerAtLocation(location) {
@@ -363,6 +387,8 @@
         selected,
         onDelete,
         centerAtLocation,
+        deleteEntry,
+        deletionModalIsVisible
       };
     },
   };

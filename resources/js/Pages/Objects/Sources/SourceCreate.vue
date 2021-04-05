@@ -220,7 +220,7 @@
         v-if="selectedTemplate"
         >Add Equipment</secondary-button
       >
-      <primary-button :disabled="form.proecessing" @click="submit()">
+      <primary-button :disabled="form.processing" @click="submit()">
         Create
       </primary-button>
     </div>

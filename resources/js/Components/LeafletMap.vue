@@ -2,7 +2,7 @@
   <div class="w-full h-full">
     <div
       id="map"
-      class="h-full w-full"
+      class="h-full w-full z-0"
     ></div>
   </div>
 </template>
