@@ -120,7 +120,8 @@
 
 <script>
   import { watch, ref, computed } from "vue";
-  import { Inertia } from "@inertiajs/inertia";
+
+  import useUniqueLocations from "@/Composables/useUniqueLocations";
 
   import DeletionModal from "@/Components/Modals/DeletionModal";
   import TrashIcon from "@/Icons/TrashIcon.vue";
@@ -199,9 +200,6 @@
           } else {
             massSelectionIndeterminated.value = true;
           }
-
-          // Remove the entry from the selected items
-          //   removeEntry(current, previous);
           return;
         }
 
@@ -217,9 +215,6 @@
             massSelection.value = false;
             massSelectionIndeterminated.value = true;
           }
-
-          // Add the entry to the selected items
-          //   addEntry(current, previous);
           return;
         }
       });
@@ -233,63 +228,13 @@
         selected.value = [];
       }
 
-      //   function removeEntry(currentSelections, previousSelections) {
-      //     // we must find the removed entry and check if its location already exists in the markers array
-      //     // if it does, remove it
-      //     // if it does not, do nothing
-      //     for (const _previousSelection of previousSelections) {
-      //       const entry = currentSelections.find((element) => element.id === _previousSelection.id);
-
-      //       // Current (_previousSelection) entry does not exist in the currentSelections, which means, that
-      //       // this entry was removed from the array of selected entries.
-      //       // For that reason, we must remove its marker (location) from the map.
-      //       if (!entry) {
-      //         const marker = markers.value.find((element) => element.id === _previousSelection.data.id);
-
-      //         if (marker) {
-      //           const markerIndex = markers.value.indexOf(marker);
-      //           //   console.log("will delete entry", markerIndex, "from the markers", [...markers.value]);
-      //           markers.value.splice(markerIndex, 1);
-      //         }
-      //         // we found the element that was removed, so stop the itteration
-      //         break;
-      //       }
-      //     }
-      //     // Because there is a posibility that the removed marker (location)
-      //     // was belonging to another entry that is still selected, we must repopulate
-      //     // the markers(locations) array.
-      //     //
-      //     // In the end, we will end up with the NEW unique locations for the
-      //     // currently selected entries
-      //     populateMarkers(currentSelections);
-      //   }
-
-      //   function addEntry(currentSelections, previousSelections) {
-      //     // We must find the new entry and check if its location already exists in the markers array
-      //     // if it does, do nothing
-      //     // if it does not, add it
-      //     for (const _currentSelection of currentSelections) {
-      //       const entry = previousSelections.find((element) => element.id === _currentSelection.id);
-
-      //       // Current (_currentSelection) entry does not exist in the previousSelections, which means, that
-      //       // this entry was added to the array of selected entries.
-      //       // For that reason, we must add its marker (location) to the map.
-      //       if (!entry) {
-      //         const marker = markers.value.find((element) => element.id === _currentSelection.data.id);
-
-      //         // This entry's location does not exist in the already displaying
-      //         // markers (locations). For that reason, we must include it in it
-      //         if (!marker) {
-      //           markers.value.push(_currentSelection.data);
-      //         }
-
-      //         // we found the element that was added, so stop the itteration
-      //         break;
-      //       }
-      //     }
-      //   }
-
       function centerAtLocation(location) {
+        // we must check if the pressed location is present in the selected array
+        // if not, do nothing
+        const locationIsChecked = selected.value.find((element) => element.location.value === location);
+
+        if (!locationIsChecked) return;// we can disable the link in general (recommended) or do nothing () or display a toast notification
+
         context.emit('centerAtLocation', location);
       }
 
@@ -305,8 +250,5 @@
         selected
       };
     },
-
-
-
   }
 </script>
