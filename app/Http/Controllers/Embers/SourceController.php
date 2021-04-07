@@ -132,6 +132,12 @@ class SourceController extends Controller
         }
 
 
+        unset($source["data"]["name"]);
+        $newInstance["values"] = [
+            "equipments" => $equipments,
+            "info" => $source
+        ];
+
 
         $instace = Instance::create($newInstance);
         $instace->teams()->attach(Auth::user()->currentTeam);

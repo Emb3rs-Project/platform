@@ -1,4 +1,4 @@
-import L from "leaflet";
+import L from 'leaflet';
 
 export default {
     fontAwesomeIcon: L.divIcon({
@@ -27,33 +27,34 @@ export default {
 
         return map;
     },
-    loadMarkers(map, markers = []) {
+    loadMarkers(map, markers = [], mapObjects = {}) {
+        console.log(markers)
         for (const marker of markers) {
             const type = marker.type;
             const data = marker.data;
             switch (type) {
                 case "circle":
-                    L.circle(data.center, {
+                    const circle = L.circle(data.center, {
                         color: 'red',
                         fillColor: 'red',
                         fillOpacity: 0.2,
                         radius: data.radius
                     }).addTo(map)
-                    console.log('Added Circle', data.center)
+                    mapObjects[data.id] = circle
                     break;
                 case "polygon":
-                    L.polygon(data.points, {
+                    const polygon = L.polygon(data.points, {
                         color: 'blue',
                         fillColor: 'blue',
                         fillOpacity: 0.5,
                     }).addTo(map)
-                    console.log('Added Polygon', data.points)
+                    mapObjects[data.id] = polygon
                     break;
                 case "point":
-                    L.marker(data.center, {
+                    const point = L.marker(data.center, {
                         icon: this.fontAwesomeIcon
                     }).addTo(map)
-                    console.log('Added Point', data.center)
+                    mapObjects[data.id] = point
                     break;
             }
         }
