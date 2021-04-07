@@ -9,9 +9,14 @@
     <div class="flex flex-col md:flex-row h-screen md:h-table-and-map p-5 gap-5">
       <div class="w-full h-96 md:h-full md:w-1/2">
         <index-table
-          v-model="selected"
           :headers="headers"
           :items="items"
+          @itemAdded="onItemAdded"
+          @itemRemoved="onItemRemoved"
+          @allItemsAdded="onAllItemsAdded"
+          @allItemsRemoved="onAllItemsRemoved"
+          @itemDeleted="onItemDeleted"
+          @centerAtLocation="onCenterAtLocation"
         >
           <template #header>
             Sources
@@ -79,7 +84,15 @@
 
     setup(props) {
       const map = ref(null);
-      const markers = ref([]);
+
+      // Intialize the markers with unique locations
+      const markers = ref(
+        useUniqueLocations(props.sources).value.map((element) => element.data)
+      );
+      console.log(markers.value);
+
+      const deletionModalIsVisible = ref(false);
+      const entryToDelete = ref({});
 
       const headers = [
         {
@@ -138,33 +151,60 @@
         }
       });
 
-      const selected = ref(
-        // We can use .filter() here instead of .flatMap() and apply the .map() later (i.e. .filter().map())
-        // it depends on the developer's writting style
-        items.flatMap((item) => {
-          if (item.location.name === 'Not assigned') return [];
-          return item;
-        })
-      );
+      function onItemRemoved(item) {
+        console.log("onItemRemoved", item);
+        const marker = markers.value.find((element) => element.id === item.location.value.geo_object.id);
 
-      watch(selected, (current, previous) => {
-        console.log("PARENT CURRENT selcted", current);
-        console.log("PARENT PREVIOUS selcted", previous);
-      })
+        if (marker) {
+          const markerIndex = markers.value.indexOf(marker);
+          //   console.log("will delete entry", markerIndex, "from the markers", [...markers.value]);
+          markers.value.splice(markerIndex, 1);
+        }
+        // Because there is a posibility that the removed marker (location)
+        // was belonging to another entry that is still selected, we must repopulate
+        // the markers(locations) array.
 
-      const deletionModalIsVisible = ref(false);
-      const entryToDelete = ref({});
-
-      function populateMarkers(locations) {
-        const uniqueLocations = useUniqueLocations(locations);
-        markers.value = uniqueLocations.value.map((element) => element.data);
+        // In the end, we will end up with the NEW unique locations for the
+        // currently selected entries
+        // populateMarkers(currentSelections);
       }
 
-      function removeMarkers() {
+
+      function onItemAdded(item) {
+        console.log('onItemAdded', item);
+        // const marker = markers.value.find((element) => element.id === _currentSelection.data.id);
+
+        // // This entry's location does not exist in the already displaying
+        // // markers (locations). For that reason, we must include it in it
+        // if (!marker) {
+        //   markers.value.push(_currentSelection.data);
+        // }
+      }
+
+      function onAllItemsAdded() {
+        console.log("onAllItemsAdded");
+        populateAllMarkers();
+      }
+
+      function onAllItemsRemoved() {
+        console.log("allItemsRemoved");
+        removeAllMarkers();
+      }
+
+      //   function populateMarkers(locations) {
+      //     const uniqueLocations = useUniqueLocations(locations);
+      //     markers.value = uniqueLocations.value.map((element) => element. );
+      //   }
+
+      function populateAllMarkers() {
+        markers.value = useUniqueLocations(props.sources).value.map((element) => element.data)
+      }
+
+      function removeAllMarkers() {
         markers.value = [];
       }
 
-      function deleteEntry(entry) {
+      function onItemDeleted(entry) {
         entryToDelete.value = entry;
         deletionModalIsVisible.value = true;
       }
@@ -176,7 +216,7 @@
         deletionModalIsVisible.value = false;
       }
 
-      function centerAtLocation(location) {
+      function onCenterAtLocation(location) {
         if (!markers.value.length) return;
 
         const marker = markers.value.find((m) => m.id === location.geo_object.id);
@@ -186,12 +226,15 @@
       return {
         map,
         markers,
-        selected,
         headers,
         items,
+        onItemAdded,
+        onItemRemoved,
+        onAllItemsAdded,
+        onAllItemsRemoved,
+        onItemDeleted,
         deletionModalIsVisible,
-        centerAtLocation,
-        deleteEntry,
+        onCenterAtLocation,
         onDelete
       };
     },
