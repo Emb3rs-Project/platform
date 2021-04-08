@@ -3,7 +3,10 @@
     <thead class="bg-gray-50">
       <tr>
         <!-- Checkbox -->
-        <th scope="col" class="relative px-6 py-3">
+        <th
+          scope="col"
+          class="relative px-6 py-3"
+        >
           <div class="flex justify-center items-center h-5">
             <input
               type="checkbox"
@@ -54,73 +57,69 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+  import { computed, ref, watch } from "vue";
 
-export default {
-  components: {},
-  props: {
-    modelValue: {
-      type: Array,
-      required: true,
+  export default {
+    components: {},
+    props: {
+      modelValue: {
+        type: Array,
+        required: true,
+      },
+      columns: {
+        type: Array,
+        required: true,
+      },
     },
-    columns: {
-      type: Array,
-      required: true,
+    emits: ["update:modelValue", "onUpdateSelection"],
+    setup(props, { emit }) {
+      /**
+       * Properties
+       */
+      const mainCheckbox = ref();
+      const model = computed({
+        get() {
+          return props.modelValue;
+        },
+        set(value) {
+          emit("update:modelValue", value);
+        },
+      });
+
+      const allSelected = computed({
+        get() {
+          return model.value.filter((m) => m.selected).length > 0;
+        },
+        set(value) {
+          model.value.forEach((m) => (m.selected = value));
+        },
+      });
+
+      watch(
+        () => model.value,
+        () => onSelectRow(),
+        { deep: true }
+      );
+
+      /**
+       * Methods
+       */
+      const onSelectRow = () => {
+        let selected = model.value.filter((m) => m.selected).length;
+
+        if (selected > 0 && selected !== model.value.length)
+          mainCheckbox.value.indeterminate = true;
+        else mainCheckbox.value.indeterminate = false;
+
+        emit("onUpdateSelection");
+      };
+
+      return {
+        allSelected,
+        model,
+        onSelectRow,
+        mainCheckbox,
+      };
     },
-  },
-  emits: ["update:modelValue", "onUpdateSelection"],
-  setup(props, { emit }) {
-    /**
-     * Properties
-     */
-    const mainCheckbox = ref();
-    const model = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        emit("update:modelValue", value);
-      },
-    });
-
-    const allSelected = computed({
-      get() {
-        return model.value.filter((m) => m.selected).length > 0;
-      },
-      set(value) {
-        model.value.forEach((m) => (m.selected = value));
-      },
-    });
-
-    watch(
-      () => model.value,
-      () => onSelectRow(),
-      { deep: true }
-    );
-
-    /**
-     * Methods
-     */
-
-    const onSelectRow = () => {
-      let selected = model.value.filter((m) => m.selected).length;
-
-      if (selected > 0 && selected !== model.value.length)
-        mainCheckbox.value.indeterminate = true;
-      else mainCheckbox.value.indeterminate = false;
-
-      emit("onUpdateSelection");
-    };
-
-    return {
-      allSelected,
-      model,
-      onSelectRow,
-      mainCheckbox,
-    };
-  },
-};
+  };
 </script>
-
-<style>
-</style>

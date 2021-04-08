@@ -6,6 +6,7 @@ use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
+use App\Http\Controllers\Embers\NewLayout;
 use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
 use App\Http\Controllers\Embers\SinkController;
@@ -75,4 +76,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Help
     Route::resource('/help', HelpController::class)->names(createResourceNames('help'));
+
+    // New layout test
+    Route::resource('/new-layout', NewLayout::class)->names(createResourceNames('new-layout'));
 });

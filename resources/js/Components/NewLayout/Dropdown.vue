@@ -12,7 +12,7 @@
     ></div>
 
     <transition
-      enter-active-class="transition ease-out duration-200"
+      enter-active-class="transition ease-out duration-100"
       enter-from-class="transform opacity-0 scale-95"
       enter-to-class="transform opacity-100 scale-100"
       leave-active-class="transition ease-in duration-75"
@@ -20,39 +20,18 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <div
+        class="z-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         v-show="open"
-        class="absolute z-1000 mt-2 rounded-md shadow-lg"
-        :class="[widthClass, alignmentClasses]"
-        style="display: none"
         @click="open = false"
       >
-        <div
-          class="rounded-md ring-1 ring-black ring-opacity-5"
-          :class="contentClasses"
-        >
-          <slot name="content"></slot>
-        </div>
+        <slot name="content"></slot>
       </div>
     </transition>
   </div>
 </template>
-
 <script>
-  import { onMounted, onUnmounted, ref } from "vue";
-
+  import { ref, onMounted, onUnmounted } from "vue";
   export default {
-    props: {
-      align: {
-        default: "right",
-      },
-      width: {
-        default: "48",
-      },
-      contentClasses: {
-        default: () => ["py-1", "bg-white"],
-      },
-    },
-
     setup() {
       let open = ref(false);
 
@@ -69,23 +48,5 @@
         open,
       };
     },
-
-    computed: {
-      widthClass() {
-        return {
-          48: "w-48",
-        }[this.width.toString()];
-      },
-
-      alignmentClasses() {
-        if (this.align === "left") {
-          return "origin-top-left left-0";
-        } else if (this.align === "right") {
-          return "origin-top-right right-0";
-        } else {
-          return "origin-top";
-        }
-      },
-    },
-  };
+  }
 </script>
