@@ -1,6 +1,6 @@
 <template>
   <img
     src="../../../images/logo.png"
-    alt=""
+    alt="EMB4Rs"
   />
 </template>
