@@ -15,6 +15,9 @@ module.exports = {
             // fontFamily: {
             //     sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             // },
+            fontFamily: {
+                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+            },
             colors: {
                 'content-background': {
                     bluish: '#F7F8FF'

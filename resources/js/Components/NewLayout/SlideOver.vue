@@ -12,7 +12,7 @@
         v-show="open"
         class="w-screen max-w-2xl"
       >
-        <form class="h-full flex flex-col bg-white shadow-xl overflow-y-auto">
+        <form class="h-full flex flex-col bg-white shadow-xl overflow-y-auto z-20">
           <div class="flex-1">
             <!-- Header -->
             <div class="px-4 py-6 bg-indigo-700 sm:px-6">

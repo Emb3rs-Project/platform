@@ -133,9 +133,9 @@
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
   import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
-  import TrashIcon from "@/Icons/TrashIcon.vue";
-  import EditIcon from "@/Icons/EditIcon.vue";
-  import DetailIcon from "@/Icons/DetailIcon.vue";
+  import TrashIcon from "@/Components/Icons/TrashIcon.vue";
+  import EditIcon from "@/Components/Icons/EditIcon.vue";
+  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
   export default {
     components: {

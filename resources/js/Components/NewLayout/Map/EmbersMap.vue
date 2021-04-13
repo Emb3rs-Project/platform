@@ -1,7 +1,7 @@
 <template>
   <div
     id="map"
-    class="h-screen w-full z-0"
+    class="h-screen min-w-full z-0"
   ></div>
 </template>
 
@@ -15,32 +15,31 @@
         type: Array,
         required: true,
       },
-      marker: {
-        type: Object,
-        required: false,
-      },
     },
 
     setup(props) {
-      const map = ref();
+      const map = ref(null);
       const mapObjects = ref({});
 
       onMounted(() => {
         map.value = mapUtils.init("map");
-        mapUtils.loadMarkers(map.value, props.markers, mapObjects);
+        mapObjects.value = mapUtils.loadMarkers(map.value, props.markers, mapObjects.value);
         window.map = map.value;
+        console.log(mapObjects.value);
       });
 
       watch(
         () => props.markers,
         (value) => {
-          console.log(props.markers);
+          //   console.log(props.markers);
+
           // console.log("Map received those new markers", current);
           // console.log("Map must remove old markers", previous);
           // mapUtils.removeMarkers(map.value, previous);
           // mapUtils.loadMarkers(map.value, current);
         }
       );
+
 
       function centerAtLocation(location) {
         mapUtils.centerAtLocation(this.map, location);
@@ -55,7 +54,7 @@
   };
 </script>
 
-<style scoped>
+<style >
   .leaflet-popup-close-button {
     display: none;
   }

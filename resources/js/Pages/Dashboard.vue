@@ -1,62 +1,83 @@
 <template>
   <app-layout>
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Dashboard
-      </h2>
-    </template>
+    <template #content>
 
-    <div class="flex p-5">
-      <div class="w-8/12">
-        <leaflet-map></leaflet-map>
-      </div>
-      <div class="w-4/12 text-gray-700 p-5">
-        <div class="h-56 mb-5 p-3 border border-gray-200 shadow">
-          <h1 class="leading-5 font-bold mb-3">Latest news</h1>
-          <span v-if="news.length == 0">No News</span>
-          <div
-            class="border-t border-gray-400 mt-2 p-2"
-            v-for="ne of news"
-            :key="ne.id"
-          >
-            <span class="leading-4 font-bold block">{{ ne.title }}</span>
-            <span class="text-sm text-justify" v-html="ne.content"></span>
-          </div>
+      <!-- <div class="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-lg font-medium leading-6 text-gray-900 sm:truncate">
+            Home
+          </h1>
         </div>
-        <div class="h-56 my-5 p-3 border border-gray-200 shadow">
-          <h1 class="leading-5 font-bold mb-3">Latest notifications</h1>
-          <span v-if="notifications.length == 0">No New Notifications</span>
-          <div
-            class="border-t border-gray-400 mt-2 p-2"
-            v-for="not of notifications"
-            :key="not.id"
+        <div class="mt-4 flex sm:mt-0 sm:ml-4">
+          <button
+            type="button"
+            class="order-1 ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-0 sm:ml-0"
           >
-            <span class="leading-4 font-bold block">{{ not.title }}</span>
-            <span class="text-sm text-justify" v-html="not.content"></span>
-          </div>
+            Share
+          </button>
+          <button
+            type="button"
+            class="order-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3"
+          >
+            Create
+          </button>
         </div>
-      </div>
-    </div>
+      </div> -->
+      <embers-map :markers="markers"></embers-map>
+      <slide-over></slide-over>
+      <filter-dropdown></filter-dropdown>
+    </template>
   </app-layout>
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout";
-import JetLabel from "@/Jetstream/Label";
-import LeafletMap from "@/Components/LeafletMap";
+  import { ref } from "vue";
 
-export default {
-  components: {
-    AppLayout,
-    JetLabel,
-    LeafletMap,
-  },
-  props: {
-    notifications: Array,
-    news: Array,
-  },
-};
+  import useUniqueLocations from "@/Composables/useUniqueLocations";
+
+  import AppLayout from "@/Layouts/AppLayout.vue";
+  import EmbersMap from "@/Components/NewLayout/Map/EmbersMap.vue";
+  import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+  import FilterDropdown from "@/Components/NewLayout/FilterDropdown.vue";
+
+
+  export default {
+    components: { AppLayout, SlideOver, EmbersMap, FilterDropdown },
+
+    props: {
+      users: {
+        type: Array,
+        required: true,
+      },
+      sources: {
+        type: Array,
+        required: true,
+      },
+      sinks: {
+        type: Array,
+        required: true,
+      },
+    },
+
+    setup(props, context) {
+      const map = ref(null);
+      const markers = ref([]);
+
+      const locations = props.sources.concat(props.sinks);
+
+      const uniqueLocations = useUniqueLocations(locations);
+
+      for (const _location of uniqueLocations.value) {
+        markers.value.push(_location.data)
+      }
+
+      return {
+        map,
+        markers,
+      }
+    },
+  };
 </script>
 
-<style>
+<style scoped>
 </style>

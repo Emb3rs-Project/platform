@@ -1,139 +1,46 @@
 <template>
-  <span class="sm:ml-3 relative z-0">
-    <!--
-            Custom select controls like this require a considerable amount of JS to implement from scratch. We're planning
-            to build some low-level libraries to make this easier with popular frameworks like React, Vue, and even Alpine.js
-            in the near future, but in the mean time we recommend these reference guides when building your implementation:
-
-            https://www.w3.org/TR/wai-aria-practices/#Listbox
-            https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-collapsible.html
-          -->
-    <div>
-      <label
-        id="listbox-label"
-        class="sr-only"
-      >
-        Change published status
-      </label>
-      <div class="relative">
-        <div class="inline-flex shadow-sm rounded-md divide-x divide-purple-600">
-          <div class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-purple-600">
-            <div class="relative inline-flex items-center bg-purple-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white">
-              <!-- Heroicon name: solid/check -->
-              <svg
-                class="h-5 w-5"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <p class="ml-2.5 text-sm font-medium">
-                Published
-              </p>
-            </div>
-            <button
-              type="button"
-              class="relative inline-flex items-center bg-purple-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-purple-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-purple-500"
-              aria-haspopup="listbox"
-              aria-expanded="true"
-              aria-labelledby="listbox-label"
-            >
-              <span class="sr-only">Change published status</span>
-              <!-- Heroicon name: solid/chevron-down -->
-              <svg
-                class="h-5 w-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <!--
-                Select popover, show/hide based on select state.
-
-                Entering: ""
-                  From: ""
-                  To: ""
-                Leaving: "transition ease-in duration-100"
-                  From: "opacity-100"
-                  To: "opacity-0"
-              -->
-        <ul
-          class="origin-top-right absolute left-0 mt-2 -mr-1 w-72 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-gray-200 ring-1 ring-black ring-opacity-5 focus:outline-none sm:left-auto sm:right-0"
-          tabindex="-1"
-          role="listbox"
-          aria-labelledby="listbox-label"
-          aria-activedescendant="listbox-option-0"
-        >
-          <!--
-                  Select option, manage highlight styles based on mouseenter/mouseleave and keyboard navigation.
-
-                  Highlighted: "text-white bg-purple-500", Not Highlighted: "text-gray-900"
-                -->
-          <li
-            class="text-gray-900 cursor-default select-none relative p-4 text-sm"
-            id="listbox-option-0"
-            role="option"
-          >
-            <div class="flex flex-col">
-              <div class="flex justify-between">
-                <!-- Selected: "font-semibold", Not Selected: "font-normal" -->
-                <p class="font-normal">
-                  Published
-                </p>
-                <!--
-                        Checkmark, only display for selected option.
-
-                        Highlighted: "text-white", Not Highlighted: "text-purple-500"
-                      -->
-                <span class="text-purple-500">
-                  <!-- Heroicon name: solid/check -->
-                  <svg
-                    class="h-5 w-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                      clip-rule="evenodd"
-                    />
-                  </svg>
-                </span>
-              </div>
-              <!-- Highlighted: "text-purple-200", Not Highlighted: "text-gray-500" -->
-              <p class="text-gray-500 mt-2">
-                This job posting can be viewed by anyone who has the link.
-              </p>
-            </div>
-          </li>
-
-          <!-- More items... -->
-        </ul>
-      </div>
+  <div class="relative">
+    <div @click="open = !open">
+      <slot name="trigger"></slot>
     </div>
-  </span>
+
+    <transition
+      enter-active-class="transition ease-out duration-100"
+      enter-from-class="transform opacity-0 scale-95"
+      enter-to-class="transform opacity-100 scale-100"
+      leave-active-class="transition ease-in duration-75"
+      leave-from-class="transform opacity-100 scale-100"
+      leave-to-class="transform opacity-0 scale-95"
+    >
+      <div
+        v-show="open"
+        class="z-10"
+        @click="open = false"
+      >
+        <slot name="content"></slot>
+      </div>
+    </transition>
+  </div>
 </template>
 
 <script>
+  import { ref, onMounted, onUnmounted } from "vue";
   export default {
+    setup() {
+      let open = ref(false);
 
+      const closeOnEscape = (e) => {
+        if (open.value && e.keyCode === 27) {
+          open.value = false;
+        }
+      };
+
+      onMounted(() => document.addEventListener("keydown", closeOnEscape));
+      onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
+
+      return {
+        open,
+      };
+    },
   }
 </script>

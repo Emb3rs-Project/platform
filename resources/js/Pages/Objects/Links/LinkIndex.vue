@@ -27,7 +27,10 @@
       >
         Configure Links
       </jet-link-button>
-      <jet-link-button path="objects.links.create" class="mx-2">
+      <jet-link-button
+        path="objects.links.create"
+        class="mx-2"
+      >
         Create New Link
       </jet-link-button>
     </div>
@@ -35,38 +38,38 @@
 </template>
 
 <script>
-import AppLayout from "@/Layouts/AppLayout";
-import JetInput from "@/Jetstream/Input";
-import JetLinkButton from "@/Jetstream/LinkButton";
-import JetLabel from "@/Jetstream/Label";
-import LeafletMapLinkViewer from "@/Components/LeafletMapLinkViewer";
-import { ref } from "@vue/reactivity";
+  import AppLayout from "@/Layouts/AppLayout";
+  import JetInput from "@/Jetstream/Input";
+  import JetLinkButton from "@/Jetstream/LinkButton";
+  import JetLabel from "@/Jetstream/Label";
+  import LeafletMapLinkViewer from "@/Components/LeafletMapLinkViewer";
+  import { ref } from "vue";
 
-export default {
-  components: {
-    AppLayout,
-    JetInput,
-    JetLabel,
-    JetLinkButton,
-    LeafletMapLinkViewer,
-  },
-  props: {
-    links: {
-      type: Array,
-      required: true,
+  export default {
+    components: {
+      AppLayout,
+      JetInput,
+      JetLabel,
+      JetLinkButton,
+      LeafletMapLinkViewer,
     },
-  },
-  setup(props) {
-    const markers = ref([]);
+    props: {
+      links: {
+        type: Array,
+        required: true,
+      },
+    },
+    setup(props) {
+      const markers = ref([]);
 
-    for (const link of props.links) {
-      markers.value.push(...link.geo_segments.map((s) => s.data));
-    }
+      for (const link of props.links) {
+        markers.value.push(...link.geo_segments.map((s) => s.data));
+      }
 
-    return { markers };
-  },
-  methods: {},
-};
+      return { markers };
+    },
+    methods: {},
+  };
 </script>
 
 <style scoped>

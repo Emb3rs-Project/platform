@@ -232,9 +232,9 @@
   import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
   import SecondaryButton from "@/Components/SecondaryButton";
   import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
-  import TrashIcon from "@/Icons/TrashIcon.vue";
-  import EditIcon from "@/Icons/EditIcon.vue";
-  import DetailIcon from "@/Icons/DetailIcon.vue";
+  import TrashIcon from "@/Components/Icons/TrashIcon.vue";
+  import EditIcon from "@/Components/Icons/EditIcon.vue";
+  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
 
   export default {

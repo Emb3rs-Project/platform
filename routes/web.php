@@ -6,7 +6,6 @@ use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
-use App\Http\Controllers\Embers\NewLayout;
 use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
 use App\Http\Controllers\Embers\SinkController;
@@ -40,12 +39,18 @@ function createResourceNames($prefix)
 }
 
 Route::get('/', function () {
-    return redirect('/login');
+    // return redirect('/login');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('/dashboard', DashboardController::class)->names(createResourceNames('dashboard'));
 
     // Institution
     Route::resource('/institution', InstitutionController::class)->names(createResourceNames('institution'));
@@ -76,7 +81,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Help
     Route::resource('/help', HelpController::class)->names(createResourceNames('help'));
-
-    // New layout test
-    Route::resource('/new-layout', NewLayout::class)->names(createResourceNames('new-layout'));
 });

@@ -8,7 +8,7 @@
 
     <template #form>
       <div class="col-span-6">
-        <jet-label value="Team Owner" />
+        <jet-label value="Institution Owner" />
 
         <div class="flex items-center mt-2">
           <img
@@ -27,7 +27,10 @@
       </div>
 
       <div class="col-span-6 sm:col-span-4">
-        <jet-label for="name" value="Team Name" />
+        <jet-label
+          for="name"
+          value="Intitution Name"
+        />
         <jet-input
           id="name"
           type="text"
@@ -35,7 +38,10 @@
           v-model="form.name"
           autofocus
         />
-        <jet-input-error :message="form.errors.name" class="mt-2" />
+        <jet-input-error
+          :message="form.errors.name"
+          class="mt-2"
+        />
       </div>
     </template>
 
@@ -51,36 +57,36 @@
 </template>
 
 <script>
-import JetButton from "@/Jetstream/Button";
-import JetFormSection from "@/Jetstream/FormSection";
-import JetInput from "@/Jetstream/Input";
-import JetInputError from "@/Jetstream/InputError";
-import JetLabel from "@/Jetstream/Label";
+  import JetButton from "@/Jetstream/Button";
+  import JetFormSection from "@/Jetstream/FormSection";
+  import JetInput from "@/Jetstream/Input";
+  import JetInputError from "@/Jetstream/InputError";
+  import JetLabel from "@/Jetstream/Label";
 
-export default {
-  components: {
-    JetButton,
-    JetFormSection,
-    JetInput,
-    JetInputError,
-    JetLabel,
-  },
-
-  data() {
-    return {
-      form: this.$inertia.form({
-        name: "",
-      }),
-    };
-  },
-
-  methods: {
-    createTeam() {
-      this.form.post(route("teams.store"), {
-        errorBag: "createTeam",
-        preserveScroll: true,
-      });
+  export default {
+    components: {
+      JetButton,
+      JetFormSection,
+      JetInput,
+      JetInputError,
+      JetLabel,
     },
-  },
-};
+
+    data() {
+      return {
+        form: this.$inertia.form({
+          name: "",
+        }),
+      };
+    },
+
+    methods: {
+      createTeam() {
+        this.form.post(route("teams.store"), {
+          errorBag: "createTeam",
+          preserveScroll: true,
+        });
+      },
+    },
+  };
 </script>

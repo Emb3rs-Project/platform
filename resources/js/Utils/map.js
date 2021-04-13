@@ -8,7 +8,7 @@ export default {
         iconAnchor: [10, 20],
     }),
     init(mapId, center = [38.7181959, -9.1975417]) {
-        const map = L.map(mapId).setView(center, 13);
+        const map = L.map(mapId, { drawControl: true }).setView(center, 13);
         map.doubleClickZoom.disable();
 
         L.tileLayer(
@@ -27,8 +27,10 @@ export default {
 
         return map;
     },
+    destroy(mapId) {
+        // maybe we need to distroy the map
+    },
     loadMarkers(map, markers = [], mapObjects = {}) {
-        console.log(markers)
         for (const marker of markers) {
             const type = marker.type;
             const data = marker.data;
@@ -58,6 +60,8 @@ export default {
                     break;
             }
         }
+
+        return mapObjects;
     },
     removeMarkers(map, markers) {
         for (const marker of markers) {

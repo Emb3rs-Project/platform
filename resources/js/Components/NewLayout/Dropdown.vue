@@ -4,7 +4,7 @@
       <slot name="trigger"></slot>
     </div>
 
-    <!-- Full Screen Dropdown Overlay -->
+    <!-- Full Screen Dropdown Overlay to achieve on-outside-click close -->
     <div
       v-show="open"
       class="fixed inset-0 z-40"
@@ -20,8 +20,8 @@
       leave-to-class="transform opacity-0 scale-95"
     >
       <div
-        class="z-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         v-show="open"
+        class="z-40"
         @click="open = false"
       >
         <slot name="content"></slot>
@@ -29,6 +29,7 @@
     </transition>
   </div>
 </template>
+
 <script>
   import { ref, onMounted, onUnmounted } from "vue";
   export default {

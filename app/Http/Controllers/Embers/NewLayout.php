@@ -59,12 +59,12 @@ class NewLayout extends Controller
         });
 
         return Inertia::render(
-            'NewLayout/Index',
-            // [
-            //     'users' => $users,
-            //     'sources' => $sources,
-            //     'sinks' => $sinks,
-            // ]
+            'Home/HomeIndex',
+            [
+                'users' => $users,
+                'sources' => $sources,
+                'sinks' => $sinks,
+            ]
         );
     }
 

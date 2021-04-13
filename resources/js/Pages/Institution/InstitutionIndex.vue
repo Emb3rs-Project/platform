@@ -318,7 +318,7 @@
 
   import AppLayout from "@/Layouts/AppLayout";
   import LeafletMap from "@/Components/LeafletMap";
-  import DetailIcon from "@/Icons/DetailIcon.vue";
+  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
   export default {
     components: {
@@ -347,7 +347,6 @@
       const markers = ref([]);
       const locations = props.sources.concat(props.sinks);
 
-      console.log(props.users);
       const uniqueLocations = useUniqueLocations(locations);
 
       for (const source of uniqueLocations.value) {

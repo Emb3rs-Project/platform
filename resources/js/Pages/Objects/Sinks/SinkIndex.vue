@@ -6,9 +6,7 @@
       </h2>
     </template>
 
-    <div
-      class="flex flex-col md:flex-row h-screen md:h-table-and-map p-5 gap-5"
-    >
+    <div class="flex flex-col md:flex-row h-screen md:h-table-and-map p-5 gap-5">
       <div class="w-full h-96 md:h-full md:w-1/2">
         <div class="flex flex-col max-h-full">
           <div class="px-4 py-5 sm:px-6 bg-white shadow sm:rounded-t-md">
@@ -149,23 +147,18 @@
                 <!-- Actions -->
                 <template #header-actions> </template>
                 <template #body-actions="{ item }">
-                  <td
-                    class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
-                  >
+                  <td class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
                     <inertia-link :href="route('objects.sinks.show', item.id)">
-                      <detail-icon
-                        class="text-gray-500 font-medium text-sm w-5"
-                      ></detail-icon>
+                      <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
                     </inertia-link>
                     <inertia-link :href="route('objects.sinks.edit', item.id)">
-                      <edit-icon
-                        class="text-gray-500 font-medium text-sm w-5"
-                      ></edit-icon>
+                      <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
                     </inertia-link>
-                    <button class="focus:outline-none" @click="onDelete(item)">
-                      <trash-icon
-                        class="text-red-500 font-medium text-sm w-5"
-                      ></trash-icon>
+                    <button
+                      class="focus:outline-none"
+                      @click="onDelete(item)"
+                    >
+                      <trash-icon class="text-red-500 font-medium text-sm w-5"></trash-icon>
                     </button>
                   </td>
                 </template>
@@ -184,12 +177,18 @@
       </div>
 
       <div class="w-full h-full md:w-1/2">
-        <leaflet-map :markers="markers" ref="map"></leaflet-map>
+        <leaflet-map
+          :markers="markers"
+          ref="map"
+        ></leaflet-map>
       </div>
     </div>
 
     <div class="w-full px-16 flex justify-end">
-      <button class="px-6 py-3 bg-pink-500" @click="hideActions()">
+      <button
+        class="px-6 py-3 bg-pink-500"
+        @click="hideActions()"
+      >
         hahahaha
       </button>
       <primary-link-button :path="'objects.sinks.create'">
@@ -200,73 +199,73 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+  import { ref } from "vue";
+  import { Inertia } from "@inertiajs/inertia";
 
-import useUniqueLocations from "@/Composables/useUniqueLocations";
+  import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-import AppLayout from "@/Layouts/AppLayout";
-import LeafletMap from "@/Components/LeafletMap";
-import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
-import TrashIcon from "@/Icons/TrashIcon.vue";
-import EditIcon from "@/Icons/EditIcon.vue";
-import DetailIcon from "@/Icons/DetailIcon.vue";
-import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
+  import AppLayout from "@/Layouts/AppLayout";
+  import LeafletMap from "@/Components/LeafletMap";
+  import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
+  import TrashIcon from "@/Components/Icons/TrashIcon.vue";
+  import EditIcon from "@/Components/Icons/EditIcon.vue";
+  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+  import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 
-export default {
-  components: {
-    AppLayout,
-    LeafletMap,
-    PrimaryLinkButton,
-    TrashIcon,
-    EditIcon,
-    DetailIcon,
-    AmazingIndexTable,
-  },
-
-  props: {
-    sinks: {
-      type: Array,
-      required: true,
+  export default {
+    components: {
+      AppLayout,
+      LeafletMap,
+      PrimaryLinkButton,
+      TrashIcon,
+      EditIcon,
+      DetailIcon,
+      AmazingIndexTable,
     },
-  },
 
-  setup(props) {
-    const map = ref(null);
-    const markers = ref([]);
-
-    const uniqueSinks = useUniqueLocations(props.sinks);
-
-    for (const sink of uniqueSinks.value) {
-      markers.value.push(sink.data);
-    }
-
-    const tableColumns = ref(["id", "name", "template", "location", "actions"]);
-
-    return {
-      map,
-      markers,
-      tableColumns,
-      uniqueSinks,
-    };
-  },
-  methods: {
-    hideActions() {
-      this.tableColumns = ["id", "name", "template"];
+    props: {
+      sinks: {
+        type: Array,
+        required: true,
+      },
     },
-    centerAtLocation(location) {
-      if (!location) return;
 
-      const marker = markers.value.find((m) => m.id === location.geo_object.id);
-      map.value.centerAtLocation(marker);
+    setup(props) {
+      const map = ref(null);
+      const markers = ref([]);
+
+      const uniqueSinks = useUniqueLocations(props.sinks);
+
+      for (const sink of uniqueSinks.value) {
+        markers.value.push(sink.data);
+      }
+
+      const tableColumns = ref(["id", "name", "template", "location", "actions"]);
+
+      return {
+        map,
+        markers,
+        tableColumns,
+        uniqueSinks,
+      };
     },
-    onDelete(sink) {
-      Inertia.delete(route("objects.sinks.destroy", sink.id));
+    methods: {
+      hideActions() {
+        this.tableColumns = ["id", "name", "template"];
+      },
+      centerAtLocation(location) {
+        if (!location) return;
+
+        const marker = markers.value.find((m) => m.id === location.geo_object.id);
+        map.value.centerAtLocation(marker);
+      },
+      onDelete(sink) {
+        Inertia.delete(route("objects.sinks.destroy", sink.id));
+      },
+      onUpdateMarkers() {
+        const selected = this.uniqueSinks.filter((s) => s.selected);
+        this.markers = selected.map((S) => S.data);
+      },
     },
-    onUpdateMarkers() {
-      const selected = this.uniqueSinks.filter((s) => s.selected);
-      this.markers = selected.map((S) => S.data);
-    },
-  },
-};
+  };
 </script>
