@@ -504,12 +504,7 @@
             <div class="mt-8">
               <!-- Secondary navigation -->
               <div class="relative">
-                <div
-                  class="absolute inset-0 flex items-center"
-                  aria-hidden="true"
-                >
-                  <!-- <div class="w-full border-t border-gray-300"></div> -->
-                </div>
+
                 <div class="relative flex items-center justify-between">
                   <span class="px-3 text-xs bg-gray-100 font-semibold text-gray-500 uppercase tracking-wider">
                     Institutions
@@ -580,7 +575,7 @@
                         >
                           {{ institution.name}}
                           <svg
-                            class="h-4 w-4 text-gray-400 hover:text-gray-600"
+                            class="-mr-2.5 h-4 w-4 text-gray-400 hover:text-gray-600"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -830,7 +825,7 @@
       </div>
 
       <main
-        class="flex-1 relative z-0 overflow-y-auto focus:outline-none"
+        class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-white"
         tabindex="0"
       >
         <slot name="content"></slot>
