@@ -32,7 +32,9 @@
         leave-from-class="translate-x-0"
         leave-to-class="-translate-x-full"
       >
-        <div class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
+        <div
+          class="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white"
+        >
           <!-- Close button, show/hide based on off-canvas menu state. -->
           <transition
             enter-active-class="ease-in-out duration-300"
@@ -43,7 +45,9 @@
             leave-to-class="opacity-0"
           >
             <div class="absolute top-0 right-0 -mr-12 pt-2">
-              <button class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              <button
+                class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              >
                 <span class="sr-only">Close sidebar</span>
                 <!-- Heroicon name: outline/x -->
                 <svg
@@ -70,7 +74,7 @@
               class="h-8 w-auto"
               src="https://tailwindui.com/img/logos/workflow-logo-purple-500-mark-gray-700-text.svg"
               alt="Workflow"
-            >
+            />
           </div>
           <div class="mt-5 flex-1 h-0 overflow-y-auto">
             <nav class="px-2">
@@ -170,9 +174,7 @@
                       class="w-2.5 h-2.5 mr-4 bg-indigo-500 rounded-full"
                       aria-hidden="true"
                     ></span>
-                    <span class="truncate">
-                      Engineering
-                    </span>
+                    <span class="truncate"> Engineering </span>
                   </a>
 
                   <a
@@ -183,9 +185,7 @@
                       class="w-2.5 h-2.5 mr-4 bg-green-500 rounded-full"
                       aria-hidden="true"
                     ></span>
-                    <span class="truncate">
-                      Human Resources
-                    </span>
+                    <span class="truncate"> Human Resources </span>
                   </a>
 
                   <a
@@ -196,9 +196,7 @@
                       class="w-2.5 h-2.5 mr-4 bg-yellow-500 rounded-full"
                       aria-hidden="true"
                     ></span>
-                    <span class="truncate">
-                      Customer Success
-                    </span>
+                    <span class="truncate"> Customer Success </span>
                   </a>
                 </div>
               </div>
@@ -207,17 +205,16 @@
         </div>
       </transition>
 
-      <div
-        class="flex-shrink-0 w-14"
-        aria-hidden="true"
-      >
+      <div class="flex-shrink-0 w-14" aria-hidden="true">
         <!-- Dummy element to force sidebar to shrink to fit close icon -->
       </div>
     </div>
 
     <!-- Static sidebar for desktop -->
     <div class="hidden lg:flex lg:flex-shrink-0">
-      <div class="flex flex-col w-64 border-r border-gray-200 pt-5 pb-4 bg-gray-100">
+      <div
+        class="flex flex-col w-64 border-r border-gray-200 pt-5 pb-4 bg-gray-100"
+      >
         <div class="flex items-center flex-shrink-0 px-6">
           <inertia-link :href="route('dashboard.index')">
             <application-logo class="h-auto w-auto" />
@@ -237,20 +234,24 @@
                   aria-haspopup="true"
                 >
                   <span class="flex w-full justify-between items-center">
-                    <span class="flex min-w-0 items-center justify-between space-x-3">
+                    <span
+                      class="flex min-w-0 items-center justify-between space-x-3"
+                    >
                       <span class="inline-block relative">
                         <img
                           class="h-10 w-10 rounded-full flex-shrink-0"
                           :src="user.profile_photo_url"
                           alt=""
-                        >
+                        />
                         <span
                           v-show="notification"
                           class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                         ></span>
                       </span>
                       <span class="flex-1 flex flex-col min-w-0">
-                        <span class="text-gray-900 text-sm font-medium truncate">
+                        <span
+                          class="text-gray-900 text-sm font-medium truncate"
+                        >
                           {{ user.name }}
                         </span>
                         <span class="text-gray-500 text-sm truncate">
@@ -282,10 +283,7 @@
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  <div
-                    class="py-1"
-                    role="none"
-                  >
+                  <div class="py-1" role="none">
                     <inertia-link
                       :href="route('profile.show')"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -315,14 +313,8 @@
                       </span>
                     </inertia-link>
                   </div>
-                  <div
-                    class="py-1"
-                    role="none"
-                  >
-                    <form
-                      @submit.prevent="logout"
-                      role="none"
-                    >
+                  <div class="py-1" role="none">
+                    <form @submit.prevent="logout" role="none">
                       <button
                         type="submit"
                         class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -335,16 +327,10 @@
                 </div>
               </template>
             </dropdown>
-
           </div>
           <!-- Sidebar Search TODO: make it a component -->
           <div class="px-3 mt-5 z-0">
-            <label
-              for="search"
-              class="sr-only"
-            >
-              Search
-            </label>
+            <label for="search" class="sr-only"> Search </label>
             <div class="mt-1 relative rounded-md shadow-sm">
               <div
                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
@@ -371,7 +357,7 @@
                 id="search"
                 class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 sm:text-sm border-gray-300 rounded-md"
                 placeholder="Search"
-              >
+              />
             </div>
           </div>
 
@@ -381,13 +367,21 @@
               <inertia-link
                 :href="route('dashboard.index')"
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                :class="route().current('dashboard.index') ? 'bg-gray-200 text-gray-900': 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'"
+                :class="
+                  route().current('dashboard.index')
+                    ? 'bg-gray-200 text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                "
                 aria-current="page"
               >
                 <!-- Heroicon name: outline/home -->
                 <svg
                   class="mr-3 h-6 w-6"
-                  :class="route().current('dashboard.index') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'"
+                  :class="
+                    route().current('dashboard.index')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  "
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -405,14 +399,22 @@
               </inertia-link>
 
               <inertia-link
-                :href="'#'"
+                :href="route('objects.index')"
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                :class="route().current('objects.index') ? 'bg-gray-200 text-gray-900': 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'"
+                :class="
+                  route().current('objects.index')
+                    ? 'bg-gray-200 text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                "
               >
                 <!-- Heroicon name: outline/view-list -->
                 <svg
                   class="mr-3 h-6 w-6"
-                  :class="route().current('objects.index') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'"
+                  :class="
+                    route().current('objects.index')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  "
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -431,12 +433,20 @@
               <inertia-link
                 :href="'#'"
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                :class="route().current('projects.index') ? 'bg-gray-200 text-gray-900': 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'"
+                :class="
+                  route().current('projects.index')
+                    ? 'bg-gray-200 text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                "
               >
                 <!-- Heroicon name: outline/view-list -->
                 <svg
                   class="mr-3 h-6 w-6"
-                  :class="route().current('projects.index') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'"
+                  :class="
+                    route().current('projects.index')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  "
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -456,12 +466,20 @@
               <inertia-link
                 :href="route('challenge.index')"
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                :class="route().current('challenge.index') ? 'bg-gray-200 text-gray-900': 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'"
+                :class="
+                  route().current('challenge.index')
+                    ? 'bg-gray-200 text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                "
               >
                 <!-- Heroicon name: outline/clock -->
                 <svg
                   class="mr-3 h-6 w-6"
-                  :class="route().current('challenge.index') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'"
+                  :class="
+                    route().current('challenge.index')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  "
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -480,11 +498,19 @@
               <inertia-link
                 :href="route('help.index')"
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                :class="route().current('help.index') ? 'bg-gray-200 text-gray-900': 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'"
+                :class="
+                  route().current('help.index')
+                    ? 'bg-gray-200 text-gray-900'
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                "
               >
                 <svg
                   class="mr-3 h-6 w-6"
-                  :class="route().current('help.index') ? 'text-gray-500' : 'text-gray-400 group-hover:text-gray-500'"
+                  :class="
+                    route().current('help.index')
+                      ? 'text-gray-500'
+                      : 'text-gray-400 group-hover:text-gray-500'
+                  "
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -511,7 +537,9 @@
                   <!-- <div class="w-full border-t border-gray-300"></div> -->
                 </div>
                 <div class="relative flex items-center justify-between">
-                  <span class="px-3 text-xs bg-gray-100 font-semibold text-gray-500 uppercase tracking-wider">
+                  <span
+                    class="px-3 text-xs bg-gray-100 font-semibold text-gray-500 uppercase tracking-wider"
+                  >
                     Institutions
                   </span>
                   <dropdown>
@@ -526,13 +554,15 @@
                         <span class="sr-only">Open options</span>
                         <!-- Heroicon name: solid/dots-vertical -->
                         <svg
-                          class="h-5 w-5"
+                          class="h-5 w-5 mr-2"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
                           aria-hidden="true"
                         >
-                          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                          <path
+                            d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                          />
                         </svg>
                       </button>
                     </template>
@@ -543,10 +573,7 @@
                         aria-orientation="vertical"
                         aria-labelledby="options-menu"
                       >
-                        <div
-                          class="py-1"
-                          role="none"
-                        >
+                        <div class="py-1" role="none">
                           <inertia-link
                             :href="route('teams.create')"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -557,7 +584,6 @@
                       </div>
                     </template>
                   </dropdown>
-
                 </div>
               </div>
               <div
@@ -570,15 +596,18 @@
                   :key="institution.id"
                 >
                   <form @submit.prevent="switchToTeam(institution)">
-
                     <div class="">
                       <div>
                         <button
                           type="submit"
-                          class="inline-flex justify-between content-center w-full px-3 py-2 text-sm leading-4 font-medium rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          :class="institution.id === user.current_team_id ? 'text-gray-900 bg-gray-200': 'text-gray-700'"
+                          class="inline-flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 h-9"
+                          :class="
+                            institution.id === user.current_team_id
+                              ? 'text-gray-900 bg-indigo-200'
+                              : 'text-gray-700'
+                          "
                         >
-                          {{ institution.name}}
+                          {{ institution.name }}
                           <svg
                             class="h-4 w-4 text-gray-400 hover:text-gray-600"
                             xmlns="http://www.w3.org/2000/svg"
@@ -605,9 +634,13 @@
     <!-- Main column -->
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <!-- Search header and sidebar on md and down -->
-      <div class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
+      <div
+        class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden"
+      >
         <!-- Sidebar toggle, controls the 'sidebarOpen' sidebar state. -->
-        <button class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden">
+        <button
+          class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"
+        >
           <span class="sr-only">Open sidebar</span>
           <!-- Heroicon name: outline/menu-alt-1 -->
           <svg
@@ -630,19 +663,14 @@
         <div class="flex-1 flex justify-between px-4 sm:px-6 lg:px-8">
           <!-- Search on MD and down -->
           <div class="flex-1 flex">
-            <form
-              class="w-full flex md:ml-0"
-              action="#"
-              method="GET"
-            >
-              <label
-                for="search_field"
-                class="sr-only"
+            <form class="w-full flex md:ml-0" action="#" method="GET">
+              <label for="search_field" class="sr-only"> Search </label>
+              <div
+                class="relative w-full text-gray-400 focus-within:text-gray-600"
               >
-                Search
-              </label>
-              <div class="relative w-full text-gray-400 focus-within:text-gray-600">
-                <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pointer-events-none"
+                >
                   <!-- Heroicon name: solid/search -->
                   <svg
                     class="h-5 w-5"
@@ -664,7 +692,7 @@
                   class="block w-full h-full pl-8 pr-3 py-2 border-transparent text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 focus:border-transparent focus:placeholder-gray-400 sm:text-sm"
                   placeholder="Search"
                   type="search"
-                >
+                />
               </div>
             </form>
           </div>
@@ -686,7 +714,7 @@
                       class="h-8 w-8 rounded-full"
                       :src="user.profile_photo_url"
                       alt=""
-                    >
+                    />
                   </button>
                 </template>
                 <template #content>
@@ -696,30 +724,27 @@
                     aria-orientation="vertical"
                     aria-labelledby="user-menu"
                   >
-                    <div
-                      class="py-1"
-                      role="none"
-                    >
+                    <div class="py-1" role="none">
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
-                      >View profile</a>
+                        >View profile</a
+                      >
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
-                      >Settings</a>
+                        >Settings</a
+                      >
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
-                      >Notifications</a>
+                        >Notifications</a
+                      >
                     </div>
-                    <div
-                      class="py-1"
-                      role="none"
-                    >
+                    <div class="py-1" role="none">
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -728,10 +753,7 @@
                         Support
                       </a>
                     </div>
-                    <div
-                      class="py-1"
-                      role="none"
-                    >
+                    <div class="py-1" role="none">
                       <a
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -757,7 +779,7 @@
                     class="h-8 w-8 rounded-full"
                     src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     alt=""
-                  >
+                  />
                 </button>
               </div>
 
@@ -778,30 +800,27 @@
                   aria-orientation="vertical"
                   aria-labelledby="user-menu"
                 >
-                  <div
-                    class="py-1"
-                    role="none"
-                  >
+                  <div class="py-1" role="none">
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                    >View profile</a>
+                      >View profile</a
+                    >
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                    >Settings</a>
+                      >Settings</a
+                    >
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                    >Notifications</a>
+                      >Notifications</a
+                    >
                   </div>
-                  <div
-                    class="py-1"
-                    role="none"
-                  >
+                  <div class="py-1" role="none">
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -810,10 +829,7 @@
                       Support
                     </a>
                   </div>
-                  <div
-                    class="py-1"
-                    role="none"
-                  >
+                  <div class="py-1" role="none">
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -840,58 +856,58 @@
 </template>
 
 <script>
-  import { ref } from "vue";
-  import { Inertia } from "@inertiajs/inertia";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
-  import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
-  import Dropdown from "@/Components/NewLayout/Dropdown.vue";
+import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
+import Dropdown from "@/Components/NewLayout/Dropdown.vue";
 
-  export default {
-    components: { ApplicationLogo, Dropdown },
+export default {
+  components: { ApplicationLogo, Dropdown },
 
-    props: {
-      jetstream: {
-        type: Object,
-        required: true,
-      },
-      user: {
-        type: Object,
-        required: true,
-      },
-      errorBags: {
-        type: Array,
-        required: true
-      },
-      errors: {
-        type: Object,
-        required: true
-      }
+  props: {
+    jetstream: {
+      type: Object,
+      required: true,
     },
-
-    setup() {
-      const notification = ref(true);
-      function logout() {
-        Inertia.post(route("logout"))
-      }
-
-      return {
-        notification,
-        logout
-      }
+    user: {
+      type: Object,
+      required: true,
     },
-
-    methods: {
-      switchToTeam(team) {
-        this.$inertia.put(
-          route("current-team.update"),
-          {
-            team_id: team.id,
-          },
-          {
-            preserveState: false,
-          }
-        );
-      },
+    errorBags: {
+      type: Array,
+      required: true,
     },
-  };
+    errors: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup() {
+    const notification = ref(true);
+    function logout() {
+      Inertia.post(route("logout"));
+    }
+
+    return {
+      notification,
+      logout,
+    };
+  },
+
+  methods: {
+    switchToTeam(team) {
+      this.$inertia.put(
+        route("current-team.update"),
+        {
+          team_id: team.id,
+        },
+        {
+          preserveState: false,
+        }
+      );
+    },
+  },
+};
 </script>
