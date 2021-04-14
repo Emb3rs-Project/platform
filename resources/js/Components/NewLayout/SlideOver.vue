@@ -53,19 +53,7 @@
           <!-- Action buttons -->
           <div class="flex-shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">
             <div class="space-x-3 flex justify-end">
-              <button
-                type="button"
-                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                @click="open = false"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Create
-              </button>
+              <slot name="actions"></slot>
             </div>
           </div>
         </form>
@@ -75,10 +63,17 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 export default {
-  setup() {
-    let open = ref(true);
+  props: {
+    modelValue: Boolean,
+  },
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
+    let open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
 
     const closeOnEscape = (e) => {
       if (open.value && e.keyCode === 27) {

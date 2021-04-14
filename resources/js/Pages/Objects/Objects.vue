@@ -46,6 +46,10 @@
                   class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50 transition ease-in-out duration-150"
                   v-for="i in [0, 1, 2, 3]"
                   :key="i"
+                  @click="
+                    slideOver = true;
+                    openMenu = false;
+                  "
                 >
                   <!-- Heroicon name: outline/support -->
                   <svg
@@ -76,6 +80,7 @@
         </transition>
         <!-- Menu END -->
         <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
+        <sink-create></sink-create>
       </div>
     </template>
   </app-layout>
@@ -84,15 +89,18 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
+import SlideOver from "../../Components/NewLayout/SlideOver";
 import { ref } from "@vue/reactivity";
+import SinkCreate from "../../Pages/Objects/Sinks/SinkCreate";
 
 export default {
-  components: { AppLayout, AmazingMap },
+  components: { AppLayout, AmazingMap, SlideOver, SinkCreate },
   setup() {
     const openMenu = ref(false);
-
+    const slideOver = ref(false);
     return {
       openMenu,
+      slideOver,
     };
   },
 };

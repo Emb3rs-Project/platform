@@ -39,19 +39,21 @@ export default {
 
       mapUtils.addPoint(map.value, center.value);
 
-      //   mapUtils.addPoint(map.value, center.value, {
-      //     icon: "leaf",
-      //     textClass: "text-green-700",
-      //     borderClass: "border-green-700",
-      //     draggable: true,
-      //   });
+      mapUtils
+        .addPoint(map.value, center.value, {
+          icon: "leaf",
+          textClass: "text-green-700",
+          borderClass: "border-green-700",
+          draggable: true,
+        })
+        .bindPopup(`${center.value}`);
 
-      //   mapUtils.addPoint(map.value, center.value, {
-      //     icon: "project-diagram",
-      //     textClass: "text-indigo-700",
-      //     borderClass: "border-indigo-700",
-      //     draggable: true,
-      //   });
+      mapUtils.addPoint(map.value, center.value, {
+        icon: "fire",
+        textClass: "text-red-700",
+        borderClass: "border-red-700",
+        draggable: true,
+      });
     });
 
     return {
