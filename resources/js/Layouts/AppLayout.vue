@@ -530,7 +530,6 @@
             <div class="mt-8">
               <!-- Secondary navigation -->
               <div class="relative">
-
                 <div class="relative flex items-center justify-between">
                   <span
                     class="px-3 text-xs bg-gray-100 font-semibold text-gray-500 uppercase tracking-wider"
@@ -595,10 +594,10 @@
                       <div>
                         <button
                           type="submit"
-                          class="inline-flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-indigo-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 h-9"
+                          class="inline-flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 h-9 pr-5"
                           :class="
                             institution.id === user.current_team_id
-                              ? 'text-gray-900 bg-indigo-200'
+                              ? 'text-yellow-500 bg-gray-200'
                               : 'text-gray-700'
                           "
                         >

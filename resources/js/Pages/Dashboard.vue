@@ -1,82 +1,83 @@
 <template>
   <app-layout>
     <template #content>
-
-      <!-- <div class="border-b border-gray-200 px-4 py-4 sm:flex sm:items-center sm:justify-between sm:px-6 lg:px-8">
-        <div class="flex-1 min-w-0">
-          <h1 class="text-lg font-medium leading-6 text-gray-900 sm:truncate">
-            Home
-          </h1>
+      <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
+      <div class="h-full fixed right-0 top-0 bot-0 z-10 shadow-md bg-gray-100">
+        <div class="flex flex-1 flex-col pt-10 items-center w-16">
+          <div class="my-4 text-center">
+            <sink-icon class="text-green-700 mb-2"></sink-icon>
+            <span class="text-xs">Sinks</span>
+          </div>
+          <div class="my-4 text-center">
+            <source-icon class="text-red-700 mb-2"></source-icon>
+            <span class="text-xs">Sources</span>
+          </div>
+          <div class="my-4 text-center">
+            <link-icon class="text-blue-700 mb-2"></link-icon>
+            <span class="text-xs">Links</span>
+          </div>
         </div>
-        <div class="mt-4 flex sm:mt-0 sm:ml-4">
-          <button
-            type="button"
-            class="order-1 ml-3 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-0 sm:ml-0"
-          >
-            Share
-          </button>
-          <button
-            type="button"
-            class="order-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:order-1 sm:ml-3"
-          >
-            Create
-          </button>
-        </div>
-      </div> -->
-      <embers-map :markers="markers"></embers-map>
-      <slide-over></slide-over>
-      <filter-dropdown></filter-dropdown>
+      </div>
     </template>
   </app-layout>
 </template>
 
 <script>
-  import { ref } from "vue";
+import { ref } from "vue";
 
-  import useUniqueLocations from "@/Composables/useUniqueLocations";
+import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-  import AppLayout from "@/Layouts/AppLayout.vue";
-  import EmbersMap from "@/Components/NewLayout/Map/EmbersMap.vue";
-  import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-  import FilterDropdown from "@/Components/NewLayout/FilterDropdown.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+import FilterDropdown from "@/Components/NewLayout/FilterDropdown.vue";
+import SinkIcon from "../Components/Icons/SinkIcon.vue";
+import SourceIcon from "../Components/Icons/SourceIcon.vue";
+import LinkIcon from "../Components/Icons/LinkIcon.vue";
+import AmazingMap from "../Components/Map/AmazingMap.vue";
 
-
-  export default {
-    components: { AppLayout, SlideOver, EmbersMap, FilterDropdown },
-
-    props: {
-      users: {
-        type: Array,
-        required: true,
-      },
-      sources: {
-        type: Array,
-        required: true,
-      },
-      sinks: {
-        type: Array,
-        required: true,
-      },
+export default {
+  components: {
+    AppLayout,
+    SlideOver,
+    FilterDropdown,
+    SinkIcon,
+    SourceIcon,
+    LinkIcon,
+    AmazingMap,
+  },
+  props: {
+    users: {
+      type: Array,
+      required: true,
     },
-
-    setup(props, context) {
-      const map = ref(null);
-      const markers = ref([]);
-
-      const locations = props.sources.concat(props.sinks);
-
-      const uniqueLocations = useUniqueLocations(locations);
-
-      for (const _location of uniqueLocations.value) {
-        markers.value.push(_location.data)
-      }
-
-      return {
-        map,
-        markers,
-      }
+    sources: {
+      type: Array,
+      required: true,
     },
-  };
+    sinks: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  setup(props, context) {
+    const map = ref(null);
+    const markers = ref([]);
+
+    const locations = props.sources.concat(props.sinks);
+
+    const uniqueLocations = useUniqueLocations(locations);
+
+    for (const _location of uniqueLocations.value) {
+      markers.value.push(_location.data);
+    }
+
+    return {
+      map,
+      markers,
+    };
+  },
+};
 </script>
 
 <style scoped>
