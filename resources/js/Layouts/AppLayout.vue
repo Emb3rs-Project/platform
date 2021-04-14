@@ -548,7 +548,7 @@
                         <span class="sr-only">Open options</span>
                         <!-- Heroicon name: solid/dots-vertical -->
                         <svg
-                          class="h-5 w-5 mr-2"
+                          class="h-5 w-5"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                           fill="currentColor"
@@ -590,20 +590,27 @@
                   :key="institution.id"
                 >
                   <form @submit.prevent="switchToTeam(institution)">
-                    <div class="">
-                      <div>
+                    <div class="flex justify-between items-center">
+                      <div class="w-full mr-3">
                         <button
                           type="submit"
-                          class="inline-flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 h-9 pr-5"
+                          class="flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md focus:outline-none"
                           :class="
                             institution.id === user.current_team_id
-                              ? 'text-yellow-500 bg-gray-200'
-                              : 'text-gray-700'
+                              ? 'text-gray-900 bg-indigo-100'
+                              : 'text-gray-700 hover:text-gray-900 hover:bg-indigo-50'
                           "
                         >
                           {{ institution.name }}
+                        </button>
+                      </div>
+                      <div>
+                        <inertia-link
+                          :href="route('teams.show', user.current_team)"
+                          class="text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        >
                           <svg
-                            class="-mr-2.5 h-4 w-4 text-gray-400 hover:text-gray-600"
+                            class="h-4 w-4 rounded-full text-gray-400 hover:text-gray-500"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20"
                             fill="currentColor"
@@ -614,7 +621,7 @@
                               clip-rule="evenodd"
                             />
                           </svg>
-                        </button>
+                        </inertia-link>
                       </div>
                     </div>
                   </form>
