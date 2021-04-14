@@ -32,5 +32,8 @@
         "vue-loader": "^16.1.2",
         "webpack-livereload-plugin": "^3.0.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "beautifymarker": "^1.0.9",
+        "font-awesome": "^4.7.0"
+    }
 }

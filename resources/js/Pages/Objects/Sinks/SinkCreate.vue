@@ -1,5 +1,5 @@
 <template>
-  <app-layout>
+  <slide-over v-model="slideOpen">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Objects | Sinks
@@ -93,12 +93,12 @@
       </div>
     </div>
 
-    <div class="w-full my-5 px-16 flex justify-end">
+    <template #actions>
       <jet-button :disabled="form.processing" @click="submit()">
         Create Sink
       </jet-button>
-    </div>
-  </app-layout>
+    </template>
+  </slide-over>
 </template>
 
 <script>
@@ -113,6 +113,7 @@ import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
 
 import { ref, watch } from "vue";
+import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
 
 export default {
   components: {
@@ -123,22 +124,24 @@ export default {
     SelectRow,
     JetButton,
     JetInputError,
+    SlideOver,
   },
   props: {
     templates: {
       type: Array,
-      required: true,
+      default: [],
     },
     equipments: {
       type: Array,
-      required: true,
+      default: [],
     },
     locations: {
       type: Array,
-      required: true,
+      default: [],
     },
   },
   setup(props) {
+    const slideOpen = ref(true);
     const templateInfo = ref();
     const selectedTemplate = ref();
     const selectedEquipment = ref();
@@ -213,6 +216,7 @@ export default {
       locationSelects,
       selectedLocation,
       marker,
+      slideOpen,
     };
   },
   computed: {

@@ -24,4 +24,6 @@
     <body class="font-sans antialiased">
         @inertia
     </body>
+
+    @include('icons')
 </html>

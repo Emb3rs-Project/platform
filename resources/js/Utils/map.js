@@ -98,5 +98,51 @@ export default {
                 map.flyTo(data.center);
                 break;
         }
+    },
+    addPoint(map, center, { icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false } = {}) {
+        const iconOptions = {
+            icon,
+            textColor: null,
+            borderColor: null,
+            iconShape: "marker",
+            customClasses: [textClass, borderClass].join(" ")
+        };
+
+
+        return L.marker(L.latLng(center), {
+            icon: L.BeautifyIcon.icon(iconOptions),
+            draggable,
+        }).addTo(map);
     }
 }
+
+// addPoint(map, center , options)
+//
+
+
+// addPoint(map, center, {icon, textClass, borderClass, draggable} = {icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false })
+// appPoint(map, [])
+// options = null
+// icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false
+
+// addPoint(map, [], { icon : 'fire' })
+// options = {icon : 'fire'}
+// icon = 'fire', textClass = null, borderClass = null, draggable = null
+
+
+// addPoint(map, center, _options) {
+//     const options = Object.assign( {icon : 'leaf', textClass : 'text-green-700', borderClass : 'border-green-700', draggable : false }, _options)
+//     const iconOptions = {
+//         icon : options.icon,
+//         textColor: null,
+//         borderColor: null,
+//         iconShape: "marker",
+//         customClasses: [options.textClass, options.borderClass].join(" ")
+//     };
+
+
+//     return L.marker(L.latLng(center), {
+//         icon: L.BeautifyIcon.icon(iconOptions),
+//         draggable : options.draggable,
+//     }).addTo(map);
+// }
