@@ -33,6 +33,8 @@
         "webpack-livereload-plugin": "^3.0.0"
     },
     "dependencies": {
+        "@headlessui/vue": "^1.0.0",
+        "@heroicons/vue": "^1.0.1",
         "beautifymarker": "^1.0.9",
         "font-awesome": "^4.7.0"
     }

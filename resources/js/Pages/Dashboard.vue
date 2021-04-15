@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 import useUniqueLocations from "@/Composables/useUniqueLocations";
 
@@ -33,7 +33,6 @@ import SinkIcon from "../Components/Icons/SinkIcon.vue";
 import SourceIcon from "../Components/Icons/SourceIcon.vue";
 import LinkIcon from "../Components/Icons/LinkIcon.vue";
 import AmazingMap from "../Components/Map/AmazingMap.vue";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {
@@ -70,8 +69,6 @@ export default {
     for (const _location of uniqueLocations.value) {
       markers.value.push(_location.data);
     }
-
-    onMounted(() => Inertia.visit(route("objects.index")));
 
     return {
       map,
