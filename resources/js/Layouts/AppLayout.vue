@@ -845,7 +845,7 @@
       </div>
 
       <main
-        class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-white"
+        class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-gray-50"
         tabindex="0"
       >
         <slot name="content"></slot>
@@ -855,58 +855,58 @@
 </template>
 
 <script>
-  import { ref } from "vue";
-  import { Inertia } from "@inertiajs/inertia";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
-  import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
-  import Dropdown from "@/Components/NewLayout/Dropdown.vue";
+import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
+import Dropdown from "@/Components/NewLayout/Dropdown.vue";
 
-  export default {
-    components: { ApplicationLogo, Dropdown },
+export default {
+  components: { ApplicationLogo, Dropdown },
 
-    props: {
-      jetstream: {
-        type: Object,
-        required: true,
-      },
-      user: {
-        type: Object,
-        required: true,
-      },
-      errorBags: {
-        type: Array,
-        required: true,
-      },
-      errors: {
-        type: Object,
-        required: true,
-      },
+  props: {
+    jetstream: {
+      type: Object,
+      required: true,
     },
-
-    setup() {
-      const notification = ref(true);
-      function logout() {
-        Inertia.post(route("logout"));
-      }
-
-      return {
-        notification,
-        logout,
-      };
+    user: {
+      type: Object,
+      required: true,
     },
-
-    methods: {
-      switchToTeam(team) {
-        this.$inertia.put(
-          route("current-team.update"),
-          {
-            team_id: team.id,
-          },
-          {
-            preserveState: false,
-          }
-        );
-      },
+    errorBags: {
+      type: Array,
+      required: true,
     },
-  };
+    errors: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup() {
+    const notification = ref(true);
+    function logout() {
+      Inertia.post(route("logout"));
+    }
+
+    return {
+      notification,
+      logout,
+    };
+  },
+
+  methods: {
+    switchToTeam(team) {
+      this.$inertia.put(
+        route("current-team.update"),
+        {
+          team_id: team.id,
+        },
+        {
+          preserveState: false,
+        }
+      );
+    },
+  },
+};
 </script>
