@@ -594,8 +594,8 @@
                       class="group flex justify-between items-center w-full rounded-md"
                       :class="
                         institution.id === user.current_team_id
-                          ? 'text-gray-900 bg-indigo-200'
-                          : 'text-gray-700 hover:text-gray-900 hover:bg-indigo-100'
+                          ? 'text-gray-900 bg-gray-200'
+                          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
                     >
                       <button
