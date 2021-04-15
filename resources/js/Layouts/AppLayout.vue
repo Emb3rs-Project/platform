@@ -223,8 +223,8 @@
         <!-- Sidebar component, swap this element with another sidebar if you like -->
         <div class="h-0 flex-1 flex flex-col overflow-y-auto">
           <!-- User account dropdown -->
-          <div class="px-3 mt-6 relative inline-block text-left">
-            <dropdown>
+          <div class="px-3 mt-6 relative inline-block text-left z-10">
+            <dropdown v-model="profileDropdownIsOpen">
               <template #trigger>
                 <button
                   type="button"
@@ -232,6 +232,7 @@
                   id="options-menu"
                   aria-expanded="false"
                   aria-haspopup="true"
+                  @click="profileDropdownIsOpen = true"
                 >
                   <span class="flex w-full justify-between items-center">
                     <span
@@ -282,6 +283,7 @@
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
+                  @click="profileDropdownIsOpen = false"
                 >
                   <div class="py-1" role="none">
                     <inertia-link
@@ -328,38 +330,8 @@
               </template>
             </dropdown>
           </div>
-          <!-- Sidebar Search TODO: make it a component -->
-          <div class="px-3 mt-5 z-0">
-            <label for="search" class="sr-only"> Search </label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                aria-hidden="true"
-              >
-                <!-- Heroicon name: solid/search -->
-                <svg
-                  class="mr-3 h-4 w-4 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                name="search"
-                id="search"
-                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 sm:text-sm border-gray-300 rounded-md"
-                placeholder="Search"
-              />
-            </div>
-          </div>
+
+          <search v-model="searchText"></search>
 
           <!-- Navigation -->
           <nav class="px-3 mt-6">
@@ -536,7 +508,7 @@
                   >
                     Institutions
                   </span>
-                  <dropdown>
+                  <dropdown v-model="institutionDropdownIsOpen">
                     <template #trigger>
                       <button
                         type="button"
@@ -544,6 +516,7 @@
                         id="options-menu"
                         aria-expanded="true"
                         aria-haspopup="true"
+                        @click="institutionDropdownIsOpen = true"
                       >
                         <span class="sr-only">Open options</span>
                         <!-- Heroicon name: solid/dots-vertical -->
@@ -566,6 +539,7 @@
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby="options-menu"
+                        @click="institutionDropdownIsOpen = false"
                       >
                         <div class="py-1" role="none">
                           <inertia-link
@@ -699,7 +673,7 @@
           <div class="flex items-center">
             <!-- Profile dropdown -->
             <div class="ml-3 relative">
-              <dropdown>
+              <!-- <dropdown>
                 <template #trigger>
                   <button
                     type="button"
@@ -763,7 +737,7 @@
                     </div>
                   </div>
                 </template>
-              </dropdown>
+              </dropdown> -->
 
               <div>
                 <button
@@ -845,7 +819,7 @@
       </div>
 
       <main
-        class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-white"
+        class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-gray-50"
         tabindex="0"
       >
         <slot name="content"></slot>
@@ -855,58 +829,65 @@
 </template>
 
 <script>
-  import { ref } from "vue";
-  import { Inertia } from "@inertiajs/inertia";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
-  import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
-  import Dropdown from "@/Components/NewLayout/Dropdown.vue";
+import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
+import Dropdown from "@/Components/NewLayout/Dropdown.vue";
+import Search from "@/Components/NewLayout/Search.vue";
 
-  export default {
-    components: { ApplicationLogo, Dropdown },
+export default {
+  components: { ApplicationLogo, Dropdown, Search },
 
-    props: {
-      jetstream: {
-        type: Object,
-        required: true,
-      },
-      user: {
-        type: Object,
-        required: true,
-      },
-      errorBags: {
-        type: Array,
-        required: true,
-      },
-      errors: {
-        type: Object,
-        required: true,
-      },
+  props: {
+    jetstream: {
+      type: Object,
+      required: true,
     },
-
-    setup() {
-      const notification = ref(true);
-      function logout() {
-        Inertia.post(route("logout"));
-      }
-
-      return {
-        notification,
-        logout,
-      };
+    user: {
+      type: Object,
+      required: true,
     },
-
-    methods: {
-      switchToTeam(team) {
-        this.$inertia.put(
-          route("current-team.update"),
-          {
-            team_id: team.id,
-          },
-          {
-            preserveState: false,
-          }
-        );
-      },
+    errorBags: {
+      type: Array,
+      required: true,
     },
-  };
+    errors: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup() {
+    const notification = ref(true);
+    const profileDropdownIsOpen = ref(false);
+    const institutionDropdownIsOpen = ref(false);
+    const searchText = ref("");
+
+    function logout() {
+      Inertia.post(route("logout"));
+    }
+
+    function switchToTeam(team) {
+      Inertia.put(
+        route("current-team.update"),
+        {
+          team_id: team.id,
+        },
+        {
+          preserveState: false,
+        }
+      );
+    }
+
+    return {
+      notification,
+      profileDropdownIsOpen,
+      institutionDropdownIsOpen,
+      searchText,
+      logout,
+      switchToTeam,
+    };
+  },
+};
 </script>

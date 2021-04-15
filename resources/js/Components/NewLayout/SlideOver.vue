@@ -8,53 +8,20 @@
       leave-from-class="translate-x-0"
       leave-to-class="translate-x-full"
     >
-      <div v-show="open" class="w-screen max-w-2xl">
+      <div v-if="open" class="w-screen max-w-2xl">
         <form
-          class="h-full flex flex-col bg-white shadow-xl overflow-y-auto z-20"
+          class="h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl z-20"
         >
-          <div class="flex-1">
+          <div class="flex-1 h-0 overflow-y-auto">
             <!-- Header -->
-            <div class="px-4 py-6 bg-indigo-700 sm:px-6">
-              <div class="flex items-start justify-between space-x-3">
-                <div class="space-y-1">
-                  <slot name="header"></slot>
-                </div>
-                <div class="h-7 flex items-center">
-                  <button
-                    type="button"
-                    class="bg-indigo-700 rounded-md text-indigo-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    @click="open = false"
-                  >
-                    <span class="sr-only">Close panel</span>
-                    <!-- Heroicon name: outline/x -->
-                    <svg
-                      class="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
+            <slot name="header"></slot>
 
-            <slot></slot>
+            <slot name="content"></slot>
           </div>
 
           <!-- Action buttons -->
-          <div class="flex-shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">
-            <div class="space-x-3 flex justify-end">
-              <slot name="actions"></slot>
-            </div>
+          <div class="flex-shrink-0 px-4 py-4 flex justify-end">
+            <slot name="actions"></slot>
           </div>
         </form>
       </div>
@@ -63,14 +30,16 @@
 </template>
 
 <script>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { onMounted, onUnmounted, computed } from "vue";
 export default {
   props: {
     modelValue: Boolean,
   },
+
   emits: ["update:modelValue"],
+
   setup(props, { emit }) {
-    let open = computed({
+    const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
