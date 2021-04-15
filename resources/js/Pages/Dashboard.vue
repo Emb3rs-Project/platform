@@ -23,59 +23,59 @@
 </template>
 
 <script>
-  import { ref } from "vue";
+import { ref } from "vue";
 
-  import useUniqueLocations from "@/Composables/useUniqueLocations";
+import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-  import AppLayout from "@/Layouts/AppLayout.vue";
-  import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-  import SinkIcon from "../Components/Icons/SinkIcon.vue";
-  import SourceIcon from "../Components/Icons/SourceIcon.vue";
-  import LinkIcon from "../Components/Icons/LinkIcon.vue";
-  import AmazingMap from "../Components/Map/AmazingMap.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+import SinkIcon from "../Components/Icons/SinkIcon.vue";
+import SourceIcon from "../Components/Icons/SourceIcon.vue";
+import LinkIcon from "../Components/Icons/LinkIcon.vue";
+import AmazingMap from "../Components/Map/AmazingMap.vue";
 
-  export default {
-    components: {
-      AppLayout,
-      SlideOver,
-      SinkIcon,
-      SourceIcon,
-      LinkIcon,
-      AmazingMap,
+export default {
+  components: {
+    AppLayout,
+    SlideOver,
+    SinkIcon,
+    SourceIcon,
+    LinkIcon,
+    AmazingMap,
+  },
+  props: {
+    users: {
+      type: Array,
+      required: true,
     },
-    props: {
-      users: {
-        type: Array,
-        required: true,
-      },
-      sources: {
-        type: Array,
-        required: true,
-      },
-      sinks: {
-        type: Array,
-        required: true,
-      },
+    sources: {
+      type: Array,
+      required: true,
     },
-
-    setup(props, context) {
-      const map = ref(null);
-      const markers = ref([]);
-
-      const locations = props.sources.concat(props.sinks);
-
-      const uniqueLocations = useUniqueLocations(locations);
-
-      for (const _location of uniqueLocations.value) {
-        markers.value.push(_location.data);
-      }
-
-      return {
-        map,
-        markers,
-      };
+    sinks: {
+      type: Array,
+      required: true,
     },
-  };
+  },
+
+  setup(props, context) {
+    const map = ref(null);
+    const markers = ref([]);
+
+    const locations = props.sources.concat(props.sinks);
+
+    const uniqueLocations = useUniqueLocations(locations);
+
+    for (const _location of uniqueLocations.value) {
+      markers.value.push(_location.data);
+    }
+
+    return {
+      map,
+      markers,
+    };
+  },
+};
 </script>
 
 <style scoped>
