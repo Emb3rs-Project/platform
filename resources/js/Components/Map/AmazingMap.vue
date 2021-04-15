@@ -7,9 +7,11 @@ import mapUtils from "@/Utils/map.js";
 import { computed, onMounted, ref } from "@vue/runtime-core";
 import L from "leaflet";
 import "beautifymarker";
+import "leaflet-contextmenu";
 
 // CSS for Markers
 import "beautifymarker/leaflet-beautify-marker-icon.css";
+import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
 export default {
   props: {
@@ -21,7 +23,7 @@ export default {
       default: [],
     },
   },
-  emits: ["onMove"],
+  emits: ["onMove", "onCreateRequest"],
   setup(props, { emit }) {
     const map = ref(null);
     const mapObjects = ref({});
@@ -35,8 +37,45 @@ export default {
       },
     });
 
+    const onDemo = () => console.log("hi");
+
+    const onCreateSink = (val) =>
+      emit("onCreateRequest", {
+        type: "sink",
+        center: [val.latlng.lat, val.latlng.lng],
+      });
+
+    const onCreateSource = (val) =>
+      emit("onCreateRequest", {
+        type: "source",
+        center: [val.latlng.lat, val.latlng.lng],
+      });
+
     onMounted(() => {
-      map.value = mapUtils.init("map", center.value);
+      map.value = mapUtils.init("map", center.value, {
+        drawControl: true,
+        contextmenu: true,
+        contextmenuWidth: 140,
+        contextmenuItems: [
+          {
+            text: "Create Sink Here",
+            callback: onCreateSink,
+          },
+          {
+            text: "Create Source Here",
+            callback: onCreateSource,
+          },
+          "-",
+          {
+            text: "Zoom in",
+            callback: (o) => map.value.zoomIn(),
+          },
+          {
+            text: "Zoom out",
+            callback: (o) => map.value.zoomOut(),
+          },
+        ],
+      });
       window.map = map.value;
 
       map.value.on(

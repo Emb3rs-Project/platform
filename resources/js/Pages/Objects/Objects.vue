@@ -79,6 +79,7 @@
         <amazing-map
           :centerValue="[38.7181959, -9.1975417]"
           :instances="instances"
+          @onCreateRequest="onCreateRequest"
         ></amazing-map>
         <Component
           class="z-20"
@@ -113,6 +114,10 @@ export default {
 
     const onLoadComponent = () => (modalComponent.value = SinkCreate);
 
+    const onCreateRequest = (req) => {
+      if (req.type === "sink") modalComponent.value = SinkCreate;
+    };
+
     console.log(props.slideOverComponent);
 
     return {
@@ -120,6 +125,7 @@ export default {
       slideOver,
       onLoadComponent,
       modalComponent,
+      onCreateRequest,
     };
   },
 };
