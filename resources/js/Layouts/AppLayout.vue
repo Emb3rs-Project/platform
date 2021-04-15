@@ -605,7 +605,7 @@
                         {{ institution.name }}
                       </button>
                       <inertia-link
-                        :href="route('teams.show', user.current_team)"
+                        :href="route('teams.show', institution)"
                         class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                       >
                         <svg
