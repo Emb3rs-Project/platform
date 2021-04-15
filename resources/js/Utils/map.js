@@ -8,7 +8,7 @@ export default {
         iconAnchor: [10, 20],
     }),
     init(mapId, center = [38.7181959, -9.1975417]) {
-        const map = L.map(mapId, { drawControl: true }).setView(center, 13);
+        const map = L.map(mapId, { drawControl: true, contextmenu: true }).setView(center, 13);
         map.doubleClickZoom.disable();
 
         L.tileLayer(
@@ -112,7 +112,42 @@ export default {
         return L.marker(L.latLng(center), {
             icon: L.BeautifyIcon.icon(iconOptions),
             draggable,
-        }).addTo(map);
+        })
+            .addTo(map);
+    },
+    addInstances(map, instances = [], mapObjects = {}) {
+        for (let instance of instances.filter((i) => i.location)) {
+
+            // Skipping Locations with areas
+            if (instance.location.geo_object.type !== 'point') continue;
+
+            const type = instance.template.category.type
+            const center = instance.location.geo_object.data.center
+
+            const iconOptions = {
+                icon: '',
+                textClass: '',
+                borderClass: '',
+                draggale: false
+            }
+
+
+
+            switch (type) {
+                case 'sink':
+                    iconOptions.icon = 'leaf'
+                    iconOptions.textClass = 'text-green-700'
+                    iconOptions.borderClass = 'border-green-700'
+                    break;
+                case 'source':
+                    iconOptions.icon = 'fire'
+                    iconOptions.textClass = 'text-red-700'
+                    iconOptions.borderClass = 'border-red-700'
+                    break;
+            }
+
+            mapObjects[instance.id] = this.addPoint(map, center, iconOptions)
+        }
     }
 }
 

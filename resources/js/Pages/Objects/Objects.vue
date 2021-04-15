@@ -76,7 +76,10 @@
           </div>
         </transition>
         <!-- Menu END -->
-        <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
+        <amazing-map
+          :centerValue="[38.7181959, -9.1975417]"
+          :instances="instances"
+        ></amazing-map>
         <Component
           class="z-20"
           v-bind="$props"
@@ -97,6 +100,12 @@ import SinkCreate from "../../Pages/Objects/Sinks/SinkCreate";
 
 export default {
   components: { AppLayout, AmazingMap, SlideOver, SinkCreate },
+  props: {
+    instances: {
+      type: Array,
+      default: [],
+    },
+  },
   setup(props) {
     const openMenu = ref(false);
     const slideOver = ref(false);

@@ -16,6 +16,10 @@ export default {
     centerValue: {
       type: Array,
     },
+    instances: {
+      type: Array,
+      default: [],
+    },
   },
   emits: ["onMove"],
   setup(props, { emit }) {
@@ -35,25 +39,14 @@ export default {
       map.value = mapUtils.init("map", center.value);
       window.map = map.value;
 
-      map.value.on("moveend", ({ target }) => console.log(target.getCenter()));
+      map.value.on(
+        "moveend",
+        ({ target }) => (center.value = target.getCenter())
+      );
 
-      mapUtils.addPoint(map.value, center.value);
-
-      mapUtils
-        .addPoint(map.value, center.value, {
-          icon: "leaf",
-          textClass: "text-green-700",
-          borderClass: "border-green-700",
-          draggable: true,
-        })
-        .bindPopup(`${center.value}`);
-
-      mapUtils.addPoint(map.value, center.value, {
-        icon: "fire",
-        textClass: "text-red-700",
-        borderClass: "border-red-700",
-        draggable: true,
-      });
+      if (props.instances?.length > 0) {
+        mapUtils.addInstances(map.value, props.instances, mapObjects.value);
+      }
     });
 
     return {

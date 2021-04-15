@@ -4,8 +4,6 @@ import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-v
 import { InertiaProgress } from '@inertiajs/progress';
 import { createApp, h } from 'vue';
 
-import { useSlideOver } from './Mixins/UseSlideOver';
-
 require('./bootstrap');
 
 // Import modules...
@@ -19,7 +17,6 @@ createApp({
         }),
 })
     .mixin({ methods: { route } })
-    .mixin(useSlideOver)
     .use(InertiaPlugin)
     .mount(el);
 

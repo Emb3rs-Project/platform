@@ -4626,6 +4626,11 @@ laravel-mix@^6.0.6:
     webpackbar "^5.0.0-3"
     yargs "^16.1.0"
 
+leaflet-contextmenu@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/leaflet-contextmenu/-/leaflet-contextmenu-1.4.0.tgz#e2bda481af1026080eabaa32997e531fd44f605c"
+  integrity sha1-4r2kga8QJggOq6oymX5TH9RPYFw=
+
 leaflet-draw@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.4.tgz#45be92f378ed253e7202fdeda1fcc71885198d46"
