@@ -46,10 +46,7 @@
                   class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50 transition ease-in-out duration-150"
                   v-for="i in [0, 1, 2, 3]"
                   :key="i"
-                  @click="
-                    slideOver = true;
-                    openMenu = false;
-                  "
+                  @click="onLoadComponent()"
                 >
                   <!-- Heroicon name: outline/support -->
                   <svg
@@ -80,7 +77,12 @@
         </transition>
         <!-- Menu END -->
         <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
-        <sink-create></sink-create>
+        <Component
+          class="z-20"
+          v-bind="$props"
+          :is="modalComponent"
+          v-if="modalComponent"
+        />
       </div>
     </template>
   </app-layout>
@@ -95,12 +97,20 @@ import SinkCreate from "../../Pages/Objects/Sinks/SinkCreate";
 
 export default {
   components: { AppLayout, AmazingMap, SlideOver, SinkCreate },
-  setup() {
+  setup(props) {
     const openMenu = ref(false);
     const slideOver = ref(false);
+    const modalComponent = ref();
+
+    const onLoadComponent = () => (modalComponent.value = SinkCreate);
+
+    console.log(props.slideOverComponent);
+
     return {
       openMenu,
       slideOver,
+      onLoadComponent,
+      modalComponent,
     };
   },
 };

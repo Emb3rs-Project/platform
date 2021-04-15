@@ -23,23 +23,22 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 import useUniqueLocations from "@/Composables/useUniqueLocations";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import FilterDropdown from "@/Components/NewLayout/FilterDropdown.vue";
 import SinkIcon from "../Components/Icons/SinkIcon.vue";
 import SourceIcon from "../Components/Icons/SourceIcon.vue";
 import LinkIcon from "../Components/Icons/LinkIcon.vue";
 import AmazingMap from "../Components/Map/AmazingMap.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {
     AppLayout,
     SlideOver,
-    FilterDropdown,
     SinkIcon,
     SourceIcon,
     LinkIcon,
@@ -71,6 +70,8 @@ export default {
     for (const _location of uniqueLocations.value) {
       markers.value.push(_location.data);
     }
+
+    onMounted(() => Inertia.visit(route("objects.index")));
 
     return {
       map,

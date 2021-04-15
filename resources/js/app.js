@@ -1,11 +1,14 @@
+import 'leaflet/dist/leaflet.css';
+
+import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
+import { InertiaProgress } from '@inertiajs/progress';
+import { createApp, h } from 'vue';
+
+import { useSlideOver } from './Mixins/UseSlideOver';
+
 require('./bootstrap');
 
 // Import modules...
-import { createApp, h } from 'vue';
-import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-vue3';
-import { InertiaProgress } from '@inertiajs/progress';
-import 'leaflet/dist/leaflet.css';
-
 const el = document.getElementById('app');
 
 createApp({
@@ -16,6 +19,7 @@ createApp({
         }),
 })
     .mixin({ methods: { route } })
+    .mixin(useSlideOver)
     .use(InertiaPlugin)
     .mount(el);
 

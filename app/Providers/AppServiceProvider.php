@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Inertia\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        ResponseFactory::macro('slideOver', function ($slideOver) {
+            inertia()->share(['slideOver' => $slideOver]);
+        });
     }
 }
