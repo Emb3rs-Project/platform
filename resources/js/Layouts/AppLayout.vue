@@ -540,7 +540,7 @@
                     <template #trigger>
                       <button
                         type="button"
-                        class="bg-gray-100 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                        class="bg-gray-100 mr-1.5 rounded-full flex items-center text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
                         id="options-menu"
                         aria-expanded="true"
                         aria-haspopup="true"
@@ -590,39 +590,37 @@
                   :key="institution.id"
                 >
                   <form @submit.prevent="switchToTeam(institution)">
-                    <div class="flex justify-between items-center">
-                      <div class="w-full mr-3">
-                        <button
-                          type="submit"
-                          class="flex justify-between content-center w-full px-3 py-2.5 text-sm leading-4 font-medium text-gray-700 rounded-md focus:outline-none"
-                          :class="
-                            institution.id === user.current_team_id
-                              ? 'text-gray-900 bg-indigo-100'
-                              : 'text-gray-700 hover:text-gray-900 hover:bg-indigo-50'
-                          "
+                    <div
+                      class="group flex justify-between items-center w-full rounded-md"
+                      :class="
+                        institution.id === user.current_team_id
+                          ? 'text-gray-900 bg-indigo-200'
+                          : 'text-gray-700 hover:text-gray-900 hover:bg-indigo-100'
+                      "
+                    >
+                      <button
+                        type="submit"
+                        class="flex w-full px-3 py-2.5 text-sm leading-4 font-medium focus:outline-none"
+                      >
+                        {{ institution.name }}
+                      </button>
+                      <inertia-link
+                        :href="route('teams.show', user.current_team)"
+                        class="text-sm mr-1.5 hidden rounded-full group-hover:block"
+                      >
+                        <svg
+                          class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
                         >
-                          {{ institution.name }}
-                        </button>
-                      </div>
-                      <div>
-                        <inertia-link
-                          :href="route('teams.show', user.current_team)"
-                          class="text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                        >
-                          <svg
-                            class="h-4 w-4 rounded-full text-gray-400 hover:text-gray-500"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                        </inertia-link>
-                      </div>
+                          <path
+                            fill-rule="evenodd"
+                            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </inertia-link>
                     </div>
                   </form>
                 </div>
@@ -857,58 +855,58 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+  import { ref } from "vue";
+  import { Inertia } from "@inertiajs/inertia";
 
-import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
-import Dropdown from "@/Components/NewLayout/Dropdown.vue";
+  import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
+  import Dropdown from "@/Components/NewLayout/Dropdown.vue";
 
-export default {
-  components: { ApplicationLogo, Dropdown },
+  export default {
+    components: { ApplicationLogo, Dropdown },
 
-  props: {
-    jetstream: {
-      type: Object,
-      required: true,
+    props: {
+      jetstream: {
+        type: Object,
+        required: true,
+      },
+      user: {
+        type: Object,
+        required: true,
+      },
+      errorBags: {
+        type: Array,
+        required: true,
+      },
+      errors: {
+        type: Object,
+        required: true,
+      },
     },
-    user: {
-      type: Object,
-      required: true,
-    },
-    errorBags: {
-      type: Array,
-      required: true,
-    },
-    errors: {
-      type: Object,
-      required: true,
-    },
-  },
 
-  setup() {
-    const notification = ref(true);
-    function logout() {
-      Inertia.post(route("logout"));
-    }
+    setup() {
+      const notification = ref(true);
+      function logout() {
+        Inertia.post(route("logout"));
+      }
 
-    return {
-      notification,
-      logout,
-    };
-  },
-
-  methods: {
-    switchToTeam(team) {
-      this.$inertia.put(
-        route("current-team.update"),
-        {
-          team_id: team.id,
-        },
-        {
-          preserveState: false,
-        }
-      );
+      return {
+        notification,
+        logout,
+      };
     },
-  },
-};
+
+    methods: {
+      switchToTeam(team) {
+        this.$inertia.put(
+          route("current-team.update"),
+          {
+            team_id: team.id,
+          },
+          {
+            preserveState: false,
+          }
+        );
+      },
+    },
+  };
 </script>
