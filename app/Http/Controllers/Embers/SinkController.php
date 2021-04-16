@@ -87,7 +87,7 @@ class SinkController extends Controller
         $locations = Location::with(['geoObject'])->get();
 
         return Inertia::render(
-            'Objects/Sinks/SinkCreate',
+            'Objects/Objects',
             [
             "templates" => $sourceTemplates,
             "equipments" => $equipmentTemplates,

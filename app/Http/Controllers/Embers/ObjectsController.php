@@ -7,12 +7,12 @@ use App\Models\Instance;
 use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ObjectsController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-
         $currentTeamInstances = Auth::user()->currentTeam->instances->pluck('id');
 
         $instances = Instance::with([
@@ -20,8 +20,7 @@ class ObjectsController extends Controller
             'template.category',
             'location',
             'location.geoObject'
-        ])
-            ->whereIn('id', $currentTeamInstances)->get();
+        ])->whereIn('id', $currentTeamInstances)->get();
 
         return Inertia::render('Objects/Objects', ['instances' => $instances]);
     }

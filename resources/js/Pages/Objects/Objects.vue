@@ -1,5 +1,6 @@
 <template>
   <app-layout>
+    <!-- Menu Of Available Instances -->
     <div
       class="fixed right-8 top-6 z-10 p-4 rounded-full cursor-pointer bg-yellow-500 hover:animate-none"
       :class="{ 'animate-pulse': !indexSlide }"
@@ -20,18 +21,21 @@
         ></path>
       </svg>
     </div>
-    <!-- Menu END -->
+
     <amazing-map
       :centerValue="[38.7181959, -9.1975417]"
       :instances="instances"
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
+
     <Component
       class="z-20"
       v-bind="$props"
       :is="modalComponent"
       v-if="modalComponent"
+      v-model="slideOver"
     />
+
     <objects-index
       :instances="instances"
       class="z-30"
@@ -41,37 +45,49 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
-import { ref } from "@vue/reactivity";
 import SinkCreate from "../../Pages/Objects/Sinks/SinkCreate";
+import SourceCreate from "../../Pages/Objects/Sources/SourceCreate";
 import ObjectsIndex from "./ObjectsIndex.vue";
 
 export default {
-  components: { AppLayout, AmazingMap, SlideOver, ObjectsIndex },
+  components: {
+    AppLayout,
+    AmazingMap,
+    SlideOver,
+    ObjectsIndex,
+  },
+
   props: {
     instances: {
       type: Array,
       default: [],
     },
   },
+
   setup(props) {
-    const openMenu = ref(false);
-    const slideOver = ref(false);
+    console.log(props);
+    const slideOver = ref(true);
     const modalComponent = ref();
+
     const indexSlide = ref(false);
 
-    const onLoadComponent = () => (modalComponent.value = SinkCreate);
+    // const onLoadComponent = () => (modalComponent.value = SinkCreate);
 
     const onCreateRequest = (req) => {
+      if (modalComponent.value) slideOver.value = false; // reset the current slide over
       if (req.type === "sink") modalComponent.value = SinkCreate;
+      if (req.type === "source") modalComponent.value = SourceCreate;
     };
 
     return {
-      openMenu,
+      //   openMenu,
       slideOver,
-      onLoadComponent,
+      //   onLoadComponent,
       modalComponent,
       onCreateRequest,
       indexSlide,

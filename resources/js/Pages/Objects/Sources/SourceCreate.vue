@@ -1,82 +1,47 @@
 <template>
-  <slide-over v-model="slideOverIsOpen">
-    <template #header>
-      <div class="py-6 px-4 bg-red-700 sm:px-6">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-medium text-white">New Source</h2>
-          <div class="ml-3 h-7 flex items-center">
-            <button
-              type="button"
-              class="bg-red-700 rounded-md text-red-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-              @click="slideOverIsOpen = false"
-            >
-              <span class="sr-only">Close panel</span>
-              <svg
-                class="h-6 w-6"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+  <slide-over
+    v-model="open"
+    title="New Source"
+    subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
+    headerBackground="bg-green-700"
+    dismissButtonTextColor="text-green-200"
+    subtitleTextColor="text-green-300"
+  >
+    <!-- Source Configuration -->
+    <div class="mt-10 sm:mt-0 p-10">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Source</h3>
+            <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
           </div>
         </div>
-        <div class="mt-1">
-          <p class="text-sm text-red-300">
-            Get started by filling in the information below to create your new
-            Source. This Source will be attached to your currently selected
-            Institution.
-          </p>
-        </div>
-      </div>
-    </template>
-
-    <template #content>
-      <!-- Source Configuration -->
-      <div class="mt-10 sm:mt-0 p-10">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <div class="px-4 sm:px-0">
-              <h3 class="text-lg font-medium leading-6 text-gray-900">
-                Source
-              </h3>
-              <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
-            </div>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="shadow overflow-hidden sm:rounded-md">
-              <div class="px-4 py-5 bg-white sm:p-6">
-                <div class="grid grid-cols-6 gap-6">
-                  <div class="col-span-12">
-                    <select-row
-                      class="mt-5"
-                      desc="Source Templates"
-                      :options="mainTemplates"
-                      v-model="selectedTemplate"
-                    >
-                      Template
-                    </select-row>
-                  </div>
-                  <div class="col-span-12">
-                    <select-row
-                      class="my-5"
-                      desc="Source Templates"
-                      :options="locationSelects"
-                      v-model="form.source.location_id"
-                      v-if="selectedTemplate"
-                    >
-                      Location
-                    </select-row>
-                  </div>
-                  <!-- <div class="col-span-12">
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <select-row
+                    class="mt-5"
+                    desc="Source Templates"
+                    :options="mainTemplates"
+                    v-model="selectedTemplate"
+                  >
+                    Template
+                  </select-row>
+                </div>
+                <div class="col-span-12">
+                  <select-row
+                    class="my-5"
+                    desc="Source Templates"
+                    :options="locationSelects"
+                    v-model="form.source.location_id"
+                    v-if="selectedTemplate"
+                  >
+                    Location
+                  </select-row>
+                </div>
+                <!-- <div class="col-span-12">
                   <select-row
                     class="mt-5"
                     :options="equipTemplates"
@@ -93,137 +58,30 @@
                     </button>
                   </select-row>
                 </div> -->
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Source Properties -->
-      <div class="sm:mt-0 p-10" v-if="selectedTemplate">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <div class="px-4 sm:px-0">
-              <p class="mt-1 text-sm text-gray-600">Source Properties</p>
-            </div>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="shadow overflow-hidden sm:rounded-md">
-              <div class="px-4 py-5 bg-white sm:p-6">
-                <div class="grid grid-cols-6 gap-6">
-                  <div class="col-span-12">
-                    <div v-for="prop in properties" :key="prop.id" class="my-4">
-                      <input-row
-                        :desc="prop.property.description"
-                        v-model="form.source.data[prop.property.symbolic_name]"
-                        v-if="prop.property.inputType === 'text'"
-                        :required="prop.required"
-                      >
-                        {{ prop.property.name }}
-                        <span v-if="prop.unit.symbol"
-                          >({{ prop.unit.symbol }})</span
-                        >
-                      </input-row>
-
-                      <select-row
-                        :desc="prop.property.description"
-                        :options="prop.property.data.options"
-                        v-model="form.source.data[prop.property.symbolic_name]"
-                        v-if="prop.property.inputType === 'select'"
-                        :required="prop.required"
-                      >
-                        {{ prop.property.name }}
-                        <span v-if="prop.unit.symbol"
-                          >({{ prop.unit.symbol }})</span
-                        >
-                      </select-row>
-
-                      <div
-                        v-if="prop.property.inputType === 'week_schedule'"
-                        class="grid grid-cols-7 gap-2"
-                      >
-                        <div class="col-span-7">
-                          <p class="text-indigo-400 text-sm mb-2 mx-5">
-                            {{ prop.property.name }}
-                          </p>
-                        </div>
-                        <div
-                          class="col-span-1"
-                          v-for="i of [
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday',
-                            'Sunday',
-                          ]"
-                          :key="i"
-                        >
-                          <div class="text-center text-indigo-400 text-sm">
-                            <p>{{ i }}</p>
-                          </div>
-                          <div class="mt-2">
-                            <input
-                              type="text"
-                              class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
-                              v-model="
-                                form.source.data[prop.property.symbolic_name][i]
-                                  .start
-                              "
-                              placeholder="00:00"
-                            />
-                          </div>
-                          <div class="mt-2">
-                            <input
-                              type="text"
-                              class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
-                              v-model="
-                                form.source.data[prop.property.symbolic_name][i]
-                                  .end
-                              "
-                              placeholder="00:00"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <!-- Source Properties -->
+    <div class="sm:mt-0 p-10" v-if="selectedTemplate">
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <p class="mt-1 text-sm text-gray-600">Source Properties</p>
           </div>
         </div>
-      </div>
-
-      <!-- Equipment Configuration -->
-      <div
-        class="mt-10 sm:mt-0 p-10"
-        v-for="equip in form.equipments"
-        :key="equip.id"
-      >
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <div class="px-4 sm:px-0">
-              <h3 class="text-lg font-medium leading-6 text-gray-900">
-                {{ equip.template.name }}
-              </h3>
-              <p class="mt-1 text-sm text-gray-600">Equipment Properties</p>
-            </div>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="shadow overflow-hidden sm:rounded-md">
-              <div class="px-4 py-5 bg-white sm:p-6">
-                <div class="grid grid-cols-6 gap-6">
-                  <div
-                    v-for="prop in equip.template.template_properties"
-                    :key="prop.id"
-                    class="my-4 col-span-12"
-                  >
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div class="col-span-12">
+                  <div v-for="prop in properties" :key="prop.id" class="my-4">
                     <input-row
                       :desc="prop.property.description"
-                      v-model="equip.data[prop.property.symbolic_name]"
+                      v-model="form.source.data[prop.property.symbolic_name]"
                       v-if="prop.property.inputType === 'text'"
                       :required="prop.required"
                     >
@@ -236,7 +94,7 @@
                     <select-row
                       :desc="prop.property.description"
                       :options="prop.property.data.options"
-                      v-model="equip.data[prop.property.symbolic_name]"
+                      v-model="form.source.data[prop.property.symbolic_name]"
                       v-if="prop.property.inputType === 'select'"
                       :required="prop.required"
                     >
@@ -276,8 +134,10 @@
                             type="text"
                             class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
                             v-model="
-                              equip.data[prop.property.symbolic_name][i].start
+                              form.source.data[prop.property.symbolic_name][i]
+                                .start
                             "
+                            placeholder="00:00"
                           />
                         </div>
                         <div class="mt-2">
@@ -285,8 +145,10 @@
                             type="text"
                             class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
                             v-model="
-                              equip.data[prop.property.symbolic_name][i].end
+                              form.source.data[prop.property.symbolic_name][i]
+                                .end
                             "
+                            placeholder="00:00"
                           />
                         </div>
                       </div>
@@ -298,7 +160,109 @@
           </div>
         </div>
       </div>
-    </template>
+    </div>
+
+    <!-- Equipment Configuration -->
+    <div
+      class="mt-10 sm:mt-0 p-10"
+      v-for="equip in form.equipments"
+      :key="equip.id"
+    >
+      <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:col-span-1">
+          <div class="px-4 sm:px-0">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">
+              {{ equip.template.name }}
+            </h3>
+            <p class="mt-1 text-sm text-gray-600">Equipment Properties</p>
+          </div>
+        </div>
+        <div class="mt-5 md:mt-0 md:col-span-2">
+          <div class="shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 bg-white sm:p-6">
+              <div class="grid grid-cols-6 gap-6">
+                <div
+                  v-for="prop in equip.template.template_properties"
+                  :key="prop.id"
+                  class="my-4 col-span-12"
+                >
+                  <input-row
+                    :desc="prop.property.description"
+                    v-model="equip.data[prop.property.symbolic_name]"
+                    v-if="prop.property.inputType === 'text'"
+                    :required="prop.required"
+                  >
+                    {{ prop.property.name }}
+                    <span v-if="prop.unit.symbol"
+                      >({{ prop.unit.symbol }})</span
+                    >
+                  </input-row>
+
+                  <select-row
+                    :desc="prop.property.description"
+                    :options="prop.property.data.options"
+                    v-model="equip.data[prop.property.symbolic_name]"
+                    v-if="prop.property.inputType === 'select'"
+                    :required="prop.required"
+                  >
+                    {{ prop.property.name }}
+                    <span v-if="prop.unit.symbol"
+                      >({{ prop.unit.symbol }})</span
+                    >
+                  </select-row>
+
+                  <div
+                    v-if="prop.property.inputType === 'week_schedule'"
+                    class="grid grid-cols-7 gap-2"
+                  >
+                    <div class="col-span-7">
+                      <p class="text-indigo-400 text-sm mb-2 mx-5">
+                        {{ prop.property.name }}
+                      </p>
+                    </div>
+                    <div
+                      class="col-span-1"
+                      v-for="i of [
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                        'Sunday',
+                      ]"
+                      :key="i"
+                    >
+                      <div class="text-center text-indigo-400 text-sm">
+                        <p>{{ i }}</p>
+                      </div>
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                          v-model="
+                            equip.data[prop.property.symbolic_name][i].start
+                          "
+                        />
+                      </div>
+                      <div class="mt-2">
+                        <input
+                          type="text"
+                          class="border border-gray-300 outline-none focus:ring focus:ring-indigo-200 border-opacity-25 pl-3 text-sm w-full leading-6 rounded"
+                          v-model="
+                            equip.data[prop.property.symbolic_name][i].end
+                          "
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <template #actions>
       <secondary-button
@@ -336,6 +300,7 @@
 </template>
 
 <script>
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
@@ -347,7 +312,6 @@ import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
 import EquipmentAddModal from "@/Components/Modals/EquipmentAddModal.vue";
 
-import { ref, watch } from "vue";
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/SecondaryButton.vue";
 import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
@@ -367,6 +331,10 @@ export default {
     SlideOver,
   },
   props: {
+    modelValue: {
+      type: Boolean,
+      required: true,
+    },
     templates: {
       type: Array,
       required: true,
@@ -381,7 +349,15 @@ export default {
     },
     equipmentCategories: Array,
   },
+
+  emits: ["update:modelValue"],
+
   setup(props) {
+    const open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
+
     const slideOverIsOpen = ref(true);
     const templateInfo = ref();
     const selectedTemplate = ref();
@@ -475,7 +451,7 @@ export default {
     });
 
     return {
-      slideOverIsOpen,
+      open,
       form,
       mainTemplates,
       templateInfo,

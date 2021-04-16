@@ -1,5 +1,12 @@
 <template>
-  <slide-over v-model="open" title="Objects" subtitle="">
+  <slide-over
+    v-model="open"
+    title="Objects"
+    subtitle="A list of all the Objects for the currently selected Instituion"
+    headerBackground="bg-yellow-700"
+    dismissButtonTextColor="text-yellow-100"
+    subtitleTextColor="text-yellow-100"
+  >
     <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
       <div v-if="instances.length">
         <amazing-index-table v-model="sinks" :columns="tableColumns">
@@ -87,7 +94,7 @@
 </template>
 
 <script>
-import { computed, ref } from "@vue/runtime-core";
+import { computed, ref } from "vue";
 import SlideOver from "../../Components/NewLayout/SlideOver.vue";
 import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
 import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
@@ -104,14 +111,20 @@ export default {
     EditIcon,
     DetailIcon,
   },
+
   props: {
-    modelValue: Boolean,
+    modelValue: {
+      type: Boolean,
+      required: true,
+    },
     instances: {
       type: Array,
       default: [],
     },
   },
+
   emits: ["onCenter"],
+
   setup(props, { emit }) {
     const onDelete = (e) => {};
     const centerAtLocation = (loc) => emit("onCenter", loc);

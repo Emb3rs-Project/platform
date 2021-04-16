@@ -14,14 +14,14 @@
         >
           <div class="flex-1 h-0 overflow-y-auto">
             <!-- Header -->
-            <div class="py-6 px-4 sm:px-6" :class="headerClass">
+            <div class="py-6 px-4 sm:px-6" :class="headerBackground">
               <div class="flex items-center justify-between">
                 <h2 class="text-lg font-medium text-white">{{ title }}</h2>
                 <div class="ml-3 h-7 flex items-center">
                   <button
                     type="button"
-                    class="rounded-md text-green-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                    :class="headerClass"
+                    class="rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
+                    :class="dismissButtonTextColor"
                     @click="open = false"
                   >
                     <span class="sr-only">Close panel</span>
@@ -44,7 +44,7 @@
                 </div>
               </div>
               <div class="mt-1">
-                <p class="text-sm text-green-300">
+                <p class="text-sm" :class="subtitleTextColor">
                   {{ subtitle }}
                 </p>
               </div>
@@ -67,7 +67,10 @@
 import { onMounted, onUnmounted, computed } from "vue";
 export default {
   props: {
-    modelValue: Boolean,
+    modelValue: {
+      type: Boolean,
+      required: true,
+    },
     title: {
       type: String,
       default: "Not Defined",
@@ -76,9 +79,17 @@ export default {
       type: String,
       default: "",
     },
-    headerClass: {
+    headerBackground: {
       type: String,
       default: "bg-green-700",
+    },
+    dismissButtonTextColor: {
+      type: String,
+      default: "text-green-200",
+    },
+    subtitleTextColor: {
+      type: String,
+      default: "text-green-300",
     },
   },
 

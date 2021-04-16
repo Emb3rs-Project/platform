@@ -1,19 +1,19 @@
 <template>
   <slide-over
     v-model="open"
-    title="New Source"
-    subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
+    title="New Sink"
+    subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
     dismissButtonTextColor="text-green-200"
     subtitleTextColor="text-green-300"
   >
-    <!-- Source Configuration -->
+    <!-- Sink Template -->
     <div class="mt-10 sm:mt-0 p-10">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Source</h3>
-            <p class="mt-1 text-sm text-gray-600">Source Configuration</p>
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Sink</h3>
+            <p class="mt-1 text-sm text-gray-600">Sink Configuration</p>
           </div>
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
@@ -23,7 +23,7 @@
                 <div class="col-span-12">
                   <select-row
                     class="mt-5"
-                    desc="Source Templates"
+                    desc="Sink Templates"
                     :options="mainTemplates"
                     v-model="selectedTemplate"
                   >
@@ -33,9 +33,9 @@
                 <div class="col-span-12">
                   <select-row
                     class="my-5"
-                    desc="Source Templates"
+                    desc="Sink Location"
                     :options="locationSelects"
-                    v-model="form.source.location_id"
+                    v-model="form.sink.location_id"
                     v-if="selectedTemplate"
                   >
                     Location
@@ -48,12 +48,12 @@
       </div>
     </div>
 
-    <!-- Source Properties -->
+    <!-- sink Properties -->
     <div class="sm:mt-0 p-10" v-if="selectedTemplate">
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <div class="px-4 sm:px-0">
-            <p class="mt-1 text-sm text-gray-600">Source Properties</p>
+            <p class="mt-1 text-sm text-gray-600">sink Properties</p>
           </div>
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
@@ -64,7 +64,7 @@
                   <div v-for="prop in properties" :key="prop.id" class="my-4">
                     <input-row
                       :desc="prop.property.description"
-                      v-model="form.source.data[prop.property.symbolic_name]"
+                      v-model="form.sink.data[prop.property.symbolic_name]"
                       v-if="prop.property.inputType === 'text'"
                       :required="prop.required"
                     >
@@ -77,7 +77,7 @@
                     <select-row
                       :desc="prop.property.description"
                       :options="prop.property.data.options"
-                      v-model="form.source.data[prop.property.symbolic_name]"
+                      v-model="form.sink.data[prop.property.symbolic_name]"
                       v-if="prop.property.inputType === 'select'"
                       :required="prop.required"
                     >
@@ -95,64 +95,12 @@
       </div>
     </div>
 
-    <!-- Equipment Configuration -->
-    <div
-      class="mt-10 sm:mt-0 p-10"
-      v-for="equip in form.equipments"
-      :key="equip.id"
-    >
-      <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1">
-          <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">
-              {{ equip.template.name }}
-            </h3>
-            <p class="mt-1 text-sm text-gray-600">Equipment Properties</p>
-          </div>
-        </div>
-        <div class="mt-5 md:mt-0 md:col-span-2">
-          <div class="shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 bg-white sm:p-6">
-              <div class="grid grid-cols-6 gap-6">
-                <div
-                  v-for="prop in equip.template.template_properties"
-                  :key="prop.id"
-                  class="my-4 col-span-12"
-                >
-                  <input-row
-                    :desc="prop.property.description"
-                    v-model="equip.data[prop.property.symbolic_name]"
-                    v-if="prop.property.inputType === 'text'"
-                    :required="prop.required"
-                  >
-                    {{ prop.property.name }}
-                    <span v-if="prop.unit.symbol"
-                      >({{ prop.unit.symbol }})</span
-                    >
-                  </input-row>
-
-                  <select-row
-                    :desc="prop.property.description"
-                    :options="prop.property.data.options"
-                    v-model="equip.data[prop.property.symbolic_name]"
-                    v-if="prop.property.inputType === 'select'"
-                    :required="prop.required"
-                  >
-                    {{ prop.property.name }}
-                    <span v-if="prop.unit.symbol"
-                      >({{ prop.unit.symbol }})</span
-                    >
-                  </select-row>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <template #actions>
+      <jet-button :disabled="form.processing" @click="onSaveAs()" class="mx-2">
+        Save As New Sink
+      </jet-button>
       <jet-button :disabled="form.processing" @click="submit()">
-        Create Source
+        Save Sink
       </jet-button>
     </template>
   </slide-over>
@@ -169,7 +117,7 @@ import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
 
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 export default {
   components: {
@@ -203,8 +151,6 @@ export default {
       required: true,
     },
   },
-  emits: ["update:modelValue"],
-
   setup(props) {
     const open = computed({
       get: () => props.modelValue,
@@ -217,7 +163,7 @@ export default {
     const selectedLocation = ref();
     const marker = ref();
     const form = useForm({
-      source: {
+      sink: {
         data: {},
       },
       equipments: [],
@@ -237,14 +183,14 @@ export default {
       value: t.name,
     }));
 
-    //  Set Instance Values
     selectedTemplate.value = props.instance.template_id;
+    form.value.template_id = props.instance.template_id;
     templateInfo.value = props.templates.find(
       (t) => t.id === props.instance.template_id
     );
-    form.value.source.data.name = props.instance.name;
+    form.value.sink.data.name = props.instance.name;
 
-    form.value.source.location_id = props.instance.location_id;
+    form.value.sink.location_id = props.instance.location_id;
     form.value.equipments = props.instance.values.equipments.map((e) => ({
       ...e,
       template: props.equipments.find((_e) => _e.id === e.id),
@@ -276,9 +222,9 @@ export default {
 
       if (templateInfo.value?.template_properties)
         for (const prop of templateInfo.value?.template_properties) {
-          form.value.source.data[
-            prop.property.symbolic_name
-          ] = prop.default_value ? prop.default_value : "";
+          form.value.sink.data[prop.property.symbolic_name] = prop.default_value
+            ? prop.default_value
+            : "";
         }
     });
 
@@ -327,14 +273,13 @@ export default {
     },
     submit() {
       console.log("saving ", this.form);
-      this.form.patch(route("objects.sources.update", this.instance.id));
+      this.form.patch(route("objects.sinks.update", this.instance.id));
+    },
+    onSaveAs() {
+      this.form.post(route("objects.sinks.store"));
     },
     onLocationSelect(locId) {},
   },
 };
 </script>
-
-<style>
-</style>
-
 
