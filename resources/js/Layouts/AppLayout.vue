@@ -822,7 +822,7 @@
         class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-gray-50"
         tabindex="0"
       >
-        <slot name="content"></slot>
+        <slot></slot>
       </main>
     </div>
   </div>

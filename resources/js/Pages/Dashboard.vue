@@ -1,24 +1,22 @@
 <template>
   <app-layout>
-    <template #content>
-      <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
-      <div class="h-full fixed right-0 top-0 bot-0 z-10 shadow-md bg-gray-100">
-        <div class="flex flex-1 flex-col pt-10 items-center w-16">
-          <div class="my-4 text-center">
-            <sink-icon class="text-green-700 mb-2"></sink-icon>
-            <span class="text-xs">Sinks</span>
-          </div>
-          <div class="my-4 text-center">
-            <source-icon class="text-red-700 mb-2"></source-icon>
-            <span class="text-xs">Sources</span>
-          </div>
-          <div class="my-4 text-center">
-            <link-icon class="text-blue-700 mb-2"></link-icon>
-            <span class="text-xs">Links</span>
-          </div>
+    <amazing-map :centerValue="[38.7181959, -9.1975417]"></amazing-map>
+    <div class="h-full fixed right-0 top-0 bot-0 z-10 shadow-md bg-gray-100">
+      <div class="flex flex-1 flex-col pt-10 items-center w-16">
+        <div class="my-4 text-center">
+          <sink-icon class="text-green-700 mb-2"></sink-icon>
+          <span class="text-xs">Sinks</span>
+        </div>
+        <div class="my-4 text-center">
+          <source-icon class="text-red-700 mb-2"></source-icon>
+          <span class="text-xs">Sources</span>
+        </div>
+        <div class="my-4 text-center">
+          <link-icon class="text-blue-700 mb-2"></link-icon>
+          <span class="text-xs">Links</span>
         </div>
       </div>
-    </template>
+    </div>
   </app-layout>
 </template>
 
