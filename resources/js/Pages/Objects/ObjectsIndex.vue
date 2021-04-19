@@ -15,7 +15,7 @@
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
-      <div v-if="objects.length">
+      <div v-if="objects?.length">
         <amazing-index-table v-model="objects" :columns="tableColumns">
           <!-- ID -->
           <template #header-id> ID </template>
@@ -63,12 +63,12 @@
             <td
               class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
             >
-              <inertia-link :href="route('objects.sinks.show', item.id)">
+              <inertia-link :href="route(`${selected.path}.show`, item.id)">
                 <detail-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></detail-icon>
               </inertia-link>
-              <inertia-link :href="route('objects.sinks.edit', item.id)">
+              <inertia-link :href="route(`${selected.path}.edit`, item.id)">
                 <edit-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></edit-icon>
@@ -93,8 +93,8 @@
     </div>
 
     <template #actions>
-      <primary-link-button :path="'objects.sinks.create'" parameter="">
-        Create New Sink
+      <primary-link-button :path="`${selected.path}.create`" parameter="">
+        Create New {{ getSingular(selected.title) }}
       </primary-link-button>
     </template>
   </slide-over>
@@ -102,9 +102,11 @@
 
 <script>
 import { computed, ref, watch } from "vue";
+import pluralize from "pluralize";
 
 import SlideOver from "../../Components/NewLayout/SlideOver.vue";
 import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
+import SecondaryLinkButton from "../../Components/SecondaryLinkButton.vue";
 import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
@@ -115,11 +117,11 @@ export default {
   components: {
     SlideOver,
     PrimaryLinkButton,
+    SecondaryLinkButton,
     AmazingIndexTable,
     TrashIcon,
     EditIcon,
     DetailIcon,
-
     BrandedDropdown,
   },
 
@@ -141,18 +143,21 @@ export default {
     const options = [
       {
         title: "Sources",
+        path: "objects.sources",
         description:
           "Display all the Sources for the currently selected Institution",
         current: true,
       },
       {
         title: "Sinks",
+        path: "objects.sinks",
         description:
           "Display all the Sinks for the currently selected Institution",
         current: false,
       },
       {
         title: "Links",
+        path: "objects.links",
         description:
           "Display all the Links for the currently selected Institution",
         current: false,
@@ -193,6 +198,7 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
+    const getSingular = (val) => pluralize.singular(val);
     const onDelete = (e) => {};
     const centerAtLocation = (loc) => emit("onCenter", loc);
 
@@ -203,6 +209,7 @@ export default {
       tableColumns,
       dropdown,
       open,
+      getSingular,
       onDelete,
       centerAtLocation,
     };

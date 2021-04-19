@@ -2,19 +2,19 @@
   <Listbox as="div" v-model="selected">
     <ListboxLabel class="sr-only"> Change published status </ListboxLabel>
     <div class="relative">
-      <div class="inline-flex shadow-sm rounded-md divide-x divide-indigo-600">
+      <div class="inline-flex shadow-sm rounded-md divide-x divide-blue-600">
         <div
-          class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-indigo-600"
+          class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-blue-600"
         >
           <div
-            class="relative inline-flex items-center bg-indigo-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white"
+            class="relative inline-flex items-center bg-blue-500 py-2 pl-3 pr-4 border border-transparent rounded-l-md shadow-sm text-white"
           >
             <p class="ml-2.5 text-sm font-medium">
               {{ selected.title }}
             </p>
           </div>
           <ListboxButton
-            class="relative inline-flex items-center bg-indigo-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-indigo-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+            class="relative inline-flex items-center bg-blue-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-blue-500"
           >
             <span class="sr-only">Change published status</span>
             <FilterIcon class="h-5 w-5" aria-hidden="true" />
@@ -40,7 +40,7 @@
           >
             <li
               :class="[
-                active ? 'text-white bg-indigo-500' : 'text-gray-900',
+                active ? 'text-white bg-blue-500' : 'text-gray-900',
                 'cursor-default select-none relative p-4 text-sm',
               ]"
             >
@@ -51,16 +51,13 @@
                   </p>
                   <span
                     v-if="selected"
-                    :class="active ? 'text-white' : 'text-indigo-500'"
+                    :class="active ? 'text-white' : 'text-blue-500'"
                   >
                     <CheckIcon class="h-5 w-5" aria-hidden="true" />
                   </span>
                 </div>
                 <p
-                  :class="[
-                    active ? 'text-indigo-200' : 'text-gray-500',
-                    'mt-2',
-                  ]"
+                  :class="[active ? 'text-blue-200' : 'text-gray-500', 'mt-2']"
                 >
                   {{ option.description }}
                 </p>
