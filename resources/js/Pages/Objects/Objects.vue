@@ -70,9 +70,8 @@ export default {
   },
 
   setup(props) {
-    console.log(props);
     const slideOver = ref(true);
-    const modalComponent = ref();
+    const modalComponent = ref(null);
 
     const indexSlide = ref(false);
 

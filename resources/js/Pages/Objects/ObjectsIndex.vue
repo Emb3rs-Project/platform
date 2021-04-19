@@ -3,11 +3,11 @@
     v-model="open"
     title="Objects"
     subtitle="A list of all the Objects for the currently selected Instituion"
-    headerBackground="bg-yellow-700"
-    dismissButtonTextColor="text-yellow-100"
-    subtitleTextColor="text-yellow-100"
+    headerBackground="bg-yellow-600"
+    dismissButtonTextColor="text-gray-100"
+    subtitleTextColor="text-gray-100"
   >
-    <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
+    <div class="overflow-y-auto overflow-x-auto">
       <div v-if="instances.length">
         <amazing-index-table v-model="sinks" :columns="tableColumns">
           <!-- ID -->
@@ -123,13 +123,9 @@ export default {
     },
   },
 
-  emits: ["onCenter"],
+  emits: ["update:modelValue", "onCenter"],
 
   setup(props, { emit }) {
-    const onDelete = (e) => {};
-    const centerAtLocation = (loc) => emit("onCenter", loc);
-    const tableColumns = ["name", "location", "actions"];
-
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
@@ -139,6 +135,10 @@ export default {
       get: () =>
         props.instances.filter((i) => i.template.category.type === "sink"),
     });
+
+    const onDelete = (e) => {};
+    const centerAtLocation = (loc) => emit("onCenter", loc);
+    const tableColumns = ["name", "location", "actions"];
 
     return {
       onDelete,

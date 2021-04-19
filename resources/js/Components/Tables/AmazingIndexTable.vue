@@ -1,5 +1,5 @@
 <template>
-  <table class="min-w-full divide-y divide-gray-200">
+  <table class="table-auto min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
       <tr>
         <!-- Checkbox -->
@@ -78,7 +78,7 @@ export default {
     /**
      * Properties
      */
-    const mainCheckbox = ref();
+    const mainCheckbox = ref(null);
     const model = computed({
       get() {
         return props.modelValue;
