@@ -341,7 +341,7 @@
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                 :class="
                   route().current('dashboard.index')
-                    ? 'bg-gray-200 text-gray-900'
+                    ? 'bg-gray-200 text-yellow-600'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                 "
                 aria-current="page"
@@ -351,7 +351,7 @@
                   class="mr-3 h-6 w-6"
                   :class="
                     route().current('dashboard.index')
-                      ? 'text-gray-500'
+                      ? 'text-yellow-500'
                       : 'text-gray-400 group-hover:text-gray-500'
                   "
                   xmlns="http://www.w3.org/2000/svg"
@@ -375,7 +375,7 @@
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                 :class="
                   route().current('objects.index')
-                    ? 'bg-gray-200 text-gray-900'
+                    ? 'bg-gray-200 text-yellow-600'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                 "
               >
@@ -384,7 +384,7 @@
                   class="mr-3 h-6 w-6"
                   :class="
                     route().current('objects.index')
-                      ? 'text-gray-500'
+                      ? 'text-yellow-500'
                       : 'text-gray-400 group-hover:text-gray-500'
                   "
                   xmlns="http://www.w3.org/2000/svg"
@@ -407,7 +407,7 @@
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                 :class="
                   route().current('projects.index')
-                    ? 'bg-gray-200 text-gray-900'
+                    ? 'bg-gray-200 text-yellow-600'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                 "
               >
@@ -416,7 +416,7 @@
                   class="mr-3 h-6 w-6"
                   :class="
                     route().current('projects.index')
-                      ? 'text-gray-500'
+                      ? 'text-yellow-500'
                       : 'text-gray-400 group-hover:text-gray-500'
                   "
                   xmlns="http://www.w3.org/2000/svg"
@@ -440,7 +440,7 @@
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                 :class="
                   route().current('challenge.index')
-                    ? 'bg-gray-200 text-gray-900'
+                    ? 'bg-gray-200 text-yellow-600'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                 "
               >
@@ -449,7 +449,7 @@
                   class="mr-3 h-6 w-6"
                   :class="
                     route().current('challenge.index')
-                      ? 'text-gray-500'
+                      ? 'text-yellow-500'
                       : 'text-gray-400 group-hover:text-gray-500'
                   "
                   xmlns="http://www.w3.org/2000/svg"
@@ -472,7 +472,7 @@
                 class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
                 :class="
                   route().current('help.index')
-                    ? 'bg-gray-200 text-gray-900'
+                    ? 'bg-gray-200 text-yellow-600'
                     : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                 "
               >
@@ -480,7 +480,7 @@
                   class="mr-3 h-6 w-6"
                   :class="
                     route().current('help.index')
-                      ? 'text-gray-500'
+                      ? 'text-yellow-500'
                       : 'text-gray-400 group-hover:text-gray-500'
                   "
                   xmlns="http://www.w3.org/2000/svg"
@@ -568,7 +568,7 @@
                       class="group flex justify-between items-center w-full rounded-md"
                       :class="
                         institution.id === user.current_team_id
-                          ? 'text-gray-900 bg-gray-200'
+                          ? 'text-yellow-600 bg-gray-200'
                           : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
                     >
