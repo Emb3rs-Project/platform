@@ -37,6 +37,7 @@
         "@heroicons/vue": "^1.0.1",
         "beautifymarker": "^1.0.9",
         "font-awesome": "^4.7.0",
-        "leaflet-contextmenu": "^1.4.0"
+        "leaflet-contextmenu": "^1.4.0",
+        "pluralize": "^8.0.0"
     }
 }
