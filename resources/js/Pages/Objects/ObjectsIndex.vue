@@ -7,9 +7,16 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-100"
   >
+    <div class="flex justify-end m-3">
+      <branded-dropdown
+        v-model="selected"
+        :options="options"
+      ></branded-dropdown>
+    </div>
+
     <div class="overflow-y-auto overflow-x-auto">
-      <div v-if="instances.length">
-        <amazing-index-table v-model="sinks" :columns="tableColumns">
+      <div v-if="objects.length">
+        <amazing-index-table v-model="objects" :columns="tableColumns">
           <!-- ID -->
           <template #header-id> ID </template>
           <template #body-id="{ item }">
@@ -94,13 +101,15 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+
 import SlideOver from "../../Components/NewLayout/SlideOver.vue";
 import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
 import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import BrandedDropdown from "../../Components/NewLayout/BrandedDropdown.vue";
 
 export default {
   components: {
@@ -110,6 +119,8 @@ export default {
     TrashIcon,
     EditIcon,
     DetailIcon,
+
+    BrandedDropdown,
   },
 
   props: {
@@ -126,26 +137,74 @@ export default {
   emits: ["update:modelValue", "onCenter"],
 
   setup(props, { emit }) {
+    const tableColumns = ["name", "location", "actions"];
+    const options = [
+      {
+        title: "Sources",
+        description:
+          "Display all the Sources for the currently selected Institution",
+        current: true,
+      },
+      {
+        title: "Sinks",
+        description:
+          "Display all the Sinks for the currently selected Institution",
+        current: false,
+      },
+      {
+        title: "Links",
+        description:
+          "Display all the Links for the currently selected Institution",
+        current: false,
+      },
+    ];
+
+    const selected = ref(options[0]);
+    const objects = ref(null);
+    const dropdown = ref(false);
+
+    watch(
+      selected,
+      (current, previous) => {
+        if (current.title === "Sinks") {
+          objects.value = props.instances.filter(
+            (i) => i.template.category.type === "sink"
+          );
+          return;
+        }
+        if (current.title === "Sources") {
+          objects.value = props.instances.filter(
+            (i) => i.template.category.type === "source"
+          );
+          return;
+        }
+        if (current.title === "Links") {
+          objects.value = props.instances.filter(
+            (i) => i.template.category.type === "link"
+          );
+          return;
+        }
+      },
+      { immediate: true }
+    );
+
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
 
-    const sinks = computed({
-      get: () =>
-        props.instances.filter((i) => i.template.category.type === "sink"),
-    });
-
     const onDelete = (e) => {};
     const centerAtLocation = (loc) => emit("onCenter", loc);
-    const tableColumns = ["name", "location", "actions"];
 
     return {
+      objects,
+      options,
+      selected,
+      tableColumns,
+      dropdown,
+      open,
       onDelete,
       centerAtLocation,
-      sinks,
-      tableColumns,
-      open,
     };
   },
 };
