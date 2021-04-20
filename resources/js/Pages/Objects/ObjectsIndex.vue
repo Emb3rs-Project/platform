@@ -8,10 +8,10 @@
     subtitleTextColor="text-gray-100"
   >
     <div class="flex justify-end m-3">
-      <branded-dropdown
-        v-model="selected"
-        :options="options"
-      ></branded-dropdown>
+      <filter-dropdown
+        v-model="selectedObject"
+        :options="filterOptions"
+      ></filter-dropdown>
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
@@ -63,19 +63,24 @@
             <td
               class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
             >
-              <inertia-link :href="route(`${selected.path}.show`, item.id)">
+              <inertia-link
+                :href="route(`${selectedObject.path}.show`, item.id)"
+              >
                 <detail-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></detail-icon>
               </inertia-link>
-              <inertia-link :href="route(`${selected.path}.edit`, item.id)">
+              <inertia-link
+                :href="route(`${selectedObject.path}.edit`, item.id)"
+              >
                 <edit-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></edit-icon>
               </inertia-link>
-              <button class="focus:outline-none" @click="onDelete(item)">
+              <button class="focus:outline-none">
                 <trash-icon
                   class="text-red-500 font-medium text-sm w-5"
+                  @click="showModal(item, modalTypes.delete)"
                 ></trash-icon>
               </button>
             </td>
@@ -93,25 +98,35 @@
     </div>
 
     <template #actions>
-      <primary-link-button :path="`${selected.path}.create`" parameter="">
-        Create New {{ getSingular(selected.title) }}
+      <primary-link-button :path="`${selectedObject.path}.create`">
+        Create New {{ getSingular(selectedObject.title) }}
       </primary-link-button>
     </template>
   </slide-over>
+
+  <component
+    class="z-50"
+    :is="modalComponent"
+    v-if="modalComponent"
+    v-model="modalIsOpen"
+    @confirmation="onConfirmation"
+  >
+  </component>
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, defineAsyncComponent } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 import pluralize from "pluralize";
 
 import SlideOver from "../../Components/NewLayout/SlideOver.vue";
-import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
-import SecondaryLinkButton from "../../Components/SecondaryLinkButton.vue";
+import FilterDropdown from "../../Components/NewLayout/BrandedDropdown.vue";
 import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
-import BrandedDropdown from "../../Components/NewLayout/BrandedDropdown.vue";
+import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
+import SecondaryLinkButton from "../../Components/SecondaryLinkButton.vue";
 
 export default {
   components: {
@@ -122,7 +137,7 @@ export default {
     TrashIcon,
     EditIcon,
     DetailIcon,
-    BrandedDropdown,
+    FilterDropdown,
   },
 
   props: {
@@ -140,7 +155,7 @@ export default {
 
   setup(props, { emit }) {
     const tableColumns = ["name", "location", "actions"];
-    const options = [
+    const filterOptions = [
       {
         title: "Sources",
         path: "objects.sources",
@@ -163,13 +178,33 @@ export default {
         current: false,
       },
     ];
+    const modalTypes = {
+      delete: {
+        type: "delete",
+        path: "@/Components/NewLayout/Modals/DeleteModal.vue",
+      },
+    };
 
-    const selected = ref(options[0]);
     const objects = ref(null);
-    const dropdown = ref(false);
+    const selectedObject = ref(filterOptions[0]);
+    const filterDropdown = ref(false);
+    const modalIsOpen = ref(false);
+    const currentModal = ref(null);
+    const itemToDelete = ref(null);
+
+    const open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
+
+    const modalComponent = computed(() =>
+      currentModal.value
+        ? defineAsyncComponent(() => import(`${currentModal.value.path}`))
+        : false
+    );
 
     watch(
-      selected,
+      selectedObject,
       (current, previous) => {
         if (current.title === "Sinks") {
           objects.value = props.instances.filter(
@@ -193,25 +228,51 @@ export default {
       { immediate: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const getSingular = (val) => pluralize.singular(val);
-    const onDelete = (e) => {};
+
+    const showModal = (item, type) => {
+      switch (type) {
+        case modalTypes.delete:
+          currentModal.value = modalTypes.delete;
+          itemToDelete.value = item;
+          break;
+
+        default:
+          break;
+      }
+
+      modalIsOpen.value = true;
+    };
+
     const centerAtLocation = (loc) => emit("onCenter", loc);
 
+    const onConfirmation = () => {
+      switch (currentModal.value) {
+        case modalTypes.delete:
+          Inertia.delete(
+            route(`${selectedObject.value.path}.destroy`, itemToDelete.value.id)
+          );
+          break;
+
+        default:
+          break;
+      }
+    };
+
     return {
-      objects,
-      options,
-      selected,
       tableColumns,
-      dropdown,
+      filterOptions,
+      modalTypes,
+      objects,
+      selectedObject,
+      filterDropdown,
+      modalIsOpen,
       open,
+      modalComponent,
       getSingular,
-      onDelete,
+      showModal,
       centerAtLocation,
+      onConfirmation,
     };
   },
 };

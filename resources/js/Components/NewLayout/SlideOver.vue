@@ -10,7 +10,7 @@
     >
       <div
         v-if="open"
-        class="flex flex-col justify-between w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200"
+        class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200"
       >
         <!-- Header -->
         <div class="py-6 px-4 sm:px-6" :class="headerBackground">

@@ -15,7 +15,7 @@ export default {
       type: String,
     },
     parameter: {
-      type: String,
+      type: Object,
       default: {},
     },
   },

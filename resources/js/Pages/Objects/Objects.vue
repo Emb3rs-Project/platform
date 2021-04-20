@@ -28,19 +28,17 @@
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
-    <component
-      class="z-20"
-      v-bind="slideOverProps"
-      :is="slideOverComponent"
-      v-if="slideOverComponent"
-      v-model="slideOver"
-    ></component>
+    <keep-alive>
+      <component
+        class="z-30"
+        v-bind="slideOverProps"
+        :is="slideOverComponent"
+        v-if="slideOverComponent"
+        v-model="slideOver"
+      ></component>
+    </keep-alive>
 
-    <objects-index
-      :instances="instances"
-      class="z-30"
-      v-model="indexSlide"
-    ></objects-index>
+    <objects-index :instances="instances" v-model="indexSlide"></objects-index>
   </app-layout>
 </template>
 
@@ -52,8 +50,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
 import ObjectsIndex from "./ObjectsIndex.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {
@@ -70,11 +66,11 @@ export default {
   },
 
   setup(props) {
+    const slideOverProps = ref(null);
     const slideOver = ref(true);
     const modalComponent = ref(null);
     const indexSlide = ref(false);
     const currentSlideOver = ref(null);
-    const slideOverProps = ref(null);
 
     const slideOverComponent = computed(() =>
       currentSlideOver.value
@@ -85,7 +81,8 @@ export default {
     );
 
     const onCreateRequest = async (req) => {
-      if (modalComponent.value) slideOver.value = false; // reset the current slide over
+      if (slideOver.value) slideOver.value = false; // reset the current slideover
+      if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
 
       const res = await fetch(
         route(`objects.${pluralize.plural(req.type)}.create`)
@@ -106,7 +103,6 @@ export default {
     };
 
     return {
-      //   openMenu,
       slideOver,
       modalComponent,
       onCreateRequest,

@@ -30,6 +30,7 @@ class SinkController extends Controller
             ->pluck('id');
 
         $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+
         $instances = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['template', 'template.category', 'location.geoObject'])
@@ -128,8 +129,6 @@ class SinkController extends Controller
         if (isset($sink['location_id'])) {
             $newInstance['location_id'] = $sink['location_id'];
         }
-
-
 
         $instace = Instance::create($newInstance);
         $instace->teams()->attach(Auth::user()->currentTeam);

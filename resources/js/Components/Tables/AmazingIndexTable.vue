@@ -1,6 +1,6 @@
 <template>
   <table class="table-auto min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
+    <thead class="bg-gray-200">
       <tr>
         <!-- Checkbox -->
         <th scope="col" class="relative px-6 py-3" v-if="hasCheckbox">

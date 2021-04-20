@@ -65,7 +65,8 @@ class SourceController extends Controller
             ->pluck('id');
 
         $equipmentCategories = Category::whereType('equipment')
-            ->get();
+            ->get()
+            ->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([
@@ -75,7 +76,7 @@ class SourceController extends Controller
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories->map(fn ($e) => $e->id))
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -85,17 +86,24 @@ class SourceController extends Controller
 
         $locations = Location::with(['geoObject'])->get();
 
-
-
-        return Inertia::render(
-            'Objects/Sources/SourceCreate',
-            [
-            "templates" => $sourceTemplates,
-            "equipments" => $equipmentTemplates,
-            "equipmentCategories" => $equipmentCategories,
-            "locations" => $locations
+        // return Inertia::render(
+        //     'Objects/Sources/SourceCreate',
+        //     [
+        //     "templates" => $sourceTemplates,
+        //     "equipments" => $equipmentTemplates,
+        //     "equipmentCategories" => $equipmentCategories,
+        //     "locations" => $locations
+        //     ]
+        // );
+        return [
+            "slideOver" => "Objects/Sources/SourceCreate",
+            "props" => [
+                "templates" => $sourceTemplates,
+                "equipments" => $equipmentTemplates,
+                "equipmentsCategories" => $equipmentCategories,
+                "locations" => $locations,
             ]
-        );
+        ];
     }
 
     /**
@@ -154,33 +162,40 @@ class SourceController extends Controller
     public function show($id)
     {
         $sourceCategories = Category::whereType('source')
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $equipmentCategories = Category::whereType('equipment')
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-        ->with([
-            'templateProperties',
-            'templateProperties.unit',
-            'templateProperties.property'
-        ])
-        ->get();
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
 
         $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-        ->with([
-            'templateProperties',
-            'templateProperties.unit',
-            'templateProperties.property'
-        ])
-        ->get();
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
 
 
         $locations = Location::with(['geoObject'])->get();
 
-        $instance = Instance::whereId($id)->with(['location','template','template.category', 'location.geoObject'])->first();
+        $instance = Instance::whereId($id)
+            ->with([
+                'location',
+                'template',
+                'template.category',
+                'location.geoObject'
+            ])
+            ->first();
 
         return Inertia::render(
             'Objects/Sources/SourceDetails',
