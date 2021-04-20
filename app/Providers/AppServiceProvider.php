@@ -24,8 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        ResponseFactory::macro('slideOver', function ($slideOver) {
-            inertia()->share(['slideOver' => $slideOver]);
+        ResponseFactory::macro('slideOver', function ($slideOver, $props) {
+            inertia()->share(['slideOver' => $slideOver, 'slideOverProps' => $props]);
         });
     }
 }

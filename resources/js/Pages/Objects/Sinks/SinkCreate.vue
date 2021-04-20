@@ -9,39 +9,29 @@
   >
     <!-- Sink Template -->
     <div class="mt-10 sm:mt-0 p-10">
-      <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1">
-          <div class="px-4 sm:px-0">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Sink</h3>
-            <p class="mt-1 text-sm text-gray-600">Sink Configuration</p>
-          </div>
-        </div>
-        <div class="mt-5 md:mt-0 md:col-span-2">
-          <div class="shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 bg-white sm:p-6">
-              <div class="grid grid-cols-6 gap-6">
-                <div class="col-span-12">
-                  <select-row
-                    class="mt-5"
-                    desc="Sink Templates"
-                    :options="mainTemplates"
-                    v-model="selectedTemplate"
-                  >
-                    Template
-                  </select-row>
-                </div>
-                <div class="col-span-12">
-                  <select-row
-                    class="my-5"
-                    desc="sink Templates"
-                    :options="locationSelects"
-                    v-model="form.sink.location_id"
-                    v-if="selectedTemplate"
-                  >
-                    Location
-                  </select-row>
-                </div>
-              </div>
+      <div class="shadow overflow-hidden sm:rounded-md">
+        <div class="px-4 py-5 bg-white sm:p-6">
+          <div class="grid grid-cols-6 gap-6">
+            <div class="col-span-12">
+              <select-row
+                class="mt-5"
+                desc="Sink Templates"
+                :options="mainTemplates"
+                v-model="selectedTemplate"
+              >
+                Template
+              </select-row>
+            </div>
+            <div class="col-span-12">
+              <select-row
+                class="my-5"
+                desc="sink Templates"
+                :options="locationSelects"
+                v-model="form.sink.location_id"
+                v-if="selectedTemplate"
+              >
+                Location
+              </select-row>
             </div>
           </div>
         </div>
@@ -120,7 +110,6 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
-import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
 import RadioRow from "@/Components/RadioRow";
 import SelectRow from "@/Components/SelectRow";
@@ -132,7 +121,6 @@ import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
 export default {
   components: {
     AppLayout,
-    LeafletMap,
     InputRow,
     RadioRow,
     SelectRow,
@@ -160,7 +148,7 @@ export default {
     },
   },
 
-  setup(props) {
+  setup(props, { emit }) {
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
@@ -194,8 +182,10 @@ export default {
 
     watch(selectedTemplate, (template) => {
       templateInfo.value = props.templates.find((t) => t.id === template);
-      form.value.equipments = [];
-      form.value.template_id = template;
+      console.log(templateInfo);
+      console.log(templateInfo.value);
+      form.equipments = [];
+      form.template_id = template;
 
       // Check if there are Children
       if (templateInfo.value.values.children)
@@ -213,12 +203,12 @@ export default {
               : "";
           }
 
-          form.value.equipments.push(equip);
+          form.equipments.push(equip);
         }
 
       if (templateInfo.value?.template_properties)
         for (const prop of templateInfo.value?.template_properties) {
-          form.value.sink.data[prop.property.symbolic_name] = prop.default_value
+          form.sink.data[prop.property.symbolic_name] = prop.default_value
             ? prop.default_value
             : "";
         }

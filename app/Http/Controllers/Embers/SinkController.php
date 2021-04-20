@@ -22,18 +22,18 @@ class SinkController extends Controller
     public function index()
     {
         $sinkCategories = Category::whereType('sink')
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $templates = Template::whereIn('category_id', $sinkCategories)
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
         $instances = Instance::whereIn('template_id', $templates)
-        ->whereIn('id', $teamInstances)
-        ->with(['template', 'template.category', 'location.geoObject'])
-        ->get();
+            ->whereIn('id', $teamInstances)
+            ->with(['template', 'template.category', 'location.geoObject'])
+            ->get();
 
         $output = $instances->map(function ($item) {
             if (isset($item->location)) {
@@ -86,14 +86,14 @@ class SinkController extends Controller
 
         $locations = Location::with(['geoObject'])->get();
 
-        return Inertia::render(
-            'Objects/Objects',
-            [
-            "templates" => $sourceTemplates,
-            "equipments" => $equipmentTemplates,
-            "locations" => $locations
+        return [
+            "slideOver" => 'Objects/Sinks/SinkCreate',
+            "props" => [
+                "templates" => $sourceTemplates,
+                "equipments" => $equipmentTemplates,
+                "locations" => $locations
             ]
-        );
+        ];
     }
 
     /**
@@ -134,7 +134,7 @@ class SinkController extends Controller
         $instace = Instance::create($newInstance);
         $instace->teams()->attach(Auth::user()->currentTeam);
 
-        return Redirect::route('objects.sinks.index');
+        return Redirect::route('objects.index');
     }
 
     /**

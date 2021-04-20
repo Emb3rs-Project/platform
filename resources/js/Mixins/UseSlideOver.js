@@ -4,6 +4,9 @@ const useSlideOver = {
             return this.$page.props.slideOver ?
                 () => import(`@/Pages/${this.$page.props.slideOver}`)
                 : false
+        },
+        slideOverProps() {
+            return this.$page.props.slideOverProps
         }
     }
 }

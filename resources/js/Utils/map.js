@@ -105,7 +105,7 @@ export default {
             textColor: null,
             borderColor: null,
             iconShape: "marker",
-            customClasses: [textClass, borderClass].join(" ")
+            customClasses: [textClass, borderClass].join(" ") + ""
         };
 
 

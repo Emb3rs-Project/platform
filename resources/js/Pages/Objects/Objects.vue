@@ -28,13 +28,13 @@
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
-    <Component
+    <component
       class="z-20"
-      v-bind="$props"
-      :is="modalComponent"
-      v-if="modalComponent"
+      v-bind="slideOverProps"
+      :is="slideOverComponent"
+      v-if="slideOverComponent"
       v-model="slideOver"
-    />
+    ></component>
 
     <objects-index
       :instances="instances"
@@ -45,14 +45,15 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, defineAsyncComponent, ref } from "vue";
+import pluralize from "pluralize";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
-import SinkCreate from "../../Pages/Objects/Sinks/SinkCreate";
-import SourceCreate from "../../Pages/Objects/Sources/SourceCreate";
 import ObjectsIndex from "./ObjectsIndex.vue";
+import { usePage } from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {
@@ -61,7 +62,6 @@ export default {
     SlideOver,
     ObjectsIndex,
   },
-
   props: {
     instances: {
       type: Array,
@@ -72,24 +72,47 @@ export default {
   setup(props) {
     const slideOver = ref(true);
     const modalComponent = ref(null);
-
     const indexSlide = ref(false);
+    const currentSlideOver = ref(null);
+    const slideOverProps = ref(null);
 
-    // const onLoadComponent = () => (modalComponent.value = SinkCreate);
+    const slideOverComponent = computed(() =>
+      currentSlideOver.value
+        ? defineAsyncComponent(() =>
+            import(`@/Pages/${currentSlideOver.value}`)
+          )
+        : false
+    );
 
-    const onCreateRequest = (req) => {
+    const onCreateRequest = async (req) => {
       if (modalComponent.value) slideOver.value = false; // reset the current slide over
-      if (req.type === "sink") modalComponent.value = SinkCreate;
-      if (req.type === "source") modalComponent.value = SourceCreate;
+
+      const res = await fetch(
+        route(`objects.${pluralize.plural(req.type)}.create`)
+      ).then((res) => {
+        if (!res.ok) {
+          const error = new Error(res.statusText);
+          error.json = res.json();
+          throw error;
+        }
+
+        return res.json();
+      });
+
+      slideOverProps.value = res.props;
+      currentSlideOver.value = res.slideOver;
+
+      slideOver.value = true;
     };
 
     return {
       //   openMenu,
       slideOver,
-      //   onLoadComponent,
       modalComponent,
       onCreateRequest,
       indexSlide,
+      slideOverComponent,
+      slideOverProps,
     };
   },
 };
