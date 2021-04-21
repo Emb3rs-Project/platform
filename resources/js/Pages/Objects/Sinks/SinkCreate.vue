@@ -4,103 +4,95 @@
     title="New Sink"
     subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
-    dismissButtonTextColor="text-green-200"
-    subtitleTextColor="text-green-300"
+    dismissButtonTextColor="text-gray-200"
+    subtitleTextColor="text-gray-200"
   >
     <!-- Sink Template -->
-    <div class="mt-10 sm:mt-0 p-10">
-      <div class="shadow overflow-hidden sm:rounded-md">
-        <div class="px-4 py-5 bg-white sm:p-6">
-          <div class="grid grid-cols-6 gap-6">
-            <div class="col-span-12">
-              <select-row
-                class="mt-5"
-                desc="Templates"
-                :options="mainTemplates"
-                v-model="selectedTemplate"
-              >
-                Template
-              </select-row>
-            </div>
-            <div class="col-span-12">
-              <select-row
-                class="my-5"
-                desc="Locations"
-                :options="locationSelects"
-                v-model="form.sink.location_id"
-                v-if="selectedTemplate"
-              >
-                Location
-              </select-row>
-            </div>
-          </div>
-        </div>
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
+          Templates
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <select-menu
+          v-model="selectedTemplate"
+          :options="templates"
+        ></select-menu>
       </div>
     </div>
 
-    <!-- sink Properties -->
-    <div class="sm:mt-0 p-10" v-if="selectedTemplate">
-      <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1">
-          <div class="px-4 sm:px-0">
-            <p class="mt-1 text-sm text-gray-600">sink Properties</p>
-          </div>
-        </div>
-        <div class="mt-5 md:mt-0 md:col-span-2">
-          <div class="shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 bg-white sm:p-6">
-              <div class="grid grid-cols-6 gap-6">
-                <div class="col-span-12">
-                  <div v-for="prop in properties" :key="prop.id" class="my-4">
-                    <input-row
-                      :desc="prop.property.description"
-                      v-model="form.sink.data[prop.property.symbolic_name]"
-                      v-if="prop.property.inputType === 'text'"
-                      :required="prop.required"
-                    >
-                      {{ prop.property.name }}
-                      <span v-if="prop.unit.symbol"
-                        >({{ prop.unit.symbol }})</span
-                      >
-                    </input-row>
+    <!-- Sink Location -->
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <div>
+        <label
+          for="project_name"
+          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+        >
+          Locations
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <select-menu
+          v-model="selectedLocation"
+          :options="locations"
+          :disabled="selectedTemplate ? false : true"
+        ></select-menu>
+      </div>
+    </div>
 
-                    <select-row
-                      :desc="prop.property.description"
-                      :options="prop.property.data.options"
-                      v-model="form.sink.data[prop.property.symbolic_name]"
-                      v-if="prop.property.inputType === 'select'"
-                      :required="prop.required"
-                    >
-                      {{ prop.property.name }}
-                      <span v-if="prop.unit.symbol"
-                        >({{ prop.unit.symbol }})</span
-                      >
-                    </select-row>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    <!-- Sink Properties -->
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-for="prop in properties"
+      :key="prop.id"
+    >
+      <div>
+        <label
+          for="project_name"
+          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+        >
+          {{ prop.property.description }}
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <div v-if="prop.property.inputType === 'text'">
+          <text-input
+            v-model="form.sink.data[prop.property.symbolic_name]"
+            :label="prop.property.name"
+            placeholder="Sink Name 1"
+            :required="prop.required"
+          >
+          </text-input>
+        </div>
+        <div v-else-if="prop.property.inputType === 'select'">
+          <select-menu
+            v-model="form.sink.data[prop.property.symbolic_name]"
+            :options="prop.property.data.options"
+            :disabled="selectedTemplate ? false : true"
+            :required="prop.required"
+            :label="prop.property.name"
+          >
+          </select-menu>
         </div>
       </div>
     </div>
 
     <template #actions>
-      <button
+      <secondary-outlined-button
         type="button"
-        class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        :disabled="form.processing"
         @click="open = false"
       >
         Cancel
-      </button>
-      <button
-        type="submit"
-        class="ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="submit"
-        :disabled="form.processing"
-      >
+      </secondary-outlined-button>
+      <primary-button @click="submit" :disabled="form.processing">
         Save
-      </button>
+      </primary-button>
     </template>
   </slide-over>
 </template>
@@ -109,24 +101,21 @@
 import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
-import AppLayout from "@/Layouts/AppLayout";
-import InputRow from "@/Components/InputRow";
-import RadioRow from "@/Components/RadioRow";
-import SelectRow from "@/Components/SelectRow";
-import JetButton from "@/Jetstream/Button";
-import JetInputError from "@/Jetstream/InputError";
-
-import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
+import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 
 export default {
   components: {
     AppLayout,
-    InputRow,
-    RadioRow,
-    SelectRow,
-    JetButton,
-    JetInputError,
     SlideOver,
+    SelectMenu,
+    TextInput,
+    PrimaryButton,
+    SecondaryOutlinedButton,
   },
 
   props: {
@@ -149,95 +138,106 @@ export default {
   },
 
   setup(props, { emit }) {
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
+    const templateInfo = ref(null);
 
-    const templateInfo = ref();
-    const selectedTemplate = ref();
-    const selectedEquipment = ref();
-    const selectedLocation = ref();
-    const marker = ref();
+    const templates = props.templates.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+    const selectedTemplate = ref(templates.length ? templates[0] : null);
+
+    const equipmentTemplates = props.equipments.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+    const selectedEquipmentTemplate = ref(
+      templates.length ? templates[0] : null
+    );
+
+    const locations = props.locations.map((t) => ({
+      key: t.id,
+      value: t.name,
+    }));
+    const selectedLocation = ref(locations.length ? locations[0] : null);
+
     const form = useForm({
       sink: {
         data: {},
       },
       equipments: [],
       template_id: null,
+      location_id: null,
     });
 
-    const mainTemplates = props.templates.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const equipTemplates = props.equipments.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const locationSelects = props.locations.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
+    watch(
+      selectedTemplate,
+      (template) => {
+        templateInfo.value = props.templates.find((t) => t.id === template.key);
+        form.equipments = [];
+        form.template_id = template.key;
 
-    watch(selectedTemplate, (template) => {
-      templateInfo.value = props.templates.find((t) => t.id === template);
-      console.log(templateInfo);
-      console.log(templateInfo.value);
-      form.equipments = [];
-      form.template_id = template;
+        // Check if there are Children
+        if (templateInfo.value.values.children)
+          for (const child of templateInfo.value.values.children) {
+            const equipment = props.equipments.find((t) => t.id === child.key);
+            const equip = {
+              id: child.key,
+              data: {},
+              template: equipment,
+            };
+            // Load Default Values
+            for (const prop of equip.template.template_properties) {
+              equip.data[prop.property.symbolic_name] = prop.default_value
+                ? prop.default_value
+                : "";
+            }
 
-      // Check if there are Children
-      if (templateInfo.value.values.children)
-        for (const child of templateInfo.value.values.children) {
-          const equipment = props.equipments.find((t) => t.id === child);
-          const equip = {
-            id: child,
-            data: {},
-            template: equipment,
-          };
-          // Load Default Values
-          for (const prop of equip.template.template_properties) {
-            equip.data[prop.property.symbolic_name] = prop.default_value
+            form.equipments.push(equip);
+          }
+
+        if (templateInfo.value?.template_properties)
+          for (const prop of templateInfo.value?.template_properties) {
+            form.sink.data[prop.property.symbolic_name] = prop.default_value
               ? prop.default_value
               : "";
           }
+      },
+      { immediate: true }
+    );
 
-          form.equipments.push(equip);
-        }
+    watch(
+      selectedLocation,
+      (current) => {
+        console.log();
 
-      if (templateInfo.value?.template_properties)
-        for (const prop of templateInfo.value?.template_properties) {
-          form.sink.data[prop.property.symbolic_name] = prop.default_value
-            ? prop.default_value
-            : "";
-        }
+        // const location = locations.value.find((l) => l.id === current.key);
+        form.location_id = selectedLocation.value.key;
+        //this.$refs.map.centerAtLocation(marker);
+      },
+      { immediate: true }
+    );
+
+    const open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
     });
 
-    watch(selectedLocation, (locId) => {
-      const location = props.locations.find((l) => l.id === locId);
-      marker.value = location.geo_object;
-      //this.$refs.map.centerAtLocation(marker);
-    });
+    const properties = computed(() =>
+      Object.assign([], templateInfo.value?.template_properties)
+    );
 
     return {
-      open,
-      form,
-      mainTemplates,
       templateInfo,
-      equipTemplates,
+      templates,
       selectedTemplate,
-      selectedEquipment,
-      locationSelects,
+      equipmentTemplates,
+      selectedEquipmentTemplate,
+      locations,
       selectedLocation,
-      marker,
+      form,
+      open,
+      properties,
     };
-  },
-
-  computed: {
-    properties() {
-      return Object.assign([], this.templateInfo?.template_properties);
-    },
   },
 
   methods: {
@@ -261,7 +261,7 @@ export default {
     },
     submit() {
       console.log("saving ", this.form);
-      this.form.post(route("objects.sinks.store"));
+      //   this.form.post(route("objects.sinks.store"));
     },
     onLocationSelect(locId) {},
   },

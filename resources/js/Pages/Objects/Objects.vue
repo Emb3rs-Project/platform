@@ -28,15 +28,13 @@
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
-    <keep-alive>
-      <component
-        class="z-30"
-        v-bind="slideOverProps"
-        :is="slideOverComponent"
-        v-if="slideOverComponent"
-        v-model="slideOver"
-      ></component>
-    </keep-alive>
+    <component
+      class="z-30"
+      v-bind="slideOverProps"
+      :is="slideOverComponent"
+      v-if="slideOverComponent"
+      v-model="slideOver"
+    ></component>
 
     <objects-index :instances="instances" v-model="indexSlide"></objects-index>
   </app-layout>
