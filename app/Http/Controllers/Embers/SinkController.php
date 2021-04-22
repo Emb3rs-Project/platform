@@ -149,9 +149,50 @@ class SinkController extends Controller
      */
     public function show($id)
     {
+        $sinkCategories = Category::whereType('source')
+            ->get()
+            ->pluck('id');
+
+        $equipmentCategories = Category::whereType('equipment')
+            ->get()
+            ->pluck('id');
+
+        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
+
+        $locations = Location::with(['geoObject'])->get();
+
+        $instance = Instance::whereId($id)
+            ->with([
+                'location',
+                'template',
+                'template.category',
+                'location.geoObject'
+            ])
+            ->first();
+
         return [
             "slideOver" => 'Objects/Sinks/SinkDetails',
-            "props" => []
+            "props" => [
+                "templates" => $sinkTemplates,
+                "equipments" => $equipmentTemplates,
+                "locations" => $locations,
+                "instance" => $instance
+            ]
         ];
     }
 

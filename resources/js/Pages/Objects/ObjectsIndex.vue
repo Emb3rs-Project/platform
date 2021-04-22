@@ -63,13 +63,14 @@
             <td
               class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
             >
-              <inertia-link
-                :href="route(`${selectedObject.path}.show`, item.id)"
+              <button
+                class="focus:outline-none"
+                @click="onRouteRequest(`${selectedObject.path}.show`, item.id)"
               >
                 <detail-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></detail-icon>
-              </inertia-link>
+              </button>
               <inertia-link
                 :href="route(`${selectedObject.path}.edit`, item.id)"
               >
@@ -151,7 +152,7 @@ export default {
     },
   },
 
-  emits: ["update:modelValue", "onCenter"],
+  emits: ["update:modelValue", "onCenter", "onRouteRequest"],
 
   setup(props, { emit }) {
     const tableColumns = ["name", "location", "actions"];
@@ -259,6 +260,21 @@ export default {
       }
     };
 
+    const onRouteRequest = async (daroute, param) => {
+      const res = await fetch(route(`${daroute}`, param)).then((res) => {
+        // console.log(await res.text());
+        if (!res.ok) {
+          const error = new Error(res.statusText);
+          error.json = res.json();
+          throw error;
+        }
+        return res.json();
+      });
+      console.log(res);
+
+      emit("onRouteRequest", res);
+    };
+
     return {
       tableColumns,
       filterOptions,
@@ -273,6 +289,7 @@ export default {
       showModal,
       centerAtLocation,
       onConfirmation,
+      onRouteRequest,
     };
   },
 };
