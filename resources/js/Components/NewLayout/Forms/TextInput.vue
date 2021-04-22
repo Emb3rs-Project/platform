@@ -22,13 +22,13 @@
         :disabled="disabled"
         aria-describedby="input-required"
       />
-      <!-- TODO: Add validation errors here -->
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref } from "@vue/runtime-core";
+import { computed, ref } from "vue";
+
 export default {
   props: {
     modelValue: {
@@ -50,6 +50,13 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  emits: {
+    "update:modelValue": (value) => {
+      if (value !== "") return true;
+      return false;
     },
   },
 

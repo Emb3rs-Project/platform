@@ -61,7 +61,6 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
-          <pre>{{ prop }}</pre>
           <text-input
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"

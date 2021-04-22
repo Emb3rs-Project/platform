@@ -105,9 +105,8 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        $sink = $request->get('sink');
-        // dd($request);
-        $equipments = $request->get('equipments');
+        $sink = $request->input('sink');
+        $equipments = $request->input('equipments');
         foreach ($equipments as $key => $value) {
             unset($equipments[$key]['template']);
         }
@@ -135,10 +134,11 @@ class SinkController extends Controller
         $instace = Instance::create($newInstance);
         $instace->teams()->attach(Auth::user()->currentTeam);
 
+        // @geocfu: i must return to the objectsindex page
+        // return Inertia::render(
+        //     'Objects/Objects'
+        // );
         return Redirect::route('objects.index');
-        return [
-            "slideOver" => 'Objects/Objects'
-        ];
     }
 
     /**
@@ -149,7 +149,10 @@ class SinkController extends Controller
      */
     public function show($id)
     {
-        //
+        return [
+            "slideOver" => 'Objects/Sinks/SinkDetails',
+            "props" => []
+        ];
     }
 
     /**
