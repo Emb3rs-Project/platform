@@ -216,8 +216,8 @@ export default {
 
     watch(
       selectedLocation,
-      () => {
-        form.location_id = selectedLocation.value.key;
+      (location) => {
+        form.location_id = location.key;
       },
       { immediate: true }
     );
@@ -225,7 +225,7 @@ export default {
     watch(
       form.sink.data,
       (current) => {
-        console.log("form.sink.data", current);
+        // console.log("form.sink.data", current);
       },
       { immediate: true, deep: true }
     );
@@ -274,9 +274,6 @@ export default {
     //   form.equipments.push(equip);
     // },
     submit() {
-      console.log("saving ", this.form);
-      console.log(this.form.sink.data);
-
       this.form.post(route("objects.sinks.store"));
     },
     onLocationSelect(locId) {},

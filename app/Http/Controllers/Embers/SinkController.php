@@ -105,8 +105,8 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $sink = $request->get('sink');
+        // dd($request);
         $equipments = $request->get('equipments');
         foreach ($equipments as $key => $value) {
             unset($equipments[$key]['template']);
@@ -127,8 +127,9 @@ class SinkController extends Controller
         }
 
         // Check if Location is Set
-        if (isset($sink['location_id'])) {
-            $newInstance['location_id'] = $sink['location_id'];
+        $locationId = $request->input('location_id');
+        if ($locationId) {
+            $newInstance['location_id'] = $locationId;
         }
 
         $instace = Instance::create($newInstance);
