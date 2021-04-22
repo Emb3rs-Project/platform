@@ -64,11 +64,7 @@
           <text-input
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
-            :placeholder="
-              prop.property.default_value
-                ? prop.property.default_value
-                : 'John Doe'
-            "
+            :placeholder="prop.property.name"
             :required="prop.required"
           >
           </text-input>

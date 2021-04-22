@@ -26,7 +26,11 @@ export default {
   emits: ["onMove", "onCreateRequest"],
   setup(props, { emit }) {
     const map = ref(null);
-    const mapObjects = ref({});
+    const mapObjects = ref({
+      sources: null,
+      sinks: null,
+      links: null,
+    });
 
     const center = computed({
       get() {
@@ -36,8 +40,6 @@ export default {
         emit("onMove", value);
       },
     });
-
-    const onDemo = () => console.log("hi");
 
     const onCreateSink = (val) =>
       emit("onCreateRequest", {
@@ -50,6 +52,10 @@ export default {
         type: "source",
         center: [val.latlng.lat, val.latlng.lng],
       });
+
+    const onCreateLink = (vale) => {
+      mapUtils.removeAllInstances(map.value, mapObjects.value);
+    };
 
     onMounted(() => {
       map.value = mapUtils.init("map", center.value, {
@@ -66,6 +72,10 @@ export default {
             callback: onCreateSource,
           },
           "-",
+          {
+            text: "Start Link Creation",
+            callback: onCreateLink,
+          },
           {
             text: "Zoom in",
             callback: (o) => map.value.zoomIn(),

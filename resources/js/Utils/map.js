@@ -115,7 +115,15 @@ export default {
         })
             .addTo(map);
     },
-    addInstances(map, instances = [], mapObjects = {}) {
+    addInstances(map, instances = [], mapObjects = {
+        sources: null,
+        sinks: null,
+        links: null
+    }) {
+        const sources = []
+        const sinks = []
+
+
         for (let instance of instances.filter((i) => i.location)) {
 
             // Skipping Locations with areas
@@ -138,15 +146,33 @@ export default {
                     iconOptions.icon = 'leaf'
                     iconOptions.textClass = 'text-green-700'
                     iconOptions.borderClass = 'border-green-700'
+                    sinks.push(this.addPoint(map, center, iconOptions))
                     break;
                 case 'source':
                     iconOptions.icon = 'fire'
                     iconOptions.textClass = 'text-red-700'
                     iconOptions.borderClass = 'border-red-700'
+                    sources.push(this.addPoint(map, center, iconOptions))
                     break;
             }
+        }
 
-            mapObjects[instance.id] = this.addPoint(map, center, iconOptions)
+        mapObjects.sinks = L.layerGroup(sinks)
+        mapObjects.sources = L.layerGroup(sources)
+    },
+    removeAllInstances(map, mapObjects = {
+        sources: null,
+        sinks: null,
+        links: null
+    }) {
+        for (let marker of Object.values(mapObjects)) {
+            map.removeLayer(marker)
+        }
+
+        mapObjects = {
+            sources: null,
+            sinks: null,
+            links: null
         }
     }
 }
