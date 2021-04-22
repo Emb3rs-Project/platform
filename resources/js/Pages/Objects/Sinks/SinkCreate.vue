@@ -61,10 +61,15 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
+          <pre>{{ prop }}</pre>
           <text-input
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
-            placeholder="Sink Name 1"
+            :placeholder="
+              prop.property.default_value
+                ? prop.property.default_value
+                : 'John Doe'
+            "
             :required="prop.required"
           >
           </text-input>
@@ -173,48 +178,56 @@ export default {
       selectedTemplate,
       (template) => {
         templateInfo.value = props.templates.find((t) => t.id === template.key);
-        form.equipments = [];
         form.template_id = template.key;
 
-        // Check if there are Children
-        if (templateInfo.value.values.children)
-          for (const child of templateInfo.value.values.children) {
-            const equipment = props.equipments.find((t) => t.id === child.key);
-            const equip = {
-              id: child.key,
-              data: {},
-              template: equipment,
-            };
-            // Load Default Values
-            for (const prop of equip.template.template_properties) {
-              equip.data[prop.property.symbolic_name] = prop.default_value
-                ? prop.default_value
-                : "";
-            }
+        // @geocfu: revisit this at a later stage
+        //
+        // form.equipments = [];
+        // // Check if there are Children
+        // if (templateInfo.value.values.children) {
+        //   for (const child of templateInfo.value.values.children) {
+        //     const equipment = props.equipments.find((t) => t.id === child.key);
+        //     const equip = {
+        //       id: child.key,
+        //       data: {},
+        //       template: equipment,
+        //     };
+        //     // Load Default Values
+        //     for (const prop of equip.template.template_properties) {
+        //       equip.data[prop.property.symbolic_name] = prop.default_value
+        //         ? prop.default_value
+        //         : "";
+        //     }
 
-            form.equipments.push(equip);
-          }
+        //     form.equipments.push(equip);
+        //   }
+        // }
 
-        if (templateInfo.value?.template_properties)
+        if (templateInfo.value?.template_properties) {
           for (const prop of templateInfo.value?.template_properties) {
             form.sink.data[prop.property.symbolic_name] = prop.default_value
               ? prop.default_value
               : "";
           }
+        }
       },
       { immediate: true }
     );
 
     watch(
       selectedLocation,
-      (current) => {
-        console.log();
-
-        // const location = locations.value.find((l) => l.id === current.key);
+      () => {
         form.location_id = selectedLocation.value.key;
-        //this.$refs.map.centerAtLocation(marker);
       },
       { immediate: true }
+    );
+
+    watch(
+      form.sink.data,
+      (current) => {
+        console.log("form.sink.data", current);
+      },
+      { immediate: true, deep: true }
     );
 
     const open = computed({
@@ -241,27 +254,30 @@ export default {
   },
 
   methods: {
-    addEquipment() {
-      const equipment = this.equipments.find(
-        (t) => t.id === this.selectedEquipment
-      );
-      const equip = {
-        id: child,
-        data: {},
-        template: equipment,
-      };
-      // Load Default Values
-      for (const prop of equip.template.template_properties) {
-        equip.data[prop.property.symbolic_name] = prop.default_value
-          ? prop.default_value
-          : "";
-      }
+    // @geocfu: revisit this at a later stage
+    // addEquipment() {
+    //   const equipment = this.equipments.find(
+    //     (t) => t.id === this.selectedEquipment
+    //   );
+    //   const equip = {
+    //     id: child,
+    //     data: {},
+    //     template: equipment,
+    //   };
+    //   // Load Default Values
+    //   for (const prop of equip.template.template_properties) {
+    //     equip.data[prop.property.symbolic_name] = prop.default_value
+    //       ? prop.default_value
+    //       : "";
+    //   }
 
-      form.equipments.push(equip);
-    },
+    //   form.equipments.push(equip);
+    // },
     submit() {
       console.log("saving ", this.form);
-      //   this.form.post(route("objects.sinks.store"));
+      console.log(this.form.sink.data);
+
+      this.form.post(route("objects.sinks.store"));
     },
     onLocationSelect(locId) {},
   },

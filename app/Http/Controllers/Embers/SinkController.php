@@ -105,6 +105,7 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request);
         $sink = $request->get('sink');
         $equipments = $request->get('equipments');
         foreach ($equipments as $key => $value) {
@@ -134,6 +135,9 @@ class SinkController extends Controller
         $instace->teams()->attach(Auth::user()->currentTeam);
 
         return Redirect::route('objects.index');
+        return [
+            "slideOver" => 'Objects/Objects'
+        ];
     }
 
     /**

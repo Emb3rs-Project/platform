@@ -58,7 +58,7 @@ export default {
 
     const value = computed({
       get: () => props.modelValue,
-      set: (value) => emit("update:modelValie", value),
+      set: (value) => emit("update:modelValue", value),
     });
 
     const focus = () => input.value.focus();
