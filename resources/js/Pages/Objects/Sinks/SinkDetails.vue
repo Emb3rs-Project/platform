@@ -147,22 +147,23 @@
       <secondary-outlined-button type="button" @click="open = false">
         Cancel
       </secondary-outlined-button>
-      <primary-link-button :href="route('objects.sinks.edit', instance.id)">
+      <primary-button
+        @click="onRouteRequest('objects.sinks.edit', instance.id)"
+      >
         Edit
-      </primary-link-button>
+      </primary-button>
     </template>
   </slide-over>
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/NewLayout/SlideOver.vue";
 import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import PrimaryLinkButton from "@/Components/NewLayout/PrimaryLinkButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 
 export default {
@@ -172,7 +173,6 @@ export default {
     SelectMenu,
     TextInput,
     PrimaryButton,
-    PrimaryLinkButton,
     SecondaryOutlinedButton,
   },
 
@@ -193,18 +193,14 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
+    const onRouteRequest = (route, params) => {
+      console.log("child onRouteRequest", route, params);
+    };
+
     return {
       open,
+      onRouteRequest,
     };
-  },
-
-  methods: {
-    edit() {
-      this.form.get(route("objects.sinks.edit"));
-    },
-    centerAtLocation() {
-      console.log("yes");
-    },
   },
 };
 </script>

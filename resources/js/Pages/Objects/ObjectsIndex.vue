@@ -65,19 +65,20 @@
             >
               <button
                 class="focus:outline-none"
-                @click="onRouteRequest(`${selectedObject.path}.show`, item.id)"
+                @click="onActionRequest(`${selectedObject.path}.show`, item.id)"
               >
                 <detail-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></detail-icon>
               </button>
-              <inertia-link
-                :href="route(`${selectedObject.path}.edit`, item.id)"
+              <button
+                class="focus:outline-none"
+                @click="onActionRequest(`${selectedObject.path}.edit`, item.id)"
               >
                 <edit-icon
                   class="text-gray-500 font-medium text-sm w-5"
                 ></edit-icon>
-              </inertia-link>
+              </button>
               <button class="focus:outline-none">
                 <trash-icon
                   class="text-red-500 font-medium text-sm w-5"
@@ -152,7 +153,7 @@ export default {
     },
   },
 
-  emits: ["update:modelValue", "onCenter", "onRouteRequest"],
+  emits: ["update:modelValue", "onCenter", "onActionRequest"],
 
   setup(props, { emit }) {
     const tableColumns = ["name", "location", "actions"];
@@ -260,7 +261,7 @@ export default {
       }
     };
 
-    const onRouteRequest = async (daroute, param) => {
+    const onActionRequest = async (daroute, param) => {
       const res = await fetch(route(`${daroute}`, param)).then((res) => {
         // console.log(await res.text());
         if (!res.ok) {
@@ -272,7 +273,7 @@ export default {
       });
       console.log(res);
 
-      emit("onRouteRequest", res);
+      emit("onActionRequest", res);
     };
 
     return {
@@ -289,7 +290,7 @@ export default {
       showModal,
       centerAtLocation,
       onConfirmation,
-      onRouteRequest,
+      onActionRequest,
     };
   },
 };

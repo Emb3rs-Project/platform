@@ -60,7 +60,7 @@ class SinkController extends Controller
      */
     public function create()
     {
-        $sourceCategories = Category::whereType('sink')
+        $sinkCategories = Category::whereType('sink')
             ->get()
             ->pluck('id');
 
@@ -69,7 +69,7 @@ class SinkController extends Controller
             ->pluck('id');
 
 
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -90,7 +90,7 @@ class SinkController extends Controller
         return [
             "slideOver" => 'Objects/Sinks/SinkCreate',
             "props" => [
-                "templates" => $sourceTemplates,
+                "templates" => $sinkTemplates,
                 "equipments" => $equipmentTemplates,
                 "locations" => $locations
             ]
@@ -149,7 +149,32 @@ class SinkController extends Controller
      */
     public function show($id)
     {
-        $sinkCategories = Category::whereType('source')
+        $instance = Instance::whereId($id)
+            ->with([
+                'location',
+                'template',
+                'template.category',
+                'location.geoObject'
+            ])
+            ->first();
+
+        return [
+            "slideOver" => 'Objects/Sinks/SinkDetails',
+            "props" => [
+                "instance" => $instance
+            ]
+        ];
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $sinkCategories = Category::whereType('sink')
             ->get()
             ->pluck('id');
 
@@ -173,20 +198,14 @@ class SinkController extends Controller
             ])
             ->get();
 
-
         $locations = Location::with(['geoObject'])->get();
 
         $instance = Instance::whereId($id)
-            ->with([
-                'location',
-                'template',
-                'template.category',
-                'location.geoObject'
-            ])
+            ->with(['location','template','template.category', 'location.geoObject'])
             ->first();
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkDetails',
+            "slideOver" => 'Objects/Sinks/SinkEdit',
             "props" => [
                 "templates" => $sinkTemplates,
                 "equipments" => $equipmentTemplates,
@@ -194,17 +213,6 @@ class SinkController extends Controller
                 "instance" => $instance
             ]
         ];
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -216,7 +224,29 @@ class SinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $sink = $request->get('sink');
+        $equipments = $request->get('equipments');
+        foreach ($equipments as $key => $value) {
+            unset($equipments[$key]['template']);
+        }
+
+        $instance = Instance::find($id);
+
+        // Check if Property Name Exists
+        if (isset($sink['data']['name'])) {
+            $instance->name = $sink['data']['name'];
+        }
+
+        $locationId = $request->input('location_id');
+        if ($locationId) {
+            $newInstance['location_id'] = $locationId;
+        } else {
+            $instance->location()->disassociate();
+        }
+
+        $instance->save();
+
+        return Redirect::route('objects.sinks.show', $instance->id);
     }
 
     /**

@@ -32,14 +32,15 @@
       class="z-30"
       v-bind="slideOverProps"
       :is="slideOverComponent"
-      v-if="slideOverComponent"
+      v-show="slideOverComponent"
       v-model="slideOver"
+      @onRouteRequest="onRouteRequest"
     ></component>
 
     <objects-index
       :instances="instances"
       v-model="indexSlide"
-      @onRouteRequest="onRouteRequest"
+      @onActionRequest="onActionRequest"
     ></objects-index>
   </app-layout>
 </template>
@@ -105,7 +106,7 @@ export default {
       slideOver.value = true;
     };
 
-    const onRouteRequest = (res) => {
+    const onActionRequest = (res) => {
       console.log("parent", res);
       if (slideOver.value) slideOver.value = false; // reset the current slideover
       if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
@@ -116,14 +117,19 @@ export default {
       slideOver.value = true;
     };
 
+    const onRouteRequest = (e) => {
+      console.log("OBJECTS onRouteRequest", e);
+    };
+
     return {
       slideOver,
       modalComponent,
       onCreateRequest,
-      onRouteRequest,
+      onActionRequest,
       indexSlide,
       slideOverComponent,
       slideOverProps,
+      onRouteRequest,
     };
   },
 };
