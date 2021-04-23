@@ -86,15 +86,6 @@ class SourceController extends Controller
 
         $locations = Location::with(['geoObject'])->get();
 
-        // return Inertia::render(
-        //     'Objects/Sources/SourceCreate',
-        //     [
-        //     "templates" => $sourceTemplates,
-        //     "equipments" => $equipmentTemplates,
-        //     "equipmentCategories" => $equipmentCategories,
-        //     "locations" => $locations
-        //     ]
-        // );
         return [
             "slideOver" => "Objects/Sources/SourceCreate",
             "props" => [
