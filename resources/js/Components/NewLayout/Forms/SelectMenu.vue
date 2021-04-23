@@ -7,7 +7,7 @@
     <div class="mt-1 relative">
       <ListboxButton
         :class="[
-          disabled ? 'cursor-not-allowed disabled:opacity-50' : '',
+          disabled ? 'disabled:opacity-70 cursor-not-allowed' : '',
           'h-10 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
         ]"
         :disabled="disabled"
