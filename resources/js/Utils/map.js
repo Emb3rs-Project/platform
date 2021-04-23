@@ -159,6 +159,8 @@ export default {
 
         mapObjects.sinks = L.layerGroup(sinks)
         mapObjects.sources = L.layerGroup(sources)
+
+        L.control.layers({ 'Sinks': mapObjects.sinks, 'Sources': mapObjects.sources }, null, { position: 'topleft' }).addTo(map);
     },
     removeAllInstances(map, mapObjects = {
         sources: null,
