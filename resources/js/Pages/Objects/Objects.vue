@@ -112,6 +112,7 @@ export default {
       if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
 
       slideOverProps.value = res.props;
+      console.log("GEOCFU", res.props);
       currentSlideOver.value = res.slideOver;
 
       slideOver.value = true;

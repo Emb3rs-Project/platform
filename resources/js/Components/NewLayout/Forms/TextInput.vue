@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="flex justify-between">
-      <label for="input" class="block text-sm font-medium text-gray-700">
+      <label :for="value" class="block text-sm font-medium text-gray-700">
         {{ label }}
       </label>
       <span v-if="required" class="text-sm text-gray-500" id="input-required">
         Required
       </span>
     </div>
-    <div class="mt-1">
+    <div class="mt-1 relative">
       <input
         v-model="value"
         type="text"
-        name="input"
+        :name="value"
         :placeholder="placeholder"
-        id="input"
+        :id="value"
         :class="[
           disabled ? 'disabled:opacity-70 cursor-not-allowed' : '',
           'shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md',
@@ -22,6 +22,13 @@
         :disabled="disabled"
         aria-describedby="input-required"
       />
+      <div
+        class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
+      >
+        <span class="text-gray-500 sm:text-sm" id="price-currency">
+          {{ unit }}
+        </span>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +47,10 @@ export default {
       default: "Input...",
     },
     label: {
+      type: String,
+      default: "",
+    },
+    unit: {
       type: String,
       default: "",
     },
