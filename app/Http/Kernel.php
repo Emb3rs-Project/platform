@@ -2,10 +2,33 @@
 
 namespace App\Http;
 
+use App;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Routing\Router;
 
 class Kernel extends HttpKernel
 {
+
+
+    /**
+     * Create a new HTTP kernel instance.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Routing\Router  $router
+     * @return void
+     */
+    public function __construct(Application $app, Router $router)
+    {
+
+        if (App::environment('local')) {
+            $this->prependMiddlewareToGroup('web', \App\Http\Middleware\HttpsProtocolMiddleware::class);
+        }
+
+        parent::__construct($app, $router);
+    }
+
+
     /**
      * The application's global HTTP middleware stack.
      *
@@ -38,6 +61,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class,
+            \App\Http\Middleware\HttpsProtocolMiddleware::class,
         ],
 
         'api' => [
