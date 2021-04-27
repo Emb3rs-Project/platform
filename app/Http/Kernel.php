@@ -2,10 +2,10 @@
 
 namespace App\Http;
 
-use App;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\App;
 
 class Kernel extends HttpKernel
 {
