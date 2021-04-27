@@ -63,7 +63,11 @@ export default {
   },
 
   props: {
-    instances: {
+    modelValue: {
+      type: Object,
+      required: true,
+    },
+    objects: {
       type: Array,
       required: true,
     },
@@ -88,7 +92,7 @@ export default {
       { deep: true }
     );
 
-    const templates = props.instances.map((t) => ({
+    const templates = props.objects.map((t) => ({
       key: t.id,
       value: t.name,
       props: t.template_properties,

@@ -1,6 +1,6 @@
 <template>
   <!-- TODO: maybe modularize it more, we'll see -->
-  <!-- Equipments -->
+  <!-- Resources -->
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
     v-for="equipment in equipments"
@@ -116,7 +116,7 @@ export default {
 
   setup(props) {
     const form = useForm({
-      equipment: {
+      resources: {
         data: {},
       },
     });

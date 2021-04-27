@@ -8,8 +8,9 @@
     subtitleTextColor="text-gray-200"
   >
     <component
+      v-model="currentStep"
       v-bind="currentStepProps"
-      :is="wizardStepComponent"
+      :is="stepComponent"
       @completed="onStepCompleted"
     ></component>
 
@@ -17,8 +18,6 @@
       <div class="flex justify-start w-full">
         <bullet-steps :steps="steps" class="ml-0"></bullet-steps>
       </div>
-
-      <div v-if="currentStep"></div>
 
       <button
         type="button"
@@ -28,11 +27,20 @@
         Cancel
       </button>
       <button
-        type="submit"
+        type="button"
+        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        @click="navigateToPreviousStep"
+        :disabled="currentStepIndex === 0"
+      >
+        Previous
+      </button>
+      <button
+        type="button"
         class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         @click="navigateToNextStep"
       >
-        {{ actionButtonText }}
+        <span v-if="currentStepIndex + 1 === steps.length">Save</span>
+        <span v-else>Next</span>
       </button>
     </template>
   </slide-over>
@@ -72,17 +80,20 @@ export default {
       type: Array,
       required: true,
     },
+    equipmentCategories: {
+      type: Array,
+      required: true,
+    },
     locations: {
       type: Array,
       required: true,
     },
-    equipmentCategories: Array,
   },
 
   emits: ["update:modelValue"],
 
-  setup(props) {
-    const steps = [
+  setup(props, { emit }) {
+    const steps = ref([
       {
         name: "Source Details",
         component: "Objects/Sources/SourceCreateWizard/Step1.vue",
@@ -103,11 +114,13 @@ export default {
         component: "Objects/Sources/SourceCreateWizard/Step4.vue",
         status: "upcoming",
       },
-    ];
+    ]);
 
-    const currentStep = ref(steps[0]);
-    const currentStepProps = ref({ instances: null });
-    const actionButton = ref({ text: "", action: "" });
+    const currentStep = ref(steps.value[0]);
+    const currentStepIndex = ref(
+      steps.value.findIndex((step) => step.name === currentStep.value.name)
+    );
+    const currentStepProps = ref({ objects: null });
 
     const form = useForm({
       source: {
@@ -115,21 +128,22 @@ export default {
       },
     });
 
-    watch(form, (form) => {
-      //   console.log(form);
-    });
+    // watch(form, (form) => {
+    //   //   console.log(form);
+    // });
 
     watch(
       currentStep,
       (currentStep) => {
         switch (currentStep.name) {
           case "Source Details":
-            currentStepProps.value.instances = props.templates;
+            currentStepProps.value.objects = props.templates;
             break;
           case "Equipments":
-            currentStepProps.value.instances = props.equipments;
+            currentStepProps.value.objects = props.equipments;
             break;
           case "Processes":
+            currentStepProps.value.objects = props.equipments;
             break;
           case "Scripts":
             break;
@@ -141,7 +155,7 @@ export default {
       { immediate: true }
     );
 
-    const wizardStepComponent = computed(() =>
+    const stepComponent = computed(() =>
       defineAsyncComponent(() =>
         import(`@/Pages/${currentStep.value.component}`)
       )
@@ -152,8 +166,30 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
+    const navigateToPreviousStep = () => {
+      if (currentStepIndex.value !== 0) {
+        steps.value[currentStepIndex.value].status = "upcoming";
+        steps.value[currentStepIndex.value - 1].status = "current";
+        currentStep.value = steps.value[currentStepIndex.value - 1];
+
+        return;
+      }
+    };
+
     const navigateToNextStep = () => {
-      console.log("nextstep");
+      console.log("hello");
+      console.log(currentStep.value.name);
+
+      if (currentStepIndex.value !== steps.length) {
+        steps.value[currentStepIndex.value].status = "complete";
+        steps.value[currentStepIndex.value + 1].status = "current";
+        currentStep.value = steps.value[currentStepIndex.value + 1];
+
+        console.log(steps.value);
+        console.log(currentStepIndex.value);
+
+        return;
+      }
     };
 
     const onStepCompleted = () => {
@@ -166,19 +202,20 @@ export default {
       //   } else if (currentStepIndex + 1 < steps.length) {
       //     currentStep.value = steps[currentStepIndex + 1];
       //   }
-
-      currentStep.value.status = "completed";
+      //   currentStep.value.status = "completed";
     };
 
     return {
       steps,
       currentStep,
+      currentStepIndex,
       currentStepProps,
-      actionButton,
-      wizardStepComponent,
+
+      stepComponent,
       form,
       open,
       onStepCompleted,
+      navigateToPreviousStep,
       navigateToNextStep,
     };
   },

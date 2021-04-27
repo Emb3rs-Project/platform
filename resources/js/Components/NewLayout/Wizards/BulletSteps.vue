@@ -41,6 +41,13 @@
 </template>
 
 <script>
+// const steps = [
+//   { name: 'Step 1', href: '#', status: 'complete' },
+//   { name: 'Step 2', href: '#', status: 'current' },
+//   { name: 'Step 3', href: '#', status: 'upcoming' },
+//   { name: 'Step 4', href: '#', status: 'upcoming' },
+// ]
+
 export default {
   props: {
     steps: {
