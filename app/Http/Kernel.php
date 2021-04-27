@@ -5,7 +5,6 @@ namespace App\Http;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\App;
 
 class Kernel extends HttpKernel
 {
@@ -21,7 +20,7 @@ class Kernel extends HttpKernel
     public function __construct(Application $app, Router $router)
     {
 
-        if (App::environment('local')) {
+        if ($this->app->environment() === 'local') {
             $this->prependMiddlewareToGroup('web', \App\Http\Middleware\HttpsProtocolMiddleware::class);
         }
 
