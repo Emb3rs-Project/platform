@@ -8,8 +8,6 @@ use Illuminate\Routing\Router;
 
 class Kernel extends HttpKernel
 {
-
-
     /**
      * Create a new HTTP kernel instance.
      *
@@ -17,15 +15,14 @@ class Kernel extends HttpKernel
      * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    public function __construct(Application $app, Router $router)
-    {
+    // public function __construct(Application $app, Router $router)
+    // {
+    //     // if ($this->app->environment() === 'local') {
+    //     //     $this->prependMiddlewareToGroup('web', \App\Http\Middleware\HttpsProtocolMiddleware::class);
+    //     // }
 
-        if ($this->app->environment() === 'local') {
-            $this->prependMiddlewareToGroup('web', \App\Http\Middleware\HttpsProtocolMiddleware::class);
-        }
-
-        parent::__construct($app, $router);
-    }
+    //     parent::__construct($app, $router);
+    // }
 
 
     /**
