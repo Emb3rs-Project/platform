@@ -69,7 +69,7 @@ export default {
       type: Array,
       required: true,
     },
-    equipmentCategories: {
+    equipmentsCategories: {
       type: Array,
       required: true,
     },
@@ -106,7 +106,7 @@ export default {
       },
     ]);
     const currentStep = ref(steps.value[0]);
-    const currentStepProps = ref({ objects: null });
+    const currentStepProps = ref({});
 
     const stepComponent = computed(() => {
       // @geocfu: i really dont like how this gets updated reactively rn.
@@ -134,7 +134,9 @@ export default {
             currentStepProps.value.objects = props.templates;
             break;
           case "Equipments":
-            currentStepProps.value.objects = props.equipments;
+            console.log("yes", props.equipmentCategories);
+            currentStepProps.value.categories = props.equipmentsCategories;
+            currentStepProps.value.equipments = props.equipments;
             break;
           case "Processes":
             currentStepProps.value.objects = props.equipments;
@@ -174,10 +176,6 @@ export default {
         steps.value[currentStepIndex.value].status = "complete";
         steps.value[currentStepIndex.value + 1].status = "current";
         currentStep.value = steps.value[currentStepIndex.value + 1];
-
-        console.log(currentStepIndex.value);
-        console.log(currentStep.value);
-        console.log(steps.value);
 
         return;
       }

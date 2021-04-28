@@ -84,9 +84,11 @@
     </div>
   </div>
 
-  <add-equipment-modal v-model="modalIsVisible">
-    <template #title> Add an Equipment </template>
-    <h1>hes</h1>
+  <add-equipment-modal
+    v-model="modalIsVisible"
+    :categories="categories"
+    :equipments="equipments"
+  >
   </add-equipment-modal>
 </template>
 
@@ -119,7 +121,11 @@ export default {
   },
 
   props: {
-    objects: {
+    categories: {
+      type: Array,
+      required: true,
+    },
+    equipments: {
       type: Array,
       required: true,
     },
@@ -143,10 +149,10 @@ export default {
     //   { deep: true }
     // );
 
-    const equipments = props.objects.map((o) => ({
-      key: o.id,
-      value: o.name,
-      props: o.template_properties,
+    const equipments = props.equipments.map((e) => ({
+      key: e.id,
+      value: e.name,
+      props: e.template_properties,
     }));
 
     const modalIsVisible = ref(false);

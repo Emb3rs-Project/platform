@@ -39,22 +39,6 @@
       </div>
     </div>
 
-    <!-- Sink Values -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Equipments
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.values.equipments }}
-        </div>
-      </div>
-    </div>
-
     <!-- Sink Template -->
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -67,23 +51,6 @@
       <div class="sm:col-span-2">
         <div class="block text-sm font-medium text-gray-900 sm:pt-1">
           {{ instance.template.name }}
-        </div>
-      </div>
-    </div>
-
-    <!-- Sink Location ID -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's ID
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.id }}
         </div>
       </div>
     </div>

@@ -59,7 +59,20 @@
                 >
                   <slot name="title"></slot>
                 </DialogTitle>
-                <div class="mt-2"></div>
+                <div class="mt-2">
+                  <select-menu
+                    v-model="selectedCategory"
+                    :options="categories"
+                    :label="'Category'"
+                  ></select-menu>
+                </div>
+                <div class="mt-2">
+                  <select-menu
+                    v-model="selectedEquipment"
+                    :options="equipments"
+                    :label="'Equipment'"
+                  ></select-menu>
+                </div>
               </div>
             </div>
             <div
@@ -70,7 +83,7 @@
                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
                 @click="onConfirmation"
               >
-                Deactivate
+                Confirm
               </button>
 
               <button
@@ -90,7 +103,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { ref, computed } from "vue";
 
 import {
   Dialog,
@@ -101,6 +114,7 @@ import {
 } from "@headlessui/vue";
 import { DatabaseIcon } from "@heroicons/vue/outline";
 import PrimaryButton from "../../PrimaryButton.vue";
+import SelectMenu from "../Forms/SelectMenu.vue";
 
 export default {
   components: {
@@ -111,6 +125,7 @@ export default {
     TransitionRoot,
     DatabaseIcon,
     PrimaryButton,
+    SelectMenu,
   },
 
   props: {
@@ -118,11 +133,11 @@ export default {
       type: Boolean,
       required: true,
     },
-    equipments: {
+    categories: {
       type: Array,
       required: true,
     },
-    categories: {
+    equipments: {
       type: Array,
       required: true,
     },
@@ -131,6 +146,21 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
+    const selectedCategory = ref(null);
+    const selectedEquipment = ref(null);
+    const categories = computed(() =>
+      props.categories.map((c) => ({
+        key: c.id,
+        value: c.name,
+      }))
+    );
+    const equipments = computed(() =>
+      props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+      }))
+    );
+
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
@@ -142,6 +172,8 @@ export default {
     };
 
     return {
+      selectedCategory,
+      selectedEquipment,
       open,
       onConfirmation,
     };
