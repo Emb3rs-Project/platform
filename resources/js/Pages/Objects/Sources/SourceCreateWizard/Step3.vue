@@ -1,6 +1,7 @@
 <template>
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Resources -->
+
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
     v-for="equipment in equipments"
@@ -87,6 +88,7 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
+import PrimaryButton from "../../../../Components/NewLayout/PrimaryButton.vue";
 // import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
 
 export default {
@@ -98,21 +100,16 @@ export default {
 
     SelectMenu,
     TextInput,
+    PrimaryButton,
     // Disclosure,
   },
 
   props: {
-    // modelValue: {
-    //   type: Object,
-    //   required: true,
-    // },
     objects: {
       type: Array,
       required: true,
     },
   },
-
-  emits: ["completed"],
 
   setup(props) {
     const form = useForm({
@@ -129,19 +126,15 @@ export default {
       },
       { deep: true }
     );
-    const checkedEquipments = ref([]);
-    const equipments1 = props.objects.map((o) => ({
+    const equipments = props.objects.map((o) => ({
       key: o.id,
       value: o.name,
       props: o.template_properties,
     }));
 
-    const equipments = [...equipments1, ...equipments1, ...equipments1];
-
     return {
       form,
       equipments,
-      checkedEquipments,
     };
   },
 };

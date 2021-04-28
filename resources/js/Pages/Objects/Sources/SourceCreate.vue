@@ -7,13 +7,14 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <component
-      v-bind="currentStepProps"
-      :is="stepComponent"
-      v-show="stepComponent"
-      @completed="onStepCompleted"
-    ></component>
-
+    <keep-alive>
+      <component
+        v-bind="currentStepProps"
+        :is="stepComponent"
+        v-show="stepComponent"
+        @completed="onStepCompleted"
+      ></component>
+    </keep-alive>
     <template #actions>
       <div class="flex justify-start w-full">
         <bullet-steps :steps="steps"></bullet-steps>
@@ -116,6 +117,15 @@ export default {
         );
     });
 
+    // const test = computed({
+    //   get: () => {
+    //     return defineAsyncComponent(() =>
+    //       import(`@/Pages/${currentStep.value.component}`)
+    //     );
+    //   },
+    //   set: (value) => defineAsyncComponent(() => import(`@/Pages/${value}`)),
+    // });
+
     watch(
       currentStep,
       (currentStep) => {
@@ -125,7 +135,6 @@ export default {
             break;
           case "Equipments":
             currentStepProps.value.objects = props.equipments;
-
             break;
           case "Processes":
             currentStepProps.value.objects = props.equipments;

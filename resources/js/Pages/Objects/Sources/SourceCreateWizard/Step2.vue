@@ -1,6 +1,13 @@
 <template>
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Equipments -->
+  <div class="flex justify-end justify-items-center p-5">
+    <primary-button type="button" @click="addEquipment">
+      <DatabaseIcon class="h-6 w-6 mr-2" aria-hidden="true" />
+      Add Equipment
+    </primary-button>
+  </div>
+
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
     v-for="equipment in equipments"
@@ -76,17 +83,24 @@
       </Disclosure>
     </div>
   </div>
+
+  <add-equipment-modal v-model="modalIsVisible">
+    <template #title> Add an Equipment </template>
+    <h1>hes</h1>
+  </add-equipment-modal>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
+import PrimaryButton from "../../../../Components/NewLayout/PrimaryButton.vue";
+import AddEquipmentModal from "../../../../Components/NewLayout/Modals/AddEquipmentModal.vue";
 // import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
 
 export default {
@@ -95,6 +109,9 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
+    DatabaseIcon,
+    PrimaryButton,
+    AddEquipmentModal,
 
     SelectMenu,
     TextInput,
@@ -102,10 +119,6 @@ export default {
   },
 
   props: {
-    // modelValue: {
-    //   type: Object,
-    //   required: true,
-    // },
     objects: {
       type: Array,
       required: true,
@@ -121,27 +134,32 @@ export default {
       },
     });
 
-    watch(
-      form,
-      (form) => {
-        console.log(form);
-        // the component can return true for completed or false otherwise
-      },
-      { deep: true }
-    );
-    const checkedEquipments = ref([]);
-    const equipments1 = props.objects.map((o) => ({
+    // watch(
+    //   form,
+    //   (form) => {
+    //     console.log(form);
+    //     // the component can return true for completed or false otherwise
+    //   },
+    //   { deep: true }
+    // );
+
+    const equipments = props.objects.map((o) => ({
       key: o.id,
       value: o.name,
       props: o.template_properties,
     }));
 
-    const equipments = [...equipments1, ...equipments1, ...equipments1];
+    const modalIsVisible = ref(false);
+
+    const addEquipment = () => {
+      modalIsVisible.value = true;
+    };
 
     return {
+      modalIsVisible,
       form,
       equipments,
-      checkedEquipments,
+      addEquipment,
     };
   },
 };
