@@ -102,10 +102,10 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Object,
-      required: true,
-    },
+    // modelValue: {
+    //   type: Object,
+    //   required: true,
+    // },
     objects: {
       type: Array,
       required: true,

@@ -75,13 +75,15 @@ export default {
     const indexSlide = ref(false);
     const currentSlideOver = ref(null);
 
-    const slideOverComponent = computed(() =>
-      currentSlideOver.value
-        ? defineAsyncComponent(() =>
-            import(`@/Pages/${currentSlideOver.value}`)
-          )
-        : false
-    );
+    const slideOverComponent = computed(() => {
+      if (currentSlideOver.value) {
+        return defineAsyncComponent(() =>
+          import(`@/Pages/${currentSlideOver.value}`)
+        );
+      }
+
+      return false;
+    });
 
     const onCreateRequest = async (req) => {
       if (slideOver.value) slideOver.value = false; // reset the current slideover

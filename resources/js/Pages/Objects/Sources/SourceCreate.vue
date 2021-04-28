@@ -8,50 +8,38 @@
     subtitleTextColor="text-gray-200"
   >
     <component
-      v-model="currentStep"
       v-bind="currentStepProps"
       :is="stepComponent"
+      v-show="stepComponent"
       @completed="onStepCompleted"
     ></component>
 
     <template #actions>
       <div class="flex justify-start w-full">
-        <bullet-steps :steps="steps" class="ml-0"></bullet-steps>
+        <bullet-steps :steps="steps"></bullet-steps>
       </div>
 
-      <button
+      <secondary-button
         type="button"
-        class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="slideOverIsOpen = false"
-      >
-        Cancel
-      </button>
-      <button
-        type="button"
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         @click="navigateToPreviousStep"
         :disabled="currentStepIndex === 0"
       >
         Previous
-      </button>
-      <button
-        type="button"
-        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        @click="navigateToNextStep"
-      >
+      </secondary-button>
+      <primary-button type="button" @click="navigateToNextStep">
         <span v-if="currentStepIndex + 1 === steps.length">Save</span>
         <span v-else>Next</span>
-      </button>
+      </primary-button>
     </template>
   </slide-over>
 </template>
 
 <script>
 import { ref, watch, computed, defineAsyncComponent } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+// import { useForm } from "@inertiajs/inertia-vue3";
 
-import PrimaryButton from "../../../Components/PrimaryButton.vue";
-import SecondaryButton from "../../../Components/SecondaryButton.vue";
+import PrimaryButton from "../../../Components/NewLayout/PrimaryButton.vue";
+import SecondaryButton from "../../../Components/NewLayout/SecondaryButton.vue";
 import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
 import SelectMenu from "../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../Components/NewLayout/Forms/TextInput.vue";
@@ -93,6 +81,7 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
+    // status: current | complete | upcoming
     const steps = ref([
       {
         name: "Source Details",
@@ -115,22 +104,17 @@ export default {
         status: "upcoming",
       },
     ]);
-
     const currentStep = ref(steps.value[0]);
-    const currentStepIndex = ref(
-      steps.value.findIndex((step) => step.name === currentStep.value.name)
-    );
     const currentStepProps = ref({ objects: null });
 
-    const form = useForm({
-      source: {
-        data: {},
-      },
+    const stepComponent = computed(() => {
+      // @geocfu: i really dont like how this gets updated reactively rn.
+      // TODO: we MUST check it again
+      if (currentStep.value)
+        return defineAsyncComponent(() =>
+          import(`@/Pages/${currentStep.value.component}`)
+        );
     });
-
-    // watch(form, (form) => {
-    //   //   console.log(form);
-    // });
 
     watch(
       currentStep,
@@ -141,30 +125,30 @@ export default {
             break;
           case "Equipments":
             currentStepProps.value.objects = props.equipments;
+
             break;
           case "Processes":
             currentStepProps.value.objects = props.equipments;
             break;
           case "Scripts":
+            currentStepProps.value.objects = props.equipments;
             break;
 
           default:
             break;
         }
       },
-      { immediate: true }
-    );
-
-    const stepComponent = computed(() =>
-      defineAsyncComponent(() =>
-        import(`@/Pages/${currentStep.value.component}`)
-      )
+      { immediate: true, deep: true }
     );
 
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
+
+    const currentStepIndex = computed(() =>
+      steps.value.findIndex((step) => step.name === currentStep.value.name)
+    );
 
     const navigateToPreviousStep = () => {
       if (currentStepIndex.value !== 0) {
@@ -177,16 +161,14 @@ export default {
     };
 
     const navigateToNextStep = () => {
-      console.log("hello");
-      console.log(currentStep.value.name);
-
       if (currentStepIndex.value !== steps.length) {
         steps.value[currentStepIndex.value].status = "complete";
         steps.value[currentStepIndex.value + 1].status = "current";
         currentStep.value = steps.value[currentStepIndex.value + 1];
 
-        console.log(steps.value);
         console.log(currentStepIndex.value);
+        console.log(currentStep.value);
+        console.log(steps.value);
 
         return;
       }
@@ -212,7 +194,7 @@ export default {
       currentStepProps,
 
       stepComponent,
-      form,
+      //   form,
       open,
       onStepCompleted,
       navigateToPreviousStep,
