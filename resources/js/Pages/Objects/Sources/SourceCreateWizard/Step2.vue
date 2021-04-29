@@ -86,8 +86,9 @@
 
   <add-equipment-modal
     v-model="modalIsVisible"
-    :categories="categories"
+    :equipmentsCategories="equipmentsCategories"
     :equipments="equipments"
+    @confirmation="onAddEquipmentConfirmation"
   >
   </add-equipment-modal>
 </template>
@@ -121,7 +122,7 @@ export default {
   },
 
   props: {
-    categories: {
+    equipmentsCategories: {
       type: Array,
       required: true,
     },
@@ -139,19 +140,12 @@ export default {
         data: {},
       },
     });
-
-    // watch(
-    //   form,
-    //   (form) => {
-    //     console.log(form);
-    //     // the component can return true for completed or false otherwise
-    //   },
-    //   { deep: true }
-    // );
+    console.log("parent", props.equipments);
 
     const equipments = props.equipments.map((e) => ({
       key: e.id,
       value: e.name,
+      parent: e.category_id,
       props: e.template_properties,
     }));
 
@@ -161,11 +155,16 @@ export default {
       modalIsVisible.value = true;
     };
 
+    const onAddEquipmentConfirmation = () => {
+      // TODO: Add it to the vuex store
+      console.log(form.value);
+    };
     return {
       modalIsVisible,
       form,
       equipments,
       addEquipment,
+      onAddEquipmentConfirmation,
     };
   },
 };

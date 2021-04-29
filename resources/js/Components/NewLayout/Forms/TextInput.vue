@@ -40,7 +40,7 @@ export default {
   props: {
     modelValue: {
       type: String,
-      required: true,
+      default: "",
     },
     placeholder: {
       type: String,

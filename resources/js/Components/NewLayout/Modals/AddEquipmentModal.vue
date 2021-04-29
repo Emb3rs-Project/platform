@@ -29,8 +29,9 @@
         <span
           class="hidden sm:inline-block sm:align-middle sm:h-screen"
           aria-hidden="true"
-          >&#8203;</span
         >
+          &#8203;
+        </span>
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -52,24 +53,25 @@
                   aria-hidden="true"
                 />
               </div>
-              <div class="mt-3 text-center sm:mt-5">
+              <div class="mt-3 sm:mt-5">
                 <DialogTitle
                   as="h3"
-                  class="text-lg leading-6 font-medium text-gray-900"
+                  class="text-lg text-center leading-6 font-medium text-gray-900"
                 >
-                  <slot name="title"></slot>
+                  Add an Equipment
                 </DialogTitle>
                 <div class="mt-2">
                   <select-menu
-                    v-model="selectedCategory"
-                    :options="categories"
+                    v-model="selectedEquipmentCategory"
+                    :options="equipmentsCategories"
                     :label="'Category'"
                   ></select-menu>
                 </div>
-                <div class="mt-2">
+                <div class="mt-5">
                   <select-menu
+                    :disabled="!equipmentsAreAvailable"
                     v-model="selectedEquipment"
-                    :options="equipments"
+                    :options="availableEquipments"
                     :label="'Equipment'"
                   ></select-menu>
                 </div>
@@ -78,22 +80,22 @@
             <div
               class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
             >
-              <button
+              <secondary-outlined-button
                 type="button"
-                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm"
-                @click="onConfirmation"
-              >
-                Confirm
-              </button>
-
-              <button
-                type="button"
-                class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm"
                 @click="open = false"
                 ref="cancelButtonRef"
+                class="sm:col-start-1"
               >
                 Cancel
-              </button>
+              </secondary-outlined-button>
+              <primary-button
+                type="button"
+                @click="onConfirmation"
+                :disabled="!canAddEquipment"
+                class="sm:col-start-2"
+              >
+                Confirm
+              </primary-button>
             </div>
           </div>
         </TransitionChild>
@@ -103,7 +105,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 import {
   Dialog,
@@ -113,7 +115,9 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import { DatabaseIcon } from "@heroicons/vue/outline";
-import PrimaryButton from "../../PrimaryButton.vue";
+
+import PrimaryButton from "../PrimaryButton.vue";
+import SecondaryOutlinedButton from "../SecondaryOutlinedButton.vue";
 import SelectMenu from "../Forms/SelectMenu.vue";
 
 export default {
@@ -125,6 +129,7 @@ export default {
     TransitionRoot,
     DatabaseIcon,
     PrimaryButton,
+    SecondaryOutlinedButton,
     SelectMenu,
   },
 
@@ -133,7 +138,7 @@ export default {
       type: Boolean,
       required: true,
     },
-    categories: {
+    equipmentsCategories: {
       type: Array,
       required: true,
     },
@@ -146,36 +151,68 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
-    const selectedCategory = ref(null);
+    const availableEquipments = ref([]);
+    const selectedEquipmentCategory = ref(null);
     const selectedEquipment = ref(null);
-    const categories = computed(() =>
-      props.categories.map((c) => ({
+
+    const equipmentsCategories = computed(() =>
+      props.equipmentsCategories.map((c) => ({
         key: c.id,
         value: c.name,
       }))
     );
+
     const equipments = computed(() =>
       props.equipments.map((e) => ({
-        key: e.id,
-        value: e.name,
+        key: e.key,
+        value: e.value,
+        parent: e.parent,
       }))
     );
+
+    const equipmentsAreAvailable = computed(() => {
+      if (!selectedEquipmentCategory.value) return false;
+
+      const equipmentsThatMatch = equipments.value.filter(
+        (e) => e.parent == selectedEquipmentCategory.value.key
+      );
+
+      if (!equipmentsThatMatch.length) return false;
+
+      return true;
+    });
+
+    const canAddEquipment = computed(() => {
+      if (selectedEquipmentCategory.value && selectedEquipment.value)
+        return true;
+      return false;
+    });
 
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
 
+    watch(selectedEquipmentCategory, (selectedEquipmentCategory) => {
+      availableEquipments.value = equipments.value.filter(
+        (e) => e.parent == selectedEquipmentCategory.key
+      );
+    });
+
     const onConfirmation = () => {
+      emit("confirmation", selectedEquipment.value);
       open.value = false;
-      emit("confirmation" /* to add the selected equipmenthere */);
     };
 
     return {
-      selectedCategory,
+      equipmentsCategories,
+      selectedEquipmentCategory,
+      availableEquipments,
       selectedEquipment,
       open,
       onConfirmation,
+      equipmentsAreAvailable,
+      canAddEquipment,
     };
   },
 };

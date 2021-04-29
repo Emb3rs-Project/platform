@@ -73,6 +73,14 @@ export default {
       type: Array,
       required: true,
     },
+    processes: {
+      type: Array,
+      required: true,
+    },
+    processCategories: {
+      type: Array,
+      required: true,
+    },
     locations: {
       type: Array,
       required: true,
@@ -134,8 +142,8 @@ export default {
             currentStepProps.value.objects = props.templates;
             break;
           case "Equipments":
-            console.log("yes", props.equipmentCategories);
-            currentStepProps.value.categories = props.equipmentsCategories;
+            currentStepProps.value.equipmentsCategories =
+              props.equipmentsCategories;
             currentStepProps.value.equipments = props.equipments;
             break;
           case "Processes":
