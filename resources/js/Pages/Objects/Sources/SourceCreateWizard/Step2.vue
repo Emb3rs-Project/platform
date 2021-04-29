@@ -88,7 +88,7 @@
     v-model="modalIsVisible"
     :equipmentsCategories="equipmentsCategories"
     :equipments="equipments"
-    @confirmation="onAddEquipmentConfirmation"
+    @confirmation="onAddEquipment"
   >
   </add-equipment-modal>
 </template>
@@ -140,31 +140,48 @@ export default {
         data: {},
       },
     });
-    console.log("parent", props.equipments);
 
-    const equipments = props.equipments.map((e) => ({
-      key: e.id,
-      value: e.name,
-      parent: e.category_id,
-      props: e.template_properties,
-    }));
+    const equipments = ref(
+      props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+        props: e.template_properties,
+      }))
+    );
 
     const modalIsVisible = ref(false);
 
-    const addEquipment = () => {
-      modalIsVisible.value = true;
+    const addEquipment = () => (modalIsVisible.value = true);
+
+    const onAddEquipment = (addedEquipment) => {
+      // TODO: Add it to the vuex store
+
+      const equipment = equipments.value.find(
+        (e) => e.key === addedEquipment.key
+      );
+
+      const equip = {
+        id: addedEquipment.key,
+        data: {},
+        template: equipment,
+      };
+
+      for (const prop of equipment.props) {
+        equip.data[prop.property.symbolic_name] = prop.default_value
+          ? prop.default_value
+          : "";
+      }
+
+      equipments.value = [...equipments.value, equipment];
     };
 
-    const onAddEquipmentConfirmation = () => {
-      // TODO: Add it to the vuex store
-      console.log(form.value);
-    };
     return {
       modalIsVisible,
       form,
       equipments,
       addEquipment,
-      onAddEquipmentConfirmation,
+      onAddEquipment,
     };
   },
 };
