@@ -28,6 +28,7 @@
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
+    {{ counter }}
     <component
       class="z-30"
       v-bind="slideOverProps"
@@ -77,9 +78,7 @@ export default {
     const currentSlideOver = ref(null);
 
     const store = useStore();
-
-    store.subscribe(() => console.log(store.state));
-    store.commit("increment");
+    store.dispatch("map/increment");
 
     const slideOverComponent = computed(() => {
       if (currentSlideOver.value) {
@@ -136,6 +135,7 @@ export default {
       slideOverComponent,
       slideOverProps,
       onRouteRequest,
+      counter: computed(() => store.getters["map/counter"]),
     };
   },
 };

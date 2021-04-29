@@ -5,7 +5,7 @@ import { App as InertiaApp, plugin as InertiaPlugin } from '@inertiajs/inertia-v
 import { InertiaProgress } from '@inertiajs/progress';
 import { createApp, h } from 'vue';
 
-import { store as mapStore } from './Stores/map.state';
+import { store } from './Stores';
 
 require('./bootstrap');
 
@@ -21,7 +21,7 @@ createApp({
 })
     .mixin({ methods: { route } })
     .use(InertiaPlugin)
-    .use(mapStore)
+    .use(store)
     .mount(el);
 
 InertiaProgress.init({ color: '#4B5563' });
