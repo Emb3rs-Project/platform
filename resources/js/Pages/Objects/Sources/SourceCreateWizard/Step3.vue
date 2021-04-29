@@ -1,11 +1,16 @@
 <template>
   <!-- TODO: maybe modularize it more, we'll see -->
-  <!-- Resources -->
-
+  <!-- Processes -->
+  <div class="flex justify-end justify-items-center p-5">
+    <primary-button type="button" @click="addProcess">
+      <BeakerIcon class="h-6 w-6 mr-2" aria-hidden="true" />
+      Add Process
+    </primary-button>
+  </div>
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="equipment in equipments"
-    :key="equipment"
+    v-for="process in processes"
+    :key="process"
   >
     <div class="sm:col-span-3">
       <Disclosure as="div" v-slot="{ open }">
@@ -14,7 +19,7 @@
             class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none"
           >
             <span class="font-medium text-gray-900">
-              {{ equipment.value }}
+              {{ process.value }}
             </span>
             <span class="ml-6 h-7 flex items-center">
               <ChevronDownIcon
@@ -38,7 +43,7 @@
           <DisclosurePanel as="dd" class="mt-2 pr-12">
             <div
               class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              v-for="property in equipment.props"
+              v-for="property in process.props"
               :key="property"
             >
               <div>
@@ -51,9 +56,7 @@
               <div class="sm:col-span-2">
                 <div v-if="property.property.inputType === 'text'">
                   <text-input
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
+                    v-model="form.process.data[property.property.symbolic_name]"
                     :unit="property.unit.symbol"
                     :placeholder="property.property.name"
                     :required="property.required"
@@ -62,9 +65,7 @@
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                   <select-menu
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
+                    v-model="form.process.data[property.property.symbolic_name]"
                     :options="property.property.data.options"
                     :required="property.required"
                   >
@@ -77,6 +78,14 @@
       </Disclosure>
     </div>
   </div>
+
+  <add-process-modal
+    v-model="modalIsVisible"
+    :processesCategories="processesCategories"
+    :processes="processes"
+    @confirmation="onAddProcess"
+  >
+  </add-process-modal>
 </template>
 
 <script>
@@ -84,11 +93,12 @@ import { ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon, BeakerIcon } from "@heroicons/vue/outline";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "../../../../Components/NewLayout/PrimaryButton.vue";
+import AddProcessModal from "../../../../Components/NewLayout/Modals/AddProcessModal.vue";
 // import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
 
 export default {
@@ -97,44 +107,73 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
+    BeakerIcon,
+    AddProcessModal,
 
     SelectMenu,
     TextInput,
     PrimaryButton,
-    // Disclosure,
   },
 
   props: {
-    objects: {
+    processesCategories: {
+      type: Array,
+      required: true,
+    },
+    processes: {
       type: Array,
       required: true,
     },
   },
 
+  emits: ["completed"],
+
   setup(props) {
     const form = useForm({
-      resources: {
+      process: {
         data: {},
       },
     });
 
-    watch(
-      form,
-      (form) => {
-        console.log(form);
-        // the component can return true for completed or false otherwise
-      },
-      { deep: true }
+    const processes = ref(
+      props.processes.map((p) => ({
+        key: p.id,
+        value: p.name,
+        parent: p.category_id,
+        props: p.template_properties,
+      }))
     );
-    const equipments = props.objects.map((o) => ({
-      key: o.id,
-      value: o.name,
-      props: o.template_properties,
-    }));
+
+    const modalIsVisible = ref(false);
+
+    const addProcess = () => (modalIsVisible.value = true);
+
+    const onAddProcess = (addedProcess) => {
+      // TODO: Add it to the vuex store
+
+      const process = processes.value.find((p) => p.key === addedProcess.key);
+
+      const proc = {
+        id: addedProcess.key,
+        data: {},
+        template: process,
+      };
+
+      for (const prop of process.props) {
+        proc.data[prop.property.symbolic_name] = prop.default_value
+          ? prop.default_value
+          : "";
+      }
+
+      processes.value = [...processes.value, process];
+    };
 
     return {
       form,
-      equipments,
+      processes,
+      modalIsVisible,
+      addProcess,
+      onAddProcess,
     };
   },
 };

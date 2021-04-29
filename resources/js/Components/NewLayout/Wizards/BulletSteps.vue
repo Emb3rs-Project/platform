@@ -1,8 +1,7 @@
 <template>
   <nav class="flex items-center justify-center" aria-label="Progress">
     <p class="text-sm font-medium">
-      Step {{ steps.findIndex((step) => step.status === "current") + 1 }} of
-      {{ steps.length }}
+      Step {{ currentStepIndex + 1 }} of {{ steps.length }}
     </p>
     <ol class="ml-8 flex items-center space-x-5">
       <li v-for="step in steps" :key="step.name">
@@ -31,16 +30,30 @@
         </div>
       </li>
     </ol>
+    <p class="ml-8 text-sm font-medium">{{ currentStep.name }}</p>
   </nav>
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
   props: {
     steps: {
       type: Array,
       required: true,
     },
+  },
+  setup(props) {
+    const currentStepIndex = computed(() =>
+      props.steps.findIndex((step) => step.status === "current")
+    );
+
+    const currentStep = computed(() => props.steps[currentStepIndex.value]);
+
+    return {
+      currentStepIndex,
+      currentStep,
+    };
   },
 };
 </script>

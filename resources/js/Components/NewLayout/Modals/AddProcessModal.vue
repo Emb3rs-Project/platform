@@ -48,7 +48,7 @@
               <div
                 class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100"
               >
-                <DatabaseIcon
+                <BeakerIcon
                   class="h-6 w-6 text-yellow-600"
                   aria-hidden="true"
                 />
@@ -62,16 +62,16 @@
                 </DialogTitle>
                 <div class="mt-2">
                   <select-menu
-                    v-model="selectedEquipmentCategory"
-                    :options="equipmentsCategories"
+                    v-model="selectedProcessCategory"
+                    :options="processesCategories"
                     :label="'Category'"
                   ></select-menu>
                 </div>
                 <div class="mt-5">
                   <select-menu
-                    :disabled="!equipmentsAreAvailable"
-                    v-model="selectedEquipment"
-                    :options="availableEquipments"
+                    :disabled="!processesAreAvailable"
+                    v-model="selectedProcess"
+                    :options="availableProcesses"
                     :label="'Equipment'"
                   ></select-menu>
                 </div>
@@ -91,7 +91,7 @@
               <primary-button
                 type="button"
                 @click="onConfirmation"
-                :disabled="!canAddEquipment"
+                :disabled="!canAddProcess"
                 class="sm:col-start-2"
               >
                 Confirm
@@ -114,7 +114,7 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { DatabaseIcon } from "@heroicons/vue/outline";
+import { BeakerIcon } from "@heroicons/vue/outline";
 
 import PrimaryButton from "../PrimaryButton.vue";
 import SecondaryOutlinedButton from "../SecondaryOutlinedButton.vue";
@@ -125,9 +125,10 @@ export default {
     Dialog,
     DialogOverlay,
     DialogTitle,
+    BeakerIcon,
     TransitionChild,
     TransitionRoot,
-    DatabaseIcon,
+
     PrimaryButton,
     SecondaryOutlinedButton,
     SelectMenu,
@@ -138,11 +139,11 @@ export default {
       type: Boolean,
       required: true,
     },
-    equipmentsCategories: {
+    processesCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    processes: {
       type: Array,
       required: true,
     },
@@ -151,40 +152,40 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
-    const availableEquipments = ref([]);
-    const selectedEquipmentCategory = ref(null);
-    const selectedEquipment = ref(null);
+    console.log("hello");
+    const availableProcesses = ref([]);
+    const selectedProcessCategory = ref(null);
+    const selectedProcess = ref(null);
 
-    const equipmentsCategories = computed(() =>
-      props.equipmentsCategories.map((c) => ({
-        key: c.id,
-        value: c.name,
+    const processesCategories = computed(() =>
+      props.processesCategories.map((p) => ({
+        key: p.id,
+        value: p.name,
       }))
     );
 
-    const equipments = computed(() =>
-      props.equipments.map((e) => ({
+    const processes = computed(() =>
+      props.processes.map((e) => ({
         key: e.key,
         value: e.value,
         parent: e.parent,
       }))
     );
 
-    const equipmentsAreAvailable = computed(() => {
-      if (!selectedEquipmentCategory.value) return false;
+    const processesAreAvailable = computed(() => {
+      if (!selectedProcessCategory.value) return false;
 
-      const equipmentsThatMatch = equipments.value.filter(
-        (e) => e.parent == selectedEquipmentCategory.value.key
+      const processesThatMatch = processes.value.filter(
+        (p) => p.parent == selectedProcessCategory.value.key
       );
 
-      if (!equipmentsThatMatch.length) return false;
+      if (!processesThatMatch.length) return false;
 
       return true;
     });
 
-    const canAddEquipment = computed(() => {
-      if (selectedEquipmentCategory.value && selectedEquipment.value)
-        return true;
+    const canAddProcess = computed(() => {
+      if (selectedProcessCategory.value && selectedProcess.value) return true;
       return false;
     });
 
@@ -193,26 +194,26 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
-    watch(selectedEquipmentCategory, (selectedEquipmentCategory) => {
-      availableEquipments.value = equipments.value.filter(
-        (e) => e.parent == selectedEquipmentCategory.key
+    watch(selectedProcessCategory, (selectedProcessCategory) => {
+      availableProcesses.value = processes.value.filter(
+        (p) => p.parent == selectedProcessCategory.key
       );
     });
 
     const onConfirmation = () => {
-      emit("confirmation", selectedEquipment.value);
+      emit("confirmation", selectedProcess.value);
       open.value = false;
     };
 
     return {
-      equipmentsCategories,
-      selectedEquipmentCategory,
-      availableEquipments,
-      selectedEquipment,
+      processesCategories,
+      selectedProcessCategory,
+      availableProcesses,
+      selectedProcess,
       open,
       onConfirmation,
-      equipmentsAreAvailable,
-      canAddEquipment,
+      processesAreAvailable,
+      canAddProcess,
     };
   },
 };

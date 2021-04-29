@@ -65,11 +65,19 @@ export default {
       type: Array,
       required: true,
     },
+    equipmentsCategories: {
+      type: Array,
+      required: true,
+    },
     equipments: {
       type: Array,
       required: true,
     },
-    equipmentsCategories: {
+    processesCategories: {
+      type: Array,
+      required: true,
+    },
+    processes: {
       type: Array,
       required: true,
     },
@@ -134,12 +142,14 @@ export default {
             currentStepProps.value.objects = props.templates;
             break;
           case "Equipments":
-            console.log("yes", props.equipmentCategories);
-            currentStepProps.value.categories = props.equipmentsCategories;
+            currentStepProps.value.equipmentsCategories =
+              props.equipmentsCategories;
             currentStepProps.value.equipments = props.equipments;
             break;
           case "Processes":
-            currentStepProps.value.objects = props.equipments;
+            currentStepProps.value.processesCategories =
+              props.processesCategories;
+            currentStepProps.value.processes = props.processes;
             break;
           case "Scripts":
             currentStepProps.value.objects = props.equipments;

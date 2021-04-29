@@ -86,8 +86,9 @@
 
   <add-equipment-modal
     v-model="modalIsVisible"
-    :categories="categories"
+    :equipmentsCategories="equipmentsCategories"
     :equipments="equipments"
+    @confirmation="onAddEquipment"
   >
   </add-equipment-modal>
 </template>
@@ -121,7 +122,7 @@ export default {
   },
 
   props: {
-    categories: {
+    equipmentsCategories: {
       type: Array,
       required: true,
     },
@@ -140,25 +141,39 @@ export default {
       },
     });
 
-    // watch(
-    //   form,
-    //   (form) => {
-    //     console.log(form);
-    //     // the component can return true for completed or false otherwise
-    //   },
-    //   { deep: true }
-    // );
-
-    const equipments = props.equipments.map((e) => ({
-      key: e.id,
-      value: e.name,
-      props: e.template_properties,
-    }));
+    const equipments = ref(
+      props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+        props: e.template_properties,
+      }))
+    );
 
     const modalIsVisible = ref(false);
 
-    const addEquipment = () => {
-      modalIsVisible.value = true;
+    const addEquipment = () => (modalIsVisible.value = true);
+
+    const onAddEquipment = (addedEquipment) => {
+      // TODO: Add it to the vuex store
+
+      const equipment = equipments.value.find(
+        (e) => e.key === addedEquipment.key
+      );
+
+      const equip = {
+        id: addedEquipment.key,
+        data: {},
+        template: equipment,
+      };
+
+      for (const prop of equipment.props) {
+        equip.data[prop.property.symbolic_name] = prop.default_value
+          ? prop.default_value
+          : "";
+      }
+
+      equipments.value = [...equipments.value, equipment];
     };
 
     return {
@@ -166,6 +181,7 @@ export default {
       form,
       equipments,
       addEquipment,
+      onAddEquipment,
     };
   },
 };

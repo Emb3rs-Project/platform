@@ -65,8 +65,10 @@ class SourceController extends Controller
             ->pluck('id');
 
         $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
+            ->get();
+
+        $processCategories = Category::whereType('process')
+            ->get();
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([
@@ -76,7 +78,7 @@ class SourceController extends Controller
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories->map(fn ($e) => $e->id))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -86,12 +88,22 @@ class SourceController extends Controller
 
         $locations = Location::with(['geoObject'])->get();
 
+        $processTemplates = Template::whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
         return [
             "slideOver" => "Objects/Sources/SourceCreate",
             "props" => [
                 "templates" => $sourceTemplates,
                 "equipments" => $equipmentTemplates,
                 "equipmentsCategories" => $equipmentCategories,
+                "processes" => $processTemplates,
+                "processCategories" => $processCategories,
                 "locations" => $locations,
             ]
         ];
