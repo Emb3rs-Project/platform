@@ -36,8 +36,10 @@
         "@headlessui/vue": "^1.0.0",
         "@heroicons/vue": "^1.0.1",
         "beautifymarker": "^1.0.9",
+        "es6-promise": "^4.2.8",
         "font-awesome": "^4.7.0",
         "leaflet-contextmenu": "^1.4.0",
-        "pluralize": "^8.0.0"
+        "pluralize": "^8.0.0",
+        "vuex": "^4.0.0"
     }
 }

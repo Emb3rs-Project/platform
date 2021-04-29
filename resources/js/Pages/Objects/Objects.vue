@@ -53,6 +53,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
 import ObjectsIndex from "./ObjectsIndex.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -74,6 +75,11 @@ export default {
     const modalComponent = ref(null);
     const indexSlide = ref(false);
     const currentSlideOver = ref(null);
+
+    const store = useStore();
+
+    store.subscribe(() => console.log(store.state));
+    store.commit("increment");
 
     const slideOverComponent = computed(() => {
       if (currentSlideOver.value) {
@@ -100,7 +106,6 @@ export default {
 
         return res.json();
       });
-      console.log(res);
 
       slideOverProps.value = res.props;
       currentSlideOver.value = res.slideOver;
@@ -109,12 +114,10 @@ export default {
     };
 
     const onActionRequest = (res) => {
-      console.log("parent", res);
       if (slideOver.value) slideOver.value = false; // reset the current slideover
       if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
 
       slideOverProps.value = res.props;
-      console.log("GEOCFU", res.props);
       currentSlideOver.value = res.slideOver;
 
       slideOver.value = true;
