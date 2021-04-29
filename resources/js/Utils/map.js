@@ -112,8 +112,28 @@ export default {
         return L.marker(L.latLng(center), {
             icon: L.BeautifyIcon.icon(iconOptions),
             draggable,
+            contextmenu: true,
+            contextmenuWidth: 140,
+            contextmenuItems: []
         })
             .addTo(map);
+    },
+    addCircle(map, center) {
+        return L.circle(center, {
+            color: 'red',
+            fillColor: 'red',
+            fillOpacity: 0.2,
+            radius: 5
+        }).addTo(map)
+    },
+    addSegment(map, from, to, context) {
+        const m = L.polyline([from, to], {
+            color: 'green', contextmenu: true,
+            contextmenuWidth: 140,
+            contextmenuItems: context(m)
+        }).addTo(map);
+
+        return m;
     },
     addInstances(map, instances = [], mapObjects = {
         sources: null,
