@@ -103,7 +103,7 @@ class SourceController extends Controller
                 "equipments" => $equipmentTemplates,
                 "equipmentsCategories" => $equipmentCategories,
                 "processes" => $processTemplates,
-                "processCategories" => $processCategories,
+                "processesCategories" => $processCategories,
                 "locations" => $locations,
             ]
         ];

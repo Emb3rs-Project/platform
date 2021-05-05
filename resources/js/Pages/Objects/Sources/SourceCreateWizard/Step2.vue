@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
@@ -118,7 +118,6 @@ export default {
 
     SelectMenu,
     TextInput,
-    // Disclosure,
   },
 
   props: {
@@ -135,28 +134,48 @@ export default {
   emits: ["completed"],
 
   setup(props) {
-    const form = useForm({
-      equipment: {
-        data: {},
-      },
+    const modalIsVisible = ref(false);
+    // const equipments = reactive({});
+
+    // const form = useForm({
+    //   equipment: {
+    //     data: {},
+    //   },
+    // });
+
+    const equipments = computed({
+      get: () =>
+        props.equipments.map((e) => ({
+          key: e.id,
+          value: e.name,
+          parent: e.category_id,
+          props: e.template_properties,
+        })),
+      set: (value) => [
+        ...props.equipments,
+        {
+          key: value.id,
+          value: value.name,
+          parent: value.category_id,
+          props: value.template_properties,
+        },
+      ],
     });
 
-    const equipments = ref(
-      props.equipments.map((e) => ({
-        key: e.id,
-        value: e.name,
-        parent: e.category_id,
-        props: e.template_properties,
-      }))
-    );
-
-    const modalIsVisible = ref(false);
+    // const equipments = ref(
+    //   props.equipments.map((e) => ({
+    //     key: e.id,
+    //     value: e.name,
+    //     parent: e.category_id,
+    //     props: e.template_properties,
+    //   }))
+    // );
 
     const addEquipment = () => (modalIsVisible.value = true);
 
     const onAddEquipment = (addedEquipment) => {
       // TODO: Add it to the vuex store
-
+      console.log(equipments);
       const equipment = equipments.value.find(
         (e) => e.key === addedEquipment.key
       );

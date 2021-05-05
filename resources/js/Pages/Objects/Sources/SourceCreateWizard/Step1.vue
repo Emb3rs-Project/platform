@@ -16,41 +16,43 @@
     </div>
   </div>
 
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="property in selectedTemplate.props"
-    :key="property"
-  >
-    <div>
-      <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-        {{ property.property.name }}
-      </label>
-    </div>
-    <div class="sm:col-span-2">
-      <div v-if="property.property.inputType === 'text'">
-        <text-input
-          v-model="form.source.data[property.property.symbolic_name]"
-          :unit="property.unit.symbol"
-          :placeholder="property.property.name"
-          :required="property.required"
-        >
-        </text-input>
+  <div v-if="selectedTemplate">
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-for="property in selectedTemplate.props"
+      :key="property"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
+          {{ property.property.name }}
+        </label>
       </div>
-      <div v-else-if="property.property.inputType === 'select'">
-        <select-menu
-          v-model="form.source.data[property.property.symbolic_name]"
-          :options="property.property.data.options"
-          :disabled="selectedTemplate ? false : true"
-          :required="property.required"
-        >
-        </select-menu>
+      <div class="sm:col-span-2">
+        <div v-if="property.property.inputType === 'text'">
+          <text-input
+            v-model="data[property.property.symbolic_name]"
+            :unit="property.unit.symbol"
+            :placeholder="property.property.name"
+            :required="property.required"
+          >
+          </text-input>
+        </div>
+        <div v-else-if="property.property.inputType === 'select'">
+          <select-menu
+            v-model="data[property.property.symbolic_name]"
+            :options="property.property.data.options"
+            :required="property.required"
+          >
+          </select-menu>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, ref, reactive, watch } from "vue";
+import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
@@ -63,46 +65,43 @@ export default {
   },
 
   props: {
-    // modelValue: {
-    //   type: Object,
-    //   required: true,
-    // },
-    objects: {
+    templates: {
       type: Array,
       required: true,
     },
   },
 
-  emits: ["completed"],
+  setup(props) {
+    const store = useStore();
 
-  setup(props, { emit }) {
-    const form = useForm({
-      source: {
-        data: {},
-      },
-    });
+    const selectedTemplate = ref(null);
+    const data = ref({});
 
     watch(
-      form,
-      (form) => {
-        console.log(form);
-        emit("completed", true);
-        // the component can return true for completed or false otherwise
+      data,
+      (data) => {
+        // TODO: vuex complains for some reason
+        // store.dispatch("sources/addSource", { source: data });
       },
       { deep: true }
     );
 
-    const templates = props.objects.map((t) => ({
-      key: t.id,
-      value: t.name,
-      props: t.template_properties,
-    }));
-    const selectedTemplate = ref(templates.length ? templates[0] : null);
+    watch(selectedTemplate, (selectedTemplate) => {
+      store.dispatch("sources/addTemplateId", selectedTemplate.key);
+    });
+
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+        props: t.template_properties,
+      }))
+    );
 
     return {
-      form,
       templates,
       selectedTemplate,
+      data,
     };
   },
 };

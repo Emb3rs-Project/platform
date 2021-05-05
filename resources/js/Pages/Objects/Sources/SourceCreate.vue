@@ -8,13 +8,9 @@
     subtitleTextColor="text-gray-200"
   >
     <keep-alive>
-      <component
-        v-bind="currentStepProps"
-        :is="stepComponent"
-        v-show="stepComponent"
-        @completed="onStepCompleted"
-      ></component>
+      <component v-bind="currentStepProps" :is="stepComponent"></component>
     </keep-alive>
+
     <template #actions>
       <div class="flex justify-start w-full">
         <bullet-steps :steps="steps"></bullet-steps>
@@ -137,9 +133,11 @@ export default {
     watch(
       currentStep,
       (currentStep) => {
+        currentStepProps.value = {};
+
         switch (currentStep.name) {
           case "Source Details":
-            currentStepProps.value.objects = props.templates;
+            currentStepProps.value.templates = props.templates;
             break;
           case "Equipments":
             currentStepProps.value.equipmentsCategories =
@@ -189,6 +187,8 @@ export default {
 
         return;
       }
+
+      console.log("it shuld save");
     };
 
     const onStepCompleted = () => {

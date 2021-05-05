@@ -28,7 +28,6 @@
       @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
-    {{ counter }}
     <component
       class="z-30"
       v-bind="slideOverProps"
@@ -48,13 +47,13 @@
 
 <script>
 import { computed, defineAsyncComponent, ref } from "vue";
+import { useStore } from "vuex";
 import pluralize from "pluralize";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
 import ObjectsIndex from "./ObjectsIndex.vue";
-import { useStore } from "vuex";
 
 export default {
   components: {
@@ -63,6 +62,7 @@ export default {
     SlideOver,
     ObjectsIndex,
   },
+
   props: {
     instances: {
       type: Array,

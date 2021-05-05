@@ -1,4 +1,3 @@
-
 const state = () => ({
     count: 0
 });
@@ -15,14 +14,11 @@ const actions = {
     }
 };
 
-
 const mutations = {
     doIncrement(state) {
         state.count++;
     }
 };
-
-
 
 
 export default {
