@@ -301,6 +301,7 @@ class SourceController extends Controller
     public function destroy($id)
     {
         Instance::destroy($id);
-        return redirect::route('objects.sources.index');
+
+        return Redirect::route('objects.index');
     }
 }
