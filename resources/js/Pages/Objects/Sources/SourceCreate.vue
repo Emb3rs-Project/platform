@@ -7,9 +7,9 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <keep-alive>
-      <component v-bind="currentStepProps" :is="stepComponent"></component>
-    </keep-alive>
+    <!-- <keep-alive> -->
+    <component v-bind="currentStepProps" :is="stepComponent"></component>
+    <!-- </keep-alive> -->
 
     <template #actions>
       <div class="flex justify-start w-full">

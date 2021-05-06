@@ -74,8 +74,15 @@ export default {
   setup(props) {
     const store = useStore();
 
-    const selectedTemplate = ref(null);
+    // const selectedTemplate = ref(null);
     const data = ref({});
+
+    console.log(store.getters["sources/template"]);
+
+    const selectedTemplate = computed({
+      get: () => store.getters["sources/template"],
+      set: (value) => store.dispatch("sources/addTemplate", value),
+    });
 
     watch(
       data,
@@ -86,9 +93,9 @@ export default {
       { deep: true }
     );
 
-    watch(selectedTemplate, (selectedTemplate) => {
-      store.dispatch("sources/addTemplateId", selectedTemplate.key);
-    });
+    // watch(selectedTemplate, (selectedTemplate) => {
+    //   store.dispatch("sources/addTemplateId", selectedTemplate.key);
+    // });
 
     const templates = computed(() =>
       props.templates.map((t) => ({

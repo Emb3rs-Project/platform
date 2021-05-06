@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot as="template" :show="open">
     <Dialog
@@ -131,6 +130,8 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
+    // TODO: For some reason the enter animation seems that id does not happen,
+    // ivestigate at a later stage
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
