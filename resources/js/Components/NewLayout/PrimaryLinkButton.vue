@@ -1,7 +1,7 @@
 <template>
   <inertia-link
     as="button"
-    :href="href"
+    :href="route(path, parameter)"
     :class="[
       disabled
         ? 'cursor-wait disabled:opacity-50 hover:bg-blue-600'
@@ -17,9 +17,13 @@
 <script>
 export default {
   props: {
-    href: {
+    path: {
       type: String,
       default: "'#'",
+    },
+    parameter: {
+      type: String,
+      default: {},
     },
     disabled: {
       type: Boolean,
