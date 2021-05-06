@@ -127,13 +127,17 @@ export default {
         }).addTo(map)
     },
     addSegment(map, from, to, context) {
-        const m = L.polyline([from, to], {
-            color: 'green', contextmenu: true,
-            contextmenuWidth: 140,
-            contextmenuItems: context(m)
+        const polyline = L.polyline([from, to], {
+            color: 'green'
         }).addTo(map);
 
-        return m;
+        polyline.bindContextMenu({
+            contextmenu: true,
+            contextmenuWidth: 140,
+            contextmenuItems: context(polyline)
+        })
+
+        return polyline;
     },
     addInstances(map, instances = [], mapObjects = {
         sources: null,
