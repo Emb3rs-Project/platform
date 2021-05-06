@@ -100,9 +100,9 @@
     </div>
 
     <template #actions>
-      <primary-link-button :path="`${selectedObject.path}.create`">
-        Create New {{ getSingular(selectedObject.title) }}
-      </primary-link-button>
+      <primary-button @click="onActionRequest(`${selectedObject.path}.create`)">
+        Create New {{ getSingular(selectedObject.title) }}</primary-button
+      >
     </template>
   </slide-over>
 
@@ -129,6 +129,7 @@ import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
 import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
+import PrimaryButton from "../../Components/NewLayout/PrimaryButton.vue";
 
 export default {
   components: {
@@ -140,6 +141,7 @@ export default {
     DetailIcon,
     FilterDropdown,
     DeleteModal,
+    PrimaryButton,
   },
 
   props: {
