@@ -93,23 +93,6 @@
       </div>
     </div>
 
-    <!-- Sink Location Type -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's Type
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.geo_object.type }}
-        </div>
-      </div>
-    </div>
-
     <template #actions>
       <secondary-outlined-button type="button" @click="open = false">
         Cancel
