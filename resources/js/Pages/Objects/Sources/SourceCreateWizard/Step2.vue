@@ -57,9 +57,7 @@
               <div class="sm:col-span-2">
                 <div v-if="property.property.inputType === 'text'">
                   <text-input
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
+                    v-model="data[property.property.symbolic_name]"
                     :unit="property.unit.symbol"
                     :placeholder="property.property.name"
                     :required="property.required"
@@ -68,9 +66,7 @@
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                   <select-menu
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
+                    v-model="data[property.property.symbolic_name]"
                     :options="property.property.data.options"
                     :required="property.required"
                   >
@@ -135,47 +131,22 @@ export default {
 
   setup(props) {
     const modalIsVisible = ref(false);
-    // const equipments = reactive({});
+    const data = ref({});
 
-    // const form = useForm({
-    //   equipment: {
-    //     data: {},
-    //   },
-    // });
-
-    const equipments = computed({
-      get: () =>
-        props.equipments.map((e) => ({
-          key: e.id,
-          value: e.name,
-          parent: e.category_id,
-          props: e.template_properties,
-        })),
-      set: (value) => [
-        ...props.equipments,
-        {
-          key: value.id,
-          value: value.name,
-          parent: value.category_id,
-          props: value.template_properties,
-        },
-      ],
-    });
-
-    // const equipments = ref(
-    //   props.equipments.map((e) => ({
-    //     key: e.id,
-    //     value: e.name,
-    //     parent: e.category_id,
-    //     props: e.template_properties,
-    //   }))
-    // );
+    const equipments = ref(
+      props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+        props: e.template_properties,
+      }))
+    );
 
     const addEquipment = () => (modalIsVisible.value = true);
 
     const onAddEquipment = (addedEquipment) => {
       // TODO: Add it to the vuex store
-      console.log(equipments);
+      console.log(addedEquipment);
       const equipment = equipments.value.find(
         (e) => e.key === addedEquipment.key
       );
@@ -197,7 +168,7 @@ export default {
 
     return {
       modalIsVisible,
-      form,
+      data,
       equipments,
       addEquipment,
       onAddEquipment,
