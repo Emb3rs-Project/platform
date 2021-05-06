@@ -10,14 +10,12 @@
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
     >
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-          Name
-        </label>
-      </div>
+      <label
+        for="project_name"
+        class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+      >
+        Name
+      </label>
       <div class="sm:col-span-2">
         <text-input v-model="form.name" placeholder="Link's Name"> </text-input>
       </div>
@@ -65,7 +63,8 @@ export default {
       required: true,
     },
   },
-  setup(props) {
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
     const form = useForm({
       name: "",
     });

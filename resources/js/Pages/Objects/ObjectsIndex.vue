@@ -130,6 +130,7 @@ import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
 import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
 import PrimaryButton from "../../Components/NewLayout/PrimaryButton.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -158,6 +159,9 @@ export default {
   emits: ["update:modelValue", "onCenter", "onActionRequest"],
 
   setup(props, { emit }) {
+    const store = useStore();
+    console.log(store.state);
+
     const tableColumns = ["name", "location", "actions"];
     const filterOptions = [
       {
