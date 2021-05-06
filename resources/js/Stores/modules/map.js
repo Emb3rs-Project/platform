@@ -1,29 +1,27 @@
-const state = () => ({
-    count: 0
+const _state = () => ({
+    map: null,
+    selectedMarker: null
 });
 
 const getters = {
-    counter(state, getters, rootState) {
-        return state.count;
-    }
+    selectedMarker: (state) => state.selectedMarker
 };
 
 const actions = {
-    increment({ commit, state }) {
-        commit('doIncrement');
-    }
+    // selectMarker: ({ commit, state }, marker) => {
+    //     commit('doSelectMarker', marker);
+    // }
 };
 
 const mutations = {
-    doIncrement(state) {
-        state.count++;
-    }
+    doSelectMarker: (state, marker) => state.selectMarker = marker,
+    setMap: (state, map) => state.map = map,
 };
 
 
 export default {
     namespaced: true,
-    state,
+    state: _state,
     getters,
     actions,
     mutations

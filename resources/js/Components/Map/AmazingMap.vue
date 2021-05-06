@@ -26,7 +26,7 @@ export default {
   },
   emits: ["onMove", "onCreateRequest"],
   setup(props, { emit }) {
-    // TODO: Convert to VUEX
+    // TODO: Convert to VUEX!!!
 
     const map = ref(null);
     const mapObjects = ref({
@@ -51,21 +51,23 @@ export default {
       },
     });
 
-    const onCreateSink = (val) =>
-      emit("onCreateRequest", {
-        type: "sink",
-        center: [val.latlng.lat, val.latlng.lng],
+    const onCreateSink = (_) => {
+      store.dispatch("objects/goToSlideOver", {
+        route: "objects.sinks.create",
+        props: {},
       });
+    };
 
-    const onCreateSource = (val) =>
-      emit("onCreateRequest", {
-        type: "source",
-        center: [val.latlng.lat, val.latlng.lng],
+    const onCreateSource = (_) =>
+      store.dispatch("objects/goToSlideOver", {
+        route: "objects.sources.create",
+        props: {},
       });
 
     const onCreateLink = (value) => {
-      emit("onCreateRequest", {
-        type: "link",
+      store.dispatch("objects/goToSlideOver", {
+        route: "objects.links.create",
+        props: {},
       });
 
       map.value.contextmenu.removeAllItems();

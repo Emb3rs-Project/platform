@@ -25,7 +25,6 @@
     <amazing-map
       :centerValue="[38.7181959, -9.1975417]"
       :instances="instances"
-      @onCreateRequest="onCreateRequest"
     ></amazing-map>
 
     <component
@@ -34,7 +33,6 @@
       :is="slideOverComponent"
       v-show="slideOverComponent"
       v-model="slideOver"
-      @onRouteRequest="onRouteRequest"
     ></component>
 
     <objects-index
@@ -46,14 +44,14 @@
 </template>
 
 <script>
-import { computed, defineAsyncComponent, ref } from "vue";
+import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
-import pluralize from "pluralize";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
 import ObjectsIndex from "./ObjectsIndex.vue";
+import LinkIcon from "../../Components/Icons/LinkIcon";
 
 export default {
   components: {
@@ -61,6 +59,7 @@ export default {
     AmazingMap,
     SlideOver,
     ObjectsIndex,
+    LinkIcon,
   },
 
   props: {
@@ -78,25 +77,16 @@ export default {
     const currentSlideOver = ref(null);
 
     const store = useStore();
-    store.dispatch("map/increment");
 
-    const slideOverComponent = computed(() => {
-      if (currentSlideOver.value) {
-        return defineAsyncComponent(() =>
-          import(`@/Pages/${currentSlideOver.value}`)
-        );
-      }
+    const currentSlideOverPath = computed(
+      () => store.getters["objects/currentRoute"]
+    );
 
-      return false;
-    });
-
-    const onCreateRequest = async (req) => {
+    watch(currentSlideOverPath, async (newPath) => {
       if (slideOver.value) slideOver.value = false; // reset the current slideover
       if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
 
-      const res = await fetch(
-        route(`objects.${pluralize.plural(req.type)}.create`)
-      ).then((res) => {
+      const response = await fetch(route(newPath)).then((res) => {
         if (!res.ok) {
           const error = new Error(res.statusText);
           error.json = res.json();
@@ -106,11 +96,19 @@ export default {
         return res.json();
       });
 
-      slideOverProps.value = res.props;
-      currentSlideOver.value = res.slideOver;
+      slideOverProps.value = response.props;
+      currentSlideOver.value = response.slideOver;
 
       slideOver.value = true;
-    };
+    });
+
+    const slideOverComponent = computed(() =>
+      currentSlideOver.value
+        ? defineAsyncComponent(() =>
+            import(`@/Pages/${currentSlideOver.value}`)
+          )
+        : false
+    );
 
     const onActionRequest = (res) => {
       if (slideOver.value) slideOver.value = false; // reset the current slideover
@@ -122,19 +120,13 @@ export default {
       slideOver.value = true;
     };
 
-    const onRouteRequest = (e) => {
-      console.log("OBJECTS onRouteRequest", e);
-    };
-
     return {
       slideOver,
       modalComponent,
-      onCreateRequest,
       onActionRequest,
       indexSlide,
       slideOverComponent,
       slideOverProps,
-      onRouteRequest,
       counter: computed(() => store.getters["map/counter"]),
     };
   },

@@ -1,7 +1,7 @@
 import { createLogger, createStore } from 'vuex';
 
 import map from './modules/map';
-import objectIndex from './modules/object_index';
+import objects from './modules/objects';
 import sources from './modules/Objects/sources';
 
 const isLocalMode = process.env.MIX_ENV === 'local' ? true : false;
@@ -21,7 +21,7 @@ const store = createStore({
         : plugins,
     modules: {
         map,
-        objectIndex,
+        objects,
         sources
     },
 });
