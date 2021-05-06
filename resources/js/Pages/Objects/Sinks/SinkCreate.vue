@@ -63,6 +63,7 @@
         <div v-if="prop.property.inputType === 'text'">
           <text-input
             v-model="form.sink.data[prop.property.symbolic_name]"
+            :unit="prop.unit.symbol"
             :label="prop.property.name"
             :placeholder="prop.property.name"
             :required="prop.required"
