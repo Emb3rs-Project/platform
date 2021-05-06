@@ -123,7 +123,9 @@ export default {
     };
 
     const onSegmentProperties = (value) => {
-      console.log(value);
+      value.setStyle({
+        color: "#F9A602",
+      });
     };
 
     const onNextPoint = (value) => {
