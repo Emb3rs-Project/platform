@@ -1,101 +1,87 @@
 <template>
-  <app-layout>
-    <template #header>
-      <h2 class="font-semibold text-lg text-gray-800 leading-tight">
-        Objects | Links
-      </h2>
-    </template>
-    <div class="p-5">
-      <h1 class="text-lg font-bold">New Link</h1>
-    </div>
-    <div class="flex p-5 h-content gap-2">
-      <div class="w-6/12 md:overflow-y-auto md:pr-4">
-        <input-row
-          heading="Details | Link"
-          desc="Enter a name for your link"
-          v-model="form.name"
+  <slide-over
+    v-model="open"
+    title="New Link"
+    subtitle="Get started by selecting a marker to start your segments."
+    headerBackground="bg-blue-700"
+    dismissButtonTextColor="text-gray-200"
+    subtitleTextColor="text-gray-200"
+  >
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <div>
+        <label
+          for="project_name"
+          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
         >
-          Link Name
-        </input-row>
-
-        <input-row
-          class="mt-5"
-          desc="Enter a description for your link"
-          v-model="form.description"
-        >
-          Link Description
-        </input-row>
-
-        <select-row
-          class="mt-5"
-          desc="Sharing Options"
-          :options="locationSharingOptions"
-          v-model="form.locationSharing"
-        >
-          Share With
-        </select-row>
+          Name
+        </label>
       </div>
-
-      <div class="w-6/12">
-        <leaflet-map-create-link
-          :radius="form.locationRadius"
-          v-model="form.locationData"
-        ></leaflet-map-create-link>
+      <div class="sm:col-span-2">
+        <text-input v-model="form.name" placeholder="Link's Name"> </text-input>
       </div>
     </div>
-    <div class="w-full my-5 px-16 flex justify-end">
-      <jet-button :disabled="form.processing" @click="submit()"
-        >Create Location</jet-button
+
+    <template #actions>
+      <secondary-outlined-button
+        type="button"
+        :disabled="form.processing"
+        @click="open = false"
       >
-    </div>
-  </app-layout>
+        Cancel
+      </secondary-outlined-button>
+      <primary-button @click="submit" :disabled="form.processing">
+        Save
+      </primary-button>
+    </template>
+  </slide-over>
 </template>
 
 <script>
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
-import AppLayout from "@/Layouts/AppLayout";
-import LeafletMapCreateLink from "@/Components/LeafletMapCreateLink";
-import InputRow from "@/Components/InputRow";
-import RadioRow from "@/Components/RadioRow";
-import SelectRow from "@/Components/SelectRow";
-import JetButton from "@/Jetstream/Button";
-import JetInputError from "@/Jetstream/InputError";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
+import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 
 export default {
   components: {
     AppLayout,
-    LeafletMapCreateLink,
-    InputRow,
-    RadioRow,
-    SelectRow,
-    JetButton,
-    JetInputError,
+    SlideOver,
+    SelectMenu,
+    TextInput,
+    PrimaryButton,
+    SecondaryOutlinedButton,
   },
 
-  setup() {
+  props: {
+    modelValue: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  setup(props) {
     const form = useForm({
       name: "",
-      description: "",
-      locationSharing: "",
-      locationData: {},
     });
 
-    const locationSharingOptions = [
-      { key: "no", value: "I don't want to share my Location" },
-      { key: "team", value: "I want to share my Location with my Institution" },
-      { key: "public", value: "I want to share my Location with everyone" },
-    ];
+    const submit = () => form.post(route("objects.links.store"));
+
+    const open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
 
     return {
       form,
-      locationSharingOptions,
+      submit,
+      open,
     };
-  },
-  methods: {
-    submit() {
-      this.form.post(route("objects.links.store"));
-    },
   },
 };
 </script>

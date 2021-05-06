@@ -32,7 +32,10 @@ class LinkController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Objects/Links/LinkCreate');
+        return [
+            "slideOver" => 'Objects/Links/LinkCreate',
+            "props" => []
+        ];
     }
 
     /**
@@ -50,7 +53,7 @@ class LinkController extends Controller
         $link = Link::create([
             'name' => $request->get('name'),
             'description' => $request->get('description')
-            ]);
+        ]);
 
         $link->teams()->attach(Auth::user()->currentTeam);
 

@@ -64,6 +64,10 @@ export default {
       });
 
     const onCreateLink = (value) => {
+      emit("onCreateRequest", {
+        type: "link",
+      });
+
       map.value.contextmenu.removeAllItems();
       for (const a of linkCreationMapContext)
         map.value.contextmenu.insertItem(a);
@@ -109,7 +113,6 @@ export default {
 
       map.value.removeLayer(value);
       mapObjects.value.links.splice(segmentIndex, 1);
-      console.log(mapObjects.value.links);
       if (mapObjects.value.links.length > 0)
         currentSegment.from = mapObjects.value.links[
           segmentIndex - 1
@@ -117,6 +120,10 @@ export default {
       else {
         currentSegment.from = currentSegment.start;
       }
+    };
+
+    const onSegmentProperties = (value) => {
+      console.log(value);
     };
 
     const onNextPoint = (value) => {
@@ -184,6 +191,10 @@ export default {
       {
         text: "Remove segment",
         callback: () => onRemoveSegment(m),
+      },
+      {
+        text: "Segment Properties",
+        callback: () => onSegmentProperties(m),
       },
     ];
 
