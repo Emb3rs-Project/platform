@@ -67,15 +67,11 @@
                   as="h3"
                   class="text-lg leading-6 font-medium text-gray-900"
                 >
-                  <!-- <slot name="title"></slot> -->
-                  yes
+                  Delete Item
                 </DialogTitle>
                 <div class="mt-2">
                   <p class="text-sm text-gray-500">
-                    <!-- <slot name="description"></slot> -->
-                    Are you sure you want to deactivate your account? All of
-                    your data will be permanently removed from our servers
-                    forever. This action cannot be undone.
+                    Are you sure you want to delete this item?
                   </p>
                 </div>
               </div>
@@ -135,8 +131,6 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
-    const confirmation = ref(false);
-
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
@@ -144,8 +138,7 @@ export default {
 
     const onDelete = () => {
       open.value = false;
-      confirmation.value = true;
-      emit("confirmation", confirmation.value);
+      emit("confirmation", "delete");
     };
 
     return {

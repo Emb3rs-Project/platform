@@ -259,6 +259,6 @@ class SinkController extends Controller
     {
         Instance::destroy($id);
 
-        return redirect::route('objects.sinks.index');
+        return Redirect::route('objects.index');
     }
 }

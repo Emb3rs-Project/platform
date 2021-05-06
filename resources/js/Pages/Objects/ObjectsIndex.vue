@@ -82,7 +82,7 @@
               <button class="focus:outline-none">
                 <trash-icon
                   class="text-red-500 font-medium text-sm w-5"
-                  @click="showModal(item, modalTypes.delete)"
+                  @click="showModal(item, DeleteModal)"
                 ></trash-icon>
               </button>
             </td>
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { computed, ref, watch, defineAsyncComponent } from "vue";
+import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import pluralize from "pluralize";
 
@@ -127,19 +127,19 @@ import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
-import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
-import SecondaryLinkButton from "../../Components/SecondaryLinkButton.vue";
+import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
+import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
 
 export default {
   components: {
     SlideOver,
     PrimaryLinkButton,
-    SecondaryLinkButton,
     AmazingIndexTable,
     TrashIcon,
     EditIcon,
     DetailIcon,
     FilterDropdown,
+    DeleteModal,
   },
 
   props: {
@@ -180,15 +180,9 @@ export default {
         current: false,
       },
     ];
-    const modalTypes = {
-      delete: {
-        type: "delete",
-        path: "@/Components/NewLayout/Modals/DeleteModal.vue",
-      },
-    };
+    const selectedObject = ref(filterOptions[0]);
 
     const objects = ref(null);
-    const selectedObject = ref(filterOptions[0]);
     const filterDropdown = ref(false);
     const modalIsOpen = ref(false);
     const currentModal = ref(null);
@@ -200,14 +194,12 @@ export default {
     });
 
     const modalComponent = computed(() =>
-      currentModal.value
-        ? defineAsyncComponent(() => import(`${currentModal.value.path}`))
-        : false
+      currentModal.value ? currentModal.value : false
     );
 
     watch(
       selectedObject,
-      (current, previous) => {
+      (current) => {
         if (current.title === "Sinks") {
           objects.value = props.instances.filter(
             (i) => i.template.category.type === "sink"
@@ -232,28 +224,24 @@ export default {
 
     const getSingular = (val) => pluralize.singular(val);
 
-    const showModal = (item, type) => {
-      switch (type) {
-        case modalTypes.delete:
-          currentModal.value = modalTypes.delete;
-          itemToDelete.value = item;
-          break;
-
-        default:
-          break;
-      }
+    const showModal = (item, modal) => {
+      currentModal.value = modal;
+      itemToDelete.value = item;
 
       modalIsOpen.value = true;
     };
 
     const centerAtLocation = (loc) => emit("onCenter", loc);
 
-    const onConfirmation = () => {
-      switch (currentModal.value) {
-        case modalTypes.delete:
+    const onConfirmation = (modalType) => {
+      switch (modalType) {
+        case "delete":
           Inertia.delete(
             route(`${selectedObject.value.path}.destroy`, itemToDelete.value.id)
           );
+
+          objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);
+
           break;
 
         default:
@@ -279,7 +267,6 @@ export default {
     return {
       tableColumns,
       filterOptions,
-      modalTypes,
       objects,
       selectedObject,
       filterDropdown,
@@ -291,6 +278,7 @@ export default {
       centerAtLocation,
       onConfirmation,
       onActionRequest,
+      DeleteModal,
     };
   },
 };
