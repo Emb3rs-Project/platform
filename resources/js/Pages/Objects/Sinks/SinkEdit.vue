@@ -64,6 +64,7 @@
           <text-input
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
+            :unit="prop.unit.symbol"
             :placeholder="prop.property.name"
             :required="prop.required"
           >
@@ -99,8 +100,19 @@
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
+import {
+  ref,
+  watch,
+  computed,
+  onBeforeUpdate,
+  onUpdated,
+  onUnmounted,
+  onErrorCaptured,
+  onRenderTracked,
+  onRenderTriggered,
+} from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
+// import { Inertia } from '@inertiajs/inertia'
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/NewLayout/SlideOver.vue";
@@ -143,31 +155,9 @@ export default {
   },
 
   setup(props, { emit }) {
-    const templateInfo = ref(null);
-
-    const templates = props.templates.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const selectedTemplate = ref(
-      templates.find((t) => t.key === props.instance.template.id)
-    );
-
-    const equipmentTemplates = props.equipments.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const selectedEquipmentTemplate = ref(
-      equipmentTemplates.length ? equipmentTemplates[0] : null
-    );
-
-    const locations = props.locations.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const selectedLocation = ref(
-      locations.find((t) => t.key === props.instance.location.id)
-    );
+    onBeforeUpdate(() => {
+      console.log("onBeforeUpdate");
+    });
 
     const form = useForm({
       sink: {
@@ -178,11 +168,49 @@ export default {
       location_id: null,
     });
 
+    const templateInfo = ref(null);
+
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+      }))
+    );
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+
+    const selectedTemplate = ref(
+      templates.value.find((t) => t.key === props.instance.template.id)
+    );
+    console.log(selectedTemplate.value);
+    const selectedLocation = ref(
+      locations.value.find((l) => l.key === props.instance.location.id)
+    );
+    console.log(selectedLocation.value);
+    // const equipmentTemplates = props.equipments.map((t) => ({
+    //   key: t.id,
+    //   value: t.name,
+    // }));
+    // const selectedEquipmentTemplate = ref(
+    //   equipmentTemplates.length ? equipmentTemplates[0] : null
+    // );
+
+    // const locations = props.locations.map((t) => ({
+    //   key: t.id,
+    //   value: t.name,
+    // }));
+
     watch(
       selectedTemplate,
-      (template) => {
-        templateInfo.value = props.templates.find((t) => t.id === template.key);
-        form.template_id = template.key;
+      (selectedTemplate) => {
+        templateInfo.value = props.templates.find(
+          (t) => t.id === selectedTemplate.key
+        );
+        form.template_id = selectedTemplate.key;
 
         // @geocfu: revisit this at a later stage
         //
@@ -214,25 +242,8 @@ export default {
               : "";
           }
         }
-        console.log(templateInfo.value);
       },
       { immediate: true }
-    );
-
-    watch(
-      selectedLocation,
-      (location) => {
-        form.location_id = location.key;
-      },
-      { immediate: true }
-    );
-
-    watch(
-      form.sink.data,
-      (current) => {
-        // console.log("form.sink.data", current);
-      },
-      { immediate: true, deep: true }
     );
 
     const open = computed({
@@ -244,17 +255,22 @@ export default {
       Object.assign([], templateInfo.value?.template_properties)
     );
 
+    const submit = () => {
+      form.post(route("objects.sinks.edit"));
+    };
+
     return {
       templateInfo,
       templates,
       selectedTemplate,
-      equipmentTemplates,
-      selectedEquipmentTemplate,
+      //   equipmentTemplates,
+      //   selectedEquipmentTemplate,
       locations,
       selectedLocation,
       form,
       open,
       properties,
+      submit,
     };
   },
 
@@ -278,9 +294,7 @@ export default {
 
     //   form.equipments.push(equip);
     // },
-    submit() {
-      this.form.post(route("objects.sinks.edit"));
-    },
+
     onLocationSelect(locId) {},
   },
 };

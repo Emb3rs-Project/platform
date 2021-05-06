@@ -159,6 +159,7 @@
 </template>
 
 <script>
+import { onMounted, ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
@@ -168,8 +169,6 @@ import RadioRow from "@/Components/RadioRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-
-import { onMounted, ref, watch } from "vue";
 
 export default {
   components: {
