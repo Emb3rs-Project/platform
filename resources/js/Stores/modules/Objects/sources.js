@@ -4,7 +4,7 @@ const state = () => ({
     equipments: [],
     processes: [],
     scripts: [],
-    templateId: null,
+    template: null,
 });
 
 // https://next.vuex.vuejs.org/api/#getters
@@ -21,8 +21,8 @@ const getters = {
     scripts(state, getters, rootState, rootGetters) {
         return state.scripts;
     },
-    templateId(state, getters, rootState, rootGetters) {
-        return state.templateId;
+    template(state, getters, rootState, rootGetters) {
+        return state.template;
     },
 };
 
@@ -68,11 +68,11 @@ const actions = {
         ctx.commit('removeScript', payload);
     },
 
-    addTemplateId(ctx, payload) {
-        ctx.commit('addTemplateId', payload);
+    addTemplate(ctx, payload) {
+        ctx.commit('addTemplate', payload);
     },
-    removeTemplateId(ctx) {
-        ctx.commit('removeTemplateId');
+    removeTemplate(ctx) {
+        ctx.commit('removeTemplate');
     },
 };
 
@@ -118,11 +118,11 @@ const mutations = {
         state.scripts.splice(state.scripts.indexOf(payload.script), 1)
     },
 
-    addTemplateId(state, payload) {
-        state.templateId = payload.templateId;
+    addTemplate(state, payload) {
+        state.template = payload.template;
     },
-    removeTemplateId(state) {
-        state.templateId = null;
+    removeTemplate(state) {
+        state.template = null;
     },
 };
 

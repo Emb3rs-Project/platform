@@ -91,7 +91,7 @@
               <primary-button
                 type="button"
                 @click="onConfirmation"
-                :disabled="!canAddEquipment"
+                :disabled="!canAddEquipment || processing"
                 class="sm:col-start-2"
               >
                 Confirm
@@ -105,7 +105,7 @@
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, onBeforeUpdate } from "vue";
 
 import {
   Dialog,
@@ -151,6 +151,13 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
+    const processing = ref(false); // TODO: dont allow the press of more than one connfirm
+
+    onBeforeUpdate(() => {
+      console.log("updated");
+      processing.value = false;
+    });
+
     const availableEquipments = ref([]);
     const selectedEquipmentCategory = ref(null);
     const selectedEquipment = ref(null);
@@ -213,6 +220,7 @@ export default {
       onConfirmation,
       equipmentsAreAvailable,
       canAddEquipment,
+      processing,
     };
   },
 };
