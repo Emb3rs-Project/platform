@@ -37,7 +37,7 @@ export default {
 
     const currentSegment = {
       from: null,
-      to: null,
+      start: null,
     };
 
     const store = useStore();
@@ -64,6 +64,10 @@ export default {
       });
 
     const onCreateLink = (value) => {
+      emit("onCreateRequest", {
+        type: "link",
+      });
+
       map.value.contextmenu.removeAllItems();
       for (const a of linkCreationMapContext)
         map.value.contextmenu.insertItem(a);
@@ -83,9 +87,44 @@ export default {
     const onStartMarker = (value) => {
       const start = mapUtils.addCircle(map.value, value.getLatLng());
       currentSegment.from = start.getLatLng();
+      currentSegment.start = start.getLatLng();
     };
 
-    const onRemoveSegment = (value) => {};
+    const onFinishMarker = (value) => {
+      const coord = value.getLatLng();
+      const segment = mapUtils.addSegment(
+        map.value,
+        currentSegment.from,
+        coord,
+        linkCreationSegmentContext
+      );
+
+      mapObjects.value.links.push(segment);
+      currentSegment.from = coord;
+    };
+
+    const onRemoveSegment = (value) => {
+      const points = value.getLatLngs();
+      const segmentIndex = mapObjects.value.links.findIndex(
+        (s) =>
+          s.getLatLngs().includes(points[0]) &&
+          s.getLatLngs().includes(points[1])
+      );
+
+      map.value.removeLayer(value);
+      mapObjects.value.links.splice(segmentIndex, 1);
+      if (mapObjects.value.links.length > 0)
+        currentSegment.from = mapObjects.value.links[
+          segmentIndex - 1
+        ].getLatLngs()[1];
+      else {
+        currentSegment.from = currentSegment.start;
+      }
+    };
+
+    const onSegmentProperties = (value) => {
+      console.log(value);
+    };
 
     const onNextPoint = (value) => {
       const coord = value.latlng;
@@ -141,6 +180,10 @@ export default {
         text: "Start here",
         callback: () => onStartMarker(m),
       }),
+      (m) => ({
+        text: "Finish here",
+        callback: () => onFinishMarker(m),
+      }),
     ];
 
     const linkCreationSegmentContext = (m) => [
@@ -148,6 +191,10 @@ export default {
       {
         text: "Remove segment",
         callback: () => onRemoveSegment(m),
+      },
+      {
+        text: "Segment Properties",
+        callback: () => onSegmentProperties(m),
       },
     ];
 
