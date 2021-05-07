@@ -119,15 +119,6 @@ export default {
         );
     });
 
-    // const test = computed({
-    //   get: () => {
-    //     return defineAsyncComponent(() =>
-    //       import(`@/Pages/${currentStep.value.component}`)
-    //     );
-    //   },
-    //   set: (value) => defineAsyncComponent(() => import(`@/Pages/${value}`)),
-    // });
-
     watch(
       currentStep,
       (currentStep) => {
@@ -185,21 +176,6 @@ export default {
 
         return;
       }
-
-      console.log("it shuld save");
-    };
-
-    const onStepCompleted = () => {
-      //   const currentStepIndex = steps.findIndex(
-      //     (step) => currentStep.value.name === step.name
-      //   );
-      //   if (currentStepIndex + 1 === steps.length) {
-      //     actionButton.value.text = "Save";
-      //     actionButton.value.action = "Save";
-      //   } else if (currentStepIndex + 1 < steps.length) {
-      //     currentStep.value = steps[currentStepIndex + 1];
-      //   }
-      //   currentStep.value.status = "completed";
     };
 
     return {
@@ -207,11 +183,8 @@ export default {
       currentStep,
       currentStepIndex,
       currentStepProps,
-
       stepComponent,
-      //   form,
       open,
-      onStepCompleted,
       navigateToPreviousStep,
       navigateToNextStep,
     };
