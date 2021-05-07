@@ -218,6 +218,8 @@ export default {
         contextmenuItems: defautMapContext,
       });
       window.map = map.value;
+      // throws errors
+      // store.dispatch("map/setMap", { map: map.value });
 
       map.value.on(
         "moveend",
