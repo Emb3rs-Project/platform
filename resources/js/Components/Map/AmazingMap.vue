@@ -203,7 +203,10 @@ export default {
     ];
 
     const onCenterLocation = (loc) => {
-      //   console.log("AmazingMap::onCenterLocation", loc);
+      // @geocfu: maybe we need to make a switch statement here in case
+      // sources and sinks have the location structured in a different way
+      // console.log("AmazingMap::onCenterLocation", loc);
+
       mapUtils.centerAtLocation(map.value, loc.geo_object);
     };
 
