@@ -160,7 +160,6 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-    console.log(store.state);
 
     const tableColumns = ["name", "location", "actions"];
     const filterOptions = [

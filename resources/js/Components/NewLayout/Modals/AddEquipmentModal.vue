@@ -153,6 +153,7 @@ export default {
   setup(props, { emit }) {
     const processing = ref(false); // TODO: dont allow the press of more than one connfirm
 
+    // TODO: dont allow the press of more than one connfirm
     onBeforeUpdate(() => {
       console.log("updated");
       processing.value = false;

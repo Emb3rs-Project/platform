@@ -2,7 +2,7 @@
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Equipments -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button type="button" @click="addEquipment">
+    <primary-button type="button" @click="modalIsVisible = true">
       <DatabaseIcon class="h-6 w-6 mr-2" aria-hidden="true" />
       Add Equipment
     </primary-button>
@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import { computed, reactive, ref, watch } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { computed, ref, watch, onMounted } from "vue";
+import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
@@ -100,7 +100,6 @@ import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "../../../../Components/NewLayout/PrimaryButton.vue";
 import AddEquipmentModal from "../../../../Components/NewLayout/Modals/AddEquipmentModal.vue";
-// import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
 
 export default {
   components: {
@@ -111,7 +110,6 @@ export default {
     DatabaseIcon,
     PrimaryButton,
     AddEquipmentModal,
-
     SelectMenu,
     TextInput,
   },
@@ -127,50 +125,58 @@ export default {
     },
   },
 
-  emits: ["completed"],
-
   setup(props) {
+    const store = useStore();
     const modalIsVisible = ref(false);
-    const data = ref({});
 
-    const equipments = ref(
-      props.equipments.map((e) => ({
+    store.dispatch("sources/addEquipments", {
+      equipments: props.equipments.map((e) => ({
         key: e.id,
         value: e.name,
         parent: e.category_id,
         props: e.template_properties,
-      }))
+      })),
+    });
+
+    const data = ref({});
+    const equipments = computed(
+      () =>
+        store.getters["sources/equipments"] ??
+        props.equipments.map((e) => ({
+          key: e.id,
+          value: e.name,
+          parent: e.category_id,
+          props: e.template_properties,
+        }))
     );
 
-    const addEquipment = () => (modalIsVisible.value = true);
-
-    const onAddEquipment = (addedEquipment) => {
-      // TODO: Add it to the vuex store
-      console.log(addedEquipment);
+    const onAddEquipment = (newEquipment) => {
       const equipment = equipments.value.find(
-        (e) => e.key === addedEquipment.key
+        (e) => e.key === newEquipment.key
       );
 
       const equip = {
-        id: addedEquipment.key,
+        id: newEquipment.key,
         data: {},
         template: equipment,
       };
 
-      for (const prop of equipment.props) {
-        equip.data[prop.property.symbolic_name] = prop.default_value
-          ? prop.default_value
-          : "";
+      for (const property of equipment.props) {
+        equip.data[property.property.symbolic_name] = property.default_value;
       }
-
-      equipments.value = [...equipments.value, equipment];
+      store.dispatch("sources/addEquipment", { equipment: equipment });
+      console.log(equip);
+      //   equipments.value = [...equipments.value, equipment];
+      //   equipments.value = equipments.value.concat(equipments.value, [equipment]);
+      //   Object.assign(equipments.value, equipment);
+      console.log(newEquipment);
     };
 
     return {
       modalIsVisible,
       data,
       equipments,
-      addEquipment,
+      //   addEquipment,
       onAddEquipment,
     };
   },
