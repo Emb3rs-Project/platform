@@ -33,7 +33,6 @@
 
 <script>
 import { ref, watch, computed, defineAsyncComponent } from "vue";
-// import { useForm } from "@inertiajs/inertia-vue3";
 
 import PrimaryButton from "../../../Components/NewLayout/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/NewLayout/SecondaryButton.vue";
@@ -86,12 +85,11 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
-    // status: current | complete | upcoming
     const steps = ref([
       {
         name: "Source Details",
         component: "Objects/Sources/SourceCreateWizard/Step1.vue",
-        status: "current",
+        status: "current", // status: current | complete | upcoming
       },
       {
         name: "Equipments",

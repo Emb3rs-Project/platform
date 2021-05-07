@@ -156,7 +156,7 @@ export default {
     },
   },
 
-  emits: ["update:modelValue", "onCenter", "onActionRequest"],
+  emits: ["update:modelValue", "centerAtLocation", "onActionRequest"],
 
   setup(props, { emit }) {
     const store = useStore();
@@ -237,7 +237,7 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const centerAtLocation = (loc) => emit("onCenter", loc);
+    const centerAtLocation = (loc) => emit("centerAtLocation", loc);
 
     const onConfirmation = (modalType) => {
       switch (modalType) {
@@ -257,7 +257,6 @@ export default {
 
     const onActionRequest = async (daroute, param) => {
       const res = await fetch(route(`${daroute}`, param)).then((res) => {
-        // console.log(await res.text());
         if (!res.ok) {
           const error = new Error(res.statusText);
           error.json = res.json();

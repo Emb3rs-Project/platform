@@ -25,6 +25,7 @@
     <amazing-map
       :centerValue="[38.7181959, -9.1975417]"
       :instances="instances"
+      ref="map"
     ></amazing-map>
 
     <component
@@ -39,6 +40,7 @@
       :instances="instances"
       v-model="indexSlide"
       @onActionRequest="onActionRequest"
+      @centerAtLocation="onCenterLocation"
     ></objects-index>
   </app-layout>
 </template>
@@ -70,6 +72,7 @@ export default {
   },
 
   setup(props) {
+    const map = ref(null);
     const slideOverProps = ref(null);
     const slideOver = ref(true);
     const modalComponent = ref(null);
@@ -120,14 +123,21 @@ export default {
       slideOver.value = true;
     };
 
+    const onCenterLocation = (location) => {
+      console.log(map.value);
+      map.value.onCenterLocation(location);
+    };
+
     return {
+      map,
       slideOver,
       modalComponent,
       onActionRequest,
       indexSlide,
       slideOverComponent,
       slideOverProps,
-      counter: computed(() => store.getters["map/counter"]),
+      //   counter: computed(() => store.getters["map/counter"]),
+      onCenterLocation,
     };
   },
 };

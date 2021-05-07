@@ -1,5 +1,4 @@
 const _state = () => ({
-    // count: 0
     currentSlideOver: null,
     currentSlideOverProps: null
 });
