@@ -2,7 +2,7 @@
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Processes -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button type="button" @click="addProcess">
+    <primary-button type="button" @click="modalIsVisible = true">
       <BeakerIcon class="h-6 w-6 mr-2" aria-hidden="true" />
       Add Process
     </primary-button>
@@ -56,7 +56,7 @@
               <div class="sm:col-span-2">
                 <div v-if="property.property.inputType === 'text'">
                   <text-input
-                    v-model="form.process.data[property.property.symbolic_name]"
+                    v-model="process.data[property.property.symbolic_name]"
                     :unit="property.unit.symbol"
                     :placeholder="property.property.name"
                     :required="property.required"
@@ -65,7 +65,7 @@
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                   <select-menu
-                    v-model="form.process.data[property.property.symbolic_name]"
+                    v-model="process.data[property.property.symbolic_name]"
                     :options="property.property.data.options"
                     :required="property.required"
                   >
@@ -89,8 +89,8 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon, BeakerIcon } from "@heroicons/vue/outline";
@@ -99,7 +99,6 @@ import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "../../../../Components/NewLayout/PrimaryButton.vue";
 import AddProcessModal from "../../../../Components/NewLayout/Modals/AddProcessModal.vue";
-// import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
 
 export default {
   components: {
@@ -109,7 +108,6 @@ export default {
     ChevronDownIcon,
     BeakerIcon,
     AddProcessModal,
-
     SelectMenu,
     TextInput,
     PrimaryButton,
@@ -126,53 +124,62 @@ export default {
     },
   },
 
-  emits: ["completed"],
-
   setup(props) {
-    const form = useForm({
-      process: {
-        data: {},
-      },
-    });
-
-    const processes = ref(
-      props.processes.map((p) => ({
-        key: p.id,
-        value: p.name,
-        parent: p.category_id,
-        props: p.template_properties,
-      }))
-    );
-
+    const store = useStore();
     const modalIsVisible = ref(false);
+    const processes = ref([]);
 
-    const addProcess = () => (modalIsVisible.value = true);
+    const storeProcesses = computed(() => store.getters["sources/processes"]);
 
-    const onAddProcess = (addedProcess) => {
-      // TODO: Add it to the vuex store
+    const propProcesses = props.processes.map((p) => ({
+      key: p.id,
+      value: p.name,
+      parent: p.category_id,
+      props: p.template_properties,
+      data: {},
+    }));
 
-      const process = processes.value.find((p) => p.key === addedProcess.key);
-
-      const proc = {
-        id: addedProcess.key,
-        data: {},
-        template: process,
-      };
-
-      for (const prop of process.props) {
-        proc.data[prop.property.symbolic_name] = prop.default_value
-          ? prop.default_value
-          : "";
+    const init = () => {
+      if (storeProcesses.value.length) {
+        processes.value = JSON.parse(JSON.stringify(storeProcesses.value));
+        return;
       }
 
-      processes.value = [...processes.value, process];
+      store.dispatch("sources/addProcesses", {
+        processes: JSON.parse(JSON.stringify(propProcesses)),
+      });
+
+      processes.value = propProcesses;
+    };
+
+    init();
+
+    watch(
+      processes,
+      (processes) => {
+        store.dispatch("sources/addProcesses", {
+          processes: JSON.parse(JSON.stringify(processes)),
+        });
+      },
+      { deep: true }
+    );
+
+    const onAddProcess = (process) => {
+      const newProcess = JSON.parse(JSON.stringify(process));
+
+      if (!Object.keys(newProcess.props).length === 0) return;
+
+      for (const property of newProcess.props) {
+        newProcess.data[property.property.symbolic_name] =
+          property.default_value;
+      }
+
+      processes.value = [...processes.value, newProcess];
     };
 
     return {
-      form,
-      processes,
       modalIsVisible,
-      addProcess,
+      processes,
       onAddProcess,
     };
   },

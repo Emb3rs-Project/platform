@@ -58,7 +58,7 @@
                   as="h3"
                   class="text-lg text-center leading-6 font-medium text-gray-900"
                 >
-                  Add an Equipment
+                  Add an Process
                 </DialogTitle>
                 <div class="mt-2">
                   <select-menu
@@ -72,7 +72,7 @@
                     :disabled="!processesAreAvailable"
                     v-model="selectedProcess"
                     :options="availableProcesses"
-                    :label="'Equipment'"
+                    :label="'Process'"
                   ></select-menu>
                 </div>
               </div>
@@ -128,7 +128,6 @@ export default {
     BeakerIcon,
     TransitionChild,
     TransitionRoot,
-
     PrimaryButton,
     SecondaryOutlinedButton,
     SelectMenu,
@@ -152,7 +151,6 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
-    console.log("hello");
     const availableProcesses = ref([]);
     const selectedProcessCategory = ref(null);
     const selectedProcess = ref(null);
@@ -164,18 +162,10 @@ export default {
       }))
     );
 
-    const processes = computed(() =>
-      props.processes.map((e) => ({
-        key: e.key,
-        value: e.value,
-        parent: e.parent,
-      }))
-    );
-
     const processesAreAvailable = computed(() => {
       if (!selectedProcessCategory.value) return false;
 
-      const processesThatMatch = processes.value.filter(
+      const processesThatMatch = props.processes.filter(
         (p) => p.parent == selectedProcessCategory.value.key
       );
 
@@ -195,7 +185,7 @@ export default {
     });
 
     watch(selectedProcessCategory, (selectedProcessCategory) => {
-      availableProcesses.value = processes.value.filter(
+      availableProcesses.value = props.processes.filter(
         (p) => p.parent == selectedProcessCategory.key
       );
     });

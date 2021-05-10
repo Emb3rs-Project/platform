@@ -53,6 +53,9 @@ const actions = {
     addProcesses(ctx, payload) {
         ctx.commit('addProcesses', payload);
     },
+    addProcess(ctx, payload) {
+        ctx.commit('addProcess', payload);
+    },
     removeProcesses(ctx) {
         ctx.commit('removeProcesses');
     },
@@ -98,12 +101,6 @@ const mutations = {
         state.equipments = payload.equipments;
     },
     addEquipment(state, payload) {
-        // if (state.equipments) {
-        //     state.equipments = [...state.equipments, payload.equipment];
-        //     return;
-        // }
-        // state.equipments = [payload.equipment];
-
         state.equipments = [...state.equipments, payload.equipment];
     },
     removeEquipments(state) {
@@ -115,7 +112,10 @@ const mutations = {
 
 
     addProcesses(state, payload) {
-        state.processes = [payload.processes];
+        state.processes = payload.processes;
+    },
+    addProcess(state, payload) {
+        state.processes = [...state.processes, payload.process];
     },
     removeProcesses(state) {
         state.processes = [];
@@ -126,7 +126,7 @@ const mutations = {
 
 
     addScripts(state, payload) {
-        state.scripts = [payload.scripts];
+        state.scripts = payload.scripts;
     },
     removeScripts(state) {
         state.scripts = [];
