@@ -37,6 +37,9 @@ const actions = {
 
 
     addEquipments(ctx, payload) {
+        ctx.commit('addEquipments', payload);
+    },
+    addEquipment(ctx, payload) {
         ctx.commit('addEquipment', payload);
     },
     removeEquipments(ctx) {
@@ -87,7 +90,10 @@ const mutations = {
 
 
     addEquipments(state, payload) {
-        state.equipments = [payload.equipments];
+        state.equipments = payload.equipments;
+    },
+    addEquipment(state, payload) {
+        state.equipments = [...state.equipments, payload.equipment];
     },
     removeEquipments(state) {
         state.equipments = [];

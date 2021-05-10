@@ -12,9 +12,9 @@
         ]"
         :disabled="disabled"
       >
-        <span class="block truncate">{{
-          selected ? selected.value : "Select an option..."
-        }}</span>
+        <span class="block truncate">
+          {{ selected ? selected.value : "Select an option..." }}
+        </span>
         <span
           class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
         >
@@ -116,6 +116,7 @@ export default {
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
+    console.log("SelectMenu::selected", selected.value);
 
     return {
       selected,

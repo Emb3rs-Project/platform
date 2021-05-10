@@ -33,7 +33,6 @@
 
 <script>
 import { ref, watch, computed, defineAsyncComponent } from "vue";
-// import { useForm } from "@inertiajs/inertia-vue3";
 
 import PrimaryButton from "../../../Components/NewLayout/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/NewLayout/SecondaryButton.vue";
@@ -86,12 +85,11 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
-    // status: current | complete | upcoming
     const steps = ref([
       {
         name: "Source Details",
         component: "Objects/Sources/SourceCreateWizard/Step1.vue",
-        status: "current",
+        status: "current", // status: current | complete | upcoming
       },
       {
         name: "Equipments",
@@ -120,15 +118,6 @@ export default {
           import(`@/Pages/${currentStep.value.component}`)
         );
     });
-
-    // const test = computed({
-    //   get: () => {
-    //     return defineAsyncComponent(() =>
-    //       import(`@/Pages/${currentStep.value.component}`)
-    //     );
-    //   },
-    //   set: (value) => defineAsyncComponent(() => import(`@/Pages/${value}`)),
-    // });
 
     watch(
       currentStep,
@@ -187,21 +176,6 @@ export default {
 
         return;
       }
-
-      console.log("it shuld save");
-    };
-
-    const onStepCompleted = () => {
-      //   const currentStepIndex = steps.findIndex(
-      //     (step) => currentStep.value.name === step.name
-      //   );
-      //   if (currentStepIndex + 1 === steps.length) {
-      //     actionButton.value.text = "Save";
-      //     actionButton.value.action = "Save";
-      //   } else if (currentStepIndex + 1 < steps.length) {
-      //     currentStep.value = steps[currentStepIndex + 1];
-      //   }
-      //   currentStep.value.status = "completed";
     };
 
     return {
@@ -209,11 +183,8 @@ export default {
       currentStep,
       currentStepIndex,
       currentStepProps,
-
       stepComponent,
-      //   form,
       open,
-      onStepCompleted,
       navigateToPreviousStep,
       navigateToNextStep,
     };

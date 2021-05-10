@@ -108,6 +108,7 @@
 
 <script>
 import { computed } from "vue";
+import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/NewLayout/SlideOver.vue";
@@ -138,13 +139,15 @@ export default {
   },
 
   setup(props, { emit }) {
+    const store = useStore();
+
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
 
-    const onRouteRequest = (route, params) => {
-      console.log("child onRouteRequest", route, params);
+    const onRouteRequest = (route, props) => {
+      store.dispatch("objects/goToSlideOver", { route, props });
     };
 
     return {

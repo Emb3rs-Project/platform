@@ -38,6 +38,7 @@
           </text-input>
         </div>
         <div v-else-if="property.property.inputType === 'select'">
+          <pre>{{ data[property.property.symbolic_name] }}</pre>
           <select-menu
             v-model="data[property.property.symbolic_name]"
             :options="property.property.data.options"
@@ -51,9 +52,8 @@
 </template>
 
 <script>
-import { computed, ref, reactive, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { useForm } from "@inertiajs/inertia-vue3";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
@@ -73,29 +73,30 @@ export default {
 
   setup(props) {
     const store = useStore();
-
-    // const selectedTemplate = ref(null);
-    const data = ref({});
-
     console.log(store.getters["sources/template"]);
-
-    const selectedTemplate = computed({
-      get: () => store.getters["sources/template"],
-      set: (value) => store.dispatch("sources/addTemplate", value),
-    });
+    const selectedTemplate = ref(store.getters["sources/template"] ?? null);
+    const data = ref(store.getters["sources/source"]);
 
     watch(
       data,
       (data) => {
-        // TODO: vuex complains for some reason
-        // store.dispatch("sources/addSource", { source: data });
+        store.dispatch("sources/addSource", {
+          source: Object.assign({}, data), // id we dont copy the object, we are passing it by reference and thus, vuex complains
+        });
       },
       { deep: true }
     );
 
-    // watch(selectedTemplate, (selectedTemplate) => {
-    //   store.dispatch("sources/addTemplateId", selectedTemplate.key);
-    // });
+    watch(selectedTemplate, (selectedTemplate) => {
+      data.value = {};
+      store.dispatch("sources/addTemplate", { template: selectedTemplate });
+
+      if (!Object.keys(selectedTemplate.props).length === 0) return;
+
+      for (const property of selectedTemplate.props) {
+        data.value[property.property.symbolic_name] = property.default_value;
+      }
+    });
 
     const templates = computed(() =>
       props.templates.map((t) => ({

@@ -216,7 +216,7 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const centerAtLocation = (loc) => emit("onCenter", loc);
+    const centerAtLocation = (loc) => emit("centerAtLocation", loc);
 
     const onConfirmation = (modalType) => {
       switch (modalType) {

@@ -4,7 +4,7 @@
 
 <script>
 import mapUtils from "@/Utils/map.js";
-import { computed, onMounted, ref } from "@vue/runtime-core";
+import { computed, onMounted, ref } from "vue";
 import L from "leaflet";
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -203,6 +203,14 @@ export default {
       },
     ];
 
+    const onCenterLocation = (loc) => {
+      // @geocfu: maybe we need to make a switch statement here in case
+      // sources and sinks have the location structured in a different way
+      // console.log("AmazingMap::onCenterLocation", loc);
+
+      mapUtils.centerAtLocation(map.value, loc.geo_object);
+    };
+
     onMounted(() => {
       map.value = mapUtils.init("map", center.value, {
         drawControl: true,
@@ -211,6 +219,8 @@ export default {
         contextmenuItems: defautMapContext,
       });
       window.map = map.value;
+      // throws errors
+      // store.dispatch("map/setMap", { map: map.value });
 
       map.value.on(
         "moveend",
@@ -224,6 +234,7 @@ export default {
 
     return {
       center,
+      onCenterLocation,
     };
   },
 };
