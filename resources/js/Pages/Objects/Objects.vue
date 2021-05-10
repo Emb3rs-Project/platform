@@ -38,7 +38,6 @@
 
     <objects-index
       :instances="instances"
-      v-model="indexSlide"
       @onActionRequest="onActionRequest"
       @centerAtLocation="onCenterLocation"
     ></objects-index>
@@ -76,7 +75,6 @@ export default {
     const slideOverProps = ref(null);
     const slideOver = ref(true);
     const modalComponent = ref(null);
-    const indexSlide = ref(false);
     const currentSlideOver = ref(null);
 
     const store = useStore();
@@ -85,9 +83,13 @@ export default {
       () => store.getters["objects/currentRoute"]
     );
 
-    watch(currentSlideOverPath, async (newPath) => {
-      if (slideOver.value) slideOver.value = false; // reset the current slideover
-      if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
+    const indexSlide = computed({
+      get: () => store.getters["objects/indexOpen"],
+      set: (value) => store.commit("objects/updateIndex", value),
+    });
+
+    watch(currentSlideOverPath, async (newPath, oldPath) => {
+      if (!newPath) return;
 
       const response = await fetch(route(newPath)).then((res) => {
         if (!res.ok) {
@@ -102,14 +104,15 @@ export default {
       slideOverProps.value = response.props;
       currentSlideOver.value = response.slideOver;
 
-      slideOver.value = true;
+      if (newPath == oldPath) store.dispatch("objects/openSlide");
     });
 
     const slideOverComponent = computed(() =>
       currentSlideOver.value
-        ? defineAsyncComponent(() =>
-            import(`@/Pages/${currentSlideOver.value}`)
-          )
+        ? defineAsyncComponent({
+            loader: () => import(`@/Pages/${currentSlideOver.value}`),
+            delay: 300,
+          })
         : false
     );
 
@@ -133,9 +136,9 @@ export default {
       slideOver,
       modalComponent,
       onActionRequest,
-      indexSlide,
       slideOverComponent,
       slideOverProps,
+      indexSlide,
       //   counter: computed(() => store.getters["map/counter"]),
       onCenterLocation,
     };

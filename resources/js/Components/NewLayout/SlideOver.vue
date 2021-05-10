@@ -1,16 +1,16 @@
 <template>
   <div class="absolute inset-y-0 right-0 max-w-full flex overflow-hidden">
     <transition
-      enter-active-class="transform transition ease-in-out duration-500 sm:duration-700"
+      enter-active-class="transform transition ease-in-out duration-300 sm:duration-300"
       enter-from-class="translate-x-full"
       enter-to-class="translate-x-0"
-      leave-active-class="transform transition ease-in-out duration-500 sm:duration-700"
+      leave-active-class="transform transition ease-in-out duration-300 sm:duration-300"
       leave-from-class="translate-x-0"
       leave-to-class="translate-x-full"
     >
       <div
         v-if="open"
-        class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200"
+        class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200 opacity-80 hover:opacity-95"
       >
         <!-- Header -->
         <div class="py-6 px-4 sm:px-6" :class="headerBackground">
@@ -72,7 +72,9 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, computed } from "vue";
+import { onMounted, onUnmounted, computed, onRenderTriggered } from "vue";
+import { useStore } from "vuex";
+
 export default {
   props: {
     modelValue: {
@@ -99,14 +101,20 @@ export default {
       type: String,
       default: "text-green-300",
     },
+    autoOpen: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
+    const store = useStore();
+
     const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
+      get: () => store.getters["objects/slideOpen"],
+      set: (value) => (value ? null : store.commit("objects/closeSlide")),
     });
 
     const closeOnEscape = (e) => {
@@ -117,6 +125,10 @@ export default {
 
     onMounted(() => document.addEventListener("keydown", closeOnEscape));
     onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
+
+    onMounted(() =>
+      props.autoOpen ? store.commit("objects/openSlide") : null
+    );
 
     return {
       open,
