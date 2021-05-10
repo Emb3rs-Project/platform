@@ -88,11 +88,22 @@ const mutations = {
         state.source = {};
     },
 
-
+    // Equipments
+    // key: e.id,
+    // value: e.name,
+    // parent: e.category_id,
+    // props: e.template_properties,
+    // data: {},
     addEquipments(state, payload) {
         state.equipments = payload.equipments;
     },
     addEquipment(state, payload) {
+        // if (state.equipments) {
+        //     state.equipments = [...state.equipments, payload.equipment];
+        //     return;
+        // }
+        // state.equipments = [payload.equipment];
+
         state.equipments = [...state.equipments, payload.equipment];
     },
     removeEquipments(state) {

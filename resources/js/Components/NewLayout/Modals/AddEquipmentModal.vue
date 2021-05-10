@@ -170,18 +170,10 @@ export default {
       }))
     );
 
-    const equipments = computed(() =>
-      props.equipments.map((e) => ({
-        key: e.key,
-        value: e.value,
-        parent: e.parent,
-      }))
-    );
-
     const equipmentsAreAvailable = computed(() => {
       if (!selectedEquipmentCategory.value) return false;
 
-      const equipmentsThatMatch = equipments.value.filter(
+      const equipmentsThatMatch = props.equipments.filter(
         (e) => e.parent == selectedEquipmentCategory.value.key
       );
 
@@ -202,7 +194,7 @@ export default {
     });
 
     watch(selectedEquipmentCategory, (selectedEquipmentCategory) => {
-      availableEquipments.value = equipments.value.filter(
+      availableEquipments.value = props.equipments.filter(
         (e) => e.parent == selectedEquipmentCategory.key
       );
     });

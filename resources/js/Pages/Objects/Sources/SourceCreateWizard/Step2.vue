@@ -57,7 +57,7 @@
               <div class="sm:col-span-2">
                 <div v-if="property.property.inputType === 'text'">
                   <text-input
-                    v-model="data[property.property.symbolic_name]"
+                    v-model="equipment.data[property.property.symbolic_name]"
                     :unit="property.unit.symbol"
                     :placeholder="property.property.name"
                     :required="property.required"
@@ -66,7 +66,7 @@
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                   <select-menu
-                    v-model="data[property.property.symbolic_name]"
+                    v-model="equipment.data[property.property.symbolic_name]"
                     :options="property.property.data.options"
                     :required="property.required"
                   >
@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { computed, ref, watch, onMounted } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
@@ -128,55 +128,88 @@ export default {
   setup(props) {
     const store = useStore();
     const modalIsVisible = ref(false);
+    // const equipments = ref([]);
 
-    store.dispatch("sources/addEquipments", {
-      equipments: props.equipments.map((e) => ({
+    // const storeEquipments = computed(() => store.getters["sources/equipments"]);
+
+    // const propEquipments = props.equipments.map((e) => ({
+    //   key: e.id,
+    //   value: e.name,
+    //   parent: e.category_id,
+    //   props: e.template_properties,
+    //   data: e.template_properties.map((property) => ({
+    //     [property.property.symbolic_name]: property.default_value,
+    //   })),
+    // }));
+
+    // const init = () => {
+    //   if (storeEquipments.value.length) {
+    //     equipments.value = storeEquipments.value;
+    //     return;
+    //   }
+
+    //   equipments.value = propEquipments;
+
+    //   store.dispatch("sources/addEquipments", {
+    //     equipments: [...propEquipments],
+    //   });
+    // };
+
+    // init();
+
+    // const equipments = () => {
+    //   // if this is not the first visit, get form the store
+    //   if (store.getters["sources/equipments"].length)
+    //     return store.getters["sources/equipments"];
+
+    //   // but if it is, get from the props and also, save to the store
+    //   const equipments = props.equipments.map((e) => ({
+    //     key: e.id,
+    //     value: e.name,
+    //     parent: e.category_id,
+    //     props: e.template_properties,
+    //     data: e.template_properties.map((property) => ({
+    //       [property.property.symbolic_name]: property.default_value,
+    //     })),
+    //   }));
+
+    //   store.dispatch("sources/addEquipments", {
+    //     equipments: Object.assign({}, equipments),
+    //   });
+
+    //   return equipments;
+    // };
+
+    const equipments = ref(
+      props.equipments.map((e) => ({
         key: e.id,
         value: e.name,
         parent: e.category_id,
         props: e.template_properties,
-      })),
-    });
-
-    const data = ref({});
-    const equipments = computed(
-      () =>
-        store.getters["sources/equipments"] ??
-        props.equipments.map((e) => ({
-          key: e.id,
-          value: e.name,
-          parent: e.category_id,
-          props: e.template_properties,
-        }))
+        data: {},
+      }))
     );
 
-    const onAddEquipment = (newEquipment) => {
-      const equipment = equipments.value.find(
-        (e) => e.key === newEquipment.key
-      );
+    const onAddEquipment = (equipment) => {
+      const newEquipment = JSON.parse(JSON.stringify(equipment));
 
-      const equip = {
-        id: newEquipment.key,
-        data: {},
-        template: equipment,
-      };
+      if (!Object.keys(newEquipment.props).length === 0) return;
 
-      for (const property of equipment.props) {
-        equip.data[property.property.symbolic_name] = property.default_value;
+      for (const property of newEquipment.props) {
+        newEquipment.data[property.property.symbolic_name] =
+          property.default_value;
       }
-      store.dispatch("sources/addEquipment", { equipment: equipment });
-      console.log(equip);
-      //   equipments.value = [...equipments.value, equipment];
-      //   equipments.value = equipments.value.concat(equipments.value, [equipment]);
-      //   Object.assign(equipments.value, equipment);
-      console.log(newEquipment);
+
+      //   store.dispatch("sources/addEquipment", {
+      //     equipment: newEquipment,
+      //   });
+
+      equipments.value = [...equipments.value, newEquipment];
     };
 
     return {
       modalIsVisible,
-      data,
       equipments,
-      //   addEquipment,
       onAddEquipment,
     };
   },

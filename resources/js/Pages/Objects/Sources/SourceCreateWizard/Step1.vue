@@ -73,7 +73,6 @@ export default {
 
   setup(props) {
     const store = useStore();
-    console.log(store.getters["sources/template"]);
     const selectedTemplate = ref(store.getters["sources/template"] ?? null);
     const data = ref(store.getters["sources/source"]);
 
@@ -81,7 +80,7 @@ export default {
       data,
       (data) => {
         store.dispatch("sources/addSource", {
-          source: Object.assign({}, data), // id we dont copy the object, we are passing it by reference and thus, vuex complains
+          source: JSON.parse(JSON.stringify(data)),
         });
       },
       { deep: true }
@@ -89,6 +88,7 @@ export default {
 
     watch(selectedTemplate, (selectedTemplate) => {
       data.value = {};
+
       store.dispatch("sources/addTemplate", { template: selectedTemplate });
 
       if (!Object.keys(selectedTemplate.props).length === 0) return;
