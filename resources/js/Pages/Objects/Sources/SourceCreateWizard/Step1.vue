@@ -38,7 +38,6 @@
           </text-input>
         </div>
         <div v-else-if="property.property.inputType === 'select'">
-          <pre>{{ data[property.property.symbolic_name] }}</pre>
           <select-menu
             v-model="data[property.property.symbolic_name]"
             :options="property.property.data.options"
