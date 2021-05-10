@@ -1,7 +1,7 @@
 <template>
   <slide-over
     v-model="open"
-    title="Objects"
+    :title="`Objects`"
     subtitle="A list of all the Objects for the currently selected Instituion"
     headerBackground="bg-yellow-600"
     dismissButtonTextColor="text-gray-100"
@@ -65,7 +65,9 @@
             >
               <button
                 class="focus:outline-none"
-                @click="onActionRequest(`${selectedObject.path}.show`, item.id)"
+                @click="
+                  onActionRequest(`${selectedObject.paths.details}`, item.id)
+                "
               >
                 <detail-icon
                   class="text-gray-500 font-medium text-sm w-5"
@@ -73,7 +75,9 @@
               </button>
               <button
                 class="focus:outline-none"
-                @click="onActionRequest(`${selectedObject.path}.edit`, item.id)"
+                @click="
+                  onActionRequest(`${selectedObject.paths.edit}`, item.id)
+                "
               >
                 <edit-icon
                   class="text-gray-500 font-medium text-sm w-5"
@@ -100,7 +104,9 @@
     </div>
 
     <template #actions>
-      <primary-button @click="onActionRequest(`${selectedObject.path}.create`)">
+      <primary-button
+        @click="onActionRequest(`${selectedObject.paths.create}`)"
+      >
         Create New {{ getSingular(selectedObject.title) }}</primary-button
       >
     </template>
@@ -131,6 +137,7 @@ import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue"
 import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
 import PrimaryButton from "../../Components/NewLayout/PrimaryButton.vue";
 import { useStore } from "vuex";
+import { filterOptions } from "../../Utils/objectIndex";
 
 export default {
   components: {
@@ -146,46 +153,18 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instances: {
       type: Array,
       default: [],
     },
   },
 
-  emits: ["update:modelValue", "onCenter", "onActionRequest"],
+  emits: ["onCenter", "onActionRequest"],
 
   setup(props, { emit }) {
     const store = useStore();
-    console.log(store.state);
 
     const tableColumns = ["name", "location", "actions"];
-    const filterOptions = [
-      {
-        title: "Sources",
-        path: "objects.sources",
-        description:
-          "Display all the Sources for the currently selected Institution",
-        current: true,
-      },
-      {
-        title: "Sinks",
-        path: "objects.sinks",
-        description:
-          "Display all the Sinks for the currently selected Institution",
-        current: false,
-      },
-      {
-        title: "Links",
-        path: "objects.links",
-        description:
-          "Display all the Links for the currently selected Institution",
-        current: false,
-      },
-    ];
     const selectedObject = ref(filterOptions[0]);
 
     const objects = ref(null);
@@ -195,8 +174,8 @@ export default {
     const itemToDelete = ref(null);
 
     const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
+      get: () => store.getters["objects/indexOpen"],
+      set: (value) => store.commit("objects/updateIndex", value),
     });
 
     const modalComponent = computed(() =>
@@ -255,20 +234,8 @@ export default {
       }
     };
 
-    const onActionRequest = async (daroute, param) => {
-      const res = await fetch(route(`${daroute}`, param)).then((res) => {
-        // console.log(await res.text());
-        if (!res.ok) {
-          const error = new Error(res.statusText);
-          error.json = res.json();
-          throw error;
-        }
-        return res.json();
-      });
-      console.log(res);
-
-      emit("onActionRequest", res);
-    };
+    const onActionRequest = async (route, param) =>
+      store.dispatch("objects/goToSlideOver", { route, props: param });
 
     return {
       tableColumns,

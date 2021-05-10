@@ -7,7 +7,10 @@ import sources from './modules/Objects/sources';
 const isLocalMode = process.env.MIX_ENV === 'local' ? true : false;
 
 const loggerOptions = {
-    collapsed: false
+    collapsed: true,
+    logActions: true, // Log Actions
+    logMutations: true, // Log mutations
+    logger: console, // implementation of the `console` API, default `console`
 };
 
 // add plugins that will go in prod, here
