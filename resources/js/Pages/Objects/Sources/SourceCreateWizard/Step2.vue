@@ -128,66 +128,41 @@ export default {
   setup(props) {
     const store = useStore();
     const modalIsVisible = ref(false);
-    // const equipments = ref([]);
+    const equipments = ref([]);
 
-    // const storeEquipments = computed(() => store.getters["sources/equipments"]);
+    const storeEquipments = computed(() => store.getters["sources/equipments"]);
 
-    // const propEquipments = props.equipments.map((e) => ({
-    //   key: e.id,
-    //   value: e.name,
-    //   parent: e.category_id,
-    //   props: e.template_properties,
-    //   data: e.template_properties.map((property) => ({
-    //     [property.property.symbolic_name]: property.default_value,
-    //   })),
-    // }));
+    const propEquipments = props.equipments.map((e) => ({
+      key: e.id,
+      value: e.name,
+      parent: e.category_id,
+      props: e.template_properties,
+      data: {},
+    }));
 
-    // const init = () => {
-    //   if (storeEquipments.value.length) {
-    //     equipments.value = storeEquipments.value;
-    //     return;
-    //   }
+    const init = () => {
+      if (storeEquipments.value.length) {
+        equipments.value = JSON.parse(JSON.stringify(storeEquipments.value));
+        return;
+      }
 
-    //   equipments.value = propEquipments;
+      store.dispatch("sources/addEquipments", {
+        equipments: JSON.parse(JSON.stringify(propEquipments)),
+      });
 
-    //   store.dispatch("sources/addEquipments", {
-    //     equipments: [...propEquipments],
-    //   });
-    // };
+      equipments.value = propEquipments;
+    };
 
-    // init();
+    init();
 
-    // const equipments = () => {
-    //   // if this is not the first visit, get form the store
-    //   if (store.getters["sources/equipments"].length)
-    //     return store.getters["sources/equipments"];
-
-    //   // but if it is, get from the props and also, save to the store
-    //   const equipments = props.equipments.map((e) => ({
-    //     key: e.id,
-    //     value: e.name,
-    //     parent: e.category_id,
-    //     props: e.template_properties,
-    //     data: e.template_properties.map((property) => ({
-    //       [property.property.symbolic_name]: property.default_value,
-    //     })),
-    //   }));
-
-    //   store.dispatch("sources/addEquipments", {
-    //     equipments: Object.assign({}, equipments),
-    //   });
-
-    //   return equipments;
-    // };
-
-    const equipments = ref(
-      props.equipments.map((e) => ({
-        key: e.id,
-        value: e.name,
-        parent: e.category_id,
-        props: e.template_properties,
-        data: {},
-      }))
+    watch(
+      equipments,
+      (equipments) => {
+        store.dispatch("sources/addEquipments", {
+          equipments: JSON.parse(JSON.stringify(equipments)),
+        });
+      },
+      { deep: true }
     );
 
     const onAddEquipment = (equipment) => {
@@ -199,10 +174,6 @@ export default {
         newEquipment.data[property.property.symbolic_name] =
           property.default_value;
       }
-
-      //   store.dispatch("sources/addEquipment", {
-      //     equipment: newEquipment,
-      //   });
 
       equipments.value = [...equipments.value, newEquipment];
     };
