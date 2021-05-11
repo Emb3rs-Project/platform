@@ -249,7 +249,7 @@ export default {
       open,
       properties,
       onCancel: () =>
-        store.dispatch("objects/goToSlideOver", { route: "objects.list" }),
+        store.dispatch("objects/showSlide", { route: "objects.list" }),
     };
   },
 

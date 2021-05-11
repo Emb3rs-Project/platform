@@ -233,7 +233,7 @@ export default {
     };
 
     const onActionRequest = async (route, param) =>
-      store.dispatch("objects/goToSlideOver", { route, props: param });
+      store.dispatch("objects/showSlide", { route, props: param });
 
     return {
       tableColumns,

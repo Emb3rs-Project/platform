@@ -52,20 +52,20 @@ export default {
     });
 
     const onCreateSink = (_) => {
-      store.dispatch("objects/goToSlideOver", {
+      store.dispatch("objects/showSlide", {
         route: "objects.sinks.create",
         props: {},
       });
     };
 
     const onCreateSource = (_) =>
-      store.dispatch("objects/goToSlideOver", {
+      store.dispatch("objects/showSlide", {
         route: "objects.sources.create",
         props: {},
       });
 
     const onCreateLink = (value) => {
-      store.dispatch("objects/goToSlideOver", {
+      store.dispatch("objects/showSlide", {
         route: "objects.links.create",
         props: {},
       });

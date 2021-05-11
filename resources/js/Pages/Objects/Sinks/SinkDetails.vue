@@ -147,7 +147,7 @@ export default {
     });
 
     const onRouteRequest = (route, props) => {
-      store.dispatch("objects/goToSlideOver", { route, props });
+      store.dispatch("objects/showSlide", { route, props });
     };
 
     return {

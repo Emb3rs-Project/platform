@@ -106,7 +106,7 @@ export default {
     });
 
     const toggleIndexComponent = () =>
-      store.dispatch("objects/goToSlideOver", {
+      store.dispatch("objects/showSlide", {
         route: "objects.list",
         props: null,
       });
