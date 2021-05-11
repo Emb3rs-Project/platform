@@ -2,7 +2,6 @@ const _state = () => ({
     // count: 0
     currentRoute: null,
     currentRouteProps: null,
-    objectIndexOpen: true,
     slideOpen: false
 });
 
@@ -10,14 +9,14 @@ const getters = {
     currentRoute: (state, getters, rootState) => state.currentRoute,
     currentRouteProps: (state) => state.currentRouteProps,
     slideOpen: (state) => state.slideOpen,
-    indexOpen: (state) => state.objectIndexOpen
 };
 
 const actions = {
-    goToSlideOver: ({ commit, getters, dispatch }, { route, props }) => {
+    goToSlideOver: ({ commit, getters, dispatch, state }, { route, props }) => {
+        if (state.currentRoute === route) commit('openSlide')
         commit('updateSlide', route)
         commit('updateSlideProps', props)
-        dispatch('openSlide')
+        // commit('openSlide')
     }
 };
 
@@ -26,7 +25,7 @@ const mutations = {
     updateSlideProps: (state, props) => state.currentRouteProps = props,
     openSlide: (state) => state.slideOpen = true,
     closeSlide: (state) => state.slideOpen = false,
-    updateIndex: (state, status) => state.objectIndexOpen = status
+    setSlide: (state, status) => state.slideOpen = status
 };
 
 

@@ -3,8 +3,8 @@
     <!-- Menu Of Available Instances -->
     <div
       class="fixed right-8 top-6 z-10 p-4 rounded-full cursor-pointer bg-yellow-500 hover:animate-none"
-      :class="{ 'animate-pulse': !indexSlide }"
-      @click="indexSlide = !indexSlide"
+      :class="{ 'animate-pulse': !slideOpen }"
+      @click="toggleIndexComponent"
     >
       <svg
         class="w-8 h-8 text-white hover:text-gray-100"
@@ -30,17 +30,10 @@
 
     <component
       class="z-30"
-      v-bind="slideOverProps"
-      :is="slideOverComponent"
-      v-show="slideOverComponent"
-      v-model="slideOver"
+      v-bind="slideProps"
+      :is="slideComponent"
+      v-show="slideComponent"
     ></component>
-
-    <objects-index
-      :instances="instances"
-      @onActionRequest="onActionRequest"
-      @centerAtLocation="onCenterLocation"
-    ></objects-index>
   </app-layout>
 </template>
 
@@ -51,7 +44,6 @@ import { useStore } from "vuex";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
-import ObjectsIndex from "./ObjectsIndex.vue";
 import LinkIcon from "../../Components/Icons/LinkIcon";
 
 export default {
@@ -59,7 +51,6 @@ export default {
     AppLayout,
     AmazingMap,
     SlideOver,
-    ObjectsIndex,
     LinkIcon,
   },
 
@@ -72,24 +63,28 @@ export default {
 
   setup(props) {
     const map = ref(null);
-    const slideOverProps = ref(null);
-    const slideOver = ref(true);
-    const modalComponent = ref(null);
-    const currentSlideOver = ref(null);
-
     const store = useStore();
+    const slideProps = ref(null);
+    const slideController = ref();
+    const slideOpen = computed(() => store.getters["objects/slideOpen"]);
+
+    const slideComponent = computed(() =>
+      slideController.value
+        ? defineAsyncComponent({
+            loader: () => import(`@/Pages/${slideController.value}`),
+            delay: 300,
+          })
+        : false
+    );
 
     const currentSlideOverPath = computed(
       () => store.getters["objects/currentRoute"]
     );
 
-    const indexSlide = computed({
-      get: () => store.getters["objects/indexOpen"],
-      set: (value) => store.commit("objects/updateIndex", value),
-    });
-
-    watch(currentSlideOverPath, async (newPath, oldPath) => {
+    watch(currentSlideOverPath, async (newPath) => {
       if (!newPath) return;
+
+      console.log("New Path", newPath);
 
       const response = await fetch(route(newPath)).then((res) => {
         if (!res.ok) {
@@ -101,46 +96,27 @@ export default {
         return res.json();
       });
 
-      slideOverProps.value = response.props;
-      currentSlideOver.value = response.slideOver;
+      slideProps.value = response.props;
 
-      if (newPath == oldPath) store.dispatch("objects/openSlide");
+      if (response.slideOver === slideController.value) {
+        store.commit("objects/openSlide");
+      } else {
+        slideController.value = response.slideOver;
+      }
     });
 
-    const slideOverComponent = computed(() =>
-      currentSlideOver.value
-        ? defineAsyncComponent({
-            loader: () => import(`@/Pages/${currentSlideOver.value}`),
-            delay: 300,
-          })
-        : false
-    );
-
-    const onActionRequest = (res) => {
-      if (slideOver.value) slideOver.value = false; // reset the current slideover
-      if (indexSlide.value) indexSlide.value = false; // reset the current index slideover
-
-      slideOverProps.value = res.props;
-      currentSlideOver.value = res.slideOver;
-
-      slideOver.value = true;
-    };
-
-    const onCenterLocation = (location) => {
-      console.log(map.value);
-      map.value.onCenterLocation(location);
-    };
+    const toggleIndexComponent = () =>
+      store.dispatch("objects/goToSlideOver", {
+        route: "objects.list",
+        props: null,
+      });
 
     return {
       map,
-      slideOver,
-      modalComponent,
-      onActionRequest,
-      slideOverComponent,
-      slideOverProps,
-      indexSlide,
-      //   counter: computed(() => store.getters["map/counter"]),
-      onCenterLocation,
+      slideComponent,
+      slideProps,
+      toggleIndexComponent,
+      slideOpen,
     };
   },
 };

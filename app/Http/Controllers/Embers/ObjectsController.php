@@ -11,7 +11,26 @@ use Inertia\Response;
 
 class ObjectsController extends Controller
 {
-    public function index(): Response
+    public function index()
+    {
+        $currentTeamInstances = Auth::user()->currentTeam->instances->pluck('id');
+
+        $instances = Instance::with([
+            'template',
+            'template.category',
+            'location',
+            'location.geoObject'
+        ])->whereIn('id', $currentTeamInstances)->get();
+
+        return [
+            "slideOver" => 'Objects/ObjectsIndex',
+            "props" => [
+                "instances" => $instances
+            ]
+        ];
+    }
+
+    public function map(): Response
     {
         $currentTeamInstances = Auth::user()->currentTeam->instances->pluck('id');
 

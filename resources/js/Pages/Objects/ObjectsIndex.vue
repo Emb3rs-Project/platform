@@ -158,10 +158,7 @@ export default {
       default: [],
     },
   },
-
-  emits: ["onCenter", "onActionRequest"],
-
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
 
     const tableColumns = ["name", "location", "actions"];
@@ -174,8 +171,8 @@ export default {
     const itemToDelete = ref(null);
 
     const open = computed({
-      get: () => store.getters["objects/indexOpen"],
-      set: (value) => store.commit("objects/updateIndex", value),
+      get: () => store.getters["objects/slideOpen"],
+      set: (value) => store.commit("objects/setSlide", value),
     });
 
     const modalComponent = computed(() =>
@@ -216,7 +213,7 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const centerAtLocation = (loc) => emit("centerAtLocation", loc);
+    const centerAtLocation = (loc) => {}; //emit("centerAtLocation", loc);
 
     const onConfirmation = (modalType) => {
       switch (modalType) {

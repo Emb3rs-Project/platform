@@ -41,12 +41,6 @@ function createResourceNames($prefix)
 
 Route::get('/', function () {
     return redirect('/login');
-    // return Inertia::render('Welcome', [
-    //     'canLogin' => Route::has('login'),
-    //     'canRegister' => Route::has('register'),
-    //     'laravelVersion' => Application::VERSION,
-    //     'phpVersion' => PHP_VERSION,
-    // ]);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
@@ -59,7 +53,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix' => 'objects', 'as' => 'objects.'], function () {
 
-        Route::get('/', [ObjectsController::class, 'index'])->name('index');
+        Route::get('/', [ObjectsController::class, 'map'])->name('index');
+        Route::get('/list', [ObjectsController::class, 'index'])->name('list');
 
         // Locations
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
