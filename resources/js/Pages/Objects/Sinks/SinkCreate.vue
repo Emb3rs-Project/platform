@@ -87,7 +87,7 @@
       <secondary-outlined-button
         type="button"
         :disabled="form.processing"
-        @click="open = false"
+        @click="onCancel"
       >
         Cancel
       </secondary-outlined-button>
@@ -108,6 +108,7 @@ import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -139,6 +140,7 @@ export default {
   },
 
   setup(props, { emit }) {
+    const store = useStore();
     const templateInfo = ref(null);
 
     const templates = props.templates.map((t) => ({
@@ -246,6 +248,8 @@ export default {
       form,
       open,
       properties,
+      onCancel: () =>
+        store.dispatch("objects/goToSlideOver", { route: "objects.list" }),
     };
   },
 

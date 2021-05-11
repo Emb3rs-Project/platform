@@ -18,8 +18,16 @@
 
       <secondary-button
         type="button"
+        @click="onCancel"
+        v-if="currentStepIndex === 0"
+      >
+        Cancel
+      </secondary-button>
+
+      <secondary-button
+        type="button"
         @click="navigateToPreviousStep"
-        :disabled="currentStepIndex === 0"
+        v-if="currentStepIndex > 0"
       >
         Previous
       </secondary-button>
@@ -40,6 +48,7 @@ import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
 import SelectMenu from "../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../Components/NewLayout/Forms/TextInput.vue";
 import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -85,6 +94,7 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
+    const store = useStore();
     const steps = ref([
       {
         name: "Source Details",
@@ -187,6 +197,8 @@ export default {
       open,
       navigateToPreviousStep,
       navigateToNextStep,
+      onCancel: () =>
+        store.dispatch("objects/goToSlideOver", { route: "objects.list" }),
     };
   },
 };

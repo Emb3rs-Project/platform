@@ -4,7 +4,7 @@ const _state = () => ({
 });
 
 const getters = {
-    selectedMarker: (state) => state.selectedMarker
+    selectedMarker: (state) => state.selectedMarker,
 };
 
 const actions = {
@@ -13,7 +13,8 @@ const actions = {
     // }
     setMap(ctx, payload) {
         ctx.commit('setMap', payload);
-    }
+    },
+    centerAt: () => { }
 };
 
 const mutations = {

@@ -25,7 +25,7 @@
       <secondary-outlined-button
         type="button"
         :disabled="form.processing"
-        @click="open = false"
+        @click="onCancel"
       >
         Cancel
       </secondary-outlined-button>
@@ -66,6 +66,7 @@ export default {
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
+    const store = useStore();
     const form = useForm({
       name: "",
     });
@@ -81,6 +82,8 @@ export default {
       form,
       submit,
       open,
+      onCancel: () =>
+        store.dispatch("objects/goToSlideOver", { route: "objects.list" }),
     };
   },
 };

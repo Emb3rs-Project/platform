@@ -213,7 +213,8 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const centerAtLocation = (loc) => {}; //emit("centerAtLocation", loc);
+    const centerAtLocation = (loc) =>
+      store.dispatch("map/centerAt", { marker: loc });
 
     const onConfirmation = (modalType) => {
       switch (modalType) {

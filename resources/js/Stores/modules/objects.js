@@ -14,6 +14,7 @@ const getters = {
 const actions = {
     goToSlideOver: ({ commit, getters, dispatch, state }, { route, props }) => {
         if (state.currentRoute === route) commit('openSlide')
+        commit('closeSlide')
         commit('updateSlide', route)
         commit('updateSlideProps', props)
         // commit('openSlide')

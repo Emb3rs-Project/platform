@@ -232,6 +232,13 @@ export default {
       }
     });
 
+    store.subscribeAction(({ type, payload }) => {
+      if (type === "map/centerAt") {
+        const { marker } = payload;
+        onCenterLocation(marker);
+      }
+    });
+
     return {
       center,
       onCenterLocation,
