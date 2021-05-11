@@ -129,10 +129,6 @@ export default {
       type: Array,
       default: [],
     },
-    equipments: {
-      type: Array,
-      default: [],
-    },
     locations: {
       type: Array,
       default: [],
@@ -148,14 +144,6 @@ export default {
       value: t.name,
     }));
     const selectedTemplate = ref(templates.length ? templates[0] : null);
-
-    const equipmentTemplates = props.equipments.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
-    const selectedEquipmentTemplate = ref(
-      templates.length ? templates[0] : null
-    );
 
     const locations = props.locations.map((t) => ({
       key: t.id,
@@ -177,29 +165,6 @@ export default {
       (template) => {
         templateInfo.value = props.templates.find((t) => t.id === template.key);
         form.template_id = template.key;
-
-        // @geocfu: revisit this at a later stage
-        //
-        // form.equipments = [];
-        // // Check if there are Children
-        // if (templateInfo.value.values.children) {
-        //   for (const child of templateInfo.value.values.children) {
-        //     const equipment = props.equipments.find((t) => t.id === child.key);
-        //     const equip = {
-        //       id: child.key,
-        //       data: {},
-        //       template: equipment,
-        //     };
-        //     // Load Default Values
-        //     for (const prop of equip.template.template_properties) {
-        //       equip.data[prop.property.symbolic_name] = prop.default_value
-        //         ? prop.default_value
-        //         : "";
-        //     }
-
-        //     form.equipments.push(equip);
-        //   }
-        // }
 
         if (templateInfo.value?.template_properties) {
           for (const prop of templateInfo.value?.template_properties) {
@@ -241,8 +206,6 @@ export default {
       templateInfo,
       templates,
       selectedTemplate,
-      equipmentTemplates,
-      selectedEquipmentTemplate,
       locations,
       selectedLocation,
       form,
@@ -254,25 +217,6 @@ export default {
   },
 
   methods: {
-    // @geocfu: revisit this at a later stage
-    // addEquipment() {
-    //   const equipment = this.equipments.find(
-    //     (t) => t.id === this.selectedEquipment
-    //   );
-    //   const equip = {
-    //     id: child,
-    //     data: {},
-    //     template: equipment,
-    //   };
-    //   // Load Default Values
-    //   for (const prop of equip.template.template_properties) {
-    //     equip.data[prop.property.symbolic_name] = prop.default_value
-    //       ? prop.default_value
-    //       : "";
-    //   }
-
-    //   form.equipments.push(equip);
-    // },
     submit() {
       this.form.post(route("objects.sinks.store"));
     },
