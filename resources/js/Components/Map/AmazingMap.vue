@@ -51,7 +51,6 @@ export default {
 
     const onCreateSink = (marker) => {
       store.commit("map/selectMarker", marker.latlng);
-      console.log(store.state["map"]);
       store.dispatch("objects/showSlide", {
         route: "objects.sinks.create",
         props: {},
@@ -64,8 +63,6 @@ export default {
     const selectedMarker = ref();
 
     watch(selectedMarkerLatlng, (newValue) => {
-      console.log("selectedMarker", selectedMarkerLatlng);
-
       if (selectedMarker.value) map.value.removeLayer(selectedMarker.value);
 
       selectedMarker.value = mapUtils.addPoint(map.value, newValue, {

@@ -109,6 +109,7 @@ import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
+import { keyParToSelect } from "../../../Utils/array";
 
 export default {
   components: {
@@ -139,23 +140,25 @@ export default {
     const store = useStore();
     const templateInfo = ref(null);
 
-    const templates = props.templates.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
+    const templates = keyParToSelect(props.templates);
     const selectedTemplate = ref(templates.length ? templates[0] : null);
 
-    const locations = props.locations.map((t) => ({
-      key: t.id,
-      value: t.name,
-    }));
+    const locations = keyParToSelect(props.locations);
     const selectedLocation = ref(locations.length ? locations[0] : null);
+
+    const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
+    if (selectedMarker.value) {
+      locations.unshift({
+        key: selectedMarker.value,
+        value: "Selected Marker",
+      });
+      selectedLocation.value = locations[0];
+    }
 
     const form = useForm({
       sink: {
         data: {},
       },
-      equipments: [],
       template_id: null,
       location_id: null,
     });
