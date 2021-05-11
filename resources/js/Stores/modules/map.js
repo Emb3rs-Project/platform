@@ -1,5 +1,4 @@
 const _state = () => ({
-    map: null,
     selectedMarker: null
 });
 
@@ -8,17 +7,11 @@ const getters = {
 };
 
 const actions = {
-    // selectMarker: ({ commit, state }, marker) => {
-    //     commit('doSelectMarker', marker);
-    // }
-    setMap(ctx, payload) {
-        ctx.commit('setMap', payload);
-    },
     centerAt: () => { }
 };
 
 const mutations = {
-    doSelectMarker: (state, marker) => state.selectMarker = marker,
+    selectMarker: (state, marker) => state.selectedMarker = marker,
     setMap: (state, payload) => state.map = payload.map,
 };
 

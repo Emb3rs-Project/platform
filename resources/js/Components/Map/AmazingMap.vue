@@ -4,7 +4,7 @@
 
 <script>
 import mapUtils from "@/Utils/map.js";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import L from "leaflet";
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -24,9 +24,9 @@ export default {
       default: [],
     },
   },
-  emits: ["onMove", "onCreateRequest"],
   setup(props, { emit }) {
     // TODO: Convert to VUEX!!!
+    const store = useStore();
 
     const map = ref(null);
     const mapObjects = ref({
@@ -40,8 +40,6 @@ export default {
       start: null,
     };
 
-    const store = useStore();
-
     const center = computed({
       get() {
         return props.centerValue;
@@ -51,12 +49,31 @@ export default {
       },
     });
 
-    const onCreateSink = (_) => {
+    const onCreateSink = (marker) => {
+      store.commit("map/selectMarker", marker.latlng);
+      console.log(store.state["map"]);
       store.dispatch("objects/showSlide", {
         route: "objects.sinks.create",
         props: {},
       });
     };
+
+    const selectedMarkerLatlng = computed(
+      () => store.getters["map/selectedMarker"]
+    );
+    const selectedMarker = ref();
+
+    watch(selectedMarkerLatlng, (newValue) => {
+      console.log("selectedMarker", selectedMarkerLatlng);
+
+      if (selectedMarker.value) map.value.removeLayer(selectedMarker.value);
+
+      selectedMarker.value = mapUtils.addPoint(map.value, newValue, {
+        icon: "plus",
+      });
+
+      map.value.flyTo(newValue);
+    });
 
     const onCreateSource = (_) =>
       store.dispatch("objects/showSlide", {
@@ -242,6 +259,7 @@ export default {
     return {
       center,
       onCenterLocation,
+      selectedMarkerLatlng,
     };
   },
 };

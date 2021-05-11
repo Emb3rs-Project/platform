@@ -13,8 +13,8 @@ const getters = {
 
 const actions = {
     showSlide: ({ commit, getters, dispatch, state }, { route, props }) => {
-        if (state.currentRoute === route) commit('openSlide')
         commit('closeSlide')
+        if (state.currentRoute === route) commit('openSlide')
         commit('updateSlide', route)
         commit('updateSlideProps', props)
         // commit('openSlide')
