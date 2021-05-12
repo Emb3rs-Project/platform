@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Actions\Embers\CreateSink;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Embers\StoreSinkRequest;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Redirect;
 
@@ -43,6 +46,10 @@ class SinkController extends Controller
 
             return $item;
         });
+
+        return response()->json([
+            'sinks' => $output
+        ]);
 
 
         return Inertia::render(
@@ -103,12 +110,14 @@ class SinkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreSinkRequest $request)
     {
         $sink = $request->input('sink');
         $equipments = $request->input('equipments');
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
+        if ($equipments) {
+            foreach ($equipments as $key => $value) {
+                unset($equipments[$key]['template']);
+            }
         }
 
         $newInstance = [
@@ -138,6 +147,11 @@ class SinkController extends Controller
         // return Inertia::render(
         //     'Objects/Objects'
         // );
+
+        return response()->json([
+            'sinks' => $newInstance
+        ]);
+
         return Redirect::route('objects.index');
     }
 

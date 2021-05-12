@@ -9,29 +9,23 @@ use Illuminate\Support\Facades\Validator;
 class CreateSink implements CreatesSinks
 {
     /**
-     * Validate and create a new sink.
+     * Validate and create a new instance.
      *
-     * @param  mixed  $sink
-     * @return mixed
+     * @param  mixed $user
+     * @return mixed $instance
      */
-    public function create($user, $sink)
+    public static function create($user, $instance)
     {
-        Gate::forUser($user)->authorize('create-sink', $sink);
-        // $newInstance = [
-        //     "name" => 'Not Defined',
-        //     "values" => [
-        //         "equipments" => $equipments
-        //     ],
-        //     "template_id" => $request->get('template_id'),
-        //     "location_id" => null
-        // ];
+        Gate::forUser($user)->authorize('create', $instance);
 
-        Validator::make($sink, [
+        Validator::make($instance, [
             'name' => ['required', 'string', 'max:255'],
             'values.equipments' => ['required', 'array'],
-            'template_id' => ['required', 'string', 'exists:template,id'],
-            'location_id' => ['required', 'string', 'exists:location,id'],
+            'template_id' => ['required', 'string', 'exists:templates,id'],
+            'location_id' => ['required', 'string', 'exists:locations,id'],
         ])->validateWithBag('createSink');
+
+
 
         // AddingTeam::dispatch($user);
 

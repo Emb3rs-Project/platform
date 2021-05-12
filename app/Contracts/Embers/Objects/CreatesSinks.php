@@ -10,5 +10,5 @@ interface CreatesSinks
      * @param  mixed  $user
      * @return mixed  $sink
      */
-    public function create($user, $sink);
+    public static function create($user, $sink);
 }
