@@ -219,9 +219,16 @@ export default {
     const onConfirmation = (modalType) => {
       switch (modalType) {
         case "delete":
-          Inertia.delete(
-            route(`${selectedObject.value.path}.destroy`, itemToDelete.value.id)
-          );
+          const _type = itemToDelete.value?.template?.category?.type;
+
+          if (_type === "source")
+            Inertia.delete(
+              route(`objects.sources.destroy`, itemToDelete.value.id)
+            );
+          if (_type === "sink")
+            Inertia.delete(
+              route(`objects.sinks.destroy`, itemToDelete.value.id)
+            );
 
           objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);
 

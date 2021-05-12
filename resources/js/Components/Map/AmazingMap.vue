@@ -50,9 +50,23 @@ export default {
     });
 
     const onCreateSink = (marker) => {
-      store.commit("map/selectMarker", marker.latlng);
+      store.dispatch("map/selectMarker", {
+        marker: marker.latlng,
+        color: "green-700",
+      });
       store.dispatch("objects/showSlide", {
         route: "objects.sinks.create",
+        props: {},
+      });
+    };
+
+    const onCreateSource = (marker) => {
+      store.dispatch("map/selectMarker", {
+        marker: marker.latlng,
+        color: "red-700",
+      });
+      store.dispatch("objects/showSlide", {
+        route: "objects.sources.create",
         props: {},
       });
     };
@@ -67,16 +81,12 @@ export default {
 
       selectedMarker.value = mapUtils.addPoint(map.value, newValue, {
         icon: "plus",
+        textClass: "text-" + store.getters["map/selectedMarkerColor"],
+        borderClass: "border-" + store.getters["map/selectedMarkerColor"],
       });
 
-      map.value.flyTo(newValue);
+      //   map.value.flyTo(newValue);
     });
-
-    const onCreateSource = (_) =>
-      store.dispatch("objects/showSlide", {
-        route: "objects.sources.create",
-        props: {},
-      });
 
     const onCreateLink = (value) => {
       store.dispatch("objects/showSlide", {

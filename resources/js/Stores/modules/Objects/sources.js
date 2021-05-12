@@ -5,6 +5,7 @@ const state = () => ({
     processes: [],
     scripts: [],
     template: null,
+    location: null
 });
 
 // https://next.vuex.vuejs.org/api/#getters
@@ -24,6 +25,15 @@ const getters = {
     template(state, getters, rootState, rootGetters) {
         return state.template;
     },
+    form(state) {
+        return {
+            source: state.source,
+            equipments: state.equipments,
+            processes: state.processes,
+            template_id: state.template.key,
+            location_id: state.location.key
+        }
+    }
 };
 
 // https://next.vuex.vuejs.org/api/#actions
@@ -141,6 +151,10 @@ const mutations = {
     removeTemplate(state) {
         state.template = null;
     },
+
+    setLocation(state, payload) {
+        state.location = payload
+    }
 };
 
 export default {

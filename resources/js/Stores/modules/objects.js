@@ -17,7 +17,7 @@ const actions = {
         if (state.currentRoute === route) commit('openSlide')
         commit('updateSlide', route)
         commit('updateSlideProps', props)
-    }
+    },
 };
 
 const mutations = {

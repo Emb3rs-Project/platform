@@ -142,11 +142,12 @@ export default {
     addInstances(map, instances = [], mapObjects = {
         sources: null,
         sinks: null,
-        links: null
+        links: null,
+        all: null
     }) {
         const sources = []
         const sinks = []
-
+        const all = []
 
         for (let instance of instances.filter((i) => i.location)) {
 
@@ -183,8 +184,9 @@ export default {
 
         mapObjects.sinks = L.layerGroup(sinks)
         mapObjects.sources = L.layerGroup(sources)
+        mapObjects.all = L.layerGroup([...sinks, ...sources])
 
-        L.control.layers({ 'Sinks': mapObjects.sinks, 'Sources': mapObjects.sources }, null, { position: 'topleft' }).addTo(map);
+        L.control.layers({ 'Sinks': mapObjects.sinks, 'Sources': mapObjects.sources, 'All': mapObjects.all }, null, { position: 'topleft' }).addTo(map);
     },
     removeAllInstances(map, mapObjects = {
         sources: null,

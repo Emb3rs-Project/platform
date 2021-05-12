@@ -49,6 +49,7 @@ import SelectMenu from "../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../Components/NewLayout/Forms/TextInput.vue";
 import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
 import { useStore } from "vuex";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
   components: {
@@ -137,6 +138,7 @@ export default {
         switch (currentStep.name) {
           case "Source Details":
             currentStepProps.value.templates = props.templates;
+            currentStepProps.value.locations = props.locations;
             break;
           case "Equipments":
             currentStepProps.value.equipmentsCategories =
@@ -179,13 +181,16 @@ export default {
     };
 
     const navigateToNextStep = () => {
-      if (currentStepIndex.value !== steps.length) {
+      console.log(currentStepIndex.value, steps.value.length);
+      if (currentStepIndex.value < steps.value.length - 1) {
         steps.value[currentStepIndex.value].status = "complete";
         steps.value[currentStepIndex.value + 1].status = "current";
         currentStep.value = steps.value[currentStepIndex.value + 1];
 
         return;
       }
+      const form = useForm(store.getters["sources/form"]);
+      form.post(route("objects.sources.store"));
     };
 
     return {

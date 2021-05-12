@@ -45,6 +45,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "../../Components/Map/AmazingMap";
 import SlideOver from "../../Components/NewLayout/SlideOver";
 import LinkIcon from "../../Components/Icons/LinkIcon";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {
@@ -83,10 +84,16 @@ export default {
 
     watch(currentSlideOverPath, async (newPath) => {
       if (!newPath) return;
+      let _route = "";
 
-      console.log("New Path", newPath);
+      if (newPath.includes("show")) {
+        let props = store.getters["objects/currentRouteProps"];
+        _route = route(newPath, props);
+      } else {
+        _route = route(newPath);
+      }
 
-      const response = await fetch(route(newPath)).then((res) => {
+      const response = await fetch(_route).then((res) => {
         if (!res.ok) {
           const error = new Error(res.statusText);
           error.json = res.json();
@@ -102,6 +109,12 @@ export default {
         store.commit("objects/openSlide");
       } else {
         slideController.value = response.slideOver;
+      }
+    });
+
+    store.subscribeAction(({ type, payload }) => {
+      if (type === "map/refreshMap") {
+        Inertia.visit(route("objects.index"), null, { only: ["instances"] });
       }
     });
 

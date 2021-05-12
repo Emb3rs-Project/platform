@@ -16,6 +16,26 @@
     </div>
   </div>
 
+  <div
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+  >
+    <div>
+      <label
+        for="project_name"
+        class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+      >
+        Locations
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <select-menu
+        v-model="selectedLocation"
+        :options="locationSelect"
+        :disabled="selectedTemplate ? false : true"
+      ></select-menu>
+    </div>
+  </div>
+
   <div v-if="selectedTemplate">
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -56,6 +76,7 @@ import { useStore } from "vuex";
 
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
+import { keyParToSelect } from "../../../../Utils/array";
 
 export default {
   components: {
@@ -68,12 +89,35 @@ export default {
       type: Array,
       required: true,
     },
+    locations: {
+      type: Array,
+      required: true,
+    },
   },
 
   setup(props) {
     const store = useStore();
     const selectedTemplate = ref(store.getters["sources/template"] ?? null);
     const data = ref(store.getters["sources/source"]);
+    const locationSelect = keyParToSelect(props.locations);
+    const selectedLocation = ref(
+      locationSelect.length ? locationSelect[0] : null
+    );
+
+    const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
+    if (selectedMarker.value) {
+      locationSelect.unshift({
+        key: selectedMarker.value,
+        value: "Selected Marker",
+      });
+      selectedLocation.value = locationSelect[0];
+    }
+
+    watch(
+      selectedLocation,
+      () => store.commit("sources/setLocation", selectedLocation.value),
+      { immediate: true }
+    );
 
     watch(
       data,
@@ -85,17 +129,22 @@ export default {
       { deep: true }
     );
 
-    watch(selectedTemplate, (selectedTemplate) => {
-      data.value = {};
+    watch(
+      selectedTemplate,
+      (selectedTemplate) => {
+        if (!selectedTemplate) return;
+        data.value = {};
 
-      store.dispatch("sources/addTemplate", { template: selectedTemplate });
+        store.dispatch("sources/addTemplate", { template: selectedTemplate });
 
-      if (!Object.keys(selectedTemplate.props).length === 0) return;
+        if (!Object.keys(selectedTemplate.props).length === 0) return;
 
-      for (const property of selectedTemplate.props) {
-        data.value[property.property.symbolic_name] = property.default_value;
-      }
-    });
+        for (const property of selectedTemplate.props) {
+          data.value[property.property.symbolic_name] = property.default_value;
+        }
+      },
+      { immediate: true }
+    );
 
     const templates = computed(() =>
       props.templates.map((t) => ({
@@ -109,6 +158,8 @@ export default {
       templates,
       selectedTemplate,
       data,
+      locationSelect,
+      selectedLocation,
     };
   },
 };

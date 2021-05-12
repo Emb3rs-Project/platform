@@ -205,6 +205,15 @@ export default {
       Object.assign([], templateInfo.value?.template_properties)
     );
 
+    const submit = () => {
+      form.post(route("objects.sinks.store"), {
+        onSuccess: () => {
+          store.dispatch("map/refreshMap");
+          store.dispatch("objects/showSlide", { route: "objects.list" });
+        },
+      });
+    };
+
     return {
       templateInfo,
       templates,
@@ -214,16 +223,10 @@ export default {
       form,
       open,
       properties,
+      submit,
       onCancel: () =>
         store.dispatch("objects/showSlide", { route: "objects.list" }),
     };
-  },
-
-  methods: {
-    submit() {
-      this.form.post(route("objects.sinks.store"));
-    },
-    onLocationSelect(locId) {},
   },
 };
 </script>
