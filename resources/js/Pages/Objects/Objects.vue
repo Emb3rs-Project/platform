@@ -82,7 +82,12 @@ export default {
       () => store.getters["objects/currentRoute"]
     );
 
-    watch(currentSlideOverPath, async (newPath) => {
+    const currentSlidePathCheckSum = computed(
+      () => store.getters["objects/routeCheckSum"]
+    );
+
+    watch(currentSlidePathCheckSum, async (_) => {
+      const newPath = currentSlideOverPath.value;
       if (!newPath) return;
       let _route = "";
 

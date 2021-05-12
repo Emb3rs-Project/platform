@@ -84,8 +84,6 @@ export default {
         textClass: "text-" + store.getters["map/selectedMarkerColor"],
         borderClass: "border-" + store.getters["map/selectedMarkerColor"],
       });
-
-      //   map.value.flyTo(newValue);
     });
 
     const onCreateLink = (value) => {
@@ -228,11 +226,28 @@ export default {
     ];
 
     const onCenterLocation = (loc) => {
-      // @geocfu: maybe we need to make a switch statement here in case
-      // sources and sinks have the location structured in a different way
-      // console.log("AmazingMap::onCenterLocation", loc);
-
       mapUtils.centerAtLocation(map.value, loc.geo_object);
+    };
+
+    const onMarkerClick = (instance) => {
+      const _type = instance.template.category.type;
+
+      switch (_type) {
+        case "sink":
+          store.dispatch("objects/showSlide", {
+            route: "objects.sinks.show",
+            props: instance.id,
+          });
+          break;
+        case "source":
+          store.dispatch("objects/showSlide", {
+            route: "objects.sources.show",
+            props: instance.id,
+          });
+          break;
+        default:
+          break;
+      }
     };
 
     onMounted(() => {
@@ -252,7 +267,12 @@ export default {
       );
 
       if (props.instances?.length > 0) {
-        mapUtils.addInstances(map.value, props.instances, mapObjects.value);
+        mapUtils.addInstances(
+          map.value,
+          props.instances,
+          mapObjects.value,
+          onMarkerClick
+        );
       }
     });
 

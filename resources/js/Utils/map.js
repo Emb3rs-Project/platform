@@ -144,7 +144,7 @@ export default {
         sinks: null,
         links: null,
         all: null
-    }) {
+    }, onMarkerClick = () => { }) {
         const sources = []
         const sinks = []
         const all = []
@@ -171,13 +171,13 @@ export default {
                     iconOptions.icon = 'leaf'
                     iconOptions.textClass = 'text-green-700'
                     iconOptions.borderClass = 'border-green-700'
-                    sinks.push(this.addPoint(map, center, iconOptions))
+                    sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
                     break;
                 case 'source':
                     iconOptions.icon = 'fire'
                     iconOptions.textClass = 'text-red-700'
                     iconOptions.borderClass = 'border-red-700'
-                    sources.push(this.addPoint(map, center, iconOptions))
+                    sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
                     break;
             }
         }
