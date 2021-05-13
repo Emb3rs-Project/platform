@@ -218,15 +218,15 @@ class SourceController extends Controller
             ])
             ->first();
 
-        return Inertia::render(
-            'Objects/Sources/SourceDetails',
-            [
+        return [
+            "slideOver" => "Objects/Sources/SourceDetails",
+            "props" => [
                 "templates" => $sourceTemplates,
                 "equipments" => $equipmentTemplates,
                 "locations" => $locations,
                 "instance" => $instance
             ]
-        );
+        ];
     }
 
     /**
