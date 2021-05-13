@@ -6,6 +6,7 @@ use App\Actions\Embers\CreateSink;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Embers\StoreSinkRequest;
 use App\Models\Category;
+use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
@@ -113,31 +114,43 @@ class SinkController extends Controller
     public function store(StoreSinkRequest $request)
     {
         $sink = $request->input('sink');
-        $equipments = $request->input('equipments');
-        if ($equipments) {
-            foreach ($equipments as $key => $value) {
-                unset($equipments[$key]['template']);
-            }
-        }
+
 
         $newInstance = [
             "name" => 'Not Defined',
             "values" => [
-                "equipments" => $equipments
+                "equipments" => []
             ],
             "template_id" => $request->get('template_id'),
             "location_id" => null
         ];
 
+        if (is_array($request["location_id"])) {
+            $marker = $request["location_id"];
+            $geo = GeoObject::create([
+                'type' => 'point',
+                'data' => [
+                    "center" => [$marker["lat"], $marker["lng"]]
+                ]
+            ]);
+
+            $location = Location::create([
+                'name' => $sink["data"]["name"],
+                'geo_object_id' => $geo->id
+            ]);
+            $newInstance['location_id'] = $location->id;
+        } else {
+            // Check if Location is Set
+            $locationId = $request->input('location_id');
+            if ($locationId) {
+                $newInstance['location_id'] = $locationId;
+            }
+        }
+
+
         // Check if Property Name Exists
         if (isset($sink['data']['name'])) {
             $newInstance['name'] = $sink['data']['name'];
-        }
-
-        // Check if Location is Set
-        $locationId = $request->input('location_id');
-        if ($locationId) {
-            $newInstance['location_id'] = $locationId;
         }
 
         $instace = Instance::create($newInstance);
@@ -147,11 +160,6 @@ class SinkController extends Controller
         // return Inertia::render(
         //     'Objects/Objects'
         // );
-
-        return response()->json([
-            'sinks' => $newInstance
-        ]);
-
         return Redirect::route('objects.index');
     }
 
@@ -215,7 +223,7 @@ class SinkController extends Controller
         $locations = Location::with(['geoObject'])->get();
 
         $instance = Instance::whereId($id)
-            ->with(['location','template','template.category', 'location.geoObject'])
+            ->with(['location', 'template', 'template.category', 'location.geoObject'])
             ->first();
 
         return [

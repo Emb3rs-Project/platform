@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
@@ -48,7 +49,7 @@ class SourceController extends Controller
         return Inertia::render(
             'Objects/Sources/SourceIndex',
             [
-            'sources' => $output
+                'sources' => $output
             ]
         );
     }
@@ -132,18 +133,35 @@ class SourceController extends Controller
             "location_id" => null
         ];
 
+        if (is_array($request["location_id"])) {
+            $marker = $request["location_id"];
+            $geo = GeoObject::create([
+                'type' => 'point',
+                'data' => [
+                    "center" => [$marker["lat"], $marker["lng"]]
+                ]
+            ]);
+
+            $location = Location::create([
+                'name' => $source["name"],
+                'geo_object_id' => $geo->id
+            ]);
+            $newInstance['location_id'] = $location->id;
+        } else {
+            // Check if Location is Set
+            $locationId = $request->input('location_id');
+            if ($locationId) {
+                $newInstance['location_id'] = $locationId;
+            }
+        }
+
+
         // Check if Property Name Exists
-        if (isset($source['data']['name'])) {
-            $newInstance['name'] = $source['data']['name'];
-        }
-
-        // Check if Location is Set
-        if (isset($source['location_id'])) {
-            $newInstance['location_id'] = $source['location_id'];
+        if (isset($source['name'])) {
+            $newInstance['name'] = $source['name'];
         }
 
 
-        unset($source["data"]["name"]);
         $newInstance["values"] = [
             "equipments" => $equipments,
             "info" => $source
@@ -153,7 +171,7 @@ class SourceController extends Controller
         $instace = Instance::create($newInstance);
         $instace->teams()->attach(Auth::user()->currentTeam);
 
-        return Redirect::route('objects.sources.show', $instace->id);
+        return Redirect::route('objects.index');
     }
 
     /**
@@ -203,10 +221,10 @@ class SourceController extends Controller
         return Inertia::render(
             'Objects/Sources/SourceDetails',
             [
-            "templates" => $sourceTemplates,
-            "equipments" => $equipmentTemplates,
-            "locations" => $locations,
-            "instance" => $instance
+                "templates" => $sourceTemplates,
+                "equipments" => $equipmentTemplates,
+                "locations" => $locations,
+                "instance" => $instance
             ]
         );
     }
@@ -220,40 +238,40 @@ class SourceController extends Controller
     public function edit($id)
     {
         $sourceCategories = Category::whereType('source')
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $equipmentCategories = Category::whereType('equipment')
-        ->get()
-        ->pluck('id');
+            ->get()
+            ->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-        ->with([
-            'templateProperties',
-            'templateProperties.unit',
-            'templateProperties.property'
-        ])
-        ->get();
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
 
         $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-        ->with([
-            'templateProperties',
-            'templateProperties.unit',
-            'templateProperties.property'
-        ])
-        ->get();
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
 
         $locations = Location::with(['geoObject'])->get();
 
-        $instance = Instance::whereId($id)->with(['location','template','template.category', 'location.geoObject'])->first();
+        $instance = Instance::whereId($id)->with(['location', 'template', 'template.category', 'location.geoObject'])->first();
 
         return Inertia::render(
             'Objects/Sources/SourceEdit',
             [
-            "templates" => $sourceTemplates,
-            "equipments" => $equipmentTemplates,
-            "locations" => $locations,
-            "instance" => $instance
+                "templates" => $sourceTemplates,
+                "equipments" => $equipmentTemplates,
+                "locations" => $locations,
+                "instance" => $instance
             ]
         );
     }
