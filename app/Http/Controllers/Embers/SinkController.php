@@ -49,10 +49,6 @@ class SinkController extends Controller
             return $item;
         });
 
-        return response()->json([
-            'sinks' => $output
-        ]);
-
         return Inertia::render(
             'Objects/Sinks/SinkIndex',
             [
@@ -213,11 +209,9 @@ class SinkController extends Controller
     {
         $sink = Instance::findOrFail($id);
 
-        $updater = app(UpdatesSinks::class)->update($request->user(), $sink, $request->all());
+        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $sink, $request->all());
 
-        return $updater;
-
-        return Redirect::route('objects.sinks.show', $updater->id);
+        return Redirect::route('objects.sinks.show', $updatedSink->id);
     }
 
     /**
