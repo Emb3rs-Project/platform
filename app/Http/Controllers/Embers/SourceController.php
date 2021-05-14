@@ -52,9 +52,9 @@ class SourceController extends Controller
             return $item;
         });
 
-        return response()->json([
-            'sources' => $output
-        ]);
+        // return response()->json([
+        //     'sources' => $output
+        // ]);
 
         return Inertia::render('Objects/Sources/SourceIndex', [
             'sources' => $output
