@@ -2,19 +2,18 @@
 
 namespace App\Http\Controllers\Embers;
 
-use App\Actions\Embers\CreateSink;
+use App\Contracts\Embers\Objects\CreatesSinks;
+use App\Contracts\Embers\Objects\UpdatesSinks;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Embers\StoreSinkRequest;
 use App\Models\Category;
-use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
-use Redirect;
+use \Illuminate\Support\Facades\Redirect;
 
 class SinkController extends Controller
 {
@@ -25,6 +24,8 @@ class SinkController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Instance::class);
+
         $sinkCategories = Category::whereType('sink')
             ->get()
             ->pluck('id');
@@ -52,7 +53,6 @@ class SinkController extends Controller
             'sinks' => $output
         ]);
 
-
         return Inertia::render(
             'Objects/Sinks/SinkIndex',
             [
@@ -68,6 +68,8 @@ class SinkController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Instance::class);
+
         $sinkCategories = Category::whereType('sink')
             ->get()
             ->pluck('id');
@@ -111,55 +113,10 @@ class SinkController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSinkRequest $request)
+    public function store(Request $request)
     {
-        $sink = $request->input('sink');
+        app(CreatesSinks::class)->create($request->user(), $request->all());
 
-
-        $newInstance = [
-            "name" => 'Not Defined',
-            "values" => [
-                "equipments" => []
-            ],
-            "template_id" => $request->get('template_id'),
-            "location_id" => null
-        ];
-
-        if (is_array($request["location_id"])) {
-            $marker = $request["location_id"];
-            $geo = GeoObject::create([
-                'type' => 'point',
-                'data' => [
-                    "center" => [$marker["lat"], $marker["lng"]]
-                ]
-            ]);
-
-            $location = Location::create([
-                'name' => $sink["data"]["name"],
-                'geo_object_id' => $geo->id
-            ]);
-            $newInstance['location_id'] = $location->id;
-        } else {
-            // Check if Location is Set
-            $locationId = $request->input('location_id');
-            if ($locationId) {
-                $newInstance['location_id'] = $locationId;
-            }
-        }
-
-
-        // Check if Property Name Exists
-        if (isset($sink['data']['name'])) {
-            $newInstance['name'] = $sink['data']['name'];
-        }
-
-        $instace = Instance::create($newInstance);
-        $instace->teams()->attach(Auth::user()->currentTeam);
-
-        // @geocfu: i must return to the objectsindex page
-        // return Inertia::render(
-        //     'Objects/Objects'
-        // );
         return Redirect::route('objects.index');
     }
 
@@ -171,6 +128,10 @@ class SinkController extends Controller
      */
     public function show($id)
     {
+        $sink = Instance::findOrFail($id);
+
+        Gate::authorize('view', $sink);
+
         $instance = Instance::whereId($id)
             ->with([
                 'location',
@@ -196,6 +157,10 @@ class SinkController extends Controller
      */
     public function edit($id)
     {
+        $sink = Instance::findOrFail($id);
+
+        Gate::authorize('view', $sink);
+
         $sinkCategories = Category::whereType('sink')
             ->get()
             ->pluck('id');
@@ -244,31 +209,15 @@ class SinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        $sink = $request->get('sink');
-        $equipments = $request->get('equipments');
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
-        }
+        $sink = Instance::findOrFail($id);
 
-        $instance = Instance::find($id);
+        $updater = app(UpdatesSinks::class)->update($request->user(), $sink, $request->all());
 
-        // Check if Property Name Exists
-        if (isset($sink['data']['name'])) {
-            $instance->name = $sink['data']['name'];
-        }
+        return $updater;
 
-        $locationId = $request->input('location_id');
-        if ($locationId) {
-            $newInstance['location_id'] = $locationId;
-        } else {
-            $instance->location()->disassociate();
-        }
-
-        $instance->save();
-
-        return Redirect::route('objects.sinks.show', $instance->id);
+        return Redirect::route('objects.sinks.show', $updater->id);
     }
 
     /**
@@ -279,7 +228,11 @@ class SinkController extends Controller
      */
     public function destroy($id)
     {
-        Instance::destroy($id);
+        $sink = Instance::findOrFail($id);
+
+        Gate::authorize('delete', $sink);
+
+        Instance::destroy($sink->id);
 
         return Redirect::route('objects.index');
     }

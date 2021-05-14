@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Instance;
 use App\Models\Team;
-use App\Policies\InstancePolicy;
+use App\Policies\Embers\InstancePolicy;
 use App\Policies\TeamPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 

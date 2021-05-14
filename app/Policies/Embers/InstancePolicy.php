@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Embers;
 
 use App\Models\Instance;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Log;
 
 class InstancePolicy
 {
