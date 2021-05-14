@@ -49,12 +49,9 @@ class SinkController extends Controller
             return $item;
         });
 
-        return Inertia::render(
-            'Objects/Sinks/SinkIndex',
-            [
-                'sinks' => $output
-            ]
-        );
+        return Inertia::render('Objects/Sinks/SinkIndex', [
+            'sinks' => $output
+        ]);
     }
 
     /**
