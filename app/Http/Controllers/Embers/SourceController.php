@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Objects\CreatesSources;
+use App\Contracts\Embers\Objects\UpdatesSources;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Redirect;
 
 class SourceController extends Controller
 {
@@ -22,9 +25,13 @@ class SourceController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', Instance::class);
+
         $sourceCategories = Category::whereType('source')
             ->get()
             ->pluck('id');
+
+        return $sourceCategories;
 
         $templates = Template::whereIn('category_id', $sourceCategories)
             ->get()
@@ -45,13 +52,13 @@ class SourceController extends Controller
             return $item;
         });
 
+        return response()->json([
+            'sources' => $output
+        ]);
 
-        return Inertia::render(
-            'Objects/Sources/SourceIndex',
-            [
-                'sources' => $output
-            ]
-        );
+        return Inertia::render('Objects/Sources/SourceIndex', [
+            'sources' => $output
+        ]);
     }
 
     /**
@@ -61,6 +68,8 @@ class SourceController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Instance::class);
+
         $sourceCategories = Category::whereType('source')
             ->get()
             ->pluck('id');
@@ -118,58 +127,7 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        $source = $request->get('source');
-        $equipments = $request->get('equipments');
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
-        }
-
-        $newInstance = [
-            "name" => 'Not Defined',
-            "values" => [
-                "equipments" => $equipments
-            ],
-            "template_id" => $request->get('template_id'),
-            "location_id" => null
-        ];
-
-        if (is_array($request["location_id"])) {
-            $marker = $request["location_id"];
-            $geo = GeoObject::create([
-                'type' => 'point',
-                'data' => [
-                    "center" => [$marker["lat"], $marker["lng"]]
-                ]
-            ]);
-
-            $location = Location::create([
-                'name' => $source["name"],
-                'geo_object_id' => $geo->id
-            ]);
-            $newInstance['location_id'] = $location->id;
-        } else {
-            // Check if Location is Set
-            $locationId = $request->input('location_id');
-            if ($locationId) {
-                $newInstance['location_id'] = $locationId;
-            }
-        }
-
-
-        // Check if Property Name Exists
-        if (isset($source['name'])) {
-            $newInstance['name'] = $source['name'];
-        }
-
-
-        $newInstance["values"] = [
-            "equipments" => $equipments,
-            "info" => $source
-        ];
-
-
-        $instace = Instance::create($newInstance);
-        $instace->teams()->attach(Auth::user()->currentTeam);
+        app(CreatesSources::class)->create($request->user(), $request->all());
 
         return Redirect::route('objects.index');
     }
@@ -182,6 +140,10 @@ class SourceController extends Controller
      */
     public function show($id)
     {
+        $source = Instance::findOrFail($id);
+
+        Gate::authorize('view', $source);
+
         $sourceCategories = Category::whereType('source')
             ->get()
             ->pluck('id');
@@ -237,6 +199,10 @@ class SourceController extends Controller
      */
     public function edit($id)
     {
+        $source = Instance::findOrFail($id);
+
+        Gate::authorize('view', $source);
+
         $sourceCategories = Category::whereType('source')
             ->get()
             ->pluck('id');
@@ -285,29 +251,11 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $source = $request->get('source');
-        $equipments = $request->get('equipments');
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
-        }
+        $source = Instance::findOrFail($id);
 
-        $instance = Instance::find($id);
+        $updatedSource = app(UpdatesSources::class)->update($request->user(), $source, $request->all());
 
-        // Check if Property Name Exists
-        if (isset($source['data']['name'])) {
-            $instance->name = $source['data']['name'];
-        }
-
-        // Check if Location is Set
-        if (isset($source['location_id'])) {
-            $instance->location_id = $source['location_id'];
-        } else {
-            $instance->location()->disassociate();
-        }
-
-        $instance->save();
-
-        return Redirect::route('objects.sources.show', $instance->id);
+        return Redirect::route('objects.sources.show', $updatedSource->id);
     }
 
     /**
@@ -318,7 +266,11 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        Instance::destroy($id);
+        $source = Instance::findOrFail($id);
+
+        Gate::authorize('delete', $source);
+
+        Instance::destroy($source->id);
 
         return Redirect::route('objects.index');
     }

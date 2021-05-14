@@ -2,16 +2,15 @@
 
 namespace App\Actions\Embers;
 
-use App\Contracts\Embers\Objects\UpdatesSinks;
+use App\Contracts\Embers\Objects\UpdatesSources;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class UpdateSink implements UpdatesSinks
+class UpdateSource implements UpdatesSources
 {
     /**
      * Validate and update an existing instance.
@@ -21,15 +20,15 @@ class UpdateSink implements UpdatesSinks
      * @param  array $input
      * @return Instance
      */
-    public function update(mixed $user, Instance $sink, array $input)
+    public function update(mixed $user, Instance $source, array $input)
     {
-        Gate::authorize('update', $sink);
+        Gate::authorize('update', $source);
 
         $this->validate($input);
 
-        $sink = $this->save($user, $sink, $input);
+        $source = $this->save($user, $source, $input);
 
-        return $sink;
+        return $source;
     }
 
     /**
@@ -41,9 +40,11 @@ class UpdateSink implements UpdatesSinks
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'sink' => ['required', 'array'],
-            'sink.data.name' => ['filled', 'string', 'max:255'],
-            // 'equipments' => ['present'], // Will change later
+            'source' => ['required', 'array'],
+            'source.data.name' => ['filled', 'string', 'max:255'],
+            'equipments' => ['filled', 'array'],
+            'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
+            'processes' => ['filled', 'array'],
             'template_id' => ['filled', 'integer','numeric', 'exists:templates,id'],
             // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
@@ -52,12 +53,23 @@ class UpdateSink implements UpdatesSinks
         ->validate();
     }
 
-    protected function save(mixed $user, Instance $sink, array $input): Instance
+    protected function save(mixed $user, Instance $source, array $input): Instance
     {
-        // TODO: attach the user id to the entity
+        // TODO: update processes
 
-        if (!empty($input['sink']['data']['name'])) {
-            $sink->name = $input['sink']['data']['name'];
+        if (!empty($input['equipments'])) {
+            foreach ($input['equipments'] as $key => $value) {
+                unset($input['equipments'][$key]['template']);
+            }
+
+            $source["values"] = [
+                "equipments" => $input['equipments'],
+                "info" => $source
+            ];
+        }
+
+        if (!empty($input['source']['data']['name'])) {
+            $source->name = $input['source']['data']['name'];
         }
 
         if (!empty($input['location_id'])) {
@@ -71,22 +83,22 @@ class UpdateSink implements UpdatesSinks
                 ]);
 
                 $location = Location::create([
-                    'name' => $sink->name,
+                    'name' => $source->name,
                     'geo_object_id' => $geo->id
                 ]);
-                $sink->location_id = $location->id;
+                $source->location_id = $location->id;
             } else {
-                $sink['location_id'] = $input['location_id'];
+                $source['location_id'] = $input['location_id'];
             }
         }
 
         if (!empty($input['template_id'])) {
-            $sink->template_id = $input['template_id'];
+            $source->template_id = $input['template_id'];
         }
 
-        $sink->save();
+        $source->save();
 
-        return $sink;
+        return $source;
     }
 
     public function redirectTo()

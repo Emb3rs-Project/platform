@@ -2,15 +2,14 @@
 
 namespace App\Actions\Embers;
 
-use App\Contracts\Embers\Objects\CreatesSinks;
+use App\Contracts\Embers\Objects\CreatesSources;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class CreateSink implements CreatesSinks
+class CreateSource implements CreatesSources
 {
     /**
      * Validate and create a new instance.
@@ -25,9 +24,9 @@ class CreateSink implements CreatesSinks
 
         $this->validate($input);
 
-        $sink = $this->save($user, $input);
+        $source = $this->save($user, $input);
 
-        return $sink;
+        return $source;
     }
 
     /**
@@ -39,9 +38,11 @@ class CreateSink implements CreatesSinks
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'sink' => ['required', 'array'],
-            'sink.data.name' => ['filled', 'string', 'max:255'],
-            // 'equipments' => ['present'], // Will change later
+            'source' => ['required', 'array'],
+            'source.data.name' => ['filled', 'string', 'max:255'],
+            'equipments' => ['required', 'array'],
+            'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
+            'processes' => ['required', 'array'],
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
@@ -51,7 +52,7 @@ class CreateSink implements CreatesSinks
     }
 
     /**
-     * Save the Sink in the DB.
+     * Save the Source in the DB.
      *
      * @param  mixed  $user
      * @param  array  $input
@@ -59,21 +60,29 @@ class CreateSink implements CreatesSinks
      */
     protected function save(mixed $user, array $input): Instance
     {
-        $sink = $input['sink'];
-        $templateId = $input['template_id'];
+        // TODO: attach the user id to the entity
+
+        // TODO: save processes
+
+        $source = $input['source'];
+        $equipments = $input['equipments'];
+        foreach ($equipments as $key => $value) {
+            unset($equipments[$key]['template']);
+        }
 
         $newInstance = [
             "name" => 'Not Defined',
             "values" => [
-                "equipments" => []
+                "equipments" => $equipments,
+                "info" => $source
             ],
-            "template_id" => $templateId,
+            "template_id" => $input['template_id'],
             "location_id" => null
         ];
 
         // Check if Property Name Exists
-        if (isset($sink['data']['name'])) {
-            $newInstance['name'] = $sink['data']['name'];
+        if (!empty($source['data']['name'])) {
+            $newInstance['name'] = $source['data']['name'];
         }
 
         if (is_array($input["location_id"])) {
@@ -98,9 +107,6 @@ class CreateSink implements CreatesSinks
             }
         }
 
-
-
-
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
@@ -111,21 +117,4 @@ class CreateSink implements CreatesSinks
     {
         //TODO
     }
-
-    // @geocfu: Seems too verbose for now, leave it for future use (maaaayyyyyybe)
-    // /**
-    //  * Get the validation rules for adding a team member.
-    //  *
-    //  * @return array
-    //  */
-    // protected function rules()
-    // {
-    //     return array_filter([
-    //         'sink.data.name' => ['string', 'max:255'],
-    //         'equipments' => ['present', 'array'], // Will change later
-    //         'template_id' => ['required', 'string', 'exists:templates,id'],
-    //         'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
-    //         'location' => ['required_without:location', 'string', 'exists:locations,id'],
-    //     ]);
-    // }
 }
