@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -40,5 +41,16 @@ class Location extends Model
     public function instances(): HasMany
     {
         return $this->hasMany(Instance::class, 'location_id');
+    }
+
+    // Table team_location
+    public function team(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Team::class,
+            'team_location',
+            'location_id',
+            'team_id'
+        );
     }
 }

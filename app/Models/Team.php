@@ -75,4 +75,15 @@ class Team extends JetstreamTeam
             'project_id'
         );
     }
+
+    // Table team_location
+    public function locations(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Location::class,
+            'team_location',
+            'team_id',
+            'location_id'
+        );
+    }
 }
