@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Http\Controllers\Controller;
 use App\Models\GeoSegment;
@@ -34,9 +35,11 @@ class LinkController extends Controller
      */
     public function create()
     {
+        $props = app(CreatesLinks::class)->create();
+
         return [
             "slideOver" => 'Objects/Links/LinkCreate',
-            "props" => []
+            "props" => $props
         ];
     }
 

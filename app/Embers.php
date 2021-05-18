@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
@@ -187,5 +188,17 @@ class Embers
     public static function indexLinksUsing(string $class)
     {
         return app()->singleton(IndexesLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the creation of a Link.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function createLinksUsing(string $class)
+    {
+        return app()->singleton(CreatesLinks::class, $class);
     }
 }
