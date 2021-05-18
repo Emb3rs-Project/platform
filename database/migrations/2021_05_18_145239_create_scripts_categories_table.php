@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModelScriptsTable extends Migration
+class CreateScriptsCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateModelScriptsTable extends Migration
      */
     public function up()
     {
-        Schema::create('model_scripts', function (Blueprint $table) {
+        Schema::create('scripts_categories', function (Blueprint $table) {
             $table->id();
 
-            $table->longText('code')->nullable();
+            $table->foreignId('script_id');
+            $table->foreignId('category_id');
+            $table->integer('order')->unsigned()->default(1);
 
             $table->timestamps();
         });
@@ -29,6 +31,6 @@ class CreateModelScriptsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('model_scripts');
+        Schema::dropIfExists('scripts_categories');
     }
 }
