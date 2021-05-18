@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Objects\Links\IndexLink;
 use App\Actions\Embers\Objects\Sinks\CreateSink;
 use App\Actions\Embers\Objects\Sinks\DestroySink;
 use App\Actions\Embers\Objects\Sinks\EditSink;
@@ -62,7 +63,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::updateSourcesUsing(UpdateSource::class);
         Embers::destroySourcesUsing(DestroySource::class);
 
-        //Links
-        // TODO
+        Embers::indexLinksUsing(IndexLink::class);
     }
 }

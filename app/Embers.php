@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -175,5 +176,16 @@ class Embers
     public static function destroySourcesUsing(string $class)
     {
         return app()->singleton(DestroysSources::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to index all Links.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function indexLinksUsing(string $class)
+    {
+        return app()->singleton(IndexesLinks::class, $class);
     }
 }

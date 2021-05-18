@@ -2,11 +2,11 @@
 
 namespace App\Policies\Embers;
 
-use App\Models\Instance;
+use App\Models\Link;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class InstancePolicy
+class LinkPolicy
 {
     use HandlesAuthorization;
 
@@ -18,8 +18,6 @@ class InstancePolicy
      */
     public function viewAny(User $user)
     {
-        // TODO: Permissions check
-
         return true;
     }
 
@@ -27,13 +25,11 @@ class InstancePolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Instance  $instance
+     * @param  \App\Models\Link  $link
      * @return mixed
      */
-    public function view(User $user, Instance $instance)
+    public function view(User $user, Link $link)
     {
-        // TODO: Permissions check
-
         return true;
     }
 
@@ -45,8 +41,6 @@ class InstancePolicy
      */
     public function create(User $user)
     {
-        // TODO: Permissions check
-
         return true;
     }
 
@@ -54,13 +48,11 @@ class InstancePolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Instance  $instance
+     * @param  \App\Models\Link  $link
      * @return mixed
      */
-    public function update(User $user, Instance $instance)
+    public function update(User $user, Link $link)
     {
-        // TODO: Permissions check
-
         return true;
     }
 
@@ -68,13 +60,11 @@ class InstancePolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Instance  $instance
+     * @param  \App\Models\Link  $link
      * @return mixed
      */
-    public function delete(User $user, Instance $instance)
+    public function delete(User $user, Link $link)
     {
-        // TODO: Permissions check
-
         return true;
     }
 
@@ -82,27 +72,23 @@ class InstancePolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Instance  $instance
+     * @param  \App\Models\Link  $link
      * @return mixed
      */
-    public function restore(User $user, Instance $instance)
+    public function restore(User $user, Link $link)
     {
-        // TODO: Permissions check
-
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Instance  $instance
+     * @param  \App\Models\Link  $link
      * @return mixed
      */
-    public function forceDelete(User $user, Instance $instance)
+    public function forceDelete(User $user, Link $link)
     {
-        // TODO: Permissions check
-
         return true;
     }
 }
