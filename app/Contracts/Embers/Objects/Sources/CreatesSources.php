@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Contracts\Embers\Objects;
+namespace App\Contracts\Embers\Objects\Sources;
 
 interface CreatesSources
 {
     /**
-     * Validate and create a new source.
+     * Display the necessary objects for the creation of a Source.
      *
-     * @param  mixed  $user
-     * @param  array  $input
      * @return mixed
      */
-    public function create($user, array $input);
+    public function create();
 
     /**
      * Redirect to a specific page after creating a new source

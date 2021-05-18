@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Actions\Embers;
+namespace App\Actions\Embers\Objects\Sources;
 
-use App\Contracts\Embers\Objects\UpdatesSources;
+use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
@@ -15,13 +15,15 @@ class UpdateSource implements UpdatesSources
     /**
      * Validate and update an existing instance.
      *
-     * @param  mixed $user
-     * @param  Instance $sink
-     * @param  array $input
+     * @param  mixed  $user
+     * @param  int    $sink
+     * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, Instance $source, array $input)
+    public function update(mixed $user, int $id, array $input)
     {
+        $source = Instance::findOrFail($id);
+
         Gate::authorize('update', $source);
 
         $this->validate($input);

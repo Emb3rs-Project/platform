@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Embers;
 
-use App\Contracts\Embers\Objects\CreatesSources;
-use App\Contracts\Embers\Objects\UpdatesSources;
+use App\Contracts\Embers\Objects\Sources\CreatesSources;
+use App\Contracts\Embers\Objects\Sources\DestroysSources;
+use App\Contracts\Embers\Objects\Sources\EditsSources;
+use App\Contracts\Embers\Objects\Sources\IndexesSources;
+use App\Contracts\Embers\Objects\Sources\ShowsSources;
+use App\Contracts\Embers\Objects\Sources\StoresSources;
+use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\GeoObject;
-use App\Models\Instance;
-use App\Models\Location;
-use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -25,39 +24,10 @@ class SourceController extends Controller
      */
     public function index()
     {
-        Gate::authorize('viewAny', Instance::class);
-
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
-
-        return $sourceCategories;
-
-        $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get()
-            ->pluck('id');
-
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
-
-        $instances = Instance::whereIn('template_id', $templates)
-            ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category', 'location.geoObject'])
-            ->get();
-
-        $output = $instances->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-
-            return $item;
-        });
-
-        // return response()->json([
-        //     'sources' => $output
-        // ]);
+        $sources = app(IndexesSources::class)->index(Auth::user());
 
         return Inertia::render('Objects/Sources/SourceIndex', [
-            'sources' => $output
+            'sources' => $sources
         ]);
     }
 
@@ -68,52 +38,23 @@ class SourceController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Instance::class);
-
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')
-            ->get();
-
-        $processCategories = Category::whereType('process')
-            ->get();
-
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories->map(fn ($e) => $e->id))
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $locations = Location::with(['geoObject'])->get();
-
-        $processTemplates = Template::whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
+        [
+            $templates,
+            $equipments,
+            $equipmentsCategories,
+            $processes,
+            $processesCategories,
+            $locations
+        ] = app(CreatesSources::class)->create();
 
         return [
             "slideOver" => "Objects/Sources/SourceCreate",
             "props" => [
-                "templates" => $sourceTemplates,
-                "equipments" => $equipmentTemplates,
-                "equipmentsCategories" => $equipmentCategories,
-                "processes" => $processTemplates,
-                "processesCategories" => $processCategories,
+                "templates" => $templates,
+                "equipments" => $equipments,
+                "equipmentsCategories" => $equipmentsCategories,
+                "processes" => $processes,
+                "processesCategories" => $processesCategories,
                 "locations" => $locations,
             ]
         ];
@@ -127,7 +68,7 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        app(CreatesSources::class)->create($request->user(), $request->all());
+        app(StoresSources::class)->store($request->user(), $request->all());
 
         return Redirect::route('objects.index');
     }
@@ -140,51 +81,18 @@ class SourceController extends Controller
      */
     public function show($id)
     {
-        $source = Instance::findOrFail($id);
-
-        Gate::authorize('view', $source);
-
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
-
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)
-            ->with([
-                'location',
-                'template',
-                'template.category',
-                'location.geoObject'
-            ])
-            ->first();
+        [
+            $templates,
+            $equipments,
+            $locations,
+            $instance
+        ] = app(ShowsSources::class)->show(Auth::user(), $id);
 
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
-                "templates" => $sourceTemplates,
-                "equipments" => $equipmentTemplates,
+                "templates" => $templates,
+                "equipments" => $equipments,
                 "locations" => $locations,
                 "instance" => $instance
             ]
@@ -199,47 +107,19 @@ class SourceController extends Controller
      */
     public function edit($id)
     {
-        $source = Instance::findOrFail($id);
+        [
+            $templates,
+            $equipments,
+            $locations,
+            $instance
+        ] = app(EditsSources::class)->edit(Auth::user(), $id);
 
-        Gate::authorize('view', $source);
-
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
-
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)->with(['location', 'template', 'template.category', 'location.geoObject'])->first();
-
-        return Inertia::render(
-            'Objects/Sources/SourceEdit',
-            [
-                "templates" => $sourceTemplates,
-                "equipments" => $equipmentTemplates,
-                "locations" => $locations,
-                "instance" => $instance
-            ]
-        );
+        return Inertia::render('Objects/Sources/SourceEdit', [
+            "templates" => $templates,
+            "equipments" => $equipments,
+            "locations" => $locations,
+            "instance" => $instance
+        ]);
     }
 
     /**
@@ -251,9 +131,8 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $source = Instance::findOrFail($id);
-
-        $updatedSource = app(UpdatesSources::class)->update($request->user(), $source, $request->all());
+        $updatedSource = app(UpdatesSources::class)
+            ->update($request->user(), $id, $request->all());
 
         return Redirect::route('objects.sources.show', $updatedSource->id);
     }
@@ -266,11 +145,7 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        $source = Instance::findOrFail($id);
-
-        Gate::authorize('delete', $source);
-
-        Instance::destroy($source->id);
+        app(DestroysSources::class)->destroy($id);
 
         return Redirect::route('objects.index');
     }

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Contracts\Embers\Objects;
+namespace App\Contracts\Embers\Objects\Sinks;
 
-interface CreatesSinks
+interface StoresSinks
 {
     /**
-     * Validate and create a new sink.
+     * Validate and create a new Sink.
      *
      * @param  mixed  $user
      * @param  array  $input
      * @return mixed
      */
-    public function create(mixed $user, array $input);
+    public function store(mixed $user, array $input);
 
     /**
      * Redirect to a specific page after creating a new sink.

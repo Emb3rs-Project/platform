@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Embers;
 
-use App\Contracts\Embers\Objects\CreatesSinks;
-use App\Contracts\Embers\Objects\UpdatesSinks;
+use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
+use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
+use App\Contracts\Embers\Objects\Sinks\EditsSinks;
+use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
+use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
+use App\Contracts\Embers\Objects\Sinks\StoresSinks;
+use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Instance;
-use App\Models\Location;
-use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use \Illuminate\Support\Facades\Redirect;
 
@@ -24,33 +24,10 @@ class SinkController extends Controller
      */
     public function index()
     {
-        Gate::authorize('viewAny', Instance::class);
-
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
-
-        $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get()
-            ->pluck('id');
-
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
-
-        $instances = Instance::whereIn('template_id', $templates)
-            ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category', 'location.geoObject'])
-            ->get();
-
-        $output = $instances->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-
-            return $item;
-        });
+        $sinks = app(IndexesSinks::class)->index(Auth::user());
 
         return Inertia::render('Objects/Sinks/SinkIndex', [
-            'sinks' => $output
+            'sinks' => $sinks
         ]);
     }
 
@@ -61,40 +38,13 @@ class SinkController extends Controller
      */
     public function create()
     {
-        Gate::authorize('create', Instance::class);
-
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
-
-
-        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $locations = Location::with(['geoObject'])->get();
+        [$templates, $equipments, $locations] = app(CreatesSinks::class)->create();
 
         return [
             "slideOver" => 'Objects/Sinks/SinkCreate',
             "props" => [
-                "templates" => $sinkTemplates,
-                "equipments" => $equipmentTemplates,
+                "templates" => $templates,
+                "equipments" => $equipments,
                 "locations" => $locations
             ]
         ];
@@ -108,7 +58,7 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(CreatesSinks::class)->create($request->user(), $request->all());
+        app(StoresSinks::class)->store($request->user(), $request->all());
 
         return Redirect::route('objects.index');
     }
@@ -121,23 +71,12 @@ class SinkController extends Controller
      */
     public function show($id)
     {
-        $sink = Instance::findOrFail($id);
-
-        Gate::authorize('view', $sink);
-
-        $instance = Instance::whereId($id)
-            ->with([
-                'location',
-                'template',
-                'template.category',
-                'location.geoObject'
-            ])
-            ->first();
+        $sink = app(ShowsSinks::class)->show(Auth::user(), $id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkDetails',
             "props" => [
-                "instance" => $instance
+                "instance" => $sink
             ]
         ];
     }
@@ -150,45 +89,18 @@ class SinkController extends Controller
      */
     public function edit($id)
     {
-        $sink = Instance::findOrFail($id);
-
-        Gate::authorize('view', $sink);
-
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
-
-        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)
-            ->with(['location', 'template', 'template.category', 'location.geoObject'])
-            ->first();
+        [
+            $templates,
+            $equipments,
+            $locations,
+            $instance
+        ] = app(EditsSinks::class)->edit(Auth::user(), $id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkEdit',
             "props" => [
-                "templates" => $sinkTemplates,
-                "equipments" => $equipmentTemplates,
+                "templates" => $templates,
+                "equipments" => $equipments,
                 "locations" => $locations,
                 "instance" => $instance
             ]
@@ -204,9 +116,7 @@ class SinkController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $sink = Instance::findOrFail($id);
-
-        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $sink, $request->all());
+        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
 
         return Redirect::route('objects.sinks.show', $updatedSink->id);
     }
@@ -219,11 +129,7 @@ class SinkController extends Controller
      */
     public function destroy($id)
     {
-        $sink = Instance::findOrFail($id);
-
-        Gate::authorize('delete', $sink);
-
-        Instance::destroy($sink->id);
+        app(DestroysSinks::class)->destroy(Auth::user(), $id);
 
         return Redirect::route('objects.index');
     }

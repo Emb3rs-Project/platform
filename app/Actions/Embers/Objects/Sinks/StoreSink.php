@@ -1,32 +1,32 @@
 <?php
 
-namespace App\Actions\Embers;
+namespace App\Actions\Embers\Objects\Sinks;
 
-use App\Contracts\Embers\Objects\CreatesSources;
+use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
-class CreateSource implements CreatesSources
+class StoreSink implements StoresSinks
 {
     /**
-     * Validate and create a new instance.
+     * Validate and create a new Sink.
      *
      * @param  mixed $user
      * @param  array $input
      * @return mixed
      */
-    public function create($user, $input)
+    public function store(mixed $user, array $input)
     {
         Gate::authorize('create', Instance::class);
 
         $this->validate($input);
 
-        $source = $this->save($user, $input);
+        $sink = $this->save($user, $input);
 
-        return $source;
+        return $sink;
     }
 
     /**
@@ -38,11 +38,9 @@ class CreateSource implements CreatesSources
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'source' => ['required', 'array'],
-            'source.data.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['required', 'array'],
-            'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
-            'processes' => ['required', 'array'],
+            'sink' => ['required', 'array'],
+            'sink.data.name' => ['filled', 'string', 'max:255'],
+            // 'equipments' => ['present'], // Will change later
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
@@ -52,7 +50,7 @@ class CreateSource implements CreatesSources
     }
 
     /**
-     * Save the Source in the DB.
+     * Save the Sink in the DB.
      *
      * @param  mixed  $user
      * @param  array  $input
@@ -60,29 +58,21 @@ class CreateSource implements CreatesSources
      */
     protected function save(mixed $user, array $input): Instance
     {
-        // TODO: attach the user id to the entity
-
-        // TODO: save processes
-
-        $source = $input['source'];
-        $equipments = $input['equipments'];
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
-        }
+        $sink = $input['sink'];
+        $templateId = $input['template_id'];
 
         $newInstance = [
             "name" => 'Not Defined',
             "values" => [
-                "equipments" => $equipments,
-                "info" => $source
+                "equipments" => []
             ],
-            "template_id" => $input['template_id'],
+            "template_id" => $templateId,
             "location_id" => null
         ];
 
         // Check if Property Name Exists
-        if (!empty($source['data']['name'])) {
-            $newInstance['name'] = $source['data']['name'];
+        if (isset($sink['data']['name'])) {
+            $newInstance['name'] = $sink['data']['name'];
         }
 
         if (is_array($input["location_id"])) {

@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Contracts\Embers\Objects;
+namespace App\Contracts\Embers\Objects\Sources;
 
 use App\Models\Instance;
 
-interface UpdatesSources
+interface IndexesSources
 {
     /**
-     * Validate and update an existing source.
+     * Display all existing sources.
      *
      * @param  mixed    $user
-     * @param  Instance $source
-     * @param  array    $input
      * @return mixed
      */
-    public function update($user, Instance $source, array $input);
+    public function index(mixed $user);
 
     /**
      * Redirect to a specific page after updating an existing source.

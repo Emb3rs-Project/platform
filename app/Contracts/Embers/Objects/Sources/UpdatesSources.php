@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Contracts\Embers\Objects\Sources;
+
+interface UpdatesSources
+{
+    /**
+     * Validate and update an existing Source.
+     *
+     * @param  mixed  $user
+     * @param  int    $source
+     * @param  array  $input
+     * @return mixed
+     */
+    public function update($user, int $id, array $input);
+
+    /**
+     * Redirect to a specific page after updating an existing source.
+     * //TODO
+     */
+    public function redirectTo();
+}

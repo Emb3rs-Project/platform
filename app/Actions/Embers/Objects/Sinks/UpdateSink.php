@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Actions\Embers;
+namespace App\Actions\Embers\Objects\Sinks;
 
-use App\Contracts\Embers\Objects\UpdatesSinks;
+use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
@@ -14,15 +14,17 @@ use Illuminate\Support\Facades\Validator;
 class UpdateSink implements UpdatesSinks
 {
     /**
-     * Validate and update an existing instance.
+     * Validate, update and return an existing instance.
      *
-     * @param  mixed $user
-     * @param  Instance $sink
-     * @param  array $input
+     * @param  mixed  $user
+     * @param  int    $sink
+     * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, Instance $sink, array $input)
+    public function update(mixed $user, int $id, array $input)
     {
+        $sink = Instance::findOrFail($id);
+
         Gate::authorize('update', $sink);
 
         $this->validate($input);
