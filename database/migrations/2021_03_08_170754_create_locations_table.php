@@ -19,8 +19,8 @@ class CreateLocationsTable extends Migration
             $table->string('name');
             $table->string('description')->nullable();
 
-            $table->foreignId('geo_object_id')->nullable();
             $table->foreignId('project_id')->nullable();
+            $table->jsonb('data'); // { center : point }
 
             $table->softDeletes();
             $table->timestamps();
