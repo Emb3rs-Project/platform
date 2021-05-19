@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Gate;
 class DestroySink implements DestroysSinks
 {
     /**
-     * Find and delete an existing Sink.
+     * Find and delete an existing Link.
      *
      * @param  mixed $user
-     * @param  string $id
+     * @param  int   $id
      * @param  array $input
-     * @return mixed
+     * @return void
      */
-    public function destroy($user, string $id)
+    public function destroy(mixed $user, string $id)
     {
         $sink = Instance::findOrFail($id);
 

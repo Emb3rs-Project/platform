@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\Embers\Objects\Links\CreateLink;
+use App\Actions\Embers\Objects\Links\DestroyLink;
 use App\Actions\Embers\Objects\Links\EditLink;
 use App\Actions\Embers\Objects\Links\IndexLink;
 use App\Actions\Embers\Objects\Links\ShowLink;
@@ -74,5 +75,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::showLinksUsing(ShowLink::class);
         Embers::editLinksUsing(EditLink::class);
         Embers::updateLinkssUsing(UpdateLink::class);
+        Embers::destroyLinksUsing(DestroyLink::class);
     }
 }

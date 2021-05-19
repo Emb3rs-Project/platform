@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
+use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
@@ -122,7 +123,7 @@ class LinkController extends Controller
      */
     public function destroy($id)
     {
-        // app(DestroysSinks::class)->destroy(Auth::user(), $id);
+        app(DestroysLinks::class)->destroy(Auth::user(), $id);
 
         return Redirect::route('objects.index');
     }
