@@ -2,10 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class AddScriptToTemplatesTable extends Migration
+class CreatePermissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +13,12 @@ class AddScriptToTemplatesTable extends Migration
      */
     public function up()
     {
-        Schema::table('templates', function (Blueprint $table) {
-            $table->longText('header_script')->nullable();
-            $table->longText('footer_script')->nullable();
+        Schema::create('permissions', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name');
+
+            $table->timestamps();
         });
     }
 
@@ -27,8 +29,6 @@ class AddScriptToTemplatesTable extends Migration
      */
     public function down()
     {
-        Schema::table('templates', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('permissions');
     }
 }

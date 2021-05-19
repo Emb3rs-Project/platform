@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModelScriptsTable extends Migration
+class CreateTeamsRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateModelScriptsTable extends Migration
      */
     public function up()
     {
-        Schema::create('model_scripts', function (Blueprint $table) {
+        Schema::create('teams_roles', function (Blueprint $table) {
             $table->id();
 
-            $table->longText('code')->nullable();
+            $table->foreignId('team_id');
+            $table->string('role');
+
+            $table->jsonb('permissions')->nullable(); // array of permission names
 
             $table->timestamps();
         });
@@ -29,6 +32,6 @@ class CreateModelScriptsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('model_scripts');
+        Schema::dropIfExists('teams_roles');
     }
 }

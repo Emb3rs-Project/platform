@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGeoObjectsTable extends Migration
+class CreateScriptsCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateGeoObjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('geo_objects', function (Blueprint $table) {
+        Schema::create('scripts_categories', function (Blueprint $table) {
             $table->id();
 
-            $table->enum('type', ['point','circle','polygon']);
-            $table->jsonb('data'); // { points : any[], radious : int}
+            $table->foreignId('script_id');
+            $table->foreignId('category_id');
+            $table->integer('order')->unsigned()->default(1);
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ class CreateGeoObjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('geo_objects');
+        Schema::dropIfExists('scripts_categories');
     }
 }
