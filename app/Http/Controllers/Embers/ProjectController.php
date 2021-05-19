@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
@@ -36,7 +37,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $locations = Location::with(['geoObject'])->get();
+        $locations = app(CreatesProjects::class)->create();
 
         return Inertia::render('Projects/ProjectCreate', [
             'locations' => $locations

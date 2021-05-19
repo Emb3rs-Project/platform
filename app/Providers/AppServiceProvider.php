@@ -24,6 +24,7 @@ use App\Actions\Embers\Objects\Sources\IndexSource;
 use App\Actions\Embers\Objects\Sources\ShowSource;
 use App\Actions\Embers\Objects\Sources\StoreSource;
 use App\Actions\Embers\Objects\Sources\UpdateSource;
+use App\Actions\Embers\Projects\CreateProject;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -79,5 +80,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::destroyLinksUsing(DestroyLink::class);
 
         Embers::indexProjectsUsing(IndexProject::class);
+        Embers::createProjectsUsing(CreateProject::class);
     }
 }
