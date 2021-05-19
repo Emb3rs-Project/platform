@@ -28,6 +28,7 @@ use App\Actions\Embers\Projects\CreateProject;
 use App\Actions\Embers\Projects\EditProject;
 use App\Actions\Embers\Projects\ShowProject;
 use App\Actions\Embers\Projects\StoreProject;
+use App\Actions\Embers\Projects\UpdateProject;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -87,5 +88,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::storeProjectsUsing(StoreProject::class);
         Embers::showProjectsUsing(ShowProject::class);
         Embers::editProjectsUsing(EditProject::class);
+        Embers::updateProjectsUsing(UpdateProject::class);
     }
 }

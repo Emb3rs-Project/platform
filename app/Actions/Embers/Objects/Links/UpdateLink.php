@@ -14,7 +14,7 @@ class UpdateLink implements UpdatesLinks
      * Validate, update and return an existing instance.
      *
      * @param  mixed  $user
-     * @param  int    $sink
+     * @param  int    $id
      * @param  array  $input
      * @return Instance
      */

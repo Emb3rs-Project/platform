@@ -7,6 +7,7 @@ use App\Contracts\Embers\Projects\EditsProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
+use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
@@ -118,13 +119,9 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Project::findOrFail($id)->update([
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'location_id' => $request->get('location_id')
-        ]);
+        $updatedProject = app(UpdatesProjects::class)->update(Auth::user(), $id, $request->all());
 
-        return Redirect::route('projects.index');
+        return Redirect::route('projects.show', $updatedProject->id);
     }
 
     /**
