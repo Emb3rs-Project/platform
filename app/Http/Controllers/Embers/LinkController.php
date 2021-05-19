@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ class LinkController extends Controller
     public function index()
     {
         $links = app(IndexesLinks::class)->index(Auth::user());
+
+        return response()->json([
+            'links' => $links
+        ]);
 
         return Inertia::render('Objects/Links/LinkIndex', [
             'links' => $links
@@ -63,7 +68,14 @@ class LinkController extends Controller
      */
     public function show($id)
     {
-        //
+        $link = app(ShowsLinks::class)->show(Auth::user(), $id);
+
+        return [
+            "slideOver" => 'Objects/Links/LinkDetails',
+            "props" => [
+                "instance" => $link
+            ]
+        ];
     }
 
     /**
