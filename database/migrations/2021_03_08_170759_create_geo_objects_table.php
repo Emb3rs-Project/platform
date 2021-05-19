@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocationsTable extends Migration
+class CreateGeoObjectsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateLocationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('locations', function (Blueprint $table) {
+        Schema::create('geo_objects', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name');
-            $table->string('description')->nullable();
-
-            $table->foreignId('geo_object_id')->nullable();
-            $table->foreignId('project_id')->nullable();
+            $table->enum('type', ['point','circle','polygon']);
+            $table->jsonb('data'); // { points : any[], radious : int}
 
             $table->softDeletes();
             $table->timestamps();
@@ -34,6 +31,6 @@ class CreateLocationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('locations');
+        Schema::dropIfExists('geo_objects');
     }
 }
