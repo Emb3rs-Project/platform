@@ -15,7 +15,7 @@ class StoreLink implements StoresLinks
      *
      * @param  mixed $user
      * @param  array $input
-     * @return mixed
+     * @return Instance
      */
     public function store(mixed $user, array $input)
     {
@@ -70,10 +70,5 @@ class StoreLink implements StoresLinks
         }
 
         return $link;
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }

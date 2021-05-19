@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\Gate;
 class EditSource implements EditsSources
 {
     /**
-     * // TODO
+     * Display the necessary objects for updating a given Source.
      *
      * @param  mixed  $user
      * @param  int    $id
-     * @param  array  $input
      * @return mixed
      */
     public function edit(mixed $user, int $id)

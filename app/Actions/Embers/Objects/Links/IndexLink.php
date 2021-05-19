@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Gate;
 class IndexLink implements IndexesLinks
 {
     /**
-     * Display all the available Sinks.
+     * Display all the available Links.
      *
      * @param mixed  $user
-     * @return mixed
+     * @return [Instance]
      */
     public function index(mixed $user)
     {

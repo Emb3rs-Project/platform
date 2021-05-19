@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class CreateSource implements CreatesSources
 {
     /**
-     * // TODO
+     * Display the necessary objects for the creation of a Source.
      *
      * @return mixed
      */
@@ -66,10 +66,5 @@ class CreateSource implements CreatesSources
             $processCategories,
             $locations,
         ];
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }

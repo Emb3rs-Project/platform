@@ -16,9 +16,9 @@ class StoreSource implements StoresSources
      *
      * @param  mixed $user
      * @param  array $input
-     * @return mixed
+     * @return Instance
      */
-    public function store($user, $input)
+    public function store(mixed $user, array $input)
     {
         Gate::authorize('create', Instance::class);
 
@@ -30,7 +30,7 @@ class StoreSource implements StoresSources
     }
 
     /**
-     * Validate the create Sink operation.
+     * Validate the create Source operation.
      *
      * @param  array  $input
      * @return void
@@ -56,9 +56,9 @@ class StoreSource implements StoresSources
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return Instance
      */
-    protected function save(mixed $user, array $input): Instance
+    protected function save(mixed $user, array $input)
     {
         // TODO: attach the user id to the entity
 
@@ -111,10 +111,5 @@ class StoreSource implements StoresSources
         $instance->teams()->attach($user->currentTeam);
 
         return $instance;
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }

@@ -34,7 +34,7 @@ class UpdateSource implements UpdatesSources
     }
 
     /**
-     * Validate the create Sink operation.
+     * Validate the create Source operation.
      *
      * @param  array  $input
      * @return void
@@ -55,7 +55,15 @@ class UpdateSource implements UpdatesSources
         ->validate();
     }
 
-    protected function save(mixed $user, Instance $source, array $input): Instance
+    /**
+     * Save the Source in the DB.
+     *
+     * @param  mixed    $user
+     * @param  Instance $source
+     * @param  array    $input
+     * @return Instance
+     */
+    protected function save(mixed $user, Instance $source, array $input)
     {
         // TODO: update processes
 
@@ -101,10 +109,5 @@ class UpdateSource implements UpdatesSources
         $source->save();
 
         return $source;
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }

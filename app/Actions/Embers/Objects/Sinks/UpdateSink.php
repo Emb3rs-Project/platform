@@ -54,7 +54,15 @@ class UpdateSink implements UpdatesSinks
         ->validate();
     }
 
-    protected function save(mixed $user, Instance $sink, array $input): Instance
+    /**
+     * Save the Sink in the DB.
+     *
+     * @param  mixed    $user
+     * @param  Instance $sink
+     * @param  array    $input
+     * @return Instance
+     */
+    protected function save(mixed $user, Instance $sink, array $input)
     {
         // TODO: attach the user id to the entity
 
@@ -89,10 +97,5 @@ class UpdateSink implements UpdatesSinks
         $sink->save();
 
         return $sink;
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }

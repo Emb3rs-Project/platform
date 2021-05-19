@@ -9,13 +9,13 @@ use Illuminate\Support\Facades\Gate;
 class DestroySource implements DestroysSources
 {
     /**
-     * Find and delete an existing Sink.
+     * Find and delete an existing Source.
      *
      * @param  mixed $user
      * @param  string $id
      * @return void
      */
-    public function destroy($user, string $id)
+    public function destroy(mixed $user, string $id)
     {
         $source = Instance::findOrFail($id);
 

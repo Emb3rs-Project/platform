@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Gate;
 class ShowSource implements ShowsSources
 {
     /**
-    * Find and return an existing Sink.
+    * Find and return an existing Source.
     *
     * @param mixed  $user
     * @param int    $id

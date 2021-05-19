@@ -16,7 +16,7 @@ class StoreSink implements StoresSinks
      *
      * @param  mixed $user
      * @param  array $input
-     * @return mixed
+     * @return Instance
      */
     public function store(mixed $user, array $input)
     {
@@ -54,9 +54,9 @@ class StoreSink implements StoresSinks
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return Instance
      */
-    protected function save(mixed $user, array $input): Instance
+    protected function save(mixed $user, array $input)
     {
         $sink = $input['sink'];
         $templateId = $input['template_id'];
@@ -101,10 +101,5 @@ class StoreSink implements StoresSinks
         $instance->teams()->attach($user->currentTeam);
 
         return $instance;
-    }
-
-    public function redirectTo()
-    {
-        //TODO
     }
 }
