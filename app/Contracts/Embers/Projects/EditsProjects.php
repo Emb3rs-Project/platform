@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Embers\Objects\Projects;
+namespace App\Contracts\Embers\Projects;
 
 interface EditsProjects
 {
