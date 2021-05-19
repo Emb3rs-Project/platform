@@ -7,6 +7,7 @@ use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
+use App\Contracts\Embers\Objects\Links\UpdatesLinks;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,7 +109,9 @@ class LinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $updatedLink = app(UpdatesLinks::class)->update(Auth::user(), $id, $request->all());
+
+        return Redirect::route('objects.links.show', $updatedLink->id);
     }
 
     /**
@@ -119,6 +122,8 @@ class LinkController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // app(DestroysSinks::class)->destroy(Auth::user(), $id);
+
+        return Redirect::route('objects.index');
     }
 }
