@@ -16,7 +16,7 @@ class DestroyLink implements DestroysLinks
      * @param  array $input
      * @return void
      */
-    public function destroy(mixed$user, string $id)
+    public function destroy(mixed $user, int $id)
     {
         $link = Link::findOrFail($id);
 

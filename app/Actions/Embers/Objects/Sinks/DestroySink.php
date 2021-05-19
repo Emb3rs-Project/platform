@@ -16,7 +16,7 @@ class DestroySink implements DestroysSinks
      * @param  array $input
      * @return void
      */
-    public function destroy(mixed $user, string $id)
+    public function destroy(mixed $user, int $id)
     {
         $sink = Instance::findOrFail($id);
 
