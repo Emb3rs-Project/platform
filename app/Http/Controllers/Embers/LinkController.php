@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 class LinkController extends Controller
 {
@@ -26,9 +25,10 @@ class LinkController extends Controller
     {
         $links = app(IndexesLinks::class)->index(Auth::user());
 
-        return Inertia::render('Objects/Links/LinkIndex', [
+        return [
+            'slideOver' => 'Objects/Links/LinkIndex',
             'links' => $links
-        ]);
+        ];
     }
 
     /**
