@@ -54,7 +54,8 @@ class Category extends Resource
                 'sink' => __('sink'),
                 'source' => __('source'),
                 'equipment' => __('equipment'),
-                ]),
+                'process' => __('process'),
+            ]),
 
             BelongsTo::make(__('PARENT'), 'parent', Category::class)
                 ->nullable(),
