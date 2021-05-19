@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Projects\CreatesProjects;
+use App\Contracts\Embers\Projects\EditsProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
@@ -73,8 +74,8 @@ class ProjectController extends Controller
     public function show($id)
     {
         [
-           $project,
-           $simulations
+            $project,
+            $simulations
         ] = app(ShowsProjects::class)->show(Auth::user(), $id);
 
         return [
@@ -94,14 +95,18 @@ class ProjectController extends Controller
      */
     public function edit($id)
     {
-        $project = Project::whereId($id)->with(['location'])->first();
+        [
+            $project,
+            $locations,
+        ] = app(EditsProjects::class)->edit(Auth::user(), $id);
 
-        $locations = Location::all();
-
-        return Inertia::render('Projects/ProjectEdit', [
-            'project' => $project,
-            'locations' => $locations
-        ]);
+        return [
+            'slideOver' => 'Projects/ProjectEdit',
+            'props' => [
+                'project' => $project,
+                'locations' => $locations
+            ]
+        ];
     }
 
     /**
