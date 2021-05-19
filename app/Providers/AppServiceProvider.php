@@ -25,6 +25,7 @@ use App\Actions\Embers\Objects\Sources\ShowSource;
 use App\Actions\Embers\Objects\Sources\StoreSource;
 use App\Actions\Embers\Objects\Sources\UpdateSource;
 use App\Actions\Embers\Projects\CreateProject;
+use App\Actions\Embers\Projects\DestroyProject;
 use App\Actions\Embers\Projects\EditProject;
 use App\Actions\Embers\Projects\ShowProject;
 use App\Actions\Embers\Projects\StoreProject;
@@ -89,5 +90,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::showProjectsUsing(ShowProject::class);
         Embers::editProjectsUsing(EditProject::class);
         Embers::updateProjectsUsing(UpdateProject::class);
+        Embers::destroyProjectsUsing(DestroyProject::class);
     }
 }

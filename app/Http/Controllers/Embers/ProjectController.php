@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Projects\CreatesProjects;
+use App\Contracts\Embers\Projects\DestroysProjects;
 use App\Contracts\Embers\Projects\EditsProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Contracts\Embers\Projects\ShowsProjects;
@@ -132,7 +133,8 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        Project::destroy($id);
+        app(DestroysProjects::class)->destroy(Auth::user(), $id);
+
         return Redirect::route('projects.index');
     }
 }
