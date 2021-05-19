@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
@@ -20,22 +21,12 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $teamProjects = Auth::user()->currentTeam->projects->pluck('id');
-        $projects = Project::whereIn('id', $teamProjects)
-            ->with(['location'])
-            ->get();
+        $projects = app(IndexesProjects::class)->index(Auth::user());
 
-        $output = $projects->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-
-            return $item;
-        });
-
-        return Inertia::render('Projects/ProjectIndex', [
-            'projects' => $output
-        ]);
+        return [
+            'slideOver' => 'Projects/ProjectIndex',
+            'projects' => $projects
+        ];
     }
 
     /**
