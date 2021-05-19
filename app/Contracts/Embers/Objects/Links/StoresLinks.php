@@ -2,18 +2,20 @@
 
 namespace App\Contracts\Embers\Objects\Links;
 
-interface CreatesLinks
+interface StoresLinks
 {
     /**
-     * Display the necessary objects for the creation of a Link.
+     * Validate and create a new Link.
      *
+     * @param  mixed  $user
+     * @param  array  $input
      * @return mixed
      */
-    public function create();
+    public function store(mixed $user, array $input);
 
     /**
      * Redirect to a specific page after creating a new sink.
-     * // TODO
+     * //TODO
      */
     public function redirectTo();
 }

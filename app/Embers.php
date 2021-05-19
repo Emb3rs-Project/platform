@@ -4,6 +4,7 @@ namespace App;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -135,7 +136,7 @@ class Embers
     }
 
     /**
-    * Register a class / callback that should be used to create sources.
+    * Register a class / callback that should be used to create Sources.
     *
     * @param  string  $class
     * @return void
@@ -147,7 +148,7 @@ class Embers
 
     /**
     * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Sοθρψε.
+    * objects for the updating of a given Source.
     *
     * @param  string  $class
     * @return void
@@ -200,5 +201,16 @@ class Embers
     public static function createLinksUsing(string $class)
     {
         return app()->singleton(CreatesLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to create Links.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function storeLinksUsing(string $class)
+    {
+        return app()->singleton(StoresLinks::class, $class);
     }
 }

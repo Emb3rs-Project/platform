@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Gate;
 class CreateLink implements CreatesLinks
 {
     /**
-     * Display all the available Sinks.
+     * Display the necessary objects for the creation of a Link.
      *
      * @return mixed
      */

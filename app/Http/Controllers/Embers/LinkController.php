@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Http\Controllers\Controller;
-use App\Models\GeoSegment;
-use App\Models\Link;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -51,24 +50,7 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        $segments = $request->get('locationData')['segments'];
-
-        $link = Link::create([
-            'name' => $request->get('name'),
-            'description' => $request->get('description')
-        ]);
-
-        $link->teams()->attach(Auth::user()->currentTeam);
-
-        foreach ($segments as $data) {
-            $segment = GeoSegment::create([
-                'data' => $data
-            ]);
-
-            $link->geoSegments()->attach($segment);
-        }
-
-
+        app(StoresLinks::class)->store(Auth::user(), $request->all());
 
         return Redirect::route('objects.links.index');
     }
