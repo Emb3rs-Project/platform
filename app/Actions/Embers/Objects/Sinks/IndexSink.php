@@ -45,8 +45,4 @@ class IndexSink implements IndexesSinks
 
         return $output;
     }
-
-    public function redirectTo()
-    {
-    }
 }

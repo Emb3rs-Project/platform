@@ -23,8 +23,4 @@ class DestroySource implements DestroysSources
 
         Instance::destroy($source->id);
     }
-
-    public function redirectTo()
-    {
-    }
 }

@@ -72,8 +72,4 @@ class IndexSource implements IndexesSources
 
         return $output;
     }
-
-    public function redirectTo()
-    {
-    }
 }

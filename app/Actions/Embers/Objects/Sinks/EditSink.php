@@ -62,8 +62,4 @@ class EditSink implements EditsSinks
             $instance
         ];
     }
-
-    public function redirectTo()
-    {
-    }
 }

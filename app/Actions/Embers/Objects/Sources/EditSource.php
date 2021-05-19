@@ -60,8 +60,4 @@ class EditSource implements EditsSources
             $instance
         ];
     }
-
-    public function redirectTo()
-    {
-    }
 }

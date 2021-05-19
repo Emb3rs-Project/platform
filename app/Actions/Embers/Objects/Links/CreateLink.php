@@ -19,8 +19,4 @@ class CreateLink implements CreatesLinks
 
         return [];
     }
-
-    public function redirectTo()
-    {
-    }
 }

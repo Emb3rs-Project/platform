@@ -24,8 +24,4 @@ class IndexLink implements IndexesLinks
 
         return $links;
     }
-
-    public function redirectTo()
-    {
-    }
 }

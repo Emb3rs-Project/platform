@@ -53,8 +53,4 @@ class CreateSink implements CreatesSinks
             $locations
         ];
     }
-
-    public function redirectTo()
-    {
-    }
 }

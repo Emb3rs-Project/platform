@@ -24,8 +24,4 @@ class DestroySink implements DestroysSinks
 
         Instance::destroy($sink->id);
     }
-
-    public function redirectTo()
-    {
-    }
 }

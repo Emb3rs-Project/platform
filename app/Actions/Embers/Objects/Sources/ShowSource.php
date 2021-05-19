@@ -66,8 +66,4 @@ class ShowSource implements ShowsSources
             $instance
         ];
     }
-
-    public function redirectTo()
-    {
-    }
 }

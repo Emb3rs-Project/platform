@@ -3,8 +3,12 @@
 namespace App;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
+use App\Contracts\Embers\Objects\Links\DestroysLinks;
+use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
+use App\Contracts\Embers\Objects\Links\UpdatesLinks;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -212,5 +216,50 @@ class Embers
     public static function storeLinksUsing(string $class)
     {
         return app()->singleton(StoresLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display a given Λινκ.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function showLinksUsing(string $class)
+    {
+        return app()->singleton(ShowsLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the updating of a given Link.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function editLinksUsing(string $class)
+    {
+        return app()->singleton(EditsLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to update a given Source.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function updateLinkssUsing(string $class)
+    {
+        return app()->singleton(UpdatesLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to delete a given Source.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function destroyLinksUsing(string $class)
+    {
+        return app()->singleton(DestroysLinks::class, $class);
     }
 }

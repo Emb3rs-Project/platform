@@ -28,8 +28,4 @@ class ShowSink implements ShowsSinks
 
         return $sink;
     }
-
-    public function redirectTo()
-    {
-    }
 }
