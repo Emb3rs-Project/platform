@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Gate;
 class DestroyProject implements DestroysProjects
 {
     /**
-     * Find and delete an existing Link.
+     * Find and delete an existing Project.
      *
      * @param  mixed $user
      * @param  int   $id

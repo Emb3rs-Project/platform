@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 class ShowProject implements ShowsProjects
 {
     /**
-     * Find and return an existing Sink.
+     * Find and return an existing Project.
      *
      * @param mixed  $user
      * @param int    $id
