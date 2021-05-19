@@ -26,7 +26,11 @@ class SourceController extends Controller
     {
         $sources = app(IndexesSources::class)->index(Auth::user());
 
-        return Inertia::render('Objects/Sources/SourceIndex', [
+        // return Inertia::render('Objects/Sources/SourceIndex', [
+        //     'sources' => $sources
+        // ]);
+
+        return response()->json([
             'sources' => $sources
         ]);
     }
@@ -114,12 +118,15 @@ class SourceController extends Controller
             $instance
         ] = app(EditsSources::class)->edit(Auth::user(), $id);
 
-        return Inertia::render('Objects/Sources/SourceEdit', [
-            "templates" => $templates,
-            "equipments" => $equipments,
-            "locations" => $locations,
-            "instance" => $instance
-        ]);
+        return [
+            "slideOver" => "Objects/Sources/SourceEdit",
+            "props" => [
+                "templates" => $templates,
+                "equipments" => $equipments,
+                "locations" => $locations,
+                "instance" => $instance
+            ]
+        ];
     }
 
     /**

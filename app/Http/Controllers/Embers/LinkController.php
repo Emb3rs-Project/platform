@@ -25,10 +25,16 @@ class LinkController extends Controller
     {
         $links = app(IndexesLinks::class)->index(Auth::user());
 
-        return [
-            'slideOver' => 'Objects/Links/LinkIndex',
+        // return [
+        //     'slideOver' => 'Objects/Links/LinkIndex',
+        //     'props' => [
+        //         'links' => $links
+        //     ]
+        // ];
+
+        return response()->json([
             'links' => $links
-        ];
+        ]);
     }
 
     /**

@@ -26,7 +26,11 @@ class SinkController extends Controller
     {
         $sinks = app(IndexesSinks::class)->index(Auth::user());
 
-        return Inertia::render('Objects/Sinks/SinkIndex', [
+        // return Inertia::render('Objects/Sinks/SinkIndex', [
+        //     'sinks' => $sinks
+        // ]);
+
+        return response()->json([
             'sinks' => $sinks
         ]);
     }
