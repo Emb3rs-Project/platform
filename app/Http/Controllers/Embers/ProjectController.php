@@ -9,10 +9,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Redirect;
 
 class ProjectController extends Controller
 {
@@ -27,7 +27,9 @@ class ProjectController extends Controller
 
         return [
             'slideOver' => 'Projects/ProjectIndex',
-            'projects' => $projects
+            'props' => [
+                'projects' => $projects
+            ]
         ];
     }
 
@@ -42,7 +44,9 @@ class ProjectController extends Controller
 
         return [
             'slideOver' => 'Projects/ProjectCreate',
-            'locations' => $locations
+            'props' =>[
+                'locations' => $locations
+            ]
         ];
     }
 
@@ -67,16 +71,18 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = Project::whereId($id)->with(['location', 'location.geoObject'])->first();
+        [
+           $project,
+           $simulations
+        ] = app(StoresProjects::class)->store(Auth::user(), $id);
 
-        $projectId = $project->id;
-
-        $simulations = Simulation::whereProjectId($projectId)->with(['simulationType', 'simulationType.unit'])->get();
-
-        return Inertia::render('Projects/ProjectDetails', [
-            'project' => $project,
-            'simulations' => $simulations
-        ]);
+        return [
+            'slideOver' => 'Projects/ProjectDetails',
+            'props' => [
+                'project' => $project,
+                'simulations' => $simulations
+            ]
+        ];
     }
 
     /**
