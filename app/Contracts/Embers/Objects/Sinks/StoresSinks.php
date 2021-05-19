@@ -12,10 +12,4 @@ interface StoresSinks
      * @return mixed
      */
     public function store(mixed $user, array $input);
-
-    /**
-     * Redirect to a specific page after creating a new sink.
-     * //TODO
-     */
-    public function redirectTo();
 }

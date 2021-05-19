@@ -11,10 +11,4 @@ interface IndexesSinks
      * @return mixed
      */
     public function index($user);
-
-    /**
-     * Redirect to a specific page after updating an existing source.
-     * //TODO
-     */
-    public function redirectTo();
 }

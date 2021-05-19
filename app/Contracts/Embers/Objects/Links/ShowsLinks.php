@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Contracts\Embers\Objects\Sources;
+namespace App\Contracts\Embers\Objects\Links;
 
-use App\Models\Instance;
-
-interface ShowsSources
+interface ShowsLinks
 {
     /**
-     * Display the given Source.
+     * Display the given Link.
      *
      * @param  mixed  $user
      * @param  int    $source

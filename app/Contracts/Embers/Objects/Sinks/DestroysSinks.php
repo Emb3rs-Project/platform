@@ -12,10 +12,4 @@ interface DestroysSinks
      * @return mixed
      */
     public function destroy(mixed $user, string $id);
-
-    /**
-     * Redirect to a specific page after updating an existing source.
-     * //TODO
-     */
-    public function redirectTo();
 }

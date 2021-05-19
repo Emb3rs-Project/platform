@@ -12,10 +12,4 @@ interface ShowsSinks
      * @return mixed
      */
     public function show(mixed $user, int $id);
-
-    /**
-     * Redirect to a specific page after updating an existing source.
-     * //TODO
-     */
-    public function redirectTo();
 }

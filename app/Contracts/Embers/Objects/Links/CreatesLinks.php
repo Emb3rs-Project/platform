@@ -10,10 +10,4 @@ interface CreatesLinks
      * @return mixed
      */
     public function create();
-
-    /**
-     * Redirect to a specific page after creating a new sink.
-     * // TODO
-     */
-    public function redirectTo();
 }

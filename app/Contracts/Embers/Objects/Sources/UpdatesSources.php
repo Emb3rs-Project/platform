@@ -13,10 +13,4 @@ interface UpdatesSources
      * @return mixed
      */
     public function update($user, int $id, array $input);
-
-    /**
-     * Redirect to a specific page after updating an existing source.
-     * //TODO
-     */
-    public function redirectTo();
 }

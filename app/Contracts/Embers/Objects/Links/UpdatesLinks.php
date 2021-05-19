@@ -2,14 +2,15 @@
 
 namespace App\Contracts\Embers\Objects\Links;
 
-interface StoresLinks
+interface UpdatesLinks
 {
     /**
-     * Validate and create a new Link.
+     * Validate and update an existing Link.
      *
      * @param  mixed  $user
+     * @param  int    $source
      * @param  array  $input
      * @return mixed
      */
-    public function store(mixed $user, array $input);
+    public function update($user, int $id, array $input);
 }

@@ -15,10 +15,4 @@ interface UpdatesSinks
      * @return Instance
      */
     public function update(mixed $user, int $id, array $input);
-
-    /**
-     * Redirect to a specific page after updating an existing sink.
-     * //TODO
-     */
-    public function redirectTo();
 }

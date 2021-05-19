@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Contracts\Embers\Objects\Sinks;
+namespace App\Contracts\Embers\Objects\Links;
 
-interface EditsSinks
+interface EditsLinks
 {
     /**
-     * Display the necessary objects for updating a given Sink.
+     * Display the necessary objects for updating a given Link.
      *
      * @param  mixed  $user
      * @param  int    $id

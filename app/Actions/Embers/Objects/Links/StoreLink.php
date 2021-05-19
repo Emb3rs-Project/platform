@@ -3,11 +3,8 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\StoresLinks;
-use App\Models\GeoObject;
 use App\Models\GeoSegment;
-use App\Models\Instance;
 use App\Models\Link;
-use App\Models\Location;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 

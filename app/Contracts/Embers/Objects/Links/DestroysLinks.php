@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Contracts\Embers\Objects\Sources;
+namespace App\Contracts\Embers\Objects\Links;
 
-interface DestroysSources
+interface DestroysLinks
 {
     /**
-     * Delete an existing Source.
+     * Delete an existing Link.
      *
      * @param  mixed   $user
      * @param  string  $id

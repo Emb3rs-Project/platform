@@ -12,10 +12,4 @@ interface StoresSources
      * @return mixed
      */
     public function store($user, array $input);
-
-    /**
-     * Redirect to a specific page after creating a new source
-     * //TODO
-     */
-    public function redirectTo();
 }

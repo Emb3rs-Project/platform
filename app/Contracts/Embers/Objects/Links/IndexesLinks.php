@@ -11,6 +11,4 @@ interface IndexesLinks
      * @return mixed
      */
     public function index(mixed $user);
-
-    public function redirectTo();
 }

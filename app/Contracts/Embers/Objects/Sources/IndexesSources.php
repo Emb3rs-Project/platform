@@ -13,10 +13,4 @@ interface IndexesSources
      * @return mixed
      */
     public function index(mixed $user);
-
-    /**
-     * Redirect to a specific page after updating an existing source.
-     * //TODO
-     */
-    public function redirectTo();
 }
