@@ -10,7 +10,7 @@ interface UpdatesSinks
      * Validate and update an existing Sink.
      *
      * @param  mixed  $user
-     * @param  int    $sink
+     * @param  int    $id
      * @param  array  $input
      * @return Instance
      */

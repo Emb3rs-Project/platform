@@ -8,7 +8,7 @@ interface UpdatesSources
      * Validate and update an existing Source.
      *
      * @param  mixed  $user
-     * @param  int    $source
+     * @param  int    $id
      * @param  array  $input
      * @return mixed
      */

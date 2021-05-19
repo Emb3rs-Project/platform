@@ -8,7 +8,7 @@ interface UpdatesLinks
      * Validate and update an existing Link.
      *
      * @param  mixed  $user
-     * @param  int    $source
+     * @param  int    $id
      * @param  array  $input
      * @return mixed
      */

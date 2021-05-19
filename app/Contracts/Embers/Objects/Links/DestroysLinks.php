@@ -7,9 +7,9 @@ interface DestroysLinks
     /**
      * Delete an existing Link.
      *
-     * @param  mixed   $user
-     * @param  string  $id
+     * @param  mixed  $user
+     * @param  int    $id
      * @return mixed
      */
-    public function destroy(mixed $user, string $id);
+    public function destroy(mixed $user, int $id);
 }
