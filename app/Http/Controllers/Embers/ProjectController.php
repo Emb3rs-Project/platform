@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
+use App\Contracts\Embers\Projects\StoresProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use App\Models\Project;
@@ -39,9 +40,10 @@ class ProjectController extends Controller
     {
         $locations = app(CreatesProjects::class)->create();
 
-        return Inertia::render('Projects/ProjectCreate', [
+        return [
+            'slideOver' => 'Projects/ProjectCreate',
             'locations' => $locations
-        ]);
+        ];
     }
 
     /**
@@ -52,14 +54,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $newProject = [
-            'name' => $request->get('name'),
-            'description' => $request->get('description'),
-            'location_id' => $request->get('location_id')
-        ];
-
-        $project = Project::create($newProject);
-        $project->teams()->attach(Auth::user()->currentTeam);
+        app(StoresProjects::class)->store(Auth::user(), $request->all());
 
         return Redirect::route('projects.index');
     }
