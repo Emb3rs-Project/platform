@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
+use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
@@ -74,7 +75,7 @@ class ProjectController extends Controller
         [
            $project,
            $simulations
-        ] = app(StoresProjects::class)->store(Auth::user(), $id);
+        ] = app(ShowsProjects::class)->show(Auth::user(), $id);
 
         return [
             'slideOver' => 'Projects/ProjectDetails',
