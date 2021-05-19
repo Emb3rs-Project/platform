@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
+use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
@@ -22,10 +23,6 @@ class LinkController extends Controller
     public function index()
     {
         $links = app(IndexesLinks::class)->index(Auth::user());
-
-        return response()->json([
-            'links' => $links
-        ]);
 
         return Inertia::render('Objects/Links/LinkIndex', [
             'links' => $links
@@ -86,7 +83,20 @@ class LinkController extends Controller
      */
     public function edit($id)
     {
-        //
+        [
+            $links,
+            $locations,
+            $link
+        ] = app(EditsLinks::class)->edit(Auth::user(), $id);
+
+        return [
+            "slideOver" => 'Objects/Links/LinkEdit',
+            "props" => [
+                "links" => $links,
+                "locations" => $locations,
+                "instance" => $link
+            ]
+        ];
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\Embers\Objects\Links\CreateLink;
+use App\Actions\Embers\Objects\Links\EditLink;
 use App\Actions\Embers\Objects\Links\IndexLink;
 use App\Actions\Embers\Objects\Links\ShowLink;
 use App\Actions\Embers\Objects\Links\StoreLink;
@@ -70,5 +71,6 @@ class AppServiceProvider extends ServiceProvider
         Embers::createLinksUsing(CreateLink::class);
         Embers::storeLinksUsing(StoreLink::class);
         Embers::showLinksUsing(ShowLink::class);
+        Embers::editLinksUsing(EditLink::class);
     }
 }
