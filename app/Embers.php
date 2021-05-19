@@ -9,6 +9,13 @@ use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
+use App\Contracts\Embers\Objects\Projects\CreatesProjects;
+use App\Contracts\Embers\Objects\Projects\DestroysProjects;
+use App\Contracts\Embers\Objects\Projects\EditsProjects;
+use App\Contracts\Embers\Objects\Projects\IndexesProjects;
+use App\Contracts\Embers\Objects\Projects\ShowsProjects;
+use App\Contracts\Embers\Objects\Projects\StoresProjects;
+use App\Contracts\Embers\Objects\Projects\UpdatesProjects;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -129,7 +136,7 @@ class Embers
     }
 
     /**
-    * Register a class / callback that should be used to display a given Sink.
+    * Register a class / callback that should be used to display a given Source.
     *
     * @param  string  $class
     * @return void
@@ -219,7 +226,7 @@ class Embers
     }
 
     /**
-    * Register a class / callback that should be used to display a given Λινκ.
+    * Register a class / callback that should be used to display a given Link.
     *
     * @param  string  $class
     * @return void
@@ -242,18 +249,18 @@ class Embers
     }
 
     /**
-    * Register a class / callback that should be used to update a given Source.
+    * Register a class / callback that should be used to update a given Link.
     *
     * @param  string  $class
     * @return void
     */
-    public static function updateLinkssUsing(string $class)
+    public static function updateLinksUsing(string $class)
     {
         return app()->singleton(UpdatesLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Source.
+    * Register a class / callback that should be used to delete a given Link.
     *
     * @param  string  $class
     * @return void
@@ -261,5 +268,86 @@ class Embers
     public static function destroyLinksUsing(string $class)
     {
         return app()->singleton(DestroysLinks::class, $class);
+    }
+
+
+
+    /**
+    * Register a class / callback that should be used to index all Projects.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function indexProjectsUsing(string $class)
+    {
+        return app()->singleton(IndexesProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the creation of a Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function createProjectsUsing(string $class)
+    {
+        return app()->singleton(CreatesProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to create Projects.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function storeProjectsUsing(string $class)
+    {
+        return app()->singleton(StoresProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display a given Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function showProjectsUsing(string $class)
+    {
+        return app()->singleton(ShowsProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the updating of a given Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function editProjectsUsing(string $class)
+    {
+        return app()->singleton(EditsProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to update a given Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function updateProjectsUsing(string $class)
+    {
+        return app()->singleton(UpdatesProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to delete a given Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function destroyProjectsUsing(string $class)
+    {
+        return app()->singleton(DestroysProjects::class, $class);
     }
 }
