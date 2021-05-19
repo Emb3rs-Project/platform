@@ -17,7 +17,7 @@ class CreateLinksTable extends Migration
             $table->id();
 
             $table->string('name');
-            $table->string('description');
+            $table->string('description')->nullable();
 
             $table->softDeletes();
             $table->timestamps();
