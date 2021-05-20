@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Simulations\CreatesSimulations;
+use App\Contracts\Embers\Simulations\EditsSimulations;
 use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
@@ -104,9 +105,17 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Project $project, Simulation $simulation)
+    public function edit(int $projectId, int $simulationId)
     {
-        dd($project, $simulation);
+        [
+            $simulation,
+            $project
+        ] = app(EditsSimulations::class)->edit(Auth::user(), $projectId, $simulationId);
+
+        return response()->json([
+            'simulation' => $simulation,
+            'project' => $project
+        ]);
     }
 
     /**
