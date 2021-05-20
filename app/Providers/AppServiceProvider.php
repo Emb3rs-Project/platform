@@ -32,6 +32,7 @@ use App\Actions\Embers\Projects\StoreProject;
 use App\Actions\Embers\Projects\UpdateProject;
 use App\Actions\Embers\Simulations\CreateSimulation;
 use App\Actions\Embers\Simulations\IndexSimulation;
+use App\Actions\Embers\Simulations\ShowSimulation;
 use App\Actions\Embers\Simulations\StoreSimulation;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
@@ -98,7 +99,7 @@ class AppServiceProvider extends ServiceProvider
         Embers::indexSimulationsUsing(IndexSimulation::class);
         Embers::createSimulationsUsing(CreateSimulation::class);
         Embers::storeSimulationsUsing(StoreSimulation::class);
-        // Embers::showSimulationsUsing(::class);
+        Embers::showSimulationsUsing(ShowSimulation::class);
         // Embers::editSimulationsUsing(::class);
         // Embers::updateSimulationsUsing(::class);
         // Embers::deleteSimulationsUsing(::class);

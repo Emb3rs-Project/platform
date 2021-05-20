@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\Contracts\Embers\Simulations\IndexesSimulations;
+use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
@@ -84,9 +85,17 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project, Simulation $simulation)
+    public function show(int $projectId, int $simulationId)
     {
-        dd($project, $simulation);
+        [
+            $simulation,
+            $project
+        ] = app(ShowsSimulations::class)->show(Auth::user(), $projectId, $simulationId);
+
+        return response()->json([
+            'simulation' => $simulation,
+            'project' => $project
+        ]);
     }
 
     /**
