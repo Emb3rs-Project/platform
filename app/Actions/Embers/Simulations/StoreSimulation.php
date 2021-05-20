@@ -42,7 +42,6 @@ class StoreSimulation implements StoresSimulations
         Validator::make($input, [
             'status' => ['filled', 'in:NEW,IN PREPARATION,READY,ANALYSING,STOPPED,ERROR'],
             'target_data' => ['required'], // TODO: Define this rule
-            // 'project_id' => ['required', 'string', 'exists:projects,id'],
             'target_id' => ['required', 'string', 'exists:targets,id'],
             'simulation_type_id' => ['required', 'string', 'exists:simulation_types,id']
         ])
