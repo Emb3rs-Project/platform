@@ -430,7 +430,7 @@ class Embers
     * @param  string  $class
     * @return void
     */
-    public static function destroSimulationsUsing(string $class)
+    public static function destroySimulationsUsing(string $class)
     {
         return app()->singleton(DestroysSimulations::class, $class);
     }

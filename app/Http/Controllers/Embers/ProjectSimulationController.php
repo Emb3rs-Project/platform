@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Simulations\CreatesSimulations;
+use App\Contracts\Embers\Simulations\DestroysSimulations;
 use App\Contracts\Embers\Simulations\EditsSimulations;
 use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Contracts\Embers\Simulations\ShowsSimulations;
@@ -143,8 +144,10 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Project $project, Simulation $simulation)
+    public function destroy(int $projectId, int $simulationId)
     {
-        dd($project, $simulation);
+        app(DestroysSimulations::class)->destroy(Auth::user(), $projectId, $simulationId);
+
+        return Redirect::route('projects.simulations.index', $projectId);
     }
 }
