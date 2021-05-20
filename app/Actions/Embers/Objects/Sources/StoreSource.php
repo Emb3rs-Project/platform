@@ -37,18 +37,18 @@ class StoreSource implements StoresSources
      */
     protected function validate(array $input)
     {
-        Validator::make($input, [
-            'source' => ['required', 'array'],
-            'source.data.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['required', 'array'],
-            'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
-            'processes' => ['required', 'array'],
-            'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
-            // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
-            'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        ])
-        ->validate();
+        // Validator::make($input, [
+        //     'source' => ['required', 'array'],
+        //     'source.name' => ['filled', 'string', 'max:255'],
+        //     'equipments' => ['required', 'array'],
+        //     'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
+        //     'processes' => ['required', 'array'],
+        //     'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+        //     // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
+        //     // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
+        //     'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
+        // ])
+        //     ->validate();
     }
 
     /**
@@ -81,8 +81,8 @@ class StoreSource implements StoresSources
         ];
 
         // Check if Property Name Exists
-        if (!empty($source['data']['name'])) {
-            $newInstance['name'] = $source['data']['name'];
+        if (!empty($source['name'])) {
+            $newInstance['name'] = $source['name'];
         }
 
         if (is_array($input["location_id"])) {
