@@ -152,7 +152,7 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        app(DestroysSources::class)->destroy($id);
+        app(DestroysSources::class)->destroy(Auth::user(), $id);
 
         return Redirect::route('objects.index');
     }
