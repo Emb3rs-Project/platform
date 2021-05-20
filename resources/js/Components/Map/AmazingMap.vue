@@ -151,6 +151,10 @@ export default {
       value.setStyle({
         color: "#F9A602",
       });
+      const coords = value.getLatLngs();
+      const dist = L.latLng(coords[0]).distanceTo(L.latLng(coords[1]));
+
+      value.bindTooltip(`distance : ${Math.round(dist)}`).openTooltip();
     };
 
     const onNextPoint = (value) => {
@@ -213,17 +217,19 @@ export default {
       }),
     ];
 
-    const linkCreationSegmentContext = (m) => [
-      "-",
-      {
-        text: "Remove segment",
-        callback: () => onRemoveSegment(m),
-      },
-      {
-        text: "Segment Properties",
-        callback: () => onSegmentProperties(m),
-      },
-    ];
+    const linkCreationSegmentContext = (m) => {
+      return [
+        "-",
+        {
+          text: "Remove segment",
+          callback: () => onRemoveSegment(m),
+        },
+        {
+          text: "Segment Properties",
+          callback: () => onSegmentProperties(m),
+        },
+      ];
+    };
 
     const onCenterLocation = (loc) => {
       mapUtils.centerAtLocation(map.value, loc.geo_object);

@@ -190,7 +190,12 @@ export default {
         return;
       }
       const form = useForm(store.getters["sources/form"]);
-      form.post(route("objects.sources.store"));
+      form.post(route("objects.sources.store"), {
+        onSuccess: () => {
+          store.dispatch("map/refreshMap");
+          store.dispatch("objects/showSlide", { route: "objects.list" });
+        },
+      });
     };
 
     return {
