@@ -16,7 +16,14 @@ class CreateSimulationsTable extends Migration
         Schema::create('simulations', function (Blueprint $table) {
             $table->id();
 
-            $table->enum('status', ['NEW','IN PREPARATION', 'READY', 'ANALYSING', 'STOPPED', 'ERROR'])->default('NEW');
+            $table->enum('status', [
+                'NEW',
+                'IN PREPARATION',
+                'READY',
+                'ANALYSING',
+                'STOPPED',
+                'ERROR'
+            ])->default('NEW');
             $table->jsonb('targetData');
 
             $table->foreignId('project_id');

@@ -52,7 +52,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Objects.["locations", "sources", "sinks", "links"]
     Route::group(['prefix' => 'objects', 'as' => 'objects.'], function () {
-
         Route::get('/', [ObjectsController::class, 'map'])->name('index');
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');
 
