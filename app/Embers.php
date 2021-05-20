@@ -30,6 +30,13 @@ use App\Contracts\Embers\Objects\Sources\IndexesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\Contracts\Embers\Simulations\CreatesSimulations;
+use App\Contracts\Embers\Simulations\DestroysSimulations;
+use App\Contracts\Embers\Simulations\EditsSimulations;
+use App\Contracts\Embers\Simulations\IndexesSimulations;
+use App\Contracts\Embers\Simulations\ShowsSimulations;
+use App\Contracts\Embers\Simulations\StoresSimulations;
+use App\Contracts\Embers\Simulations\UpdatesSimulations;
 
 class Embers
 {
@@ -270,8 +277,6 @@ class Embers
         return app()->singleton(DestroysLinks::class, $class);
     }
 
-
-
     /**
     * Register a class / callback that should be used to index all Projects.
     *
@@ -349,5 +354,84 @@ class Embers
     public static function destroyProjectsUsing(string $class)
     {
         return app()->singleton(DestroysProjects::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to index all Simulations.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function indexSimulationsUsing(string $class)
+    {
+        return app()->singleton(IndexesSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the creation of a Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function createSimulationsUsing(string $class)
+    {
+        return app()->singleton(CreatesSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to create Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function storeSimulationsUsing(string $class)
+    {
+        return app()->singleton(StoresSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display a given Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function showSimulationsUsing(string $class)
+    {
+        return app()->singleton(ShowsSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * objects for the updating of a given Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function editSimulationsUsing(string $class)
+    {
+        return app()->singleton(EditsSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to update a given Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function updateSimulationsUsing(string $class)
+    {
+        return app()->singleton(UpdatesSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to delete a given Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function destroSimulationsUsing(string $class)
+    {
+        return app()->singleton(DestroysSimulations::class, $class);
     }
 }
