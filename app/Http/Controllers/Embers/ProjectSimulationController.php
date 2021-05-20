@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\Contracts\Embers\Simulations\IndexesSimulations;
+use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
@@ -54,7 +56,6 @@ class ProjectSimulationController extends Controller
             'locations' => $locations,
         ]);
 
-
         // return Inertia::render('Simulations/SimulationCreate', [
         //     'simulationTypes' => $simulationTypes,
         //     'sources' => $sources,
@@ -70,9 +71,11 @@ class ProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, int $projectId)
     {
-        //
+        app(StoresSimulations::class)->store(Auth::user(), $projectId, $request->all());
+
+        return Redirect::route('projects.simulations.index', $projectId);
     }
 
     /**

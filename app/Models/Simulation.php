@@ -12,6 +12,19 @@ class Simulation extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'status',
+        'targetData',
+        'project_id',
+        'target_id',
+        'simulation_type_id'
+    ];
+
+    /**
     * The attributes that should be cast.
     *
     * @var array
