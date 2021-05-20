@@ -22,34 +22,14 @@ class IndexSource implements IndexesSources
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
-        // $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
-
-        // $processCategories = Category::whereType('process')->get()->pluck('id');
-
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
                 'templateProperties.property'
             ])
-            ->get();
-
-        // $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-        //     ->with([
-        //         'templateProperties',
-        //         'templateProperties.unit',
-        //         'templateProperties.property'
-        //     ])
-        //     ->get();
-
-        // $processTemplates = Template::whereIn('category_id', $processCategories)
-        //     ->with([
-        //         'templateProperties',
-        //         'templateProperties.unit',
-        //         'templateProperties.property'
-        //     ])
-        //     ->get();
-
+            ->get()
+            ->pluck('id');
 
         $teamInstances = $user->currentTeam->instances->pluck('id');
 
@@ -57,10 +37,6 @@ class IndexSource implements IndexesSources
             ->whereIn('id', $teamInstances)
             ->with(['template', 'template.category', 'location.geoObject'])
             ->get();
-
-        return response()->json([
-            'sources' => $instances
-        ]);
 
         $output = $instances->map(function ($item) {
             if (isset($item->location)) {
