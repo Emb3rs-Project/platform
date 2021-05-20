@@ -36,40 +36,9 @@
         >
           <DisclosurePanel as="dd" class="mt-2 pr-12">
             <div
-              class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              v-for="property in equipment.props"
-              :key="property"
+              class="bg-gray-800 p-2 text-sm font-mono text-white overflow-x-scroll"
             >
-              <div>
-                <label
-                  class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                >
-                  {{ property.property.name }}
-                </label>
-              </div>
-              <div class="sm:col-span-2">
-                <div v-if="property.property.inputType === 'text'">
-                  <text-input
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
-                    :unit="property.unit.symbol"
-                    :placeholder="property.property.name"
-                    :required="property.required"
-                  >
-                  </text-input>
-                </div>
-                <div v-else-if="property.property.inputType === 'select'">
-                  <select-menu
-                    v-model="
-                      form.equipment.data[property.property.symbolic_name]
-                    "
-                    :options="property.property.data.options"
-                    :required="property.required"
-                  >
-                  </select-menu>
-                </div>
-              </div>
+              <pre>{{ equipment.script }}</pre>
             </div>
           </DisclosurePanel>
         </transition>
@@ -88,6 +57,8 @@ import { ChevronDownIcon } from "@heroicons/vue/outline";
 import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
 // import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
+
+import ESCRIPT from "./info";
 
 export default {
   components: {
@@ -134,9 +105,10 @@ export default {
       key: o.id,
       value: o.name,
       props: o.template_properties,
+      script: ESCRIPT,
     }));
 
-    const equipments = [...equipments1, ...equipments1, ...equipments1];
+    const equipments = [...equipments1];
 
     return {
       form,
