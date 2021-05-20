@@ -7,6 +7,7 @@ use App\Contracts\Embers\Simulations\EditsSimulations;
 use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
+use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Simulation;
@@ -125,9 +126,15 @@ class ProjectSimulationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $projectId, int $simulationId)
     {
-        //
+        $updatedSimulation = app(UpdatesSimulations::class)
+                                ->update(Auth::user(), $projectId, $simulationId, $request->all());
+
+        return Redirect::route('projects.simulations.show', [
+            $projectId,
+            $updatedSimulation->id
+        ]);
     }
 
     /**

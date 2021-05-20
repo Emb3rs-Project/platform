@@ -7,9 +7,10 @@ interface UpdatesSimulations
      * Validate and update an existing Simulation.
      *
      * @param  mixed  $user
-     * @param  int    $id
+     * @param  int    $projectId
+     * @param  int    $simulationId
      * @param  array  $input
      * @return mixed
      */
-    public function update($user, int $id, array $input);
+    public function update($user, int $projectId, int $simulationId, array $input);
 }

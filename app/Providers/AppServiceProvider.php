@@ -35,6 +35,7 @@ use App\Actions\Embers\Simulations\EditSimulation;
 use App\Actions\Embers\Simulations\IndexSimulation;
 use App\Actions\Embers\Simulations\ShowSimulation;
 use App\Actions\Embers\Simulations\StoreSimulation;
+use App\Actions\Embers\Simulations\UpdateSimulation;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -102,7 +103,7 @@ class AppServiceProvider extends ServiceProvider
         Embers::storeSimulationsUsing(StoreSimulation::class);
         Embers::showSimulationsUsing(ShowSimulation::class);
         Embers::editSimulationsUsing(EditSimulation::class);
-        // Embers::updateSimulationsUsing(::class);
+        Embers::updateSimulationsUsing(UpdateSimulation::class);
         // Embers::deleteSimulationsUsing(::class);
     }
 }
