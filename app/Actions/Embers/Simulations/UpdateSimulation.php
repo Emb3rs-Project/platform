@@ -21,7 +21,9 @@ class UpdateSimulation implements UpdatesSimulations
      */
     public function update(mixed $user, int $projectId, int $simulationId, array $input)
     {
-        Project::findOrFail($projectId);
+        $project = Project::findOrFail($projectId);
+
+        Gate::authorize('view', $project);
 
         $simulation = Simulation::findOrFail($simulationId);
 

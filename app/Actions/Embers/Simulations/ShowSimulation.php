@@ -22,6 +22,8 @@ class ShowSimulation implements ShowsSimulations
         $project = Project::with(['location', 'location.geoObject'])
             ->findOrFail($projectId);
 
+        Gate::authorize('view', $project);
+
         $simulation = Simulation::with(['project', 'target', 'simulationType'])
             ->findOrFail($simulationId);
 

@@ -22,6 +22,8 @@ class IndexSimulation implements IndexesSimulations
 
         $project = Project::findOrFail($projectId);
 
+        Gate::authorize('view', $project);
+
         $simulations = $project->simulations()->with(['target','simulationType'])->get();
 
         return $simulations;

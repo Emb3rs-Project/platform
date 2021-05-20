@@ -22,7 +22,9 @@ class StoreSimulation implements StoresSimulations
     {
         Gate::authorize('create', Simulation::class);
 
-        Project::findOrFail($projectId);
+        $project = Project::findOrFail($projectId);
+
+        Gate::authorize('view', $project);
 
         $this->validate($input);
 

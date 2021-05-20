@@ -42,7 +42,7 @@ class ProjectSimulationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(int $projectId)
     {
         [
             $simulationTypes,
@@ -50,7 +50,7 @@ class ProjectSimulationController extends Controller
             $sinks,
             $links,
             $locations
-        ] = app(CreatesSimulations::class)->create(Auth::user());
+        ] = app(CreatesSimulations::class)->create(Auth::user(), $projectId);
 
         return response()->json([
             'simulationTypes' => $simulationTypes,

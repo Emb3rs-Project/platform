@@ -20,7 +20,9 @@ class DestroySimulation implements DestroysSimulations
      */
     public function destroy(mixed $user, int $projectId, int $simulationId)
     {
-        Project::findOrFail($projectId);
+        $project = Project::findOrFail($projectId);
+
+        Gate::authorize('view', $project);
 
         $simulation = Simulation::findOrFail($simulationId);
 
