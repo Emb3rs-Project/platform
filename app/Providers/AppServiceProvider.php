@@ -30,6 +30,8 @@ use App\Actions\Embers\Projects\EditProject;
 use App\Actions\Embers\Projects\ShowProject;
 use App\Actions\Embers\Projects\StoreProject;
 use App\Actions\Embers\Projects\UpdateProject;
+use App\Actions\Embers\Simulations\CreateSimulation;
+use App\Actions\Embers\Simulations\IndexSimulation;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -91,5 +93,8 @@ class AppServiceProvider extends ServiceProvider
         Embers::editProjectsUsing(EditProject::class);
         Embers::updateProjectsUsing(UpdateProject::class);
         Embers::destroyProjectsUsing(DestroyProject::class);
+
+        Embers::indexSimulationsUsing(IndexSimulation::class);
+        Embers::createSimulationsUsing(CreateSimulation::class);
     }
 }

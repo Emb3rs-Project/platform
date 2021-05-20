@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Simulations\CreatesSimulations;
+use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Instance;
-use App\Models\Link;
-use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
-use App\Models\SimulationType;
-use App\Models\Template;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
@@ -22,15 +18,17 @@ class ProjectSimulationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Project $project)
+    public function index(int $projectId)
     {
-        $simulations = $project->simulations()->with(['target','simulationType'])->get();
+        $simulations = app(IndexesSimulations::class)->index(Auth::user(), $projectId);
 
-        dd($project);
-
-        return Inertia::render('Simulations/SimulationIndex', [
+        return response()->json([
             'simulations' => $simulations
         ]);
+
+        // return Inertia::render('Simulations/SimulationIndex', [
+        //     'simulations' => $simulations
+        // ]);
     }
 
     /**
@@ -40,53 +38,30 @@ class ProjectSimulationController extends Controller
      */
     public function create()
     {
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        [
+            $simulationTypes,
+            $sources,
+            $sinks,
+            $links,
+            $locations
+        ] = app(CreatesSimulations::class)->create(Auth::user());
 
-        // Get Locations
-        $locations = Location::all();
-
-        // Get Sinks
-        $sourceCategories = Category::whereType('sink')
-        ->get()
-        ->pluck('id');
-
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-        ->get()
-        ->pluck('id');
-
-        $sinks = Instance::whereIn('template_id', $sourceTemplates)
-        ->whereIn('id', $teamInstances)
-        ->with(['template', 'template.category', 'location.geoObject'])
-        ->get();
-
-        // Get Sources
-        $sourceCategories = Category::whereType('source')
-        ->get()
-        ->pluck('id');
-
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-        ->get()
-        ->pluck('id');
-
-        $sources = Instance::whereIn('template_id', $sourceTemplates)
-        ->whereIn('id', $teamInstances)
-        ->with(['template', 'template.category', 'location.geoObject'])
-        ->get();
-
-        // Get Simulation Types
-        $simulationTypes = SimulationType::all();
-
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
-        $links = Link::whereIn('id', $teamLinks)->get();
-
-
-        return Inertia::render('Simulations/SimulationCreate', [
+        return response()->json([
+            'simulationTypes' => $simulationTypes,
             'sources' => $sources,
             'sinks' => $sinks,
+            'links' => $links,
             'locations' => $locations,
-            'simulation_types' => $simulationTypes,
-            'links' => $links
         ]);
+
+
+        // return Inertia::render('Simulations/SimulationCreate', [
+        //     'simulationTypes' => $simulationTypes,
+        //     'sources' => $sources,
+        //     'sinks' => $sinks,
+        //     'links' => $links,
+        //     'locations' => $locations,
+        // ]);
     }
 
     /**
