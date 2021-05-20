@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 class CreateProject implements CreatesProjects
 {
     /**
-     * Display the necessary objects for the creation of a Link.
+     * Display the necessary objects for the creation of a Project.
      *
      * @return mixed
      */
