@@ -28,7 +28,7 @@ class EditLink implements EditsLinks
 
         $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
 
-        $locations = Location::with(['geoObject'])->get();
+        $locations = Location::all();
 
         return [
             $links,

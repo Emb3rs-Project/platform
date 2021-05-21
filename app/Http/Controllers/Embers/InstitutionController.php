@@ -29,16 +29,10 @@ class InstitutionController extends Controller
         $templates = Template::whereIn('category_id', $sourceCategories)
             ->get()
             ->pluck('id');
-        $instances = Instance::whereIn('template_id', $templates)
+        $sources = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category', 'location.geoObject'])
+            ->with(['location', 'template', 'template.category'])
             ->get();
-        $sources = $instances->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-            return $item;
-        });
 
         $sinkCategories = Category::whereType('sink')
             ->get()
@@ -46,16 +40,10 @@ class InstitutionController extends Controller
         $templates = Template::whereIn('category_id', $sinkCategories)
             ->get()
             ->pluck('id');
-        $instances = Instance::whereIn('template_id', $templates)
+        $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category', 'location.geoObject'])
+            ->with(['location', 'template', 'template.category'])
             ->get();
-        $sinks = $instances->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-            return $item;
-        });
 
         return Inertia::render(
             'Institution/InstitutionIndex',

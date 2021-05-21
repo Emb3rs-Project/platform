@@ -35,17 +35,9 @@ class IndexSource implements IndexesSources
 
         $instances = Instance::whereIn('template_id', $sourceTemplates)
             ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category', 'location.geoObject'])
+            ->with([ 'location', 'template', 'template.category'])
             ->get();
 
-        $output = $instances->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-
-            return $item;
-        });
-
-        return $output;
+        return $instances;
     }
 }

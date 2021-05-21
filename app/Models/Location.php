@@ -13,12 +13,26 @@ class Location extends Model
 {
     use HasFactory, SoftDeletes;
 
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
-        'geo_object_id'
+        'decription',
+        'type',
+        'data'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'data' => 'array',
+    ];
 
     // Table locations
     public function geoObject(): BelongsTo

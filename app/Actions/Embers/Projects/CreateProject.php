@@ -18,7 +18,7 @@ class CreateProject implements CreatesProjects
     {
         Gate::authorize('create', Project::class);
 
-        $locations = Location::with(['geoObject'])->get();
+        $locations = Location::all();
 
         return $locations;
     }

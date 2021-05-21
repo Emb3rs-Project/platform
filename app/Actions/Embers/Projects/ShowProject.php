@@ -18,8 +18,7 @@ class ShowProject implements ShowsProjects
      */
     public function show(mixed $user, int $id)
     {
-        $project = Project::with(['location', 'location.geoObject'])
-            ->findOrFail($id);
+        $project = Project::with(['location'])->findOrFail($id);
 
         Gate::authorize('view', $project);
 

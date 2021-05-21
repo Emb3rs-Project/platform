@@ -87,24 +87,17 @@ class StoreSource implements StoresSources
 
         if (is_array($input["location_id"])) {
             $marker = $input["location_id"];
-            $geo = GeoObject::create([
+            $location = Location::create([
+                'name' => $newInstance['name'],
                 'type' => 'point',
                 'data' => [
                     "center" => [$marker["lat"], $marker["lng"]]
                 ]
             ]);
-
-            $location = Location::create([
-                'name' => $newInstance['name'],
-                'geo_object_id' => $geo->id
-            ]);
             $newInstance['location_id'] = $location->id;
         } else {
             // Check if Location is Set
-            $locationId = $input['location_id'];
-            if ($locationId) {
-                $newInstance['location_id'] = $locationId;
-            }
+            $newInstance['location_id'] = $input['location_id'];
         }
 
         $instance = Instance::create($newInstance);

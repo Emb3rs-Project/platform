@@ -45,7 +45,7 @@ class CreateSink implements CreatesSinks
             ])
             ->get();
 
-        $locations = Location::with(['geoObject'])->get();
+        $locations = Location::all();
 
         return [
             $sinkTemplates,

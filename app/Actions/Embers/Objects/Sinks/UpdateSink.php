@@ -73,16 +73,12 @@ class UpdateSink implements UpdatesSinks
         if (!empty($input['location_id'])) {
             if (Arr::accessible($input["location_id"])) {
                 $marker = $input["location_id"];
-                $geo = GeoObject::create([
+                $location = Location::create([
+                    'name' => $sink->name,
                     'type' => 'point',
                     'data' => [
                         "center" => [$marker["lat"], $marker["lng"]]
                     ]
-                ]);
-
-                $location = Location::create([
-                    'name' => $sink->name,
-                    'geo_object_id' => $geo->id
                 ]);
                 $sink->location_id = $location->id;
             } else {

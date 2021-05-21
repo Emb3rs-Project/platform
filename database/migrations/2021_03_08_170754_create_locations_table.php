@@ -18,8 +18,66 @@ class CreateLocationsTable extends Migration
 
             $table->string('name');
             $table->string('description')->nullable();
+            $table->enum('type', ['point','circle','polygon']);
+            $table->jsonb('data');
+            /**
+             * {
+             *      "data": {
+             *          "coordinates": [
+             *              38.75261070835031,
+             *              -9.303359985351564
+             *          ],
+             *          "radius": 23
+             *      }
+             * }
+             *
+             * {
+             *      "data": {
+             *          "coordinates": [
+             *              38.75261070835031,
+             *              -9.303359985351564
+             *          ],
+             *      }
+             * }
+             *
+             * {
+             *      "data": {
+             *          "coordinates": [
+             *              [
+             *                  [
+             *                      39.85915479295669,
+             *                      21.7913818359375
+             *                  ],
+             *                  [
+             *                      39.198205348894795,
+             *                      21.423339843749996
+             *                  ],
+             *                  [
+             *                      39.85915479295669,
+             *                      21.4617919921875
+             *                  ],
+             *                  [
+             *                      39.1854331703021,
+             *                      22.21435546875
+             *                  ],
+             *                  [
+             *                      39.40224434029275,
+             *                      22.6593017578125
+             *                  ],
+             *                  [
+             *                      39.614152077002664,
+             *                      22.587890625
+             *                  ],
+             *                  [
+             *                      39.85915479295669,
+             *                      21.7913818359375
+             *                  ]
+             *              ]
+             *          ]
+             *      }
+             * }
+             */
 
-            $table->foreignId('geo_object_id')->nullable();
             $table->foreignId('project_id')->nullable();
 
             $table->softDeletes();

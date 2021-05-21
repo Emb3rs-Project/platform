@@ -71,30 +71,24 @@ class StoreSink implements StoresSinks
         ];
 
         // Check if Property Name Exists
-        if (isset($sink['data']['name'])) {
+        if (!empty($sink['data']['name'])) {
             $newInstance['name'] = $sink['data']['name'];
         }
 
+        // TODO: Adapt it to the new validation rules i.e. accept either location or location_id ONLY
         if (is_array($input["location_id"])) {
             $marker = $input["location_id"];
-            $geo = GeoObject::create([
+
+            $location = Location::create([
+                'name' => $newInstance['name'],
                 'type' => 'point',
                 'data' => [
                     "center" => [$marker["lat"], $marker["lng"]]
                 ]
             ]);
-
-            $location = Location::create([
-                'name' => $newInstance['name'],
-                'geo_object_id' => $geo->id
-            ]);
             $newInstance['location_id'] = $location->id;
         } else {
-            // Check if Location is Set
-            $locationId = $input['location_id'];
-            if ($locationId) {
-                $newInstance['location_id'] = $locationId;
-            }
+            $newInstance['location_id'] = $input['location_id'];
         }
 
         $instance = Instance::create($newInstance);

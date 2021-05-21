@@ -19,8 +19,7 @@ class ShowSimulation implements ShowsSimulations
      */
     public function show(mixed $user, int $projectId, int $simulationId)
     {
-        $project = Project::with(['location', 'location.geoObject'])
-            ->findOrFail($projectId);
+        $project = Project::with(['location'])->findOrFail($projectId);
 
         Gate::authorize('view', $project);
 

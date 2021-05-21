@@ -21,7 +21,6 @@ class ShowSink implements ShowsSinks
             'location',
             'template',
             'template.category',
-            'location.geoObject'
         ])->findOrFail($id);
 
         Gate::authorize('view', $sink);

@@ -20,7 +20,7 @@ class EditSource implements EditsSources
      */
     public function edit(mixed $user, int $id)
     {
-        $source = Instance::findOrFail($id);
+        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         Gate::authorize('view', $source);
 
@@ -48,15 +48,13 @@ class EditSource implements EditsSources
             ])
             ->get();
 
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)->with(['location', 'template', 'template.category', 'location.geoObject'])->first();
+        $locations = Location::all();
 
         return [
             $sourceTemplates,
             $equipmentTemplates,
             $locations,
-            $instance
+            $source
         ];
     }
 }

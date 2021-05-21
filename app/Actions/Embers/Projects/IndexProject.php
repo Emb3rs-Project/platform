@@ -24,14 +24,6 @@ class IndexProject implements IndexesProjects
             ->whereIn('id', $teamProjects)
             ->get();
 
-        $output = $projects->map(function ($item) {
-            if (isset($item->location)) {
-                $item['data'] = $item->location->geoObject;
-            }
-
-            return $item;
-        });
-
-        return $output;
+        return $projects;
     }
 }

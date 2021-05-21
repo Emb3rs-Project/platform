@@ -5,7 +5,9 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Location extends Resource
@@ -36,6 +38,7 @@ class Location extends Resource
 // You can add any of this to your Laravel Nova Search
 //    'name',
 //    'description',
+//    'type'
     ];
 
     /**
@@ -50,8 +53,16 @@ class Location extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
             Text::make(__('DESCRIPTION'), 'description'),
+            Select::make(__('TYPE'), 'type')
+                ->options([
+                    'point' => __('point'),
+                    'circle' => __('circle'),
+                    'polygon' => __('polygon')
+                    ]),
+            Code::make(__('DATA'), 'data')
+                ->json()
+                ->rules('json'),
 
-            BelongsTo::make(__('GEOOBJECT'), 'geoObject', GeoObject::class),
             BelongsTo::make(__('PROJECT'), 'project', Project::class)->nullable(),
             HasMany::make(__('PROJECTS'), 'projects', Project::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),

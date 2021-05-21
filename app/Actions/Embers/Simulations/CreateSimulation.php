@@ -39,7 +39,7 @@ class CreateSimulation implements CreatesSimulations
 
         $sinks = app(IndexesSinks::class)->index($user);
 
-        $locations = Location::with(['geoObject'])->get();
+        $locations = Location::all();
 
         $links = app(IndexesLinks::class)->index($user);
 

@@ -46,7 +46,7 @@ class CreateSource implements CreatesSources
             ])
             ->get();
 
-        $locations = Location::with(['geoObject'])->get();
+        $locations = Location::all();
 
         $processTemplates = Template::whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
             ->with([

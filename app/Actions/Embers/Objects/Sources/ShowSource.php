@@ -20,7 +20,8 @@ class ShowSource implements ShowsSources
     */
     public function show(mixed $user, int $id)
     {
-        $source = Instance::findOrFail($id);
+        $source = Instance::with(['location', 'template', 'template.category'])
+            ->findOrFail($id);
 
         Gate::authorize('view', $source);
 
@@ -48,22 +49,13 @@ class ShowSource implements ShowsSources
             ])
             ->get();
 
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)
-            ->with([
-                'location',
-                'template',
-                'template.category',
-                'location.geoObject'
-            ])
-            ->first();
+        $locations = Location::all();
 
         return [
             $sourceTemplates,
             $equipmentTemplates,
             $locations,
-            $instance
+            $source
         ];
     }
 }

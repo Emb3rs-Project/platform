@@ -85,16 +85,12 @@ class UpdateSource implements UpdatesSources
         if (!empty($input['location_id'])) {
             if (Arr::accessible($input["location_id"])) {
                 $marker = $input["location_id"];
-                $geo = GeoObject::create([
+                $location = Location::create([
+                    'name' => $source->name,
                     'type' => 'point',
                     'data' => [
                         "center" => [$marker["lat"], $marker["lng"]]
                     ]
-                ]);
-
-                $location = Location::create([
-                    'name' => $source->name,
-                    'geo_object_id' => $geo->id
                 ]);
                 $source->location_id = $location->id;
             } else {

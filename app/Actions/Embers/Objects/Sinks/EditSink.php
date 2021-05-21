@@ -20,7 +20,7 @@ class EditSink implements EditsSinks
      */
     public function edit($user, int $id)
     {
-        $sink = Instance::findOrFail($id);
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         Gate::authorize('view', $sink);
 
@@ -48,17 +48,13 @@ class EditSink implements EditsSinks
             ])
             ->get();
 
-        $locations = Location::with(['geoObject'])->get();
-
-        $instance = Instance::whereId($id)
-            ->with(['location', 'template', 'template.category', 'location.geoObject'])
-            ->first();
+        $locations = Location::all();
 
         return [
             $sinkTemplates,
             $equipmentTemplates,
             $locations,
-            $instance
+            $sink
         ];
     }
 }

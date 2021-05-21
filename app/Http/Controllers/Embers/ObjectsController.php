@@ -18,7 +18,6 @@ class ObjectsController extends Controller
             'template',
             'template.category',
             'location',
-            'location.geoObject'
         ])->whereIn('id', $teamInstances)->get();
 
         return [
@@ -38,7 +37,6 @@ class ObjectsController extends Controller
             'template',
             'template.category',
             'location',
-            'location.geoObject'
         ])->whereIn('id', $teamInstances)->get();
 
         return Inertia::render('Objects/Objects', ['instances' => $instances]);

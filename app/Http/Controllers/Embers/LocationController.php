@@ -18,7 +18,11 @@ class LocationController extends Controller
      */
     public function index()
     {
-        $locations = Location::with(['project','geoObject'])->get();
+        $locations = Location::with(['project'])->get();
+
+        return response()->json([
+            "locations" => $locations
+        ]);
 
         return Inertia::render('Objects/Locations/LocationIndex', ['locations' => $locations]);
     }
@@ -41,15 +45,10 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        $geo = GeoObject::create([
-            'type' => $request->get('locationType'),
-            'data' => $request->get('locationData')
-        ]);
-
-
         Location::create([
             'name' => $request->get('locationName'),
-            'geo_object_id' => $geo->id
+            'type' => $request->get('locationType'),
+            'data' => $request->get('locationData')
         ]);
 
 
