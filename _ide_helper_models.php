@@ -16,11 +16,11 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string|null $type
  * @property int|null $parent_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $type
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $children
  * @property-read int|null $children_count
  * @property-read Category|null $parent
@@ -67,34 +67,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|FAQ withoutTrashed()
  */
 	class FAQ extends \Eloquent {}
-}
-
-namespace App\Models{
-/**
- * App\Models\GeoObject
- *
- * @property int $id
- * @property string $type
- * @property array $data
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
- * @property-read int|null $locations_count
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject newQuery()
- * @method static \Illuminate\Database\Query\Builder|GeoObject onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject query()
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|GeoObject whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|GeoObject withTrashed()
- * @method static \Illuminate\Database\Query\Builder|GeoObject withoutTrashed()
- */
-	class GeoObject extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -165,7 +137,7 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -173,6 +145,7 @@ namespace App\Models{
  * @property-read int|null $geo_segments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
+ * @method static \Database\Factories\LinkFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Link newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Link newQuery()
  * @method static \Illuminate\Database\Query\Builder|Link onlyTrashed()
@@ -196,28 +169,32 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string|null $description
- * @property int|null $geo_object_id
+ * @property string $type
+ * @property array $data
  * @property int|null $project_id
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\GeoObject|null $geoObject
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Instance[] $instances
  * @property-read int|null $instances_count
  * @property-read \App\Models\Project|null $project
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $team
+ * @property-read int|null $team_count
+ * @method static \Database\Factories\LocationFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Location newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Location newQuery()
  * @method static \Illuminate\Database\Query\Builder|Location onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Location query()
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Location whereData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Location whereGeoObjectId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Location whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Location whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Location withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Location withoutTrashed()
@@ -258,6 +235,7 @@ namespace App\Models{
  * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Team $team
  * @method static \Illuminate\Database\Eloquent\Builder|News newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|News newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|News query()
@@ -273,7 +251,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Notifications
+ * App\Models\Notification
  *
  * @property int $id
  * @property string $title
@@ -281,17 +259,18 @@ namespace App\Models{
  * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications query()
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereTeamId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Notifications whereUpdatedAt($value)
+ * @property-read \App\Models\Team $team
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
  */
-	class Notifications extends \Eloquent {}
+	class Notification extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -312,6 +291,7 @@ namespace App\Models{
  * @property-read int|null $simulations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
+ * @method static \Database\Factories\ProjectFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Project newQuery()
  * @method static \Illuminate\Database\Query\Builder|Project onlyTrashed()
@@ -331,7 +311,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\Properties
+ * App\Models\Property
  *
  * @property int $id
  * @property string $name
@@ -343,52 +323,52 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $symbolic_name
  * @property string|null $description
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperties[] $templateProperties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
  * @property-read int|null $units_count
- * @method static \Illuminate\Database\Eloquent\Builder|Properties newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Properties newQuery()
- * @method static \Illuminate\Database\Query\Builder|Properties onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|Properties query()
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereData($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereDataType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereInputType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereSymbolicName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Properties whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Properties withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Properties withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Property onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDataType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereInputType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereSymbolicName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Property withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Property withoutTrashed()
  */
-	class Properties extends \Eloquent {}
+	class Property extends \Eloquent {}
 }
 
 namespace App\Models{
 /**
- * App\Models\PropertyGroups
+ * App\Models\PropertyGroup
  *
  * @property int $id
  * @property string $name
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups newQuery()
- * @method static \Illuminate\Database\Query\Builder|PropertyGroups onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups query()
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroups whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|PropertyGroups withTrashed()
- * @method static \Illuminate\Database\Query\Builder|PropertyGroups withoutTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup newQuery()
+ * @method static \Illuminate\Database\Query\Builder|PropertyGroup onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PropertyGroup whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|PropertyGroup withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|PropertyGroup withoutTrashed()
  */
-	class PropertyGroups extends \Eloquent {}
+	class PropertyGroup extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -407,6 +387,7 @@ namespace App\Models{
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\SimulationType $simulationType
  * @property-read \App\Models\Target $target
+ * @method static \Database\Factories\SimulationFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newQuery()
  * @method static \Illuminate\Database\Query\Builder|Simulation onlyTrashed()
@@ -506,6 +487,8 @@ namespace App\Models{
  * @property-read int|null $instances_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Link[] $links
  * @property-read int|null $links_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
+ * @property-read int|null $locations_count
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
@@ -513,6 +496,7 @@ namespace App\Models{
  * @property-read int|null $team_invitations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
+ * @method static \Database\Factories\TeamFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Team newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Team query()
@@ -566,8 +550,9 @@ namespace App\Models{
  * @property-read int|null $instances_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateGrouping[] $templateGrouping
  * @property-read int|null $template_grouping_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperties[] $templateProperties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
+ * @method static \Database\Factories\TemplateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
  * @method static \Illuminate\Database\Query\Builder|Template onlyTrashed()
@@ -596,9 +581,9 @@ namespace App\Models{
  * @property int $property_group_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\PropertyGroups $propertyGroup
+ * @property-read \App\Models\PropertyGroup $propertyGroup
  * @property-read \App\Models\Template $template
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperties[] $templateProperties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateGrouping newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateGrouping newQuery()
@@ -616,7 +601,7 @@ namespace App\Models{
 
 namespace App\Models{
 /**
- * App\Models\TemplateProperties
+ * App\Models\TemplateProperty
  *
  * @property int $id
  * @property bool $required
@@ -630,30 +615,31 @@ namespace App\Models{
  * @property int $order
  * @property bool|null $is_summary
  * @property int|null $grouping_id
- * @property-read \App\Models\Properties $property
+ * @property-read \App\Models\Property $property
  * @property-read \App\Models\Template $template
  * @property-read \App\Models\TemplateGrouping|null $templateGroup
  * @property-read \App\Models\Unit $unit
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties newQuery()
- * @method static \Illuminate\Database\Query\Builder|TemplateProperties onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties query()
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereDefaultUnitId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereDefaultValue($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereGroupingId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereIsSummary($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties wherePropertyId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereRequired($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereTemplateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperties whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|TemplateProperties withTrashed()
- * @method static \Illuminate\Database\Query\Builder|TemplateProperties withoutTrashed()
+ * @method static \Database\Factories\TemplatePropertyFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newQuery()
+ * @method static \Illuminate\Database\Query\Builder|TemplateProperty onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDefaultUnitId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDefaultValue($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereGroupingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereIsSummary($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|TemplateProperty withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|TemplateProperty withoutTrashed()
  */
-	class TemplateProperties extends \Eloquent {}
+	class TemplateProperty extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -666,13 +652,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $symbol
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Properties[] $properties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Property[] $properties
  * @property-read int|null $properties_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SimulationType[] $simulationTypes
  * @property-read int|null $simulation_types_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Target[] $targets
  * @property-read int|null $targets_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperties[] $templateProperties
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UnitConversion[] $unitCoversionsFrom
  * @property-read int|null $unit_coversions_from_count
@@ -750,6 +736,7 @@ namespace App\Models{
  * @property-read int|null $teams_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
