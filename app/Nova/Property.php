@@ -2,28 +2,30 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class TemplateProperties extends Resource
+class Property extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var  string
      */
-    public static $model = \App\Models\TemplateProperties::class;
+    public static $model = \App\Models\Property::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var  string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -35,7 +37,10 @@ class TemplateProperties extends Resource
 
 
 // You can add any of this to your Laravel Nova Search
-//    'required',
+//    'name',
+//    'dataType',
+//    'inputType',
+//    'data',
     ];
 
     /**
@@ -48,16 +53,33 @@ class TemplateProperties extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
-            Boolean::make(__('REQUIRED'), 'required'),
-            Boolean::make(__('IS_SUMMARY'), 'is_summary'),
-            Number::make(__('ORDER'), 'order')->min(0),
+            Text::make(__('NAME'), 'name'),
+            Text::make(__('SYMBOLICNAME'), 'symbolic_name'),
+            Text::make(__('DESCRIPTION'), 'description'),
+            Select::make(__('DATATYPE'), 'dataType')
+                ->options(
+                    [
+                        "number" => __('Number'),
+                        "datetime" => __('DateTime'),
+                        "string" => __('String'),
+                        "float" => __('Float')
+                    ]
+                )
+                ->displayUsingLabels(),
+            Select::make(__('INPUTTYPE'), 'inputType')
+                ->options(
+                    [
+                        "text" => __('Text Input'),
+                        "datetime" => __('Date Input'),
+                        "select" => __('Select / ComboBox'),
+                        "week_schedule" => __('Week Schedule Input')
+                    ]
+                )
+                ->displayUsingLabels(),
+            Code::make(__('DATA'), 'data')->json()->rules('json'),
 
-            BelongsTo::make(__('TEMPLATE'), 'template', Template::class),
-            BelongsTo::make(__('PROPERTY'), 'property', Properties::class),
-            Text::make(__('DEFAULT_VALUE'), 'default_value'),
-            BelongsTo::make(__('UNIT'), 'unit', Unit::class),
-            BelongsTo::make(__('TEMPLATEGROUP'), 'templateGroup', TemplateGrouping::class)
-                ->nullable()
+            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class),
+            BelongsToMany::make(__('UNITPROPERTY'), 'units', Unit::class),
         ];
     }
 

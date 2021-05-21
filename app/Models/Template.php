@@ -37,7 +37,7 @@ class Template extends Model
     // Table template_properties
     public function templateProperties(): HasMany
     {
-        return $this->hasMany(TemplateProperties::class, 'template_id');
+        return $this->hasMany(TemplateProperty::class, 'template_id');
     }
 
     public function templateGrouping()

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TemplateProperties extends Model
+class TemplateProperty extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -20,7 +20,7 @@ class TemplateProperties extends Model
     // Table template_properties
     public function property(): BelongsTo
     {
-        return $this->belongsTo(Properties::class, 'property_id');
+        return $this->belongsTo(Property::class, 'property_id');
     }
 
     // Table template_properties

@@ -58,7 +58,7 @@ class Template extends Resource
 
             BelongsTo::make(__('CATEGORY'), 'category', Category::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),
-            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
+            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class),
 
             HasMany::make(__('PROPERTYGROUPS'), 'templateGrouping', TemplateGrouping::class)
         ];

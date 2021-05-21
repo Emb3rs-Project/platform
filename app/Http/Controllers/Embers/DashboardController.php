@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\News;
-use App\Models\Notifications;
+use App\Models\Notification;
 use App\Models\Template;
 use Auth;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index(): Response
     {
         $news = News::whereTeamId(Auth::user()->currentTeam->id)->get();
-        $notifications = Notifications::whereTeamId(Auth::user()->currentTeam->id)->get();
+        $notifications = Notification::whereTeamId(Auth::user()->currentTeam->id)->get();
         $currentTeam = Auth::user()->currentTeam;
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');

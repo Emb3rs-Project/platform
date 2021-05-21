@@ -52,9 +52,9 @@ class TemplateGrouping extends Resource
             Boolean::make(__('IS_SUMMARY'), 'is_summary'),
 
             BelongsTo::make(__('TEMPLATE'), 'template', Template::class),
-            BelongsTo::make(__('GROUP'), 'propertyGroup', PropertyGroups::class),
+            BelongsTo::make(__('GROUP'), 'propertyGroup', PropertyGroup::class),
 
-            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class)
+            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class)
         ];
     }
 

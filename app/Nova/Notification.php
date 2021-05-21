@@ -9,14 +9,14 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Notifications extends Resource
+class Notification extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\Notifications::class;
+    public static $model = \App\Models\Notification::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.

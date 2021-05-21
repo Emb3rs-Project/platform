@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Properties extends Model
+class Property extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -23,7 +23,7 @@ class Properties extends Model
     // Table template_properties
     public function templateProperties(): HasMany
     {
-        return $this->hasMany(TemplateProperties::class, 'property_id');
+        return $this->hasMany(TemplateProperty::class, 'property_id');
     }
 
     public function units()

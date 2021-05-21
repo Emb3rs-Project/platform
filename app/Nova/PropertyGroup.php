@@ -10,14 +10,14 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class PropertyGroups extends Resource
+class PropertyGroup extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\PropertyGroups::class;
+    public static $model = \App\Models\PropertyGroup::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -46,7 +46,7 @@ class PropertyGroups extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name')->sortable(),
 
-            HasMany::make(__('PROPERTIES'), 'properties', TemplateProperties::class)
+            HasMany::make(__('PROPERTIES'), 'properties', TemplateProperty::class)
         ];
     }
 

@@ -12,7 +12,7 @@ class TemplateGrouping extends Model
 
     public function propertyGroup() : BelongsTo
     {
-        return $this->belongsTo(PropertyGroups::class, 'property_group_id');
+        return $this->belongsTo(PropertyGroup::class, 'property_group_id');
     }
 
     public function template() : BelongsTo
@@ -22,6 +22,6 @@ class TemplateGrouping extends Model
 
     public function templateProperties()
     {
-        return $this->hasMany(TemplateProperties::class, 'grouping_id');
+        return $this->hasMany(TemplateProperty::class, 'grouping_id');
     }
 }

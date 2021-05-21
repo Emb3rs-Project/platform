@@ -27,7 +27,7 @@ class Unit extends Model
     // Table template_properties
     public function templateProperties(): HasMany
     {
-        return $this->hasMany(TemplateProperties::class, 'default_unit_id');
+        return $this->hasMany(TemplateProperty::class, 'default_unit_id');
     }
 
     // Table targets
@@ -46,7 +46,7 @@ class Unit extends Model
     public function properties()
     {
         return $this->belongsToMany(
-            Properties::class,
+            Property::class,
             'unit_property',
             'unit_id',
             'property_id'

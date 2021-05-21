@@ -51,7 +51,7 @@ class Unit extends Resource
 
             HasMany::make(__('UNITCOVERSIONSFROM'), 'unitCoversionsFrom', UnitConversion::class),
             HasMany::make(__('UNITCOVERSIONSTO'), 'unitCoversionsTo', UnitConversion::class),
-            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperties::class),
+            HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class),
             HasMany::make(__('TARGETS'), 'targets', Target::class),
             HasMany::make(__('SIMULATIONTYPES'), 'simulationTypes', SimulationType::class),
 
