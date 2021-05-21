@@ -35,12 +35,6 @@ class Location extends Model
     ];
 
     // Table locations
-    public function geoObject(): BelongsTo
-    {
-        return $this->belongsTo(GeoObject::class, 'geo_object_id');
-    }
-
-    // Table locations
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

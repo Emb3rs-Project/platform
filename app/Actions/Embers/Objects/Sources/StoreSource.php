@@ -3,7 +3,6 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\StoresSources;
-use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Gate;
@@ -37,6 +36,7 @@ class StoreSource implements StoresSources
      */
     protected function validate(array $input)
     {
+        // TODO: fix the validator
         // Validator::make($input, [
         //     'source' => ['required', 'array'],
         //     'source.name' => ['filled', 'string', 'max:255'],
@@ -47,8 +47,7 @@ class StoreSource implements StoresSources
         //     // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
         //     // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
         //     'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        // ])
-        //     ->validate();
+        // ])->validate();
     }
 
     /**

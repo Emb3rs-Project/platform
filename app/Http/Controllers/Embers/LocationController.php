@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
-use App\Models\GeoObject;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use Inertia\Inertia;

@@ -3,7 +3,6 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
-use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Gate;
@@ -45,8 +44,7 @@ class StoreSink implements StoresSinks
             // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
             'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        ])
-        ->validate();
+        ])->validate();
     }
 
     /**

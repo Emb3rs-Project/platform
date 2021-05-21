@@ -3,7 +3,6 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
-use App\Models\GeoObject;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
@@ -51,8 +50,7 @@ class UpdateSource implements UpdatesSources
             // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
             'location_id' => ['filled'], // for now. Later remove current line and uncomment 2 above
-        ])
-        ->validate();
+        ])->validate();
     }
 
     /**
