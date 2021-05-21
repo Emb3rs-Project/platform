@@ -152,10 +152,10 @@ export default {
         for (let instance of instances.filter((i) => i.location)) {
 
             // Skipping Locations with areas
-            if (instance.location.geo_object.type !== 'point') continue;
+            if (instance.location.type !== 'point') continue;
 
             const type = instance.template.category.type
-            const center = instance.location.geo_object.data.center
+            const center = instance.location.data.center
 
             const iconOptions = {
                 icon: '',
