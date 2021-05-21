@@ -20,6 +20,11 @@ class GeoSegment extends Model
         'data' => 'array',
     ];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
         'data'
     ];

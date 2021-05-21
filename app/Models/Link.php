@@ -11,8 +11,15 @@ class Link extends Model
 {
     use HasFactory, SoftDeletes;
 
-
-    protected $fillable = ['name', 'description'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'description'
+    ];
 
     // Table geo_segment_link
     public function geoSegments() : BelongsToMany

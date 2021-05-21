@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
-use App\Models\Team;
 use App\Models\Template;
 use Auth;
 use Illuminate\Http\Request;

@@ -10,13 +10,9 @@ use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
-use App\Models\Location;
-use App\Models\Project;
-use App\Models\Simulation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
