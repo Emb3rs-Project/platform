@@ -145,7 +145,6 @@ namespace App\Models{
  * @property-read int|null $geo_segments_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
- * @method static \Database\Factories\LinkFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Link newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Link newQuery()
  * @method static \Illuminate\Database\Query\Builder|Link onlyTrashed()
@@ -182,7 +181,6 @@ namespace App\Models{
  * @property-read int|null $projects_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $team
  * @property-read int|null $team_count
- * @method static \Database\Factories\LocationFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Location newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Location newQuery()
  * @method static \Illuminate\Database\Query\Builder|Location onlyTrashed()
@@ -291,7 +289,6 @@ namespace App\Models{
  * @property-read int|null $simulations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
- * @method static \Database\Factories\ProjectFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Project newQuery()
  * @method static \Illuminate\Database\Query\Builder|Project onlyTrashed()
@@ -387,7 +384,6 @@ namespace App\Models{
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\SimulationType $simulationType
  * @property-read \App\Models\Target $target
- * @method static \Database\Factories\SimulationFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newQuery()
  * @method static \Illuminate\Database\Query\Builder|Simulation onlyTrashed()
@@ -552,7 +548,6 @@ namespace App\Models{
  * @property-read int|null $template_grouping_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
- * @method static \Database\Factories\TemplateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
  * @method static \Illuminate\Database\Query\Builder|Template onlyTrashed()
@@ -619,7 +614,6 @@ namespace App\Models{
  * @property-read \App\Models\Template $template
  * @property-read \App\Models\TemplateGrouping|null $templateGroup
  * @property-read \App\Models\Unit $unit
- * @method static \Database\Factories\TemplatePropertyFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newQuery()
  * @method static \Illuminate\Database\Query\Builder|TemplateProperty onlyTrashed()

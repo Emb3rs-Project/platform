@@ -10,13 +10,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Instance extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'values' => 'array',
     ];

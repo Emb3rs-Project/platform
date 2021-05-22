@@ -16,17 +16,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $davidsf = User::factory()->create([
-            'name' => 'David Fernandes',
-            'email' => 'davidsf@panterify.com',
-            'password' => Hash::make('scob4volk_gnix*BUFT')
-        ]);
-
-        Team::forceCreate([
-            'user_id' => $davidsf->id,
-            'name' => explode(' ', $davidsf->name, 2)[0]."'s Personal",
-            'personal_team' => true,
-        ]);
 
         $geocfu = User::factory()->create([
             'name' => 'George Mantellos',
@@ -36,7 +25,7 @@ class UserSeeder extends Seeder
 
         Team::forceCreate([
             'user_id' => $geocfu->id,
-            'name' => explode(' ', $geocfu->name, 2)[0]."'s Personal",
+            'name' => explode(' ', $geocfu->name, 2)[0] . "'s Personal",
             'personal_team' => true,
         ]);
     }

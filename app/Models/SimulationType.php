@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SimulationType extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     // Table simulations
-    public function simulations() : HasMany
+    public function simulations(): HasMany
     {
         return $this->hasMany(Simulation::class, 'simulation_type_id');
     }

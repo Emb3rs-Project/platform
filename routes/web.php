@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::group(['prefix' => 'objects', 'as' => 'objects.'], function () {
         Route::get('/', [ObjectsController::class, 'map'])->name('index');
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');
+        Route::get('/map', [ObjectsController::class, 'markers'])->name('markers');
 
         // Locations
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));

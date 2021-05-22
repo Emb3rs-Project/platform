@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GeoSegment extends Model
 {
-    use HasFactory,SoftDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast.
@@ -30,7 +30,7 @@ class GeoSegment extends Model
     ];
 
     // Table geo_segment_link
-    public function links() : BelongsToMany
+    public function links(): BelongsToMany
     {
         return $this->belongsToMany(
             Link::class,

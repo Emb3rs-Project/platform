@@ -2,17 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Instance;
+use App\Models\Model;
+use App\Models\Template;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SinkFactory extends Factory
+class ProcessTemplateFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Instance::class;
+    protected $model = Template::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +23,8 @@ class SinkFactory extends Factory
     public function definition()
     {
         return [
-            //
+            "name" => $this->faker->colorName . " Process",
+            "values" => []
         ];
     }
 }

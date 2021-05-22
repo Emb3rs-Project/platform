@@ -19,10 +19,6 @@ export default {
     centerValue: {
       type: Array,
     },
-    instances: {
-      type: Array,
-      default: [],
-    },
   },
   setup(props, { emit }) {
     // TODO: Convert to VUEX!!!
@@ -34,6 +30,8 @@ export default {
       sinks: null,
       links: [],
     });
+
+    const instances = ref([]);
 
     const currentSegment = {
       from: null,
@@ -293,6 +291,8 @@ export default {
       center,
       onCenterLocation,
       selectedMarkerLatlng,
+
+      instances,
     };
   },
 };

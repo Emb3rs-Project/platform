@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Location extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

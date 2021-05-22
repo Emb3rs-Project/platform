@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TemplateProperty extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     // Table template_properties
     public function template(): BelongsTo
@@ -29,7 +29,7 @@ class TemplateProperty extends Model
         return $this->belongsTo(Unit::class, 'default_unit_id');
     }
 
-    public function templateGroup() : BelongsTo
+    public function templateGroup(): BelongsTo
     {
         return $this->belongsTo(TemplateGrouping::class, 'grouping_id');
     }

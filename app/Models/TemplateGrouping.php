@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TemplateGrouping extends Model
 {
-    use HasFactory;
 
-    public function propertyGroup() : BelongsTo
+    public function propertyGroup(): BelongsTo
     {
         return $this->belongsTo(PropertyGroup::class, 'property_group_id');
     }
 
-    public function template() : BelongsTo
+    public function template(): BelongsTo
     {
         return $this->belongsTo(Template::class, 'template_id');
     }

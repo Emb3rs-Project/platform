@@ -41,4 +41,19 @@ class ObjectsController extends Controller
 
         return Inertia::render('Objects/Objects', ['instances' => $instances]);
     }
+
+    public function markers()
+    {
+        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+
+        $instances = Instance::with([
+            'template',
+            'template.category',
+            'location',
+        ])->whereIn('id', $teamInstances)->get();
+
+        return [
+            "instances" => $instances
+        ];
+    }
 }

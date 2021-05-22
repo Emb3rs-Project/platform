@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,7 +25,7 @@ class Project extends Model
     ];
 
     // Table locations
-    public function locations() : HasMany
+    public function locations(): HasMany
     {
         return $this->hasMany(Location::class, 'project_id');
     }
@@ -37,7 +37,7 @@ class Project extends Model
     }
 
     // Table simulations
-    public function simulations() : HasMany
+    public function simulations(): HasMany
     {
         return $this->hasMany(Simulation::class, 'project_id');
     }

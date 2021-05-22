@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Simulation extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,28 +25,28 @@ class Simulation extends Model
     ];
 
     /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'targetData' => 'array',
     ];
 
     // Table simulations
-    public function project() : BelongsTo
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
 
     // Table simulations
-    public function target() : BelongsTo
+    public function target(): BelongsTo
     {
         return $this->belongsTo(Target::class, 'target_id');
     }
 
     // Table simulations
-    public function simulationType() : BelongsTo
+    public function simulationType(): BelongsTo
     {
         return $this->belongsTo(SimulationType::class, 'simulation_type_id');
     }

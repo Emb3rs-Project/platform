@@ -24,7 +24,6 @@
 
     <amazing-map
       :centerValue="[38.7181959, -9.1975417]"
-      :instances="instances"
       ref="map"
     ></amazing-map>
 

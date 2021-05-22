@@ -9,9 +9,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UnitConversion extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
-    public function from() : BelongsTo
+    public function from(): BelongsTo
     {
         return $this->belongsTo(Unit::class, 'from_id');
     }

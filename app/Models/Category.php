@@ -10,21 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use  SoftDeletes;
 
     // Table categories
-    public function parent() : BelongsTo
+    public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
     // Table templates
-    public function templates() : HasMany
+    public function templates(): HasMany
     {
         return $this->hasMany(Template::class, 'category_id');
     }
 
-    public function children() : HasMany
+    public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
