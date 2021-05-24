@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Template extends Model
 {
-    use  SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast.

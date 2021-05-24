@@ -184,19 +184,19 @@ export default {
       (current) => {
         if (current.title === "Sinks") {
           objects.value = props.instances.filter(
-            (i) => i.template.category.type === "sink"
+            (i) => i.template?.category?.type === "sink"
           );
           return;
         }
         if (current.title === "Sources") {
           objects.value = props.instances.filter(
-            (i) => i.template.category.type === "source"
+            (i) => i.template?.category?.type === "source"
           );
           return;
         }
         if (current.title === "Links") {
           objects.value = props.instances.filter(
-            (i) => i.template.category.type === "link"
+            (i) => i.template?.category?.type === "link"
           );
           return;
         }

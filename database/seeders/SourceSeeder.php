@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Template;
 use Illuminate\Database\Seeder;
 
 class SourceSeeder extends Seeder
@@ -13,6 +15,14 @@ class SourceSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $category = Category::whereName("Sources")->first();
+        if (!$category) $category = Category::create(["name" => "Sources", "type" => "source"]);
+
+
+        Template::factory()
+            ->count(5)
+            ->isSource()
+            ->for($category)
+            ->create();
     }
 }

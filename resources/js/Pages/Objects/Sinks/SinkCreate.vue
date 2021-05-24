@@ -146,14 +146,33 @@ export default {
     const locations = keyParToSelect(props.locations);
     const selectedLocation = ref(locations.length ? locations[0] : null);
 
-    const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
-    if (selectedMarker.value) {
-      locations.unshift({
-        key: selectedMarker.value,
-        value: "Selected Marker",
-      });
-      selectedLocation.value = locations[0];
-    }
+    watch(
+      () => store.getters["map/selectedMarker"],
+      (val) => {
+        if (!!val) {
+          const oldLocation = locations.find(
+            (l) => l.value === "Selected Marker"
+          );
+          if (oldLocation) {
+            oldLocation.key = val.value;
+            return;
+          }
+          locations.unshift({
+            key: val.value,
+            value: "Selected Marker",
+          });
+          selectedLocation.value = locations[0];
+        } else {
+          const oldLocationIndex = locations.findIndex(
+            (l) => l.value === "Selected Marker"
+          );
+          if (oldLocationIndex !== -1) {
+            locations.splice(oldLocationIndex, 1);
+          }
+        }
+      },
+      { immediate: true }
+    );
 
     const form = useForm({
       sink: {
@@ -183,7 +202,7 @@ export default {
     watch(
       selectedLocation,
       (location) => {
-        form.location_id = location.key;
+        form.location_id = location?.key;
       },
       { immediate: true }
     );

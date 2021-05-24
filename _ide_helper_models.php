@@ -603,6 +603,7 @@ namespace App\Models{
  * @property-read int|null $template_grouping_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
+ * @method static \Database\Factories\TemplateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
  * @method static \Illuminate\Database\Query\Builder|Template onlyTrashed()
