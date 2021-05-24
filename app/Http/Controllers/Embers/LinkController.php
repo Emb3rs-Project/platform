@@ -11,7 +11,6 @@ use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class LinkController extends Controller
@@ -23,7 +22,7 @@ class LinkController extends Controller
      */
     public function index()
     {
-        $links = app(IndexesLinks::class)->index(Auth::user());
+        $links = app(IndexesLinks::class)->index();
 
         // return [
         //     'slideOver' => 'Objects/Links/LinkIndex',
@@ -60,7 +59,7 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresLinks::class)->store(Auth::user(), $request->all());
+        app(StoresLinks::class)->store($request->all());
 
         return Redirect::route('objects.links.index');
     }
@@ -73,7 +72,7 @@ class LinkController extends Controller
      */
     public function show($id)
     {
-        $link = app(ShowsLinks::class)->show(Auth::user(), $id);
+        $link = app(ShowsLinks::class)->show($id);
 
         return [
             "slideOver" => 'Objects/Links/LinkDetails',
@@ -95,7 +94,7 @@ class LinkController extends Controller
             $links,
             $locations,
             $link
-        ] = app(EditsLinks::class)->edit(Auth::user(), $id);
+        ] = app(EditsLinks::class)->edit($id);
 
         return [
             "slideOver" => 'Objects/Links/LinkEdit',
@@ -116,7 +115,7 @@ class LinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedLink = app(UpdatesLinks::class)->update(Auth::user(), $id, $request->all());
+        $updatedLink = app(UpdatesLinks::class)->update($id, $request->all());
 
         return Redirect::route('objects.links.show', $updatedLink->id);
     }
@@ -129,7 +128,7 @@ class LinkController extends Controller
      */
     public function destroy($id)
     {
-        app(DestroysLinks::class)->destroy(Auth::user(), $id);
+        app(DestroysLinks::class)->destroy($id);
 
         return Redirect::route('objects.index');
     }

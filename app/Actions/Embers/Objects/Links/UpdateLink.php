@@ -18,7 +18,7 @@ class UpdateLink implements UpdatesLinks
      * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, int $id, array $input)
+    public function update(int $id, array $input)
     {
         $link = Link::with(['geoSegments'])->findOrFail($id);
 
@@ -26,7 +26,7 @@ class UpdateLink implements UpdatesLinks
 
         $this->validate($input);
 
-        $link = $this->save($user, $link, $input);
+        $link = $this->save($link, $input);
 
         return $link;
     }
@@ -51,12 +51,11 @@ class UpdateLink implements UpdatesLinks
     /**
      * Save the Sink in the DB.
      *
-     * @param  mixed    $user
      * @param  Instance $sink
      * @param  array    $input
      * @return Instance
      */
-    protected function save(mixed $user, Link $link, array $input)
+    protected function save(Link $link, array $input)
     {
         $segments = $input['locationData']['segments'];
 
