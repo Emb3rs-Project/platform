@@ -39,10 +39,10 @@ class UpdateLink implements UpdatesLinks
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'locationData.segments.*.data.to.*' => ['required', 'numeric'],
-            'locationData.segments.*.data.from.*' => ['required', 'numeric'],
-            'description' => ['filled','string']
+            'name' => ['filled', 'string', 'max:255'],
+            'locationData.segments.*.data.to.*' => ['filled', 'numeric'],
+            'locationData.segments.*.data.from.*' => ['filled', 'numeric'],
+            'description' => ['filled', 'string']
         ])
         ->validate();
     }
@@ -56,18 +56,25 @@ class UpdateLink implements UpdatesLinks
      */
     protected function save(Link $link, array $input)
     {
-        $segments = $input['locationData']['segments'];
-
-        $link->name = $input['name'];
-        $link->description = $input['description'] ?? null;
-
-        foreach ($segments as $data) {
-            $segment = GeoSegment::create([
-                'data' => $data
-            ]);
-
-            $link->geoSegments()->attach($segment);
+        if (!empty($input['name'])) {
+            $link->name = $input['name'];
         }
+
+        if (!empty($input['description'])) {
+            $link->description = $input['description'];
+        }
+
+        if (!empty($input['locationData']['segments'])) {
+            foreach ($input['locationData']['segments'] as $data) {
+                $segment = GeoSegment::create([
+                    'data' => $data
+                ]);
+
+                $link->geoSegments()->attach($segment);
+            }
+        }
+
+        $link->save();
 
         return $link;
     }
