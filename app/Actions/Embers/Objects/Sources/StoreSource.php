@@ -36,18 +36,14 @@ class StoreSource implements StoresSources
      */
     protected function validate(array $input)
     {
-        // TODO: fix the validator
-        // Validator::make($input, [
-        //     'source' => ['required', 'array'],
-        //     'source.name' => ['filled', 'string', 'max:255'],
-        //     'equipments' => ['required', 'array'],
-        //     'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
-        //     'processes' => ['required', 'array'],
-        //     'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-        //     // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
-        //     // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
-        //     'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        // ])->validate();
+        Validator::make($input, [
+            'source.name' => ['filled', 'string', 'max:255'],
+            'equipments.*.key' => ['required', 'string', 'exists:categories,id'],
+            'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            // // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
+            // // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
+            'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
+        ])->validate();
     }
 
     /**
