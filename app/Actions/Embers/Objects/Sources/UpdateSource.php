@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,12 +15,11 @@ class UpdateSource implements UpdatesSources
     /**
      * Validate and update an existing instance.
      *
-     * @param  mixed  $user
-     * @param  int    $sink
+     * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, int $id, array $input)
+    public function update(int $id, array $input)
     {
         $source = Instance::findOrFail($id);
 
@@ -27,7 +27,7 @@ class UpdateSource implements UpdatesSources
 
         $this->validate($input);
 
-        $source = $this->save($user, $source, $input);
+        $source = $this->save($source, $input);
 
         return $source;
     }
@@ -56,12 +56,11 @@ class UpdateSource implements UpdatesSources
     /**
      * Save the Source in the DB.
      *
-     * @param  mixed    $user
      * @param  Instance $source
      * @param  array    $input
      * @return Instance
      */
-    protected function save(mixed $user, Instance $source, array $input)
+    protected function save(Instance $source, array $input)
     {
         // TODO: update processes
 

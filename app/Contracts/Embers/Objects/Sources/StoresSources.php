@@ -7,9 +7,8 @@ interface StoresSources
     /**
      * Validate and create a new Source.
      *
-     * @param  mixed  $user
      * @param  array  $input
      * @return mixed
      */
-    public function store($user, array $input);
+    public function store(array $input);
 }

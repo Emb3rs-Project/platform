@@ -15,12 +15,11 @@ class UpdateSink implements UpdatesSinks
     /**
      * Validate, update and return an existing instance.
      *
-     * @param  mixed  $user
-     * @param  int    $sink
+     * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, int $id, array $input)
+    public function update(int $id, array $input)
     {
         $sink = Instance::findOrFail($id);
 
@@ -28,7 +27,7 @@ class UpdateSink implements UpdatesSinks
 
         $this->validate($input);
 
-        $sink = $this->save($user, $sink, $input);
+        $sink = $this->save($sink, $input);
 
         return $sink;
     }
@@ -55,12 +54,11 @@ class UpdateSink implements UpdatesSinks
     /**
      * Save the Sink in the DB.
      *
-     * @param  mixed    $user
      * @param  Instance $sink
      * @param  array    $input
      * @return Instance
      */
-    protected function save(mixed $user, Instance $sink, array $input)
+    protected function save(Instance $sink, array $input)
     {
         // TODO: attach the user id to the entity
 

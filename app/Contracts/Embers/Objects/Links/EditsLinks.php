@@ -7,7 +7,7 @@ interface EditsLinks
     /**
      * Display the necessary objects for updating a given Link.
      *
-     * @param  int    $id
+     * @param  int  $id
      * @return mixed
      */
     public function edit(int $id);

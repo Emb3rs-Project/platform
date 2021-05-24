@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class IndexSink implements IndexesSinks
@@ -13,10 +14,9 @@ class IndexSink implements IndexesSinks
     /**
      * Display all the available Sinks.
      *
-     * @param mixed  $user
      * @return mixed
      */
-    public function index(mixed $user)
+    public function index()
     {
         Gate::authorize('viewAny', Instance::class);
 
@@ -28,7 +28,7 @@ class IndexSink implements IndexesSinks
             ->get()
             ->pluck('id');
 
-        $teamInstances = $user->currentTeam->instances->pluck('id');
+        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
 
         $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)

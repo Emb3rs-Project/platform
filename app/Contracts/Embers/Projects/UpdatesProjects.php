@@ -6,10 +6,9 @@ interface UpdatesProjects
     /**
      * Validate and update an existing Project.
      *
-     * @param  mixed  $user
-     * @param  int    $id
+     * @param  int  $id
      * @param  array  $input
      * @return mixed
      */
-    public function update($user, int $id, array $input);
+    public function update(int $id, array $input);
 }

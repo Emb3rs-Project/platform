@@ -48,7 +48,6 @@ class StoreLink implements StoresLinks
     /**
      * Save the Link in the DB.
      *
-     * @param  mixed  $user
      * @param  array  $input
      * @return void
      */

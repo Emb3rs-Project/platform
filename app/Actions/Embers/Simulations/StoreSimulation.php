@@ -13,12 +13,11 @@ class StoreSimulation implements StoresSimulations
     /**
      * Validate and create a new Link.
      *
-     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return Project
      */
-    public function store(mixed $user, int $projectId, array $input)
+    public function store(int $projectId, array $input)
     {
         Gate::authorize('create', Simulation::class);
 
@@ -28,7 +27,7 @@ class StoreSimulation implements StoresSimulations
 
         $this->validate($input);
 
-        $simulation = $this->save($user, $projectId, $input);
+        $simulation = $this->save($projectId, $input);
 
         return $simulation;
     }
@@ -53,12 +52,11 @@ class StoreSimulation implements StoresSimulations
     /**
      * Save the Link in the DB.
      *
-     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return Simulation
      */
-    protected function save(mixed $user, int $projectId, array $input)
+    protected function save(int $projectId, array $input)
     {
         $simulation = Simulation::create([
             'status' => $input['status'] ?? 'NEW',

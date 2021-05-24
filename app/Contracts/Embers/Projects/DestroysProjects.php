@@ -7,9 +7,8 @@ interface DestroysProjects
     /**
      * Delete an existing Project.
      *
-     * @param  mixed  $user
-     * @param  int    $id
+     * @param  int  $id
      * @return mixed
      */
-    public function destroy(mixed $user, int $id);
+    public function destroy(int $id);
 }

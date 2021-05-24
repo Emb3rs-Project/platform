@@ -7,7 +7,7 @@ interface UpdatesLinks
     /**
      * Validate and update an existing Link.
      *
-     * @param  int    $id
+     * @param  int  $id
      * @param  array  $input
      * @return mixed
      */

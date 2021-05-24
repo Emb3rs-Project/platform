@@ -14,11 +14,10 @@ class ShowSource implements ShowsSources
     /**
     * Find and return an existing Source.
     *
-    * @param mixed  $user
-    * @param int    $id
+    * @param  int  $id
     * @return mixed
     */
-    public function show(mixed $user, int $id)
+    public function show(int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])
             ->findOrFail($id);

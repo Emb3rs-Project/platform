@@ -12,11 +12,10 @@ class ShowProject implements ShowsProjects
     /**
      * Find and return an existing Project.
      *
-     * @param mixed  $user
-     * @param int    $id
+     * @param  int  $id
      * @return mixed
      */
-    public function show(mixed $user, int $id)
+    public function show(int $id)
     {
         $project = Project::with(['location'])->findOrFail($id);
 

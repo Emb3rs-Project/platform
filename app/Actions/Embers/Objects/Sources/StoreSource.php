@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Objects\Sources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Models\Instance;
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,17 +14,16 @@ class StoreSource implements StoresSources
     /**
      * Validate and create a new instance.
      *
-     * @param  mixed $user
-     * @param  array $input
+     * @param  array  $input
      * @return Instance
      */
-    public function store(mixed $user, array $input)
+    public function store(array $input)
     {
         Gate::authorize('create', Instance::class);
 
         $this->validate($input);
 
-        $source = $this->save($user, $input);
+        $source = $this->save($input);
 
         return $source;
     }
@@ -53,7 +53,7 @@ class StoreSource implements StoresSources
      * @param  array  $input
      * @return Instance
      */
-    protected function save(mixed $user, array $input)
+    protected function save(array $input)
     {
         // TODO: attach the user id to the entity
 
@@ -96,7 +96,7 @@ class StoreSource implements StoresSources
         }
 
         $instance = Instance::create($newInstance);
-        $instance->teams()->attach($user->currentTeam);
+        $instance->teams()->attach(Auth::user()->currentTeam);
 
         return $instance;
     }

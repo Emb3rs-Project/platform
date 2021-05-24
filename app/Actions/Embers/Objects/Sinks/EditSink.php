@@ -14,11 +14,10 @@ class EditSink implements EditsSinks
     /**
      * Display the necessary objects for updating a given Sink.
      *
-     * @param  mixed  $user
-     * @param  int    $id
+     * @param  int  $id
      * @return mixed
      */
-    public function edit($user, int $id)
+    public function edit(int $id)
     {
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

@@ -11,11 +11,10 @@ class ShowSink implements ShowsSinks
     /**
     * Find and return an existing Sink.
     *
-    * @param mixed  $user
-    * @param int    $id
+    * @param int  $id
     * @return mixed
     */
-    public function show(mixed $user, int $id)
+    public function show(int $id)
     {
         $sink = Instance::with([
             'location',

@@ -4,6 +4,7 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class IndexProject implements IndexesProjects
@@ -11,14 +12,13 @@ class IndexProject implements IndexesProjects
     /**
      * Display all the available Projects.
      *
-     * @param mixed  $user
      * @return [Project]
      */
-    public function index(mixed $user)
+    public function index()
     {
         Gate::authorize('viewAny', Project::class);
 
-        $teamProjects = $user->currentTeam->projects->pluck('id');
+        $teamProjects = Auth::user()->currentTeam->projects->pluck('id');
 
         $projects = Project::with(['location'])
             ->whereIn('id', $teamProjects)

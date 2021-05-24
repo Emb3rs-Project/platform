@@ -23,7 +23,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = app(IndexesProjects::class)->index(Auth::user());
+        $projects = app(IndexesProjects::class)->index();
 
         return [
             'slideOver' => 'Projects/ProjectIndex',
@@ -58,7 +58,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresProjects::class)->store(Auth::user(), $request->all());
+        app(StoresProjects::class)->store($request->all());
 
         return Redirect::route('projects.index');
     }
@@ -74,7 +74,7 @@ class ProjectController extends Controller
         [
             $project,
             $simulations
-        ] = app(ShowsProjects::class)->show(Auth::user(), $id);
+        ] = app(ShowsProjects::class)->show($id);
 
         return [
             'slideOver' => 'Projects/ProjectDetails',
@@ -96,7 +96,7 @@ class ProjectController extends Controller
         [
             $project,
             $locations,
-        ] = app(EditsProjects::class)->edit(Auth::user(), $id);
+        ] = app(EditsProjects::class)->edit($id);
 
         return [
             'slideOver' => 'Projects/ProjectEdit',
@@ -116,7 +116,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedProject = app(UpdatesProjects::class)->update(Auth::user(), $id, $request->all());
+        $updatedProject = app(UpdatesProjects::class)->update($id, $request->all());
 
         return Redirect::route('projects.show', $updatedProject->id);
     }
@@ -129,7 +129,7 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        app(DestroysProjects::class)->destroy(Auth::user(), $id);
+        app(DestroysProjects::class)->destroy($id);
 
         return Redirect::route('projects.index');
     }
