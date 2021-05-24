@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
@@ -85,5 +86,11 @@ class Team extends JetstreamTeam
             'team_id',
             'location_id'
         );
+    }
+
+    // Table team_roles
+    public function teamRoles(): HasMany
+    {
+        return $this->hasMany(TeamRole::class, 'team_id');
     }
 }
