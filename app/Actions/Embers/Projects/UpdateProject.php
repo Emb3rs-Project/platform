@@ -39,7 +39,7 @@ class UpdateProject implements UpdatesProjects
     {
         Validator::make($input, [
             'name' => ['filled', 'string', 'max:255'],
-            'description' => ['filled', 'string', 'max:255'],
+            'description' => ['filled', 'string'],
             'location_id' => ['filled', 'string', 'exists:locations,id']
         ])
         ->validate();

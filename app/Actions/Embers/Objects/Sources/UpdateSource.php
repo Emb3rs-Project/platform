@@ -41,11 +41,12 @@ class UpdateSource implements UpdatesSources
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'source' => ['required', 'array'],
+            'source' => ['filled', 'array'],
             'source.data.name' => ['filled', 'string', 'max:255'],
             'equipments' => ['filled', 'array'],
-            'equipments.*.id' => ['required', 'string', 'exists:categories,id'],
+            'equipments.*.key' => ['required', 'string', 'exists:categories,id'],
             'processes' => ['filled', 'array'],
+            'processes.*.key' => ['required', 'string', 'exists:categories,id'],
             'template_id' => ['filled', 'integer','numeric', 'exists:templates,id'],
             // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
@@ -62,7 +63,9 @@ class UpdateSource implements UpdatesSources
      */
     protected function save(Instance $source, array $input)
     {
-        // TODO: update processes
+        if (!empty($input['source']['data']['name'])) {
+            $source->name = $input['source']['data']['name'];
+        }
 
         if (!empty($input['equipments'])) {
             foreach ($input['equipments'] as $key => $value) {
@@ -75,8 +78,15 @@ class UpdateSource implements UpdatesSources
             ];
         }
 
-        if (!empty($input['source']['data']['name'])) {
-            $source->name = $input['source']['data']['name'];
+        if (!empty($input['equipments'])) {
+            foreach ($input['equipments'] as $key => $value) {
+                unset($input['equipments'][$key]['template']);
+            }
+
+            $source["values"] = [
+                "equipments" => $input['equipments'],
+                "info" => $source
+            ];
         }
 
         if (!empty($input['location_id'])) {

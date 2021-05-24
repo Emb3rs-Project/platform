@@ -23,8 +23,7 @@ class EditSimulation implements EditsSimulations
 
         Gate::authorize('view', $project);
 
-        $simulation = Simulation::with(['project', 'target', 'simulationType'])
-            ->findOrFail($simulationId);
+        $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
 
         Gate::authorize('view', $simulation);
 

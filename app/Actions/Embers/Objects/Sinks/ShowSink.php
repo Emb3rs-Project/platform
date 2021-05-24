@@ -16,11 +16,7 @@ class ShowSink implements ShowsSinks
     */
     public function show(int $id)
     {
-        $sink = Instance::with([
-            'location',
-            'template',
-            'template.category',
-        ])->findOrFail($id);
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         Gate::authorize('view', $sink);
 

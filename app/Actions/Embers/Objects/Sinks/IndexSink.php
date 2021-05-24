@@ -20,13 +20,9 @@ class IndexSink implements IndexesSinks
     {
         Gate::authorize('viewAny', Instance::class);
 
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 
-        $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get()
-            ->pluck('id');
+        $templates = Template::whereIn('category_id', $sinkCategories)->get()->pluck('id');
 
         $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
 

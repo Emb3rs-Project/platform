@@ -37,8 +37,12 @@ class StoreSource implements StoresSources
     protected function validate(array $input)
     {
         Validator::make($input, [
+            'source' => ['filled', 'array'],
             'source.name' => ['filled', 'string', 'max:255'],
+            'equipments' => ['filled', 'array'],
             'equipments.*.key' => ['required', 'string', 'exists:categories,id'],
+            'processes' => ['filled', 'array'],
+            'processes.*.key' => ['required', 'string', 'exists:categories,id'],
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             // // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
@@ -65,10 +69,16 @@ class StoreSource implements StoresSources
             unset($equipments[$key]['template']);
         }
 
+        $processes = $input['processes'];
+        foreach ($processes as $key => $value) {
+            unset($processes[$key]['template']);
+        }
+
         $newInstance = [
             "name" => 'Not Defined',
             "values" => [
                 "equipments" => $equipments,
+                "processes" => $processes,
                 "info" => $source
             ],
             "template_id" => $input['template_id'],

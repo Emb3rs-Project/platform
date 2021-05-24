@@ -38,7 +38,7 @@ class StoreProject implements StoresProjects
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['filled', 'string', 'max:255'],
+            'description' => ['filled', 'string'],
             'location_id' => ['required', 'string', 'exists:locations,id']
         ])
         ->validate();

@@ -37,9 +37,10 @@ class StoreSink implements StoresSinks
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'sink' => ['required', 'array'],
+            'sink' => ['filled', 'array'],
             'sink.data.name' => ['filled', 'string', 'max:255'],
-            // 'equipments' => ['present'], // Will change later
+            'equipments' => ['filled', 'array'],
+            'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
@@ -70,6 +71,10 @@ class StoreSink implements StoresSinks
         // Check if Property Name Exists
         if (!empty($sink['data']['name'])) {
             $newInstance['name'] = $sink['data']['name'];
+        }
+
+        if (!empty($input['equipments'])) {
+            $newInstance['name']['equipments'] = $input['equipments'];
         }
 
         // TODO: Adapt it to the new validation rules i.e. accept either location or location_id ONLY

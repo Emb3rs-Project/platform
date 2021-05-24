@@ -20,15 +20,11 @@ class CreateSource implements CreatesSources
     {
         Gate::authorize('create', Instance::class);
 
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+        $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get();
+        $equipmentCategories = Category::whereType('equipment')->get();
 
-        $processCategories = Category::whereType('process')
-            ->get();
+        $processCategories = Category::whereType('process')->get();
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([

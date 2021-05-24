@@ -19,18 +19,13 @@ class ShowSource implements ShowsSources
     */
     public function show(int $id)
     {
-        $source = Instance::with(['location', 'template', 'template.category'])
-            ->findOrFail($id);
+        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         Gate::authorize('view', $source);
 
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+        $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([

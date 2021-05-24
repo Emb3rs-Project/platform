@@ -23,13 +23,9 @@ class EditSink implements EditsSinks
 
         Gate::authorize('view', $sink);
 
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
 
         $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
             ->with([

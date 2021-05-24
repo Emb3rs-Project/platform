@@ -20,9 +20,7 @@ class IndexProject implements IndexesProjects
 
         $teamProjects = Auth::user()->currentTeam->projects->pluck('id');
 
-        $projects = Project::with(['location'])
-            ->whereIn('id', $teamProjects)
-            ->get();
+        $projects = Project::with(['location'])->whereIn('id', $teamProjects)->get();
 
         return $projects;
     }

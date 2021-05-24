@@ -23,13 +23,9 @@ class EditSource implements EditsSources
 
         Gate::authorize('view', $source);
 
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+        $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([

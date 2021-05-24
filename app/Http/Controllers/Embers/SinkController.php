@@ -61,9 +61,13 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSinks::class)->store($request->all());
+        $t = app(StoresSinks::class)->store($request->all());
 
-        return Redirect::route('objects.index');
+        return response()->json([
+            'sink' => $t
+        ]);
+
+        // return Redirect::route('objects.index');
     }
 
     /**
