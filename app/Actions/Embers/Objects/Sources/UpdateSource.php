@@ -41,16 +41,15 @@ class UpdateSource implements UpdatesSources
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'source' => ['filled', 'array'],
-            'source.data.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['filled', 'array'],
-            'equipments.*.key' => ['required', 'string', 'exists:categories,id'],
-            'processes' => ['filled', 'array'],
-            'processes.*.key' => ['required', 'string', 'exists:categories,id'],
-            'template_id' => ['filled', 'integer','numeric', 'exists:templates,id'],
-            // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
-            // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
-            'location_id' => ['filled'], // for now. Later remove current line and uncomment 2 above
+            'source.name' => ['filled', 'string', 'max:255'],
+            // 'equipments' => ['filled', 'array'],
+            'equipments.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            // 'processes' => ['filled', 'array'],
+            'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            'template_id' => ['filled', 'integer', 'numeric', 'exists:templates,id'],
+            // // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
+            // // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
+            'location_id' => ['filled'], // for now, later remove current line and uncomment 2 above
         ])->validate();
     }
 
@@ -63,8 +62,8 @@ class UpdateSource implements UpdatesSources
      */
     protected function save(Instance $source, array $input)
     {
-        if (!empty($input['source']['data']['name'])) {
-            $source->name = $input['source']['data']['name'];
+        if (!empty($input['source']['name'])) {
+            $source->name = $input['source']['name'];
         }
 
         if (!empty($input['equipments'])) {
