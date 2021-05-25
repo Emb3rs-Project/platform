@@ -57,7 +57,7 @@ class StoreLink implements StoresLinks
 
         $link = Link::create([
             'name' => $input['name'],
-            'description' => $input['description']
+            // 'description' => $input['description']
         ]);
 
         $link->teams()->attach(Auth::user()->currentTeam);

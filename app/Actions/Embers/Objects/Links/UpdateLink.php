@@ -40,8 +40,8 @@ class UpdateLink implements UpdatesLinks
     {
         // Validator::make($input, [
         //     'name' => ['filled', 'string', 'max:255'],
-        //     'locationData.segments.*.data.to.*' => ['filled', 'numeric'],
-        //     'locationData.segments.*.data.from.*' => ['filled', 'numeric'],
+        //     'segments.*.data.to.*' => ['filled', 'numeric'],
+        //     'segments.*.data.from.*' => ['filled', 'numeric'],
         //     'description' => ['filled', 'string']
         // ])
         // ->validate();
@@ -60,9 +60,9 @@ class UpdateLink implements UpdatesLinks
             $link->name = $input['name'];
         }
 
-        if (!empty($input['description'])) {
-            $link->description = $input['description'];
-        }
+        // if (!empty($input['description'])) {
+        //     $link->description = $input['description'];
+        // }
 
         if (!empty($input['segments'])) {
             foreach ($input['segments'] as $data) {
