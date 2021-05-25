@@ -116,12 +116,6 @@ export default {
       }
     });
 
-    store.subscribeAction(({ type, payload }) => {
-      if (type === "map/refreshMap") {
-        Inertia.visit(route("objects.index"), null, { only: ["instances"] });
-      }
-    });
-
     const toggleIndexComponent = () =>
       store.dispatch("objects/showSlide", {
         route: "objects.list",

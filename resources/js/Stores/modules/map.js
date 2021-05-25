@@ -1,4 +1,5 @@
 const _state = () => ({
+    focusedMarker: null,
     selectedMarker: null,
     selectedMarkerColor: 'green'
 });
@@ -14,13 +15,15 @@ const actions = {
     selectMarker: ({ commit, state }, { marker, color }) => {
         commit("selectMarker", marker)
         commit("selectMarkerColor", color)
-    }
+    },
+    focusMarker: ({ commit }, marker) => { commit("focusMarker", marker) },
+    unfocusMarker: ({ commit }) => { commit("focusMarker", null) }
 };
 
 const mutations = {
     selectMarker: (state, marker) => state.selectedMarker = marker,
     selectMarkerColor: (state, color) => state.selectedMarkerColor = color,
-    setMap: (state, payload) => state.map = payload.map,
+    focusMarker: (state, marker) => state.focusedMarker = marker
 };
 
 

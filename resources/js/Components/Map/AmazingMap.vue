@@ -13,6 +13,8 @@ import "leaflet-contextmenu";
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 import { useStore } from "vuex";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   props: {
@@ -32,6 +34,14 @@ export default {
     });
 
     const instances = ref([]);
+
+    watch(
+      instances,
+      (_i) => {
+        if (map.value) loadMarkers();
+      },
+      { immediate: true, deep: true }
+    );
 
     const currentSegment = {
       from: null,
@@ -230,7 +240,11 @@ export default {
     };
 
     const onCenterLocation = (loc) => {
-      mapUtils.centerAtLocation(map.value, loc.geo_object);
+      mapUtils.centerAtLocation(map.value, loc);
+      const allMarkers = mapObjects.value.all.getLayers();
+      const geo = L.latLng(loc.data?.center);
+      const m = allMarkers.find((_m) => _m.getLatLng().distanceTo(geo) === 0);
+      mapUtils.focusMarker(map.value, m, mapObjects.value);
     };
 
     const onMarkerClick = (instance) => {
@@ -242,6 +256,7 @@ export default {
             route: "objects.sinks.show",
             props: instance.id,
           });
+          onCenterLocation(instance.location);
           break;
         case "source":
           store.dispatch("objects/showSlide", {
@@ -253,6 +268,23 @@ export default {
           break;
       }
     };
+
+    const loadMarkers = () => {
+      console.log("loading markers ", instances.value);
+      if (instances.value?.length > 0) {
+        mapUtils.addInstances(
+          map.value,
+          instances.value,
+          mapObjects.value,
+          onMarkerClick
+        );
+      }
+    };
+
+    const refreshInstance = () =>
+      axios.get(route("objects.markers")).then(({ data }) => {
+        instances.value = data.instances;
+      });
 
     onMounted(() => {
       map.value = mapUtils.init("map", center.value, {
@@ -270,20 +302,18 @@ export default {
         ({ target }) => (center.value = target.getCenter())
       );
 
-      if (props.instances?.length > 0) {
-        mapUtils.addInstances(
-          map.value,
-          props.instances,
-          mapObjects.value,
-          onMarkerClick
-        );
-      }
+      refreshInstance();
     });
 
     store.subscribeAction(({ type, payload }) => {
       if (type === "map/centerAt") {
         const { marker } = payload;
         onCenterLocation(marker);
+      }
+
+      if (type === "map/refreshMap") {
+        mapUtils.removeAllInstances(map.value, mapObjects.value);
+        refreshInstance();
       }
     });
 

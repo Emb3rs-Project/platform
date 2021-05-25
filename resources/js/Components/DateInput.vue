@@ -1,10 +1,7 @@
 <template>
   <div class="flex flex-1 flex-col md:flex-row">
     <div class="w-ful pl-0 md:pl-4">
-      <label
-        for="name"
-        class="block text-sm text-indigo-400 mb-2"
-      >
+      <label for="name" class="block text-sm text-indigo-400 mb-2">
         <slot></slot>
       </label>
       <input
@@ -22,28 +19,28 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      placeholder: String,
-      modelValue: String,
-      required: Boolean,
-      disabled: Boolean,
+export default {
+  props: {
+    placeholder: String,
+    modelValue: String,
+    required: Boolean,
+    disabled: Boolean,
+  },
+  emits: ["update:modelValue"],
+  methods: {
+    focus() {
+      this.$refs.input.focus();
     },
-    emits: ["update:modelValue"],
-    methods: {
-      focus() {
-        this.$refs.input.focus();
+  },
+  computed: {
+    value: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit("update:modelValue", value);
       },
     },
-    computed: {
-      value: {
-        get() {
-          return this.modelValue;
-        },
-        set(value) {
-          this.$emit("update:modelValue", value);
-        },
-      },
-    },
-  };
+  },
+};
 </script>

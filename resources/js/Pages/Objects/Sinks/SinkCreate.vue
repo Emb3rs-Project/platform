@@ -38,7 +38,7 @@
       </div>
       <div class="sm:col-span-2">
         <select-menu
-          v-model="selectedLocation"
+          v-model="form.location_id"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
         ></select-menu>
@@ -144,35 +144,6 @@ export default {
     const selectedTemplate = ref(templates.length ? templates[0] : null);
 
     const locations = keyParToSelect(props.locations);
-    const selectedLocation = ref(locations.length ? locations[0] : null);
-
-    watch(
-      () => store.getters["map/selectedMarker"],
-      (val) => {
-        if (!!val) {
-          const oldLocation = locations.find(
-            (l) => l.value === "Selected Marker"
-          );
-          if (oldLocation) {
-            oldLocation.key = val.value;
-            return;
-          }
-          locations.unshift({
-            key: val.value,
-            value: "Selected Marker",
-          });
-          selectedLocation.value = locations[0];
-        } else {
-          const oldLocationIndex = locations.findIndex(
-            (l) => l.value === "Selected Marker"
-          );
-          if (oldLocationIndex !== -1) {
-            locations.splice(oldLocationIndex, 1);
-          }
-        }
-      },
-      { immediate: true }
-    );
 
     const form = useForm({
       sink: {
@@ -181,6 +152,35 @@ export default {
       template_id: null,
       location_id: null,
     });
+
+    watch(
+      () => store.getters["map/selectedMarker"],
+      (val) => {
+        console.log("marker", val);
+        if (!!val) {
+          const oldLocation = locations.find(
+            (l) => l.value === "Selected Marker"
+          );
+          if (oldLocation) {
+            oldLocation.key = val;
+          } else {
+            locations.unshift({
+              key: val,
+              value: "Selected Marker",
+            });
+          }
+        } else {
+          const oldLocationIndex = locations.findIndex(
+            (l) => l.value === "Selected Marker"
+          );
+          if (oldLocationIndex !== -1) {
+            locations.splice(oldLocationIndex, 1);
+          }
+        }
+        form.location_id = locations[0];
+      },
+      { immediate: true }
+    );
 
     watch(
       selectedTemplate,
@@ -195,14 +195,6 @@ export default {
               : "";
           }
         }
-      },
-      { immediate: true }
-    );
-
-    watch(
-      selectedLocation,
-      (location) => {
-        form.location_id = location?.key;
       },
       { immediate: true }
     );
@@ -225,6 +217,7 @@ export default {
     );
 
     const submit = () => {
+      form.location_id = form.location_id?.key;
       form.post(route("objects.sinks.store"), {
         onSuccess: () => {
           store.dispatch("map/refreshMap");
@@ -238,7 +231,6 @@ export default {
       templates,
       selectedTemplate,
       locations,
-      selectedLocation,
       form,
       open,
       properties,
