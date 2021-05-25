@@ -34,6 +34,8 @@ class LinkController extends Controller
         // return response()->json([
         //     'links' => $links
         // ]);
+
+        return Redirect::route('objects.index');
     }
 
     /**
