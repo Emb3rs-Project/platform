@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
+use App\Contracts\Embers\Objects\Sinks\SharesSinks;
 use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
@@ -63,11 +64,11 @@ class SinkController extends Controller
     {
         $t = app(StoresSinks::class)->store($request->all());
 
-        return response()->json([
-            'sink' => $t
-        ]);
+        // return response()->json([
+        //     'sink' => $t
+        // ]);
 
-        // return Redirect::route('objects.index');
+        return Redirect::route('objects.index');
     }
 
     /**
@@ -139,5 +140,27 @@ class SinkController extends Controller
         app(DestroysSinks::class)->destroy($id);
 
         return Redirect::route('objects.index');
+    }
+
+    /**
+     * Share the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function share($id)
+    {
+        $sink = app(SharesSinks::class)->show($id);
+
+        // return [
+        //     "slideOver" => 'Objects/Sinks/SinkShare',
+        //     "props" => [
+        //         "instance" => $sink
+        //     ]
+        // ];
+
+        return response()->json([
+            "instance" => $sink
+        ]);
     }
 }
