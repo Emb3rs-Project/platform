@@ -179,7 +179,12 @@ export default {
     const submit = () => {
       form.segments = linkList.value;
 
-      form.post(route("objects.links.store"));
+      form.post(route("objects.links.store"), {
+        onSuccess: () => {
+          store.dispatch("map/refreshMap");
+          store.dispatch("objects/showSlide", { route: "objects.list" });
+        },
+      });
     };
 
     const open = computed({
