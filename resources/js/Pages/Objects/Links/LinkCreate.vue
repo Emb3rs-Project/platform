@@ -112,6 +112,40 @@
                   </div>
                 </div>
               </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    Cost/m
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.cost" :disabled="true">
+                    </text-input>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    Depth
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.depth" :disabled="true">
+                    </text-input>
+                  </div>
+                </div>
+              </div>
             </DisclosurePanel>
           </transition>
         </Disclosure>
