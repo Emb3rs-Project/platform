@@ -45,8 +45,24 @@
       </div>
     </div>
 
-    <!-- Sink Properties -->
+    <!-- Sink Name -->
     <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <div>
+        <label
+          for="project_name"
+          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+        >
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <text-input v-model="form.sink.data.name" :label="'Name'"> </text-input>
+      </div>
+    </div>
+
+    <!-- Sink Properties -->
+    <!-- <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
       v-for="prop in properties"
       :key="prop.id"
@@ -81,8 +97,8 @@
           </select-menu>
         </div>
       </div>
-    </div>
-    <pre>{{ instance }}</pre>
+      <pre>{{ prop }}</pre>
+    </div> -->
 
     <template #actions>
       <secondary-outlined-button
@@ -100,17 +116,7 @@
 </template>
 
 <script>
-import {
-  ref,
-  watch,
-  computed,
-  onBeforeUpdate,
-  onUpdated,
-  onUnmounted,
-  onErrorCaptured,
-  onRenderTracked,
-  onRenderTriggered,
-} from "vue";
+import { ref, watch, computed, onBeforeUpdate } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 // import { Inertia } from '@inertiajs/inertia'
 
@@ -165,7 +171,7 @@ export default {
       sink: {
         data: {},
       },
-      equipments: [],
+      //   equipments: [],
       template_id: null,
       location_id: null,
     });
@@ -188,23 +194,10 @@ export default {
     const selectedTemplate = ref(
       templates.value.find((t) => t.key === props.instance.template.id)
     );
-    console.log(selectedTemplate.value);
+
     const selectedLocation = ref(
       locations.value.find((l) => l.key === props.instance.location.id)
     );
-    console.log(selectedLocation.value);
-    // const equipmentTemplates = props.equipments.map((t) => ({
-    //   key: t.id,
-    //   value: t.name,
-    // }));
-    // const selectedEquipmentTemplate = ref(
-    //   equipmentTemplates.length ? equipmentTemplates[0] : null
-    // );
-
-    // const locations = props.locations.map((t) => ({
-    //   key: t.id,
-    //   value: t.name,
-    // }));
 
     watch(
       selectedTemplate,
@@ -213,29 +206,7 @@ export default {
           (t) => t.id === selectedTemplate.key
         );
         form.template_id = selectedTemplate.key;
-
-        // @geocfu: revisit this at a later stage
-        //
-        // form.equipments = [];
-        // // Check if there are Children
-        // if (templateInfo.value.values.children) {
-        //   for (const child of templateInfo.value.values.children) {
-        //     const equipment = props.equipments.find((t) => t.id === child.key);
-        //     const equip = {
-        //       id: child.key,
-        //       data: {},
-        //       template: equipment,
-        //     };
-        //     // Load Default Values
-        //     for (const prop of equip.template.template_properties) {
-        //       equip.data[prop.property.symbolic_name] = prop.default_value
-        //         ? prop.default_value
-        //         : "";
-        //     }
-
-        //     form.equipments.push(equip);
-        //   }
-        // }
+        form.sink.data.name = props.instance.name;
 
         if (templateInfo.value?.template_properties) {
           for (const prop of templateInfo.value?.template_properties) {
@@ -245,7 +216,15 @@ export default {
           }
         }
       },
-      { immediate: true }
+      { immediate: true, deep: true }
+    );
+
+    watch(
+      selectedLocation,
+      (selectedLocation) => {
+        form.location_id = selectedLocation.key;
+      },
+      { immediate: true, deep: true }
     );
 
     const open = computed({
@@ -258,15 +237,15 @@ export default {
     );
 
     const submit = () => {
-      form.post(route("objects.sinks.edit"));
+      form.patch(route("objects.sinks.update", props.instance.id), {
+        onError: (e) => console.log(e),
+      });
     };
 
     return {
       templateInfo,
       templates,
       selectedTemplate,
-      //   equipmentTemplates,
-      //   selectedEquipmentTemplate,
       locations,
       selectedLocation,
       form,
@@ -279,26 +258,6 @@ export default {
   },
 
   methods: {
-    // @geocfu: revisit this at a later stage
-    // addEquipment() {
-    //   const equipment = this.equipments.find(
-    //     (t) => t.id === this.selectedEquipment
-    //   );
-    //   const equip = {
-    //     id: child,
-    //     data: {},
-    //     template: equipment,
-    //   };
-    //   // Load Default Values
-    //   for (const prop of equip.template.template_properties) {
-    //     equip.data[prop.property.symbolic_name] = prop.default_value
-    //       ? prop.default_value
-    //       : "";
-    //   }
-
-    //   form.equipments.push(equip);
-    // },
-
     onLocationSelect(locId) {},
   },
 };
