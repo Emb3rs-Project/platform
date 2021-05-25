@@ -64,8 +64,8 @@ class UpdateLink implements UpdatesLinks
             $link->description = $input['description'];
         }
 
-        if (!empty($input['locationData']['segments'])) {
-            foreach ($input['locationData']['segments'] as $data) {
+        if (!empty($input['segments'])) {
+            foreach ($input['segments'] as $data) {
                 $segment = GeoSegment::create([
                     'data' => $data
                 ]);
