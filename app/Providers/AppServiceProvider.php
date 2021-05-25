@@ -14,6 +14,7 @@ use App\Actions\Embers\Objects\Sinks\CreateSink;
 use App\Actions\Embers\Objects\Sinks\DestroySink;
 use App\Actions\Embers\Objects\Sinks\EditSink;
 use App\Actions\Embers\Objects\Sinks\IndexSink;
+use App\Actions\Embers\Objects\Sinks\ShareSink;
 use App\Actions\Embers\Objects\Sinks\ShowSink;
 use App\Actions\Embers\Objects\Sinks\StoreSink;
 use App\Actions\Embers\Objects\Sinks\UpdateSink;
@@ -74,6 +75,7 @@ class AppServiceProvider extends ServiceProvider
         Embers::editSinksUsing(EditSink::class);
         Embers::updateSinksUsing(UpdateSink::class);
         Embers::destroySinksUsing(DestroySink::class);
+        Embers::shareSinksUsing(ShareSink::class);
 
         Embers::indexSourcesUsing(IndexSource::class);
         Embers::createSourcesUsing(CreateSource::class);

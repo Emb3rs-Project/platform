@@ -20,6 +20,7 @@ use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
+use App\Contracts\Embers\Objects\Sinks\SharesSinks;
 use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
@@ -117,6 +118,17 @@ class Embers
     public static function destroySinksUsing(string $class)
     {
         return app()->singleton(DestroysSinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to share a given Sink.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function shareSinksUsing(string $class)
+    {
+        return app()->singleton(SharesSinks::class, $class);
     }
 
     /**
