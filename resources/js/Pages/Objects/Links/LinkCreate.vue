@@ -73,7 +73,8 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.from"> </text-input>
+                    <text-input v-model="link.from" :disabled="true">
+                    </text-input>
                   </div>
                 </div>
               </div>
@@ -89,7 +90,8 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.to"> </text-input>
+                    <text-input v-model="link.to" :disabled="true">
+                    </text-input>
                   </div>
                 </div>
               </div>
@@ -105,7 +107,8 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.distance"> </text-input>
+                    <text-input v-model="link.distance" :disabled="true">
+                    </text-input>
                   </div>
                 </div>
               </div>
