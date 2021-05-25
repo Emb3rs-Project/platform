@@ -126,7 +126,8 @@ class SinkController extends Controller
     {
         $updatedSink = app(UpdatesSinks::class)->update($id, $request->all());
 
-        return Redirect::route('objects.sinks.show', $updatedSink->id);
+        // return Redirect::route('objects.sinks.show', $updatedSink->id);
+        return Redirect::route('objects.index');
     }
 
     /**
