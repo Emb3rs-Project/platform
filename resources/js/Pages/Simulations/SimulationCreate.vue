@@ -3,12 +3,7 @@
     <div class="bg-white">
       <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
         <div class="lg:grid lg:grid-cols-3 lg:gap-8">
-          <div>
-            <h2 class="text-3xl font-extrabold text-gray-900">
-              Simulation Create
-            </h2>
-          </div>
-          <div class="mt-12 lg:mt-0 lg:col-span-2">
+          <div class="mt-12 lg:mt-0 lg:col-span-3">
             <div class="mt-10 sm:mt-0 p-10">
               <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1">
