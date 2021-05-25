@@ -107,7 +107,11 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.distance" :disabled="true">
+                    <text-input
+                      v-model="link.distance"
+                      :disabled="true"
+                      unit="m"
+                    >
                     </text-input>
                   </div>
                 </div>
@@ -119,13 +123,12 @@
                   <label
                     class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
                   >
-                    Cost/m
+                    Cost
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.cost" :disabled="true">
-                    </text-input>
+                    <text-input v-model="link.cost" unit="€/m"> </text-input>
                   </div>
                 </div>
               </div>
@@ -141,8 +144,7 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.depth" :disabled="true">
-                    </text-input>
+                    <text-input v-model="link.depth" unit="m"> </text-input>
                   </div>
                 </div>
               </div>
