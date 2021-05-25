@@ -90,7 +90,7 @@ export default {
       if (!newPath) return;
       let _route = "";
 
-      if (newPath.includes("show")) {
+      if (newPath.includes("show") || newPath.includes("edit")) {
         let props = store.getters["objects/currentRouteProps"];
         _route = route(newPath, props);
       } else {
