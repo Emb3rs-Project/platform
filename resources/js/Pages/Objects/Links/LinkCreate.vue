@@ -107,8 +107,44 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.distance" :disabled="true">
+                    <text-input
+                      v-model="link.distance"
+                      :disabled="true"
+                      unit="m"
+                    >
                     </text-input>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    Cost
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.cost" unit="€/m"> </text-input>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    Depth
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.depth" unit="m"> </text-input>
                   </div>
                 </div>
               </div>
@@ -179,7 +215,12 @@ export default {
     const submit = () => {
       form.segments = linkList.value;
 
-      form.post(route("objects.links.store"));
+      form.post(route("objects.links.store"), {
+        onSuccess: () => {
+          store.dispatch("map/refreshMap");
+          store.dispatch("objects/showSlide", { route: "objects.list" });
+        },
+      });
     };
 
     const open = computed({
