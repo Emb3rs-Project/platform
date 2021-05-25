@@ -3,12 +3,16 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\StoresSources;
+use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Instance;
 use App\Models\Location;
+use App\Nova\Actions\InstanceProcessing;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Nova\Fields\ActionFields;
 
 class StoreSource implements StoresSources
 {
@@ -107,6 +111,24 @@ class StoreSource implements StoresSources
 
         $instance = Instance::create($newInstance);
         $instance->teams()->attach(Auth::user()->currentTeam);
+
+
+        /*
+STUFF
+*/
+
+        $action = new InstanceProcessing();
+        $user_id = Auth::user()->id;
+
+
+        DispatchCustomAction::queue
+
+        DispatchCustomAction::dispatchAction(
+            $action,
+            new ActionFields(new Collection(), new Collection()),
+            [$instance],
+            $user_id
+        );
 
         return $instance;
     }
