@@ -12,6 +12,7 @@ use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
 {
@@ -25,13 +26,13 @@ class ProjectSimulationController extends Controller
     {
         $simulations = app(IndexesSimulations::class)->index($projectId);
 
-        return response()->json([
-            'simulations' => $simulations
-        ]);
-
-        // return Inertia::render('Simulations/SimulationIndex', [
+        // return response()->json([
         //     'simulations' => $simulations
         // ]);
+
+        return Inertia::render('Simulations/SimulationIndex', [
+            'simulations' => $simulations
+        ]);
     }
 
     /**
@@ -50,21 +51,21 @@ class ProjectSimulationController extends Controller
             $locations
         ] = app(CreatesSimulations::class)->create($projectId);
 
-        return response()->json([
-            'simulationTypes' => $simulationTypes,
-            'sources' => $sources,
-            'sinks' => $sinks,
-            'links' => $links,
-            'locations' => $locations,
-        ]);
-
-        // return Inertia::render('Simulations/SimulationCreate', [
+        // return response()->json([
         //     'simulationTypes' => $simulationTypes,
         //     'sources' => $sources,
         //     'sinks' => $sinks,
         //     'links' => $links,
         //     'locations' => $locations,
         // ]);
+
+        return Inertia::render('Simulations/SimulationCreate', [
+            'simulationTypes' => $simulationTypes,
+            'sources' => $sources,
+            'sinks' => $sinks,
+            'links' => $links,
+            'locations' => $locations,
+        ]);
     }
 
     /**

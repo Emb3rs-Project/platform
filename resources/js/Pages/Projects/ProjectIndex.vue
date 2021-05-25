@@ -36,6 +36,9 @@
                           >
                             Location
                           </th>
+                          <th scope="col" class="relative px-6 py-3">
+                            <span class="sr-only">Edit</span>
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -60,6 +63,18 @@
                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                           >
                             {{ project.location.name }}
+                          </td>
+                          <td
+                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
+                          >
+                            <a
+                              :href="
+                                route('projects.simulations.create', project.id)
+                              "
+                              class="text-indigo-600 hover:text-indigo-900"
+                            >
+                              Create Simulation
+                            </a>
                           </td>
                         </tr>
                       </tbody>
