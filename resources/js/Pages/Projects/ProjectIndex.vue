@@ -3,13 +3,7 @@
     <div class="bg-white">
       <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
         <div class="lg:grid lg:grid-cols-3 lg:gap-8">
-          <div>
-            <h2 class="text-3xl font-extrabold text-gray-900">Projects</h2>
-          </div>
-          <primary-link-button class="w-24" :path="'projects.create'">
-            Create a Project
-          </primary-link-button>
-          <div class="mt-12 lg:mt-0 lg:col-span-2">
+          <div class="mt-12 lg:mt-0 lg:col-span-3">
             <div class="flex flex-col">
               <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div
@@ -87,6 +81,9 @@
               </div>
             </div>
           </div>
+          <primary-link-button class="w-48" :path="'projects.create'">
+            Create a Project
+          </primary-link-button>
         </div>
       </div>
     </div>
