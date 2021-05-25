@@ -223,7 +223,10 @@ export default {
 
           if (_type === "source")
             Inertia.delete(
-              route(`objects.sources.destroy`, itemToDelete.value.id)
+              route(`objects.sources.destroy`, itemToDelete.value.id),
+              {
+                onSuccess: () => store.dispatch("map/refreshMap"),
+              }
             );
           if (_type === "sink")
             Inertia.delete(

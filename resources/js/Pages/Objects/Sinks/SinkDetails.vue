@@ -94,7 +94,7 @@
     </div>
 
     <template #actions>
-      <secondary-outlined-button type="button" @click="open = false">
+      <secondary-outlined-button type="button" @click="onClose()">
         Cancel
       </secondary-outlined-button>
       <primary-button
@@ -153,6 +153,8 @@ export default {
     return {
       open,
       onRouteRequest,
+      onClose: () =>
+        store.dispatch("objects/showSlide", { route: "objects.list" }),
     };
   },
 };

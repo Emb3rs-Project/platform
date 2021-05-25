@@ -99,7 +99,7 @@ export default {
                 break;
         }
     },
-    addPoint(map, center, { icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false } = {}) {
+    addPoint(map, center, { icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false, type = 'sink' } = {}) {
         const iconOptions = {
             icon,
             textColor: null,
@@ -114,7 +114,10 @@ export default {
             draggable,
             contextmenu: true,
             contextmenuWidth: 140,
-            contextmenuItems: []
+            contextmenuItems: [],
+            defaultTextClass: textClass,
+            defaultBorderClass: borderClass,
+            instanceType: type
         })
             .addTo(map);
     },
@@ -143,7 +146,8 @@ export default {
         sources: null,
         sinks: null,
         links: null,
-        all: null
+        all: null,
+        layerControl: null
     }, onMarkerClick = () => { }) {
         const sources = []
         const sinks = []
@@ -171,12 +175,14 @@ export default {
                     iconOptions.icon = 'leaf'
                     iconOptions.textClass = 'text-green-700'
                     iconOptions.borderClass = 'border-green-700'
+                    iconOptions.type = 'sink'
                     sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
                     break;
                 case 'source':
                     iconOptions.icon = 'fire'
                     iconOptions.textClass = 'text-red-700'
                     iconOptions.borderClass = 'border-red-700'
+                    iconOptions.type = 'source'
                     sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
                     break;
             }
@@ -185,13 +191,50 @@ export default {
         mapObjects.sinks = L.layerGroup(sinks)
         mapObjects.sources = L.layerGroup(sources)
         mapObjects.all = L.layerGroup([...sinks, ...sources])
+    },
+    createIconOptions(type, inFocus = false) {
+        const iconOptions = {
+            icon: '',
+            textClass: '',
+            borderClass: '',
+            textColor: null,
+            borderColor: null,
+            draggale: false,
+            iconShape: "marker",
+        }
 
-        L.control.layers({ 'Sinks': mapObjects.sinks, 'Sources': mapObjects.sources, 'All': mapObjects.all }, null, { position: 'topleft' }).addTo(map);
+        switch (type) {
+            case 'sink':
+                iconOptions.icon = 'leaf'
+                iconOptions.textClass = 'text-green-700'
+                iconOptions.borderClass = 'border-green-700'
+                iconOptions.type = 'sink'
+                break;
+            case 'source':
+                iconOptions.icon = 'fire'
+                iconOptions.textClass = 'text-red-700'
+                iconOptions.borderClass = 'border-red-700'
+                iconOptions.type = 'source'
+                break;
+        }
+
+        if (inFocus) {
+            iconOptions.textClass = 'text-yellow-500'
+            iconOptions.borderClass = 'border-yellow-500'
+        }
+
+
+
+        iconOptions.customClasses = [iconOptions.textClass, iconOptions.borderClass].join(" ") + ""
+
+        return iconOptions
     },
     removeAllInstances(map, mapObjects = {
         sources: null,
         sinks: null,
-        links: null
+        links: null,
+        all: null,
+        layerControl: null
     }) {
         for (let marker of Object.values(mapObjects)) {
             map.removeLayer(marker)
@@ -202,36 +245,20 @@ export default {
             sinks: null,
             links: null
         }
+
+        mapObjects.layerControl?.removeFrom(map)
+    },
+    focusMarker(map, marker, mapObjects) {
+        const allMarkers = mapObjects.all.getLayers();
+
+        for (const _m of allMarkers) {
+            const _opt = this.createIconOptions(_m.options.instanceType)
+            _m.setIcon(L.BeautifyIcon.icon(_opt))
+        }
+
+        const iconOptions = this.createIconOptions(marker.options.instanceType, true)
+        const _icon = L.BeautifyIcon.icon(iconOptions)
+
+        marker.setIcon(_icon)
     }
 }
-
-// addPoint(map, center , options)
-//
-
-
-// addPoint(map, center, {icon, textClass, borderClass, draggable} = {icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false })
-// appPoint(map, [])
-// options = null
-// icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false
-
-// addPoint(map, [], { icon : 'fire' })
-// options = {icon : 'fire'}
-// icon = 'fire', textClass = null, borderClass = null, draggable = null
-
-
-// addPoint(map, center, _options) {
-//     const options = Object.assign( {icon : 'leaf', textClass : 'text-green-700', borderClass : 'border-green-700', draggable : false }, _options)
-//     const iconOptions = {
-//         icon : options.icon,
-//         textColor: null,
-//         borderColor: null,
-//         iconShape: "marker",
-//         customClasses: [options.textClass, options.borderClass].join(" ")
-//     };
-
-
-//     return L.marker(L.latLng(center), {
-//         icon: L.BeautifyIcon.icon(iconOptions),
-//         draggable : options.draggable,
-//     }).addTo(map);
-// }
