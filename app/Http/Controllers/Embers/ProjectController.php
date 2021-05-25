@@ -11,8 +11,8 @@ use App\Contracts\Embers\Projects\StoresProjects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
@@ -25,12 +25,7 @@ class ProjectController extends Controller
     {
         $projects = app(IndexesProjects::class)->index();
 
-        return [
-            'slideOver' => 'Projects/ProjectIndex',
-            'props' => [
-                'projects' => $projects
-            ]
-        ];
+        return Inertia::render('Projects/ProjectIndex', ['projects' => $projects]);
     }
 
     /**
