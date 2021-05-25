@@ -120,6 +120,7 @@ import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
 import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import { useStore } from "vuex";
 
 export default {
   components: {
@@ -155,6 +156,7 @@ export default {
   },
 
   setup(props, { emit }) {
+    const store = useStore();
     onBeforeUpdate(() => {
       console.log("onBeforeUpdate");
     });
