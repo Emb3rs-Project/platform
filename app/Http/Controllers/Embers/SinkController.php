@@ -12,7 +12,6 @@ use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use \Illuminate\Support\Facades\Redirect;
 
 class SinkController extends Controller
@@ -24,7 +23,7 @@ class SinkController extends Controller
      */
     public function index()
     {
-        $sinks = app(IndexesSinks::class)->index(Auth::user());
+        $sinks = app(IndexesSinks::class)->index();
 
         // return Inertia::render('Objects/Sinks/SinkIndex', [
         //     'sinks' => $sinks
@@ -62,9 +61,13 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSinks::class)->store($request->user(), $request->all());
+        $t = app(StoresSinks::class)->store($request->all());
 
-        return Redirect::route('objects.index');
+        return response()->json([
+            'sink' => $t
+        ]);
+
+        // return Redirect::route('objects.index');
     }
 
     /**
@@ -75,7 +78,7 @@ class SinkController extends Controller
      */
     public function show($id)
     {
-        $sink = app(ShowsSinks::class)->show(Auth::user(), $id);
+        $sink = app(ShowsSinks::class)->show($id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkDetails',
@@ -98,7 +101,7 @@ class SinkController extends Controller
             $equipments,
             $locations,
             $instance
-        ] = app(EditsSinks::class)->edit(Auth::user(), $id);
+        ] = app(EditsSinks::class)->edit($id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkEdit',
@@ -120,7 +123,7 @@ class SinkController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
+        $updatedSink = app(UpdatesSinks::class)->update($id, $request->all());
 
         return Redirect::route('objects.sinks.show', $updatedSink->id);
     }
@@ -133,7 +136,7 @@ class SinkController extends Controller
      */
     public function destroy($id)
     {
-        app(DestroysSinks::class)->destroy(Auth::user(), $id);
+        app(DestroysSinks::class)->destroy($id);
 
         return Redirect::route('objects.index');
     }

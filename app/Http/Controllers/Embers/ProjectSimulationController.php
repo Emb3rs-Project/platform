@@ -10,23 +10,20 @@ use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
-use App\Models\Project;
-use App\Models\Simulation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param  int  $projectId
      * @return \Illuminate\Http\Response
      */
     public function index(int $projectId)
     {
-        $simulations = app(IndexesSimulations::class)->index(Auth::user(), $projectId);
+        $simulations = app(IndexesSimulations::class)->index($projectId);
 
         return response()->json([
             'simulations' => $simulations
@@ -40,6 +37,7 @@ class ProjectSimulationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  int  $projectId
      * @return \Illuminate\Http\Response
      */
     public function create(int $projectId)
@@ -50,7 +48,7 @@ class ProjectSimulationController extends Controller
             $sinks,
             $links,
             $locations
-        ] = app(CreatesSimulations::class)->create(Auth::user(), $projectId);
+        ] = app(CreatesSimulations::class)->create($projectId);
 
         return response()->json([
             'simulationTypes' => $simulationTypes,
@@ -73,11 +71,12 @@ class ProjectSimulationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * @param  int  $projectId
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, int $projectId)
     {
-        app(StoresSimulations::class)->store(Auth::user(), $projectId, $request->all());
+        app(StoresSimulations::class)->store($projectId, $request->all());
 
         return Redirect::route('projects.simulations.index', $projectId);
     }
@@ -85,7 +84,8 @@ class ProjectSimulationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $projectId
+     * @param  int  $simulationId
      * @return \Illuminate\Http\Response
      */
     public function show(int $projectId, int $simulationId)
@@ -93,7 +93,7 @@ class ProjectSimulationController extends Controller
         [
             $simulation,
             $project
-        ] = app(ShowsSimulations::class)->show(Auth::user(), $projectId, $simulationId);
+        ] = app(ShowsSimulations::class)->show($projectId, $simulationId);
 
         return response()->json([
             'simulation' => $simulation,
@@ -104,7 +104,8 @@ class ProjectSimulationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $projectId
+     * @param  int  $simulationId
      * @return \Illuminate\Http\Response
      */
     public function edit(int $projectId, int $simulationId)
@@ -112,7 +113,7 @@ class ProjectSimulationController extends Controller
         [
             $simulation,
             $project
-        ] = app(EditsSimulations::class)->edit(Auth::user(), $projectId, $simulationId);
+        ] = app(EditsSimulations::class)->edit($projectId, $simulationId);
 
         return response()->json([
             'simulation' => $simulation,
@@ -124,13 +125,13 @@ class ProjectSimulationController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $projectId
+     * @param  int  $simulationId
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, int $projectId, int $simulationId)
     {
-        $updatedSimulation = app(UpdatesSimulations::class)
-                                ->update(Auth::user(), $projectId, $simulationId, $request->all());
+        $updatedSimulation = app(UpdatesSimulations::class)->update($projectId, $simulationId, $request->all());
 
         return Redirect::route('projects.simulations.show', [
             $projectId,
@@ -141,12 +142,13 @@ class ProjectSimulationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $projectId
+     * @param  int  $simulationId
      * @return \Illuminate\Http\Response
      */
     public function destroy(int $projectId, int $simulationId)
     {
-        app(DestroysSimulations::class)->destroy(Auth::user(), $projectId, $simulationId);
+        app(DestroysSimulations::class)->destroy($projectId, $simulationId);
 
         return Redirect::route('projects.simulations.index', $projectId);
     }

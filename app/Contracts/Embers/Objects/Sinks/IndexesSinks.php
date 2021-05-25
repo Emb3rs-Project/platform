@@ -7,8 +7,7 @@ interface IndexesSinks
     /**
      * Display all available Sinks.
      *
-     * @param  mixed  $user
      * @return mixed
      */
-    public function index($user);
+    public function index();
 }

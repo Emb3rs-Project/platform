@@ -14,23 +14,18 @@ class EditSource implements EditsSources
     /**
      * Display the necessary objects for updating a given Source.
      *
-     * @param  mixed  $user
-     * @param  int    $id
+     * @param  int  $id
      * @return mixed
      */
-    public function edit(mixed $user, int $id)
+    public function edit(int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         Gate::authorize('view', $source);
 
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+        $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([

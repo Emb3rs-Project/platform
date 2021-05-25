@@ -12,19 +12,17 @@ class ShowSimulation implements ShowsSimulations
     /**
      * Find and return an existing Simulation.
      *
-     * @param mixed  $user
-     * @param int  $projectId
-     * @param int  $simulationId
+     * @param  int  $projectId
+     * @param  int  $simulationId
      * @return mixed
      */
-    public function show(mixed $user, int $projectId, int $simulationId)
+    public function show(int $projectId, int $simulationId)
     {
         $project = Project::with(['location'])->findOrFail($projectId);
 
         Gate::authorize('view', $project);
 
-        $simulation = Simulation::with(['project', 'target', 'simulationType'])
-            ->findOrFail($simulationId);
+        $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
 
         Gate::authorize('view', $simulation);
 

@@ -11,9 +11,7 @@ use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 class SourceController extends Controller
 {
@@ -24,7 +22,7 @@ class SourceController extends Controller
      */
     public function index()
     {
-        $sources = app(IndexesSources::class)->index(Auth::user());
+        $sources = app(IndexesSources::class)->index();
 
         // return Inertia::render('Objects/Sources/SourceIndex', [
         //     'sources' => $sources
@@ -72,7 +70,7 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSources::class)->store($request->user(), $request->all());
+        app(StoresSources::class)->store($request->all());
 
         return Redirect::route('objects.index');
     }
@@ -90,7 +88,7 @@ class SourceController extends Controller
             $equipments,
             $locations,
             $instance
-        ] = app(ShowsSources::class)->show(Auth::user(), $id);
+        ] = app(ShowsSources::class)->show($id);
 
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
@@ -116,7 +114,7 @@ class SourceController extends Controller
             $equipments,
             $locations,
             $instance
-        ] = app(EditsSources::class)->edit(Auth::user(), $id);
+        ] = app(EditsSources::class)->edit($id);
 
         return [
             "slideOver" => "Objects/Sources/SourceEdit",
@@ -138,8 +136,7 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedSource = app(UpdatesSources::class)
-            ->update($request->user(), $id, $request->all());
+        $updatedSource = app(UpdatesSources::class)->update($id, $request->all());
 
         return Redirect::route('objects.sources.show', $updatedSource->id);
     }
@@ -152,7 +149,7 @@ class SourceController extends Controller
      */
     public function destroy($id)
     {
-        app(DestroysSources::class)->destroy(Auth::user(), $id);
+        app(DestroysSources::class)->destroy($id);
 
         return Redirect::route('objects.index');
     }

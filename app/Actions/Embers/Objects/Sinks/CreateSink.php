@@ -20,14 +20,9 @@ class CreateSink implements CreatesSinks
     {
         Gate::authorize('create', Instance::class);
 
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 
-        $equipmentCategories = Category::whereType('equipment')
-            ->get()
-            ->pluck('id');
-
+        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
 
         $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
             ->with([

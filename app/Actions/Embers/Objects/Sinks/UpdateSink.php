@@ -15,12 +15,11 @@ class UpdateSink implements UpdatesSinks
     /**
      * Validate, update and return an existing instance.
      *
-     * @param  mixed  $user
-     * @param  int    $sink
+     * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(mixed $user, int $id, array $input)
+    public function update(int $id, array $input)
     {
         $sink = Instance::findOrFail($id);
 
@@ -28,7 +27,7 @@ class UpdateSink implements UpdatesSinks
 
         $this->validate($input);
 
-        $sink = $this->save($user, $sink, $input);
+        $sink = $this->save($sink, $input);
 
         return $sink;
     }
@@ -42,9 +41,10 @@ class UpdateSink implements UpdatesSinks
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'sink' => ['required', 'array'],
+            'sink' => ['filled', 'array'],
             'sink.data.name' => ['filled', 'string', 'max:255'],
-            // 'equipments' => ['present'], // Will change later
+            'equipments' => ['filled', 'array'],
+            'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['filled', 'integer','numeric', 'exists:templates,id'],
             // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
@@ -55,17 +55,22 @@ class UpdateSink implements UpdatesSinks
     /**
      * Save the Sink in the DB.
      *
-     * @param  mixed    $user
      * @param  Instance $sink
      * @param  array    $input
      * @return Instance
      */
-    protected function save(mixed $user, Instance $sink, array $input)
+    protected function save(Instance $sink, array $input)
     {
-        // TODO: attach the user id to the entity
-
         if (!empty($input['sink']['data']['name'])) {
             $sink->name = $input['sink']['data']['name'];
+        }
+
+        if (!empty($input['equipments'])) {
+            $newInstance['name']['equipments'] = $input['equipments'];
+        }
+
+        if (!empty($input['template_id'])) {
+            $sink->template_id = $input['template_id'];
         }
 
         if (!empty($input['location_id'])) {
@@ -82,10 +87,6 @@ class UpdateSink implements UpdatesSinks
             } else {
                 $sink['location_id'] = $input['location_id'];
             }
-        }
-
-        if (!empty($input['template_id'])) {
-            $sink->template_id = $input['template_id'];
         }
 
         $sink->save();

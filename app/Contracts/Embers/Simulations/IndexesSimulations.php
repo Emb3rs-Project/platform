@@ -9,9 +9,8 @@ interface IndexesSimulations
     /**
      * Display all available Simulations.
      *
-     * @param  mixed  $user
      * @param  int  $projectId
      * @return mixed
      */
-    public function index(mixed $user, int $projectId);
+    public function index(int $projectId);
 }

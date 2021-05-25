@@ -11,12 +11,11 @@ class DestroyProject implements DestroysProjects
     /**
      * Find and delete an existing Project.
      *
-     * @param  mixed $user
-     * @param  int   $id
-     * @param  array $input
+     * @param  int  $id
+     * @param  array  $input
      * @return void
      */
-    public function destroy(mixed $user, int $id)
+    public function destroy(int $id)
     {
         $project = Project::findOrFail($id);
 

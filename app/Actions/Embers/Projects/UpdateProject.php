@@ -12,12 +12,11 @@ class UpdateProject implements UpdatesProjects
     /**
       * Validate, update and return an existing Project.
       *
-      * @param  mixed  $user
-      * @param  int    $id
+      * @param  int  $id
       * @param  array  $input
       * @return Instance
       */
-    public function update(mixed $user, int $id, array $input)
+    public function update(int $id, array $input)
     {
         $project = Project::findOrFail($id);
 
@@ -25,7 +24,7 @@ class UpdateProject implements UpdatesProjects
 
         $this->validate($input);
 
-        $project = $this->save($user, $project, $input);
+        $project = $this->save($project, $input);
 
         return $project;
     }
@@ -40,7 +39,7 @@ class UpdateProject implements UpdatesProjects
     {
         Validator::make($input, [
             'name' => ['filled', 'string', 'max:255'],
-            'description' => ['filled', 'string', 'max:255'],
+            'description' => ['filled', 'string'],
             'location_id' => ['filled', 'string', 'exists:locations,id']
         ])
         ->validate();
@@ -53,7 +52,7 @@ class UpdateProject implements UpdatesProjects
      * @param  array  $input
      * @return Project
      */
-    protected function save(mixed $user, Project $project, array $input)
+    protected function save(Project $project, array $input)
     {
         if (!empty($input['name'])) {
             $project->name = $input['name'];

@@ -7,8 +7,7 @@ interface IndexesLinks
     /**
      * Display all available Links.
      *
-     * @param  mixed  $user
      * @return mixed
      */
-    public function index(mixed $user);
+    public function index();
 }

@@ -7,8 +7,7 @@ interface ShowsProjects
     /**
      * Display the given Projects.
      *
-     * @param  mixed  $user
-     * @param  int    $id
+     * @param  int  $id
      */
-    public function show(mixed $user, int $id);
+    public function show(int $id);
 }

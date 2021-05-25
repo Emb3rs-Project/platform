@@ -13,13 +13,12 @@ class UpdateSimulation implements UpdatesSimulations
     /**
      * Validate and create a new Link.
      *
-     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @param  array  $input
      * @return Project
      */
-    public function update(mixed $user, int $projectId, int $simulationId, array $input)
+    public function update(int $projectId, int $simulationId, array $input)
     {
         $project = Project::findOrFail($projectId);
 
@@ -31,7 +30,7 @@ class UpdateSimulation implements UpdatesSimulations
 
         $this->validate($input);
 
-        $simulation = $this->save($user, $simulation, $input);
+        $simulation = $this->save($simulation, $input);
 
         return $simulation;
     }
@@ -56,12 +55,11 @@ class UpdateSimulation implements UpdatesSimulations
     /**
      * Save the Link in the DB.
      *
-     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return Simulation
      */
-    protected function save(mixed $user, Simulation $simulation, array $input)
+    protected function save(Simulation $simulation, array $input)
     {
         if (!empty($input['status'])) {
             $simulation->status = $input['status'];
