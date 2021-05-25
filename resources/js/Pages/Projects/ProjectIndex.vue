@@ -6,6 +6,9 @@
           <div>
             <h2 class="text-3xl font-extrabold text-gray-900">Projects</h2>
           </div>
+          <primary-link-button class="w-24" :path="'projects.create'">
+            Create a Project
+          </primary-link-button>
           <div class="mt-12 lg:mt-0 lg:col-span-2">
             <div class="flex flex-col">
               <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -92,10 +95,12 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
 
 export default {
   components: {
     AppLayout,
+    PrimaryLinkButton,
   },
   props: {
     projects: {

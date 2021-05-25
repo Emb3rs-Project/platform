@@ -37,12 +37,14 @@ class ProjectController extends Controller
     {
         $locations = app(CreatesProjects::class)->create();
 
-        return [
-            'slideOver' => 'Projects/ProjectCreate',
-            'props' =>[
-                'locations' => $locations
-            ]
-        ];
+        return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
+
+        // return [
+        //     'slideOver' => 'Projects/ProjectCreate',
+        //     'props' =>[
+        //         'locations' => $locations
+        //     ]
+        // ];
     }
 
     /**
