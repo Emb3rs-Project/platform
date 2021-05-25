@@ -100,6 +100,8 @@ export default {
         props: {},
       });
 
+      store.commit("map/startLinks");
+
       map.value.contextmenu.removeAllItems();
       for (const a of linkCreationMapContext)
         map.value.contextmenu.insertItem(a);
@@ -132,8 +134,24 @@ export default {
         linkCreationSegmentContext
       );
 
+      const id = `${currentSegment.from}${coord}`;
+      store.dispatch("map/setLink", {
+        id,
+        link: {
+          from: currentSegment.from,
+          to: coord,
+          distance: L.latLng(coord).distanceTo(currentSegment.from),
+          data: {},
+        },
+      });
+
       mapObjects.value.links.push(segment);
       currentSegment.from = coord;
+
+      store.dispatch("objects/showSlide", {
+        route: "objects.links.create",
+        props: {},
+      });
     };
 
     const onRemoveSegment = (value) => {
@@ -174,8 +192,24 @@ export default {
         linkCreationSegmentContext
       );
 
+      const id = `${currentSegment.from}${coord}`;
+      store.dispatch("map/setLink", {
+        id,
+        link: {
+          from: currentSegment.from,
+          to: coord,
+          distance: L.latLng(coord).distanceTo(currentSegment.from),
+          data: {},
+        },
+      });
+
       mapObjects.value.links.push(segment);
       currentSegment.from = coord;
+
+      store.dispatch("objects/showSlide", {
+        route: "objects.links.create",
+        props: {},
+      });
     };
 
     const defautMapContext = [
@@ -239,8 +273,8 @@ export default {
       ];
     };
 
-    const onCenterLocation = (loc) => {
-      mapUtils.centerAtLocation(map.value, loc);
+    const onCenterLocation = (loc, move = true) => {
+      if (move) mapUtils.centerAtLocation(map.value, loc);
       const allMarkers = mapObjects.value.all.getLayers();
       const geo = L.latLng(loc.data?.center);
       const m = allMarkers.find((_m) => _m.getLatLng().distanceTo(geo) === 0);
@@ -256,7 +290,7 @@ export default {
             route: "objects.sinks.show",
             props: instance.id,
           });
-          onCenterLocation(instance.location);
+          onCenterLocation(instance.location, false);
           break;
         case "source":
           store.dispatch("objects/showSlide", {

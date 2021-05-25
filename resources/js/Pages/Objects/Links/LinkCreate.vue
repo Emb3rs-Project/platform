@@ -21,6 +21,100 @@
       </div>
     </div>
 
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <h1>Segments</h1>
+    </div>
+
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-for="(link, index) in linkList"
+      :key="link"
+    >
+      <div class="sm:col-span-3">
+        <Disclosure as="div" v-slot="{ open }">
+          <dt class="text-lg">
+            <DisclosureButton
+              class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none"
+            >
+              <span class="font-medium text-gray-900">
+                Segment #{{ index + 1 }}</span
+              >
+              <span class="ml-6 h-7 flex items-center">
+                <ChevronDownIcon
+                  :class="[
+                    open ? '-rotate-180' : 'rotate-0',
+                    'h-6 w-6 transform',
+                  ]"
+                  aria-hidden="true"
+                />
+              </span>
+            </DisclosureButton>
+          </dt>
+          <transition
+            enter-active-class="transition duration-100 ease-out"
+            enter-from-class="transform scale-95 opacity-0"
+            enter-to-class="transform scale-100 opacity-100"
+            leave-active-class="transition duration-75 ease-out"
+            leave-from-class="transform scale-100 opacity-100"
+            leave-to-class="transform scale-95 opacity-0"
+          >
+            <DisclosurePanel as="dd" class="mt-2 pr-12">
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    From
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.from"> </text-input>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    To
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.to"> </text-input>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+              >
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
+                  >
+                    Distance
+                  </label>
+                </div>
+                <div class="sm:col-span-2">
+                  <div>
+                    <text-input v-model="link.distance"> </text-input>
+                  </div>
+                </div>
+              </div>
+            </DisclosurePanel>
+          </transition>
+        </Disclosure>
+      </div>
+    </div>
+
     <template #actions>
       <secondary-outlined-button
         type="button"
@@ -47,6 +141,8 @@ import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
 
 export default {
   components: {
@@ -56,6 +152,11 @@ export default {
     TextInput,
     PrimaryButton,
     SecondaryOutlinedButton,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    DatabaseIcon,
+    ChevronDownIcon,
   },
 
   props: {
@@ -69,6 +170,7 @@ export default {
     const store = useStore();
     const form = useForm({
       name: "",
+      segments: {},
     });
 
     const submit = () => form.post(route("objects.links.store"));
@@ -78,12 +180,16 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
+    const links = store.getters["map/currentLinks"];
+    const linkList = computed(() => Object.values(links));
+
     return {
       form,
       submit,
       open,
       onCancel: () =>
         store.dispatch("objects/showSlide", { route: "objects.list" }),
+      linkList,
     };
   },
 };
