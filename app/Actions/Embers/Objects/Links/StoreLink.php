@@ -36,13 +36,13 @@ class StoreLink implements StoresLinks
      */
     protected function validate(array $input)
     {
-        Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'locationData.segments.*.data.to.*' => ['required', 'numeric'],
-            'locationData.segments.*.data.from.*' => ['required', 'numeric'],
-            'description' => ['filled','string']
-        ])
-        ->validate();
+        // Validator::make($input, [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'locationData.segments.*.data.to.*' => ['required', 'numeric'],
+        //     'locationData.segments.*.data.from.*' => ['required', 'numeric'],
+        //     'description' => ['filled','string']
+        // ])
+        // ->validate();
     }
 
     /**

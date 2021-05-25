@@ -38,13 +38,13 @@ class UpdateLink implements UpdatesLinks
      */
     protected function validate(array $input)
     {
-        Validator::make($input, [
-            'name' => ['filled', 'string', 'max:255'],
-            'locationData.segments.*.data.to.*' => ['filled', 'numeric'],
-            'locationData.segments.*.data.from.*' => ['filled', 'numeric'],
-            'description' => ['filled', 'string']
-        ])
-        ->validate();
+        // Validator::make($input, [
+        //     'name' => ['filled', 'string', 'max:255'],
+        //     'locationData.segments.*.data.to.*' => ['filled', 'numeric'],
+        //     'locationData.segments.*.data.from.*' => ['filled', 'numeric'],
+        //     'description' => ['filled', 'string']
+        // ])
+        // ->validate();
     }
 
     /**
