@@ -162,6 +162,9 @@ export default {
           s.getLatLngs().includes(points[1])
       );
 
+      const id = `${points[0]}${points[1]}`;
+      store.dispatch("map/unsetLink", id);
+
       map.value.removeLayer(value);
       mapObjects.value.links.splice(segmentIndex, 1);
       if (mapObjects.value.links.length > 0)
@@ -177,10 +180,10 @@ export default {
       value.setStyle({
         color: "#F9A602",
       });
-      const coords = value.getLatLngs();
-      const dist = L.latLng(coords[0]).distanceTo(L.latLng(coords[1]));
-
-      value.bindTooltip(`distance : ${Math.round(dist)}`).openTooltip();
+      store.dispatch("objects/showSlide", {
+        route: "objects.links.create",
+        props: {},
+      });
     };
 
     const onNextPoint = (value) => {
