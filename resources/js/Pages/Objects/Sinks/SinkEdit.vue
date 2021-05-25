@@ -240,6 +240,10 @@ export default {
     const submit = () => {
       form.patch(route("objects.sinks.update", props.instance.id), {
         onError: (e) => console.log(e),
+        onSuccess: () => {
+          store.dispatch("map/refreshMap");
+          store.dispatch("objects/showSlide", { route: "objects.list" });
+        },
       });
     };
 

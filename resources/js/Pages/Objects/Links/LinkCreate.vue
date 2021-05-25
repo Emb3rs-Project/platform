@@ -170,10 +170,14 @@ export default {
     const store = useStore();
     const form = useForm({
       name: "",
-      segments: {},
+      segments: [],
     });
 
-    const submit = () => form.post(route("objects.links.store"));
+    const submit = () => {
+      form.segments = linkList.value;
+
+      form.post(route("objects.links.store"));
+    };
 
     const open = computed({
       get: () => props.modelValue,
