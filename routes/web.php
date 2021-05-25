@@ -35,7 +35,7 @@ function createResourceNames($prefix)
         'show' => "$prefix.show",
         'edit' => "$prefix.edit",
         'update' => "$prefix.update",
-        'destroy' => "$prefix.destroy"
+        'destroy' => "$prefix.destroy",
     ];
 }
 
@@ -60,19 +60,24 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
 
         // Sources
+        Route::get('/sources/{id}/share', [SourceController::class, "share"])->name('sources.share');
         Route::resource('/sources', SourceController::class)->names(createResourceNames('sources'));
 
         // Sinks
+        Route::get('/sinks/{id}/share', [SinkController::class, "share"])->name('sinks.share');
         Route::resource('/sinks', SinkController::class)->names(createResourceNames('sinks'));
 
         // Links
+        Route::get('/links/{id}/share', [LinkController::class, "share"])->name('links.share');
         Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
     });
 
     // Projects
+    Route::get('/projects/{id}/share', [ProjectController::class, "share"])->name('projects.share');
     Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
 
     // Simulations
+    Route::get('/projects/{projectId}/simulations/{simulationId}/share', [ProjectSimulationController::class, "share"])->name('projects.simulations.share');
     Route::resource('/projects.simulations', ProjectSimulationController::class)->names(createResourceNames('projects.simulations'));
 
     // Challenge

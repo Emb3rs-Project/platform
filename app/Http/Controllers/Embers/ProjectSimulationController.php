@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\Contracts\Embers\Simulations\DestroysSimulations;
 use App\Contracts\Embers\Simulations\EditsSimulations;
@@ -152,5 +153,28 @@ class ProjectSimulationController extends Controller
         app(DestroysSimulations::class)->destroy($projectId, $simulationId);
 
         return Redirect::route('projects.simulations.index', $projectId);
+    }
+
+    /**
+     * Share the specified resource.
+     *
+     * @param  int  $projectId
+     * @param  int  $simulationId
+     * @return \Illuminate\Http\Response
+     */
+    public function share(int $projectId, int $simulationId)
+    {
+        $simulation = app(SharesSimulations::class)->share($projectId, $simulationId);
+
+        // return [
+        //     "slideOver" => 'Objects/Sinks/SinkShare',
+        //     "props" => [
+        //         "instance" => $sink
+        //     ]
+        // ];
+
+        return response()->json([
+            "simulation" => $simulation
+        ]);
     }
 }

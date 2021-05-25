@@ -6,6 +6,7 @@ use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Contracts\Embers\Projects\DestroysProjects;
 use App\Contracts\Embers\Projects\EditsProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
+use App\Contracts\Embers\Projects\SharesProjects;
 use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
@@ -129,5 +130,27 @@ class ProjectController extends Controller
         app(DestroysProjects::class)->destroy($id);
 
         return Redirect::route('projects.index');
+    }
+
+    /**
+     * Share the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function share($id)
+    {
+        $project = app(SharesProjects::class)->share($id);
+
+        // return [
+        //     "slideOver" => 'Objects/Sinks/SinkShare',
+        //     "props" => [
+        //         "instance" => $sink
+        //     ]
+        // ];
+
+        return response()->json([
+            "project" => $project
+        ]);
     }
 }

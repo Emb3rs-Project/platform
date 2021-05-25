@@ -151,7 +151,7 @@ class SinkController extends Controller
      */
     public function share($id)
     {
-        $sink = app(SharesSinks::class)->show($id);
+        $sink = app(SharesSinks::class)->share($id);
 
         // return [
         //     "slideOver" => 'Objects/Sinks/SinkShare',
@@ -161,7 +161,7 @@ class SinkController extends Controller
         // ];
 
         return response()->json([
-            "instance" => $sink
+            "sink" => $sink
         ]);
     }
 }

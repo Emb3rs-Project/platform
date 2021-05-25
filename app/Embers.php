@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\SharesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
@@ -28,9 +29,12 @@ use App\Contracts\Embers\Objects\Sources\CreatesSources;
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\Contracts\Embers\Objects\Sources\EditsSources;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
+use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\Contracts\Embers\Projects\SharesProjects;
+use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\Contracts\Embers\Simulations\DestroysSimulations;
 use App\Contracts\Embers\Simulations\EditsSimulations;
@@ -211,6 +215,17 @@ class Embers
     }
 
     /**
+    * Register a class / callback that should be used to share a given Source.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function shareSourcesUsing(string $class)
+    {
+        return app()->singleton(SharesSources::class, $class);
+    }
+
+    /**
     * Register a class / callback that should be used to index all Links.
     *
     * @param  string  $class
@@ -287,6 +302,17 @@ class Embers
     public static function destroyLinksUsing(string $class)
     {
         return app()->singleton(DestroysLinks::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to share a given Link.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function shareLinksUsing(string $class)
+    {
+        return app()->singleton(SharesLinks::class, $class);
     }
 
     /**
@@ -369,6 +395,17 @@ class Embers
     }
 
     /**
+    * Register a class / callback that should be used to share a given Project.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function shareProjectsUsing(string $class)
+    {
+        return app()->singleton(SharesProjects::class, $class);
+    }
+
+    /**
     * Register a class / callback that should be used to index all Simulations.
     *
     * @param  string  $class
@@ -445,5 +482,16 @@ class Embers
     public static function destroySimulationsUsing(string $class)
     {
         return app()->singleton(DestroysSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to share a given Simulation.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function shareSimulationsUsing(string $class)
+    {
+        return app()->singleton(SharesSimulations::class, $class);
     }
 }

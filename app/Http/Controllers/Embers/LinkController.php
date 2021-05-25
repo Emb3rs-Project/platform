@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\Contracts\Embers\Objects\Links\SharesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
@@ -133,5 +134,27 @@ class LinkController extends Controller
         app(DestroysLinks::class)->destroy($id);
 
         return Redirect::route('objects.index');
+    }
+
+    /**
+     * Share the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function share($id)
+    {
+        $link = app(SharesLinks::class)->share($id);
+
+        // return [
+        //     "slideOver" => 'Objects/Sinks/SinkShare',
+        //     "props" => [
+        //         "instance" => $sink
+        //     ]
+        // ];
+
+        return response()->json([
+            "link" => $link
+        ]);
     }
 }

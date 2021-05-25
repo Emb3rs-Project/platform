@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sources\CreatesSources;
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\Contracts\Embers\Objects\Sources\EditsSources;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
+use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
@@ -152,5 +153,27 @@ class SourceController extends Controller
         app(DestroysSources::class)->destroy($id);
 
         return Redirect::route('objects.index');
+    }
+
+    /**
+     * Share the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function share($id)
+    {
+        $source = app(SharesSources::class)->share($id);
+
+        // return [
+        //     "slideOver" => 'Objects/Sinks/SinkShare',
+        //     "props" => [
+        //         "instance" => $sink
+        //     ]
+        // ];
+
+        return response()->json([
+            "source" => $source
+        ]);
     }
 }

@@ -21,6 +21,8 @@ class ShareSink implements SharesSinks
         Gate::authorize('view', $sink);
         // TODO: also check for sharing permissions
 
+        // TODO: generate a sharing link
+
         return $sink;
     }
 }
