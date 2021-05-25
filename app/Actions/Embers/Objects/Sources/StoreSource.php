@@ -22,8 +22,6 @@ class StoreSource implements StoresSources
     {
         Gate::authorize('create', Instance::class);
 
-        Log::info($input);
-
         $this->validate($input);
 
         $source = $this->save($input);
