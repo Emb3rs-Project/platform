@@ -7,6 +7,7 @@ use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSource implements StoresSources
@@ -20,6 +21,8 @@ class StoreSource implements StoresSources
     public function store(array $input)
     {
         Gate::authorize('create', Instance::class);
+
+        Log::info($input);
 
         $this->validate($input);
 
@@ -37,12 +40,11 @@ class StoreSource implements StoresSources
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'source' => ['filled', 'array'],
             'source.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['filled', 'array'],
-            'equipments.*.key' => ['required', 'string', 'exists:categories,id'],
-            'processes' => ['filled', 'array'],
-            'processes.*.key' => ['required', 'string', 'exists:categories,id'],
+            // 'equipments' => ['filled', 'array'],
+            'equipments.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            // 'processes' => ['filled', 'array'],
+            'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             // // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
             // // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
