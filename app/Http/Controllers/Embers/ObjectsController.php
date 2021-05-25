@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
+use App\Models\Link;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -24,7 +25,8 @@ class ObjectsController extends Controller
             "slideOver" => 'Objects/ObjectsIndex',
             "props" => [
                 // TODO: include Links
-                "instances" => $instances
+                "instances" => $instances,
+                "links" => Auth::user()->currentTeam->links
             ]
         ];
     }

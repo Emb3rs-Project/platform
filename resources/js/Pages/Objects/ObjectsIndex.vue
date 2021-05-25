@@ -157,6 +157,10 @@ export default {
       type: Array,
       default: [],
     },
+    links: {
+      type: Array,
+      default: [],
+    },
   },
   setup(props) {
     const store = useStore();
@@ -195,9 +199,7 @@ export default {
           return;
         }
         if (current.title === "Links") {
-          objects.value = props.instances.filter(
-            (i) => i.template?.category?.type === "link"
-          );
+          objects.value = props.links;
           return;
         }
       },
