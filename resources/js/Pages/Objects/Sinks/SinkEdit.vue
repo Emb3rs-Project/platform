@@ -207,14 +207,15 @@ export default {
         );
         form.template_id = selectedTemplate.key;
         form.sink.data.name = props.instance.name;
+        console.log(props.instance.name);
 
-        if (templateInfo.value?.template_properties) {
-          for (const prop of templateInfo.value?.template_properties) {
-            form.sink.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
-          }
-        }
+        // if (templateInfo.value?.template_properties) {
+        //   for (const prop of templateInfo.value?.template_properties) {
+        //     form.sink.data[prop.property.symbolic_name] = prop.default_value
+        //       ? prop.default_value
+        //       : "";
+        //   }
+        // }
       },
       { immediate: true, deep: true }
     );
