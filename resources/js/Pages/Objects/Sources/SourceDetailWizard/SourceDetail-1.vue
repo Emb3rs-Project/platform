@@ -63,6 +63,38 @@
       </div>
     </div>
   </div>
+
+  <!-- Source Template -->
+  <div
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+  >
+    <div>
+      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+        DHN supply temperature (ºc)
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+        Not Yet Calculated
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Template -->
+  <div
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+  >
+    <div>
+      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+        available excess heat for DHN (kW)
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+        Not Yet Calculated
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

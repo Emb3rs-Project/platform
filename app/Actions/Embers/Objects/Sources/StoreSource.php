@@ -121,8 +121,6 @@ STUFF
         $user_id = Auth::user()->id;
 
 
-        DispatchCustomAction::queue
-
         DispatchCustomAction::dispatchAction(
             $action,
             new ActionFields(new Collection(), new Collection()),
