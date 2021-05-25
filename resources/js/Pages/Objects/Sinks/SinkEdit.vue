@@ -88,7 +88,7 @@
       <secondary-outlined-button
         type="button"
         :disabled="form.processing"
-        @click="open = false"
+        @click="onClose"
       >
         Cancel
       </secondary-outlined-button>
@@ -271,6 +271,8 @@ export default {
       open,
       properties,
       submit,
+      onClose: () =>
+        store.dispatch("objects/showSlide", { route: "objects.list" }),
     };
   },
 

@@ -30,7 +30,7 @@
       >
         <i class="fas fa-chevron-right"></i>
       </secondary-button>
-      <secondary-outlined-button type="button" @click="open = false">
+      <secondary-outlined-button type="button" @click="onCancel">
         Cancel
       </secondary-outlined-button>
       <primary-button
@@ -133,6 +133,8 @@ export default {
       currentStep,
       onNextStep,
       onPrevStep,
+      onCancel: () =>
+        store.dispatch("objects/showSlide", { route: "objects.list" }),
     };
   },
 };
