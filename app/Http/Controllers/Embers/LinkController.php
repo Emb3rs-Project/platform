@@ -31,9 +31,9 @@ class LinkController extends Controller
         //     ]
         // ];
 
-        return response()->json([
-            'links' => $links
-        ]);
+        // return response()->json([
+        //     'links' => $links
+        // ]);
     }
 
     /**
