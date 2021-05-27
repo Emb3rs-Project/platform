@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Jetstream\Events\TeamCreated;
@@ -86,6 +87,12 @@ class Team extends JetstreamTeam
             'team_id',
             'location_id'
         );
+    }
+
+    // Table notifications
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'team_id');
     }
 
     // Table team_roles

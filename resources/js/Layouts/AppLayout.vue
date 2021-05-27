@@ -293,14 +293,6 @@
                     >
                       Your Profile
                     </inertia-link>
-
-                    <inertia-link
-                      :href="'#'"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                    >
-                      Settings
-                    </inertia-link>
                     <inertia-link
                       :href="'#'"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
@@ -708,12 +700,6 @@
                         href="#"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                         role="menuitem"
-                        >Settings</a
-                      >
-                      <a
-                        href="#"
-                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                        role="menuitem"
                         >Notifications</a
                       >
                     </div>
@@ -778,20 +764,16 @@
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >View profile</a
                     >
+                      View profile
+                    </a>
                     <a
                       href="#"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >Settings</a
                     >
-                    <a
-                      href="#"
-                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                      role="menuitem"
-                      >Notifications</a
-                    >
+                      Notifications
+                    </a>
                   </div>
                   <div class="py-1" role="none">
                     <a
