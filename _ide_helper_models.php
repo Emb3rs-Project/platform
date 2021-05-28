@@ -107,6 +107,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Nova\Actions\ActionEvent[] $actions
+ * @property-read int|null $actions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|Instance[] $grouping
  * @property-read int|null $grouping_count
  * @property-read \App\Models\Location|null $location
@@ -207,16 +209,16 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property int $user_id
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $team_role_id
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership query()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Membership whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUserId($value)
  */
@@ -509,6 +511,8 @@ namespace App\Models{
  * @property-read int|null $links_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Notification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
@@ -539,9 +543,9 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property string $email
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $team_role_id
  * @property-read \App\Models\Team $team
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newQuery()
@@ -549,8 +553,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereUpdatedAt($value)
  */
 	class TeamInvitation extends \Eloquent {}

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Teams\AddTeamMember as TeamsAddTeamMember;
+use App\Actions\Embers\Teams\InviteTeamMember as TeamsInviteTeamMember;
 use App\Actions\Jetstream\AddTeamMember;
 use App\Actions\Jetstream\CreateTeam;
 use App\Actions\Jetstream\DeleteTeam;
@@ -35,8 +37,8 @@ class JetstreamServiceProvider extends ServiceProvider
 
         Jetstream::createTeamsUsing(CreateTeam::class);
         Jetstream::updateTeamNamesUsing(UpdateTeamName::class);
-        Jetstream::addTeamMembersUsing(AddTeamMember::class);
-        Jetstream::inviteTeamMembersUsing(InviteTeamMember::class);
+        Jetstream::addTeamMembersUsing(TeamsAddTeamMember::class);
+        Jetstream::inviteTeamMembersUsing(TeamsInviteTeamMember::class);
         Jetstream::removeTeamMembersUsing(RemoveTeamMember::class);
         Jetstream::deleteTeamsUsing(DeleteTeam::class);
         Jetstream::deleteUsersUsing(DeleteUser::class);

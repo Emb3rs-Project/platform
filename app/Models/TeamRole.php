@@ -27,7 +27,7 @@ class TeamRole extends Model
         'permissions' => 'array',
     ];
 
-    //team_roles
+    // teams_roles
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'team_id');
