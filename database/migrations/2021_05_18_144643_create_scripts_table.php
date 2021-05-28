@@ -16,12 +16,9 @@ class CreateScriptsTable extends Migration
         Schema::create('scripts', function (Blueprint $table) {
             $table->id();
 
-
             $table->string('name', 100)->nullable()->default('NO NAME');
             $table->longText('code')->nullable();
-
-            $table->enum('type', ['sink', 'source','equipment', 'process'])
-            ->nullable();
+            $table->enum('type', ['sink', 'source','equipment', 'process'])->nullable();
 
             $table->timestamps();
         });
