@@ -27,9 +27,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**
@@ -42,13 +42,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewNova', function ($user) {
-            return in_array($user->email, [
-                'davidsf@pantherify.com',
-                'carlos.marques@pdmfc.com',
-                'gmantellos@pdmfc.com',
-                'jmcunha@inegi.up.pt',
-                'zmourao@inegi.up.pt'
-            ]);
+            $allowed_env = env('BO_AUTH');
+            if (!$allowed_env) return false;
+
+            $allowed = explode(";", $allowed_env);
+
+            return in_array($user->email, $allowed);
         });
     }
 
