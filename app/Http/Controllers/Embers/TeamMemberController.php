@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Teams\AddsTeamMembers;
+use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Laravel\Jetstream\Actions\UpdateTeamMemberRole;
@@ -26,14 +28,14 @@ class TeamMemberController extends Controller
                 $request->user(),
                 $team,
                 $request->email ?: '',
-                $request->teamRoleId
+                $request->team_role_id
             );
         } else {
             app(AddsTeamMembers::class)->add(
                 $request->user(),
                 $team,
                 $request->email ?: '',
-                $request->teamRoleId
+                $request->team_role_id
             );
         }
 

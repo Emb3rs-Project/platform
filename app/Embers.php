@@ -42,6 +42,8 @@ use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
+use App\Contracts\Embers\Teams\AddsTeamMembers;
+use App\Contracts\Embers\Teams\InvitesTeamMembers;
 
 class Embers
 {
@@ -493,5 +495,28 @@ class Embers
     public static function shareSimulationsUsing(string $class)
     {
         return app()->singleton(SharesSimulations::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to add team members.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function addTeamMembersUsing(string $class)
+    {
+        return app()->singleton(AddsTeamMembers::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to add team members by
+     * sending email invites.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function inviteTeamMembersUsing(string $class)
+    {
+        return app()->singleton(InvitesTeamMembers::class, $class);
     }
 }

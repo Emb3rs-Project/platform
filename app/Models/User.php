@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
+use Laravel\Jetstream\Jetstream;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -59,6 +60,24 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+    * Get all of the teams the user belongs to.
+    *
+    * Note: This function is overriding the teams() function from
+    *       HasTeams trait, so it can be adapted to EMB3Rs use case.
+    *
+    * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    */
+    public function teams()
+    {
+        return $this->belongsToMany(
+            Jetstream::teamModel(),
+            Jetstream::membershipModel(),
+            'user_id',
+            'team_id'
+        )->withPivot('team_role_id')->withTimestamps()->as('membership');
+    }
 
     /**
     * Get the role that the user has on the team.

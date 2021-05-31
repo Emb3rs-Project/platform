@@ -42,6 +42,8 @@ use App\Actions\Embers\Simulations\ShareSimulation;
 use App\Actions\Embers\Simulations\ShowSimulation;
 use App\Actions\Embers\Simulations\StoreSimulation;
 use App\Actions\Embers\Simulations\UpdateSimulation;
+use App\Actions\Embers\Teams\AddTeamMember;
+use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -116,5 +118,8 @@ class AppServiceProvider extends ServiceProvider
         Embers::updateSimulationsUsing(UpdateSimulation::class);
         Embers::destroySimulationsUsing(DestroySimulation::class);
         Embers::shareSimulationsUsing(ShareSimulation::class);
+
+        Embers::addTeamMembersUsing(AddTeamMember::class);
+        Embers::inviteTeamMembersUsing(InviteTeamMember::class);
     }
 }

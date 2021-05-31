@@ -3,11 +3,11 @@
 namespace App\Actions\Embers\Teams;
 
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
+use App\Events\Embers\InvitingTeamMember;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Jetstream\Events\InvitingTeamMember;
 use Laravel\Jetstream\Mail\TeamInvitation;
 
 class InviteTeamMember implements InvitesTeamMembers
@@ -18,7 +18,7 @@ class InviteTeamMember implements InvitesTeamMembers
      * @param  mixed  $user
      * @param  mixed  $team
      * @param  string  $email
-     * @param  string|null  $role
+     * @param  int  $teamRoleId
      * @return void
      */
     public function invite($user, $team, string $email, int $teamRoleId)

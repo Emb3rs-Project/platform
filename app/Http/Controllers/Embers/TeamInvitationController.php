@@ -9,14 +9,10 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
-abstract class TeamInvitationController extends Controller
+class TeamInvitationController extends Controller
 {
     /**
      * Accept a team invitation.
-     *
-     * Note: This function is overriding the accept() function from
-     *       TeamInvitationController Controller, so it can be adapted
-     *       to EMB3Rs use case.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Laravel\Jetstream\TeamInvitation  $invitation
