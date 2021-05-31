@@ -150,7 +150,7 @@ class InstanceProcessing extends Action implements ShouldQueue
         $process = new Process(['python3', Storage::path($path)]);
         $process->run();
 
-        if (!$process->isSuccessful()) dd($process->getErrorOutput());
-        dd($process->getOutput());
+        // if (!$process->isSuccessful()) dd($process->getErrorOutput());
+        // dd($process->getOutput());
     }
 }

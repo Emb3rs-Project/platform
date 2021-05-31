@@ -47,7 +47,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
             $allowed = explode(";", $allowed_env);
 
-            return in_array($user->email, $allowed);
+            return in_array($user->email, $allowed) || $user->isBO;
         });
     }
 

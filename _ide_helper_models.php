@@ -107,6 +107,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Nova\Actions\ActionEvent[] $actions
+ * @property-read int|null $actions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|Instance[] $grouping
  * @property-read int|null $grouping_count
  * @property-read \App\Models\Location|null $location
@@ -509,6 +511,8 @@ namespace App\Models{
  * @property-read int|null $links_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Notification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \App\Models\User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
@@ -776,6 +780,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $two_factor_secret
  * @property string|null $two_factor_recovery_codes
+ * @property bool $isBO
  * @property-read \App\Models\Team|null $currentTeam
  * @property-read string $profile_photo_url
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
@@ -795,6 +800,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsBO($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePhotoPath($value)
