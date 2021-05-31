@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -98,8 +99,7 @@ class User extends Authenticatable
             return;
         }
 
-        return TeamRole::whereId($team->users->whereId($this->id)->first()->membership->team_role_id)
-            ->first(['role']);
+        return TeamRole::where('id', $team->users->where('id', $this->id)->first()->membership->team_role_id)->first();
     }
 
     /**
@@ -119,7 +119,7 @@ class User extends Authenticatable
         }
 
         return $this->belongsToTeam($team) &&
-               TeamRole::whereId($team->users->whereId($this->id)->first()->membership->team_role_id)
+               TeamRole::where('id', $team->users->where('id', $this->id)->first()->membership->team_role_id)
                    ->first(['role']) === $role;
     }
 
@@ -142,6 +142,7 @@ class User extends Authenticatable
             return [];
         }
 
+        // TODO: Instead or returning the JSON object, return an array with the permission names ONLY
         return $this->teamRole($team)->permissions;
     }
 
@@ -173,6 +174,8 @@ class User extends Authenticatable
 
         $permissions = $this->teamPermissions($team);
 
-        return in_array($permission, $permissions) || in_array('*', $permissions);
+        //TEMP solution untill TODO in teamPermissions has been implemented
+
+        return in_array($permission, [$permissions['permissions'][0]['name']]) || in_array('*', $permissions);
     }
 }

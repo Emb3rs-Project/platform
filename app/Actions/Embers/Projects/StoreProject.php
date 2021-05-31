@@ -4,6 +4,7 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Models\Project;
+use App\Models\Team;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -20,6 +21,8 @@ class StoreProject implements StoresProjects
     public function store(array $input)
     {
         Gate::authorize('create', Project::class);
+
+        abort_unless(Auth::user()->hasTeamPermission(Team::findOrFail(1), 'update-source'), 401);
 
         $this->validate($input);
 

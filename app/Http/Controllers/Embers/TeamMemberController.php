@@ -23,21 +23,27 @@ class TeamMemberController extends Controller
     {
         $team = Jetstream::newTeamModel()->findOrFail($teamId);
 
-        if (Features::sendsTeamInvitations()) {
-            app(InvitesTeamMembers::class)->invite(
-                $request->user(),
-                $team,
-                $request->email ?: '',
-                $request->team_role_id
-            );
-        } else {
-            app(AddsTeamMembers::class)->add(
-                $request->user(),
-                $team,
-                $request->email ?: '',
-                $request->team_role_id
-            );
-        }
+        // if (Features::sendsTeamInvitations()) {
+        //     app(InvitesTeamMembers::class)->invite(
+        //         $request->user(),
+        //         $team,
+        //         $request->email ?: '',
+        //         $request->team_role_id
+        //     );
+        // } else {
+        //     app(AddsTeamMembers::class)->add(
+        //         $request->user(),
+        //         $team,
+        //         $request->email ?: '',
+        //         $request->team_role_id
+        //     );
+        // }
+        app(AddsTeamMembers::class)->add(
+            $request->user(),
+            $team,
+            $request->email ?: '',
+            $request->team_role_id
+        );
 
         return back(303);
     }
