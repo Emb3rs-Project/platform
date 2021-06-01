@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
@@ -142,40 +142,13 @@ class User extends Authenticatable
             return [];
         }
 
-        // TODO: Instead or returning the JSON object, return an array with the permission names ONLY
-        return $this->teamRole($team)->permissions;
-    }
+        $permissions = $this->teamRole($team)->permissions;
 
-    /**
-    * Determine if the user has the given permission on the given team.
-    *
-    * Note: This function is overriding the hasTeamPermission() function from
-    *       HasTeams trait, so it can be adapted to EMB3Rs use case.
-    *
-    * @param  mixed  $team
-    * @param  string  $permission
-    * @return bool
-    */
-    public function hasTeamPermission($team, string $permission)
-    {
-        if ($this->ownsTeam($team)) {
-            return true;
+        foreach ($permissions['permissions'] as &$permission) {
+            $permission = $permission['name'];
         }
+        unset($permission);
 
-        if (! $this->belongsToTeam($team)) {
-            return false;
-        }
-
-        if (in_array(HasApiTokens::class, class_uses_recursive($this)) &&
-            ! $this->tokenCan($permission) &&
-            $this->currentAccessToken() !== null) {
-            return false;
-        }
-
-        $permissions = $this->teamPermissions($team);
-
-        //TEMP solution untill TODO in teamPermissions has been implemented
-
-        return in_array($permission, [$permissions['permissions'][0]['name']]) || in_array('*', $permissions);
+        return Arr::flatten($permissions);
     }
 }
