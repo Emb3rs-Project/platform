@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Gate;
 class ShareSource implements SharesSources
 {
     /**
-    * Find and return an existing Source.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
-    public function share(int $id)
+     * Find and return an existing Source.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return mixed
+     */
+    public function share($user, int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

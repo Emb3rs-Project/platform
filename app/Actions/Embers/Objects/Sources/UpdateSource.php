@@ -15,11 +15,12 @@ class UpdateSource implements UpdatesSources
     /**
      * Validate and update an existing instance.
      *
+     * @param  mixed  $user
      * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
         $source = Instance::findOrFail($id);
 

@@ -14,10 +14,11 @@ class EditSource implements EditsSources
     /**
      * Display the necessary objects for updating a given Source.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function edit(int $id)
+    public function edit($user, int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

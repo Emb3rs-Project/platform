@@ -13,12 +13,13 @@ class UpdateSimulation implements UpdatesSimulations
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @param  array  $input
      * @return Project
      */
-    public function update(int $projectId, int $simulationId, array $input)
+    public function update($user, int $projectId, int $simulationId, array $input)
     {
         $project = Project::findOrFail($projectId);
 

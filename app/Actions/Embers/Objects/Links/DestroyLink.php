@@ -11,11 +11,12 @@ class DestroyLink implements DestroysLinks
     /**
      * Find and delete an existing Link.
      *
-     * @param  int   $id
-     * @param  array $input
+     * @param  mixed  $user
+     * @param  int  $id
+     * @param  array  $input
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
         $link = Link::findOrFail($id);
 

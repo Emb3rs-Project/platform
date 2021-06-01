@@ -12,11 +12,12 @@ class ShareSimulation implements SharesSimulations
     /**
      * Find and return an existing Simulation.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @return mixed
      */
-    public function share(int $projectId, int $simulationId)
+    public function share($user, int $projectId, int $simulationId)
     {
         $project = Project::findOrFail($projectId);
 

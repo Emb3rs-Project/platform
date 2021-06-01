@@ -12,10 +12,11 @@ class ShowLink implements ShowsLinks
     /**
      * Find and return an existing Sink.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return Instance
      */
-    public function show(int $id)
+    public function show($user, int $id)
     {
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

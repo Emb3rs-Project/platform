@@ -13,11 +13,12 @@ class UpdateLink implements UpdatesLinks
     /**
      * Validate, update and return an existing instance.
      *
-     * @param  int    $id
+     * @param  mixed  $user
+     * @param  int  $id
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

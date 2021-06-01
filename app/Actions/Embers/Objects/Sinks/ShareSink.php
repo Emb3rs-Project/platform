@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Gate;
 class ShareSink implements SharesSinks
 {
     /**
-    * Find and return an existing Sink.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
-    public function share(int $id)
+     * Find and return an existing Sink.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return mixed
+     */
+    public function share($user, int $id)
     {
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

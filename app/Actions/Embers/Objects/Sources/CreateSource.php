@@ -14,9 +14,10 @@ class CreateSource implements CreatesSources
     /**
      * Display the necessary objects for the creation of a Source.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function create()
+    public function create($user)
     {
         Gate::authorize('create', Instance::class);
 

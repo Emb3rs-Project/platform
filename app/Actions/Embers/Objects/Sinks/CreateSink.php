@@ -14,9 +14,10 @@ class CreateSink implements CreatesSinks
     /**
      * Display the necessary objects for the creation of a Sink.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function create()
+    public function create($user)
     {
         Gate::authorize('create', Instance::class);
 

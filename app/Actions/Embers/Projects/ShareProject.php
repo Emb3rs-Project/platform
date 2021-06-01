@@ -12,10 +12,11 @@ class ShareProject implements SharesProjects
     /**
      * Find and return an existing Project.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function share(int $id)
+    public function share($user, int $id)
     {
         $project = Project::with(['location'])->findOrFail($id);
 

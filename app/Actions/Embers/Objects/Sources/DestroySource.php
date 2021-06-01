@@ -11,10 +11,11 @@ class DestroySource implements DestroysSources
     /**
      * Find and delete an existing Source.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
         $source = Instance::findOrFail($id);
 

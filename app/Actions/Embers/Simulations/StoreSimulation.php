@@ -13,11 +13,12 @@ class StoreSimulation implements StoresSimulations
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return Project
      */
-    public function store(int $projectId, array $input)
+    public function store($user, int $projectId, array $input)
     {
         Gate::authorize('create', Simulation::class);
 

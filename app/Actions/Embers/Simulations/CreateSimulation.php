@@ -20,10 +20,11 @@ class CreateSimulation implements CreatesSimulations
     /**
      * Display the necessary objects for the creation of a Simulation.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @return mixed
      */
-    public function create(int $projectId)
+    public function create($user, int $projectId)
     {
         Gate::authorize('create', Simulation::class);
 

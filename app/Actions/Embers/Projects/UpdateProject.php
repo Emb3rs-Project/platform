@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Validator;
 class UpdateProject implements UpdatesProjects
 {
     /**
-      * Validate, update and return an existing Project.
-      *
-      * @param  int  $id
-      * @param  array  $input
-      * @return Instance
-      */
-    public function update(int $id, array $input)
+     * Validate, update and return an existing Project.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @param  array  $input
+     * @return Instance
+     */
+    public function update($user, int $id, array $input)
     {
         $project = Project::findOrFail($id);
 

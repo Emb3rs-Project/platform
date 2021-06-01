@@ -14,9 +14,10 @@ class IndexSink implements IndexesSinks
     /**
      * Display all the available Sinks.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function index()
+    public function index($user)
     {
         Gate::authorize('viewAny', Instance::class);
 

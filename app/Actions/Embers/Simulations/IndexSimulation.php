@@ -12,10 +12,11 @@ class IndexSimulation implements IndexesSimulations
     /**
      * Display all the available Simulations.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @return [Simulation]
      */
-    public function index(int $projectId)
+    public function index($user, int $projectId)
     {
         Gate::authorize('viewAny', Simulation::class);
 

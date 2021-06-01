@@ -14,10 +14,11 @@ class StoreSink implements StoresSinks
     /**
      * Validate and create a new Sink.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return Instance
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
         Gate::authorize('create', Instance::class);
 

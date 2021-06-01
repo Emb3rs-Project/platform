@@ -12,12 +12,13 @@ class DestroySimulation implements DestroysSimulations
     /**
      * Find and delete an existing Project.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @param  array  $input
      * @return void
      */
-    public function destroy(int $projectId, int $simulationId)
+    public function destroy($user, int $projectId, int $simulationId)
     {
         $project = Project::findOrFail($projectId);
 

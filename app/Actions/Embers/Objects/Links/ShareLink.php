@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Gate;
 class ShareLink implements SharesLinks
 {
     /**
-    * Find and return an existing Link.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
-    public function share(int $id)
+     * Find and return an existing Link.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return mixed
+     */
+    public function share($user, int $id)
     {
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

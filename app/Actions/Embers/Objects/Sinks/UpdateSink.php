@@ -15,11 +15,12 @@ class UpdateSink implements UpdatesSinks
     /**
      * Validate, update and return an existing instance.
      *
+     * @param  mixed  $user
      * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
         $sink = Instance::findOrFail($id);
 

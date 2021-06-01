@@ -12,9 +12,10 @@ class IndexLink implements IndexesLinks
     /**
      * Display all the available Links.
      *
+     * @param  mixed  $user
      * @return [Instance]
      */
-    public function index()
+    public function index($user)
     {
         Gate::authorize('viewAny', Link::class);
 

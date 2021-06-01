@@ -14,9 +14,10 @@ class IndexSource implements IndexesSources
     /**
      * Display all the available Sources.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function index()
+    public function index($user)
     {
         Gate::authorize('viewAny', Instance::class);
 

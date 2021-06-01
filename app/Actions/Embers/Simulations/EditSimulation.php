@@ -13,11 +13,12 @@ class EditSimulation implements EditsSimulations
     /**
      * Display the necessary objects for updating a given Project.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @return mixed
      */
-    public function edit(int $projectId, int $simulationId)
+    public function edit($user, int $projectId, int $simulationId)
     {
         $project = Project::with(['location'])->findOrFail($projectId);
 

@@ -12,9 +12,10 @@ class IndexProject implements IndexesProjects
     /**
      * Display all the available Projects.
      *
+     * @param  mixed  $user
      * @return [Project]
      */
-    public function index()
+    public function index($user)
     {
         Gate::authorize('viewAny', Project::class);
 

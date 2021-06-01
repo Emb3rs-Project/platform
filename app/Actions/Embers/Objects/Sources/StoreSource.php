@@ -19,10 +19,11 @@ class StoreSource implements StoresSources
     /**
      * Validate and create a new instance.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return Instance
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
         Gate::authorize('create', Instance::class);
 

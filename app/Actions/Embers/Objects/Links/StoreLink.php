@@ -14,10 +14,11 @@ class StoreLink implements StoresLinks
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  array $input
      * @return Instance
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
         Gate::authorize('create', Link::class);
 

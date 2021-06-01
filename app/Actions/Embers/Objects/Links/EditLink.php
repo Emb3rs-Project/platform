@@ -13,11 +13,12 @@ class EditLink implements EditsLinks
     /**
      * Display the necessary objects for updating a given Link.
      *
-     * @param  int    $id
+     * @param  mixed  $user
+     * @param  int  $id
      * @param  array  $input
      * @return mixed
      */
-    public function edit(int $id)
+    public function edit($user, int $id)
     {
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

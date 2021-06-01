@@ -12,12 +12,13 @@ use Illuminate\Support\Facades\Gate;
 class ShowSource implements ShowsSources
 {
     /**
-    * Find and return an existing Source.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
-    public function show(int $id)
+     * Find and return an existing Source.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return mixed
+     */
+    public function show($user, int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
