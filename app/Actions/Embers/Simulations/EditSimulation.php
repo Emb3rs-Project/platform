@@ -3,10 +3,8 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\EditsSimulations;
-use App\Models\Location;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class EditSimulation implements EditsSimulations
 {
@@ -20,13 +18,12 @@ class EditSimulation implements EditsSimulations
      */
     public function edit($user, int $projectId, int $simulationId)
     {
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+
         $project = Project::with(['location'])->findOrFail($projectId);
 
-        Gate::authorize('view', $project);
-
         $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
-
-        Gate::authorize('view', $simulation);
 
         return [
             $simulation,

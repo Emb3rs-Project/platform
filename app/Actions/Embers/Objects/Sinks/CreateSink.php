@@ -4,10 +4,8 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Models\Category;
-use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class CreateSink implements CreatesSinks
 {
@@ -19,7 +17,7 @@ class CreateSink implements CreatesSinks
      */
     public function create($user)
     {
-        Gate::authorize('create', Instance::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-sink'), 401);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

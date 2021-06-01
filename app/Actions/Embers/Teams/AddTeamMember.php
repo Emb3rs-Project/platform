@@ -43,7 +43,7 @@ class AddTeamMember implements AddsTeamMembers
      *
      * @param  mixed  $team
      * @param  string  $email
-     * @param  string|null  $role
+     * @param  int  $teamRoleId
      * @return void
      */
     protected function validate($team, string $email, int $teamRoleId)

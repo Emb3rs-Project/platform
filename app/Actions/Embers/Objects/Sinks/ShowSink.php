@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class ShowSink implements ShowsSinks
 {
@@ -17,9 +16,9 @@ class ShowSink implements ShowsSinks
      */
     public function show($user, int $id)
     {
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-sink'), 401);
 
-        Gate::authorize('view', $sink);
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         return $sink;
     }

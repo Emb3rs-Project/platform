@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSimulation implements UpdatesSimulations
@@ -21,13 +20,12 @@ class UpdateSimulation implements UpdatesSimulations
      */
     public function update($user, int $projectId, int $simulationId, array $input)
     {
-        $project = Project::findOrFail($projectId);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $simulation = Simulation::findOrFail($simulationId);
-
-        Gate::authorize('update', $simulation);
 
         $this->validate($input);
 

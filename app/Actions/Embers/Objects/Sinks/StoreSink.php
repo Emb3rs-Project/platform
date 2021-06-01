@@ -5,8 +5,6 @@ namespace App\Actions\Embers\Objects\Sinks;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Models\Instance;
 use App\Models\Location;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSink implements StoresSinks
@@ -20,11 +18,11 @@ class StoreSink implements StoresSinks
      */
     public function store($user, array $input)
     {
-        Gate::authorize('create', Instance::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-sink'), 401);
 
         $this->validate($input);
 
-        $sink = $this->save($input);
+        $sink = $this->save($user, $input);
 
         return $sink;
     }
@@ -52,10 +50,11 @@ class StoreSink implements StoresSinks
     /**
      * Save the Sink in the DB.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return Instance
      */
-    protected function save(array $input)
+    protected function save($user, array $input)
     {
         $sink = $input['sink'];
         $templateId = $input['template_id'];
@@ -95,7 +94,7 @@ class StoreSink implements StoresSinks
         }
 
         $instance = Instance::create($newInstance);
-        $instance->teams()->attach(Auth::user()->currentTeam);
+        $instance->teams()->attach($user->currentTeam);
 
         return $instance;
     }

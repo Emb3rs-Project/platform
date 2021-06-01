@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShareSimulation implements SharesSimulations
 {
@@ -19,14 +18,12 @@ class ShareSimulation implements SharesSimulations
      */
     public function share($user, int $projectId, int $simulationId)
     {
-        $project = Project::findOrFail($projectId);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
-
-        Gate::authorize('view', $simulation);
-        // TODO: also check for sharing permissions
 
         // TODO: generate a sharing link
 

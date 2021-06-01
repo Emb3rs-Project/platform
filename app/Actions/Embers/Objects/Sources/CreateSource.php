@@ -4,10 +4,8 @@ namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\CreatesSources;
 use App\Models\Category;
-use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class CreateSource implements CreatesSources
 {
@@ -19,7 +17,7 @@ class CreateSource implements CreatesSources
      */
     public function create($user)
     {
-        Gate::authorize('create', Instance::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-source'), 401);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 

@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\SharesSinks;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class ShareSink implements SharesSinks
 {
@@ -17,10 +16,9 @@ class ShareSink implements SharesSinks
      */
     public function share($user, int $id)
     {
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-sink'), 401);
 
-        Gate::authorize('view', $sink);
-        // TODO: also check for sharing permissions
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         // TODO: generate a sharing link
 

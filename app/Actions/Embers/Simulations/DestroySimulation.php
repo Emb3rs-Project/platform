@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Simulations\DestroysSimulations;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class DestroySimulation implements DestroysSimulations
 {
@@ -20,13 +19,12 @@ class DestroySimulation implements DestroysSimulations
      */
     public function destroy($user, int $projectId, int $simulationId)
     {
-        $project = Project::findOrFail($projectId);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $simulation = Simulation::findOrFail($simulationId);
-
-        Gate::authorize('delete', $simulation);
 
         Simulation::destroy($simulation->id);
     }

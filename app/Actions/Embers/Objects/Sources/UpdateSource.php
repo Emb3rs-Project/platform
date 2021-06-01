@@ -6,8 +6,6 @@ use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSource implements UpdatesSources
@@ -22,9 +20,9 @@ class UpdateSource implements UpdatesSources
      */
     public function update($user, int $id, array $input)
     {
-        $source = Instance::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-source'), 401);
 
-        Gate::authorize('update', $source);
+        $source = Instance::findOrFail($id);
 
         $this->validate($input);
 

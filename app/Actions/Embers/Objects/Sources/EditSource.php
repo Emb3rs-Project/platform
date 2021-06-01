@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class EditSource implements EditsSources
 {
@@ -20,9 +19,9 @@ class EditSource implements EditsSources
      */
     public function edit($user, int $id)
     {
-        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-source'), 401);
 
-        Gate::authorize('view', $source);
+        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 

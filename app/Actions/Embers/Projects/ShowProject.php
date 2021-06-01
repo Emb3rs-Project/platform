@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShowProject implements ShowsProjects
 {
@@ -18,9 +17,9 @@ class ShowProject implements ShowsProjects
      */
     public function show($user, int $id)
     {
-        $project = Project::with(['location'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
-        Gate::authorize('view', $project);
+        $project = Project::with(['location'])->findOrFail($id);
 
         $simulations = Simulation::with(['simulationType', 'simulationType.unit'])
             ->whereProjectId($project->id)

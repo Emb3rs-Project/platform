@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class ShareSource implements SharesSources
 {
@@ -17,10 +16,9 @@ class ShareSource implements SharesSources
      */
     public function share($user, int $id)
     {
-        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-source'), 401);
 
-        Gate::authorize('view', $source);
-        // TODO: also check for sharing permissions
+        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         // TODO: generate a sharing link
 

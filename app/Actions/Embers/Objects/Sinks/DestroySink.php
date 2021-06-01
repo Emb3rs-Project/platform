@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class DestroySink implements DestroysSinks
 {
@@ -18,9 +17,9 @@ class DestroySink implements DestroysSinks
      */
     public function destroy($user, int $id)
     {
-        $sink = Instance::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-sink'), 401);
 
-        Gate::authorize('delete', $sink);
+        $sink = Instance::findOrFail($id);
 
         Instance::destroy($sink->id);
     }

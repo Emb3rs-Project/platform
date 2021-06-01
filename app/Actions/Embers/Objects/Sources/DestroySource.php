@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class DestroySource implements DestroysSources
 {
@@ -17,9 +16,9 @@ class DestroySource implements DestroysSources
      */
     public function destroy($user, int $id)
     {
-        $source = Instance::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-source'), 401);
 
-        Gate::authorize('delete', $source);
+        $source = Instance::findOrFail($id);
 
         Instance::destroy($source->id);
     }

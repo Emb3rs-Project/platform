@@ -4,8 +4,6 @@ namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class IndexLink implements IndexesLinks
 {
@@ -17,9 +15,9 @@ class IndexLink implements IndexesLinks
      */
     public function index($user)
     {
-        Gate::authorize('viewAny', Link::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-link'), 401);
 
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $teamLinks = $user->currentTeam->links->pluck('id');
 
         $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
 

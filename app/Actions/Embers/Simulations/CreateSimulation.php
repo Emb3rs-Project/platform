@@ -6,14 +6,9 @@ use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
-use App\Models\Instance;
-use App\Models\Link;
 use App\Models\Location;
 use App\Models\Project;
-use App\Models\Simulation;
 use App\Models\SimulationType;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class CreateSimulation implements CreatesSimulations
 {
@@ -26,23 +21,22 @@ class CreateSimulation implements CreatesSimulations
      */
     public function create($user, int $projectId)
     {
-        Gate::authorize('create', Simulation::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-source'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-sink'), 401);
 
         $project = Project::findOrFail($projectId);
 
-        Gate::authorize('view', $project);
-        Gate::authorize('viewAny', Instance::class);
-        Gate::authorize('viewAny', Link::class);
-
         $simulationTypes = SimulationType::all();
 
-        $sources = app(IndexesSources::class)->index(Auth::user());
+        $sources = app(IndexesSources::class)->index($user);
 
-        $sinks = app(IndexesSinks::class)->index(Auth::user());
+        $sinks = app(IndexesSinks::class)->index($user);
 
         $locations = Location::all();
 
-        $links = app(IndexesLinks::class)->index(Auth::user());
+        $links = app(IndexesLinks::class)->index($user);
 
         return [
             $simulationTypes,

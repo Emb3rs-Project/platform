@@ -4,8 +4,6 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\SharesProjects;
 use App\Models\Project;
-use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShareProject implements SharesProjects
 {
@@ -18,10 +16,9 @@ class ShareProject implements SharesProjects
      */
     public function share($user, int $id)
     {
-        $project = Project::with(['location'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-project'), 401);
 
-        Gate::authorize('view', $project);
-        // TODO: also check for sharing permissions
+        $project = Project::with(['location'])->findOrFail($id);
 
         // TODO: generate a sharing link
 

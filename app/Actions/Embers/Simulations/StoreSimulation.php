@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSimulation implements StoresSimulations
@@ -20,11 +19,10 @@ class StoreSimulation implements StoresSimulations
      */
     public function store($user, int $projectId, array $input)
     {
-        Gate::authorize('create', Simulation::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
-        $project = Project::findOrFail($projectId);
-
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $this->validate($input);
 

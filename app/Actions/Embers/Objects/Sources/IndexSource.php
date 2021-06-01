@@ -6,8 +6,6 @@ use App\Contracts\Embers\Objects\Sources\IndexesSources;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class IndexSource implements IndexesSources
 {
@@ -19,7 +17,7 @@ class IndexSource implements IndexesSources
      */
     public function index($user)
     {
-        Gate::authorize('viewAny', Instance::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-source'), 401);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 
@@ -32,7 +30,7 @@ class IndexSource implements IndexesSources
             ->get()
             ->pluck('id');
 
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        $teamInstances = $user->currentTeam->instances->pluck('id');
 
         $instances = Instance::whereIn('template_id', $sourceTemplates)
             ->whereIn('id', $teamInstances)

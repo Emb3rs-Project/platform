@@ -7,7 +7,6 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class EditSink implements EditsSinks
 {
@@ -20,9 +19,9 @@ class EditSink implements EditsSinks
      */
     public function edit($user, int $id)
     {
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-sink'), 401);
 
-        Gate::authorize('view', $sink);
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

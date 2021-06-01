@@ -3,8 +3,6 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
-use App\Models\Link;
-use Illuminate\Support\Facades\Gate;
 
 class CreateLink implements CreatesLinks
 {
@@ -16,7 +14,7 @@ class CreateLink implements CreatesLinks
      */
     public function create($user)
     {
-        Gate::authorize('create', Link::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-link'), 401);
 
         return [];
     }

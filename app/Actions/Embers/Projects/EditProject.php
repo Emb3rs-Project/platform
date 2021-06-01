@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\EditsProjects;
 use App\Models\Location;
 use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 
 class EditProject implements EditsProjects
 {
@@ -19,9 +18,9 @@ class EditProject implements EditsProjects
      */
     public function edit($user, int $id)
     {
-        $project = Project::with(['location'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-project'), 401);
 
-        Gate::authorize('view', $project);
+        $project = Project::with(['location'])->findOrFail($id);
 
         $locations = Location::all();
 

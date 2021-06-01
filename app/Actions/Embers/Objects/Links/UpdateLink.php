@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Objects\Links;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
 use App\Models\GeoSegment;
 use App\Models\Link;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateLink implements UpdatesLinks
@@ -20,9 +19,9 @@ class UpdateLink implements UpdatesLinks
      */
     public function update($user, int $id, array $input)
     {
-        $link = Link::with(['geoSegments'])->findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-link'), 401);
 
-        Gate::authorize('update', $link);
+        $link = Link::with(['geoSegments'])->findOrFail($id);
 
         $this->validate($input);
 

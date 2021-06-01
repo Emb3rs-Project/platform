@@ -6,8 +6,6 @@ use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class IndexSink implements IndexesSinks
 {
@@ -19,13 +17,13 @@ class IndexSink implements IndexesSinks
      */
     public function index($user)
     {
-        Gate::authorize('viewAny', Instance::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-sink'), 401);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 
         $templates = Template::whereIn('category_id', $sinkCategories)->get()->pluck('id');
 
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        $teamInstances = $user->currentTeam->instances->pluck('id');
 
         $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)

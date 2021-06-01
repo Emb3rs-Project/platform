@@ -4,8 +4,6 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Models\Location;
-use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 
 class CreateProject implements CreatesProjects
 {
@@ -17,7 +15,7 @@ class CreateProject implements CreatesProjects
      */
     public function create($user)
     {
-        Gate::authorize('create', Project::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-project'), 401);
 
         $locations = Location::all();
 

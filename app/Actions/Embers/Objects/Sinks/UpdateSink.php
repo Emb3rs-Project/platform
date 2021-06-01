@@ -6,8 +6,6 @@ use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSink implements UpdatesSinks
@@ -22,9 +20,9 @@ class UpdateSink implements UpdatesSinks
      */
     public function update($user, int $id, array $input)
     {
-        $sink = Instance::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-sink'), 401);
 
-        Gate::authorize('update', $sink);
+        $sink = Instance::findOrFail($id);
 
         $this->validate($input);
 

@@ -4,8 +4,6 @@ namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Models\Project;
-use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class IndexSimulation implements IndexesSimulations
 {
@@ -18,11 +16,10 @@ class IndexSimulation implements IndexesSimulations
      */
     public function index($user, int $projectId)
     {
-        Gate::authorize('viewAny', Simulation::class);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-simulation'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
 
         $project = Project::findOrFail($projectId);
-
-        Gate::authorize('view', $project);
 
         $simulations = $project->simulations()->with(['target','simulationType'])->get();
 

@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\DestroysProjects;
 use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 
 class DestroyProject implements DestroysProjects
 {
@@ -18,9 +17,9 @@ class DestroyProject implements DestroysProjects
      */
     public function destroy($user, int $id)
     {
-        $project = Project::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-project'), 401);
 
-        Gate::authorize('delete', $project);
+        $project = Project::findOrFail($id);
 
         Project::destroy($project->id);
     }

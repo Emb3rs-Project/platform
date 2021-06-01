@@ -4,8 +4,6 @@ namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class ShowLink implements ShowsLinks
 {
@@ -18,11 +16,11 @@ class ShowLink implements ShowsLinks
      */
     public function show($user, int $id)
     {
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-link'), 401);
+
         $link = Link::with(['geoSegments'])->findOrFail($id);
 
-        Gate::authorize('view', $link);
-
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $teamLinks = $user->currentTeam->links->pluck('id');
 
         $link->whereIn('id', $teamLinks)->get();
 

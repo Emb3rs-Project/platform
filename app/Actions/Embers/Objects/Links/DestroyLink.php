@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Models\Link;
-use Illuminate\Support\Facades\Gate;
 
 class DestroyLink implements DestroysLinks
 {
@@ -18,9 +17,9 @@ class DestroyLink implements DestroysLinks
      */
     public function destroy($user, int $id)
     {
-        $link = Link::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-link'), 401);
 
-        Gate::authorize('delete', $link);
+        $link = Link::findOrFail($id);
 
         Link::destroy($link->id);
     }

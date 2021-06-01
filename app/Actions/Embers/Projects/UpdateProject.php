@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateProject implements UpdatesProjects
@@ -19,9 +18,9 @@ class UpdateProject implements UpdatesProjects
      */
     public function update($user, int $id, array $input)
     {
-        $project = Project::findOrFail($id);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-project'), 401);
 
-        Gate::authorize('update', $project);
+        $project = Project::findOrFail($id);
 
         $this->validate($input);
 

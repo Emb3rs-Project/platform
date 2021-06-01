@@ -5,8 +5,6 @@ namespace App\Actions\Embers\Objects\Links;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Models\Link;
 use App\Models\Location;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class EditLink implements EditsLinks
 {
@@ -20,11 +18,11 @@ class EditLink implements EditsLinks
      */
     public function edit($user, int $id)
     {
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-link'), 401);
+
         $link = Link::with(['geoSegments'])->findOrFail($id);
 
-        Gate::authorize('view', $link);
-
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $teamLinks = $user->currentTeam->links->pluck('id');
 
         $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
 

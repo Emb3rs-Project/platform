@@ -4,7 +4,6 @@ namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Models\Project;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class StoreProject implements StoresProjects
@@ -19,11 +18,11 @@ class StoreProject implements StoresProjects
      */
     public function store($user, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'can-deledte-project'), 401);
+        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-project'), 401);
 
         $this->validate($input);
 
-        $link = $this->save($input);
+        $link = $this->save($user, $input);
 
         return $link;
     }
@@ -51,7 +50,7 @@ class StoreProject implements StoresProjects
      * @param  array  $input
      * @return void
      */
-    protected function save(array $input)
+    protected function save($user, array $input)
     {
         $project = Project::create([
             'name' => $input['name'],
@@ -59,6 +58,6 @@ class StoreProject implements StoresProjects
             'location_id' =>  $input['location_id']
         ]);
 
-        $project->teams()->attach(Auth::user()->currentTeam);
+        $project->teams()->attach($user->currentTeam);
     }
 }
