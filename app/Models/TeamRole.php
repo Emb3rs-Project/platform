@@ -16,7 +16,9 @@ class TeamRole extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'permissions'
+    ];
 
     /**
     * The attributes that should be cast.

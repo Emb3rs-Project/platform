@@ -32,6 +32,7 @@ use App\Actions\Embers\Projects\DestroyProject;
 use App\Actions\Embers\Projects\EditProject;
 use App\Actions\Embers\Projects\ShareProject;
 use App\Actions\Embers\Projects\ShowProject;
+use App\Actions\Embers\Projects\ShowTeamRole;
 use App\Actions\Embers\Projects\StoreProject;
 use App\Actions\Embers\Projects\UpdateProject;
 use App\Actions\Embers\Simulations\CreateSimulation;
@@ -42,6 +43,12 @@ use App\Actions\Embers\Simulations\ShareSimulation;
 use App\Actions\Embers\Simulations\ShowSimulation;
 use App\Actions\Embers\Simulations\StoreSimulation;
 use App\Actions\Embers\Simulations\UpdateSimulation;
+use App\Actions\Embers\TeamRoles\CreateTeamRole;
+use App\Actions\Embers\TeamRoles\DestoryTeamRole;
+use App\Actions\Embers\TeamRoles\EditTeamRole;
+use App\Actions\Embers\TeamRoles\IndexTeamRole;
+use App\Actions\Embers\TeamRoles\StoreTeamRole;
+use App\Actions\Embers\TeamRoles\UpdateTeamRole;
 use App\Actions\Embers\Teams\AddTeamMember;
 use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Embers;
@@ -118,6 +125,14 @@ class AppServiceProvider extends ServiceProvider
         Embers::updateSimulationsUsing(UpdateSimulation::class);
         Embers::destroySimulationsUsing(DestroySimulation::class);
         Embers::shareSimulationsUsing(ShareSimulation::class);
+
+        Embers::indexTeamRolesUsing(IndexTeamRole::class);
+        Embers::createTeamRolesUsing(CreateTeamRole::class);
+        Embers::storeTeamRolesUsing(StoreTeamRole::class);
+        Embers::showTeamRolesUsing(ShowTeamRole::class);
+        Embers::editTeamRolesUsing(EditTeamRole::class);
+        Embers::updateTeamRolesUsing(UpdateTeamRole::class);
+        Embers::destroyTeamRolesUsing(DestoryTeamRole::class);
 
         Embers::addTeamMembersUsing(AddTeamMember::class);
         Embers::inviteTeamMembersUsing(InviteTeamMember::class);
