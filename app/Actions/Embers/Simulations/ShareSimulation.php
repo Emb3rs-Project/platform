@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\SharesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
 
 class ShareSimulation implements SharesSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Simulation.
      *
@@ -18,8 +21,7 @@ class ShareSimulation implements SharesSimulations
      */
     public function share($user, int $projectId, int $simulationId)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-simulation'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        $this->authorize($user);
 
         Project::findOrFail($projectId);
 

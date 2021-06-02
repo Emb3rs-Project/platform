@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\CreatesSources;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Template;
 
 class CreateSource implements CreatesSources
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for the creation of a Source.
      *
@@ -17,7 +20,7 @@ class CreateSource implements CreatesSources
      */
     public function create($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-source'), 401);
+        $this->authorize($user);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 

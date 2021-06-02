@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSink implements StoresSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Sink.
      *
@@ -18,7 +21,7 @@ class StoreSink implements StoresSinks
      */
     public function store($user, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-sink'), 401);
+        $this->authorize($user);
 
         $this->validate($input);
 

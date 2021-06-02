@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\StoresSources;
+use App\EmbersPermissionable;
 use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Instance;
 use App\Models\Location;
@@ -13,6 +14,8 @@ use Laravel\Nova\Fields\ActionFields;
 
 class StoreSource implements StoresSources
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new instance.
      *
@@ -22,7 +25,7 @@ class StoreSource implements StoresSources
      */
     public function store($user, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-source'), 401);
+        $this->authorize($user);
 
         $this->validate($input);
 

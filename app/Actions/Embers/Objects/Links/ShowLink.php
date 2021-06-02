@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
 
 class ShowLink implements ShowsLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Sink.
      *
@@ -16,7 +19,7 @@ class ShowLink implements ShowsLinks
      */
     public function show($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-link'), 401);
+        $this->authorize($user);
 
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\DestroysProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 
 class DestroyProject implements DestroysProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Project.
      *
@@ -17,7 +20,7 @@ class DestroyProject implements DestroysProjects
      */
     public function destroy($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-project'), 401);
+        $this->authorize($user);
 
         $project = Project::findOrFail($id);
 

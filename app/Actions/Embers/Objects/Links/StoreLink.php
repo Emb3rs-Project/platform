@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\StoresLinks;
+use App\EmbersPermissionable;
 use App\Models\GeoSegment;
 use App\Models\Link;
 use Illuminate\Support\Facades\Validator;
 
 class StoreLink implements StoresLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
@@ -18,7 +21,7 @@ class StoreLink implements StoresLinks
      */
     public function store($user, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-link'), 401);
+        $this->authorize($user);
 
         $this->validate($input);
 

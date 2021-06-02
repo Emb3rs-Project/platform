@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\EditsSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
 
 class EditSimulation implements EditsSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for updating a given Project.
      *
@@ -18,8 +21,7 @@ class EditSimulation implements EditsSimulations
      */
     public function edit($user, int $projectId, int $simulationId)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-simulation'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        $this->authorize($user);
 
         $project = Project::with(['location'])->findOrFail($projectId);
 

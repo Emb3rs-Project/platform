@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UpdateSource implements UpdatesSources
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and update an existing instance.
      *
@@ -20,7 +23,7 @@ class UpdateSource implements UpdatesSources
      */
     public function update($user, int $id, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-source'), 401);
+        $this->authorize($user);
 
         $source = Instance::findOrFail($id);
 

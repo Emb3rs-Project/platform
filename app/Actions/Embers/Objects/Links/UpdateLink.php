@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
+use App\EmbersPermissionable;
 use App\Models\GeoSegment;
 use App\Models\Link;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateLink implements UpdatesLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate, update and return an existing instance.
      *
@@ -19,7 +22,7 @@ class UpdateLink implements UpdatesLinks
      */
     public function update($user, int $id, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-link'), 401);
+        $this->authorize($user);
 
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

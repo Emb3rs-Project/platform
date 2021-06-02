@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
 
 class IndexSink implements IndexesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Sinks.
      *
@@ -17,7 +20,7 @@ class IndexSink implements IndexesSinks
      */
     public function index($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-sink'), 401);
+        $this->authorize($user);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

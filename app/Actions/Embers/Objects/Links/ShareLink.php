@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\SharesLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
 
 class ShareLink implements SharesLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Link.
      *
@@ -16,7 +19,7 @@ class ShareLink implements SharesLinks
      */
     public function share($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-link'), 401);
+        $this->authorize($user);
 
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

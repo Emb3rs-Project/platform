@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\EditsLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
 use App\Models\Location;
 
 class EditLink implements EditsLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for updating a given Link.
      *
@@ -18,7 +21,7 @@ class EditLink implements EditsLinks
      */
     public function edit($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-link'), 401);
+        $this->authorize($user);
 
         $link = Link::with(['geoSegments'])->findOrFail($id);
 

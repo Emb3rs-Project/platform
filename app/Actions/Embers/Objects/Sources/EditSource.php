@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\EditsSources;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
@@ -10,6 +11,8 @@ use App\Models\Template;
 
 class EditSource implements EditsSources
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for updating a given Source.
      *
@@ -19,7 +22,7 @@ class EditSource implements EditsSources
      */
     public function edit($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-source'), 401);
+        $this->authorize($user);
 
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

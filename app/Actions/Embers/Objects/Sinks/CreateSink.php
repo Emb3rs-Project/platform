@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Template;
 
 class CreateSink implements CreatesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for the creation of a Sink.
      *
@@ -17,7 +20,7 @@ class CreateSink implements CreatesSinks
      */
     public function create($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-sink'), 401);
+        $this->authorize($user);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\SharesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 
 class ShareProject implements SharesProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Project.
      *
@@ -16,7 +19,7 @@ class ShareProject implements SharesProjects
      */
     public function share($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-project'), 401);
+        $this->authorize($user);
 
         $project = Project::with(['location'])->findOrFail($id);
 

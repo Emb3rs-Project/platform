@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\ShowsSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
 
 class ShowSimulation implements ShowsSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Simulation.
      *
@@ -18,8 +21,7 @@ class ShowSimulation implements ShowsSimulations
      */
     public function show($user, int $projectId, int $simulationId)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-simulation'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        $this->authorize($user);
 
         $project = Project::with(['location'])->findOrFail($projectId);
 

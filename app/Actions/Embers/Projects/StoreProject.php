@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\StoresProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use Illuminate\Support\Facades\Validator;
 
 class StoreProject implements StoresProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
@@ -18,7 +21,7 @@ class StoreProject implements StoresProjects
      */
     public function store($user, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'store-project'), 401);
+        $this->authorize($user);
 
         $this->validate($input);
 

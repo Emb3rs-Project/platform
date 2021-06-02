@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\ShowsProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
 
 class ShowProject implements ShowsProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Project.
      *
@@ -17,7 +20,7 @@ class ShowProject implements ShowsProjects
      */
     public function show($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        $this->authorize($user);
 
         $project = Project::with(['location'])->findOrFail($id);
 

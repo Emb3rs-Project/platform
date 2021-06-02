@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
@@ -10,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UpdateSink implements UpdatesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate, update and return an existing instance.
      *
@@ -20,7 +23,7 @@ class UpdateSink implements UpdatesSinks
      */
     public function update($user, int $id, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-sink'), 401);
+        $this->authorize($user);
 
         $sink = Instance::findOrFail($id);
 

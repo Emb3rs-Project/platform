@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSimulation implements UpdatesSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
@@ -20,8 +23,7 @@ class UpdateSimulation implements UpdatesSimulations
      */
     public function update($user, int $projectId, int $simulationId, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-simulation'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
+        $this->authorize($user);
 
         Project::findOrFail($projectId);
 

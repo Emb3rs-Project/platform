@@ -3,12 +3,15 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
 
 class IndexSource implements IndexesSources
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Sources.
      *
@@ -17,7 +20,7 @@ class IndexSource implements IndexesSources
      */
     public function index($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-source'), 401);
+        $this->authorize($user);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 

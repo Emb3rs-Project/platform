@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 
 class ShowSink implements ShowsSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Sink.
      *
@@ -16,7 +19,7 @@ class ShowSink implements ShowsSinks
      */
     public function show($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-sink'), 401);
+        $this->authorize($user);
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

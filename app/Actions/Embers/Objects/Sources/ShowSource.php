@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
@@ -10,6 +11,8 @@ use App\Models\Template;
 
 class ShowSource implements ShowsSources
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Source.
      *
@@ -19,7 +22,7 @@ class ShowSource implements ShowsSources
      */
     public function show($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-source'), 401);
+        $this->authorize($user);
 
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

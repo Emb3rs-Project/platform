@@ -5,13 +5,15 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
+use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Location;
-use App\Models\Project;
 use App\Models\SimulationType;
 
 class CreateSimulation implements CreatesSimulations
 {
+    use EmbersPermissionable;
     /**
      * Display the necessary objects for the creation of a Simulation.
      *
@@ -21,12 +23,9 @@ class CreateSimulation implements CreatesSimulations
      */
     public function create($user, int $projectId)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'create-simulation'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'show-project'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-source'), 401);
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-sink'), 401);
+        $this->authorize($user);
 
-        $project = Project::findOrFail($projectId);
+        // app(ShowsProjects::class)->show($user, $projectId);
 
         $simulationTypes = SimulationType::all();
 

@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\IndexesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 
 class IndexProject implements IndexesProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Projects.
      *
@@ -15,7 +18,7 @@ class IndexProject implements IndexesProjects
      */
     public function index($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-project'), 401);
+        $this->authorize($user);
 
         $teamProjects = $user->currentTeam->projects->pluck('id');
 

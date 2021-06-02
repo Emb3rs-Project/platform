@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\SharesSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 
 class ShareSink implements SharesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Sink.
      *
@@ -16,7 +19,7 @@ class ShareSink implements SharesSinks
      */
     public function share($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'share-sink'), 401);
+        $this->authorize($user);
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

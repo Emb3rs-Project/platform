@@ -3,11 +3,14 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\UpdatesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateProject implements UpdatesProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Validate, update and return an existing Project.
      *
@@ -18,7 +21,7 @@ class UpdateProject implements UpdatesProjects
      */
     public function update($user, int $id, array $input)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'update-project'), 401);
+        $this->authorize($user);
 
         $project = Project::findOrFail($id);
 

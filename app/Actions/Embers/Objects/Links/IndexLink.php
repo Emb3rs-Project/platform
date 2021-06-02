@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
 
 class IndexLink implements IndexesLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Links.
      *
@@ -15,7 +18,7 @@ class IndexLink implements IndexesLinks
      */
     public function index($user)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'index-link'), 401);
+        $this->authorize($user);
 
         $teamLinks = $user->currentTeam->links->pluck('id');
 

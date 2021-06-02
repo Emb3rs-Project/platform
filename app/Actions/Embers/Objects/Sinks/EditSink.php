@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
@@ -10,6 +11,8 @@ use App\Models\Template;
 
 class EditSink implements EditsSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for updating a given Sink.
      *
@@ -19,7 +22,7 @@ class EditSink implements EditsSinks
      */
     public function edit($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'edit-sink'), 401);
+        $this->authorize($user);
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 

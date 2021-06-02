@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 
 class DestroySink implements DestroysSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Link.
      *
@@ -17,7 +20,7 @@ class DestroySink implements DestroysSinks
      */
     public function destroy($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-sink'), 401);
+        $this->authorize($user);
 
         $sink = Instance::findOrFail($id);
 

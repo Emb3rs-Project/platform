@@ -3,10 +3,13 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
 
 class DestroyLink implements DestroysLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Link.
      *
@@ -17,7 +20,7 @@ class DestroyLink implements DestroysLinks
      */
     public function destroy($user, int $id)
     {
-        // abort_unless($user->hasTeamPermission($user->currentTeam, 'destroy-link'), 401);
+        $this->authorize($user);
 
         $link = Link::findOrFail($id);
 
