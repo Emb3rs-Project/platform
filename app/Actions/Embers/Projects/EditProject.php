@@ -16,7 +16,6 @@ class EditProject implements EditsProjects
      *
      * @param  mixed  $user
      * @param  int  $id
-     * @param  array  $input
      * @return mixed
      */
     public function edit($user, int $id)

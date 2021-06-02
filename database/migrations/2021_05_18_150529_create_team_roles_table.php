@@ -22,27 +22,27 @@ class CreateTeamRolesTable extends Migration
             $table->jsonb('permissions')->nullable(); // array of permission names
 
             // {
-            //     "permissions": [
-            //       "can create sources",
-            //       "can read sources",
-            //       "can update sources",
-            //       "can delete sources",
-            //       "can create sinks",
-            //       "can read sinks",
-            //       "can update sinks",
-            //       "can delete sinks",
-            //       "can create links",
-            //       "can read links",
-            //       "can update links",
-            //       "can delete links",
-            //       "can create projects",
-            //       "can read projects",
-            //       "can update projects",
-            //       "can delete projects",
-            //       "can create simulations",
-            //       "can read simulations",
-            //       "can update simulations",
-            //       "can delete simulations"
+            //     "permission": [
+            //       "can create source",
+            //       "can read source",
+            //       "can update source",
+            //       "can delete source",
+            //       "can create sink",
+            //       "can read sink",
+            //       "can update sink",
+            //       "can delete sink",
+            //       "can create link",
+            //       "can read link",
+            //       "can update link",
+            //       "can delete link",
+            //       "can create project",
+            //       "can read project",
+            //       "can update project",
+            //       "can delete project",
+            //       "can create simulation",
+            //       "can read simulation",
+            //       "can update simulation",
+            //       "can delete simulation"
             //     ]
             // }
 

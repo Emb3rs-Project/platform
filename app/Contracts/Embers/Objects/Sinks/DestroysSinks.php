@@ -9,7 +9,7 @@ interface DestroysSinks
      *
      * @param  mixed  $user
      * @param  int  $id
-     * @return mixed
+     * @return void
      */
     public function destroy($user, int $id);
 }

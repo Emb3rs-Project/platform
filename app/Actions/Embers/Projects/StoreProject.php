@@ -31,7 +31,7 @@ class StoreProject implements StoresProjects
     }
 
     /**
-     * Validate the create Link operation.
+     * Validate the create Project operation.
      *
      * @param  array  $input
      * @return void
@@ -47,7 +47,7 @@ class StoreProject implements StoresProjects
     }
 
     /**
-     * Save the Link in the DB.
+     * Save the Project in the DB.
      *
      * @param  mixed  $user
      * @param  array  $input

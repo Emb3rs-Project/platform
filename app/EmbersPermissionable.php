@@ -28,6 +28,7 @@ trait EmbersPermissionable
         array_shift($actionNameArray);
 
         $friendlyActionName = 'can';
+
         foreach ($actionNameArray as &$part) {
             $part = strtolower($part);
             $friendlyActionName = $friendlyActionName . ' ' . $part;

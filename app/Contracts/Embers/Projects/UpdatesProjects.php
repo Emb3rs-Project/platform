@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Contracts\Embers\Projects;
 
 interface UpdatesProjects
