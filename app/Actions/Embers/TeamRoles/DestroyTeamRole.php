@@ -6,7 +6,7 @@ use App\Contracts\Embers\TeamRoles\DestroysTeamRoles;
 use App\EmbersPermissionable;
 use App\Models\TeamRole;
 
-class DestoryTeamRole implements DestroysTeamRoles
+class DestroyTeamRole implements DestroysTeamRoles
 {
     use EmbersPermissionable;
 

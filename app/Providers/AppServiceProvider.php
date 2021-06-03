@@ -44,7 +44,7 @@ use App\Actions\Embers\Simulations\ShowSimulation;
 use App\Actions\Embers\Simulations\StoreSimulation;
 use App\Actions\Embers\Simulations\UpdateSimulation;
 use App\Actions\Embers\TeamRoles\CreateTeamRole;
-use App\Actions\Embers\TeamRoles\DestoryTeamRole;
+use App\Actions\Embers\TeamRoles\DestroyTeamRole;
 use App\Actions\Embers\TeamRoles\EditTeamRole;
 use App\Actions\Embers\TeamRoles\IndexTeamRole;
 use App\Actions\Embers\TeamRoles\StoreTeamRole;
@@ -132,7 +132,7 @@ class AppServiceProvider extends ServiceProvider
         Embers::showTeamRolesUsing(ShowTeamRole::class);
         Embers::editTeamRolesUsing(EditTeamRole::class);
         Embers::updateTeamRolesUsing(UpdateTeamRole::class);
-        Embers::destroyTeamRolesUsing(DestoryTeamRole::class);
+        Embers::destroyTeamRolesUsing(DestroyTeamRole::class);
 
         Embers::addTeamMembersUsing(AddTeamMember::class);
         Embers::inviteTeamMembersUsing(InviteTeamMember::class);

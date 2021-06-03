@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Embers\Projects;
+namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\ShowsTeamRoles;
 use App\EmbersPermissionable;
