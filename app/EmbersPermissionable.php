@@ -46,8 +46,10 @@ trait EmbersPermissionable
      */
     public function authorize($user): void
     {
+        $team = $user->currentTeam;
+
         $friendlyActionName = $this->getFriendlyActionName();
 
-        abort_unless($user->hasTeamPermission($user->currentTeam, $friendlyActionName), 401);
+        abort_unless($user->hasTeamPermission($team, $friendlyActionName), 401);
     }
 }
