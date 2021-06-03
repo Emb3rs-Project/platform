@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\TeamRole;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Laravel\Jetstream\Jetstream;
 
 trait HasEmbersTeams
@@ -91,10 +92,11 @@ trait HasEmbersTeams
 
         $permissions = $this->teamRole($team)->permissions;
 
-        foreach ($permissions['permissions'] as &$permission) {
-            $permission = $permission['name'];
-        }
-        unset($permission);
+        // TODO: not sure if we are going to need this ATM.
+        // foreach ($permissions['permissions'] as &$permission) {
+        //     $permission = $permission['name'];
+        // }
+        // unset($permission);
 
         return Arr::flatten($permissions);
     }
