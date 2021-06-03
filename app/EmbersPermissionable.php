@@ -7,6 +7,16 @@ use Illuminate\Support\Str;
 trait EmbersPermissionable
 {
     /**
+    * The name of the action this trait is being used inside.
+    *
+    * @return string
+    */
+    public function getActionName(): string
+    {
+        return self::class;
+    }
+
+    /**
      * The name (excluding the namespace) of the action this trait is being used inside.
      *
      * @return string
