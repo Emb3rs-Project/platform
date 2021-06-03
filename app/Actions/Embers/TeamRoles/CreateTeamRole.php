@@ -4,10 +4,12 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
 use App\EmbersPermissionable;
+use App\HasEmbersPermissions;
 
 class CreateTeamRole implements CreatesTeamRoles
 {
     use EmbersPermissionable;
+    use HasEmbersPermissions;
 
     /**
     * Display the necessary permissions for the creation of a Role for user's
@@ -20,8 +22,8 @@ class CreateTeamRole implements CreatesTeamRoles
     {
         $this->authorize($user);
 
-        // TODO: Get the permission names from action names that use the EmbersPermissionable trait
+        $permissions = $this->getPermissions();
 
-        return;
+        return $permissions;
     }
 }

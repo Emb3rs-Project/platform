@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
-class RolesController extends Controller
+class TeamRolesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +28,11 @@ class RolesController extends Controller
      */
     public function create(Request $request)
     {
-        //
+        $permissions = app(CreatesTeamRoles::class)->create($request->user());
+
+        return response()->json([
+            'permissions' => $permissions
+        ]);
     }
 
     /**

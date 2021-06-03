@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Str;
+
 trait EmbersPermissionable
 {
     /**
@@ -11,7 +13,7 @@ trait EmbersPermissionable
      */
     public function getShortActionName(): string
     {
-        return substr(self::class, strrpos(self::class, '\\') + 1);
+        return class_basename(self::class);
     }
 
     /**
@@ -23,17 +25,7 @@ trait EmbersPermissionable
     {
         $actionName = $this->getShortActionName();
 
-        $actionNameArray = preg_split('/(?=[A-Z])/', $actionName);
-        // Since we split on CAPITAL letters, we get an empty string in the beggining
-        array_shift($actionNameArray);
-
-        $friendlyActionName = 'can';
-
-        foreach ($actionNameArray as &$part) {
-            $part = strtolower($part);
-            $friendlyActionName = $friendlyActionName . ' ' . $part;
-        }
-        unset($part);
+        $friendlyActionName = Str::of($actionName)->kebab()->replace('-', ' ');
 
         return $friendlyActionName;
     }
@@ -48,8 +40,8 @@ trait EmbersPermissionable
     {
         $team = $user->currentTeam;
 
-        $friendlyActionName = $this->getFriendlyActionName();
+        $permission = $this->getFriendlyActionName();
 
-        abort_unless($user->hasTeamPermission($team, $friendlyActionName), 401);
+        abort_unless($user->hasTeamPermission($team, $permission), 401);
     }
 }
