@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
+use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
+use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class TeamRolesController extends Controller
 {
@@ -17,7 +20,11 @@ class TeamRolesController extends Controller
      */
     public function index(Request $request)
     {
-        //
+        $roles = app(IndexesTeamRoles::class)->index($request->user());
+
+        return response()->json([
+            'roles' => $roles
+        ]);
     }
 
     /**
@@ -43,7 +50,9 @@ class TeamRolesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        app(StoresTeamRoles::class)->store($request->user(), $request->all());
+
+        return Redirect::route('team-roles.index');
     }
 
     /**

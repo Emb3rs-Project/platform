@@ -17,6 +17,7 @@ class TeamRole extends Model
      * @var array
      */
     protected $fillable = [
+        'role',
         'permissions'
     ];
 

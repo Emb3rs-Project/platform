@@ -4,12 +4,16 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\EmbersPermissionable;
+use App\HasEmbersPermissions;
 use App\Models\TeamRole;
+use App\Rules\Embers\TeamRole as EmbersTeamRole;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StoreTeamRole implements StoresTeamRoles
 {
     use EmbersPermissionable;
+    use HasEmbersPermissions;
 
     /**
      * Validate and create a new Role in user's current Team.
@@ -39,7 +43,9 @@ class StoreTeamRole implements StoresTeamRoles
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'permissions.*' => ['required', 'string', 'max:255'],
+            'role' => ['required', 'string', 'max:255'],
+            'permissions' => ['required', 'array'],
+            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new EmbersTeamRole],
         ])
         ->validate();
     }
@@ -53,9 +59,14 @@ class StoreTeamRole implements StoresTeamRoles
      */
     protected function save($user, array $input)
     {
+        if ($user->currentTeam->user_id === $user->id) {
+            // the user is not the team owner, deny him access
+        }
         $role = TeamRole::create([
+            'role' => $input['role'],
             'permissions' => $input['permissions']
         ]);
+
 
         // TODO: attach the role to user's current team
     }
