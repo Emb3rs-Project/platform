@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
-use ReflectionClass;
 
 trait HasEmbersPermissions
 {
@@ -26,14 +25,45 @@ trait HasEmbersPermissions
                 continue;
             }
 
-            $reflector = new ReflectionClass($class);
-            $traits = $reflector->getTraitNames();
+            $traits = class_uses_recursive($class);
 
             if (! in_array(EmbersPermissionable::class, $traits)) {
                 continue;
             }
 
             $friendlyActionName = Application::getInstance()->make($class)->getFriendlyActionName();
+
+            array_push($permissions, $friendlyActionName);
+        }
+
+        return $permissions;
+    }
+
+    /**
+     * Get all the available permissions.
+     *
+     * @return array
+     */
+    public function getPermissionNamespaces(): array
+    {
+        $composer = require base_path('/vendor/autoload.php');
+
+        $classes = array_keys($composer->getClassMap());
+
+        $permissions = [];
+
+        foreach ($classes as $class) {
+            if (! Str::startsWith($class, 'App\\Actions\\')) {
+                continue;
+            }
+
+            $traits = class_uses_recursive($class);
+
+            if (! in_array(EmbersPermissionable::class, $traits)) {
+                continue;
+            }
+
+            $friendlyActionName = Application::getInstance()->make($class)->getActionName();
 
             array_push($permissions, $friendlyActionName);
         }
