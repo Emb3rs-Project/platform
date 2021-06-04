@@ -35,7 +35,7 @@ class TeamRole implements Rule
      */
     public function passes($attribute, $value)
     {
-        return in_array($value, $this->permissions, true);
+        return in_array($value, $this->permissions);
     }
 
     /**
@@ -45,6 +45,6 @@ class TeamRole implements Rule
      */
     public function message()
     {
-        return 'The :attribute field is not a valid permission name.';
+        return __('The :attribute must be a valid permission.');
     }
 }

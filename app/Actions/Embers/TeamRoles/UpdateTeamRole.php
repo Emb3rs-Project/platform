@@ -5,7 +5,9 @@ namespace App\Actions\Embers\TeamRoles;
 use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\EmbersPermissionable;
 use App\Models\TeamRole;
+use App\Rules\Embers\TeamRole as EmbersTeamRole;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UpdateTeamRole implements UpdatesTeamRoles
 {
@@ -25,7 +27,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
 
         $project = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
 
-        $this->validate($input);
+        $this->validate($user, $input);
 
         $role = $this->save($project, $input);
 
@@ -35,13 +37,23 @@ class UpdateTeamRole implements UpdatesTeamRoles
     /**
      * Validate the update Role operation.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return void
      */
-    protected function validate(array $input)
+    protected function validate($user, array $input)
     {
         Validator::make($input, [
-            'permissions.*' => ['filled', 'string', 'max:255']
+            'role' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique(TeamRole::class)->where(function ($query) use ($user) {
+                    return $query->where('team_id', $user->current_team_id);
+                })
+            ],
+            'permissions' => ['filled', 'array'],
+            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new EmbersTeamRole],
         ])
         ->validate();
     }
@@ -49,12 +61,16 @@ class UpdateTeamRole implements UpdatesTeamRoles
     /**
      * Save the Role in the DB.
      *
-     * @param  mixed  $user
+     * @param  TeamRole  $role
      * @param  array  $input
      * @return Project
      */
     protected function save(TeamRole $role, array $input)
     {
+        if (!empty($input['role'])) {
+            $role->role = $input['role'];
+        }
+
         if (!empty($input['permissions'])) {
             $role->permissions = $input['permissions'];
         }

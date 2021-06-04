@@ -21,6 +21,8 @@ class CreateTeamRolesTable extends Migration
 
             $table->jsonb('permissions')->nullable(); // array of permission names
 
+            $table->unique(['team_id', 'role']);
+
             // {
             //     "permission": [
             //       "can create source",

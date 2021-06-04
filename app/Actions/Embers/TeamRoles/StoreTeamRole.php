@@ -5,10 +5,11 @@ namespace App\Actions\Embers\TeamRoles;
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\EmbersPermissionable;
 use App\HasEmbersPermissions;
+use App\Models\Team;
 use App\Models\TeamRole;
-use App\Rules\Embers\TeamRole as EmbersTeamRole;
-use Illuminate\Support\Facades\Log;
+use App\Rules\Embers\TeamRole as TeamRoleRule;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class StoreTeamRole implements StoresTeamRoles
 {
@@ -19,7 +20,6 @@ class StoreTeamRole implements StoresTeamRoles
      * Validate and create a new Role in user's current Team.
      *
      * @param  mixed  $user
-     * @param  mixed  $user
      * @param  array  $input
      * @return Project
      */
@@ -27,7 +27,7 @@ class StoreTeamRole implements StoresTeamRoles
     {
         $this->authorize($user);
 
-        $this->validate($input);
+        $this->validate($user, $input);
 
         $role = $this->save($user, $input);
 
@@ -37,15 +37,23 @@ class StoreTeamRole implements StoresTeamRoles
     /**
      * Validate the create Role operation.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return void
      */
-    protected function validate(array $input)
+    protected function validate($user, array $input)
     {
         Validator::make($input, [
-            'role' => ['required', 'string', 'max:255'],
+            'role' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique(TeamRole::class)->where(function ($query) use ($user) {
+                    return $query->where('team_id', $user->current_team_id);
+                })
+            ],
             'permissions' => ['required', 'array'],
-            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new EmbersTeamRole],
+            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new TeamRoleRule],
         ])
         ->validate();
     }
@@ -59,15 +67,13 @@ class StoreTeamRole implements StoresTeamRoles
      */
     protected function save($user, array $input)
     {
-        if ($user->currentTeam->user_id === $user->id) {
-            // the user is not the team owner, deny him access
-        }
-        $role = TeamRole::create([
+        $role = new TeamRole([
             'role' => $input['role'],
             'permissions' => $input['permissions']
         ]);
 
+        $team = Team::find($user->current_team_id);
 
-        // TODO: attach the role to user's current team
+        $team->teamRoles()->save($role);
     }
 }

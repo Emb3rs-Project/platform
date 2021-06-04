@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
+use App\Contracts\Embers\TeamRoles\DestroysTeamRoles;
+use App\Contracts\Embers\TeamRoles\EditsTeamRoles;
 use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
+use App\Contracts\Embers\TeamRoles\ShowsTeamRoles;
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
+use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 
 class TeamRolesController extends Controller
@@ -62,9 +65,13 @@ class TeamRolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
-        //
+        $role = app(ShowsTeamRoles::class)->show($request->user(), $id);
+
+        return response()->json([
+            'role' => $role
+        ]);
     }
 
     /**
@@ -74,9 +81,14 @@ class TeamRolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, int $id)
     {
-        //
+        [$role, $permissions] = app(EditsTeamRoles::class)->edit($request->user(), $id);
+
+        return response()->json([
+            'role' => $role,
+            'permissions' => $permissions
+        ]);
     }
 
     /**
@@ -86,9 +98,11 @@ class TeamRolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id)
     {
-        //
+        $updatedRole = app(UpdatesTeamRoles::class)->update($request->user(), $id, $request->all());
+
+        return Redirect::route('team-roles.show', $updatedRole->id);
     }
 
     /**
@@ -98,8 +112,10 @@ class TeamRolesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
-        //
+        app(DestroysTeamRoles::class)->destroy($request->user(), $id);
+
+        return Redirect::route('team-roles.index');
     }
 }
