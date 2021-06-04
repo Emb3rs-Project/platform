@@ -5,9 +5,12 @@ namespace App\Actions\Embers\TeamRoles;
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\EmbersPermissionable;
 use App\HasEmbersPermissions;
+use App\Models\Permission;
 use App\Models\Team;
 use App\Models\TeamRole;
 use App\Rules\Embers\TeamRole as TeamRoleRule;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -67,9 +70,15 @@ class StoreTeamRole implements StoresTeamRoles
      */
     protected function save($user, array $input)
     {
+        // Transform the permission friendly names to their coresponding actions
+        foreach ($input['permissions'] as &$permission) {
+            $permission = Permission::whereFriendlyName($permission)->first();
+        }
+        unset($permission);
+
         $role = new TeamRole([
             'role' => $input['role'],
-            'permissions' => $input['permissions']
+            'permissions' => Arr::pluck($input['permissions'], 'action')
         ]);
 
         $team = Team::find($user->current_team_id);

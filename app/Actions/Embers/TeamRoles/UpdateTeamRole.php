@@ -4,8 +4,10 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\EmbersPermissionable;
+use App\Models\Permission;
 use App\Models\TeamRole;
 use App\Rules\Embers\TeamRole as EmbersTeamRole;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -72,7 +74,13 @@ class UpdateTeamRole implements UpdatesTeamRoles
         }
 
         if (!empty($input['permissions'])) {
-            $role->permissions = $input['permissions'];
+            // Transform the permission friendly names to their coresponding actions
+            foreach ($input['permissions'] as &$permission) {
+                $permission = Permission::whereFriendlyName($permission)->first();
+            }
+            unset($permission);
+
+            $role->permissions = Arr::pluck($input['permissions'], 'action');
         }
 
         $role->save();

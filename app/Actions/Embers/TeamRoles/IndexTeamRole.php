@@ -22,6 +22,8 @@ class IndexTeamRole implements IndexesTeamRoles
 
         $roles = TeamRole::whereTeamId($user->current_team_id)->get();
 
+        //TODO: transform permissions to their friendly names
+
         return $roles;
     }
 }

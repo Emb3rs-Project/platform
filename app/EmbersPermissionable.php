@@ -50,7 +50,7 @@ trait EmbersPermissionable
     {
         $team = $user->currentTeam;
 
-        $permission = $this->getFriendlyActionName();
+        $permission = $this->getActionName();
 
         abort_unless($user->hasTeamPermission($team, $permission), 401);
     }

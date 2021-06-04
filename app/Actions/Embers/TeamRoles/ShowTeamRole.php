@@ -23,6 +23,8 @@ class ShowTeamRole implements ShowsTeamRoles
 
         $role = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
 
+        //TODO: transform permissions to their friendly names
+
         return $role;
     }
 }
