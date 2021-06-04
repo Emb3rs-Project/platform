@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Str;
 
 trait HasEmbersPermissions
@@ -31,7 +30,7 @@ trait HasEmbersPermissions
                 continue;
             }
 
-            $friendlyActionName = Application::getInstance()->make($class)->getFriendlyActionName();
+            $friendlyActionName = app($class)->getFriendlyActionName();
 
             array_push($permissions, $friendlyActionName);
         }
@@ -63,7 +62,7 @@ trait HasEmbersPermissions
                 continue;
             }
 
-            $friendlyActionName = Application::getInstance()->make($class)->getActionName();
+            $friendlyActionName = app($class)->getActionName();
 
             array_push($permissions, $friendlyActionName);
         }
