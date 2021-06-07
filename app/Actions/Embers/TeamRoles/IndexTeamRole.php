@@ -4,6 +4,7 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
 use App\EmbersPermissionable;
+use App\Models\Permission;
 use App\Models\TeamRole;
 
 class IndexTeamRole implements IndexesTeamRoles
@@ -22,7 +23,17 @@ class IndexTeamRole implements IndexesTeamRoles
 
         $roles = TeamRole::whereTeamId($user->current_team_id)->get();
 
-        //TODO: transform permissions to their friendly names
+        $roles->transform(function ($role) {
+            $friendlyPermissions = collect($role->permissions)->map(function ($action) {
+                $permission = Permission::whereAction($action)->first();
+
+                return $permission->friendly_name;
+            });
+
+            $role->permissions = $friendlyPermissions->all();
+
+            return $role;
+        });
 
         return $roles;
     }

@@ -4,7 +4,9 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\ShowsTeamRoles;
 use App\EmbersPermissionable;
+use App\Models\Permission;
 use App\Models\TeamRole;
+use Illuminate\Support\Facades\Log;
 
 class ShowTeamRole implements ShowsTeamRoles
 {
@@ -23,7 +25,13 @@ class ShowTeamRole implements ShowsTeamRoles
 
         $role = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
 
-        //TODO: transform permissions to their friendly names
+        $friendlyPermissions = collect($role->permissions)->map(function ($action) {
+            $permission = Permission::whereAction($action)->first();
+
+            return $permission->friendly_name;
+        });
+
+        $role->permissions = $friendlyPermissions->all();
 
         return $role;
     }
