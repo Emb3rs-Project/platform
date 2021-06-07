@@ -8,6 +8,7 @@ use App\Models\Permission;
 use App\Models\TeamRole;
 use App\Rules\Embers\TeamRole as EmbersTeamRole;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -47,7 +48,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
     {
         Validator::make($input, [
             'role' => [
-                'required',
+                'filled',
                 'string',
                 'max:255',
                 Rule::unique(TeamRole::class)->where(function ($query) use ($user) {
