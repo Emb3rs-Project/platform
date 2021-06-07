@@ -49,7 +49,7 @@ trait HasEmbersPermissions
 
         $classes = array_keys($composer->getClassMap());
 
-        $permissions = [];
+        $permissionNamespaces = [];
 
         foreach ($classes as $class) {
             if (! Str::startsWith($class, 'App\\Actions\\')) {
@@ -62,11 +62,11 @@ trait HasEmbersPermissions
                 continue;
             }
 
-            $friendlyActionName = app($class)->getActionName();
+            $actionName = app($class)->getActionName();
 
-            array_push($permissions, $friendlyActionName);
+            array_push($permissions, $actionName);
         }
 
-        return $permissions;
+        return $permissionNamespaces;
     }
 }

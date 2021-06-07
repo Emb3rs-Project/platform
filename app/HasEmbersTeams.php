@@ -92,12 +92,6 @@ trait HasEmbersTeams
 
         $permissions = $this->teamRole($team)->permissions;
 
-        // TODO: not sure if we are going to need this ATM.
-        // foreach ($permissions['permissions'] as &$permission) {
-        //     $permission = $permission['name'];
-        // }
-        // unset($permission);
-
         return Arr::flatten($permissions);
     }
 }
