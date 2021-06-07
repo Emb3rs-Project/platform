@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.44.0.
+ * Generated for Laravel 8.45.1.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -2449,6 +2449,19 @@
         {
                         /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
                         return $instance->getCustomDirectives();
+        }
+                    /**
+         * Add a handler to be executed before echoing a given class.
+         *
+         * @param string|callable $class
+         * @param callable|null $handler
+         * @return void 
+         * @static 
+         */ 
+        public static function stringable($class, $handler = null)
+        {
+                        /** @var \Illuminate\View\Compilers\BladeCompiler $instance */
+                        $instance->stringable($class, $handler);
         }
                     /**
          * Register a new precompiler.
@@ -6801,6 +6814,17 @@
         {
                         /** @var \Illuminate\Http\Client\Factory $instance */
                         return $instance->recorded($callback);
+        }
+                    /**
+         * Get the current event dispatcher implementation.
+         *
+         * @return \Illuminate\Contracts\Events\Dispatcher|null 
+         * @static 
+         */ 
+        public static function getDispatcher()
+        {
+                        /** @var \Illuminate\Http\Client\Factory $instance */
+                        return $instance->getDispatcher();
         }
                     /**
          * Register a custom macro.
@@ -17442,21 +17466,6 @@ namespace  {
             }
              
                 /**
-             * Apply the callback's query changes if the given "value" is true.
-             *
-             * @param mixed $value
-             * @param callable $callback
-             * @param callable|null $default
-             * @return mixed|$this 
-             * @static 
-             */ 
-            public static function when($value, $callback, $default = null)
-            {
-                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
-                                return $instance->when($value, $callback, $default);
-            }
-             
-                /**
              * Pass the query to a given callback.
              *
              * @param callable $callback
@@ -17470,12 +17479,27 @@ namespace  {
             }
              
                 /**
-             * Apply the callback's query changes if the given "value" is false.
+             * Apply the callback if the given "value" is truthy.
              *
              * @param mixed $value
              * @param callable $callback
              * @param callable|null $default
-             * @return mixed|$this 
+             * @return mixed 
+             * @static 
+             */ 
+            public static function when($value, $callback, $default = null)
+            {
+                                /** @var \Illuminate\Database\Eloquent\Builder $instance */
+                                return $instance->when($value, $callback, $default);
+            }
+             
+                /**
+             * Apply the callback if the given "value" is falsy.
+             *
+             * @param mixed $value
+             * @param callable $callback
+             * @param callable|null $default
+             * @return mixed 
              * @static 
              */ 
             public static function unless($value, $callback, $default = null)
