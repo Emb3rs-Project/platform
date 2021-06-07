@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -61,6 +62,8 @@ class Category extends Resource
                 ->nullable(),
             HasMany::make(__('TEMPLATES'), 'templates', Template::class),
             HasMany::make(__('CHILDREN'), 'children', Category::class),
+
+            BelongsToMany::make(__('SCRIPTS'), 'scripts', Script::class),
         ];
     }
 

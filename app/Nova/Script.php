@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
@@ -34,6 +35,16 @@ class Script extends Resource
         'id',
     ];
 
+     /**
+     * Get the URI key for the resource.
+     *
+     * @return string
+     */
+    public static function uriKey()
+    {
+        return "embers-scripts";
+    }
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -55,6 +66,8 @@ class Script extends Resource
                 'process' => __('process'),
             ]),
 
+            BelongsToMany::make(__('TEMPLATES'), 'templates', Template::class),
+            BelongsToMany::make(__('CATEGORIES'), 'categories', Category::class),
 
         ];
     }

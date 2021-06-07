@@ -45,4 +45,14 @@ class Template extends Model
     {
         return $this->hasMany(TemplateGrouping::class, 'property_group_id');
     }
+
+    public function scripts(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Script::class,
+            'scripts_templates',
+            'template_id',
+            'script_id'
+        );
+    }
 }

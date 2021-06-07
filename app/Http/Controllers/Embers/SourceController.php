@@ -10,9 +10,14 @@ use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Http\Controllers\Controller;
+use App\Nova\Actions\InstanceProcessing;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
+use Laravel\Nova\Fields\ActionFields;
 
 class SourceController extends Controller
 {
@@ -91,6 +96,20 @@ class SourceController extends Controller
             $instance
         ] = app(ShowsSources::class)->show($id);
 
+        $action = new InstanceProcessing();
+        $user_id = Auth::user()->id;
+
+
+        // DispatchCustomAction::dispatchAction(
+        //     $action,
+        //     new ActionFields(new Collection(), new Collection()),
+        //     [$instance],
+        //     $user_id
+        // );
+
+        $action->generateScriptFile($instance);
+
+
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
@@ -116,6 +135,9 @@ class SourceController extends Controller
             $locations,
             $instance
         ] = app(EditsSources::class)->edit($id);
+
+
+
 
         return [
             "slideOver" => "Objects/Sources/SourceEdit",

@@ -12,6 +12,11 @@
       v-if="currentStep === 1"
     ></source-detail-1>
 
+    <source-detail-2
+      :instance="instance"
+      v-if="currentStep === 2"
+    ></source-detail-2>
+
     <template #actions>
       <div class="flex justify-start w-full">
         <bullet-steps :steps="steps"></bullet-steps>
@@ -54,6 +59,7 @@ import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 import SourceDetail1 from "./SourceDetailWizard/SourceDetail-1";
+import SourceDetail2 from "./SourceDetailWizard/SourceDetail-2";
 import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
 
 export default {
@@ -67,6 +73,7 @@ export default {
     SecondaryOutlinedButton,
     SourceDetail1,
     BulletSteps,
+    SourceDetail2
   },
 
   props: {

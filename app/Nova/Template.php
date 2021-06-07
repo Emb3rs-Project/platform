@@ -60,7 +60,9 @@ class Template extends Resource
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class),
 
-            HasMany::make(__('PROPERTYGROUPS'), 'templateGrouping', TemplateGrouping::class)
+            HasMany::make(__('PROPERTYGROUPS'), 'templateGrouping', TemplateGrouping::class),
+
+            BelongsToMany::make(__('SCRIPTS'), 'scripts', Script::class),
         ];
     }
 

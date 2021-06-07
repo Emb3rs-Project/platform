@@ -3,20 +3,25 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
+use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use App\Nova\Actions\InstanceProcessing;
+use Auth;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Nova\Fields\ActionFields;
 
 class ShowSource implements ShowsSources
 {
     /**
-    * Find and return an existing Source.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
+     * Find and return an existing Source.
+     *
+     * @param  int  $id
+     * @return mixed
+     */
     public function show(int $id)
     {
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
