@@ -19,18 +19,12 @@ class LinkController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $links = app(IndexesLinks::class)->index();
-
-        // return [
-        //     'slideOver' => 'Objects/Links/LinkIndex',
-        //     'props' => [
-        //         'links' => $links
-        //     ]
-        // ];
+        $links = app(IndexesLinks::class)->index($request->user());
 
         // return response()->json([
         //     'links' => $links
@@ -42,11 +36,12 @@ class LinkController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $props = app(CreatesLinks::class)->create();
+        $props = app(CreatesLinks::class)->create($request->user());
 
         return [
             "slideOver" => 'Objects/Links/LinkCreate',
@@ -62,7 +57,7 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresLinks::class)->store($request->all());
+        app(StoresLinks::class)->store($request->user(), $request->all());
 
         return Redirect::route('objects.links.index');
     }
@@ -70,12 +65,13 @@ class LinkController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $link = app(ShowsLinks::class)->show($id);
+        $link = app(ShowsLinks::class)->show($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Links/LinkDetails',
@@ -88,16 +84,17 @@ class LinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         [
             $links,
             $locations,
             $link
-        ] = app(EditsLinks::class)->edit($id);
+        ] = app(EditsLinks::class)->edit($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Links/LinkEdit',
@@ -118,7 +115,7 @@ class LinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedLink = app(UpdatesLinks::class)->update($id, $request->all());
+        $updatedLink = app(UpdatesLinks::class)->update($request->user(), $id, $request->all());
 
         return Redirect::route('objects.links.show', $updatedLink->id);
     }
@@ -126,12 +123,13 @@ class LinkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        app(DestroysLinks::class)->destroy($id);
+        app(DestroysLinks::class)->destroy($request->user(), $id);
 
         return Redirect::route('objects.index');
     }
@@ -139,12 +137,13 @@ class LinkController extends Controller
     /**
      * Share the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function share($id)
+    public function share(Request $request, $id)
     {
-        $link = app(SharesLinks::class)->share($id);
+        $link = app(SharesLinks::class)->share($request->user(), $id);
 
         // return [
         //     "slideOver" => 'Objects/Sinks/SinkShare',

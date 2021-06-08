@@ -19,8 +19,7 @@ class AddProcessEnumToCategoriesTable extends Migration
         });
 
         Schema::table('categories', function (Blueprint $table) {
-            $table->enum('type', ['sink', 'source','equipment', 'process'])
-                ->nullable();
+            $table->enum('type', ['sink', 'source','equipment', 'process'])->nullable();
         });
 
         DB::statement('UPDATE categories SET type = old_type');

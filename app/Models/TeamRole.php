@@ -16,7 +16,10 @@ class TeamRole extends Model
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'role',
+        'permissions'
+    ];
 
     /**
     * The attributes that should be cast.
@@ -27,7 +30,7 @@ class TeamRole extends Model
         'permissions' => 'array',
     ];
 
-    //team_roles
+    // teams_roles
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'team_id');

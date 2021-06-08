@@ -3,23 +3,26 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class DestroySink implements DestroysSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Link.
      *
-     * @param  int   $id
-     * @param  array $input
+     * @param  mixed  $user
+     * @param  int  $id
+     * @param  array  $input
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
-        $sink = Instance::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('delete', $sink);
+        $sink = Instance::findOrFail($id);
 
         Instance::destroy($sink->id);
     }

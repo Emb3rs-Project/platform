@@ -3,22 +3,25 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
+use App\EmbersPermissionable;
 use App\Models\Instance;
-use Illuminate\Support\Facades\Gate;
 
 class DestroySource implements DestroysSources
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Source.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
-        $source = Instance::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('delete', $source);
+        $source = Instance::findOrFail($id);
 
         Instance::destroy($source->id);
     }

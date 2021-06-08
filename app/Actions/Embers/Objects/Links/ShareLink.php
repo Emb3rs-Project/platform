@@ -3,28 +3,29 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\SharesLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class ShareLink implements SharesLinks
 {
-    /**
-    * Find and return an existing Link.
-    *
-    * @param  int  $id
-    * @return mixed
-    */
-    public function share(int $id)
-    {
-        $link = Link::with(['geoSegments'])->findOrFail($id);
+    use EmbersPermissionable;
 
-        Gate::authorize('view', $link);
-        // TODO: also check for sharing permissions
+    /**
+     * Find and return an existing Link.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return mixed
+     */
+    public function share($user, int $id)
+    {
+        $this->authorize($user);
+
+        $link = Link::with(['geoSegments'])->findOrFail($id);
 
         // TODO: generate a sharing link
 
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $teamLinks = $user->currentTeam->links->pluck('id');
 
         $link->whereIn('id', $teamLinks)->get();
 

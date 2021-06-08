@@ -3,23 +3,26 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
-use Illuminate\Support\Facades\Gate;
 
 class DestroyLink implements DestroysLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Link.
      *
-     * @param  int   $id
-     * @param  array $input
+     * @param  mixed  $user
+     * @param  int  $id
+     * @param  array  $input
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
-        $link = Link::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('delete', $link);
+        $link = Link::findOrFail($id);
 
         Link::destroy($link->id);
     }

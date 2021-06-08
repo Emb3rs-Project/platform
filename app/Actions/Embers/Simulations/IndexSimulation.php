@@ -3,25 +3,25 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\IndexesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class IndexSimulation implements IndexesSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Simulations.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @return [Simulation]
      */
-    public function index(int $projectId)
+    public function index($user, int $projectId)
     {
-        Gate::authorize('viewAny', Simulation::class);
+        $this->authorize($user);
 
         $project = Project::findOrFail($projectId);
-
-        Gate::authorize('view', $project);
 
         $simulations = $project->simulations()->with(['target','simulationType'])->get();
 

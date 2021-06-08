@@ -7,7 +7,8 @@ interface ShowsLinks
     /**
      * Display the given Link.
      *
+     * @param  mixed  $user
      * @param  int  $id
      */
-    public function show(int $id);
+    public function show($user, int $id);
 }

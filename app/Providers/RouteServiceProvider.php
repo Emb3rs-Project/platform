@@ -46,6 +46,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+
+            // Jetstream routes define their middleware from the config/jetstream.php
+            Route::namespace($this->namespace)
+                ->group(base_path('routes/jetstream.php'));
         });
     }
 
