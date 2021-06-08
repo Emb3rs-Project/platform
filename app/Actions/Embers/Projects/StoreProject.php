@@ -3,33 +3,35 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\StoresProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class StoreProject implements StoresProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
      * @param  mixed  $user
+     * @param  mixed  $user
      * @param  array  $input
      * @return Project
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
-        Gate::authorize('create', Project::class);
+        $this->authorize($user);
 
         $this->validate($input);
 
-        $link = $this->save($input);
+        $link = $this->save($user, $input);
 
         return $link;
     }
 
     /**
-     * Validate the create Link operation.
+     * Validate the create Project operation.
      *
      * @param  array  $input
      * @return void
@@ -45,13 +47,13 @@ class StoreProject implements StoresProjects
     }
 
     /**
-     * Save the Link in the DB.
+     * Save the Project in the DB.
      *
      * @param  mixed  $user
      * @param  array  $input
      * @return void
      */
-    protected function save(array $input)
+    protected function save($user, array $input)
     {
         $project = Project::create([
             'name' => $input['name'],
@@ -59,6 +61,6 @@ class StoreProject implements StoresProjects
             'location_id' =>  $input['location_id']
         ]);
 
-        $project->teams()->attach(Auth::user()->currentTeam);
+        $project->teams()->attach($user->currentTeam);
     }
 }

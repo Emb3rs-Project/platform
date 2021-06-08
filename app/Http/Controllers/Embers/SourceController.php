@@ -24,11 +24,12 @@ class SourceController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sources = app(IndexesSources::class)->index();
+        $sources = app(IndexesSources::class)->index($request->user());
 
         // return Inertia::render('Objects/Sources/SourceIndex', [
         //     'sources' => $sources
@@ -42,9 +43,10 @@ class SourceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         [
             $templates,
@@ -53,7 +55,7 @@ class SourceController extends Controller
             $processes,
             $processesCategories,
             $locations
-        ] = app(CreatesSources::class)->create();
+        ] = app(CreatesSources::class)->create($request->user());
 
         return [
             "slideOver" => "Objects/Sources/SourceCreate",
@@ -76,7 +78,7 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSources::class)->store($request->all());
+        app(StoresSources::class)->store($request->user(), $request->all());
 
         return Redirect::route('objects.index');
     }
@@ -84,17 +86,18 @@ class SourceController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         [
             $templates,
             $equipments,
             $locations,
             $instance
-        ] = app(ShowsSources::class)->show($id);
+        ] = app(ShowsSources::class)->show($request->user(), $id);
 
         $action = new InstanceProcessing();
         $user_id = Auth::user()->id;
@@ -124,17 +127,18 @@ class SourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         [
             $templates,
             $equipments,
             $locations,
             $instance
-        ] = app(EditsSources::class)->edit($id);
+        ] = app(EditsSources::class)->edit($request->user(), $id);
 
 
 
@@ -159,7 +163,7 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedSource = app(UpdatesSources::class)->update($id, $request->all());
+        $updatedSource = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
 
         return Redirect::route('objects.sources.show', $updatedSource->id);
     }
@@ -167,12 +171,13 @@ class SourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        app(DestroysSources::class)->destroy($id);
+        app(DestroysSources::class)->destroy($request->user(), $id);
 
         return Redirect::route('objects.index');
     }
@@ -180,12 +185,13 @@ class SourceController extends Controller
     /**
      * Share the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function share($id)
+    public function share(Request $request, $id)
     {
-        $source = app(SharesSources::class)->share($id);
+        $source = app(SharesSources::class)->share($request->user(), $id);
 
         // return [
         //     "slideOver" => 'Objects/Sinks/SinkShare',

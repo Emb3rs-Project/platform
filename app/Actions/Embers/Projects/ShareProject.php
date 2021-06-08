@@ -3,24 +3,25 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\SharesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShareProject implements SharesProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Project.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function share(int $id)
+    public function share($user, int $id)
     {
-        $project = Project::with(['location'])->findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('view', $project);
-        // TODO: also check for sharing permissions
+        $project = Project::with(['location'])->findOrFail($id);
 
         // TODO: generate a sharing link
 

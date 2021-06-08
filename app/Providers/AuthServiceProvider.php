@@ -23,10 +23,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Team::class => TeamPolicy::class,
-        Instance::class => InstancePolicy::class, // policies for sources & sinks
-        Link::class => LinkPolicy::class, // policies for links
-        Project::class => ProjectPolicy::class, // policies for projects
-        Simulation::class => SimulationPolicy::class, // policies for simulations
     ];
 
     /**
@@ -37,7 +33,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-
-        //
     }
 }
