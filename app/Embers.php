@@ -42,6 +42,15 @@ use App\Contracts\Embers\Simulations\IndexesSimulations;
 use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
+use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
+use App\Contracts\Embers\TeamRoles\DestroysTeamRoles;
+use App\Contracts\Embers\TeamRoles\EditsTeamRoles;
+use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
+use App\Contracts\Embers\TeamRoles\ShowsTeamRoles;
+use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
+use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
+use App\Contracts\Embers\Teams\AddsTeamMembers;
+use App\Contracts\Embers\Teams\InvitesTeamMembers;
 
 class Embers
 {
@@ -493,5 +502,107 @@ class Embers
     public static function shareSimulationsUsing(string $class)
     {
         return app()->singleton(SharesSimulations::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to index all Roles.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function indexTeamRolesUsing(string $class)
+    {
+        return app()->singleton(IndexesTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * permissions for the creation of a TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function createTeamRolesUsing(string $class)
+    {
+        return app()->singleton(CreatesTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to create TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function storeTeamRolesUsing(string $class)
+    {
+        return app()->singleton(StoresTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display a given TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function showTeamRolesUsing(string $class)
+    {
+        return app()->singleton(ShowsTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to display the necessary
+    * permissions for the updating of a given TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function editTeamRolesUsing(string $class)
+    {
+        return app()->singleton(EditsTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to update a given TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function updateTeamRolesUsing(string $class)
+    {
+        return app()->singleton(UpdatesTeamRoles::class, $class);
+    }
+
+    /**
+    * Register a class / callback that should be used to delete a given TeamRole.
+    *
+    * @param  string  $class
+    * @return void
+    */
+    public static function destroyTeamRolesUsing(string $class)
+    {
+        return app()->singleton(DestroysTeamRoles::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to add team members.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function addTeamMembersUsing(string $class)
+    {
+        return app()->singleton(AddsTeamMembers::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to add team members by
+     * sending email invites.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function inviteTeamMembersUsing(string $class)
+    {
+        return app()->singleton(InvitesTeamMembers::class, $class);
     }
 }

@@ -11,9 +11,8 @@ use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Embers\TeamRolesController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,4 +84,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     // Help
     Route::resource('/help', HelpController::class)->names(createResourceNames('help'));
+
+    // TeamRoles
+    Route::resource('/team-roles', TeamRolesController::class)->names(createResourceNames('team-roles'));
 });

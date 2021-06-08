@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Jetstream\Events\TeamCreated;
 use Laravel\Jetstream\Events\TeamDeleted;
 use Laravel\Jetstream\Events\TeamUpdated;
+use Laravel\Jetstream\Jetstream;
 use Laravel\Jetstream\Team as JetstreamTeam;
 
 class Team extends JetstreamTeam
@@ -99,5 +99,23 @@ class Team extends JetstreamTeam
     public function teamRoles(): HasMany
     {
         return $this->hasMany(TeamRole::class, 'team_id');
+    }
+
+    /**
+     * Get all of the users that belong to the team.
+     *
+     * Note: This function is overriding the users() function from
+     *       JetstreamTeam class, so it can be adapted to EMB3Rs use case.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Jetstream::userModel(),
+            Jetstream::membershipModel(),
+            'team_id',
+            'user_id'
+        )->withPivot('team_role_id')->withTimestamps()->as('membership');
     }
 }

@@ -7,9 +7,10 @@ interface StoresSimulations
     /**
      * Validate and create a new Simulation.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return mixed
      */
-    public function store(int $projectId, array $input);
+    public function store($user, int $projectId, array $input);
 }

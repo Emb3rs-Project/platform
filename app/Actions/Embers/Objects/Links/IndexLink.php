@@ -3,22 +3,24 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
+use App\EmbersPermissionable;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class IndexLink implements IndexesLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Links.
      *
+     * @param  mixed  $user
      * @return [Instance]
      */
-    public function index()
+    public function index($user)
     {
-        Gate::authorize('viewAny', Link::class);
+        $this->authorize($user);
 
-        $teamLinks = Auth::user()->currentTeam->links->pluck('id');
+        $teamLinks = $user->currentTeam->links->pluck('id');
 
         $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
 

@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ObjectsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
 
         $instances = Instance::with([
             'template',
@@ -24,16 +24,15 @@ class ObjectsController extends Controller
         return [
             "slideOver" => 'Objects/ObjectsIndex',
             "props" => [
-                // TODO: include Links
                 "instances" => $instances,
-                "links" => Auth::user()->currentTeam->links
+                "links" => $request->user()->currentTeam->links
             ]
         ];
     }
 
-    public function map(): Response
+    public function map(Request $request): Response
     {
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
 
         $instances = Instance::with([
             'template',
@@ -44,9 +43,9 @@ class ObjectsController extends Controller
         return Inertia::render('Objects/Objects', ['instances' => $instances]);
     }
 
-    public function markers()
+    public function markers(Request $request)
     {
-        $teamInstances = Auth::user()->currentTeam->instances->pluck('id');
+        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
 
         $instances = Instance::with([
             'template',

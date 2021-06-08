@@ -3,22 +3,24 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
+use App\EmbersPermissionable;
 use App\Models\Category;
-use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class CreateSink implements CreatesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for the creation of a Sink.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function create()
+    public function create($user)
     {
-        Gate::authorize('create', Instance::class);
+        $this->authorize($user);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

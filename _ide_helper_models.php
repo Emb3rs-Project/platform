@@ -209,16 +209,16 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property int $user_id
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $team_role_id
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership query()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Membership whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUserId($value)
  */
@@ -278,7 +278,8 @@ namespace App\Models{
  * App\Models\Permission
  *
  * @property int $id
- * @property string $name
+ * @property string $action
+ * @property string $friendly_name
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -286,10 +287,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
  * @method static \Illuminate\Database\Query\Builder|Permission onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereAction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Permission withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Permission withoutTrashed()
@@ -543,9 +545,9 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property string $email
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $team_role_id
  * @property-read \App\Models\Team $team
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newQuery()
@@ -553,8 +555,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereUpdatedAt($value)
  */
 	class TeamInvitation extends \Eloquent {}
