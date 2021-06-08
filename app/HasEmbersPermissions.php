@@ -64,7 +64,7 @@ trait HasEmbersPermissions
 
             $actionName = app($class)->getActionName();
 
-            array_push($permissions, $actionName);
+            array_push($permissionNamespaces, $actionName);
         }
 
         return $permissionNamespaces;
