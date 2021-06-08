@@ -24,6 +24,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $children
  * @property-read int|null $children_count
  * @property-read Category|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Script[] $scripts
+ * @property-read int|null $scripts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
  * @property-read int|null $templates_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
@@ -67,6 +69,29 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|FAQ withoutTrashed()
  */
 	class FAQ extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\GeneratedScript
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $path
+ * @property int $instance_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript query()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereInstanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereUpdatedAt($value)
+ */
+	class GeneratedScript extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -398,6 +423,33 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Script
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $code
+ * @property string|null $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
+ * @property-read int|null $templates_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Script newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereUpdatedAt($value)
+ */
+	class Script extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Simulation
  *
  * @property int $id
@@ -605,6 +657,8 @@ namespace App\Models{
  * @property-read \App\Models\Category $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Instance[] $instances
  * @property-read int|null $instances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Script[] $scripts
+ * @property-read int|null $scripts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateGrouping[] $templateGrouping
  * @property-read int|null $template_grouping_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
