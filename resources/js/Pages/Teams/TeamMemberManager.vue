@@ -22,7 +22,10 @@
 
           <!-- Member Email -->
           <div class="col-span-6 sm:col-span-4">
-            <jet-label for="email" value="Email" />
+            <jet-label
+              for="email"
+              value="Email"
+            />
             <jet-input
               id="email"
               type="email"
@@ -40,15 +43,16 @@
             class="col-span-6 lg:col-span-4"
             v-if="availableRoles.length > 0"
           >
-            <jet-label for="roles" value="Role" />
+            <jet-label
+              for="roles"
+              value="Role"
+            />
             <jet-input-error
               :message="addTeamMemberForm.errors.role"
               class="mt-2"
             />
 
-            <div
-              class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer"
-            >
+            <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
               <button
                 type="button"
                 class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
@@ -60,13 +64,11 @@
                 v-for="(role, i) in availableRoles"
                 :key="role.key"
               >
-                <div
-                  :class="{
+                <div :class="{
                     'opacity-50':
                       addTeamMemberForm.role &&
                       addTeamMemberForm.role != role.key,
-                  }"
-                >
+                  }">
                   <!-- Role Name -->
                   <div class="flex items-center">
                     <div
@@ -88,9 +90,7 @@
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                   </div>
 
@@ -122,11 +122,9 @@
       </jet-form-section>
     </div>
 
-    <div
-      v-if="
+    <div v-if="
         team.team_invitations.length > 0 && userPermissions.canAddTeamMembers
-      "
-    >
+      ">
       <jet-section-border />
 
       <!-- Team Member Invitations -->
@@ -245,9 +243,7 @@
 
       <template #content>
         <div v-if="managingRoleFor">
-          <div
-            class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer"
-          >
+          <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
             <button
               type="button"
               class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
@@ -259,12 +255,10 @@
               v-for="(role, i) in availableRoles"
               :key="role.key"
             >
-              <div
-                :class="{
+              <div :class="{
                   'opacity-50':
                     updateRoleForm.role && updateRoleForm.role !== role.key,
-                }"
-              >
+                }">
                 <!-- Role Name -->
                 <div class="flex items-center">
                   <div
@@ -286,9 +280,7 @@
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                 </div>
 
@@ -404,7 +396,28 @@ export default {
     JetSectionBorder,
   },
 
-  props: ["team", "availableRoles", "userPermissions"],
+  props: {
+    team: {
+      type: Object,
+      required: true,
+    },
+    availableRoles: {
+      type: Array,
+      required: true,
+    },
+    availablePermissions: {
+      type: Array,
+      required: true,
+    },
+    userPermissions: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    console.log(props.availablePermissions);
+  },
 
   data() {
     return {

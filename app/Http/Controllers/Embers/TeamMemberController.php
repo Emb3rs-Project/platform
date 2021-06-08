@@ -23,6 +23,7 @@ class TeamMemberController extends Controller
     {
         $team = Jetstream::newTeamModel()->findOrFail($teamId);
 
+        // TODO: Uncomment the following section when we are ready with the smtp server
         // if (Features::sendsTeamInvitations()) {
         //     app(InvitesTeamMembers::class)->invite(
         //         $request->user(),

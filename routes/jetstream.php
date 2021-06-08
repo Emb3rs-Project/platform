@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Embers\TeamController;
 use App\Http\Controllers\Embers\TeamInvitationController;
 use App\Http\Controllers\Embers\TeamMemberController;
 use Illuminate\Support\Facades\Route;
@@ -8,7 +9,6 @@ use Laravel\Jetstream\Http\Controllers\Inertia\CurrentUserController;
 use Laravel\Jetstream\Http\Controllers\Inertia\OtherBrowserSessionsController;
 use Laravel\Jetstream\Http\Controllers\Inertia\PrivacyPolicyController;
 use Laravel\Jetstream\Http\Controllers\Inertia\ProfilePhotoController;
-use Laravel\Jetstream\Http\Controllers\Inertia\TeamController;
 use Laravel\Jetstream\Http\Controllers\Inertia\TermsOfServiceController;
 use Laravel\Jetstream\Http\Controllers\Inertia\UserProfileController;
 use Laravel\Jetstream\Jetstream;
