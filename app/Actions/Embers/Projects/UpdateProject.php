@@ -3,24 +3,27 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\UpdatesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateProject implements UpdatesProjects
 {
-    /**
-      * Validate, update and return an existing Project.
-      *
-      * @param  int  $id
-      * @param  array  $input
-      * @return Instance
-      */
-    public function update(int $id, array $input)
-    {
-        $project = Project::findOrFail($id);
+    use EmbersPermissionable;
 
-        Gate::authorize('update', $project);
+    /**
+     * Validate, update and return an existing Project.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @param  array  $input
+     * @return Instance
+     */
+    public function update($user, int $id, array $input)
+    {
+        $this->authorize($user);
+
+        $project = Project::findOrFail($id);
 
         $this->validate($input);
 
@@ -30,7 +33,7 @@ class UpdateProject implements UpdatesProjects
     }
 
     /**
-     * Validate the create Link operation.
+     * Validate the create Project operation.
      *
      * @param  array  $input
      * @return void
@@ -46,7 +49,7 @@ class UpdateProject implements UpdatesProjects
     }
 
     /**
-     * Save the Link in the DB.
+     * Save the Project in the DB.
      *
      * @param  mixed  $user
      * @param  array  $input

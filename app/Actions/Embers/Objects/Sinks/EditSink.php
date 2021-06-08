@@ -3,25 +3,28 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
+use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class EditSink implements EditsSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for updating a given Sink.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function edit(int $id)
+    public function edit($user, int $id)
     {
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('view', $sink);
+        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
         $sinkCategories = Category::whereType('sink')->get()->pluck('id');
 

@@ -20,11 +20,12 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $projects = app(IndexesProjects::class)->index();
+        $projects = app(IndexesProjects::class)->index($request->user());
 
         return Inertia::render('Projects/ProjectIndex', ['projects' => $projects]);
     }
@@ -32,11 +33,12 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $locations = app(CreatesProjects::class)->create();
+        $locations = app(CreatesProjects::class)->create($request->user());
 
         return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
 
@@ -56,7 +58,7 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresProjects::class)->store($request->all());
+        app(StoresProjects::class)->store($request->user(), $request->all());
 
         return Redirect::route('projects.index');
     }
@@ -64,15 +66,16 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         [
             $project,
             $simulations
-        ] = app(ShowsProjects::class)->show($id);
+        ] = app(ShowsProjects::class)->show($request->user(), $id);
 
         return [
             'slideOver' => 'Projects/ProjectDetails',
@@ -86,15 +89,16 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         [
             $project,
             $locations,
-        ] = app(EditsProjects::class)->edit($id);
+        ] = app(EditsProjects::class)->edit($request->user(), $id);
 
         return [
             'slideOver' => 'Projects/ProjectEdit',
@@ -114,7 +118,7 @@ class ProjectController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedProject = app(UpdatesProjects::class)->update($id, $request->all());
+        $updatedProject = app(UpdatesProjects::class)->update($request->user(), $id, $request->all());
 
         return Redirect::route('projects.show', $updatedProject->id);
     }
@@ -122,12 +126,13 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        app(DestroysProjects::class)->destroy($id);
+        app(DestroysProjects::class)->destroy($request->user(), $id);
 
         return Redirect::route('projects.index');
     }
@@ -135,12 +140,13 @@ class ProjectController extends Controller
     /**
      * Share the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function share($id)
+    public function share(Request $request, $id)
     {
-        $project = app(SharesProjects::class)->share($id);
+        $project = app(SharesProjects::class)->share($request->user(), $id);
 
         // return [
         //     "slideOver" => 'Objects/Sinks/SinkShare',

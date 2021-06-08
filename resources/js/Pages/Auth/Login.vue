@@ -62,7 +62,6 @@
     </form>
     <template #bottom-message>
       <inertia-link
-        v-if="canResetPassword"
         :href="route('register')"
         class="underline text-sm text-gray-600 hover:text-gray-900"
       >

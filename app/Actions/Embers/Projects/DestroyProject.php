@@ -3,23 +3,26 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\DestroysProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use Illuminate\Support\Facades\Gate;
 
 class DestroyProject implements DestroysProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Find and delete an existing Project.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @param  array  $input
      * @return void
      */
-    public function destroy(int $id)
+    public function destroy($user, int $id)
     {
-        $project = Project::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('delete', $project);
+        $project = Project::findOrFail($id);
 
         Project::destroy($project->id);
     }
