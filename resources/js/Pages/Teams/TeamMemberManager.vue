@@ -95,13 +95,22 @@
                   </div>
 
                   <!-- Role Description -->
-                  <div class="mt-2 text-xs text-gray-600">
+                  <!-- <div class="mt-2 text-xs text-gray-600">
                     {{ role.description }}
-                  </div>
+                  </div> -->
                 </div>
               </button>
             </div>
           </div>
+
+          <!-- Create Role -->
+          <div class="col-span-6 lg:col-span-4">
+            <secondary-button
+              type="button"
+              @click="roleModalIsVisible = true"
+            >Create Role</secondary-button>
+          </div>
+
         </template>
 
         <template #actions>
@@ -285,9 +294,9 @@
                 </div>
 
                 <!-- Role Description -->
-                <div class="mt-2 text-xs text-gray-600">
+                <!-- <div class="mt-2 text-xs text-gray-600">
                   {{ role.description }}
-                </div>
+                </div> -->
               </div>
             </button>
           </div>
@@ -363,10 +372,17 @@
         </jet-danger-button>
       </template>
     </jet-confirmation-modal>
+
+    <create-role-modal
+      v-model="roleModalIsVisible"
+      :permissions="availablePermissions"
+    ></create-role-modal>
   </div>
 </template>
 
 <script>
+import { computed, ref } from "vue";
+
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import JetActionSection from "@/Jetstream/ActionSection";
 import JetButton from "@/Jetstream/Button";
@@ -379,6 +395,9 @@ import JetInputError from "@/Jetstream/InputError";
 import JetLabel from "@/Jetstream/Label";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
+
+import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
+import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
 
 export default {
   components: {
@@ -394,6 +413,8 @@ export default {
     JetLabel,
     JetSecondaryButton,
     JetSectionBorder,
+    SecondaryButton,
+    CreateRoleModal,
   },
 
   props: {
@@ -416,7 +437,12 @@ export default {
   },
 
   setup(props) {
-    console.log(props.availablePermissions);
+    console.log(typeof props.availablePermissions);
+    const roleModalIsVisible = ref(false);
+
+    return {
+      roleModalIsVisible,
+    };
   },
 
   data() {
