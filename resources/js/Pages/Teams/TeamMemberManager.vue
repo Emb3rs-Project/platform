@@ -39,9 +39,10 @@
           </div>
 
           <!-- Role -->
+          <pre>{{roles}}</pre>
           <div
             class="col-span-6 lg:col-span-4"
-            v-if="availableRoles.length > 0"
+            v-if="roles.length > 0"
           >
             <jet-label
               for="roles"
@@ -58,30 +59,30 @@
                 class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
                 :class="{
                   'border-t border-gray-200 rounded-t-none': i > 0,
-                  'rounded-b-none': i != Object.keys(availableRoles).length - 1,
+                  'rounded-b-none': i != Object.keys(roles).length - 1,
                 }"
-                @click="addTeamMemberForm.role = role.key"
-                v-for="(role, i) in availableRoles"
-                :key="role.key"
+                @click="addTeamMemberForm.role = role.id"
+                v-for="(role, i) in roles"
+                :key="role.id"
               >
                 <div :class="{
                     'opacity-50':
                       addTeamMemberForm.role &&
-                      addTeamMemberForm.role != role.key,
+                      addTeamMemberForm.role != role.id,
                   }">
                   <!-- Role Name -->
                   <div class="flex items-center">
                     <div
                       class="text-sm text-gray-600"
                       :class="{
-                        'font-semibold': addTeamMemberForm.role == role.key,
+                        'font-semibold': addTeamMemberForm.role == role.id,
                       }"
                     >
-                      {{ role.name }}
+                      {{ role.role }}
                     </div>
 
                     <svg
-                      v-if="addTeamMemberForm.role == role.key"
+                      v-if="addTeamMemberForm.role == role.id"
                       class="ml-2 h-5 w-5 text-green-400"
                       fill="none"
                       stroke-linecap="round"
@@ -93,11 +94,6 @@
                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                   </div>
-
-                  <!-- Role Description -->
-                  <!-- <div class="mt-2 text-xs text-gray-600">
-                    {{ role.description }}
-                  </div> -->
                 </div>
               </button>
             </div>
@@ -381,7 +377,8 @@
 </template>
 
 <script>
-import { computed, ref } from "vue";
+import { computed, ref, watch, onBeforeMount } from "vue";
+import { useStore } from "vuex";
 
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import JetActionSection from "@/Jetstream/ActionSection";
@@ -437,11 +434,38 @@ export default {
   },
 
   setup(props) {
-    console.log(typeof props.availablePermissions);
+    const store = useStore();
+
     const roleModalIsVisible = ref(false);
+    // const roles = ref(
+    //   store.state.teamRoles.roles.length
+    //     ? store.state.teamRoles.roles
+    //     : props.availableRoles
+    // );
+    const roles = ref(store.state.teamRoles.roles);
+    console.log("before setup()", roles.value);
+    store.dispatch("teamRoles/getRoles");
+    console.log("after setup()", roles.value);
+
+    onBeforeMount(() => {
+      console.log("onBeforeMount()", roles.value);
+      //   store.dispatch("teamRoles/getRoles");
+    });
+
+    // store.watch(
+    //   () => store.getters["teamRoles/roles"],
+    //   (teamRoles) => {
+    //     console.log(teamRoles);
+    //     roles.value = [...roles.value, teamRoles];
+    //   }
+    // );
+    // watch(roles, (roles) => {
+    //   console.log("roles", roles);
+    // });
 
     return {
       roleModalIsVisible,
+      roles,
     };
   },
 

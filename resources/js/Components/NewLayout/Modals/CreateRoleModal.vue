@@ -58,8 +58,10 @@
                   </DialogTitle>
                   <div class="mt-2">
                     <text-input
+                      v-model="role"
                       label="Name"
-                      placeholder="Administrator"
+                      placeholder="Manager"
+                      :required="true"
                     ></text-input>
                     <div class="space-y-6 sm:space-y-5 divide-y divide-gray-200">
                       <div class="pt-6 sm:pt-5">
@@ -119,7 +121,7 @@
               <button
                 type="button"
                 class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
-                @click="open = false"
+                @click="createRole"
               >
                 Create
               </button>
@@ -141,6 +143,8 @@
 
 <script>
 import { computed, ref, watch } from "vue";
+import { useStore } from "vuex";
+
 import {
   Dialog,
   DialogOverlay,
@@ -176,6 +180,8 @@ export default {
   },
 
   setup(props, { emit }) {
+    const store = useStore();
+    const role = ref(null);
     const checkedPermissions = ref([]);
 
     const open = computed({
@@ -183,17 +189,20 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
-    watch(
-      checkedPermissions,
-      (checkedPermissions) => {
-        console.log(checkedPermissions);
-      },
-      { deep: true }
-    );
+    const createRole = async () => {
+      await store.dispatch("teamRoles/createRole", {
+        role: role.value,
+        permissions: checkedPermissions.value,
+      });
+
+      open.value = false;
+    };
 
     return {
-      open,
+      role,
       checkedPermissions,
+      open,
+      createRole,
     };
   },
 };

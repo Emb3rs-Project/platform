@@ -61,6 +61,9 @@ export default {
     UpdateTeamNameForm,
   },
 
-  setup(props) {},
+  setup(props) {
+    // console.log(props.availableRoles);
+    // console.log(props.availablePermissions);
+  },
 };
 </script>
