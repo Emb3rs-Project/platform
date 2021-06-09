@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeRoleToTeamUserTable extends Migration
+class RemoveSoftDeletesFromTeamRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class ChangeRoleToTeamUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('team_user', function (Blueprint $table) {
-            $table->dropColumn('role');
-
-            $table->foreignId('team_role_id');
+        Schema::table('team_roles', function (Blueprint $table) {
+            $table->dropSoftDeletes();
         });
     }
 
@@ -27,10 +25,8 @@ class ChangeRoleToTeamUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('team_user', function (Blueprint $table) {
-            $table->string('role')->nullable();
-
-            $table->dropColumn('team_role_id');
+        Schema::table('team_roles', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 }
