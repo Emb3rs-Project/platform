@@ -53,9 +53,14 @@ class TeamRolesController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresTeamRoles::class)->store($request->user(), $request->all());
+        $role = app(StoresTeamRoles::class)->store($request->user(), $request->all());
 
-        return Redirect::route('team-roles.index');
+        // return Redirect::route('team-roles.index');
+        $permissionSafeRole = app(ShowsTeamRoles::class)->show($request->user(), $role->id);
+
+        return response()->json([
+            'role' => $permissionSafeRole
+        ]);
     }
 
     /**

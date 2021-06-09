@@ -83,5 +83,7 @@ class StoreTeamRole implements StoresTeamRoles
         $team = Team::find($user->current_team_id);
 
         $team->teamRoles()->save($role);
+
+        return $role;
     }
 }
