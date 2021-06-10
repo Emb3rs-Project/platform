@@ -39,7 +39,6 @@
           </div>
 
           <!-- Role -->
-          <pre>{{roles}}</pre>
           <div
             class="col-span-6 lg:col-span-4"
             v-if="roles.length > 0"
@@ -61,28 +60,28 @@
                   'border-t border-gray-200 rounded-t-none': i > 0,
                   'rounded-b-none': i != Object.keys(roles).length - 1,
                 }"
-                @click="addTeamMemberForm.role = role.id"
+                @click="addTeamMemberForm.team_role_id = role.id"
                 v-for="(role, i) in roles"
                 :key="role.id"
               >
                 <div :class="{
                     'opacity-50':
-                      addTeamMemberForm.role &&
-                      addTeamMemberForm.role != role.id,
+                      addTeamMemberForm.team_role_id &&
+                      addTeamMemberForm.team_role_id != role.id,
                   }">
                   <!-- Role Name -->
                   <div class="flex items-center">
                     <div
                       class="text-sm text-gray-600"
                       :class="{
-                        'font-semibold': addTeamMemberForm.role == role.id,
+                        'font-semibold': addTeamMemberForm.team_role_id == role.id,
                       }"
                     >
                       {{ role.role }}
                     </div>
 
                     <svg
-                      v-if="addTeamMemberForm.role == role.id"
+                      v-if="addTeamMemberForm.team_role_id == role.id"
                       class="ml-2 h-5 w-5 text-green-400"
                       fill="none"
                       stroke-linecap="round"
@@ -104,9 +103,10 @@
             <secondary-button
               type="button"
               @click="roleModalIsVisible = true"
-            >Create Role</secondary-button>
+            >
+              Create Role
+            </secondary-button>
           </div>
-
         </template>
 
         <template #actions>
@@ -202,17 +202,17 @@
                   class="ml-2 text-sm text-gray-400 underline"
                   @click="manageRole(user)"
                   v-if="
-                    userPermissions.canAddTeamMembers && availableRoles.length
+                    userPermissions.canAddTeamMembers && roles.length
                   "
                 >
-                  {{ displayableRole(user.membership.role) }}
+                  {{ displayableRole(user.membership.team_role_id) }}
                 </button>
 
                 <div
                   class="ml-2 text-sm text-gray-400"
-                  v-else-if="availableRoles.length"
+                  v-else-if="roles.length"
                 >
-                  {{ displayableRole(user.membership.role) }}
+                  {{ displayableRole(user.membership.team_role_id) }}
                 </div>
 
                 <!-- Leave Team -->
@@ -254,29 +254,29 @@
               class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
               :class="{
                 'border-t border-gray-200 rounded-t-none': i > 0,
-                'rounded-b-none': i !== Object.keys(availableRoles).length - 1,
+                'rounded-b-none': i !== Object.keys(roles).length - 1,
               }"
-              @click="updateRoleForm.role = role.key"
-              v-for="(role, i) in availableRoles"
-              :key="role.key"
+              @click="updateRoleForm.team_role_id = role.id"
+              v-for="(role, i) in roles"
+              :key="role.id"
             >
               <div :class="{
                   'opacity-50':
-                    updateRoleForm.role && updateRoleForm.role !== role.key,
+                    updateRoleForm.team_role_id && updateRoleForm.team_role_id !== role.id,
                 }">
                 <!-- Role Name -->
                 <div class="flex items-center">
                   <div
                     class="text-sm text-gray-600"
                     :class="{
-                      'font-semibold': updateRoleForm.role === role.key,
+                      'font-semibold': updateRoleForm.team_role_id === role.id,
                     }"
                   >
-                    {{ role.name }}
+                    {{ role.role }}
                   </div>
 
                   <svg
-                    v-if="updateRoleForm.role === role.key"
+                    v-if="updateRoleForm.team_role_id === role.id"
                     class="ml-2 h-5 w-5 text-green-400"
                     fill="none"
                     stroke-linecap="round"
@@ -377,8 +377,15 @@
 </template>
 
 <script>
-import { computed, ref, watch, onBeforeMount } from "vue";
+import { ref } from "vue";
 import { useStore } from "vuex";
+
+import {
+  RadioGroup,
+  RadioGroupDescription,
+  RadioGroupLabel,
+  RadioGroupOption,
+} from "@headlessui/vue";
 
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import JetActionSection from "@/Jetstream/ActionSection";
@@ -393,11 +400,17 @@ import JetLabel from "@/Jetstream/Label";
 import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
 
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
+import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
 
 export default {
   components: {
+    RadioGroup,
+    RadioGroupDescription,
+    RadioGroupLabel,
+    RadioGroupOption,
     JetActionMessage,
     JetActionSection,
     JetButton,
@@ -410,7 +423,9 @@ export default {
     JetLabel,
     JetSecondaryButton,
     JetSectionBorder,
+    PrimaryButton,
     SecondaryButton,
+    SecondaryOutlinedButton,
     CreateRoleModal,
   },
 
@@ -435,33 +450,16 @@ export default {
 
   setup(props) {
     const store = useStore();
-
     const roleModalIsVisible = ref(false);
-    // const roles = ref(
-    //   store.state.teamRoles.roles.length
-    //     ? store.state.teamRoles.roles
-    //     : props.availableRoles
-    // );
-    const roles = ref(store.state.teamRoles.roles);
-    console.log("before setup()", roles.value);
-    store.dispatch("teamRoles/getRoles");
-    console.log("after setup()", roles.value);
+    const roles = ref(props.availableRoles);
 
-    onBeforeMount(() => {
-      console.log("onBeforeMount()", roles.value);
-      //   store.dispatch("teamRoles/getRoles");
-    });
-
-    // store.watch(
-    //   () => store.getters["teamRoles/roles"],
-    //   (teamRoles) => {
-    //     console.log(teamRoles);
-    //     roles.value = [...roles.value, teamRoles];
-    //   }
-    // );
-    // watch(roles, (roles) => {
-    //   console.log("roles", roles);
-    // });
+    store.watch(
+      () => store.state.teamRoles.role,
+      (role) => {
+        roles.value.push(role);
+      },
+      { deep: true }
+    );
 
     return {
       roleModalIsVisible,
@@ -473,11 +471,11 @@ export default {
     return {
       addTeamMemberForm: this.$inertia.form({
         email: "",
-        role: null,
+        team_role_id: null,
       }),
 
       updateRoleForm: this.$inertia.form({
-        role: null,
+        team_role_id: null,
       }),
 
       leaveTeamForm: this.$inertia.form(),
@@ -492,7 +490,7 @@ export default {
 
   methods: {
     addTeamMember() {
-      this.addTeamMemberForm.post(route("team-members.store", this.team), {
+      this.addTeamMemberForm.post(route("team-members.store", this.team.id), {
         errorBag: "addTeamMember",
         preserveScroll: true,
         onSuccess: () => this.addTeamMemberForm.reset(),
@@ -507,7 +505,7 @@ export default {
 
     manageRole(teamMember) {
       this.managingRoleFor = teamMember;
-      this.updateRoleForm.role = teamMember.membership.role;
+      this.updateRoleForm.team_role_id = teamMember.membership.team_role_id;
       this.currentlyManagingRole = true;
     },
 
@@ -547,8 +545,8 @@ export default {
       );
     },
 
-    displayableRole(role) {
-      return this.availableRoles.find((r) => r.key === role).name;
+    displayableRole(teamRoleId) {
+      return this.roles.find((r) => r.id === teamRoleId).role;
     },
   },
 };

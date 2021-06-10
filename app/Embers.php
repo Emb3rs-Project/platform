@@ -10,13 +10,6 @@ use App\Contracts\Embers\Objects\Links\SharesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
-use App\Contracts\Embers\Projects\CreatesProjects;
-use App\Contracts\Embers\Projects\DestroysProjects;
-use App\Contracts\Embers\Projects\EditsProjects;
-use App\Contracts\Embers\Projects\IndexesProjects;
-use App\Contracts\Embers\Projects\ShowsProjects;
-use App\Contracts\Embers\Projects\StoresProjects;
-use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -33,6 +26,13 @@ use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\Contracts\Embers\Projects\CreatesProjects;
+use App\Contracts\Embers\Projects\DestroysProjects;
+use App\Contracts\Embers\Projects\EditsProjects;
+use App\Contracts\Embers\Projects\IndexesProjects;
+use App\Contracts\Embers\Projects\ShowsProjects;
+use App\Contracts\Embers\Projects\StoresProjects;
+use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Contracts\Embers\Projects\SharesProjects;
 use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
@@ -51,6 +51,7 @@ use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
+use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
 
 class Embers
 {
@@ -604,5 +605,17 @@ class Embers
     public static function inviteTeamMembersUsing(string $class)
     {
         return app()->singleton(InvitesTeamMembers::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to update a team member's
+     * role inside a team.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateTeamMemberRolesUsing(string $class)
+    {
+        return app()->singleton(UpdatesTeamMemberRoles::class, $class);
     }
 }

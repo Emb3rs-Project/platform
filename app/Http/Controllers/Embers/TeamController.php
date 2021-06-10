@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
 use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
-use App\Models\Permission;
-use App\Models\TeamRole;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Laravel\Jetstream\Actions\ValidateTeamDeletion;
 use Laravel\Jetstream\Contracts\CreatesTeams;

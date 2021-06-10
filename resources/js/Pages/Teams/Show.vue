@@ -60,10 +60,5 @@ export default {
     TeamMemberManager,
     UpdateTeamNameForm,
   },
-
-  setup(props) {
-    // console.log(props.availableRoles);
-    // console.log(props.availablePermissions);
-  },
 };
 </script>

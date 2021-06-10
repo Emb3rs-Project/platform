@@ -1,28 +1,20 @@
 const _state = () => ({
-    roles: []
+    role: null
 });
 
 const getters = {
-    roles: (state) => state.roles
+    role: (state) => state.role
 };
 
 const actions = {
     createRole: async (ctx, { role, permissions }) => {
         try {
-            const response = await axios.post(route('team-roles.store'), { role, permissions });
+            const response = await axios.post(route('team-roles.store'), {
+                role: role,
+                permissions: permissions
+            });
 
             ctx.commit('addRole', { role: response.data.role });
-        } catch (error) {
-            console.log(error.response.data)
-        }
-    },
-    getRoles: async (ctx) => {
-        try {
-            const response = await axios.get(route('team-roles.index'));
-
-            // console.log(response.data.roles);
-
-            ctx.commit('addRoles', { roles: response.data.roles });
         } catch (error) {
             console.log(error.response.data)
         }
@@ -31,10 +23,7 @@ const actions = {
 
 const mutations = {
     addRole(state, payload) {
-        state.roles = [...state.roles, payload.role];
-    },
-    addRoles(state, payload) {
-        state.roles = payload.roles;
+        state.role = payload.role;
     },
 };
 

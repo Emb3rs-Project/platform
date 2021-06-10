@@ -51,6 +51,7 @@ use App\Actions\Embers\TeamRoles\StoreTeamRole;
 use App\Actions\Embers\TeamRoles\UpdateTeamRole;
 use App\Actions\Embers\Teams\AddTeamMember;
 use App\Actions\Embers\Teams\InviteTeamMember;
+use App\Actions\Embers\Teams\UpdateTeamMemberRole;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 use Inertia\ResponseFactory;
@@ -136,5 +137,6 @@ class AppServiceProvider extends ServiceProvider
 
         Embers::addTeamMembersUsing(AddTeamMember::class);
         Embers::inviteTeamMembersUsing(InviteTeamMember::class);
+        Embers::updateTeamMemberRolesUsing(UpdateTeamMemberRole::class);
     }
 }

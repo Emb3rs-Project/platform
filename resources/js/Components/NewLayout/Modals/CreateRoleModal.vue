@@ -8,7 +8,7 @@
       as="div"
       static
       class="fixed z-10 inset-0 overflow-y-auto"
-      @close="open = false"
+      @close="cancel"
       :open="open"
     >
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -128,7 +128,7 @@
               <button
                 type="button"
                 class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                @click="open = false"
+                @click="cancel"
                 ref="cancelButtonRef"
               >
                 Cancel
@@ -195,7 +195,16 @@ export default {
         permissions: checkedPermissions.value,
       });
 
+      role.value = null;
+      checkedPermissions.value = [];
+
       open.value = false;
+    };
+
+    const cancel = () => {
+      open.value = false;
+      role.value = null;
+      checkedPermissions.value = [];
     };
 
     return {
@@ -203,6 +212,7 @@ export default {
       checkedPermissions,
       open,
       createRole,
+      cancel,
     };
   },
 };
