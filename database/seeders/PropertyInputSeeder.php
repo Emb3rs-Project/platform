@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Property;
 use Illuminate\Database\Seeder;
 
-class PropertySeeder extends Seeder
+class PropertyInputSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -29,26 +29,26 @@ class PropertySeeder extends Seeder
             // SELECTS
             ["name" => "Outflow Type", "symbolic_name" => "typer" , "dataType" => "text", "inputType" => "select", "data" => [
                 "options" => [
-                    ["key" => "Type One", "value" => "typeone"],
-                    ["key" => "Type Two", "value" => "typetwo"],
+                    ["value" => "Type One", "key" => "typeone"],
+                    ["value" => "Type Two", "key" => "typetwo"],
                 ]
             ]],
             ["name" => "Industry Type", "symbolic_name" => "type" , "dataType" => "text", "inputType" => "select", "data" => [
                 "options" => [
-                    ["key" => "Type One", "value" => "typeone"],
-                    ["key" => "Type Two", "value" => "typetwo"],
+                    ["value" => "Type One", "key" => "typeone"],
+                    ["value" => "Type Two", "key" => "typetwo"],
                 ]
             ]],
             ["name" => "Sunday Off?", "symbolic_name" => "sunday_off" , "dataType" => "text", "inputType" => "select", "data" => [
                 "options" => [
-                    ["key" => "Yes", "value" => 1],
-                    ["key" => "No", "value" => 0],
+                    ["value" => "Yes", "key" => 1],
+                    ["value" => "No", "key" => 0],
                 ]
             ]],
             ["name" => "Saturday Off?", "symbolic_name" => "saturday_off" , "dataType" => "text", "inputType" => "select", "data" => [
                 "options" => [
-                    ["key" => "Yes", "value" => 1],
-                    ["key" => "No", "value" => 0],
+                    ["value" => "Yes", "key" => 1],
+                    ["value" => "No", "key" => 0],
                 ]
             ]],
 

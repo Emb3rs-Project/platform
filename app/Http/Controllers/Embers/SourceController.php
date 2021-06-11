@@ -99,20 +99,6 @@ class SourceController extends Controller
             $instance
         ] = app(ShowsSources::class)->show($request->user(), $id);
 
-        $action = new InstanceProcessing();
-        $user_id = Auth::user()->id;
-
-
-        // DispatchCustomAction::dispatchAction(
-        //     $action,
-        //     new ActionFields(new Collection(), new Collection()),
-        //     [$instance],
-        //     $user_id
-        // );
-
-        $action->generateScriptFile($instance);
-
-
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
