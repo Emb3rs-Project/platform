@@ -23,7 +23,7 @@ class TeamRole implements Rule
      */
     public function __construct()
     {
-        $this->permissions = $this->getPermissions();
+        $this->permissions = $this->getFriendlyPermissionNames()->all();
     }
 
     /**

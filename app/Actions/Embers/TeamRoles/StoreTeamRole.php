@@ -4,7 +4,6 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\EmbersPermissionable;
-use App\HasEmbersPermissions;
 use App\Models\Permission;
 use App\Models\Team;
 use App\Models\TeamRole;
@@ -16,7 +15,6 @@ use Illuminate\Validation\Rule;
 class StoreTeamRole implements StoresTeamRoles
 {
     use EmbersPermissionable;
-    use HasEmbersPermissions;
 
     /**
      * Validate and create a new Role in user's current Team.

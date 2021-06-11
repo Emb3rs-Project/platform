@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Permission;
 use Illuminate\Support\Str;
 
 trait EmbersPermissionable

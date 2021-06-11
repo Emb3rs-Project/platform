@@ -2,15 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\HasEmbersPermissions;
 use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SyncPermissions extends Command
 {
-    use HasEmbersPermissions;
-
     /**
      * The name and signature of the console command.
      *
@@ -38,21 +36,51 @@ class SyncPermissions extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        $namespaces = $this->getPermissionNamespaces();
+        $actionNamespaces = $this->getActionNamespaces();
 
-        DB::transaction(function () use ($namespaces) {
-            foreach ($namespaces as $namespace) {
+        DB::transaction(function () use ($actionNamespaces) {
+            foreach ($actionNamespaces as $actionNamespace) {
                 Permission::firstOrCreate([
-                    'action' => $namespace,
-                    'friendly_name' => app($namespace)->getFriendlyActionName()
+                    'action' => $actionNamespace,
+                    'friendly_name' => app($actionNamespace)->getFriendlyActionName()
                 ]);
             }
         });
+    }
 
-        return 0;
+    /**
+     * All the available Action namespaces.
+     *
+     * @return array
+     */
+    public function getActionNamespaces(): array
+    {
+        $composer = require base_path('/vendor/autoload.php');
+
+        $classes = array_keys($composer->getClassMap());
+
+        $permissionNamespaces = [];
+
+        foreach ($classes as $class) {
+            if (! Str::startsWith($class, 'App\\Actions\\')) {
+                continue;
+            }
+
+            $traits = class_uses_recursive($class);
+
+            if (! in_array(EmbersPermissionable::class, $traits)) {
+                continue;
+            }
+
+            $actionName = app($class)->getActionName();
+
+            array_push($permissionNamespaces, $actionName);
+        }
+
+        return $permissionNamespaces;
     }
 }

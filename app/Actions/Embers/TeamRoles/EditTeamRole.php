@@ -26,7 +26,7 @@ class EditTeamRole implements EditsTeamRoles
 
         $role = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
 
-        $permissions = $this->getPermissions();
+        $permissions = $this->getFriendlyPermissionNames();
 
         return [
             $role,
