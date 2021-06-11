@@ -117,12 +117,9 @@
             Added.
           </jet-action-message>
 
-          <jet-button
-            :class="{ 'opacity-25': addTeamMemberForm.processing }"
-            :disabled="addTeamMemberForm.processing"
-          >
+          <primary-button :disabled="addTeamMemberForm.processing">
             Add
-          </jet-button>
+          </primary-button>
         </template>
       </jet-form-section>
     </div>
@@ -300,18 +297,17 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="currentlyManagingRole = false">
+        <secondary-outlined-button @click="currentlyManagingRole = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-button
+        <primary-button
           class="ml-2"
-          @click="updateRole"
-          :class="{ 'opacity-25': updateRoleForm.processing }"
           :disabled="updateRoleForm.processing"
+          @click="updateRole"
         >
           Save
-        </jet-button>
+        </primary-button>
       </template>
     </jet-dialog-modal>
 
@@ -327,18 +323,17 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="confirmingLeavingTeam = false">
+        <secondary-outlined-button @click="confirmingLeavingTeam = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-danger-button
+        <danger-button
+          :disabled="leaveTeamForm.processing"
           class="ml-2"
           @click="leaveTeam"
-          :class="{ 'opacity-25': leaveTeamForm.processing }"
-          :disabled="leaveTeamForm.processing"
         >
           Leave
-        </jet-danger-button>
+        </danger-button>
       </template>
     </jet-confirmation-modal>
 
@@ -354,18 +349,17 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="teamMemberBeingRemoved = null">
+        <secondary-outlined-button @click="teamMemberBeingRemoved = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-danger-button
+        <danger-button
+          :disabled="removeTeamMemberForm.processing"
           class="ml-2"
           @click="removeTeamMember"
-          :class="{ 'opacity-25': removeTeamMemberForm.processing }"
-          :disabled="removeTeamMemberForm.processing"
         >
           Remove
-        </jet-danger-button>
+        </danger-button>
       </template>
     </jet-confirmation-modal>
 
@@ -389,20 +383,18 @@ import {
 
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import JetActionSection from "@/Jetstream/ActionSection";
-import JetButton from "@/Jetstream/Button";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
-import JetDangerButton from "@/Jetstream/DangerButton";
 import JetDialogModal from "@/Jetstream/DialogModal";
 import JetFormSection from "@/Jetstream/FormSection";
 import JetInput from "@/Jetstream/Input";
 import JetInputError from "@/Jetstream/InputError";
 import JetLabel from "@/Jetstream/Label";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
 
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
-import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
 import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
+import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import DangerButton from "@/Components/NewLayout/DangerButton.vue";
 import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
 
 export default {
@@ -413,19 +405,17 @@ export default {
     RadioGroupOption,
     JetActionMessage,
     JetActionSection,
-    JetButton,
     JetConfirmationModal,
-    JetDangerButton,
     JetDialogModal,
     JetFormSection,
     JetInput,
     JetInputError,
     JetLabel,
-    JetSecondaryButton,
     JetSectionBorder,
     PrimaryButton,
     SecondaryButton,
     SecondaryOutlinedButton,
+    DangerButton,
     CreateRoleModal,
   },
 
@@ -546,7 +536,11 @@ export default {
     },
 
     displayableRole(teamRoleId) {
-      return this.roles.find((r) => r.id === teamRoleId).role;
+      const role = this.roles.find((r) => r.id === teamRoleId);
+
+      if (role) {
+        return role.role;
+      }
     },
   },
 };

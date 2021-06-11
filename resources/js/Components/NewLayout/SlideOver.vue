@@ -13,7 +13,10 @@
         class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200 opacity-80 hover:opacity-95"
       >
         <!-- Header -->
-        <div class="py-6 px-4 sm:px-6" :class="headerBackground">
+        <div
+          class="py-6 px-4 sm:px-6"
+          :class="headerBackground"
+        >
           <div class="flex items-center justify-between">
             <h2 class="text-lg font-medium text-white">{{ title }}</h2>
             <div class="ml-3 h-7 flex items-center">
@@ -43,26 +46,17 @@
             </div>
           </div>
           <div class="mt-1">
-            <p class="text-sm" :class="subtitleTextColor">
+            <p
+              class="text-sm"
+              :class="subtitleTextColor"
+            >
               {{ subtitle }}
             </p>
           </div>
         </div>
-        <div
-          class="overflow-y-auto h-full py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200"
-        >
+        <div class="overflow-y-auto h-full py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <slot></slot>
         </div>
-        <!-- <form
-          class="h-full divide-y divide-gray-200 flex flex-col bg-red-500 shadow-xl z-20"
-        >
-          <div class="flex-1 h-0 overflow-y-scroll">
-            <slot></slot>
-          </div>
-          <div class="flex-shrink-0 px-4 py-4 flex justify-end">
-          <slot name="actions"></slot>
-        </div>
-        </form>-->
         <div class="flex-shrink-0 px-4 py-4 flex justify-end gap-5">
           <slot name="actions"></slot>
         </div>

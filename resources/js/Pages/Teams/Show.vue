@@ -41,11 +41,11 @@ export default {
     },
     availableRoles: {
       type: Array,
-      required: true,
+      default: [],
     },
     availablePermissions: {
       type: Array,
-      required: true,
+      default: [],
     },
     permissions: {
       type: Object,
