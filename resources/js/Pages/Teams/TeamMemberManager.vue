@@ -22,10 +22,7 @@
 
           <!-- Member Email -->
           <div class="col-span-6 sm:col-span-4">
-            <jet-label
-              for="email"
-              value="Email"
-            />
+            <jet-label for="email" value="Email" />
             <jet-input
               id="email"
               type="email"
@@ -39,23 +36,37 @@
           </div>
 
           <!-- Role -->
-          <div
-            class="col-span-6 lg:col-span-4"
-            v-if="roles.length > 0"
-          >
-            <jet-label
-              for="roles"
-              value="Role"
-            />
+          <div class="col-span-6 lg:col-span-4" v-if="roles.length > 0">
+            <jet-label for="roles" value="Role" />
             <jet-input-error
               :message="addTeamMemberForm.errors.role"
               class="mt-2"
             />
 
-            <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
+            <div
+              class="
+                relative
+                z-0
+                mt-1
+                border border-gray-200
+                rounded-lg
+                cursor-pointer
+              "
+            >
               <button
                 type="button"
-                class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
+                class="
+                  relative
+                  px-4
+                  py-3
+                  inline-flex
+                  w-full
+                  rounded-lg
+                  focus:z-10
+                  focus:outline-none
+                  focus:border-blue-300
+                  focus:shadow-outline-blue
+                "
                 :class="{
                   'border-t border-gray-200 rounded-t-none': i > 0,
                   'rounded-b-none': i != Object.keys(roles).length - 1,
@@ -64,17 +75,20 @@
                 v-for="(role, i) in roles"
                 :key="role.id"
               >
-                <div :class="{
+                <div
+                  :class="{
                     'opacity-50':
                       addTeamMemberForm.team_role_id &&
                       addTeamMemberForm.team_role_id != role.id,
-                  }">
+                  }"
+                >
                   <!-- Role Name -->
                   <div class="flex items-center">
                     <div
                       class="text-sm text-gray-600"
                       :class="{
-                        'font-semibold': addTeamMemberForm.team_role_id == role.id,
+                        'font-semibold':
+                          addTeamMemberForm.team_role_id == role.id,
                       }"
                     >
                       {{ role.role }}
@@ -90,7 +104,9 @@
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      <path
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
                     </svg>
                   </div>
                 </div>
@@ -98,14 +114,49 @@
             </div>
           </div>
 
-          <!-- Create Role -->
           <div class="col-span-6 lg:col-span-4">
-            <secondary-button
-              type="button"
-              @click="roleModalIsVisible = true"
-            >
-              Create Role
-            </secondary-button>
+            <Disclosure as="div" v-slot="{ open }">
+              <dt class="text-lg">
+                <DisclosureButton
+                  class="
+                    text-left
+                    w-full
+                    flex
+                    justify-between
+                    items-start
+                    text-gray-400
+                    focus:outline-none
+                  "
+                >
+                  <span class="font-medium text-gray-900">
+                    Create New Role
+                  </span>
+                  <span class="ml-6 h-7 flex items-center">
+                    <ChevronDownIcon
+                      :class="[
+                        open ? '-rotate-180' : 'rotate-0',
+                        'h-6 w-6 transform',
+                      ]"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </DisclosureButton>
+              </dt>
+              <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-out"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <DisclosurePanel as="dd" class="mt-2 pr-12">
+                  <create-role-modal
+                    :permissions="availablePermissions"
+                  ></create-role-modal>
+                </DisclosurePanel>
+              </transition>
+            </Disclosure>
           </div>
         </template>
 
@@ -124,9 +175,11 @@
       </jet-form-section>
     </div>
 
-    <div v-if="
+    <div
+      v-if="
         team.team_invitations.length > 0 && userPermissions.canAddTeamMembers
-      ">
+      "
+    >
       <jet-section-border />
 
       <!-- Team Member Invitations -->
@@ -152,7 +205,12 @@
               <div class="flex items-center">
                 <!-- Cancel Team Invitation -->
                 <button
-                  class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                  class="
+                    cursor-pointer
+                    ml-6
+                    text-sm text-red-500
+                    focus:outline-none
+                  "
                   @click="cancelTeamInvitation(invitation)"
                   v-if="userPermissions.canRemoveTeamMembers"
                 >
@@ -198,9 +256,7 @@
                 <button
                   class="ml-2 text-sm text-gray-400 underline"
                   @click="manageRole(user)"
-                  v-if="
-                    userPermissions.canAddTeamMembers && roles.length
-                  "
+                  v-if="userPermissions.canAddTeamMembers && roles.length"
                 >
                   {{ displayableRole(user.membership.team_role_id) }}
                 </button>
@@ -245,10 +301,30 @@
 
       <template #content>
         <div v-if="managingRoleFor">
-          <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
+          <div
+            class="
+              relative
+              z-0
+              mt-1
+              border border-gray-200
+              rounded-lg
+              cursor-pointer
+            "
+          >
             <button
               type="button"
-              class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
+              class="
+                relative
+                px-4
+                py-3
+                inline-flex
+                w-full
+                rounded-lg
+                focus:z-10
+                focus:outline-none
+                focus:border-blue-300
+                focus:shadow-outline-blue
+              "
               :class="{
                 'border-t border-gray-200 rounded-t-none': i > 0,
                 'rounded-b-none': i !== Object.keys(roles).length - 1,
@@ -257,10 +333,13 @@
               v-for="(role, i) in roles"
               :key="role.id"
             >
-              <div :class="{
+              <div
+                :class="{
                   'opacity-50':
-                    updateRoleForm.team_role_id && updateRoleForm.team_role_id !== role.id,
-                }">
+                    updateRoleForm.team_role_id &&
+                    updateRoleForm.team_role_id !== role.id,
+                }"
+              >
                 <!-- Role Name -->
                 <div class="flex items-center">
                   <div
@@ -282,7 +361,9 @@
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <path
+                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                    ></path>
                   </svg>
                 </div>
 
@@ -362,11 +443,6 @@
         </danger-button>
       </template>
     </jet-confirmation-modal>
-
-    <create-role-modal
-      v-model="roleModalIsVisible"
-      :permissions="availablePermissions"
-    ></create-role-modal>
   </div>
 </template>
 
@@ -397,6 +473,10 @@ import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedBut
 import DangerButton from "@/Components/NewLayout/DangerButton.vue";
 import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
 
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
+
 export default {
   components: {
     RadioGroup,
@@ -417,6 +497,11 @@ export default {
     SecondaryOutlinedButton,
     DangerButton,
     CreateRoleModal,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    ChevronDownIcon,
+    TextInput,
   },
 
   props: {

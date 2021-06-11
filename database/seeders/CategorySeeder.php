@@ -16,7 +16,7 @@ class CategorySeeder extends Seeder
     {
         $genericCategories = [
             ["name" => "Sources", "type" => "source"],
-            ["name" => "Sinks", "type" => "sinks"],
+            ["name" => "Sinks", "type" => "sink"],
             ["name" => "Processes", "type" => "process"],
             ["name" => "Equipments", "type" => "equipment"]
         ];
