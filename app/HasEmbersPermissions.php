@@ -16,4 +16,14 @@ trait HasEmbersPermissions
     {
         return Permission::all()->pluck('friendly_name');
     }
+
+    /**
+    * All permissions names available.
+    *
+    * @return Illuminate\Support\Collection
+    */
+    public function getPermissionsKeyValue(): Collection
+    {
+        return Permission::all()->map(fn ($p) => ["name" => $p->friendly_name, "group" => $p->group]);
+    }
 }

@@ -43,7 +43,8 @@ class Permission extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('ACTION'), 'action'),
-            Text::make(__('FRIENDLYNAME'), 'friendly_name')
+            Text::make(__('FRIENDLYNAME'), 'friendly_name'),
+            Text::make(__('GROUP'), 'group'),
         ];
     }
 
