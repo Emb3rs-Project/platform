@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\EmbersPermissionable;
 use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
@@ -44,9 +45,12 @@ class SyncPermissions extends Command
 
         DB::transaction(function () use ($actionNamespaces) {
             foreach ($actionNamespaces as $actionNamespace) {
-                Permission::firstOrCreate([
-                    'action' => $actionNamespace,
-                    'friendly_name' => app($actionNamespace)->getFriendlyActionName()
+                $instance = app($actionNamespace);
+
+                Permission::UpdateOrCreate([
+                    'action' => $instance->getActionName(),
+                    'friendly_name' => $instance->getFriendlyActionName(),
+                    'group' => $instance->getGroupName()
                 ]);
             }
         });
@@ -63,7 +67,7 @@ class SyncPermissions extends Command
 
         $classes = array_keys($composer->getClassMap());
 
-        $permissionNamespaces = [];
+        $actionNamespaces = [];
 
         foreach ($classes as $class) {
             if (! Str::startsWith($class, 'App\\Actions\\')) {
@@ -76,11 +80,11 @@ class SyncPermissions extends Command
                 continue;
             }
 
-            $actionName = app($class)->getActionName();
+            $actionNamespace = app($class)->getActionName();
 
-            array_push($permissionNamespaces, $actionName);
+            array_push($actionNamespaces, $actionNamespace);
         }
 
-        return $permissionNamespaces;
+        return $actionNamespaces;
     }
 }
