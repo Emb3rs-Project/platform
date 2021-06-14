@@ -7,8 +7,9 @@ interface ShowsSinks
     /**
      * Display the given Sink.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function show(int $id);
+    public function show($user, int $id);
 }

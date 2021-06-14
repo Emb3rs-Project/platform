@@ -75,7 +75,7 @@
     </div>
     <div class="sm:col-span-2">
       <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{ instance.values?.script?.dhn_supply }}
+        {{ instance.values?.script?.dhn_supply ?? 'Not Yet Calculated' }}
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@
     </div>
     <div class="sm:col-span-2">
       <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{ instance.values?.script?.dhn_excess }}
+        {{ instance.values?.script?.dhn_excess ?? 'Not Yet Calculated' }}
       </div>
     </div>
   </div>

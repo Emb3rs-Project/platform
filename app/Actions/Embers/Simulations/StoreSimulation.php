@@ -3,27 +3,28 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\StoresSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class StoreSimulation implements StoresSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
      * @return Project
      */
-    public function store(int $projectId, array $input)
+    public function store($user, int $projectId, array $input)
     {
-        Gate::authorize('create', Simulation::class);
+        $this->authorize($user);
 
-        $project = Project::findOrFail($projectId);
-
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $this->validate($input);
 

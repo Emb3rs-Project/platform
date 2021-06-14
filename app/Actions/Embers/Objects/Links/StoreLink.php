@@ -3,27 +3,29 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\StoresLinks;
+use App\EmbersPermissionable;
 use App\Models\GeoSegment;
 use App\Models\Link;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class StoreLink implements StoresLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  array $input
      * @return Instance
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
-        Gate::authorize('create', Link::class);
+        $this->authorize($user);
 
         $this->validate($input);
 
-        $link = $this->save($input);
+        $link = $this->save($user, $input);
 
         return $link;
     }
@@ -48,10 +50,11 @@ class StoreLink implements StoresLinks
     /**
      * Save the Link in the DB.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return void
      */
-    protected function save(array $input)
+    protected function save($user, array $input)
     {
         $segments = $input['segments'];
 
@@ -60,7 +63,7 @@ class StoreLink implements StoresLinks
             // 'description' => $input['description']
         ]);
 
-        $link->teams()->attach(Auth::user()->currentTeam);
+        $link->teams()->attach($user->currentTeam);
 
         foreach ($segments as $data) {
             $segment = GeoSegment::create([

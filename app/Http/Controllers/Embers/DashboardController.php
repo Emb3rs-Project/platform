@@ -8,18 +8,17 @@ use App\Models\Instance;
 use App\Models\News;
 use App\Models\Notification;
 use App\Models\Template;
-use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $news = News::whereTeamId(Auth::user()->currentTeam->id)->get();
-        $notifications = Notification::whereTeamId(Auth::user()->currentTeam->id)->get();
-        $currentTeam = Auth::user()->currentTeam;
+        $news = News::whereTeamId($request->user()->currentTeam->id)->get();
+        $notifications = Notification::whereTeamId($request->user()->currentTeam->id)->get();
+        $currentTeam =$request->user()->currentTeam;
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
 

@@ -13,9 +13,9 @@
       </div>
 
       <div class="mt-5">
-        <jet-danger-button @click="confirmTeamDeletion">
+        <danger-button @click="confirmTeamDeletion">
           Delete Institution
-        </jet-danger-button>
+        </danger-button>
       </div>
 
       <!-- Delete Team Confirmation Modal -->
@@ -31,18 +31,17 @@
         </template>
 
         <template #footer>
-          <jet-secondary-button @click="confirmingTeamDeletion = false">
+          <secondary-outlined-button @click="confirmingTeamDeletion = false">
             Cancel
-          </jet-secondary-button>
+          </secondary-outlined-button>
 
-          <jet-danger-button
+          <danger-button
+            :disabled="form.processing"
             class="ml-2"
             @click="deleteTeam"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
           >
             Delete Institution
-          </jet-danger-button>
+          </danger-button>
         </template>
       </jet-confirmation-modal>
     </template>
@@ -52,8 +51,9 @@
 <script>
 import JetActionSection from "@/Jetstream/ActionSection";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
-import JetDangerButton from "@/Jetstream/DangerButton";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton";
+
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import DangerButton from "@/Components/NewLayout/DangerButton.vue";
 
 export default {
   props: ["team"],
@@ -61,8 +61,8 @@ export default {
   components: {
     JetActionSection,
     JetConfirmationModal,
-    JetDangerButton,
-    JetSecondaryButton,
+    SecondaryOutlinedButton,
+    DangerButton,
   },
 
   data() {

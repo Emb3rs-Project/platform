@@ -16,10 +16,11 @@ class CreateTeamRolesTable extends Migration
         Schema::create('team_roles', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('team_id');
             $table->string('role');
+            $table->jsonb('permissions')->nullable(); // array of permission names
+            $table->unique(['team_id', 'role']);
 
-            $table->jsonb('permissions')->nullable(); // array of permission names/ids
+            $table->foreignId('team_id');
 
             $table->softDeletes();
             $table->timestamps();

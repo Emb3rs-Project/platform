@@ -3,22 +3,24 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\CreatesSources;
+use App\EmbersPermissionable;
 use App\Models\Category;
-use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Facades\Gate;
 
 class CreateSource implements CreatesSources
 {
+    use EmbersPermissionable;
+
     /**
      * Display the necessary objects for the creation of a Source.
      *
+     * @param  mixed  $user
      * @return mixed
      */
-    public function create()
+    public function create($user)
     {
-        Gate::authorize('create', Instance::class);
+        $this->authorize($user);
 
         $sourceCategories = Category::whereType('source')->get()->pluck('id');
 

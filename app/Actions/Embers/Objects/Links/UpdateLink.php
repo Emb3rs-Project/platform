@@ -3,25 +3,28 @@
 namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
+use App\EmbersPermissionable;
 use App\Models\GeoSegment;
 use App\Models\Link;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateLink implements UpdatesLinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate, update and return an existing instance.
      *
-     * @param  int    $id
+     * @param  mixed  $user
+     * @param  int  $id
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
-        $link = Link::with(['geoSegments'])->findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('update', $link);
+        $link = Link::with(['geoSegments'])->findOrFail($id);
 
         $this->validate($input);
 

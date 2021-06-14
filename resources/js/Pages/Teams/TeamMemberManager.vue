@@ -22,7 +22,10 @@
 
           <!-- Member Email -->
           <div class="col-span-6 sm:col-span-4">
-            <jet-label for="email" value="Email" />
+            <jet-label
+              for="email"
+              value="Email"
+            />
             <jet-input
               id="email"
               type="email"
@@ -38,48 +41,66 @@
           <!-- Role -->
           <div
             class="col-span-6 lg:col-span-4"
-            v-if="availableRoles.length > 0"
+            v-if="roles.length > 0"
           >
-            <jet-label for="roles" value="Role" />
+            <jet-label
+              for="roles"
+              value="Role"
+            />
             <jet-input-error
               :message="addTeamMemberForm.errors.role"
               class="mt-2"
             />
 
-            <div
-              class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer"
-            >
+            <div class="
+                relative
+                z-0
+                mt-1
+                border border-gray-200
+                rounded-lg
+                cursor-pointer
+              ">
               <button
                 type="button"
-                class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
+                class="
+                  relative
+                  px-4
+                  py-3
+                  inline-flex
+                  w-full
+                  rounded-lg
+                  focus:z-10
+                  focus:outline-none
+                  focus:border-blue-300
+                  focus:shadow-outline-blue
+                "
                 :class="{
                   'border-t border-gray-200 rounded-t-none': i > 0,
-                  'rounded-b-none': i != Object.keys(availableRoles).length - 1,
+                  'rounded-b-none': i != Object.keys(roles).length - 1,
                 }"
-                @click="addTeamMemberForm.role = role.key"
-                v-for="(role, i) in availableRoles"
-                :key="role.key"
+                @click="addTeamMemberForm.team_role_id = role.id"
+                v-for="(role, i) in roles"
+                :key="role.id"
               >
-                <div
-                  :class="{
+                <div :class="{
                     'opacity-50':
-                      addTeamMemberForm.role &&
-                      addTeamMemberForm.role != role.key,
-                  }"
-                >
+                      addTeamMemberForm.team_role_id &&
+                      addTeamMemberForm.team_role_id != role.id,
+                  }">
                   <!-- Role Name -->
                   <div class="flex items-center">
                     <div
                       class="text-sm text-gray-600"
                       :class="{
-                        'font-semibold': addTeamMemberForm.role == role.key,
+                        'font-semibold':
+                          addTeamMemberForm.team_role_id == role.id,
                       }"
                     >
-                      {{ role.name }}
+                      {{ role.role }}
                     </div>
 
                     <svg
-                      v-if="addTeamMemberForm.role == role.key"
+                      v-if="addTeamMemberForm.team_role_id == role.id"
                       class="ml-2 h-5 w-5 text-green-400"
                       fill="none"
                       stroke-linecap="round"
@@ -88,19 +109,21 @@
                       stroke="currentColor"
                       viewBox="0 0 24 24"
                     >
-                      <path
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
+                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                  </div>
-
-                  <!-- Role Description -->
-                  <div class="mt-2 text-xs text-gray-600">
-                    {{ role.description }}
                   </div>
                 </div>
               </button>
             </div>
+          </div>
+
+          <div class="col-span-6 lg:col-span-4">
+            <secondary-button
+              type="button"
+              @click="roleModalIsVisible = true"
+            >
+              Create Role
+            </secondary-button>
           </div>
         </template>
 
@@ -112,21 +135,16 @@
             Added.
           </jet-action-message>
 
-          <jet-button
-            :class="{ 'opacity-25': addTeamMemberForm.processing }"
-            :disabled="addTeamMemberForm.processing"
-          >
+          <primary-button :disabled="addTeamMemberForm.processing">
             Add
-          </jet-button>
+          </primary-button>
         </template>
       </jet-form-section>
     </div>
 
-    <div
-      v-if="
+    <div v-if="
         team.team_invitations.length > 0 && userPermissions.canAddTeamMembers
-      "
-    >
+      ">
       <jet-section-border />
 
       <!-- Team Member Invitations -->
@@ -152,7 +170,12 @@
               <div class="flex items-center">
                 <!-- Cancel Team Invitation -->
                 <button
-                  class="cursor-pointer ml-6 text-sm text-red-500 focus:outline-none"
+                  class="
+                    cursor-pointer
+                    ml-6
+                    text-sm text-red-500
+                    focus:outline-none
+                  "
                   @click="cancelTeamInvitation(invitation)"
                   v-if="userPermissions.canRemoveTeamMembers"
                 >
@@ -198,18 +221,16 @@
                 <button
                   class="ml-2 text-sm text-gray-400 underline"
                   @click="manageRole(user)"
-                  v-if="
-                    userPermissions.canAddTeamMembers && availableRoles.length
-                  "
+                  v-if="userPermissions.canAddTeamMembers && roles.length"
                 >
-                  {{ displayableRole(user.membership.role) }}
+                  {{ displayableRole(user.membership.team_role_id) }}
                 </button>
 
                 <div
                   class="ml-2 text-sm text-gray-400"
-                  v-else-if="availableRoles.length"
+                  v-else-if="roles.length"
                 >
-                  {{ displayableRole(user.membership.role) }}
+                  {{ displayableRole(user.membership.team_role_id) }}
                 </div>
 
                 <!-- Leave Team -->
@@ -245,39 +266,54 @@
 
       <template #content>
         <div v-if="managingRoleFor">
-          <div
-            class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer"
-          >
+          <div class="
+              relative
+              z-0
+              mt-1
+              border border-gray-200
+              rounded-lg
+              cursor-pointer
+            ">
             <button
               type="button"
-              class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
+              class="
+                relative
+                px-4
+                py-3
+                inline-flex
+                w-full
+                rounded-lg
+                focus:z-10
+                focus:outline-none
+                focus:border-blue-300
+                focus:shadow-outline-blue
+              "
               :class="{
                 'border-t border-gray-200 rounded-t-none': i > 0,
-                'rounded-b-none': i !== Object.keys(availableRoles).length - 1,
+                'rounded-b-none': i !== Object.keys(roles).length - 1,
               }"
-              @click="updateRoleForm.role = role.key"
-              v-for="(role, i) in availableRoles"
-              :key="role.key"
+              @click="updateRoleForm.team_role_id = role.id"
+              v-for="(role, i) in roles"
+              :key="role.id"
             >
-              <div
-                :class="{
+              <div :class="{
                   'opacity-50':
-                    updateRoleForm.role && updateRoleForm.role !== role.key,
-                }"
-              >
+                    updateRoleForm.team_role_id &&
+                    updateRoleForm.team_role_id !== role.id,
+                }">
                 <!-- Role Name -->
                 <div class="flex items-center">
                   <div
                     class="text-sm text-gray-600"
                     :class="{
-                      'font-semibold': updateRoleForm.role === role.key,
+                      'font-semibold': updateRoleForm.team_role_id === role.id,
                     }"
                   >
-                    {{ role.name }}
+                    {{ role.role }}
                   </div>
 
                   <svg
-                    v-if="updateRoleForm.role === role.key"
+                    v-if="updateRoleForm.team_role_id === role.id"
                     class="ml-2 h-5 w-5 text-green-400"
                     fill="none"
                     stroke-linecap="round"
@@ -286,16 +322,14 @@
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                 </div>
 
                 <!-- Role Description -->
-                <div class="mt-2 text-xs text-gray-600">
+                <!-- <div class="mt-2 text-xs text-gray-600">
                   {{ role.description }}
-                </div>
+                </div> -->
               </div>
             </button>
           </div>
@@ -303,18 +337,17 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="currentlyManagingRole = false">
+        <secondary-outlined-button @click="currentlyManagingRole = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-button
+        <primary-button
           class="ml-2"
-          @click="updateRole"
-          :class="{ 'opacity-25': updateRoleForm.processing }"
           :disabled="updateRoleForm.processing"
+          @click="updateRole"
         >
           Save
-        </jet-button>
+        </primary-button>
       </template>
     </jet-dialog-modal>
 
@@ -330,18 +363,17 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="confirmingLeavingTeam = false">
+        <secondary-outlined-button @click="confirmingLeavingTeam = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-danger-button
+        <danger-button
+          :disabled="leaveTeamForm.processing"
           class="ml-2"
           @click="leaveTeam"
-          :class="{ 'opacity-25': leaveTeamForm.processing }"
-          :disabled="leaveTeamForm.processing"
         >
           Leave
-        </jet-danger-button>
+        </danger-button>
       </template>
     </jet-confirmation-modal>
 
@@ -357,64 +389,132 @@
       </template>
 
       <template #footer>
-        <jet-secondary-button @click="teamMemberBeingRemoved = null">
+        <secondary-outlined-button @click="teamMemberBeingRemoved = false">
           Cancel
-        </jet-secondary-button>
+        </secondary-outlined-button>
 
-        <jet-danger-button
+        <danger-button
+          :disabled="removeTeamMemberForm.processing"
           class="ml-2"
           @click="removeTeamMember"
-          :class="{ 'opacity-25': removeTeamMemberForm.processing }"
-          :disabled="removeTeamMemberForm.processing"
         >
           Remove
-        </jet-danger-button>
+        </danger-button>
       </template>
     </jet-confirmation-modal>
+
+    <create-role-modal
+      v-model="roleModalIsVisible"
+      :permissions="availablePermissions"
+    ></create-role-modal>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import { useStore } from "vuex";
+
+import {
+  RadioGroup,
+  RadioGroupDescription,
+  RadioGroupLabel,
+  RadioGroupOption,
+} from "@headlessui/vue";
+
 import JetActionMessage from "@/Jetstream/ActionMessage";
 import JetActionSection from "@/Jetstream/ActionSection";
-import JetButton from "@/Jetstream/Button";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
-import JetDangerButton from "@/Jetstream/DangerButton";
 import JetDialogModal from "@/Jetstream/DialogModal";
 import JetFormSection from "@/Jetstream/FormSection";
 import JetInput from "@/Jetstream/Input";
 import JetInputError from "@/Jetstream/InputError";
 import JetLabel from "@/Jetstream/Label";
-import JetSecondaryButton from "@/Jetstream/SecondaryButton";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
+
+import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
+import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import DangerButton from "@/Components/NewLayout/DangerButton.vue";
+import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
+
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
 
 export default {
   components: {
+    RadioGroup,
+    RadioGroupDescription,
+    RadioGroupLabel,
+    RadioGroupOption,
     JetActionMessage,
     JetActionSection,
-    JetButton,
     JetConfirmationModal,
-    JetDangerButton,
     JetDialogModal,
     JetFormSection,
     JetInput,
     JetInputError,
     JetLabel,
-    JetSecondaryButton,
     JetSectionBorder,
+    PrimaryButton,
+    SecondaryButton,
+    SecondaryOutlinedButton,
+    DangerButton,
+    CreateRoleModal,
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    ChevronDownIcon,
+    TextInput,
   },
 
-  props: ["team", "availableRoles", "userPermissions"],
+  props: {
+    team: {
+      type: Object,
+      required: true,
+    },
+    availableRoles: {
+      type: Array,
+      required: true,
+    },
+    availablePermissions: {
+      type: Array,
+      required: true,
+    },
+    userPermissions: {
+      type: Object,
+      required: true,
+    },
+  },
+
+  setup(props) {
+    const store = useStore();
+    const roleModalIsVisible = ref(false);
+    const roles = ref(props.availableRoles);
+
+    store.watch(
+      () => store.state.teamRoles.role,
+      (role) => {
+        roles.value.push(role);
+      },
+      { deep: true }
+    );
+
+    return {
+      roleModalIsVisible,
+      roles,
+    };
+  },
 
   data() {
     return {
       addTeamMemberForm: this.$inertia.form({
         email: "",
-        role: null,
+        team_role_id: null,
       }),
 
       updateRoleForm: this.$inertia.form({
-        role: null,
+        team_role_id: null,
       }),
 
       leaveTeamForm: this.$inertia.form(),
@@ -429,7 +529,7 @@ export default {
 
   methods: {
     addTeamMember() {
-      this.addTeamMemberForm.post(route("team-members.store", this.team), {
+      this.addTeamMemberForm.post(route("team-members.store", this.team.id), {
         errorBag: "addTeamMember",
         preserveScroll: true,
         onSuccess: () => this.addTeamMemberForm.reset(),
@@ -444,7 +544,7 @@ export default {
 
     manageRole(teamMember) {
       this.managingRoleFor = teamMember;
-      this.updateRoleForm.role = teamMember.membership.role;
+      this.updateRoleForm.team_role_id = teamMember.membership.team_role_id;
       this.currentlyManagingRole = true;
     },
 
@@ -484,8 +584,12 @@ export default {
       );
     },
 
-    displayableRole(role) {
-      return this.availableRoles.find((r) => r.key === role).name;
+    displayableRole(teamRoleId) {
+      const role = this.roles.find((r) => r.id === teamRoleId);
+
+      if (role) {
+        return role.role;
+      }
     },
   },
 };

@@ -7,8 +7,9 @@ interface ShowsSimulations
     /**
      * Display the given Simulations.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      */
-    public function show(int $projectId, int $simulationId);
+    public function show($user, int $projectId, int $simulationId);
 }

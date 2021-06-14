@@ -3,22 +3,24 @@
 namespace App\Actions\Embers\Projects;
 
 use App\Contracts\Embers\Projects\IndexesProjects;
+use App\EmbersPermissionable;
 use App\Models\Project;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 
 class IndexProject implements IndexesProjects
 {
+    use EmbersPermissionable;
+
     /**
      * Display all the available Projects.
      *
+     * @param  mixed  $user
      * @return [Project]
      */
-    public function index()
+    public function index($user)
     {
-        Gate::authorize('viewAny', Project::class);
+        $this->authorize($user);
 
-        $teamProjects = Auth::user()->currentTeam->projects->pluck('id');
+        $teamProjects = $user->currentTeam->projects->pluck('id');
 
         $projects = Project::with(['location'])->whereIn('id', $teamProjects)->get();
 

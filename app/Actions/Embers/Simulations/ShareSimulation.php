@@ -3,29 +3,29 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\SharesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShareSimulation implements SharesSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Simulation.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @return mixed
      */
-    public function share(int $projectId, int $simulationId)
+    public function share($user, int $projectId, int $simulationId)
     {
-        $project = Project::findOrFail($projectId);
+        $this->authorize($user);
 
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
-
-        Gate::authorize('view', $simulation);
-        // TODO: also check for sharing permissions
 
         // TODO: generate a sharing link
 

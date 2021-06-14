@@ -3,27 +3,29 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSource implements UpdatesSources
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and update an existing instance.
      *
+     * @param  mixed  $user
      * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
-        $source = Instance::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('update', $source);
+        $source = Instance::findOrFail($id);
 
         $this->validate($input);
 

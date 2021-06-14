@@ -20,11 +20,12 @@ class SinkController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sinks = app(IndexesSinks::class)->index();
+        $sinks = app(IndexesSinks::class)->index($request->user());
 
         // return Inertia::render('Objects/Sinks/SinkIndex', [
         //     'sinks' => $sinks
@@ -38,11 +39,12 @@ class SinkController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        [$templates, $equipments, $locations] = app(CreatesSinks::class)->create();
+        [$templates, $equipments, $locations] = app(CreatesSinks::class)->create($request->user());
 
         return [
             "slideOver" => 'Objects/Sinks/SinkCreate',
@@ -62,7 +64,7 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        $t = app(StoresSinks::class)->store($request->all());
+        $t = app(StoresSinks::class)->store($request->user(), $request->all());
 
         // return response()->json([
         //     'sink' => $t
@@ -74,12 +76,13 @@ class SinkController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $sink = app(ShowsSinks::class)->show($id);
+        $sink = app(ShowsSinks::class)->show($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkDetails',
@@ -92,17 +95,18 @@ class SinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
         [
             $templates,
             $equipments,
             $locations,
             $instance
-        ] = app(EditsSinks::class)->edit($id);
+        ] = app(EditsSinks::class)->edit($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Sinks/SinkEdit',
@@ -124,7 +128,7 @@ class SinkController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $updatedSink = app(UpdatesSinks::class)->update($id, $request->all());
+        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
 
         // return Redirect::route('objects.sinks.show', $updatedSink->id);
         return Redirect::route('objects.index');
@@ -133,12 +137,13 @@ class SinkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        app(DestroysSinks::class)->destroy($id);
+        app(DestroysSinks::class)->destroy($request->user(), $id);
 
         return Redirect::route('objects.index');
     }
@@ -146,12 +151,13 @@ class SinkController extends Controller
     /**
      * Share the specified resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function share($id)
+    public function share(Request $request, $id)
     {
-        $sink = app(SharesSinks::class)->share($id);
+        $sink = app(SharesSinks::class)->share($request->user(), $id);
 
         // return [
         //     "slideOver" => 'Objects/Sinks/SinkShare',
