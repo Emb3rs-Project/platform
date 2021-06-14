@@ -1,7 +1,17 @@
 <template>
+  <h1 class="px-4 py-3 font-bold">Properties :</h1>
   <!-- Source ID -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
   >
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
@@ -17,7 +27,16 @@
 
   <!-- Source Name -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
   >
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
@@ -33,7 +52,16 @@
 
   <!-- Source Template -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
   >
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
@@ -49,7 +77,16 @@
 
   <!-- Source Location Name -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
     v-if="instance.location_id"
   >
     <div>
@@ -64,34 +101,111 @@
     </div>
   </div>
 
+  <h1 class="px-4 py-3 font-bold">Calculated :</h1>
+
   <!-- Source Template -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
   >
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        DHN supply temperature (ºc)
+        Excess Heat Fluid
       </label>
     </div>
     <div class="sm:col-span-2">
       <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{ instance.values?.script?.dhn_supply ?? 'Not Yet Calculated' }}
+        {{ instance.values?.script?.excess_heat_fluid ?? "Not Yet Calculated" }}
       </div>
     </div>
   </div>
 
   <!-- Source Template -->
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
   >
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        available excess heat for DHN (kW)
+        Excess Heat Supply Temperature (ºc)
       </label>
     </div>
     <div class="sm:col-span-2">
       <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{ instance.values?.script?.dhn_excess ?? 'Not Yet Calculated' }}
+        {{
+          instance.values?.script?.excess_heat_supply_temperature ??
+          "Not Yet Calculated"
+        }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Template -->
+  <div
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
+  >
+    <div>
+      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+        Excess Heat Flowrate (kg/h)
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+        {{
+          instance.values?.script?.excess_heat_flowrate ?? "Not Yet Calculated"
+        }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Source Template -->
+  <div
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0
+      sm:grid sm:grid-cols-3
+      sm:gap-4
+      sm:px-6
+      sm:py-2
+      border-b-[1px]
+    "
+  >
+    <div>
+      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+        Excess Heat Capacity (kW)
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+        {{
+          instance.values?.script?.excess_heat_capacity ?? "Not Yet Calculated"
+        }}
       </div>
     </div>
   </div>
