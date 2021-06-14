@@ -24,6 +24,8 @@ namespace App\Models{
  * @property-read \Illuminate\Database\Eloquent\Collection|Category[] $children
  * @property-read int|null $children_count
  * @property-read Category|null $parent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Script[] $scripts
+ * @property-read int|null $scripts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
  * @property-read int|null $templates_count
  * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
@@ -67,6 +69,29 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|FAQ withoutTrashed()
  */
 	class FAQ extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\GeneratedScript
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $path
+ * @property int $instance_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript query()
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereInstanceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript wherePath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GeneratedScript whereUpdatedAt($value)
+ */
+	class GeneratedScript extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -209,16 +234,16 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property int $user_id
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $team_role_id
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership query()
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Membership whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Membership whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Membership whereUserId($value)
  */
@@ -278,7 +303,8 @@ namespace App\Models{
  * App\Models\Permission
  *
  * @property int $id
- * @property string $name
+ * @property string $action
+ * @property string $friendly_name
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -286,10 +312,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
  * @method static \Illuminate\Database\Query\Builder|Permission onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereAction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Permission withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Permission withoutTrashed()
@@ -392,6 +419,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|PropertyGroup withoutTrashed()
  */
 	class PropertyGroup extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\Script
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property string|null $code
+ * @property string|null $type
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read int|null $categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
+ * @property-read int|null $templates_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Script newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Script whereUpdatedAt($value)
+ */
+	class Script extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -543,9 +597,9 @@ namespace App\Models{
  * @property int $id
  * @property int $team_id
  * @property string $email
- * @property string|null $role
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $team_role_id
  * @property-read \App\Models\Team $team
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation newQuery()
@@ -553,8 +607,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereTeamRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamInvitation whereUpdatedAt($value)
  */
 	class TeamInvitation extends \Eloquent {}
@@ -603,6 +657,8 @@ namespace App\Models{
  * @property-read \App\Models\Category $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Instance[] $instances
  * @property-read int|null $instances_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Script[] $scripts
+ * @property-read int|null $scripts_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateGrouping[] $templateGrouping
  * @property-read int|null $template_grouping_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties

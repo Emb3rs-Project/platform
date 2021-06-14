@@ -3,32 +3,33 @@
 namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\StoresSources;
+use App\EmbersPermissionable;
 use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Nova\Actions\InstanceProcessing;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Nova\Fields\ActionFields;
 
 class StoreSource implements StoresSources
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new instance.
      *
+     * @param  mixed  $user
      * @param  array  $input
      * @return Instance
      */
-    public function store(array $input)
+    public function store($user, array $input)
     {
-        Gate::authorize('create', Instance::class);
+        $this->authorize($user);
 
         $this->validate($input);
 
-        $source = $this->save($input);
+        $source = $this->save($user, $input);
 
         return $source;
     }
@@ -61,12 +62,8 @@ class StoreSource implements StoresSources
      * @param  array  $input
      * @return Instance
      */
-    protected function save(array $input)
+    protected function save($user, array $input)
     {
-        // TODO: attach the user id to the entity
-
-        // TODO: save processes
-
         $source = $input['source'];
         $equipments = $input['equipments'];
         foreach ($equipments as $key => $value) {
@@ -110,15 +107,14 @@ class StoreSource implements StoresSources
         }
 
         $instance = Instance::create($newInstance);
-        $instance->teams()->attach(Auth::user()->currentTeam);
+        $instance->teams()->attach($user->currentTeam);
 
 
-        /*
-STUFF
-*/
-
+        /**
+         * STUFF
+         */
         $action = new InstanceProcessing();
-        $user_id = Auth::user()->id;
+        $user_id = $user->id;
 
 
         DispatchCustomAction::dispatchAction(

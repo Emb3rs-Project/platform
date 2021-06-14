@@ -3,27 +3,29 @@
 namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
+use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSink implements UpdatesSinks
 {
+    use EmbersPermissionable;
+
     /**
      * Validate, update and return an existing instance.
      *
+     * @param  mixed  $user
      * @param  int  $sink
      * @param  array  $input
      * @return Instance
      */
-    public function update(int $id, array $input)
+    public function update($user, int $id, array $input)
     {
-        $sink = Instance::findOrFail($id);
+        $this->authorize($user);
 
-        Gate::authorize('update', $sink);
+        $sink = Instance::findOrFail($id);
 
         $this->validate($input);
 

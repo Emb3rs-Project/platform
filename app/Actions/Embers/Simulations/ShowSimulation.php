@@ -3,28 +3,29 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\ShowsSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 
 class ShowSimulation implements ShowsSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Find and return an existing Simulation.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @return mixed
      */
-    public function show(int $projectId, int $simulationId)
+    public function show($user, int $projectId, int $simulationId)
     {
+        $this->authorize($user);
+
         $project = Project::with(['location'])->findOrFail($projectId);
 
-        Gate::authorize('view', $project);
-
         $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
-
-        Gate::authorize('view', $simulation);
 
         return [
             $simulation,

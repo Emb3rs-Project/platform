@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\HasEmbersTeams;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,6 +17,12 @@ class User extends Authenticatable
     use HasFactory;
     use HasProfilePhoto;
     use HasTeams;
+    use HasEmbersTeams {
+        HasEmbersTeams::teams insteadof HasTeams;
+        HasEmbersTeams::teamRole insteadof HasTeams;
+        HasEmbersTeams::hasTeamRole insteadof HasTeams;
+        HasEmbersTeams::teamPermissions insteadof HasTeams;
+    }
     use Notifiable;
     use TwoFactorAuthenticatable;
 

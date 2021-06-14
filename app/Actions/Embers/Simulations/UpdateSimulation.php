@@ -3,30 +3,31 @@
 namespace App\Actions\Embers\Simulations;
 
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
+use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSimulation implements UpdatesSimulations
 {
+    use EmbersPermissionable;
+
     /**
      * Validate and create a new Link.
      *
+     * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
      * @param  array  $input
      * @return Project
      */
-    public function update(int $projectId, int $simulationId, array $input)
+    public function update($user, int $projectId, int $simulationId, array $input)
     {
-        $project = Project::findOrFail($projectId);
+        $this->authorize($user);
 
-        Gate::authorize('view', $project);
+        Project::findOrFail($projectId);
 
         $simulation = Simulation::findOrFail($simulationId);
-
-        Gate::authorize('update', $simulation);
 
         $this->validate($input);
 

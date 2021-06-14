@@ -7,8 +7,9 @@ interface SharesSinks
     /**
      * Share a given Sink.
      *
+     * @param  mixed  $user
      * @param  int  $id
      * @return mixed
      */
-    public function share(int $id);
+    public function share($user, int $id);
 }
