@@ -2,11 +2,22 @@
 
 namespace App;
 
-use App\Models\Permission;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 trait EmbersPermissionable
 {
+    /**
+    * The ID that is going to define this permission in the frontend.
+    *
+    * @return string
+    */
+    public function getId(): string
+    {
+        // return hash_hmac('sha512/256', $this->getActionName(), config('APP_KEY'));
+        return Hash::make($this->getActionName());
+    }
+
     /**
     * The name of the action this trait is being used inside.
     *
@@ -25,6 +36,18 @@ trait EmbersPermissionable
     public function getShortActionName(): string
     {
         return class_basename(self::class);
+    }
+
+    /**
+    * The name of the group this trait is being used inside.
+    *
+    * @return string
+    */
+    public function getGroupName(): string
+    {
+        $action = $this->getActionName();
+
+        return Str::of($action)->beforeLast('\\')->afterLast('\\');
     }
 
     /**

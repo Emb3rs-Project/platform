@@ -47,11 +47,10 @@ class SyncPermissions extends Command
             foreach ($actionNamespaces as $actionNamespace) {
                 $instance = app($actionNamespace);
 
-                Permission::UpdateOrCreate([
-                    'action' => $instance->getActionName(),
-                    'friendly_name' => $instance->getFriendlyActionName(),
-                    'group' => $instance->getGroupName()
-                ]);
+                Permission::UpdateOrCreate(
+                    ['action' => $instance->getActionName()],
+                    ['friendly_name' => $instance->getFriendlyActionName(),'group' => $instance->getGroupName()]
+                );
             }
         });
     }
