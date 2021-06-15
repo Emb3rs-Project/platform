@@ -130,11 +130,11 @@
                                             <div class="flex items-center h-full pr-2">
                                               <input
                                                 :id="`candidates-${i}`"
-                                                :name="permission.name"
+                                                :name="permission.id"
                                                 type="checkbox"
                                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded leading-10"
                                                 v-model="checkedPermissions"
-                                                :value="permission.name"
+                                                :value="permission.id"
                                               />
                                             </div>
                                           </div>
@@ -266,7 +266,7 @@ export default {
 
     const checkAll = (event) => {
       if (!allChecked.value) {
-        checkedPermissions.value = props.permissions.map((p) => p.name);
+        checkedPermissions.value = props.permissions.map((p) => p.id);
         allChecked.value = true;
       } else {
         checkedPermissions.value = [];

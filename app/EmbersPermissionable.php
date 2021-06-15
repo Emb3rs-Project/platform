@@ -2,22 +2,10 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 trait EmbersPermissionable
 {
-    /**
-    * The ID that is going to define this permission in the frontend.
-    *
-    * @return string
-    */
-    public function getId(): string
-    {
-        // return hash_hmac('sha512/256', $this->getActionName(), config('APP_KEY'));
-        return Hash::make($this->getActionName());
-    }
-
     /**
     * The name of the action this trait is being used inside.
     *
@@ -59,9 +47,7 @@ trait EmbersPermissionable
     {
         $actionName = $this->getShortActionName();
 
-        $friendlyActionName = Str::of($actionName)->kebab()->replace('-', ' ');
-
-        return $friendlyActionName;
+        return Str::of($actionName)->kebab()->replace('-', ' ');
     }
 
     /**

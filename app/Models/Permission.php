@@ -16,6 +16,7 @@ class Permission extends Model
      */
     protected $fillable = [
         'action',
+        'friendly_id',
         'friendly_name',
         'group'
     ];

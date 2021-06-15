@@ -308,11 +308,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string $group
+ * @property string $friendly_id
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereAction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
