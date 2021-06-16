@@ -49,7 +49,7 @@
                     aria-hidden="true"
                   />
                 </div>
-                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
                   <DialogTitle
                     as="h3"
                     class="text-lg leading-6 font-medium text-gray-900"
@@ -58,11 +58,64 @@
                   </DialogTitle>
                   <div class="mt-2">
                     <text-input
+                      class="w-full"
                       v-model="role"
                       label="Name"
                       placeholder="Manager"
                       :required="true"
                     ></text-input>
+
+                    <!-- <h1 class="text-sm font-medium">Permissions</h1>
+
+                    <div class="w-full mt-2">
+                      <div class="w-full max-w-md mx-auto bg-white ">
+                        <div
+                          v-for="(permissions, groupName) in grouped"
+                          :key="permissions"
+                        >
+                          <Disclosure v-slot="{ open }">
+                            <DisclosureButton class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left   hover:bg-grey-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                              <span>{{groupName}}</span>
+                              <ChevronUpIcon
+                                :class="open ? 'transform rotate-180' : ''"
+                                class="w-5 h-5 text-purple-500"
+                              />
+                            </DisclosureButton>
+                            <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                              <div class="max-w-lg space-y-4">
+                                <div>
+                                  <div
+                                    class="relative flex items-start h-10 border-gray-500 border-[1px] border-b-0 last:border-b-[1px]"
+                                    v-bind:class="{'bg-green-100':checkedPermissions.includes(permission)}"
+                                    v-for="(permission, permissionIdx) in permissions"
+                                    :key="permission"
+                                  >
+                                    <label
+                                      :for="`candidates-${permissionIdx}`"
+                                      class="font-medium text-gray-700 leading-10 ml-3 text-sm inline-block w-full"
+                                    >
+                                      {{ permission.name }}
+                                    </label>
+                                    <div class="flex flex-grow"></div>
+                                    <div class="flex items-center h-full pr-2">
+                                      <input
+                                        :id="`candidates-${permissionIdx}`"
+                                        :name="permission.id"
+                                        type="checkbox"
+                                        class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded leading-10"
+                                        v-model="checkedPermissions"
+                                        :value="permission.id"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </DisclosurePanel>
+                          </Disclosure>
+                        </div>
+                      </div>
+                    </div> -->
+
                     <div class="space-y-6 sm:space-y-5 divide-y divide-gray-200">
                       <div class="pt-6 sm:pt-5">
                         <div
@@ -77,19 +130,20 @@
                             >
                               {{allChecked ? "Uncheck All" : "Check All"}}
                             </secondary-outlined-button>
+
                             <div
                               class="col-span-3"
-                              v-for="(p, name) in grouped"
-                              :key="p"
+                              v-for="(permissions, groupName) in grouped"
+                              :key="permissions"
                             >
                               <Disclosure
                                 as="div"
                                 v-slot="{ open }"
                               >
-                                <dt class="text-lg">
+                                <dt class="flex text-lg">
                                   <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
                                     <span class="font-medium text-gray-900">
-                                      {{ name }}
+                                      {{ groupName }}
                                     </span>
                                     <span class="ml-6 h-7 flex items-center">
                                       <ChevronDownIcon
@@ -98,6 +152,13 @@
                                       />
                                     </span>
                                   </DisclosureButton>
+                                  <secondary-outlined-button
+                                    type="button"
+                                    class="bg-green-200 hover:bg-green-300 text-sm"
+                                    @click="checkAllPermissionsForGroup(permissions)"
+                                  >
+                                    Check All
+                                  </secondary-outlined-button>
                                 </dt>
                                 <transition
                                   enter-active-class="transition duration-100 ease-out"
@@ -117,11 +178,11 @@
                                           <div
                                             class="relative flex items-start h-10 border-gray-500 border-[1px] border-b-0 last:border-b-[1px]"
                                             v-bind:class="{'bg-green-100':checkedPermissions.includes(permission)}"
-                                            v-for="(permission, i) in p"
+                                            v-for="(permission, permissionIdx) in permissions"
                                             :key="permission"
                                           >
                                             <label
-                                              :for="`candidates-${i}`"
+                                              :for="`candidates-${permissionIdx}`"
                                               class="font-medium text-gray-700 leading-10 ml-3 text-sm inline-block w-full"
                                             >
                                               {{ permission.name }}
@@ -129,7 +190,7 @@
                                             <div class="flex flex-grow"></div>
                                             <div class="flex items-center h-full pr-2">
                                               <input
-                                                :id="`candidates-${i}`"
+                                                :id="`candidates-${permissionIdx}`"
                                                 :name="permission.id"
                                                 type="checkbox"
                                                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded leading-10"
@@ -195,6 +256,7 @@ import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronUpIcon } from "@heroicons/vue/solid";
 
 var groupBy = function (xs, key) {
   return xs.reduce(function (rv, x) {
@@ -218,6 +280,7 @@ export default {
     DisclosurePanel,
     ChevronDownIcon,
     PrimaryButton,
+    ChevronUpIcon,
   },
 
   props: {
@@ -235,6 +298,9 @@ export default {
     const store = useStore();
     const role = ref(null);
     const checkedPermissions = ref([]);
+    const grouped = ref(groupBy(props.permissions, "group"));
+    console.log(grouped.value);
+    const allChecked = ref(false);
 
     const open = computed({
       get: () => props.modelValue,
@@ -261,9 +327,6 @@ export default {
       allChecked.value = false;
     };
 
-    const grouped = ref(groupBy(props.permissions, "group"));
-    const allChecked = ref(false);
-
     const checkAll = (event) => {
       if (!allChecked.value) {
         checkedPermissions.value = props.permissions.map((p) => p.id);
@@ -274,6 +337,27 @@ export default {
       }
       event.preventDefault();
     };
+
+    const checkAllPermissionsForGroup = (groupPermissions) => {
+      for (const _permission of groupPermissions) {
+        const existingPermission = checkedPermissions.value.find(
+          (p) => p === _permission.id
+        );
+
+        if (!existingPermission) {
+          checkedPermissions.value.push(_permission.id);
+        }
+      }
+    };
+
+    watch(
+      checkedPermissions,
+      (perms) => {
+        console.log(perms);
+      },
+      { deep: true }
+    );
+
     return {
       role,
       checkedPermissions,
@@ -282,6 +366,7 @@ export default {
       cancel,
       grouped,
       checkAll,
+      checkAllPermissionsForGroup,
       allChecked,
     };
   },

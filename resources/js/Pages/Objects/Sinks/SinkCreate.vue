@@ -8,9 +8,7 @@
     subtitleTextColor="text-gray-200"
   >
     <!-- Sink Template -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
           Templates
@@ -25,9 +23,7 @@
     </div>
 
     <!-- Sink Location -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label
           for="project_name"
@@ -91,7 +87,10 @@
       >
         Cancel
       </secondary-outlined-button>
-      <primary-button @click="submit" :disabled="form.processing">
+      <primary-button
+        @click="submit"
+        :disabled="form.processing"
+      >
         Save
       </primary-button>
     </template>
@@ -197,14 +196,6 @@ export default {
         }
       },
       { immediate: true }
-    );
-
-    watch(
-      form.sink.data,
-      (current) => {
-        // console.log("form.sink.data", current);
-      },
-      { immediate: true, deep: true }
     );
 
     const open = computed({
