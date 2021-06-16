@@ -8,7 +8,10 @@
     subtitleTextColor="text-gray-200"
   >
     <!-- <keep-alive> -->
-    <component v-bind="currentStepProps" :is="stepComponent"></component>
+    <component
+      v-bind="currentStepProps"
+      :is="stepComponent"
+    ></component>
     <!-- </keep-alive> -->
 
     <template #actions>
@@ -31,7 +34,10 @@
       >
         Previous
       </secondary-button>
-      <primary-button type="button" @click="navigateToNextStep">
+      <primary-button
+        type="button"
+        @click="navigateToNextStep"
+      >
         <span v-if="currentStepIndex + 1 === steps.length">Save</span>
         <span v-else>Next</span>
       </primary-button>
@@ -103,7 +109,7 @@ export default {
         status: "current", // status: current | complete | upcoming
       },
       {
-        name: "Equipments",
+        name: "Equipment",
         component: "Objects/Sources/SourceCreateWizard/Step2.vue",
         status: "upcoming",
       },
@@ -140,7 +146,7 @@ export default {
             currentStepProps.value.templates = props.templates;
             currentStepProps.value.locations = props.locations;
             break;
-          case "Equipments":
+          case "Equipment":
             currentStepProps.value.equipmentsCategories =
               props.equipmentsCategories;
             currentStepProps.value.equipments = props.equipments;
