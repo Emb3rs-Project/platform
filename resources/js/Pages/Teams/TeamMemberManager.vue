@@ -52,69 +52,69 @@
               class="mt-2"
             />
 
-            <div class="
-                relative
-                z-0
-                mt-1
-                border border-gray-200
-                rounded-lg
-                cursor-pointer
-              ">
+            <div class="relative z-0 mt-1 border border-gray-200 rounded-lg">
               <button
                 type="button"
-                class="
-                  relative
-                  px-4
-                  py-3
-                  inline-flex
-                  w-full
-                  rounded-lg
-                  focus:z-10
-                  focus:outline-none
-                  focus:border-blue-300
-                  focus:shadow-outline-blue
-                "
+                class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
                 :class="{
                   'border-t border-gray-200 rounded-t-none': i > 0,
                   'rounded-b-none': i != Object.keys(roles).length - 1,
                 }"
-                @click="addTeamMemberForm.team_role_id = role.id"
                 v-for="(role, i) in roles"
                 :key="role.id"
+                @click="addTeamMemberForm.team_role_id = role.id"
               >
-                <div :class="{
+                <div class="flex justify-between w-full">
+                  <div class="">
+                    <div :class="{
                     'opacity-50':
                       addTeamMemberForm.team_role_id &&
                       addTeamMemberForm.team_role_id != role.id,
                   }">
-                  <!-- Role Name -->
-                  <div class="flex items-center">
-                    <div
-                      class="text-sm text-gray-600"
-                      :class="{
+                      <!-- Role Name -->
+                      <div class="flex items-center">
+                        <div
+                          class="text-sm text-gray-600"
+                          :class="{
                         'font-semibold':
                           addTeamMemberForm.team_role_id == role.id,
                       }"
-                    >
-                      {{ role.role }}
-                    </div>
+                        >
+                          {{ role.role }}
+                        </div>
 
-                    <svg
-                      v-if="addTeamMemberForm.team_role_id == role.id"
-                      class="ml-2 h-5 w-5 text-green-400"
-                      fill="none"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                        <svg
+                          v-if="addTeamMemberForm.team_role_id == role.id"
+                          class="ml-2 h-5 w-5 text-green-400"
+                          fill="none"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div></div>
+                  <div class="">
+                    <button
+                      type="button"
+                      class="cursor-pointer text-sm text-red-500"
+                      @click="confirmTeamRoleRemoval(role)"
                     >
-                      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
+                      Remove
+                    </button>
                   </div>
                 </div>
               </button>
             </div>
+            <jet-input-error
+              :message="removeTeamRoleForm.errors.role"
+              class="mt-2 mr-2"
+            />
           </div>
 
           <div class="col-span-6 lg:col-span-4">
@@ -266,28 +266,10 @@
 
       <template #content>
         <div v-if="managingRoleFor">
-          <div class="
-              relative
-              z-0
-              mt-1
-              border border-gray-200
-              rounded-lg
-              cursor-pointer
-            ">
+          <div class="relative z-0 mt-1 border border-gray-200 rounded-lg cursor-pointer">
             <button
               type="button"
-              class="
-                relative
-                px-4
-                py-3
-                inline-flex
-                w-full
-                rounded-lg
-                focus:z-10
-                focus:outline-none
-                focus:border-blue-300
-                focus:shadow-outline-blue
-              "
+              class="relative px-4 py-3 inline-flex w-full rounded-lg focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue"
               :class="{
                 'border-t border-gray-200 rounded-t-none': i > 0,
                 'rounded-b-none': i !== Object.keys(roles).length - 1,
@@ -400,6 +382,33 @@
         >
           Remove
         </danger-button>
+      </template>
+    </jet-confirmation-modal>
+
+    <!-- Remove Team Role Confirmation Modal -->
+    <jet-confirmation-modal
+      :show="confirmingRemovingTeamRole"
+      @close="confirmingRemovingTeamRole = false"
+    >
+      <template #title> Remove Team Role </template>
+
+      <template #content>
+        Are you sure you would like to remove this role from the institution?
+      </template>
+
+      <template #footer>
+        <secondary-outlined-button @click="confirmingRemovingTeamRole = false">
+          Cancel
+        </secondary-outlined-button>
+
+        <danger-button
+          :disabled="removeTeamRoleForm.processing"
+          class="ml-2"
+          @click="removeTeamRole"
+        >
+          Remove
+        </danger-button>
+
       </template>
     </jet-confirmation-modal>
 
@@ -520,10 +529,14 @@ export default {
       leaveTeamForm: this.$inertia.form(),
       removeTeamMemberForm: this.$inertia.form(),
 
+      removeTeamRoleForm: this.$inertia.form(),
+
       currentlyManagingRole: false,
       managingRoleFor: null,
       confirmingLeavingTeam: false,
       teamMemberBeingRemoved: null,
+      confirmingRemovingTeamRole: false,
+      teamRoleBeingRemoved: null,
     };
   },
 
@@ -590,6 +603,31 @@ export default {
       if (role) {
         return role.role;
       }
+    },
+
+    confirmTeamRoleRemoval(role) {
+      this.teamRoleBeingRemoved = role;
+      this.confirmingRemovingTeamRole = true;
+    },
+
+    removeTeamRole() {
+      const roleIdx = this.roles.findIndex(
+        (r) => r.id === this.teamRoleBeingRemoved.id
+      );
+
+      this.removeTeamRoleForm.delete(
+        route("team-roles.destroy", this.teamRoleBeingRemoved),
+        {
+          errorBag: "removeTeamRole",
+          preserveScroll: true,
+          preserveState: true,
+          onSuccess: () => {
+            this.teamRoleBeingRemoved = null;
+            this.roles.splice(roleIdx, 1);
+          },
+          onFinish: (visit) => (this.confirmingRemovingTeamRole = false),
+        }
+      );
     },
   },
 };

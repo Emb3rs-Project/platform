@@ -121,6 +121,6 @@ class TeamRolesController extends Controller
     {
         app(DestroysTeamRoles::class)->destroy($request->user(), $id);
 
-        return Redirect::route('team-roles.index');
+        return back(303);
     }
 }
