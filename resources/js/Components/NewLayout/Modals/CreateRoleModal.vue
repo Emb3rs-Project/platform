@@ -350,14 +350,6 @@ export default {
       }
     };
 
-    watch(
-      checkedPermissions,
-      (perms) => {
-        console.log(perms);
-      },
-      { deep: true }
-    );
-
     return {
       role,
       checkedPermissions,
