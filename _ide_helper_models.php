@@ -305,21 +305,20 @@ namespace App\Models{
  * @property int $id
  * @property string $action
  * @property string $friendly_name
- * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $group
+ * @property string $friendly_id
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
- * @method static \Illuminate\Database\Query\Builder|Permission onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereAction($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Permission whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereFriendlyName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|Permission withTrashed()
- * @method static \Illuminate\Database\Query\Builder|Permission withoutTrashed()
  */
 	class Permission extends \Eloquent {}
 }
@@ -619,26 +618,21 @@ namespace App\Models{
  * App\Models\TeamRole
  *
  * @property int $id
- * @property int $team_id
  * @property string $role
  * @property array|null $permissions
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Team $team
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole newQuery()
- * @method static \Illuminate\Database\Query\Builder|TeamRole onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole query()
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole wherePermissions($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereTeamId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TeamRole whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|TeamRole withTrashed()
- * @method static \Illuminate\Database\Query\Builder|TeamRole withoutTrashed()
  */
 	class TeamRole extends \Eloquent {}
 }

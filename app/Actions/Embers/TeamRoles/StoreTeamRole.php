@@ -7,7 +7,6 @@ use App\EmbersPermissionable;
 use App\Models\Permission;
 use App\Models\Team;
 use App\Models\TeamRole;
-use App\Rules\Embers\TeamRole as TeamRoleRule;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -53,7 +52,7 @@ class StoreTeamRole implements StoresTeamRoles
                 })
             ],
             'permissions' => ['required', 'array'],
-            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new TeamRoleRule],
+            'permissions.*' => ['required', 'uuid', 'distinct', 'exists:permissions,friendly_id'],
         ])
         ->validate();
     }
@@ -69,7 +68,7 @@ class StoreTeamRole implements StoresTeamRoles
     {
         // Transform the permission friendly names to their coresponding actions
         foreach ($input['permissions'] as &$permission) {
-            $permission = Permission::whereFriendlyName($permission)->first();
+            $permission = Permission::whereFriendlyId($permission)->first();
         }
         unset($permission);
 
