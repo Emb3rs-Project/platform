@@ -15,7 +15,7 @@ class AddFriendlyIdToPermissionsTable extends Migration
     public function up()
     {
         Schema::table('permissions', function (Blueprint $table) {
-            $table->uuid('friendly_id')->unique()->default(Str::uuid()->toString());
+            $table->uuid('friendly_id')->unique()->nullable();
         });
     }
 
