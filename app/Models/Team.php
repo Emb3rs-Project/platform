@@ -89,12 +89,6 @@ class Team extends JetstreamTeam
         );
     }
 
-    // Table notifications
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(Notification::class, 'team_id');
-    }
-
     // Table team_roles
     public function teamRoles(): HasMany
     {

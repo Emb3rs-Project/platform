@@ -197,7 +197,7 @@
                         alt=""
                       />
                       <span
-                        v-show="notification"
+                        v-show="notifications"
                         class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                       ></span>
                     </span>
@@ -242,10 +242,10 @@
                   >
                     Notifications
                     <span
-                      v-show="notification"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                      v-show="notifications"
+                      class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
                     >
-                      New
+                      {{ unreadNotificationsCount }}
                     </span>
                   </inertia-link>
                   </MenuItem>
@@ -460,7 +460,7 @@
                       alt=""
                     />
                     <span
-                      v-show="notification"
+                      v-show="notifications"
                       class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                     ></span>
                   </span>
@@ -491,10 +491,10 @@
                     >
                       Notifications
                       <span
-                        v-show="notification"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                        v-show="notifications"
+                        class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
                       >
-                        New
+                        {{ f }}
                       </span>
                     </inertia-link>
                     </MenuItem>
@@ -525,7 +525,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import {
   Dialog,
@@ -613,11 +613,23 @@ export default {
       type: Object,
       required: true,
     },
+    notifications: {
+      type: Object,
+      required: true,
+    },
   },
 
-  setup() {
+  setup(props) {
     const sidebarOpen = ref(false);
-    const notification = ref(true);
+    const notifications = ref(null);
+
+    const unreadNotificationsCount = computed(
+      () => props.notifications.unread.count
+    );
+
+    if (unreadNotificationsCount.value) {
+      notifications.value = true;
+    }
 
     function logout() {
       Inertia.post(route("logout"));
@@ -638,7 +650,8 @@ export default {
     return {
       navigation,
       sidebarOpen,
-      notification,
+      notifications,
+      unreadNotificationsCount,
       logout,
       switchToTeam,
     };
