@@ -88,3 +88,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // TeamRoles
     Route::resource('/team-roles', TeamRolesController::class)->names(createResourceNames('team-roles'));
 });
+
+// Jetstream routes
+require base_path('/routes/jetstream.php');
