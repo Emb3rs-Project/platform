@@ -237,7 +237,7 @@
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
                   <inertia-link
-                    :href="'#'"
+                    :href="route('notifications.index')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
                     Notifications
@@ -613,7 +613,7 @@ export default {
       type: Object,
       required: true,
     },
-    notifications: {
+    layout: {
       type: Object,
       required: true,
     },
@@ -624,7 +624,7 @@ export default {
     const notifications = ref(null);
 
     const unreadNotificationsCount = computed(
-      () => props.notifications.unread.count
+      () => props.layout.notifications.unread.count
     );
 
     if (unreadNotificationsCount.value) {

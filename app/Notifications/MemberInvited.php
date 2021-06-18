@@ -2,30 +2,38 @@
 
 namespace App\Notifications;
 
-use App\Models\TeamRole;
+use App\EmbersNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
-class MemberInvited extends Notification
+class MemberInvited extends EmbersNotification
 {
     use Queueable;
 
-    private mixed $inviter;
+    /**
+     * The team that the user is invited to.
+     *
+     * @var mixed
+     */
     private mixed $team;
-    private $tag = 'tag'; // Refference the tag for mthe db here
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($inviter, $team)
+    public function __construct($inviter, $team, ?string $description)
     {
-        $this->inviter = $inviter;
+        Log::info($description);
+        $this->from = $inviter;
+        $this->type = 'invitation';
+        $this->description = $description;
+        $this->tags = ['invite'];
+
         $this->team = $team;
-        // TODO: add tag
     }
 
     /**
@@ -61,11 +69,7 @@ class MemberInvited extends Notification
      */
     public function toArray($notifiable)
     {
-        return [
-            'inviter' => $this->inviter,
-            'team' => $this->team,
-            'tag' => $this->tag
-        ];
+        return [];
     }
 
     /**
@@ -76,10 +80,9 @@ class MemberInvited extends Notification
      */
     public function toDatabase($notifiable)
     {
-        return [
-            'inviter' => $this->inviter,
+        // ! Be careful not to override the properties from the parent class
+        return array_merge(parent::toSave(), [
             'team' => $this->team,
-            'tag' => $this->tag
-        ];
+        ]);
     }
 }

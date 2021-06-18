@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Notifications\IndexNotification;
+use App\Actions\Embers\Notifications\MarkAllNotificationsAsRead;
 use App\Actions\Embers\Objects\Links\CreateLink;
 use App\Actions\Embers\Objects\Links\DestroyLink;
 use App\Actions\Embers\Objects\Links\EditLink;
@@ -138,5 +140,8 @@ class AppServiceProvider extends ServiceProvider
         Embers::addTeamMembersUsing(AddTeamMember::class);
         Embers::inviteTeamMembersUsing(InviteTeamMember::class);
         Embers::updateTeamMemberRolesUsing(UpdateTeamMemberRole::class);
+
+        Embers::indexNotificationsUsing(IndexNotification::class);
+        Embers::MarkAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
     }
 }

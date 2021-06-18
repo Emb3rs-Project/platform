@@ -36,7 +36,7 @@ class AddTeamMember implements AddsTeamMembers
             ['team_role_id' => $teamRoleId]
         );
 
-        $newTeamMember->notify(new MemberInvited($user, $newTeamMember, $team));
+        $newTeamMember->notify(new MemberInvited($user, $team, 'THIS IS A TEST, OK?'));
 
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }

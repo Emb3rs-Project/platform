@@ -17,7 +17,6 @@ use Laravel\Nova\Nova;
 
 class DispatchCustomAction
 {
-
     /**
      * Dispatch the given action.
      *
@@ -30,7 +29,6 @@ class DispatchCustomAction
      */
     public static function dispatchAction(Action $action, ActionFields $actionFields, $models, $user_id = 0)
     {
-
         $models = \Illuminate\Database\Eloquent\Collection::wrap($models);
 
         if ($models->isEmpty()) {
@@ -67,7 +65,6 @@ class DispatchCustomAction
     protected static function queueForModels(Action $action, $method, ActionFields $fields, $models, $user_id)
     {
         return Transaction::run(function ($batchId) use ($action, $method, $fields, $models, $user_id) {
-
             if (!$action->withoutActionEvents) {
                 self::createActionEvents($action, $batchId, $models, $user_id, 'waiting');
             }
@@ -85,7 +82,6 @@ class DispatchCustomAction
         });
     }
 
-
     /**
      * Dispatch the given action.
      *
@@ -100,7 +96,6 @@ class DispatchCustomAction
     protected static function forModels(Action $action, $method, ActionFields $fields, $models, $user_id)
     {
         return Transaction::run(function ($batchId) use ($action, $method, $fields, $models, $user_id) {
-
             if (!$action->withoutActionEvents) {
                 self::createActionEvents($action, $batchId, $models, $user_id, 'running');
             }
@@ -122,7 +117,6 @@ class DispatchCustomAction
      */
     protected static function createActionEvents(Action $action, $batchId, $models, $user_id, $status = 'running')
     {
-
         $models = $models->map(function ($model) use ($action, $batchId, $status, $user_id) {
             return [
                 'batch_id' => $batchId,
