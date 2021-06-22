@@ -9,23 +9,6 @@ use Illuminate\Routing\Router;
 class Kernel extends HttpKernel
 {
     /**
-     * Create a new HTTP kernel instance.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
-     * @param  \Illuminate\Routing\Router  $router
-     * @return void
-     */
-    // public function __construct(Application $app, Router $router)
-    // {
-    //     // if ($this->app->environment() === 'local') {
-    //     //     $this->prependMiddlewareToGroup('web', \App\Http\Middleware\HttpsProtocolMiddleware::class);
-    //     // }
-
-    //     parent::__construct($app, $router);
-    // }
-
-
-    /**
      * The application's global HTTP middleware stack.
      *
      * These middleware are run during every request to your application.
@@ -56,8 +39,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\HandleInertiaRequests::class,
             \App\Http\Middleware\HttpsProtocolMiddleware::class,
+            \App\Http\Middleware\HandleInertiaRequests::class,
         ],
 
         'api' => [

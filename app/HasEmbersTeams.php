@@ -4,7 +4,6 @@ namespace App;
 
 use App\Models\TeamRole;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Laravel\Jetstream\Jetstream;
 
 trait HasEmbersTeams

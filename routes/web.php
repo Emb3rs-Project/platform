@@ -6,6 +6,7 @@ use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
+use App\Http\Controllers\Embers\NotificationContoller;
 use App\Http\Controllers\Embers\ObjectsController;
 use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
@@ -45,6 +46,11 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Dashboard
     Route::resource('/dashboard', DashboardController::class)->names(createResourceNames('dashboard'));
+
+    // Notifications
+    Route::post('/notifications/mark-all-as-read', [NotificationContoller::class, "markAllAsRead"])->name('notifications.markAllAsRead');
+    Route::get('/notifications/new-notifications', [NotificationContoller::class, "newNotifications"])->name('notifications.newNotifications');
+    Route::resource('/notifications', NotificationContoller::class)->names(createResourceNames('notifications'));
 
     // Institution
     Route::resource('/institution', InstitutionController::class)->names(createResourceNames('institution'));
@@ -88,3 +94,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // TeamRoles
     Route::resource('/team-roles', TeamRolesController::class)->names(createResourceNames('team-roles'));
 });
+
+// Jetstream routes
+require base_path('/routes/jetstream.php');
