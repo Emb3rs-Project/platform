@@ -6,7 +6,6 @@ use App\EmbersNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
 class MemberInvited extends EmbersNotification
@@ -18,7 +17,7 @@ class MemberInvited extends EmbersNotification
      *
      * @var mixed
      */
-    private mixed $team;
+    private $team;
 
     /**
      * Create a new notification instance.
@@ -27,13 +26,14 @@ class MemberInvited extends EmbersNotification
      */
     public function __construct($inviter, $team, ?string $description)
     {
-        Log::info($description);
         $this->from = $inviter;
         $this->type = 'invitation';
         $this->description = $description;
         $this->tags = ['invite'];
 
         $this->team = $team;
+
+        Log::info(json_encode(get_object_vars($this)));
     }
 
     /**
@@ -81,7 +81,7 @@ class MemberInvited extends EmbersNotification
     public function toDatabase($notifiable)
     {
         // ! Be careful not to override the properties from the parent class
-        return array_merge(parent::toSave(), [
+        return array_merge(parent::share(), [
             'team' => $this->team,
         ]);
     }

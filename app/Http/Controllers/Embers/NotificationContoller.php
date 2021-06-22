@@ -6,9 +6,10 @@ use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
-class NotificationsContoller extends Controller
+class NotificationContoller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,10 +19,17 @@ class NotificationsContoller extends Controller
      */
     public function index(Request $request)
     {
-        $notifications = app(IndexesNotifications::class)->index($request->user());
+        [
+            $notifications,
+            $unreadNotifications
+        ] = app(IndexesNotifications::class)->index($request->user());
+
+        $unreadNotificationCount = $unreadNotifications->count();
 
         return Inertia::render('Notifications/NotificationIndex', [
-            'notifications' => $notifications
+            'notifications' => $notifications,
+            'unreadNotifications' => $unreadNotifications,
+            'unreadNotificationCount' => $unreadNotificationCount
         ]);
     }
 
@@ -106,5 +114,26 @@ class NotificationsContoller extends Controller
         app(MarksAllNotificationsAsRead::class)->markAllAsRead($request->user());
 
         return back(303);
+    }
+
+    /**
+     * Get all the unread notifications.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function newNotifications(Request $request)
+    {
+        [
+            $notifications,
+            $unreadNotifications
+        ] = app(IndexesNotifications::class)->index($request->user());
+
+        $unreadNotificationCount = $unreadNotifications->count();
+
+        return response()->json([
+            'unreadNotifications' => $unreadNotifications,
+            'unreadNotificationCount' => $unreadNotificationCount
+        ]);
     }
 }

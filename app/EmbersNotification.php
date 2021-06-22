@@ -37,12 +37,12 @@ class EmbersNotification extends Notification
     /**
      * Get the representation of the notification.
      *
-     * Note: This method is intented to be used inside every method that Laravel
-     *       notifications support (toDatabase, toArray, toBroadcast, etc.)
+     * This method is intented to be used inside every method that Laravel
+     * notifications support (toDatabase, toArray, toBroadcast, etc.)
      *
      * @return array
      */
-    public function toSave(): array
+    public function share(): array
     {
         return [
             'from' => $this->from,

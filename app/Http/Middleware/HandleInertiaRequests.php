@@ -39,9 +39,9 @@ class HandleInertiaRequests extends Middleware
         // ! Always prefix the props defined here as layout.<propname> for the
         // ! reason of namespacing them.
         return array_merge(parent::share($request), [
-            'layout.notifications.unread.count' => fn () => $request->user()
-                ? count($request->user()->unreadNotifications)
-                : null
+            // 'layout.notifications.unread.count' => fn () => $request->user()
+            //     ? count($request->user()->unreadNotifications)
+            //     : null
         ]);
     }
 }

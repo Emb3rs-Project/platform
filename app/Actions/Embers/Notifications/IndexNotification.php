@@ -19,6 +19,13 @@ class IndexNotification implements IndexesNotifications
             return Arr::except($notification, ['type', 'notifiable_type', 'notifiable_id']);
         });
 
-        return $notifications;
+        $unreadNotifications = $user->unreadNotifications->map(function ($unreadNotification) {
+            return Arr::except($unreadNotification, ['type', 'notifiable_type', 'notifiable_id']);
+        });
+
+        return [
+            $notifications,
+            $unreadNotifications
+        ];
     }
 }

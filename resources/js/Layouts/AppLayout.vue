@@ -197,7 +197,7 @@
                         alt=""
                       />
                       <span
-                        v-show="notifications"
+                        v-show="newNotification"
                         class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                       ></span>
                     </span>
@@ -242,7 +242,7 @@
                   >
                     Notifications
                     <span
-                      v-show="notifications"
+                      v-show="newNotification"
                       class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
                     >
                       {{ unreadNotificationsCount }}
@@ -460,7 +460,7 @@
                       alt=""
                     />
                     <span
-                      v-show="notifications"
+                      v-show="newNotification"
                       class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                     ></span>
                   </span>
@@ -491,10 +491,10 @@
                     >
                       Notifications
                       <span
-                        v-show="notifications"
+                        v-show="newNotification"
                         class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
                       >
-                        {{ f }}
+                        {{ unreadNotificationsCount }}
                       </span>
                     </inertia-link>
                     </MenuItem>
@@ -525,8 +525,9 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch, onBeforeUnmount } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+
 import {
   Dialog,
   DialogOverlay,
@@ -613,23 +614,30 @@ export default {
       type: Object,
       required: true,
     },
-    layout: {
-      type: Object,
-      required: true,
-    },
   },
 
   setup(props) {
     const sidebarOpen = ref(false);
-    const notifications = ref(null);
+    const newNotification = ref(null);
+    const unreadNotificationsCount = ref(null);
 
-    const unreadNotificationsCount = computed(
-      () => props.layout.notifications.unread.count
-    );
+    const notifications = setInterval(async () => {
+      const response = await window.axios.get(
+        route("notifications.newNotifications")
+      );
 
-    if (unreadNotificationsCount.value) {
-      notifications.value = true;
-    }
+      if (response.data.unreadNotificationCount) {
+        newNotification.value = true;
+        unreadNotificationsCount.value = response.data.unreadNotificationCount;
+      } else {
+        newNotification.value = false;
+        unreadNotificationsCount.value = response.data.unreadNotificationCount;
+      }
+
+      return response;
+    }, 5000);
+
+    onBeforeUnmount(() => clearInterval(notifications));
 
     function logout() {
       Inertia.post(route("logout"));
@@ -650,7 +658,7 @@ export default {
     return {
       navigation,
       sidebarOpen,
-      notifications,
+      newNotification,
       unreadNotificationsCount,
       logout,
       switchToTeam,
