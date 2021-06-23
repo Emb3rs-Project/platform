@@ -525,8 +525,9 @@
 </template>
 
 <script>
-import { ref, computed, watch, onBeforeUnmount } from "vue";
+import { ref, computed, watch, onBeforeUnmount, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { useStore } from "vuex";
 
 import {
   Dialog,
@@ -617,27 +618,36 @@ export default {
   },
 
   setup(props) {
+    const store = useStore();
     const sidebarOpen = ref(false);
     const newNotification = ref(null);
     const unreadNotificationsCount = ref(null);
 
-    const notifications = setInterval(async () => {
-      const response = await window.axios.get(
-        route("notifications.newNotifications")
-      );
+    // Check for new notifications
+    store.dispatch("notifications/checkForNewNotifications");
 
-      if (response.data.unreadNotificationCount) {
-        newNotification.value = true;
-        unreadNotificationsCount.value = response.data.unreadNotificationCount;
-      } else {
-        newNotification.value = false;
-        unreadNotificationsCount.value = response.data.unreadNotificationCount;
-      }
+    // start watching for new notifications (polling)
+    store.dispatch("notifications/watchForNewNotifications");
 
-      return response;
-    }, 5000);
+    const stopWatcher = store.watch(
+      (state) => state.notifications.unreadNotificationCount,
+      (unreadNotificationCount) => {
+        if (unreadNotificationCount) {
+          newNotification.value = true;
+          unreadNotificationsCount.value = unreadNotificationCount;
+        } else {
+          newNotification.value = false;
+          unreadNotificationsCount.value = null;
+        }
+      },
+      { immediate: true }
+    );
 
-    onBeforeUnmount(() => clearInterval(notifications));
+    // stop watching for notifications when the component has been destroyed
+    onBeforeUnmount(() => {
+      store.dispatch("notifications/stopWatchingForNewNotifications");
+      stopWatcher();
+    });
 
     function logout() {
       Inertia.post(route("logout"));

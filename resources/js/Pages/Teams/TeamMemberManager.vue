@@ -420,7 +420,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 import { useStore } from "vuex";
 
 import {
@@ -501,13 +501,15 @@ export default {
     const roleModalIsVisible = ref(false);
     const roles = ref(props.availableRoles);
 
-    store.watch(
+    const stopWatcher = store.watch(
       () => store.state.teamRoles.role,
       (role) => {
         roles.value.push(role);
       },
       { deep: true }
     );
+
+    onBeforeUnmount(() => stopWatcher());
 
     return {
       roleModalIsVisible,
