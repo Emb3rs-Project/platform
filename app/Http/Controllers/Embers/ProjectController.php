@@ -136,27 +136,4 @@ class ProjectController extends Controller
 
         return Redirect::route('projects.index');
     }
-
-    /**
-     * Share the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function share(Request $request, $id)
-    {
-        $project = app(SharesProjects::class)->share($request->user(), $id);
-
-        // return [
-        //     "slideOver" => 'Objects/Sinks/SinkShare',
-        //     "props" => [
-        //         "instance" => $sink
-        //     ]
-        // ];
-
-        return response()->json([
-            "project" => $project
-        ]);
-    }
 }

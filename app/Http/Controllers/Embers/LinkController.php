@@ -133,27 +133,4 @@ class LinkController extends Controller
 
         return Redirect::route('objects.index');
     }
-
-    /**
-     * Share the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function share(Request $request, $id)
-    {
-        $link = app(SharesLinks::class)->share($request->user(), $id);
-
-        // return [
-        //     "slideOver" => 'Objects/Sinks/SinkShare',
-        //     "props" => [
-        //         "instance" => $sink
-        //     ]
-        // ];
-
-        return response()->json([
-            "link" => $link
-        ]);
-    }
 }

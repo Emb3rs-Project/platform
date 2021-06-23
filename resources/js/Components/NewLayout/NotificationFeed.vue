@@ -127,7 +127,7 @@ export default {
 
   setup(props) {
     const markAllAsRead = async () => {
-      await axios.post(route("notifications.markAllAsRead"));
+      await window.axios.post(route("notifications.markAllAsRead"));
     };
     console.log(props.notifications);
     return {

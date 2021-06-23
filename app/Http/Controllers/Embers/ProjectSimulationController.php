@@ -159,28 +159,4 @@ class ProjectSimulationController extends Controller
 
         return Redirect::route('projects.simulations.index', $projectId);
     }
-
-    /**
-     * Share the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $projectId
-     * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
-     */
-    public function share(Request $request, int $projectId, int $simulationId)
-    {
-        $simulation = app(SharesSimulations::class)->share($request->user(), $projectId, $simulationId);
-
-        // return [
-        //     "slideOver" => 'Objects/Sinks/SinkShare',
-        //     "props" => [
-        //         "instance" => $sink
-        //     ]
-        // ];
-
-        return response()->json([
-            "simulation" => $simulation
-        ]);
-    }
 }

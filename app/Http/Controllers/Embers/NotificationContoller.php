@@ -102,39 +102,4 @@ class NotificationContoller extends Controller
     {
         //
     }
-
-    /**
-     * Mark all the available notifications as read.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function markAllAsRead(Request $request)
-    {
-        app(MarksAllNotificationsAsRead::class)->markAllAsRead($request->user());
-
-        return back(303);
-    }
-
-    /**
-     * Get all the unread notifications.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function newNotifications(Request $request)
-    {
-        [
-            $notifications,
-            $unreadNotifications
-        ] = app(IndexesNotifications::class)->index($request->user());
-
-        $unreadNotificationCount = $unreadNotifications->count();
-
-        return response()->json([
-            'notifications' => $notifications,
-            'unreadNotifications' => $unreadNotifications,
-            'unreadNotificationCount' => $unreadNotificationCount
-        ]);
-    }
 }

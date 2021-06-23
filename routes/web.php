@@ -6,10 +6,17 @@ use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
 use App\Http\Controllers\Embers\LocationController;
+use App\Http\Controllers\Embers\MarkAllNotificationsAsReadController;
 use App\Http\Controllers\Embers\NotificationContoller;
 use App\Http\Controllers\Embers\ObjectsController;
 use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
+use App\Http\Controllers\Embers\ShareLinkController;
+use App\Http\Controllers\Embers\ShareProjectController;
+use App\Http\Controllers\Embers\ShareProjectSimulationController;
+use App\Http\Controllers\Embers\ShareSinkController;
+use App\Http\Controllers\Embers\ShareSourceController;
+use App\Http\Controllers\Embers\ShowNewNotificationsController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
@@ -48,8 +55,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/dashboard', DashboardController::class)->names(createResourceNames('dashboard'));
 
     // Notifications
-    Route::post('/notifications/mark-all-as-read', [NotificationContoller::class, "markAllAsRead"])->name('notifications.markAllAsRead');
-    Route::get('/notifications/new-notifications', [NotificationContoller::class, "newNotifications"])->name('notifications.newNotifications');
+    Route::get('/notifications/new-notifications', ShowNewNotificationsController::class)->name('notifications.newNotifications');
+    Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.markAllAsRead');
     Route::resource('/notifications', NotificationContoller::class)->names(createResourceNames('notifications'));
 
     // Institution
@@ -65,24 +72,24 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
 
         // Sources
-        Route::get('/sources/{id}/share', [SourceController::class, "share"])->name('sources.share');
+        Route::get('/sources/{id}/share', ShareSourceController::class)->name('sources.share');
         Route::resource('/sources', SourceController::class)->names(createResourceNames('sources'));
 
         // Sinks
-        Route::get('/sinks/{id}/share', [SinkController::class, "share"])->name('sinks.share');
+        Route::get('/sinks/{id}/share', ShareSinkController::class)->name('sinks.share');
         Route::resource('/sinks', SinkController::class)->names(createResourceNames('sinks'));
 
         // Links
-        Route::get('/links/{id}/share', [LinkController::class, "share"])->name('links.share');
+        Route::get('/links/{id}/share', ShareLinkController::class)->name('links.share');
         Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
     });
 
     // Projects
-    Route::get('/projects/{id}/share', [ProjectController::class, "share"])->name('projects.share');
+    Route::get('/projects/{id}/share', ShareProjectController::class)->name('projects.share');
     Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
 
     // Simulations
-    Route::get('/projects/{projectId}/simulations/{simulationId}/share', [ProjectSimulationController::class, "share"])->name('projects.simulations.share');
+    Route::get('/projects/{projectId}/simulations/{simulationId}/share', ShareProjectSimulationController::class)->name('projects.simulations.share');
     Route::resource('/projects.simulations', ProjectSimulationController::class)->names(createResourceNames('projects.simulations'));
 
     // Challenge
