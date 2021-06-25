@@ -7,11 +7,12 @@
     :key="equipment"
   >
     <div class="sm:col-span-3">
-      <Disclosure as="div" v-slot="{ open }">
+      <Disclosure
+        as="div"
+        v-slot="{ open }"
+      >
         <dt class="text-lg">
-          <DisclosureButton
-            class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none"
-          >
+          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
             <span class="font-medium text-gray-900">
               {{ equipment.value }}
             </span>
@@ -34,10 +35,11 @@
           leave-from-class="transform scale-100 opacity-100"
           leave-to-class="transform scale-95 opacity-0"
         >
-          <DisclosurePanel as="dd" class="mt-2 pr-12">
-            <div
-              class="bg-gray-800 p-2 text-sm font-mono text-white overflow-x-scroll"
-            >
+          <DisclosurePanel
+            as="dd"
+            class="mt-2 pr-12"
+          >
+            <div class="bg-gray-800 p-2 text-sm font-mono text-white overflow-x-scroll">
               <pre>{{ equipment.script }}</pre>
             </div>
           </DisclosurePanel>
@@ -54,9 +56,9 @@ import { useForm } from "@inertiajs/inertia-vue3";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 
-import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
-// import Disclosure from "../../../../Components/NewLayout/Wizards/Disclosure.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+// import Disclosure from "@/Components/Wizards/Disclosure.vue";
 
 import ESCRIPT from "./info";
 

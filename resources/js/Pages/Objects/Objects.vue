@@ -41,9 +41,9 @@ import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import AmazingMap from "../../Components/Map/AmazingMap";
-import SlideOver from "../../Components/NewLayout/SlideOver";
-import LinkIcon from "../../Components/Icons/LinkIcon";
+import AmazingMap from "@/Components/Map/AmazingMap";
+import SlideOver from "@/Components/SlideOver";
+import LinkIcon from "@/Components/Icons/LinkIcon";
 import { Inertia } from "@inertiajs/inertia";
 
 export default {

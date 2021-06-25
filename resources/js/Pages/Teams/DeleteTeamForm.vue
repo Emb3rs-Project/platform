@@ -52,8 +52,8 @@
 import JetActionSection from "@/Jetstream/ActionSection";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
 
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
-import DangerButton from "@/Components/NewLayout/DangerButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 
 export default {
   props: ["team"],

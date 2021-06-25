@@ -16,7 +16,10 @@
 
     <div class="overflow-y-auto overflow-x-auto">
       <div v-if="objects?.length">
-        <amazing-index-table v-model="objects" :columns="tableColumns">
+        <amazing-index-table
+          v-model="objects"
+          :columns="tableColumns"
+        >
           <!-- ID -->
           <template #header-id> ID </template>
           <template #body-id="{ item }">
@@ -60,18 +63,14 @@
           <!-- Actions -->
           <template #header-actions> </template>
           <template #body-actions="{ item }">
-            <td
-              class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
-            >
+            <td class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
               <button
                 class="focus:outline-none"
                 @click="
                   onActionRequest(`${selectedObject.paths.details}`, item.id)
                 "
               >
-                <detail-icon
-                  class="text-gray-500 font-medium text-sm w-5"
-                ></detail-icon>
+                <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
               </button>
               <button
                 class="focus:outline-none"
@@ -79,9 +78,7 @@
                   onActionRequest(`${selectedObject.paths.edit}`, item.id)
                 "
               >
-                <edit-icon
-                  class="text-gray-500 font-medium text-sm w-5"
-                ></edit-icon>
+                <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
               </button>
               <button class="focus:outline-none">
                 <trash-icon
@@ -104,11 +101,8 @@
     </div>
 
     <template #actions>
-      <primary-button
-        @click="onActionRequest(`${selectedObject.paths.create}`)"
-      >
-        Create New {{ getSingular(selectedObject.title) }}</primary-button
-      >
+      <primary-button @click="onActionRequest(`${selectedObject.paths.create}`)">
+        Create New {{ getSingular(selectedObject.title) }}</primary-button>
     </template>
   </slide-over>
 
@@ -125,19 +119,19 @@
 <script>
 import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { useStore } from "vuex";
 import pluralize from "pluralize";
 
-import SlideOver from "../../Components/NewLayout/SlideOver.vue";
-import FilterDropdown from "../../Components/NewLayout/BrandedDropdown.vue";
-import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import FilterDropdown from "@/Components/BrandedDropdown.vue";
+import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
-import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
-import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
-import PrimaryButton from "../../Components/NewLayout/PrimaryButton.vue";
-import { useStore } from "vuex";
-import { filterOptions } from "../../Utils/objectIndex";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
+import DeleteModal from "@/Components/Modals/DeleteModal.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { filterOptions } from "@/Utils/objectIndex";
 
 export default {
   components: {

@@ -5,8 +5,7 @@
     v-for="equip of instance.values.equipments"
     :key="equip.key"
   >
-    <DisclosureButton
-      class="
+    <DisclosureButton class="
         flex
         justify-between
         w-full
@@ -15,8 +14,7 @@
         text-sm
         font-medium
         text-left
-      "
-    >
+      ">
       <span>{{ equip.value }}</span>
       <ChevronUpIcon
         :class="open ? 'transform rotate-180' : ''"
@@ -52,8 +50,7 @@
       </div>
       <h1 class="px-4 py-3 font-bold">Calculated :</h1>
       <!-- Source Template -->
-      <div
-        class="
+      <div class="
           space-y-1
           px-4
           sm:space-y-0
@@ -62,8 +59,7 @@
           sm:px-6
           sm:py-2
           border-b-[1px]
-        "
-      >
+        ">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Fluid
@@ -79,8 +75,7 @@
       </div>
 
       <!-- Source Template -->
-      <div
-        class="
+      <div class="
           space-y-1
           px-4
           sm:space-y-0
@@ -89,8 +84,7 @@
           sm:px-6
           sm:py-2
           border-b-[1px]
-        "
-      >
+        ">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Supply Temperature (ºc)
@@ -107,8 +101,7 @@
       </div>
 
       <!-- Source Template -->
-      <div
-        class="
+      <div class="
           space-y-1
           px-4
           sm:space-y-0
@@ -117,8 +110,7 @@
           sm:px-6
           sm:py-2
           border-b-[1px]
-        "
-      >
+        ">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Flowrate (kg/h)
@@ -135,8 +127,7 @@
       </div>
 
       <!-- Source Template -->
-      <div
-        class="
+      <div class="
           space-y-1
           px-4
           sm:space-y-0
@@ -145,8 +136,7 @@
           sm:px-6
           sm:py-2
           border-b-[1px]
-        "
-      >
+        ">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Capacity (kW)
@@ -170,11 +160,11 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
 

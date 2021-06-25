@@ -1,8 +1,14 @@
 <template>
   <inertia-link
     as="button"
-    :href="route(path, parameter)"
-    class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none"
+    :type="type"
+    :class="[
+      disabled
+        ? 'cursor-not-allowed disabled:opacity-50 hover:bg-blue-100'
+        : '',
+      'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium uppercase tracking-widest rounded-md shadow-sm text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500',
+    ]"
+    :disabled="disabled"
   >
     <slot></slot>
   </inertia-link>
@@ -11,17 +17,14 @@
 <script>
 export default {
   props: {
-    path: {
+    type: {
       type: String,
-      require: true,
+      default: "submit",
     },
-    parameter: {
-      type: String,
-      require: false,
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 };
 </script>
-
-<style scoped>
-</style>

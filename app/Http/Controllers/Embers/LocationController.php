@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
-use Redirect;
 
 class LocationController extends Controller
 {

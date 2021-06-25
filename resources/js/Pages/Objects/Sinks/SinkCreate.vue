@@ -102,11 +102,11 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
 import { keyParToSelect } from "../../../Utils/array";
 

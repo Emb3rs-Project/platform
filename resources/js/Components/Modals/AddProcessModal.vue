@@ -1,6 +1,9 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <TransitionRoot as="template" :show="open">
+  <TransitionRoot
+    as="template"
+    :show="open"
+  >
     <Dialog
       as="div"
       static
@@ -8,9 +11,7 @@
       @close="open = false"
       :open="open"
     >
-      <div
-        class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-      >
+      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -20,9 +21,7 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <DialogOverlay
-            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          />
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -41,13 +40,9 @@
           leave-from="opacity-100 translate-y-0 sm:scale-100"
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
-          <div
-            class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6"
-          >
+          <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
             <div>
-              <div
-                class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100"
-              >
+              <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
                 <BeakerIcon
                   class="h-6 w-6 text-yellow-600"
                   aria-hidden="true"
@@ -77,9 +72,7 @@
                 </div>
               </div>
             </div>
-            <div
-              class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense"
-            >
+            <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
               <secondary-outlined-button
                 type="button"
                 @click="open = false"
@@ -116,9 +109,9 @@ import {
 } from "@headlessui/vue";
 import { BeakerIcon } from "@heroicons/vue/outline";
 
-import PrimaryButton from "../PrimaryButton.vue";
-import SecondaryOutlinedButton from "../SecondaryOutlinedButton.vue";
-import SelectMenu from "../Forms/SelectMenu.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 
 export default {
   components: {

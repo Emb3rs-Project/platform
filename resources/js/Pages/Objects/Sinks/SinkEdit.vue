@@ -8,9 +8,7 @@
     subtitleTextColor="text-gray-200"
   >
     <!-- Sink Template -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
           Templates
@@ -25,9 +23,7 @@
     </div>
 
     <!-- Sink Location -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label
           for="project_name"
@@ -46,9 +42,7 @@
     </div>
 
     <!-- Sink Name -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label
           for="project_name"
@@ -57,7 +51,10 @@
         </label>
       </div>
       <div class="sm:col-span-2">
-        <text-input v-model="form.sink.data.name" :label="'Name'"> </text-input>
+        <text-input
+          v-model="form.sink.data.name"
+          :label="'Name'"
+        > </text-input>
       </div>
     </div>
 
@@ -108,7 +105,10 @@
       >
         Cancel
       </secondary-outlined-button>
-      <primary-button @click="submit()" :disabled="form.processing">
+      <primary-button
+        @click="submit()"
+        :disabled="form.processing"
+      >
         Save
       </primary-button>
     </template>
@@ -121,11 +121,11 @@ import { useForm } from "@inertiajs/inertia-vue3";
 // import { Inertia } from '@inertiajs/inertia'
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
 
 export default {

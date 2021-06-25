@@ -1,8 +1,6 @@
 <template>
   <!-- Source Template -->
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-  >
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
         Select a Template
@@ -16,9 +14,7 @@
     </div>
   </div>
 
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-  >
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label
         for="project_name"
@@ -74,8 +70,8 @@
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
-import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { keyParToSelect } from "../../../../Utils/array";
 
 export default {

@@ -49,7 +49,10 @@
     </div>
 
     <!-- Source Properties -->
-    <div class="sm:mt-0 p-10" v-if="selectedTemplate">
+    <div
+      class="sm:mt-0 p-10"
+      v-if="selectedTemplate"
+    >
       <div class="md:grid md:grid-cols-3 md:gap-6">
         <div class="md:col-span-1">
           <div class="px-4 sm:px-0">
@@ -61,7 +64,11 @@
             <div class="px-4 py-5 bg-white sm:p-6">
               <div class="grid grid-cols-6 gap-6">
                 <div class="col-span-12">
-                  <div v-for="prop in properties" :key="prop.id" class="my-4">
+                  <div
+                    v-for="prop in properties"
+                    :key="prop.id"
+                    class="my-4"
+                  >
                     <input-row
                       :desc="prop.property.description"
                       v-model="form.source.data[prop.property.symbolic_name]"
@@ -69,9 +76,7 @@
                       :required="prop.required"
                     >
                       {{ prop.property.name }}
-                      <span v-if="prop.unit.symbol"
-                        >({{ prop.unit.symbol }})</span
-                      >
+                      <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
                     </input-row>
 
                     <select-row
@@ -82,9 +87,7 @@
                       :required="prop.required"
                     >
                       {{ prop.property.name }}
-                      <span v-if="prop.unit.symbol"
-                        >({{ prop.unit.symbol }})</span
-                      >
+                      <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
                     </select-row>
                   </div>
                 </div>
@@ -126,9 +129,7 @@
                     :required="prop.required"
                   >
                     {{ prop.property.name }}
-                    <span v-if="prop.unit.symbol"
-                      >({{ prop.unit.symbol }})</span
-                    >
+                    <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
                   </input-row>
 
                   <select-row
@@ -139,9 +140,7 @@
                     :required="prop.required"
                   >
                     {{ prop.property.name }}
-                    <span v-if="prop.unit.symbol"
-                      >({{ prop.unit.symbol }})</span
-                    >
+                    <span v-if="prop.unit.symbol">({{ prop.unit.symbol }})</span>
                   </select-row>
                 </div>
               </div>
@@ -151,7 +150,10 @@
       </div>
     </div>
     <template #actions>
-      <jet-button :disabled="form.processing" @click="submit()">
+      <jet-button
+        :disabled="form.processing"
+        @click="submit()"
+      >
         Create Source
       </jet-button>
     </template>
@@ -163,7 +165,6 @@ import { onMounted, ref, watch } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
-import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
 import RadioRow from "@/Components/RadioRow";
 import SelectRow from "@/Components/SelectRow";
@@ -173,7 +174,6 @@ import JetInputError from "@/Jetstream/InputError";
 export default {
   components: {
     AppLayout,
-    LeafletMap,
     InputRow,
     RadioRow,
     SelectRow,
@@ -275,9 +275,8 @@ export default {
 
       if (templateInfo.value?.template_properties)
         for (const prop of templateInfo.value?.template_properties) {
-          form.value.source.data[
-            prop.property.symbolic_name
-          ] = prop.default_value ? prop.default_value : "";
+          form.value.source.data[prop.property.symbolic_name] =
+            prop.default_value ? prop.default_value : "";
         }
     });
 

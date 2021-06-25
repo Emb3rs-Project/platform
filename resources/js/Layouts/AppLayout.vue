@@ -525,7 +525,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onBeforeUnmount, onMounted } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useStore } from "vuex";
 
@@ -558,7 +558,7 @@ import {
   CogIcon,
 } from "@heroicons/vue/solid";
 
-import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 const navigation = [
   {

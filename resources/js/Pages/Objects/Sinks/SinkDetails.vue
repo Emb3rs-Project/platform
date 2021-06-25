@@ -8,9 +8,7 @@
     subtitleTextColor="text-gray-200"
   >
     <!-- Sink ID -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           ID
@@ -24,9 +22,7 @@
     </div>
 
     <!-- Sink Name -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           Name
@@ -40,9 +36,7 @@
     </div>
 
     <!-- Sink Template -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           Template
@@ -94,12 +88,13 @@
     </div>
 
     <template #actions>
-      <secondary-outlined-button type="button" @click="onClose()">
+      <secondary-outlined-button
+        type="button"
+        @click="onClose()"
+      >
         Cancel
       </secondary-outlined-button>
-      <primary-button
-        @click="onRouteRequest('objects.sinks.edit', instance.id)"
-      >
+      <primary-button @click="onRouteRequest('objects.sinks.edit', instance.id)">
         Edit
       </primary-button>
     </template>
@@ -111,11 +106,11 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
 export default {
   components: {

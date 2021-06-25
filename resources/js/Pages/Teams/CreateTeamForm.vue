@@ -59,7 +59,7 @@ import JetInput from "@/Jetstream/Input";
 import JetInputError from "@/Jetstream/InputError";
 import JetLabel from "@/Jetstream/Label";
 
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 export default {
   components: {

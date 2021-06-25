@@ -8,7 +8,7 @@
 import { ref } from "vue";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import NotificationFeed from "@/Components/NewLayout/NotificationFeed.vue";
+import NotificationFeed from "@/Components/NotificationFeed.vue";
 
 export default {
   components: {

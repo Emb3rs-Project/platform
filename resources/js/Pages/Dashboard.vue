@@ -26,7 +26,7 @@ import { ref } from "vue";
 import useUniqueLocations from "@/Composables/useUniqueLocations";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
+import SlideOver from "@/Components/SlideOver.vue";
 import SinkIcon from "../Components/Icons/SinkIcon.vue";
 import SourceIcon from "../Components/Icons/SourceIcon.vue";
 import LinkIcon from "../Components/Icons/LinkIcon.vue";

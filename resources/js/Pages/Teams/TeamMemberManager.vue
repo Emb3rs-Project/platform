@@ -440,15 +440,15 @@ import JetInputError from "@/Jetstream/InputError";
 import JetLabel from "@/Jetstream/Label";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
 
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
-import DangerButton from "@/Components/NewLayout/DangerButton.vue";
-import CreateRoleModal from "@/Components/NewLayout/Modals/CreateRoleModal.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import DangerButton from "@/Components/DangerButton.vue";
+import CreateRoleModal from "@/Components/Modals/CreateRoleModal.vue";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 
 export default {
   components: {

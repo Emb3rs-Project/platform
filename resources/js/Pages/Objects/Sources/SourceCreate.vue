@@ -48,12 +48,12 @@
 <script>
 import { ref, watch, computed, defineAsyncComponent } from "vue";
 
-import PrimaryButton from "../../../Components/NewLayout/PrimaryButton.vue";
-import SecondaryButton from "../../../Components/NewLayout/SecondaryButton.vue";
-import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
-import SelectMenu from "../../../Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "../../../Components/NewLayout/Forms/TextInput.vue";
-import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
+import PrimaryButton from "../../../Components/PrimaryButton.vue";
+import SecondaryButton from "../../../Components/SecondaryButton.vue";
+import SlideOver from "../../../Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
 import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 

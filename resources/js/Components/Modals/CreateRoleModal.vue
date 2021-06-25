@@ -1,6 +1,9 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <TransitionRoot as="template" :show="open">
+  <TransitionRoot
+    as="template"
+    :show="open"
+  >
     <Dialog
       as="div"
       static
@@ -8,8 +11,7 @@
       @close="cancel"
       :open="open"
     >
-      <div
-        class="
+      <div class="
           flex
           items-end
           justify-center
@@ -20,8 +22,7 @@
           text-center
           sm:block
           sm:p-0
-        "
-      >
+        ">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -31,9 +32,7 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <DialogOverlay
-            class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          />
+          <DialogOverlay class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </TransitionChild>
 
         <!-- This element is to trick the browser into centering the modal contents. -->
@@ -52,8 +51,7 @@
           leave-from="opacity-100 translate-y-0 sm:scale-100"
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
-          <div
-            class="
+          <div class="
               inline-block
               align-bottom
               bg-white
@@ -67,12 +65,10 @@
               sm:align-middle
               sm:max-w-lg
               sm:w-full
-            "
-          >
+            ">
             <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div class="sm:flex sm:items-start">
-                <div
-                  class="
+                <div class="
                     mx-auto
                     flex-shrink-0 flex
                     items-center
@@ -84,8 +80,7 @@
                     sm:mx-0
                     sm:h-10
                     sm:w-10
-                  "
-                >
+                  ">
                   <IdentificationIcon
                     class="h-6 w-6 text-green-600"
                     aria-hidden="true"
@@ -160,14 +155,15 @@
 
                     <div class="space-y-6 sm:space-y-5 divide-y divide-gray-200">
                       <div class="pt-6 sm:pt-5">
-                        <div role="group" aria-labelledby="label-email">
-                          <div
-                            class="
+                        <div
+                          role="group"
+                          aria-labelledby="label-email"
+                        >
+                          <div class="
                               sm:grid sm:grid-cols-3
                               sm:gap-4
                               sm:items-baseline
-                            "
-                          >
+                            ">
                             <h1 class="col-span-1">Permissions</h1>
                             <secondary-outlined-button
                               class="
@@ -221,7 +217,10 @@
                                   leave-from-class="transform scale-100 opacity-100"
                                   leave-to-class="transform scale-95 opacity-0"
                                 >
-                                  <DisclosurePanel as="dd" class="mt-2">
+                                  <DisclosurePanel
+                                    as="dd"
+                                    class="mt-2"
+                                  >
                                     <div class="mt-4 col-span-3">
                                       <div class="max-w-lg space-y-4">
                                         <div>
@@ -238,14 +237,12 @@
                                               {{ permission.name }}
                                             </label>
                                             <div class="flex flex-grow"></div>
-                                            <div
-                                              class="
+                                            <div class="
                                                 flex
                                                 items-center
                                                 h-full
                                                 pr-2
-                                              "
-                                            >
+                                              ">
                                               <input
                                                 :id="`candidates-${permissionIdx}`"
                                                 :name="permission.id"
@@ -279,10 +276,11 @@
                 </div>
               </div>
             </div>
-            <div
-              class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse"
-            >
-              <primary-button type="button" @click="createRole">
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <primary-button
+                type="button"
+                @click="createRole"
+              >
                 Create
               </primary-button>
 
@@ -303,7 +301,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import {
@@ -315,9 +313,9 @@ import {
 } from "@headlessui/vue";
 import { IdentificationIcon } from "@heroicons/vue/outline";
 
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { ChevronUpIcon } from "@heroicons/vue/solid";
