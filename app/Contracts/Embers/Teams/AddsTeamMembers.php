@@ -9,9 +9,8 @@ interface AddsTeamMembers
      *
      * @param  mixed  $user
      * @param  mixed  $team
-     * @param  string  $email
-     * @param  int  $teamRoleId
+     * @param  array  $input
      * @return void
      */
-    public function add($user, $team, string $email, int $teamRoleId);
+    public function add($user, $team, array $input);
 }

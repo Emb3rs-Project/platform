@@ -115,7 +115,11 @@ class LinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedLink = app(UpdatesLinks::class)->update($request->user(), $id, $request->all());
+        $updatedLink = app(UpdatesLinks::class)->update(
+            $request->user(),
+            $id,
+            $request->all()
+        );
 
         return Redirect::route('objects.links.show', $updatedLink->id);
     }

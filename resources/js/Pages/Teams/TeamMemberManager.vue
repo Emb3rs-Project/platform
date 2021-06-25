@@ -36,6 +36,10 @@
               :message="addTeamMemberForm.errors.email"
               class="mt-2"
             />
+            <jet-input-error
+              :message="addTeamMemberForm.errors.team_role_id"
+              class="mt-2"
+            />
           </div>
 
           <!-- Role -->

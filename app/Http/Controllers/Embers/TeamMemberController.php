@@ -35,8 +35,7 @@ class TeamMemberController extends Controller
             app(AddsTeamMembers::class)->add(
                 $request->user(),
                 $team,
-                $request->email ?: '',
-                $request->team_role_id
+                $request->all()
             );
         }
 

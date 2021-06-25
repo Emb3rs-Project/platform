@@ -5,7 +5,9 @@ namespace App\Actions\Embers\Teams;
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Notifications\MemberInvited;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Laravel\Jetstream\Events\AddingTeamMember;
 use Laravel\Jetstream\Events\TeamMemberAdded;
 use Laravel\Jetstream\Jetstream;
@@ -17,23 +19,22 @@ class AddTeamMember implements AddsTeamMembers
      *
      * @param  mixed  $user
      * @param  mixed  $team
-     * @param  string  $email
-     * @param  int  $teamRoleId
+     * @param  array  $input
      * @return void
      */
-    public function add($user, $team, string $email, int $teamRoleId)
+    public function add($user, $team, array $input)
     {
         Gate::forUser($user)->authorize('addTeamMember', $team);
 
-        $this->validate($team, $email, $teamRoleId);
+        $this->validate($team, $input);
 
-        $newTeamMember = Jetstream::findUserByEmailOrFail($email);
+        $newTeamMember = Jetstream::findUserByEmailOrFail($input['email']);
 
         AddingTeamMember::dispatch($team, $newTeamMember);
 
         $team->users()->attach(
             $newTeamMember,
-            ['team_role_id' => $teamRoleId]
+            ['team_role_id' => $input['team_role_id']]
         );
 
         $newTeamMember->notify(new MemberInvited($user, $team, 'THIS IS A TEST, OK?'));
@@ -46,18 +47,19 @@ class AddTeamMember implements AddsTeamMembers
      *
      * @param  mixed  $team
      * @param  string  $email
-     * @param  int  $teamRoleId
+     * @param  array  $input
      * @return void
      */
-    protected function validate($team, string $email, int $teamRoleId)
+    protected function validate($team, array $input)
     {
         Validator::make([
-            'email' => $email,
-            'team_role_id' => $teamRoleId,
+            'email' => $input['email'],
+            'team_role_id' => $input['team_role_id'],
         ], $this->rules(), [
             'email.exists' => __('We were unable to find a registered user with this email address.'),
+            'team_role_id.required' => __('A role is required.'),
         ])->after(
-            $this->ensureUserIsNotAlreadyOnTeam($team, $email)
+            $this->ensureUserIsNotAlreadyOnTeam($team, $input['email'] = '')
         )->validateWithBag('addTeamMember');
     }
 

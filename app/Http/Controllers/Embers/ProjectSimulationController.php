@@ -137,7 +137,12 @@ class ProjectSimulationController extends Controller
      */
     public function update(Request $request, int $projectId, int $simulationId)
     {
-        $updatedSimulation = app(UpdatesSimulations::class)->update($request->user(), $projectId, $simulationId, $request->all());
+        $updatedSimulation = app(UpdatesSimulations::class)->update(
+            $request->user(),
+            $projectId,
+            $simulationId,
+            $request->all()
+        );
 
         return Redirect::route('projects.simulations.show', [
             $projectId,
