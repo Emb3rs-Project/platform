@@ -63,9 +63,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexSinksUsing(string $class)
+    public static function indexSinksUsing(string $class): void
     {
-        return app()->singleton(IndexesSinks::class, $class);
+        app()->singleton(IndexesSinks::class, $class);
     }
 
     /**
@@ -75,9 +75,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createSinksUsing(string $class)
+    public static function createSinksUsing(string $class): void
     {
-        return app()->singleton(CreatesSinks::class, $class);
+        app()->singleton(CreatesSinks::class, $class);
     }
 
     /**
@@ -86,9 +86,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showSinksUsing(string $class)
+    public static function showSinksUsing(string $class): void
     {
-        return app()->singleton(ShowsSinks::class, $class);
+        app()->singleton(ShowsSinks::class, $class);
     }
 
     /**
@@ -97,9 +97,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeSinksUsing(string $class)
+    public static function storeSinksUsing(string $class): void
     {
-        return app()->singleton(StoresSinks::class, $class);
+        app()->singleton(StoresSinks::class, $class);
     }
 
     /**
@@ -109,9 +109,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editSinksUsing(string $class)
+    public static function editSinksUsing(string $class): void
     {
-        return app()->singleton(EditsSinks::class, $class);
+        app()->singleton(EditsSinks::class, $class);
     }
 
     /**
@@ -120,9 +120,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateSinksUsing(string $class)
+    public static function updateSinksUsing(string $class): void
     {
-        return app()->singleton(UpdatesSinks::class, $class);
+        app()->singleton(UpdatesSinks::class, $class);
     }
 
     /**
@@ -131,9 +131,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroySinksUsing(string $class)
+    public static function destroySinksUsing(string $class): void
     {
-        return app()->singleton(DestroysSinks::class, $class);
+        app()->singleton(DestroysSinks::class, $class);
     }
 
     /**
@@ -142,9 +142,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function shareSinksUsing(string $class)
+    public static function shareSinksUsing(string $class): void
     {
-        return app()->singleton(SharesSinks::class, $class);
+        app()->singleton(SharesSinks::class, $class);
     }
 
     /**
@@ -153,9 +153,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexSourcesUsing(string $class)
+    public static function indexSourcesUsing(string $class): void
     {
-        return app()->singleton(IndexesSources::class, $class);
+        app()->singleton(IndexesSources::class, $class);
     }
 
     /**
@@ -165,9 +165,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createSourcesUsing(string $class)
+    public static function createSourcesUsing(string $class): void
     {
-        return app()->singleton(CreatesSources::class, $class);
+        app()->singleton(CreatesSources::class, $class);
     }
 
     /**
@@ -176,9 +176,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showSourcesUsing(string $class)
+    public static function showSourcesUsing(string $class): void
     {
-        return app()->singleton(ShowsSources::class, $class);
+        app()->singleton(ShowsSources::class, $class);
     }
 
     /**
@@ -187,9 +187,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeSourcesUsing(string $class)
+    public static function storeSourcesUsing(string $class): void
     {
-        return app()->singleton(StoresSources::class, $class);
+        app()->singleton(StoresSources::class, $class);
     }
 
     /**
@@ -199,9 +199,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editSourcesUsing(string $class)
+    public static function editSourcesUsing(string $class): void
     {
-        return app()->singleton(EditsSources::class, $class);
+        app()->singleton(EditsSources::class, $class);
     }
 
     /**
@@ -210,9 +210,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateSourcesUsing(string $class)
+    public static function updateSourcesUsing(string $class): void
     {
-        return app()->singleton(UpdatesSources::class, $class);
+        app()->singleton(UpdatesSources::class, $class);
     }
 
     /**
@@ -221,9 +221,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroySourcesUsing(string $class)
+    public static function destroySourcesUsing(string $class): void
     {
-        return app()->singleton(DestroysSources::class, $class);
+        app()->singleton(DestroysSources::class, $class);
     }
 
     /**
@@ -232,9 +232,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function shareSourcesUsing(string $class)
+    public static function shareSourcesUsing(string $class): void
     {
-        return app()->singleton(SharesSources::class, $class);
+        app()->singleton(SharesSources::class, $class);
     }
 
     /**
@@ -243,9 +243,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexLinksUsing(string $class)
+    public static function indexLinksUsing(string $class): void
     {
-        return app()->singleton(IndexesLinks::class, $class);
+        app()->singleton(IndexesLinks::class, $class);
     }
 
     /**
@@ -255,9 +255,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createLinksUsing(string $class)
+    public static function createLinksUsing(string $class): void
     {
-        return app()->singleton(CreatesLinks::class, $class);
+        app()->singleton(CreatesLinks::class, $class);
     }
 
     /**
@@ -266,9 +266,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeLinksUsing(string $class)
+    public static function storeLinksUsing(string $class): void
     {
-        return app()->singleton(StoresLinks::class, $class);
+        app()->singleton(StoresLinks::class, $class);
     }
 
     /**
@@ -277,9 +277,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showLinksUsing(string $class)
+    public static function showLinksUsing(string $class): void
     {
-        return app()->singleton(ShowsLinks::class, $class);
+        app()->singleton(ShowsLinks::class, $class);
     }
 
     /**
@@ -289,9 +289,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editLinksUsing(string $class)
+    public static function editLinksUsing(string $class): void
     {
-        return app()->singleton(EditsLinks::class, $class);
+        app()->singleton(EditsLinks::class, $class);
     }
 
     /**
@@ -300,9 +300,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateLinksUsing(string $class)
+    public static function updateLinksUsing(string $class): void
     {
-        return app()->singleton(UpdatesLinks::class, $class);
+        app()->singleton(UpdatesLinks::class, $class);
     }
 
     /**
@@ -311,9 +311,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroyLinksUsing(string $class)
+    public static function destroyLinksUsing(string $class): void
     {
-        return app()->singleton(DestroysLinks::class, $class);
+        app()->singleton(DestroysLinks::class, $class);
     }
 
     /**
@@ -322,9 +322,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function shareLinksUsing(string $class)
+    public static function shareLinksUsing(string $class): void
     {
-        return app()->singleton(SharesLinks::class, $class);
+        app()->singleton(SharesLinks::class, $class);
     }
 
     /**
@@ -333,9 +333,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexProjectsUsing(string $class)
+    public static function indexProjectsUsing(string $class): void
     {
-        return app()->singleton(IndexesProjects::class, $class);
+        app()->singleton(IndexesProjects::class, $class);
     }
 
     /**
@@ -345,9 +345,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createProjectsUsing(string $class)
+    public static function createProjectsUsing(string $class): void
     {
-        return app()->singleton(CreatesProjects::class, $class);
+        app()->singleton(CreatesProjects::class, $class);
     }
 
     /**
@@ -356,9 +356,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeProjectsUsing(string $class)
+    public static function storeProjectsUsing(string $class): void
     {
-        return app()->singleton(StoresProjects::class, $class);
+        app()->singleton(StoresProjects::class, $class);
     }
 
     /**
@@ -367,9 +367,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showProjectsUsing(string $class)
+    public static function showProjectsUsing(string $class): void
     {
-        return app()->singleton(ShowsProjects::class, $class);
+        app()->singleton(ShowsProjects::class, $class);
     }
 
     /**
@@ -379,9 +379,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editProjectsUsing(string $class)
+    public static function editProjectsUsing(string $class): void
     {
-        return app()->singleton(EditsProjects::class, $class);
+        app()->singleton(EditsProjects::class, $class);
     }
 
     /**
@@ -390,9 +390,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateProjectsUsing(string $class)
+    public static function updateProjectsUsing(string $class): void
     {
-        return app()->singleton(UpdatesProjects::class, $class);
+        app()->singleton(UpdatesProjects::class, $class);
     }
 
     /**
@@ -401,9 +401,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroyProjectsUsing(string $class)
+    public static function destroyProjectsUsing(string $class): void
     {
-        return app()->singleton(DestroysProjects::class, $class);
+        app()->singleton(DestroysProjects::class, $class);
     }
 
     /**
@@ -412,9 +412,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function shareProjectsUsing(string $class)
+    public static function shareProjectsUsing(string $class): void
     {
-        return app()->singleton(SharesProjects::class, $class);
+        app()->singleton(SharesProjects::class, $class);
     }
 
     /**
@@ -423,9 +423,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexSimulationsUsing(string $class)
+    public static function indexSimulationsUsing(string $class): void
     {
-        return app()->singleton(IndexesSimulations::class, $class);
+        app()->singleton(IndexesSimulations::class, $class);
     }
 
     /**
@@ -435,9 +435,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createSimulationsUsing(string $class)
+    public static function createSimulationsUsing(string $class): void
     {
-        return app()->singleton(CreatesSimulations::class, $class);
+        app()->singleton(CreatesSimulations::class, $class);
     }
 
     /**
@@ -446,9 +446,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeSimulationsUsing(string $class)
+    public static function storeSimulationsUsing(string $class): void
     {
-        return app()->singleton(StoresSimulations::class, $class);
+        app()->singleton(StoresSimulations::class, $class);
     }
 
     /**
@@ -457,9 +457,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showSimulationsUsing(string $class)
+    public static function showSimulationsUsing(string $class): void
     {
-        return app()->singleton(ShowsSimulations::class, $class);
+        app()->singleton(ShowsSimulations::class, $class);
     }
 
     /**
@@ -469,9 +469,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editSimulationsUsing(string $class)
+    public static function editSimulationsUsing(string $class): void
     {
-        return app()->singleton(EditsSimulations::class, $class);
+        app()->singleton(EditsSimulations::class, $class);
     }
 
     /**
@@ -480,9 +480,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateSimulationsUsing(string $class)
+    public static function updateSimulationsUsing(string $class): void
     {
-        return app()->singleton(UpdatesSimulations::class, $class);
+        app()->singleton(UpdatesSimulations::class, $class);
     }
 
     /**
@@ -491,9 +491,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroySimulationsUsing(string $class)
+    public static function destroySimulationsUsing(string $class): void
     {
-        return app()->singleton(DestroysSimulations::class, $class);
+        app()->singleton(DestroysSimulations::class, $class);
     }
 
     /**
@@ -502,9 +502,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function shareSimulationsUsing(string $class)
+    public static function shareSimulationsUsing(string $class): void
     {
-        return app()->singleton(SharesSimulations::class, $class);
+        app()->singleton(SharesSimulations::class, $class);
     }
 
     /**
@@ -513,9 +513,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexTeamRolesUsing(string $class)
+    public static function indexTeamRolesUsing(string $class): void
     {
-        return app()->singleton(IndexesTeamRoles::class, $class);
+        app()->singleton(IndexesTeamRoles::class, $class);
     }
 
     /**
@@ -525,9 +525,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function createTeamRolesUsing(string $class)
+    public static function createTeamRolesUsing(string $class): void
     {
-        return app()->singleton(CreatesTeamRoles::class, $class);
+        app()->singleton(CreatesTeamRoles::class, $class);
     }
 
     /**
@@ -536,9 +536,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeTeamRolesUsing(string $class)
+    public static function storeTeamRolesUsing(string $class): void
     {
-        return app()->singleton(StoresTeamRoles::class, $class);
+        app()->singleton(StoresTeamRoles::class, $class);
     }
 
     /**
@@ -547,9 +547,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function showTeamRolesUsing(string $class)
+    public static function showTeamRolesUsing(string $class): void
     {
-        return app()->singleton(ShowsTeamRoles::class, $class);
+        app()->singleton(ShowsTeamRoles::class, $class);
     }
 
     /**
@@ -559,9 +559,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function editTeamRolesUsing(string $class)
+    public static function editTeamRolesUsing(string $class): void
     {
-        return app()->singleton(EditsTeamRoles::class, $class);
+        app()->singleton(EditsTeamRoles::class, $class);
     }
 
     /**
@@ -570,9 +570,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateTeamRolesUsing(string $class)
+    public static function updateTeamRolesUsing(string $class): void
     {
-        return app()->singleton(UpdatesTeamRoles::class, $class);
+        app()->singleton(UpdatesTeamRoles::class, $class);
     }
 
     /**
@@ -581,9 +581,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function destroyTeamRolesUsing(string $class)
+    public static function destroyTeamRolesUsing(string $class): void
     {
-        return app()->singleton(DestroysTeamRoles::class, $class);
+        app()->singleton(DestroysTeamRoles::class, $class);
     }
 
     /**
@@ -592,9 +592,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function addTeamMembersUsing(string $class)
+    public static function addTeamMembersUsing(string $class): void
     {
-        return app()->singleton(AddsTeamMembers::class, $class);
+        app()->singleton(AddsTeamMembers::class, $class);
     }
 
     /**
@@ -604,9 +604,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function inviteTeamMembersUsing(string $class)
+    public static function inviteTeamMembersUsing(string $class): void
     {
-        return app()->singleton(InvitesTeamMembers::class, $class);
+        app()->singleton(InvitesTeamMembers::class, $class);
     }
 
     /**
@@ -616,9 +616,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function updateTeamMemberRolesUsing(string $class)
+    public static function updateTeamMemberRolesUsing(string $class): void
     {
-        return app()->singleton(UpdatesTeamMemberRoles::class, $class);
+        app()->singleton(UpdatesTeamMemberRoles::class, $class);
     }
 
     /**
@@ -627,9 +627,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexNotificationsUsing(string $class)
+    public static function indexNotificationsUsing(string $class): void
     {
-        return app()->singleton(IndexesNotifications::class, $class);
+        app()->singleton(IndexesNotifications::class, $class);
     }
 
     /**
@@ -639,8 +639,8 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function MarkAllNotificationsAsReadUsing(string $class)
+    public static function MarkAllNotificationsAsReadUsing(string $class): void
     {
-        return app()->singleton(MarksAllNotificationsAsRead::class, $class);
+        app()->singleton(MarksAllNotificationsAsRead::class, $class);
     }
 }

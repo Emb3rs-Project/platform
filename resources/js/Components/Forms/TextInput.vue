@@ -1,10 +1,17 @@
 <template>
   <div>
     <div class="flex justify-between">
-      <label :for="value" class="block text-sm font-medium text-gray-700">
+      <label
+        :for="value"
+        class="block text-sm font-medium text-gray-700"
+      >
         {{ label }}
       </label>
-      <span v-if="required" class="text-sm text-gray-500" id="input-required">
+      <span
+        v-if="required"
+        class="text-sm text-gray-500"
+        id="input-required"
+      >
         Required
       </span>
     </div>
@@ -21,10 +28,11 @@
         :disabled="disabled"
         aria-describedby="input-required"
       />
-      <div
-        class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"
-      >
-        <span class="text-gray-500 sm:text-sm" id="price-currency">
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+        <span
+          class="text-gray-500 sm:text-sm"
+          id="price-currency"
+        >
           {{ unit }}
         </span>
       </div>
@@ -63,12 +71,7 @@ export default {
     },
   },
 
-  emits: {
-    "update:modelValue": (value) => {
-      if (value !== "") return true;
-      return false;
-    },
-  },
+  emits: ["update:modelValue"],
 
   setup(props, { emit }) {
     const input = ref(null);

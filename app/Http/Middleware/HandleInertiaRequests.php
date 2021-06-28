@@ -3,7 +3,10 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Inertia\Middleware;
+use Laravel\Jetstream\Jetstream;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -36,12 +39,28 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
-        // ! Always prefix the props defined here as layout.<propname> for the
-        // ! reason of namespacing them.
         return array_merge(parent::share($request), [
-            // 'layout.notifications.unread.count' => fn () => $request->user()
+            // This is being used to override the 'user' prop from ShareInertiaData
+            // 'user' => fn () => $request->user()
             //     ? count($request->user()->unreadNotifications)
-            //     : null
+            //     : null,
+            'user' => function () use ($request) {
+                if (! $request->user()) {
+                    return;
+                }
+
+                return array_merge(
+                    Arr::except($request->user()->toArray(), [
+                        'current_team.instances'
+                    ]),
+                    array_filter([
+                    'all_teams' => Jetstream::hasTeamFeatures() ? $request->user()->allTeams() : null
+                ]),
+                    [
+                        'two_factor_enabled' => ! is_null($request->user()->two_factor_secret)
+                    ]
+                );
+            },
         ]);
     }
 }

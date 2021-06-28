@@ -1,4 +1,4 @@
-<template>
+b<template>
   <slide-over
     v-model="open"
     title="New Sink"
@@ -7,6 +7,7 @@
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
+    <pre>{{$page.props}}</pre>
     <!-- Sink Template -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
@@ -76,6 +77,10 @@
           >
           </select-menu>
         </div>
+        <jet-input-error
+          :message="form.errors"
+          class="mt-2"
+        />
       </div>
     </div>
 
@@ -105,6 +110,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
@@ -116,6 +122,7 @@ export default {
     SlideOver,
     SelectMenu,
     TextInput,
+    JetInputError,
     PrimaryButton,
     SecondaryOutlinedButton,
   },
@@ -217,6 +224,10 @@ export default {
       });
     };
 
+    const onCancel = () => {
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+    };
+
     return {
       templateInfo,
       templates,
@@ -226,8 +237,7 @@ export default {
       open,
       properties,
       submit,
-      onCancel: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onCancel,
     };
   },
 };

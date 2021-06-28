@@ -1,6 +1,9 @@
 <!-- This example requires Tailwind CSS v2.0+ -->
 <template>
-  <Listbox as="div" v-model="selected">
+  <Listbox
+    as="div"
+    v-model="selected"
+  >
     <ListboxLabel class="block text-sm font-medium text-gray-700">
       {{ label }}
     </ListboxLabel>
@@ -15,10 +18,11 @@
         <span class="block truncate">
           {{ selected ? selected.value : "Select an option..." }}
         </span>
-        <span
-          class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none"
-        >
-          <SelectorIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
+        <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+          <SelectorIcon
+            class="h-5 w-5 text-gray-400"
+            aria-hidden="true"
+          />
         </span>
       </ListboxButton>
 
@@ -27,9 +31,7 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <ListboxOptions
-          class="z-20 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
-        >
+        <ListboxOptions class="z-20 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
           <ListboxOption
             as="template"
             v-for="option in options"
@@ -37,18 +39,14 @@
             :value="option"
             v-slot="{ active, selected }"
           >
-            <li
-              :class="[
+            <li :class="[
                 active ? 'text-white bg-blue-600' : 'text-gray-900',
                 'cursor-default select-none relative py-2 pl-3 pr-9',
-              ]"
-            >
-              <span
-                :class="[
+              ]">
+              <span :class="[
                   selected ? 'font-semibold' : 'font-normal',
                   'block truncate',
-                ]"
-              >
+                ]">
                 {{ option.value }}
               </span>
 
@@ -59,7 +57,10 @@
                   'absolute inset-y-0 right-0 flex items-center pr-4',
                 ]"
               >
-                <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                <CheckIcon
+                  class="h-5 w-5"
+                  aria-hidden="true"
+                />
               </span>
             </li>
           </ListboxOption>
@@ -116,7 +117,6 @@ export default {
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
     });
-    console.log("SelectMenu::selected", selected.value);
 
     return {
       selected,
