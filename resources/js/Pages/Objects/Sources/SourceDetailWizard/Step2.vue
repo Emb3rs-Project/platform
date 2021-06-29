@@ -5,16 +5,7 @@
     v-for="equip of instance.values.equipments"
     :key="equip.key"
   >
-    <DisclosureButton class="
-        flex
-        justify-between
-        w-full
-        px-4
-        py-2
-        text-sm
-        font-medium
-        text-left
-      ">
+    <DisclosureButton class="flex justify-between w-full px-4 py-2 text-sm font-medium text-left">
       <span>{{ equip.value }}</span>
       <ChevronUpIcon
         :class="open ? 'transform rotate-180' : ''"
@@ -26,17 +17,9 @@
       <div
         v-for="(datum, name) of equip.data"
         :key="datum"
-        class="
-          space-y-1
-          px-4
-          sm:space-y-0
-          sm:grid sm:grid-cols-3
-          sm:gap-4
-          sm:px-6
-          sm:py-2
-          border-b-[1px]
-        "
+        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]"
       >
+        >
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             {{ getName(equip, name) }}
@@ -50,16 +33,7 @@
       </div>
       <h1 class="px-4 py-3 font-bold">Calculated :</h1>
       <!-- Source Template -->
-      <div class="
-          space-y-1
-          px-4
-          sm:space-y-0
-          sm:grid sm:grid-cols-3
-          sm:gap-4
-          sm:px-6
-          sm:py-2
-          border-b-[1px]
-        ">
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Fluid
@@ -75,16 +49,7 @@
       </div>
 
       <!-- Source Template -->
-      <div class="
-          space-y-1
-          px-4
-          sm:space-y-0
-          sm:grid sm:grid-cols-3
-          sm:gap-4
-          sm:px-6
-          sm:py-2
-          border-b-[1px]
-        ">
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Supply Temperature (ºc)
@@ -101,16 +66,7 @@
       </div>
 
       <!-- Source Template -->
-      <div class="
-          space-y-1
-          px-4
-          sm:space-y-0
-          sm:grid sm:grid-cols-3
-          sm:gap-4
-          sm:px-6
-          sm:py-2
-          border-b-[1px]
-        ">
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Flowrate (kg/h)
@@ -127,16 +83,7 @@
       </div>
 
       <!-- Source Template -->
-      <div class="
-          space-y-1
-          px-4
-          sm:space-y-0
-          sm:grid sm:grid-cols-3
-          sm:gap-4
-          sm:px-6
-          sm:py-2
-          border-b-[1px]
-        ">
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
             Excess Heat Capacity (kW)

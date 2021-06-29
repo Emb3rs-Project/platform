@@ -44,7 +44,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import AmazingMap from "@/Components/Map/AmazingMap";
 import SlideOver from "@/Components/SlideOver";
 import LinkIcon from "@/Components/Icons/LinkIcon";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
   components: {

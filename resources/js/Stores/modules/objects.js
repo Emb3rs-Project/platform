@@ -1,5 +1,4 @@
 const _state = () => ({
-    // count: 0
     currentRoute: null,
     currentRouteProps: null,
     slideOpen: false

@@ -16,6 +16,7 @@ use App\Nova\Actions\InstanceProcessing;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Nova\Fields\ActionFields;
 
@@ -30,10 +31,6 @@ class SourceController extends Controller
     public function index(Request $request)
     {
         $sources = app(IndexesSources::class)->index($request->user());
-
-        // return Inertia::render('Objects/Sources/SourceIndex', [
-        //     'sources' => $sources
-        // ]);
 
         return response()->json([
             'sources' => $sources
@@ -126,9 +123,6 @@ class SourceController extends Controller
             $instance
         ] = app(EditsSources::class)->edit($request->user(), $id);
 
-
-
-
         return [
             "slideOver" => "Objects/Sources/SourceEdit",
             "props" => [
@@ -138,6 +132,27 @@ class SourceController extends Controller
                 "instance" => $instance
             ]
         ];
+
+        // [
+        //     $templates,
+        //     $equipments,
+        //     $equipmentsCategories,
+        //     $processes,
+        //     $processesCategories,
+        //     $locations
+        // ] = app(CreatesSources::class)->create($request->user());
+
+        // return [
+        //     "slideOver" => "Objects/Sources/SourceEdit",
+        //     "props" => [
+        //         "templates" => $templates,
+        //         "equipments" => $equipments,
+        //         "equipmentsCategories" => $equipmentsCategories,
+        //         "processes" => $processes,
+        //         "processesCategories" => $processesCategories,
+        //         "locations" => $locations,
+        //     ]
+        // ];
     }
 
     /**

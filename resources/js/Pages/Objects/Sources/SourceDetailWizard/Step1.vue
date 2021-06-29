@@ -1,16 +1,7 @@
 <template>
   <h1 class="px-4 py-3 font-bold">Properties :</h1>
   <!-- Source ID -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         ID
@@ -24,16 +15,7 @@
   </div>
 
   <!-- Source Name -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Name
@@ -47,16 +29,7 @@
   </div>
 
   <!-- Source Template -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Template
@@ -71,16 +44,7 @@
 
   <!-- Source Location Name -->
   <div
-    class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    "
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]"
     v-if="instance.location_id"
   >
     <div>
@@ -98,16 +62,7 @@
   <h1 class="px-4 py-3 font-bold">Calculated :</h1>
 
   <!-- Source Template -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Excess Heat Fluid
@@ -121,16 +76,7 @@
   </div>
 
   <!-- Source Template -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Excess Heat Supply Temperature (ºc)
@@ -147,16 +93,7 @@
   </div>
 
   <!-- Source Template -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Excess Heat Flowrate (kg/h)
@@ -172,16 +109,7 @@
   </div>
 
   <!-- Source Template -->
-  <div class="
-      space-y-1
-      px-4
-      sm:space-y-0
-      sm:grid sm:grid-cols-3
-      sm:gap-4
-      sm:px-6
-      sm:py-2
-      border-b-[1px]
-    ">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Excess Heat Capacity (kW)

@@ -59,8 +59,8 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import SourceDetail1 from "./SourceDetailWizard/SourceDetail-1";
-import SourceDetail2 from "./SourceDetailWizard/SourceDetail-2";
+import SourceDetail1 from "./SourceDetailWizard/Step1";
+import SourceDetail2 from "./SourceDetailWizard/Step2";
 import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
 
 export default {
@@ -107,6 +107,14 @@ export default {
         ? "upcoming"
         : "complete";
 
+    // const mapStepStatus = computed((index) =>
+    //   currentStep.value === index
+    //     ? "current"
+    //     : currentStep.value < index
+    //     ? "upcoming"
+    //     : "complete"
+    // );
+
     const onNextStep = () => currentStep.value++;
     const onPrevStep = () => currentStep.value--;
 
@@ -114,12 +122,12 @@ export default {
     const steps = computed(() => [
       {
         name: "Source Details",
-        component: "Objects/Sources/SourceCreateWizard/Step1.vue",
+        component: "Objects/Sources/SourceDetailWizard/Step1.vue",
         status: mapStepStatus(1), // status: current | complete | upcoming
       },
       {
         name: "Equipments",
-        component: "Objects/Sources/SourceCreateWizard/Step2.vue",
+        component: "Objects/Sources/SourceDetailWizard/Step2.vue",
         status: mapStepStatus(2),
       },
       {
