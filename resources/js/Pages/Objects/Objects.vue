@@ -105,6 +105,7 @@ export default {
 
         return res.json();
       });
+      console.log("geocfus", response);
 
       slideProps.value = response.props;
 

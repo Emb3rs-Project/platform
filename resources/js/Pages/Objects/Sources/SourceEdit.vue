@@ -7,29 +7,33 @@
     dismissButtonTextColor="text-green-200"
     subtitleTextColor="text-green-300"
   >
-    <source-edit-step-1
+    <SourceEditStep1
+      :instance="instance"
       :templates="templates"
       :locations="locations"
       v-if="currentStep === 1"
-    ></source-edit-step-1>
+    />
 
-    <source-edit-step-2
+    <SourceEditStep2
+      :instance="instance"
       :equipmentsCategories="equipmentsCategories"
       :equipments="equipments"
       v-if="currentStep === 2"
-    ></source-edit-step-2>
+    />
 
-    <!-- <source-edit-step-3
-      :equipmentsCategories="equipmentsCategories"
-      :equipments="equipments"
+    <SourceEditStep3
+      :instance="instance"
+      :processesCategories="processesCategories"
+      :processes="processes"
       v-if="currentStep === 3"
-    ></source-edit-step-3>
+    />
 
-    <source-edit-step-4
+    <!-- <SourceEditStep4
       :equipmentsCategories="equipmentsCategories"
       :equipments="equipments"
+      :instance="instance"
       v-if="currentStep === 4"
-    ></source-edit-step-4> -->
+    /> -->
 
     <template #actions>
       <div class="flex justify-start w-full">
@@ -70,7 +74,8 @@
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -130,11 +135,17 @@ export default {
       type: Array,
       required: true,
     },
+    instance: {
+      type: Object,
+      required: true,
+    },
   },
 
   emits: ["update:modelValue"],
 
   setup(props) {
+    const store = useStore();
+    console.log(props);
     const currentStep = ref(1);
 
     const mapStepStatus = (index) =>

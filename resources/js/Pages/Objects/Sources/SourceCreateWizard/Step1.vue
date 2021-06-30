@@ -111,14 +111,17 @@ export default {
 
     watch(
       selectedLocation,
-      () => store.commit("sources/setLocation", selectedLocation.value),
+      () =>
+        store.commit("sources/setLocation", {
+          location: selectedLocation.value,
+        }),
       { immediate: true }
     );
 
     watch(
       data,
       (data) => {
-        store.dispatch("sources/addSource", {
+        store.dispatch("sources/setSource", {
           source: JSON.parse(JSON.stringify(data)),
         });
       },
@@ -131,7 +134,7 @@ export default {
         if (!selectedTemplate) return;
         data.value = {};
 
-        store.dispatch("sources/addTemplate", { template: selectedTemplate });
+        store.dispatch("sources/setTemplate", { template: selectedTemplate });
 
         if (!Object.keys(selectedTemplate.props).length === 0) return;
 

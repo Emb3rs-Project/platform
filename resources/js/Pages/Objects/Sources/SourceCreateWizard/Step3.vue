@@ -153,7 +153,7 @@ export default {
         return;
       }
 
-      store.dispatch("sources/addProcesses", {
+      store.dispatch("sources/setProcesses", {
         processes: JSON.parse(JSON.stringify(propProcesses)),
       });
 
@@ -165,7 +165,7 @@ export default {
     watch(
       processes,
       (processes) => {
-        store.dispatch("sources/addProcesses", {
+        store.dispatch("sources/setProcesses", {
           processes: JSON.parse(JSON.stringify(processes)),
         });
       },

@@ -156,6 +156,7 @@ export default {
       default: [],
     },
   },
+
   setup(props) {
     const store = useStore();
 
@@ -238,8 +239,9 @@ export default {
       }
     };
 
-    const onActionRequest = async (route, param) =>
+    const onActionRequest = async (route, param) => {
       store.dispatch("objects/showSlide", { route, props: param });
+    };
 
     return {
       tableColumns,

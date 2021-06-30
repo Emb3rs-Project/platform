@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Equipments -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button
+    <PrimaryButton
       type="button"
       @click="modalIsVisible = true"
     >
@@ -11,7 +10,7 @@
         aria-hidden="true"
       />
       Add Equipment
-    </primary-button>
+    </PrimaryButton>
   </div>
 
   <div
@@ -88,13 +87,12 @@
     </div>
   </div>
 
-  <add-equipment-modal
+  <AddEquipmentModal
     v-model="modalIsVisible"
     :equipmentsCategories="equipmentsCategories"
     :equipments="equipments"
     @confirmation="onAddEquipment"
-  >
-  </add-equipment-modal>
+  />
 </template>
 
 <script>
@@ -123,6 +121,10 @@ export default {
   },
 
   props: {
+    instance: {
+      type: Object,
+      required: true,
+    },
     equipmentsCategories: {
       type: Array,
       required: true,
@@ -136,9 +138,20 @@ export default {
   setup(props) {
     const store = useStore();
     const modalIsVisible = ref(false);
-    const equipments = ref([]);
 
-    const storeEquipments = computed(() => store.getters["sources/equipments"]);
+    const equipments = computed(() =>
+      props.equipments.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+        props: e.template_properties,
+        data: {},
+      }))
+    );
+
+    const sessionEquipments = computed(
+      () => store.getters["sources/equipments"]
+    );
 
     const propEquipments = props.equipments.map((e) => ({
       key: e.id,
@@ -154,7 +167,7 @@ export default {
         return;
       }
 
-      store.dispatch("sources/addEquipments", {
+      store.dispatch("sources/setEquipments", {
         equipments: JSON.parse(JSON.stringify(propEquipments)),
       });
 
@@ -166,7 +179,7 @@ export default {
     watch(
       equipments,
       (equipments) => {
-        store.dispatch("sources/addEquipments", {
+        store.dispatch("sources/setEquipments", {
           equipments: JSON.parse(JSON.stringify(equipments)),
         });
       },

@@ -1,21 +1,20 @@
 <template>
-  <h1>{{$page.props}}</h1>
   <!-- Source Template -->
-  <!-- <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
         Select a Template
       </label>
     </div>
     <div class="sm:col-span-2">
-      <select-menu
+      <SelectMenu
         v-model="selectedTemplate"
         :options="templates"
-      ></select-menu>
+      />
     </div>
-  </div> -->
+  </div>
 
-  <!-- <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label
         for="project_name"
@@ -27,13 +26,13 @@
     <div class="sm:col-span-2">
       <select-menu
         v-model="selectedLocation"
-        :options="locationSelect"
+        :options="locations"
         :disabled="selectedTemplate ? false : true"
       ></select-menu>
     </div>
-  </div> -->
+  </div>
 
-  <!-- <div v-if="selectedTemplate">
+  <div v-if="selectedTemplate">
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
       v-for="property in selectedTemplate.props"
@@ -64,7 +63,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 </template>
 
 <script>
@@ -73,7 +72,6 @@ import { useStore } from "vuex";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import { keyParToSelect } from "../../../../Utils/array";
 
 export default {
   components: {
@@ -82,6 +80,10 @@ export default {
   },
 
   props: {
+    instance: {
+      type: Object,
+      required: true,
+    },
     templates: {
       type: Array,
       required: true,
@@ -93,71 +95,76 @@ export default {
   },
 
   setup(props) {
-    console.log("hello");
-    // const store = useStore();
-    // const selectedTemplate = ref(store.getters["sources/template"] ?? null);
-    // const data = ref(store.getters["sources/source"]);
-    // const locationSelect = keyParToSelect(props.locations);
-    // const selectedLocation = ref(
-    //   locationSelect.length ? locationSelect[0] : null
-    // );
+    const store = useStore();
 
-    // const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
-    // if (selectedMarker.value) {
-    //   locationSelect.unshift({
-    //     key: selectedMarker.value,
-    //     value: "Selected Marker",
-    //   });
-    //   selectedLocation.value = locationSelect[0];
-    // }
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+        props: t.template_properties,
+      }))
+    );
+    const sessionTemplate = computed(() => store.getters["sources/template"]);
+    const selectedTemplate = ref(
+      sessionTemplate.value ??
+        templates.value.find((t) => t.key === props.instance.template_id)
+    );
 
-    // watch(
-    //   selectedLocation,
-    //   () => store.commit("sources/setLocation", selectedLocation.value),
-    //   { immediate: true }
-    // );
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const sessionLocation = computed(() => store.getters["sources/location"]);
+    const selectedLocation = ref(
+      sessionLocation.value ??
+        locations.value.find((l) => l.key === props.instance.location_id)
+    );
 
-    // watch(
-    //   data,
-    //   (data) => {
-    //     store.dispatch("sources/addSource", {
-    //       source: JSON.parse(JSON.stringify(data)),
-    //     });
-    //   },
-    //   { deep: true }
-    // );
+    const sessionData = computed(() => store.getters["sources/source"]);
+    const data = ref(JSON.parse(JSON.stringify(sessionData.value)) ?? {});
 
-    // watch(
-    //   selectedTemplate,
-    //   (selectedTemplate) => {
-    //     if (!selectedTemplate) return;
-    //     data.value = {};
+    watch(
+      selectedTemplate,
+      (selectedTemplate) => {
+        store.dispatch("sources/setTemplate", { template: selectedTemplate });
 
-    //     store.dispatch("sources/addTemplate", { template: selectedTemplate });
+        if (!Object.keys(selectedTemplate.props).length === 0) return;
 
-    //     if (!Object.keys(selectedTemplate.props).length === 0) return;
+        for (const property of selectedTemplate.props) {
+          console.log(property);
+          data.value[property.property.symbolic_name] = property.default_value;
+        }
+      },
+      { immediate: true, deep: true }
+    );
 
-    //     for (const property of selectedTemplate.props) {
-    //       data.value[property.property.symbolic_name] = property.default_value;
-    //     }
-    //   },
-    //   { immediate: true }
-    // );
+    watch(
+      selectedLocation,
+      () =>
+        store.commit("sources/setLocation", {
+          location: selectedLocation.value,
+        }),
+      { immediate: true, deep: true }
+    );
 
-    // const templates = computed(() =>
-    //   props.templates.map((t) => ({
-    //     key: t.id,
-    //     value: t.name,
-    //     props: t.template_properties,
-    //   }))
-    // );
+    watch(
+      data,
+      (data) => {
+        store.dispatch("sources/setSource", {
+          source: JSON.parse(JSON.stringify(data)),
+        });
+      },
+      { immediate: true, deep: true }
+    );
 
     return {
-      //   templates,
-      //   selectedTemplate,
-      //   data,
-      //   locationSelect,
-      //   selectedLocation,
+      templates,
+      selectedTemplate,
+      locations,
+      selectedLocation,
+      data,
     };
   },
 };

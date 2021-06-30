@@ -112,6 +112,8 @@ export default {
     },
   },
 
+  emits: ["update:modelValue"],
+
   setup(props, { emit }) {
     const selected = computed({
       get: () => props.modelValue,

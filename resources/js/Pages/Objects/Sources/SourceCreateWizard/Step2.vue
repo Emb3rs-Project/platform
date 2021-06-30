@@ -154,7 +154,7 @@ export default {
         return;
       }
 
-      store.dispatch("sources/addEquipments", {
+      store.dispatch("sources/setEquipments", {
         equipments: JSON.parse(JSON.stringify(propEquipments)),
       });
 
@@ -166,7 +166,7 @@ export default {
     watch(
       equipments,
       (equipments) => {
-        store.dispatch("sources/addEquipments", {
+        store.dispatch("sources/setEquipments", {
           equipments: JSON.parse(JSON.stringify(equipments)),
         });
       },
