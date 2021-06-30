@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 8.48.2.
+ * Generated for Laravel 8.49.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -1972,7 +1972,7 @@
          *
          * @param string $password
          * @param string $attribute
-         * @return bool|null 
+         * @return \App\Models\User|null 
          * @throws \Illuminate\Auth\AuthenticationException
          * @static 
          */ 
@@ -16272,29 +16272,6 @@
         public static function emailVerification()
         {
                         return \Illuminate\Routing\Router::emailVerification();
-        }
-         
-    }
-     
-}
-
-    namespace Inertia { 
-            /**
-     * 
-     *
-     */ 
-        class ResponseFactory {
-                    /**
-         * 
-         *
-         * @see \App\Providers\AppServiceProvider::boot()
-         * @param mixed $slideOver
-         * @param mixed $props
-         * @static 
-         */ 
-        public static function slideOver($slideOver, $props)
-        {
-                        return \Inertia\ResponseFactory::slideOver($slideOver, $props);
         }
          
     }
