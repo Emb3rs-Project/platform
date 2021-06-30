@@ -55,9 +55,7 @@ use App\Actions\Embers\Teams\AddTeamMember;
 use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Actions\Embers\Teams\UpdateTeamMemberRole;
 use App\Embers;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
-use Inertia\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -78,13 +76,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // ResponseFactory::macro('slideOver', function ($slideOver, $props) {
-        //     inertia()->share([
-        //         'slideOver' => $slideOver,
-        //         'slideOverProps' => $props
-        //     ]);
-        // });
-
         Embers::indexSinksUsing(IndexSink::class);
         Embers::createSinksUsing(CreateSink::class);
         Embers::storeSinksUsing(StoreSink::class);
