@@ -7,6 +7,7 @@ use App\Models\Permission;
 use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class SyncPermissions extends Command
@@ -48,7 +49,7 @@ class SyncPermissions extends Command
             foreach ($actionNamespaces as $actionNamespace) {
                 $instance = app($actionNamespace);
 
-                Permission::firstOrCreate([
+                Permission::updateOrCreate([
                     'action' => $instance->getActionName(),
                 ], [
                     'friendly_id' => Str::uuid()->toString(),
@@ -73,13 +74,13 @@ class SyncPermissions extends Command
         $actionNamespaces = [];
 
         foreach ($classes as $class) {
-            if (! Str::startsWith($class, 'App\\Actions\\')) {
+            if (!Str::startsWith($class, 'App\\Actions\\')) {
                 continue;
             }
 
             $traits = class_uses_recursive($class);
 
-            if (! Arr::exists($traits, EmbersPermissionable::class)) {
+            if (!Arr::exists($traits, EmbersPermissionable::class)) {
                 continue;
             }
 
