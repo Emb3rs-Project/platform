@@ -37,37 +37,39 @@
 
     <template #actions>
       <div class="flex justify-start w-full">
-        <bullet-steps :steps="steps"></bullet-steps>
+        <BulletSteps :steps="steps" />
       </div>
 
-      <secondary-button
+      <SecondaryButton
         type="button"
         @click="onPreviousStep"
         :disabled="currentStep === 1"
       >
 
         <ChevronLeftIcon class="w-6 h-6" />
-      </secondary-button>
-      <secondary-button
+      </SecondaryButton>
+      <SecondaryButton
         type="button"
         @click="onNextStep"
         :disabled="currentStep === steps.length"
       >
         <ChevronRightIcon class="w-6 h-6" />
-      </secondary-button>
-      <secondary-outlined-button
+      </SecondaryButton>
+      <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button
+      </SecondaryOutlinedButton>
+      <PrimaryButton
         type="button"
         @click="onNextStep"
+        :disabled="currentStep !== steps.length"
       >
-        <span v-if="currentStep === steps.length">Save</span>
-        <span v-else>Next</span>
-      </primary-button>
+        Save
+        <!-- <span v-if="currentStep === steps.length">Save</span>
+        <span v-else>Next</span> -->
+      </PrimaryButton>
     </template>
 
   </slide-over>
@@ -145,7 +147,7 @@ export default {
 
   setup(props) {
     const store = useStore();
-    console.log(props);
+    console.log(props.processes);
     const currentStep = ref(1);
 
     const mapStepStatus = (index) =>

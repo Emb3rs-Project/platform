@@ -147,19 +147,19 @@ export default {
     const processing = ref(false); // TODO: dont allow the press of more than one connfirm
 
     // TODO: dont allow the press of more than one connfirm
-    onBeforeUpdate(() => {
-      console.log("updated");
-      processing.value = false;
-    });
+    // onBeforeUpdate(() => {
+    //   console.log("updated");
+    //   processing.value = false;
+    // });
 
     const availableEquipments = ref([]);
     const selectedEquipmentCategory = ref(null);
     const selectedEquipment = ref(null);
 
     const equipmentsCategories = computed(() =>
-      props.equipmentsCategories.map((c) => ({
-        key: c.id,
-        value: c.name,
+      props.equipmentsCategories.map((ec) => ({
+        key: ec.id,
+        value: ec.name,
       }))
     );
 

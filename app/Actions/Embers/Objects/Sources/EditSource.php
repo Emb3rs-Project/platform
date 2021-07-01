@@ -26,11 +26,13 @@ class EditSource implements EditsSources
 
         $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
-        $sourceCategories = Category::whereType('source')->get()->pluck('id');
+        $sourceCategories = Category::whereType('source')->get();
 
-        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get();
 
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        $processCategories = Category::whereType('process')->get();
+
+        $sourceTemplates = Template::whereIn('category_id', $sourceCategories->map(fn ($c) => $c->id))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -38,7 +40,15 @@ class EditSource implements EditsSources
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories->map(fn ($c) => $c->id))
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->get();
+
+        $processTemplates = Template::whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -51,6 +61,9 @@ class EditSource implements EditsSources
         return [
             $sourceTemplates,
             $equipmentTemplates,
+            $equipmentCategories,
+            $processTemplates,
+            $processCategories,
             $locations,
             $source
         ];

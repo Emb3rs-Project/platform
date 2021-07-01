@@ -15,7 +15,7 @@
 
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="equipment in equipments"
+    v-for="equipment in existingEquipments"
     :key="equipment"
   >
     <div class="sm:col-span-3">
@@ -148,42 +148,23 @@ export default {
         data: {},
       }))
     );
-
     const sessionEquipments = computed(
       () => store.getters["sources/equipments"]
     );
-
-    const propEquipments = props.equipments.map((e) => ({
-      key: e.id,
-      value: e.name,
-      parent: e.category_id,
-      props: e.template_properties,
-      data: {},
-    }));
-
-    const init = () => {
-      if (storeEquipments.value.length) {
-        equipments.value = JSON.parse(JSON.stringify(storeEquipments.value));
-        return;
-      }
-
-      store.dispatch("sources/setEquipments", {
-        equipments: JSON.parse(JSON.stringify(propEquipments)),
-      });
-
-      equipments.value = propEquipments;
-    };
-
-    init();
+    const existingEquipments = ref(
+      sessionEquipments.value.length
+        ? sessionEquipments.value
+        : props.instance.values.equipments
+    );
 
     watch(
-      equipments,
+      existingEquipments,
       (equipments) => {
         store.dispatch("sources/setEquipments", {
           equipments: JSON.parse(JSON.stringify(equipments)),
         });
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
 
     const onAddEquipment = (equipment) => {
@@ -196,12 +177,14 @@ export default {
           property.default_value;
       }
 
-      equipments.value = [...equipments.value, newEquipment];
+      //   existingEquipments.value = [...existingEquipments.value, newEquipment];
+      existingEquipments.value.push(newEquipment);
     };
 
     return {
       modalIsVisible,
       equipments,
+      existingEquipments,
       onAddEquipment,
     };
   },

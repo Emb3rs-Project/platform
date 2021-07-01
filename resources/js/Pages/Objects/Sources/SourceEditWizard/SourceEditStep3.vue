@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Processes -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button
+    <PrimaryButton
       type="button"
       @click="modalIsVisible = true"
     >
@@ -11,11 +10,11 @@
         aria-hidden="true"
       />
       Add Process
-    </primary-button>
+    </PrimaryButton>
   </div>
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="process in processes"
+    v-for="process in existingProcesses"
     :key="process"
   >
     <div class="sm:col-span-3">
@@ -63,21 +62,19 @@
               </div>
               <div class="sm:col-span-2">
                 <div v-if="property.property.inputType === 'text'">
-                  <text-input
+                  <TextInput
                     v-model="process.data[property.property.symbolic_name]"
                     :unit="property.unit.symbol"
                     :placeholder="property.property.name"
                     :required="property.required"
-                  >
-                  </text-input>
+                  />
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
-                  <select-menu
+                  <SelectMenu
                     v-model="process.data[property.property.symbolic_name]"
                     :options="property.property.data.options"
                     :required="property.required"
-                  >
-                  </select-menu>
+                  />
                 </div>
               </div>
             </div>
@@ -87,13 +84,12 @@
     </div>
   </div>
 
-  <add-process-modal
+  <AddProcessModal
     v-model="modalIsVisible"
     :processesCategories="processesCategories"
     :processes="processes"
     @confirmation="onAddProcess"
-  >
-  </add-process-modal>
+  />
 </template>
 
 <script>
@@ -105,7 +101,7 @@ import { ChevronDownIcon, BeakerIcon } from "@heroicons/vue/outline";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import PrimaryButton from "../../../../Components/PrimaryButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AddProcessModal from "@/Components/Modals/AddProcessModal.vue";
 
 export default {
@@ -122,6 +118,10 @@ export default {
   },
 
   props: {
+    instance: {
+      type: Object,
+      required: true,
+    },
     processesCategories: {
       type: Array,
       required: true,
@@ -135,41 +135,31 @@ export default {
   setup(props) {
     const store = useStore();
     const modalIsVisible = ref(false);
-    const processes = ref([]);
 
-    const storeProcesses = computed(() => store.getters["sources/processes"]);
-
-    const propProcesses = props.processes.map((p) => ({
-      key: p.id,
-      value: p.name,
-      parent: p.category_id,
-      props: p.template_properties,
-      data: {},
-    }));
-
-    const init = () => {
-      if (storeProcesses.value.length) {
-        processes.value = JSON.parse(JSON.stringify(storeProcesses.value));
-        return;
-      }
-
-      store.dispatch("sources/setProcesses", {
-        processes: JSON.parse(JSON.stringify(propProcesses)),
-      });
-
-      processes.value = propProcesses;
-    };
-
-    init();
+    const processes = computed(() =>
+      props.processes.map((e) => ({
+        key: e.id,
+        value: e.name,
+        parent: e.category_id,
+        props: e.template_properties,
+        data: {},
+      }))
+    );
+    const sessionProcesses = computed(() => store.getters["sources/processes"]);
+    const existingProcesses = ref(
+      sessionProcesses.value.length
+        ? sessionProcesses.value
+        : props.instance.values.processes
+    );
 
     watch(
-      processes,
+      existingProcesses,
       (processes) => {
         store.dispatch("sources/setProcesses", {
           processes: JSON.parse(JSON.stringify(processes)),
         });
       },
-      { deep: true }
+      { immediate: true, deep: true }
     );
 
     const onAddProcess = (process) => {
@@ -182,12 +172,14 @@ export default {
           property.default_value;
       }
 
-      processes.value = [...processes.value, newProcess];
+      //   processes.value = [...processes.value, newProcess];
+      existingProcesses.value.push(newProcess);
     };
 
     return {
       modalIsVisible,
       processes,
+      existingProcesses,
       onAddProcess,
     };
   },

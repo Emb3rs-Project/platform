@@ -24,11 +24,11 @@
       </label>
     </div>
     <div class="sm:col-span-2">
-      <select-menu
+      <SelectMenu
         v-model="selectedLocation"
         :options="locations"
         :disabled="selectedTemplate ? false : true"
-      ></select-menu>
+      />
     </div>
   </div>
 
@@ -45,21 +45,19 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="property.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="data[property.property.symbolic_name]"
             :unit="property.unit.symbol"
             :placeholder="property.property.name"
             :required="property.required"
-          >
-          </text-input>
+          />
         </div>
         <div v-else-if="property.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="data[property.property.symbolic_name]"
             :options="property.property.data.options"
             :required="property.required"
-          >
-          </select-menu>
+          />
         </div>
       </div>
     </div>

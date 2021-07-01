@@ -119,6 +119,9 @@ class SourceController extends Controller
         [
             $templates,
             $equipments,
+            $equipmentsCategories,
+            $processes,
+            $processesCategories,
             $locations,
             $instance
         ] = app(EditsSources::class)->edit($request->user(), $id);
@@ -128,31 +131,13 @@ class SourceController extends Controller
             "props" => [
                 "templates" => $templates,
                 "equipments" => $equipments,
+                "equipmentsCategories" => $equipmentsCategories,
+                "processes" => $processes,
+                "processesCategories" => $processesCategories,
                 "locations" => $locations,
                 "instance" => $instance
             ]
         ];
-
-        // [
-        //     $templates,
-        //     $equipments,
-        //     $equipmentsCategories,
-        //     $processes,
-        //     $processesCategories,
-        //     $locations
-        // ] = app(CreatesSources::class)->create($request->user());
-
-        // return [
-        //     "slideOver" => "Objects/Sources/SourceEdit",
-        //     "props" => [
-        //         "templates" => $templates,
-        //         "equipments" => $equipments,
-        //         "equipmentsCategories" => $equipmentsCategories,
-        //         "processes" => $processes,
-        //         "processesCategories" => $processesCategories,
-        //         "locations" => $locations,
-        //     ]
-        // ];
     }
 
     /**
