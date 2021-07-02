@@ -16,10 +16,12 @@ class IndexUserMapData implements IndexesUsersMapData
      */
     public function index($user)
     {
+
+        // Its really annoying when it returns the wrong thing whene it shouldnt
         $data = User::whereId($user->id)->get();
 
-        Log::alert($data->get('id'));
+        Log::alert($data);
 
-        return $data->only('data');
+        return;
     }
 }
