@@ -1,10 +1,13 @@
 <template>
-  <div id="map" class="h-screen min-w-full z-0"></div>
+  <div
+    id="map"
+    class="min-h-screen min-w-full z-0"
+  ></div>
 </template>
 
 <script>
 import mapUtils from "@/Utils/map.js";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import L from "leaflet";
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -14,16 +17,17 @@ import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 import { useStore } from "vuex";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
   props: {
-    centerValue: {
+    center: {
       type: Array,
     },
   },
+
+  emits: ["moveΕnd"],
+
   setup(props, { emit }) {
-    // TODO: Convert to VUEX!!!
     const store = useStore();
 
     const map = ref(null);
@@ -50,10 +54,10 @@ export default {
 
     const center = computed({
       get() {
-        return props.centerValue;
+        return props.center;
       },
       set(value) {
-        emit("onMove", value);
+        store.dispatch("map/setCenter", { center: value });
       },
     });
 
@@ -168,9 +172,8 @@ export default {
       map.value.removeLayer(value);
       mapObjects.value.links.splice(segmentIndex, 1);
       if (mapObjects.value.links.length > 0)
-        currentSegment.from = mapObjects.value.links[
-          segmentIndex - 1
-        ].getLatLngs()[1];
+        currentSegment.from =
+          mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
       else {
         currentSegment.from = currentSegment.start;
       }
@@ -334,15 +337,14 @@ export default {
       // throws errors
       // store.dispatch("map/setMap", { map: map.value });
 
-      map.value.on(
-        "moveend",
-        ({ target }) => (center.value = target.getCenter())
-      );
+      map.value.on("moveend", ({ target }) => {
+        center.value = target.getCenter();
+      });
 
       refreshInstance();
     });
 
-    store.subscribeAction(({ type, payload }) => {
+    const unsubscribeAction = store.subscribeAction(({ type, payload }) => {
       if (type === "map/centerAt") {
         const { marker } = payload;
         onCenterLocation(marker);
@@ -352,6 +354,11 @@ export default {
         mapUtils.removeAllInstances(map.value, mapObjects.value);
         refreshInstance();
       }
+    });
+
+    onBeforeUnmount(() => {
+      map.value.off("moveend");
+      unsubscribeAction();
     });
 
     return {

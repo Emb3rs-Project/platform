@@ -20,6 +20,7 @@ use App\Http\Controllers\Embers\ShowNewNotificationsController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
+use App\Http\Controllers\Embers\UserMapDataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,6 +52,10 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    // User
+    Route::get('/user/map-data', [UserMapDataController::class, 'index'])->name('user.mapData.index');
+    Route::post('/user/map-data', [UserMapDataController::class, 'store'])->name('user.mapData.store');
+
     // Dashboard
     Route::resource('/dashboard', DashboardController::class)->names(createResourceNames('dashboard'));
 

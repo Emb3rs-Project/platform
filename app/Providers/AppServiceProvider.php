@@ -54,6 +54,8 @@ use App\Actions\Embers\TeamRoles\UpdateTeamRole;
 use App\Actions\Embers\Teams\AddTeamMember;
 use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Actions\Embers\Teams\UpdateTeamMemberRole;
+use App\Actions\Embers\Users\IndexUserMapData;
+use App\Actions\Embers\Users\StoreUserMapData;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 
@@ -134,6 +136,9 @@ class AppServiceProvider extends ServiceProvider
         Embers::updateTeamMemberRolesUsing(UpdateTeamMemberRole::class);
 
         Embers::indexNotificationsUsing(IndexNotification::class);
-        Embers::MarkAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
+        Embers::markAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
+
+        Embers::indexUsersMapDataUsing(IndexUserMapData::class);
+        Embers::storeUsersMapDataUsing(StoreUserMapData::class);
     }
 }

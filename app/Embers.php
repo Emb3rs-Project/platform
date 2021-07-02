@@ -54,6 +54,8 @@ use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
+use App\Contracts\Embers\Users\IndexesUsersMapData;
+use App\Contracts\Embers\Users\StoresUsersMapData;
 
 class Embers
 {
@@ -639,8 +641,30 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function MarkAllNotificationsAsReadUsing(string $class): void
+    public static function markAllNotificationsAsReadUsing(string $class): void
     {
         app()->singleton(MarksAllNotificationsAsRead::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all User's Map data.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexUsersMapDataUsing(string $class): void
+    {
+        app()->singleton(IndexesUsersMapData::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to create User's Map data.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeUsersMapDataUsing(string $class): void
+    {
+        app()->singleton(StoresUsersMapData::class, $class);
     }
 }

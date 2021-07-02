@@ -23,7 +23,7 @@
     </div>
 
     <amazing-map
-      :centerValue="[38.7181959, -9.1975417]"
+      :center="[38.7181959, -9.1975417]"
       ref="map"
     ></amazing-map>
 
