@@ -39,9 +39,9 @@ const actions = {
     commit('setCenter', center);
   },
   getCenter: async ({ commit }) => {
-    const res = await window.axios.get(route('user.mapData.index'));
+    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
 
-    commit('setCenter', res.map.center);
+    commit('setCenter', res[0].data.map.center);
   },
 };
 
@@ -52,7 +52,7 @@ const mutations = {
   setLink: (state, { id, link }) => state.currentLinks[id] = link,
   unsetLink: (state, id) => delete state.currentLinks[id],
   startLinks: (state) => state.currentLinks = {},
-  setCenter: (state) => state.center
+  setCenter: (state, center) => state.center = [center.lat, center.lng]
 };
 
 

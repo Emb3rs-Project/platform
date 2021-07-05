@@ -7,6 +7,13 @@ use Illuminate\Contracts\Validation\Rule;
 class Coordinates implements Rule
 {
     /**
+     * The regex responsible for checking the value.
+     *
+     * @var string
+     */
+    private string $pattern = "/^(-?\d+(\.\d+)?).\s*(-?\d+(\.\d+)?)$/";
+
+    /**
      * Create a new rule instance.
      *
      * @return void
@@ -25,10 +32,7 @@ class Coordinates implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match(
-            "/^[-]?((([0-8]?[0-9])(\.(\d{1,8}))?)|(90(\.0+)?)),\s?[-]?((((1[0-7][0-9])|([0-9]?[0-9]))(\.(\d{1,8}))?)|180(\.0+)?)$/",
-            $value
-        );
+        return preg_match($this->pattern, $value);
     }
 
     /**
@@ -38,8 +42,6 @@ class Coordinates implements Rule
      */
     public function message()
     {
-        return 'The :attribute must be a valid set of latitude and
-                longitude coordinates, with a limit of 8 digits after a
-                decimal point';
+        return 'The :attribute must be a valid set of latitude and longitude coordinates.';
     }
 }

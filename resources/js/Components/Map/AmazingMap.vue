@@ -18,14 +18,15 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 import { useStore } from "vuex";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 
+const DEFAULT_COORDS = [40.7181959, -9.1975417];
+
 export default {
   props: {
     center: {
       type: Array,
+      default: [],
     },
   },
-
-  emits: ["moveΕnd"],
 
   setup(props, { emit }) {
     const store = useStore();
@@ -52,9 +53,19 @@ export default {
       start: null,
     };
 
+    const sessionCenter = computed(() => store.getters["map/center"]);
+
     const center = computed({
       get() {
-        return props.center;
+        if (!props.center.length) {
+          store.dispatch("map/getCenter").then(() => {
+            if (!sessionCenter.value.length) return DEFAULT_COORDS;
+
+            return sessionCenter.value;
+          });
+        } else {
+          return props.center;
+        }
       },
       set(value) {
         store.dispatch("map/setCenter", { center: value });
@@ -327,6 +338,7 @@ export default {
       });
 
     onMounted(() => {
+      if (!center.value) return;
       map.value = mapUtils.init("map", center.value, {
         drawControl: true,
         contextmenu: true,
@@ -334,8 +346,6 @@ export default {
         contextmenuItems: defautMapContext,
       });
       window.map = map.value;
-      // throws errors
-      // store.dispatch("map/setMap", { map: map.value });
 
       map.value.on("moveend", ({ target }) => {
         center.value = target.getCenter();

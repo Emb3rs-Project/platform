@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Users;
 use App\Contracts\Embers\Users\StoresUsersMapData;
 use App\Models\User;
 use App\Rules\Coordinates;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StoreUserMapData implements StoresUsersMapData
@@ -20,7 +21,7 @@ class StoreUserMapData implements StoresUsersMapData
     {
         $this->validate($input);
 
-        $data = $this->save($user, $input);
+        $data = $this->save($user->id, $input);
 
         return $data;
     }
@@ -34,19 +35,19 @@ class StoreUserMapData implements StoresUsersMapData
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'map' => ['required', 'array'],
-            'center.*' => ['required', 'numeric', new Coordinates]
+            'map.center.lat' => ['required', 'numeric', new Coordinates],
+            'map.center.lng' => ['required', 'numeric', new Coordinates]
         ])->validate();
     }
 
     /**
      * Save the map data in the DB.
      *
-     * @param  mixed  $user
+     * @param  int  $userId
      * @param  array  $input
      * @return Instance
      */
-    protected function save($user, array $input)
+    protected function save(int $userId, array $input)
     {
         $data = [
             'map' => [
@@ -57,11 +58,11 @@ class StoreUserMapData implements StoresUsersMapData
             ]
         ];
 
-        $dbUser = User::whereId($user->id)->first();
+        $user = User::whereId($userId)->first();
 
-        $dbUser->data = $data;
+        $user->data = $data;
 
-        $dbUser->save();
+        $user->save();
 
         return $data;
     }

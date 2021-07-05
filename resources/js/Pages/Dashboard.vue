@@ -1,9 +1,6 @@
 <template>
-  <app-layout>
-    <AmazingMap
-      ref="map"
-      :center="[38.7181959, -9.1975417]"
-    />
+  <AppLayout>
+    <AmazingMap ref="map" />
     <div class="h-full fixed right-0 top-0 bot-0 z-10 shadow-md bg-gray-100">
       <div class="flex flex-1 flex-col pt-10 items-center w-16">
         <div class="my-4 text-center">
@@ -20,7 +17,7 @@
         </div>
       </div>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>

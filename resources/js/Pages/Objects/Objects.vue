@@ -22,10 +22,7 @@
       </svg>
     </div>
 
-    <amazing-map
-      :center="[38.7181959, -9.1975417]"
-      ref="map"
-    ></amazing-map>
+    <AmazingMap ref="map" />
 
     <component
       class="z-30"

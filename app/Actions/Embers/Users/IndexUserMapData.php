@@ -16,12 +16,9 @@ class IndexUserMapData implements IndexesUsersMapData
      */
     public function index($user)
     {
+        $data = User::whereId($user->id)->first('data');
+        $data->setAppends([]);
 
-        // Its really annoying when it returns the wrong thing whene it shouldnt
-        $data = User::whereId($user->id)->get();
-
-        Log::alert($data);
-
-        return;
+        return $data;
     }
 }
