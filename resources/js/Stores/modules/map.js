@@ -5,14 +5,16 @@ const _state = () => ({
   selectedMarker: null,
   selectedMarkerColor: 'green',
   currentLinks: {},
-  center: []
+  center: [],
+  zoom: null,
 });
 
 const getters = {
   selectedMarker: (state) => state.selectedMarker,
   selectedMarkerColor: (state) => state.selectedMarkerColor,
   currentLinks: (state) => state.currentLinks,
-  center: (state) => state.center
+  center: (state) => state.center,
+  zoom: (state) => state.zoom,
 };
 
 const actions = {
@@ -29,19 +31,27 @@ const actions = {
     const links = state.currentLinks
     if (links[id]) commit("unsetLink", id)
   },
-  setCenter: async ({ commit }, { center }) => {
-    await window.axios.post(route('user.mapData.store'), {
-      map: {
-        center: center
-      }
-    });
-
-    commit('setCenter', center);
-  },
   getCenter: async ({ commit }) => {
     const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
 
-    commit('setCenter', res[0].data.map.center);
+    if (res[0].data.map.center) commit('setCenter', res[0].data.map.center);
+  },
+  getZoom: async ({ commit }) => {
+    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
+
+    if (res[0].data.map.zoom) commit('setZoom', res[0].data.map.zoom);
+  },
+  setData: async (ctx, payload) => {
+    console.log("map.js", payload.center);
+    await window.axios.post(route('user.mapData.store'), {
+      map: {
+        center: payload.center ?? ctx.state.center,
+        zoom: payload.zoom ?? ctx.state.zoom
+      }
+    });
+
+    if (payload.center) ctx.commit('setCenter', payload.center);
+    if (payload.zoom) ctx.commit('setZoom', payload.zoom);
   },
 };
 
@@ -52,7 +62,8 @@ const mutations = {
   setLink: (state, { id, link }) => state.currentLinks[id] = link,
   unsetLink: (state, id) => delete state.currentLinks[id],
   startLinks: (state) => state.currentLinks = {},
-  setCenter: (state, center) => state.center = [center.lat, center.lng]
+  setCenter: (state, center) => state.center = [center.lat, center.lng],
+  setZoom: (state, zoom) => state.zoom = zoom
 };
 
 

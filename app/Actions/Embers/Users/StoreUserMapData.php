@@ -36,7 +36,8 @@ class StoreUserMapData implements StoresUsersMapData
     {
         Validator::make($input, [
             'map.center.lat' => ['required', 'numeric', new Coordinates],
-            'map.center.lng' => ['required', 'numeric', new Coordinates]
+            'map.center.lng' => ['required', 'numeric', new Coordinates],
+            // 'map.zoom' => ['required', 'numeric', 'min:0', 'max:18']
         ])->validate();
     }
 
@@ -54,7 +55,8 @@ class StoreUserMapData implements StoresUsersMapData
                 'center' => [
                     'lat' => $input['map']['center']['lat'],
                     'lng' => $input['map']['center']['lng']
-                ]
+                ],
+                // 'zoom' => $input['map']['zoom']
             ]
         ];
 

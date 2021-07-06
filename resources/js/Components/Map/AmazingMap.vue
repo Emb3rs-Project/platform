@@ -8,23 +8,25 @@
 <script>
 import mapUtils from "@/Utils/map.js";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
 import L from "leaflet";
+
 import "beautifymarker";
 import "leaflet-contextmenu";
-
 // CSS for Markers
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
-import { useStore } from "vuex";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
-
-const DEFAULT_COORDS = [40.7181959, -9.1975417];
 
 export default {
   props: {
     center: {
       type: Array,
       default: [],
+    },
+    zoom: {
+      type: Number,
+      default: -1,
     },
   },
 
@@ -40,6 +42,9 @@ export default {
 
     const instances = ref([]);
 
+    store.dispatch("map/getCenter");
+    store.dispatch("map/getZoom");
+
     watch(
       instances,
       (_i) => {
@@ -53,22 +58,26 @@ export default {
       start: null,
     };
 
-    const sessionCenter = computed(() => store.getters["map/center"]);
-
     const center = computed({
       get() {
-        if (!props.center.length) {
-          store.dispatch("map/getCenter").then(() => {
-            if (!sessionCenter.value.length) return DEFAULT_COORDS;
+        // if (!props.center.length) return store.getters["map/center"];
+        if (!props.center.length) return store.state.map.center;
 
-            return sessionCenter.value;
-          });
-        } else {
-          return props.center;
-        }
+        return props.center;
       },
       set(value) {
-        store.dispatch("map/setCenter", { center: value });
+        store.dispatch("map/setData", { center: value });
+      },
+    });
+
+    const zoom = computed({
+      get() {
+        if (props.zoom === -1) return store.state.map.zoom;
+
+        return props.zoom;
+      },
+      set(value) {
+        store.dispatch("map/setData", { zoom: value });
       },
     });
 
@@ -337,9 +346,8 @@ export default {
         instances.value = data.instances;
       });
 
-    onMounted(() => {
-      if (!center.value) return;
-      map.value = mapUtils.init("map", center.value, {
+    onMounted(async () => {
+      map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
         contextmenu: true,
         contextmenuWidth: 140,
@@ -348,7 +356,12 @@ export default {
       window.map = map.value;
 
       map.value.on("moveend", ({ target }) => {
+        // window._.debounce(() => (center.value = target.getCenter()), 500);
         center.value = target.getCenter();
+      });
+      map.value.on("zoomend", ({ target }) => {
+        // window._.debounce(() => (zoom.value = target.getZoom()), 500);
+        zoom.value = target.getZoom();
       });
 
       refreshInstance();
