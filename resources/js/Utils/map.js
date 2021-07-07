@@ -8,9 +8,7 @@ export default {
     iconAnchor: [10, 20],
   }),
   init(mapId, center = [38.7181959, -9.1975417], zoom, options = { drawControl: true }) {
-    console.log("MAPUTILS", center, zoom);
-
-    const map = L.map(mapId, options).setView(center.length ? center : [38.7181959, -9.1975417], zoom ?? 13);
+    const map = L.map(mapId, options).setView(center ?? [38.7181959, -9.1975417], zoom ?? 13);
     map.doubleClickZoom.disable();
 
     L.tileLayer(

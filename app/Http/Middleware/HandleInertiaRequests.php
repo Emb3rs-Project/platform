@@ -41,11 +41,8 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             // This is being used to override the 'user' prop from ShareInertiaData
-            // 'user' => fn () => $request->user()
-            //     ? count($request->user()->unreadNotifications)
-            //     : null,
             'user' => function () use ($request) {
-                if (! $request->user()) {
+                if (!$request->user()) {
                     return;
                 }
 
@@ -54,10 +51,10 @@ class HandleInertiaRequests extends Middleware
                         'current_team.instances'
                     ]),
                     array_filter([
-                    'all_teams' => Jetstream::hasTeamFeatures() ? $request->user()->allTeams() : null
-                ]),
+                        'all_teams' => Jetstream::hasTeamFeatures() ? $request->user()->allTeams() : null
+                    ]),
                     [
-                        'two_factor_enabled' => ! is_null($request->user()->two_factor_secret)
+                        'two_factor_enabled' => !is_null($request->user()->two_factor_secret)
                     ]
                 );
             },

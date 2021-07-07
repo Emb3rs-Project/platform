@@ -42,16 +42,19 @@ const actions = {
     if (res[0].data.map.zoom) commit('setZoom', res[0].data.map.zoom);
   },
   setData: async (ctx, payload) => {
-    console.log("map.js", payload.center);
-    await window.axios.post(route('user.mapData.store'), {
-      map: {
-        center: payload.center ?? ctx.state.center,
-        zoom: payload.zoom ?? ctx.state.zoom
-      }
-    });
+    const map = {};
 
-    if (payload.center) ctx.commit('setCenter', payload.center);
-    if (payload.zoom) ctx.commit('setZoom', payload.zoom);
+    if (payload.center) {
+      map.center = payload.center;
+      ctx.commit('setCenter', payload.center);
+    }
+
+    if (payload.zoom) {
+      map.zoom = payload.zoom;
+      ctx.commit('setZoom', payload.zoom);
+    }
+
+    await window.axios.post(route('user.mapData.store'), { map });
   },
 };
 

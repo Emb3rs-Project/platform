@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Users;
 use App\Contracts\Embers\Users\StoresUsersMapData;
 use App\Models\User;
 use App\Rules\Coordinates;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,9 +36,9 @@ class StoreUserMapData implements StoresUsersMapData
     protected function validate(array $input)
     {
         Validator::make($input, [
-            'map.center.lat' => ['required', 'numeric', new Coordinates],
-            'map.center.lng' => ['required', 'numeric', new Coordinates],
-            // 'map.zoom' => ['required', 'numeric', 'min:0', 'max:18']
+            'map.center.lat' => ['filled', 'numeric', new Coordinates],
+            'map.center.lng' => ['filled', 'numeric', new Coordinates],
+            'map.zoom' => ['filled', 'numeric', 'min:0', 'max:18']
         ])->validate();
     }
 
@@ -50,17 +51,26 @@ class StoreUserMapData implements StoresUsersMapData
      */
     protected function save(int $userId, array $input)
     {
-        $data = [
-            'map' => [
-                'center' => [
-                    'lat' => $input['map']['center']['lat'],
-                    'lng' => $input['map']['center']['lng']
-                ],
-                // 'zoom' => $input['map']['zoom']
-            ]
-        ];
-
         $user = User::whereId($userId)->first();
+
+        $data = $user->data;
+
+        Arr::add($data, 'map', []);
+
+        if (Arr::has($input, 'map.center.lat') && Arr::has($input, 'map.center.lng')) {
+            $center = [
+                'lat' => Arr::get($input, 'map.center.lat'),
+                'lng' => Arr::get($input, 'map.center.lng'),
+            ];
+
+            Arr::set($data, 'map.center', $center);
+        };
+
+        if (Arr::has($input, 'map.zoom')) {
+            $zoom =  Arr::get($input, 'map.zoom');
+
+            Arr::set($data, 'map.zoom', $zoom);
+        }
 
         $user->data = $data;
 

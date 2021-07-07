@@ -6,11 +6,12 @@
 </template>
 
 <script>
-import mapUtils from "@/Utils/map.js";
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
 import L from "leaflet";
+import { usePage } from "@inertiajs/inertia-vue3";
+import mapUtils from "@/Utils/map.js";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
 
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -42,9 +43,6 @@ export default {
 
     const instances = ref([]);
 
-    store.dispatch("map/getCenter");
-    store.dispatch("map/getZoom");
-
     watch(
       instances,
       (_i) => {
@@ -60,8 +58,9 @@ export default {
 
     const center = computed({
       get() {
-        // if (!props.center.length) return store.getters["map/center"];
-        if (!props.center.length) return store.state.map.center;
+        const user = usePage().props.value.user;
+
+        if (!props.center.length) return user.data.map.center;
 
         return props.center;
       },
@@ -72,7 +71,9 @@ export default {
 
     const zoom = computed({
       get() {
-        if (props.zoom === -1) return store.state.map.zoom;
+        const user = usePage().props.value.user;
+
+        if (props.zoom === -1) return user.data.map.zoom;
 
         return props.zoom;
       },
@@ -381,6 +382,7 @@ export default {
 
     onBeforeUnmount(() => {
       map.value.off("moveend");
+      map.value.off("zoomend");
       unsubscribeAction();
     });
 

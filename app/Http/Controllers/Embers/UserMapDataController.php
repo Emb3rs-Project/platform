@@ -21,7 +21,7 @@ class UserMapDataController extends Controller
     {
         $mapData = app(IndexesUsersMapData::class)->index($request->user());
 
-        return response()->json([$mapData]);
+        return response()->json($mapData);
     }
 
     /**
@@ -35,6 +35,5 @@ class UserMapDataController extends Controller
         app(StoresUsersMapData::class)->store($request->user(), $request->all());
 
         return Redirect::route('user.mapData.index');
-        // return response('', '201');
     }
 }

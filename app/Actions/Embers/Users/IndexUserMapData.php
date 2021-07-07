@@ -4,6 +4,7 @@ namespace App\Actions\Embers\Users;
 
 use App\Contracts\Embers\Users\IndexesUsersMapData;
 use App\Models\User;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class IndexUserMapData implements IndexesUsersMapData
@@ -16,9 +17,8 @@ class IndexUserMapData implements IndexesUsersMapData
      */
     public function index($user)
     {
-        $data = User::whereId($user->id)->first('data');
-        $data->setAppends([]);
+        $data = User::whereId($user->id)->first()->toArray();
 
-        return $data;
+        return Arr::only($data, 'data');
     }
 }
