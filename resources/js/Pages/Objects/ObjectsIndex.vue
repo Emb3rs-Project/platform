@@ -1,5 +1,5 @@
 <template>
-  <slide-over
+  <SlideOver
     v-model="open"
     :title="`Objects`"
     subtitle="A list of all the Objects for the currently selected Instituion"
@@ -8,15 +8,15 @@
     subtitleTextColor="text-gray-100"
   >
     <div class="flex justify-end m-3">
-      <filter-dropdown
+      <FilterDropdown
         v-model="selectedObject"
         :options="filterOptions"
-      ></filter-dropdown>
+      ></FilterDropdown>
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
       <div v-if="objects?.length">
-        <amazing-index-table
+        <AmazingIndexTable
           v-model="objects"
           :columns="tableColumns"
         >
@@ -70,7 +70,7 @@
                   onActionRequest(`${selectedObject.paths.details}`, item.id)
                 "
               >
-                <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                <DetailIcon class="text-gray-500 font-medium text-sm w-5" />
               </button>
               <button
                 class="focus:outline-none"
@@ -78,17 +78,17 @@
                   onActionRequest(`${selectedObject.paths.edit}`, item.id)
                 "
               >
-                <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                <EditIcon class="text-gray-500 font-medium text-sm w-5" />
               </button>
               <button class="focus:outline-none">
-                <trash-icon
+                <TrashIcon
                   class="text-red-500 font-medium text-sm w-5"
                   @click="showModal(item, DeleteModal)"
-                ></trash-icon>
+                />
               </button>
             </td>
           </template>
-        </amazing-index-table>
+        </AmazingIndexTable>
       </div>
       <div
         v-else
@@ -104,7 +104,7 @@
       <primary-button @click="onActionRequest(`${selectedObject.paths.create}`)">
         Create New {{ getSingular(selectedObject.title) }}</primary-button>
     </template>
-  </slide-over>
+  </SlideOver>
 
   <component
     class="z-50"
@@ -161,7 +161,9 @@ export default {
     const store = useStore();
 
     const tableColumns = ["name", "location", "actions"];
-    const selectedObject = ref(filterOptions[0]);
+    const selectedObject = ref(
+      store.state.objects.filterOption ?? filterOptions[0]
+    );
 
     const objects = ref(null);
     const filterDropdown = ref(false);
@@ -181,25 +183,31 @@ export default {
     watch(
       selectedObject,
       (current) => {
-        if (current.title === "Sinks") {
-          objects.value = props.instances.filter(
-            (i) => i.template?.category?.type === "sink"
-          );
-          return;
-        }
-        if (current.title === "Sources") {
-          objects.value = props.instances.filter(
-            (i) => i.template?.category?.type === "source"
-          );
-          return;
-        }
-        if (current.title === "Links") {
-          objects.value = props.links;
-          return;
+        switch (current.title) {
+          case "Sources":
+            objects.value = props.instances.filter(
+              (i) => i.template?.category?.type === "source"
+            );
+            break;
+          case "Sinks":
+            objects.value = props.instances.filter(
+              (i) => i.template?.category?.type === "sink"
+            );
+            break;
+          case "Links":
+            objects.value = props.links;
+            break;
+
+          default:
+            break;
         }
       },
       { immediate: true }
     );
+
+    watch(selectedObject, (current) => {
+      store.commit("objects/setFilterOption", current.title);
+    });
 
     const getSingular = (val) => pluralize.singular(val);
 
