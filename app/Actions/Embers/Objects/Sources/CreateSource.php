@@ -22,7 +22,7 @@ class CreateSource implements CreatesSources
     {
         $this->authorize($user);
 
-        $sourceCategories = Category::whereType('source')->get()->pluck('id');
+        $sourceCategories = Category::whereType('source')->get('id');
 
         $equipmentCategories = Category::whereType('equipment')->get();
 

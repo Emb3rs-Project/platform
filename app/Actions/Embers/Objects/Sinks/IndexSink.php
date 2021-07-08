@@ -22,9 +22,9 @@ class IndexSink implements IndexesSinks
     {
         $this->authorize($user);
 
-        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get('id');
 
-        $templates = Template::whereIn('category_id', $sinkCategories)->get()->pluck('id');
+        $templates = Template::whereIn('category_id', $sinkCategories)->get('id');
 
         $teamInstances = $user->currentTeam->instances->pluck('id');
 

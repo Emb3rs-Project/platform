@@ -21,22 +21,18 @@ class DashboardController extends Controller
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
 
         $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $sources = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])
             ->get();
 
         $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])

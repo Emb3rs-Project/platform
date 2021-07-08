@@ -22,7 +22,7 @@ class IndexSource implements IndexesSources
     {
         $this->authorize($user);
 
-        $sourceCategories = Category::whereType('source')->get()->pluck('id');
+        $sourceCategories = Category::whereType('source')->get('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
             ->with([
@@ -30,14 +30,13 @@ class IndexSource implements IndexesSources
                 'templateProperties.unit',
                 'templateProperties.property'
             ])
-            ->get()
-            ->pluck('id');
+            ->get('id');
 
         $teamInstances = $user->currentTeam->instances->pluck('id');
 
         $instances = Instance::whereIn('template_id', $sourceTemplates)
             ->whereIn('id', $teamInstances)
-            ->with([ 'location', 'template', 'template.category'])
+            ->with(['location', 'template', 'template.category'])
             ->get();
 
         return $instances;

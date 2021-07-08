@@ -12,11 +12,10 @@ parameters:
     ignoreErrors:
 
     excludePaths:
+        - app/Nova/Resource.php
 
-    noUnnecessaryCollectionCall: true
     checkMissingIterableValueType: false
     checkOctaneCompatibility: true
     checkFunctionNameCase: true
     checkInternalClassCaseSensitivity: true
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
-    checkUninitializedProperties: true

@@ -22,7 +22,7 @@ class DispatchCustomAction
      *
      * @param \Laravel\Nova\Actions\Action $action
      * @param \Laravel\Nova\Fields\ActionFields $actionFields
-     * @param $models
+     * @param mixed $models
      * @param int $user_id
      * @throws MissingActionHandlerException
      * @throws \Throwable
@@ -56,10 +56,10 @@ class DispatchCustomAction
      *
      * @param \Laravel\Nova\Actions\Action $action
      * @param string $method
-     * @param $fields
+     * @param ActionFields $fields
      * @param \Illuminate\Support\Collection $models
-     * @param $user_id
-     * @return void
+     * @param int $user_id
+     * @return mixed
      * @throws \Throwable
      */
     protected static function queueForModels(Action $action, $method, ActionFields $fields, $models, $user_id)
@@ -87,9 +87,9 @@ class DispatchCustomAction
      *
      * @param \Laravel\Nova\Actions\Action $action
      * @param string $method
-     * @param $fields
+     * @param ActionFields $fields
      * @param \Illuminate\Support\Collection $models
-     * @param $user_id
+     * @param int $user_id
      * @return void
      * @throws \Throwable
      */
@@ -110,7 +110,7 @@ class DispatchCustomAction
      * Create a new action events for models
      *
      * @param Action $action
-     * @param $batchId
+     * @param int $batchId
      * @param \Illuminate\Support\Collection $models
      * @param int $user_id
      * @param string $status

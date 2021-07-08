@@ -22,9 +22,9 @@ class CreateSink implements CreatesSinks
     {
         $this->authorize($user);
 
-        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get('id');
 
-        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
+        $equipmentCategories = Category::whereType('equipment')->get('id');
 
         $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
             ->with([
