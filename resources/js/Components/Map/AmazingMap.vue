@@ -354,16 +354,17 @@ export default {
         contextmenuWidth: 140,
         contextmenuItems: defautMapContext,
       });
+
       window.map = map.value;
 
-      map.value.on("moveend", ({ target }) => {
-        // window._.debounce(() => (center.value = target.getCenter()), 500);
-        center.value = target.getCenter();
-      });
-      map.value.on("zoomend", ({ target }) => {
-        // window._.debounce(() => (zoom.value = target.getZoom()), 500);
-        zoom.value = target.getZoom();
-      });
+      map.value.on(
+        "moveend",
+        _.debounce(({ target }) => (center.value = target.getCenter()), 700)
+      );
+      map.value.on(
+        "zoomend",
+        _.debounce(({ target }) => (zoom.value = target.getZoom()), 700)
+      );
 
       refreshInstance();
     });
