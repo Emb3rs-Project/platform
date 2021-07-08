@@ -15,7 +15,7 @@ class TeamInvitationController extends Controller
      * Accept a team invitation.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Jetstream\TeamInvitation  $invitation
+     * @param  TeamInvitation  $invitation
      * @return \Illuminate\Http\RedirectResponse
      */
     public function accept(Request $request, TeamInvitation $invitation)
@@ -23,8 +23,7 @@ class TeamInvitationController extends Controller
         app(AddsTeamMembers::class)->add(
             $invitation->team->owner,
             $invitation->team,
-            $invitation->email,
-            $invitation->team_role_id
+            $request->all()
         );
 
         $invitation->delete();
@@ -38,12 +37,12 @@ class TeamInvitationController extends Controller
      * Cancel the given team invitation.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Jetstream\TeamInvitation  $invitation
+     * @param  TeamInvitation  $invitation
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, TeamInvitation $invitation)
     {
-        if (! Gate::forUser($request->user())->check('removeTeamMember', $invitation->team)) {
+        if (!Gate::forUser($request->user())->check('removeTeamMember', $invitation->team)) {
             throw new AuthorizationException();
         }
 

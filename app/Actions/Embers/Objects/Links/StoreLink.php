@@ -6,7 +6,6 @@ use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\EmbersPermissionable;
 use App\Models\GeoSegment;
 use App\Models\Link;
-use Illuminate\Support\Facades\Validator;
 
 class StoreLink implements StoresLinks
 {
@@ -17,7 +16,7 @@ class StoreLink implements StoresLinks
      *
      * @param  mixed  $user
      * @param  array $input
-     * @return Instance
+     * @return mixed
      */
     public function store($user, array $input)
     {
@@ -52,7 +51,7 @@ class StoreLink implements StoresLinks
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return Link
      */
     protected function save($user, array $input)
     {

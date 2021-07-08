@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Embers;
 
-use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\Contracts\Embers\Simulations\DestroysSimulations;
 use App\Contracts\Embers\Simulations\EditsSimulations;
@@ -12,7 +11,6 @@ use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
@@ -22,7 +20,7 @@ class ProjectSimulationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request, int $projectId)
     {
@@ -42,7 +40,7 @@ class ProjectSimulationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request, int $projectId)
     {
@@ -76,13 +74,13 @@ class ProjectSimulationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, int $projectId)
     {
         app(StoresSimulations::class)->store($request->user(), $projectId, $request->all());
 
-        return Redirect::route('projects.simulations.index', $projectId);
+        return redirect()->route('projects.simulations.index', $projectId);
     }
 
     /**
@@ -91,7 +89,7 @@ class ProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, int $projectId, int $simulationId)
     {
@@ -112,7 +110,7 @@ class ProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit(Request $request, int $projectId, int $simulationId)
     {
@@ -133,7 +131,7 @@ class ProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, int $projectId, int $simulationId)
     {
@@ -144,7 +142,7 @@ class ProjectSimulationController extends Controller
             $request->all()
         );
 
-        return Redirect::route('projects.simulations.show', [
+        return redirect()->route('projects.simulations.show', [
             $projectId,
             $updatedSimulation->id
         ]);
@@ -156,12 +154,12 @@ class ProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, int $projectId, int $simulationId)
     {
         app(DestroysSimulations::class)->destroy($request->user(), $projectId, $simulationId);
 
-        return Redirect::route('projects.simulations.index', $projectId);
+        return redirect()->route('projects.simulations.index', $projectId);
     }
 }

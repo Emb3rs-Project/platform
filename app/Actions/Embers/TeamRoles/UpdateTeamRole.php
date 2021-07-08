@@ -20,7 +20,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
      * @param  mixed  $user
      * @param  int  $id
      * @param  array  $input
-     * @return Instance
+     * @return TeamRole
      */
     public function update($user, int $id, array $input)
     {
@@ -56,7 +56,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
             'permissions' => ['filled', 'array'],
             'permissions.*' => ['required', 'uuid', 'distinct', 'exists:permissions,friendly_id'],
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
@@ -64,7 +64,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
      *
      * @param  TeamRole  $role
      * @param  array  $input
-     * @return Project
+     * @return TeamRole
      */
     protected function save(TeamRole $role, array $input)
     {

@@ -18,7 +18,7 @@ class StoreSimulation implements StoresSimulations
      * @param  mixed  $user
      * @param  int  $projectId
      * @param  array  $input
-     * @return Project
+     * @return Simulation
      */
     public function store($user, int $projectId, array $input)
     {
@@ -47,7 +47,7 @@ class StoreSimulation implements StoresSimulations
             'target_id' => ['required', 'string', 'exists:targets,id'],
             'simulation_type_id' => ['required', 'string', 'exists:simulation_types,id']
         ])
-        ->validate();
+            ->validate();
     }
 
     /**

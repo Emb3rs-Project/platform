@@ -43,7 +43,7 @@ class StoreProject implements StoresProjects
             'description' => ['filled', 'string'],
             'location_id' => ['required', 'integer', 'numeric', 'exists:locations,id']
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
@@ -51,7 +51,7 @@ class StoreProject implements StoresProjects
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return Project
      */
     protected function save($user, array $input)
     {
@@ -62,5 +62,7 @@ class StoreProject implements StoresProjects
         ]);
 
         $project->teams()->attach($user->currentTeam);
+
+        return $project;
     }
 }

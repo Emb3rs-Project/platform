@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\Location;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class LocationController extends Controller
@@ -13,7 +12,7 @@ class LocationController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -23,7 +22,7 @@ class LocationController extends Controller
             "locations" => $locations
         ]);
 
-        return Inertia::render('Objects/Locations/LocationIndex', ['locations' => $locations]);
+        // return Inertia::render('Objects/Locations/LocationIndex', ['locations' => $locations]);
     }
 
     /**
@@ -40,7 +39,7 @@ class LocationController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -51,7 +50,7 @@ class LocationController extends Controller
         ]);
 
 
-        return Redirect::route('objects.locations.index');
+        return redirect()->route('objects.locations.index');
     }
 
     /**
@@ -92,12 +91,12 @@ class LocationController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
         Location::destroy($id);
 
-        return redirect::route('objects.locations.index');
+        return redirect()->route('objects.locations.index');
     }
 }

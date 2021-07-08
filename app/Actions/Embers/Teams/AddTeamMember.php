@@ -46,7 +46,6 @@ class AddTeamMember implements AddsTeamMembers
      * Validate the add member operation.
      *
      * @param  mixed  $team
-     * @param  string  $email
      * @param  array  $input
      * @return void
      */

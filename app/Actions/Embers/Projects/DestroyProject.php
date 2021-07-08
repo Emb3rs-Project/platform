@@ -15,7 +15,6 @@ class DestroyProject implements DestroysProjects
      *
      * @param  mixed  $user
      * @param  int  $id
-     * @param  array  $input
      * @return void
      */
     public function destroy($user, int $id)

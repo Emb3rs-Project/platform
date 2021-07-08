@@ -13,13 +13,12 @@ class DestroyTeamRole implements DestroysTeamRoles
     use EmbersPermissionable;
 
     /**
-      * Delete an existing Role from user's current Team.
-      *
-      * @param  mixed  $user
-      * @param  int  $id
-      * @param  array  $input
-      * @return void
-      */
+     * Delete an existing Role from user's current Team.
+     *
+     * @param  mixed  $user
+     * @param  int  $id
+     * @return void
+     */
     public function destroy($user, int $id)
     {
         $this->authorize($user);
@@ -34,7 +33,7 @@ class DestroyTeamRole implements DestroysTeamRoles
     /**
      * Ensure the Role that is about to be deleted is not in use
      *
-     * @param  mixed  role
+     * @param  mixed  $role
      * @return void
      */
     private function ensureRoleIsNotInUse($role): void

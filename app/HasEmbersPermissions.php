@@ -10,7 +10,7 @@ trait HasEmbersPermissions
     /**
      * All permissions names with their corresponding group available.
      *
-     * @return Illuminate\Support\Collection
+     * @return \Illuminate\Support\Collection
      */
     public function getFriendlyPermissions(): Collection
     {

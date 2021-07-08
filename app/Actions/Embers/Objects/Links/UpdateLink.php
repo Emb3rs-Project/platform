@@ -18,7 +18,7 @@ class UpdateLink implements UpdatesLinks
      * @param  mixed  $user
      * @param  int  $id
      * @param  array  $input
-     * @return Instance
+     * @return mixed
      */
     public function update($user, int $id, array $input)
     {
@@ -53,9 +53,9 @@ class UpdateLink implements UpdatesLinks
     /**
      * Save the Sink in the DB.
      *
-     * @param  Instance $sink
+     * @param  Link $link
      * @param  array    $input
-     * @return Instance
+     * @return Link
      */
     protected function save(Link $link, array $input)
     {

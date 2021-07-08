@@ -15,7 +15,7 @@ class ShowLink implements ShowsLinks
      *
      * @param  mixed  $user
      * @param  int  $id
-     * @return Instance
+     * @return mixed
      */
     public function show($user, int $id)
     {

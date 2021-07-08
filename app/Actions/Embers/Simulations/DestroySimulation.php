@@ -17,7 +17,6 @@ class DestroySimulation implements DestroysSimulations
      * @param  mixed  $user
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @param  array  $input
      * @return void
      */
     public function destroy($user, int $projectId, int $simulationId)

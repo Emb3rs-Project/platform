@@ -14,7 +14,7 @@ class IndexLink implements IndexesLinks
      * Display all the available Links.
      *
      * @param  mixed  $user
-     * @return [Instance]
+     * @return mixed
      */
     public function index($user)
     {

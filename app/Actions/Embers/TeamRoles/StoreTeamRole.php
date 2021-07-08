@@ -20,7 +20,7 @@ class StoreTeamRole implements StoresTeamRoles
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return Project
+     * @return TeamRole
      */
     public function store($user, array $input)
     {
@@ -54,7 +54,7 @@ class StoreTeamRole implements StoresTeamRoles
             'permissions' => ['required', 'array'],
             'permissions.*' => ['required', 'uuid', 'distinct', 'exists:permissions,friendly_id'],
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
@@ -62,7 +62,7 @@ class StoreTeamRole implements StoresTeamRoles
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return TeamRole
      */
     protected function save($user, array $input)
     {

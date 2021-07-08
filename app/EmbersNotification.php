@@ -23,14 +23,14 @@ class EmbersNotification extends Notification
     /**
      * The description of the notification.
      *
-     * @var string
+     * @var string|null
      */
     protected string|null $description;
 
     /**
      * The tags of the notification.
      *
-     * @var string
+     * @var  array|null
      */
     protected array|null $tags;
 

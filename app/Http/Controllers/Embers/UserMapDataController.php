@@ -6,8 +6,6 @@ use App\Contracts\Embers\Users\IndexesUsersMapData;
 use App\Contracts\Embers\Users\StoresUsersMapData;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 
 class UserMapDataController extends Controller
 {
@@ -15,7 +13,7 @@ class UserMapDataController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
@@ -28,12 +26,12 @@ class UserMapDataController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         app(StoresUsersMapData::class)->store($request->user(), $request->all());
 
-        return Redirect::route('user.mapData.index');
+        return redirect()->route('user.mapData.index');
     }
 }

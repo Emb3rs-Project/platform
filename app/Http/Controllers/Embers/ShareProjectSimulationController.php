@@ -14,7 +14,7 @@ class ShareProjectSimulationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $projectId
      * @param  int  $simulationId
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke(Request $request, int $projectId, int $simulationId)
     {

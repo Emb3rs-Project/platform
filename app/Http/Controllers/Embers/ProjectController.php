@@ -6,13 +6,11 @@ use App\Contracts\Embers\Projects\CreatesProjects;
 use App\Contracts\Embers\Projects\DestroysProjects;
 use App\Contracts\Embers\Projects\EditsProjects;
 use App\Contracts\Embers\Projects\IndexesProjects;
-use App\Contracts\Embers\Projects\SharesProjects;
 use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class ProjectController extends Controller
@@ -21,7 +19,7 @@ class ProjectController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index(Request $request)
     {
@@ -34,7 +32,7 @@ class ProjectController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function create(Request $request)
     {
@@ -54,13 +52,13 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         app(StoresProjects::class)->store($request->user(), $request->all());
 
-        return Redirect::route('projects.index');
+        return redirect()->route('projects.index');
     }
 
     /**
@@ -68,7 +66,7 @@ class ProjectController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function show(Request $request, $id)
     {
@@ -91,7 +89,7 @@ class ProjectController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function edit(Request $request, $id)
     {
@@ -114,13 +112,13 @@ class ProjectController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         $updatedProject = app(UpdatesProjects::class)->update($request->user(), $id, $request->all());
 
-        return Redirect::route('projects.show', $updatedProject->id);
+        return redirect()->route('projects.show', $updatedProject->id);
     }
 
     /**
@@ -128,12 +126,12 @@ class ProjectController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
         app(DestroysProjects::class)->destroy($request->user(), $id);
 
-        return Redirect::route('projects.index');
+        return redirect()->route('projects.index');
     }
 }

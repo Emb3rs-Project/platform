@@ -10,8 +10,13 @@ parameters:
     level: 5
 
     ignoreErrors:
-        - '#Unsafe usage of new static#'
 
     excludePaths:
 
+    noUnnecessaryCollectionCall: true
     checkMissingIterableValueType: false
+    checkOctaneCompatibility: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true

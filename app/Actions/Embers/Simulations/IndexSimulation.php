@@ -15,7 +15,7 @@ class IndexSimulation implements IndexesSimulations
      *
      * @param  mixed  $user
      * @param  int  $projectId
-     * @return [Simulation]
+     * @return mixed
      */
     public function index($user, int $projectId)
     {
@@ -23,7 +23,7 @@ class IndexSimulation implements IndexesSimulations
 
         $project = Project::findOrFail($projectId);
 
-        $simulations = $project->simulations()->with(['target','simulationType'])->get();
+        $simulations = $project->simulations()->with(['target', 'simulationType'])->get();
 
         return $simulations;
     }

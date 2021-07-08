@@ -6,7 +6,6 @@ use App\Contracts\Embers\Users\StoresUsersMapData;
 use App\Models\User;
 use App\Rules\Coordinates;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class StoreUserMapData implements StoresUsersMapData
@@ -47,7 +46,7 @@ class StoreUserMapData implements StoresUsersMapData
      *
      * @param  int  $userId
      * @param  array  $input
-     * @return Instance
+     * @return mixed
      */
     protected function save(int $userId, array $input)
     {

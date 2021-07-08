@@ -17,7 +17,7 @@ class UpdateSink implements UpdatesSinks
      * Validate, update and return an existing instance.
      *
      * @param  mixed  $user
-     * @param  int  $sink
+     * @param  int  $id
      * @param  array  $input
      * @return Instance
      */
@@ -47,7 +47,7 @@ class UpdateSink implements UpdatesSinks
             'sink.data.name' => ['filled', 'string', 'max:255'],
             'equipments' => ['filled', 'array'],
             'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
-            'template_id' => ['filled', 'integer','numeric', 'exists:templates,id'],
+            'template_id' => ['filled', 'integer', 'numeric', 'exists:templates,id'],
             // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
             // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
             'location_id' => ['filled'], // for now. Later remove current line and uncomment 2 above
