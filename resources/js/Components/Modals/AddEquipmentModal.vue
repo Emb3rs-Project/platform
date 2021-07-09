@@ -56,19 +56,19 @@
                   Add an Equipment
                 </DialogTitle>
                 <div class="mt-2">
-                  <select-menu
+                  <SelectMenu
                     v-model="selectedEquipmentCategory"
                     :options="equipmentsCategories"
                     :label="'Category'"
-                  ></select-menu>
+                  ></SelectMenu>
                 </div>
                 <div class="mt-5">
-                  <select-menu
+                  <SelectMenu
                     :disabled="!equipmentsAreAvailable"
                     v-model="selectedEquipment"
                     :options="availableEquipments"
                     :label="'Equipment'"
-                  ></select-menu>
+                  ></SelectMenu>
                 </div>
               </div>
             </div>

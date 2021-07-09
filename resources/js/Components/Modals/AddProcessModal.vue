@@ -56,19 +56,19 @@
                   Add an Process
                 </DialogTitle>
                 <div class="mt-2">
-                  <select-menu
+                  <SelectMenu
                     v-model="selectedProcessCategory"
                     :options="processesCategories"
                     :label="'Category'"
-                  ></select-menu>
+                  ></SelectMenu>
                 </div>
                 <div class="mt-5">
-                  <select-menu
+                  <SelectMenu
                     :disabled="!processesAreAvailable"
                     v-model="selectedProcess"
                     :options="availableProcesses"
                     :label="'Process'"
-                  ></select-menu>
+                  ></SelectMenu>
                 </div>
               </div>
             </div>

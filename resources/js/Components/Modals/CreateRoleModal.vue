@@ -94,13 +94,13 @@
                     Create a new Role
                   </DialogTitle>
                   <div class="mt-2">
-                    <text-input
+                    <TextInput
                       class="w-full"
                       v-model="role"
                       label="Name"
                       placeholder="Manager"
                       :required="true"
-                    ></text-input>
+                    ></TextInput>
 
                     <!-- <h1 class="text-sm font-medium">Permissions</h1>
 

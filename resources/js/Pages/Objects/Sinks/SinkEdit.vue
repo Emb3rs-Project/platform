@@ -95,7 +95,6 @@
           />
         </div>
       </div>
-      <pre>{{ prop }}</pre>
     </div>
 
     <template #actions>

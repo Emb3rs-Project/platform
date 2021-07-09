@@ -15,10 +15,10 @@
         Name
       </label>
       <div class="sm:col-span-2">
-        <text-input
+        <TextInput
           v-model="form.name"
           placeholder="Link's Name"
-        > </text-input>
+        > </TextInput>
       </div>
     </div>
 
@@ -71,11 +71,11 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.from"
                       :disabled="true"
                     >
-                    </text-input>
+                    </TextInput>
                   </div>
                 </div>
               </div>
@@ -87,11 +87,11 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.to"
                       :disabled="true"
                     >
-                    </text-input>
+                    </TextInput>
                   </div>
                 </div>
               </div>
@@ -103,12 +103,12 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.distance"
                       :disabled="true"
                       unit="m"
                     >
-                    </text-input>
+                    </TextInput>
                   </div>
                 </div>
               </div>
@@ -120,10 +120,10 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.cost"
                       unit="€/m"
-                    > </text-input>
+                    > </TextInput>
                   </div>
                 </div>
               </div>
@@ -135,10 +135,10 @@
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.depth"
                       unit="m"
-                    > </text-input>
+                    > </TextInput>
                   </div>
                 </div>
               </div>

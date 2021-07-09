@@ -1,6 +1,6 @@
 <template>
   <InertiaHead>
-    <title>EMB3R's{{title ? ` | ${title}` : ''}}</title>
+    <title>{{title ? `${title} | ` : ''}}EMB3R's</title>
     <meta
       head-key="description"
       name="description"
@@ -17,7 +17,7 @@ export default {
     },
     description: {
       type: String,
-      default: "THis is the description for the EMB3Rs app.",
+      default: "This is the description for the EMB3Rs app.",
     },
   },
 };
