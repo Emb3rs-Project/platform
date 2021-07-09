@@ -1,5 +1,7 @@
 <template>
-  <slide-over
+
+  <SiteHead title="Sink Details" />
+  <SlideOver
     v-model="open"
     title="Sink Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
@@ -88,17 +90,17 @@
     </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         @click="onClose()"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button @click="onRouteRequest('objects.sinks.edit', instance.id)">
+      </SecondaryOutlinedButton>
+      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
         Edit
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
@@ -106,6 +108,7 @@ import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -115,6 +118,7 @@ import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 export default {
   components: {
     AppLayout,
+    SiteHead,
     SlideOver,
     SelectMenu,
     TextInput,

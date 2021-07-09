@@ -1,5 +1,5 @@
 <template>
-  <app-layout>
+  <AppLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Projects
@@ -10,10 +10,17 @@
     </div>
     <div class="flex p-5 h-screen md:h-content gap-2">
       <div class="w-6/12 md:overflow-y-auto md:pr-4">
-        <input-row desc="Enter a name for the Project" v-model="form.name">
+        <input-row
+          desc="Enter a name for the Project"
+          v-model="form.name"
+        >
           Name
         </input-row>
-        <input-row desc="" v-model="form.description" class="mt-5">
+        <input-row
+          desc=""
+          v-model="form.description"
+          class="mt-5"
+        >
           Description
         </input-row>
         <select-row
@@ -32,11 +39,14 @@
       </div>
     </div>
     <div class="w-full my-5 px-16 py-10 flex justify-end">
-      <primary-button :disabled="form.processing" @click="submit()">
+      <PrimaryButton
+        :disabled="form.processing"
+        @click="submit()"
+      >
         Create Project
-      </primary-button>
+      </PrimaryButton>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>

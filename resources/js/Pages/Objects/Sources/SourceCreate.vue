@@ -1,5 +1,5 @@
 <template>
-  <slide-over
+  <SlideOver
     v-model="open"
     title="New Source"
     subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
@@ -32,15 +32,15 @@
       >
         Previous
       </secondary-button>
-      <primary-button
+      <PrimaryButton
         type="button"
         @click="navigateToNextStep"
       >
         <span v-if="currentStepIndex + 1 === steps.length">Save</span>
         <span v-else>Next</span>
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>

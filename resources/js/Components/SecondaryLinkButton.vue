@@ -1,5 +1,5 @@
 <template>
-  <inertia-link
+  <InertiaLink
     as="button"
     :type="type"
     :class="[
@@ -11,7 +11,7 @@
     :disabled="disabled"
   >
     <slot></slot>
-  </inertia-link>
+  </InertiaLink>
 </template>
 
 <script>

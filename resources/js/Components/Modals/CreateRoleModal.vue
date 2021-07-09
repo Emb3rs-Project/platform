@@ -165,7 +165,7 @@
                               sm:items-baseline
                             ">
                             <h1 class="col-span-1">Permissions</h1>
-                            <secondary-outlined-button
+                            <SecondaryOutlinedButton
                               class="
                                 col-span-2
                                 bg-green-200
@@ -175,7 +175,7 @@
                               @click="checkAll"
                             >
                               {{ allChecked ? "Uncheck All" : "Check All" }}
-                            </secondary-outlined-button>
+                            </SecondaryOutlinedButton>
 
                             <div
                               class="col-span-3"
@@ -201,13 +201,13 @@
                                       />
                                     </span>
                                   </DisclosureButton>
-                                  <secondary-outlined-button
+                                  <SecondaryOutlinedButton
                                     type="button"
                                     class="bg-green-200 hover:bg-green-300 text-sm"
                                     @click="checkAllPermissionsForGroup(permissions)"
                                   >
                                     Check All
-                                  </secondary-outlined-button>
+                                  </SecondaryOutlinedButton>
                                 </dt>
                                 <transition
                                   enter-active-class="transition duration-100 ease-out"
@@ -277,21 +277,21 @@
               </div>
             </div>
             <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-              <primary-button
+              <PrimaryButton
                 type="button"
                 @click="createRole"
               >
                 Create
-              </primary-button>
+              </PrimaryButton>
 
-              <secondary-outlined-button
+              <SecondaryOutlinedButton
                 class="mr-2"
                 type="button"
                 @click="cancel"
                 ref="cancelButtonRef"
               >
                 Cancel
-              </secondary-outlined-button>
+              </SecondaryOutlinedButton>
             </div>
           </div>
         </TransitionChild>

@@ -1,5 +1,8 @@
 <template>
-  <app-layout>
+  <AppLayout>
+
+    <SiteHead title="Profile" />
+
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
       <div v-if="$page.props.jetstream.canUpdateProfileInformation">
         <update-profile-information-form :user="$page.props.user" />
@@ -30,11 +33,12 @@
         <delete-user-form class="mt-10 sm:mt-0" />
       </template>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import SiteHead from "@/Components/SiteHead.vue";
 import DeleteUserForm from "./DeleteUserForm";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
 import LogoutOtherBrowserSessionsForm from "./LogoutOtherBrowserSessionsForm";
@@ -47,6 +51,7 @@ export default {
 
   components: {
     AppLayout,
+    SiteHead,
     DeleteUserForm,
     JetSectionBorder,
     LogoutOtherBrowserSessionsForm,

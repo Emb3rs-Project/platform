@@ -58,9 +58,9 @@
         Saved.
       </jet-action-message>
 
-      <primary-button :disabled="form.processing">
+      <PrimaryButton :disabled="form.processing">
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
   </jet-form-section>
 </template>

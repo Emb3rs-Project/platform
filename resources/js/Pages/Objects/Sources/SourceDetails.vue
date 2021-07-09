@@ -1,5 +1,5 @@
 <template>
-  <slide-over
+  <SlideOver
     v-model="open"
     title="Source Details"
     subtitle="Below, you can see the details that are associated to the currently selected Source."
@@ -35,17 +35,17 @@
       >
         <i class="fas fa-chevron-right"></i>
       </secondary-button>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button @click="onRouteRequest('objects.sinks.edit', instance.id)">
+      </SecondaryOutlinedButton>
+      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
         Edit
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>

@@ -1,5 +1,8 @@
 <template>
-  <inertia-link :href="'/'">
-    <img src="../../images/logo.png" alt="" />
-  </inertia-link>
+  <InertiaLink :href="'/'">
+    <img
+      src="../../images/logo.png"
+      alt=""
+    />
+  </InertiaLink>
 </template>

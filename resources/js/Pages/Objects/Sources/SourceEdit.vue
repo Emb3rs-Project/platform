@@ -1,5 +1,5 @@
 <template>
-  <slide-over
+  <SlideOver
     v-model="open"
     title="Edit Source"
     subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
@@ -72,7 +72,7 @@
       </PrimaryButton>
     </template>
 
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>

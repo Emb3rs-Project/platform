@@ -85,16 +85,16 @@
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
-                <inertia-link :href="route('objects.sources.show', item.id.value)">
+                <InertiaLink :href="route('objects.sources.show', item.id.value)">
                   <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
                   <EyeIcon
                     class="text-gray-500 font-medium text-sm w-5"
                     aria-hidden="true"
                   />
-                </inertia-link>
-                <inertia-link :href="route('objects.sources.edit', item.id.value)">
+                </InertiaLink>
+                <InertiaLink :href="route('objects.sources.edit', item.id.value)">
                   <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
-                </inertia-link>
+                </InertiaLink>
                 <button
                   class="focus:outline-none"
                   @click="deleteEntity(item.id.value)"

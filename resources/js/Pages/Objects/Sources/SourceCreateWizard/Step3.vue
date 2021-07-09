@@ -2,7 +2,7 @@
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Processes -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button
+    <PrimaryButton
       type="button"
       @click="modalIsVisible = true"
     >
@@ -11,7 +11,7 @@
         aria-hidden="true"
       />
       Add Process
-    </primary-button>
+    </PrimaryButton>
   </div>
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"

@@ -2,7 +2,7 @@
   <!-- TODO: maybe modularize it more, we'll see -->
   <!-- Equipments -->
   <div class="flex justify-end justify-items-center p-5">
-    <primary-button
+    <PrimaryButton
       type="button"
       @click="modalIsVisible = true"
     >
@@ -11,7 +11,7 @@
         aria-hidden="true"
       />
       Add Equipment
-    </primary-button>
+    </PrimaryButton>
   </div>
 
   <div

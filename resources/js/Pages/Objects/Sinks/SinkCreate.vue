@@ -1,5 +1,7 @@
 b<template>
-  <slide-over
+
+  <SiteHead title="Create a Sink" />
+  <SlideOver
     v-model="open"
     title="New Sink"
     subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution."
@@ -84,21 +86,21 @@ b<template>
     </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
         @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button
+      </SecondaryOutlinedButton>
+      <PrimaryButton
         @click="submit"
         :disabled="form.processing"
       >
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
@@ -106,6 +108,7 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -118,6 +121,7 @@ import { keyParToSelect } from "../../../Utils/array";
 export default {
   components: {
     AppLayout,
+    SiteHead,
     SlideOver,
     SelectMenu,
     TextInput,

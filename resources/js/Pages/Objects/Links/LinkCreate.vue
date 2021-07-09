@@ -1,5 +1,5 @@
 <template>
-  <slide-over
+  <SlideOver
     v-model="open"
     title="New Link"
     subtitle="Get started by selecting a marker to start your segments."
@@ -149,21 +149,21 @@
     </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
         @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button
+      </SecondaryOutlinedButton>
+      <PrimaryButton
         @click="submit"
         :disabled="form.processing"
       >
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>

@@ -31,9 +31,9 @@
         </template>
 
         <template #footer>
-          <secondary-outlined-button @click="confirmingTeamDeletion = false">
+          <SecondaryOutlinedButton @click="confirmingTeamDeletion = false">
             Cancel
-          </secondary-outlined-button>
+          </SecondaryOutlinedButton>
 
           <danger-button
             :disabled="form.processing"

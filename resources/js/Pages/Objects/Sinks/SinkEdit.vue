@@ -1,5 +1,8 @@
 <template>
-  <slide-over
+
+  <SiteHead title="Edit a Sink" />
+
+  <SlideOver
     v-model="open"
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
@@ -15,10 +18,10 @@
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -33,11 +36,11 @@
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedLocation"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -51,15 +54,15 @@
         </label>
       </div>
       <div class="sm:col-span-2">
-        <text-input
+        <TextInput
           v-model="form.sink.data.name"
           :label="'Name'"
-        > </text-input>
+        />
       </div>
     </div>
 
     <!-- Sink Properties -->
-    <!-- <div
+    <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
       v-for="prop in properties"
       :key="prop.id"
@@ -74,45 +77,43 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
             :unit="prop.unit.symbol"
             :placeholder="prop.property.name"
             :required="prop.required"
-          >
-          </text-input>
+          />
         </div>
         <div v-else-if="prop.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="form.sink.data[prop.property.symbolic_name]"
             :options="prop.property.data.options"
             :disabled="selectedTemplate ? false : true"
             :required="prop.required"
             :label="prop.property.name"
-          >
-          </select-menu>
+          />
         </div>
       </div>
       <pre>{{ prop }}</pre>
-    </div> -->
+    </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
         @click="onClose"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button
-        @click="submit()"
+      </SecondaryOutlinedButton>
+      <PrimaryButton
+        @click="submit"
         :disabled="form.processing"
       >
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
@@ -121,6 +122,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 // import { Inertia } from '@inertiajs/inertia'
 
 import AppLayout from "@/Layouts/AppLayout.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -131,6 +133,7 @@ import { useStore } from "vuex";
 export default {
   components: {
     AppLayout,
+    SiteHead,
     SlideOver,
     SelectMenu,
     TextInput,
@@ -141,7 +144,7 @@ export default {
   props: {
     modelValue: {
       type: Boolean,
-      required: true,
+      default: false,
     },
     templates: {
       type: Array,
@@ -163,15 +166,11 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-    onBeforeUpdate(() => {
-      console.log("onBeforeUpdate");
-    });
 
     const form = useForm({
       sink: {
         data: {},
       },
-      //   equipments: [],
       template_id: null,
       location_id: null,
     });
@@ -209,13 +208,13 @@ export default {
         form.sink.data.name = props.instance.name;
         console.log(props.instance.name);
 
-        // if (templateInfo.value?.template_properties) {
-        //   for (const prop of templateInfo.value?.template_properties) {
-        //     form.sink.data[prop.property.symbolic_name] = prop.default_value
-        //       ? prop.default_value
-        //       : "";
-        //   }
-        // }
+        if (templateInfo.value?.template_properties) {
+          for (const prop of templateInfo.value?.template_properties) {
+            form.sink.data[prop.property.symbolic_name] = prop.default_value
+              ? prop.default_value
+              : "";
+          }
+        }
       },
       { immediate: true, deep: true }
     );
@@ -247,6 +246,11 @@ export default {
       });
     };
 
+    const onClose = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
+    const onLocationSelect = () => {};
+
     return {
       templateInfo,
       templates,
@@ -257,13 +261,9 @@ export default {
       open,
       properties,
       submit,
-      onClose: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onLocationSelect,
+      onClose,
     };
-  },
-
-  methods: {
-    onLocationSelect(locId) {},
   },
 };
 </script>

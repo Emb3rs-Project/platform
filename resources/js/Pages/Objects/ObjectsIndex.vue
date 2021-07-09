@@ -101,8 +101,8 @@
     </div>
 
     <template #actions>
-      <primary-button @click="onActionRequest(`${selectedObject.paths.create}`)">
-        Create New {{ getSingular(selectedObject.title) }}</primary-button>
+      <PrimaryButton @click="onActionRequest(`${selectedObject.paths.create}`)">
+        Create New {{ getSingular(selectedObject.title) }}</PrimaryButton>
     </template>
   </SlideOver>
 
@@ -147,6 +147,10 @@ export default {
   },
 
   props: {
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
     instances: {
       type: Array,
       default: [],
@@ -159,7 +163,7 @@ export default {
 
   setup(props) {
     const store = useStore();
-
+    console.log();
     const tableColumns = ["name", "location", "actions"];
     const selectedObject = ref(
       store.state.objects.filterOption ?? filterOptions[0]

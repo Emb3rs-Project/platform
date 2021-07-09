@@ -139,9 +139,9 @@
             Added.
           </jet-action-message>
 
-          <primary-button :disabled="addTeamMemberForm.processing">
+          <PrimaryButton :disabled="addTeamMemberForm.processing">
             Add
-          </primary-button>
+          </PrimaryButton>
         </template>
       </jet-form-section>
     </div>
@@ -323,17 +323,17 @@
       </template>
 
       <template #footer>
-        <secondary-outlined-button @click="currentlyManagingRole = false">
+        <SecondaryOutlinedButton @click="currentlyManagingRole = false">
           Cancel
-        </secondary-outlined-button>
+        </SecondaryOutlinedButton>
 
-        <primary-button
+        <PrimaryButton
           class="ml-2"
           :disabled="updateRoleForm.processing"
           @click="updateRole"
         >
           Save
-        </primary-button>
+        </PrimaryButton>
       </template>
     </jet-dialog-modal>
 
@@ -349,9 +349,9 @@
       </template>
 
       <template #footer>
-        <secondary-outlined-button @click="confirmingLeavingTeam = false">
+        <SecondaryOutlinedButton @click="confirmingLeavingTeam = false">
           Cancel
-        </secondary-outlined-button>
+        </SecondaryOutlinedButton>
 
         <danger-button
           :disabled="leaveTeamForm.processing"
@@ -375,9 +375,9 @@
       </template>
 
       <template #footer>
-        <secondary-outlined-button @click="teamMemberBeingRemoved = false">
+        <SecondaryOutlinedButton @click="teamMemberBeingRemoved = false">
           Cancel
-        </secondary-outlined-button>
+        </SecondaryOutlinedButton>
 
         <danger-button
           :disabled="removeTeamMemberForm.processing"
@@ -401,9 +401,9 @@
       </template>
 
       <template #footer>
-        <secondary-outlined-button @click="confirmingRemovingTeamRole = false">
+        <SecondaryOutlinedButton @click="confirmingRemovingTeamRole = false">
           Cancel
-        </secondary-outlined-button>
+        </SecondaryOutlinedButton>
 
         <danger-button
           :disabled="removeTeamRoleForm.processing"

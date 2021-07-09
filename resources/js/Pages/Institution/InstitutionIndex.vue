@@ -1,5 +1,5 @@
 <template>
-  <app-layout>
+  <AppLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Institution
@@ -24,7 +24,7 @@
                   v-for="(user, index) in users"
                   :key="index"
                 >
-                  <inertia-link
+                  <InertiaLink
                     href="#"
                     class="block hover:bg-gray-50"
                   >
@@ -125,7 +125,7 @@
                         </svg>
                       </div>
                     </div>
-                  </inertia-link>
+                  </InertiaLink>
                 </li>
               </ul>
             </div>
@@ -308,61 +308,63 @@
       </div>
 
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>
-  import { ref } from 'vue';
+import { ref } from "vue";
 
-  import useUniqueLocations from "@/Composables/useUniqueLocations";
+import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-  import AppLayout from "@/Layouts/AppLayout";
-  import LeafletMap from "@/Components/LeafletMap";
-  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import AppLayout from "@/Layouts/AppLayout";
+import LeafletMap from "@/Components/LeafletMap";
+import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
-  export default {
-    components: {
-      AppLayout,
-      LeafletMap,
-      DetailIcon
+export default {
+  components: {
+    AppLayout,
+    LeafletMap,
+    DetailIcon,
+  },
+
+  props: {
+    users: {
+      type: Array,
+      required: true,
     },
-
-    props: {
-      users: {
-        type: Array,
-        required: true
-      },
-      sources: {
-        type: Array,
-        required: true
-      },
-      sinks: {
-        type: Array,
-        required: true
-      },
+    sources: {
+      type: Array,
+      required: true,
     },
+    sinks: {
+      type: Array,
+      required: true,
+    },
+  },
 
-    setup(props) {
-      const map = ref(null);
-      const markers = ref([]);
-      const locations = props.sources.concat(props.sinks);
+  setup(props) {
+    const map = ref(null);
+    const markers = ref([]);
+    const locations = props.sources.concat(props.sinks);
 
-      const uniqueLocations = useUniqueLocations(locations);
+    const uniqueLocations = useUniqueLocations(locations);
 
-      for (const source of uniqueLocations.value) {
-        markers.value.push(source.data)
-      }
-
-      function centerAtLocation(location) {
-        const locationMarker = markers.value.find((m) => m.id === location.geo_object.id);
-        map.value.centerAtLocation(locationMarker);
-      }
-
-      return {
-        map,
-        markers,
-        centerAtLocation
-      };
+    for (const source of uniqueLocations.value) {
+      markers.value.push(source.data);
     }
-  };
+
+    function centerAtLocation(location) {
+      const locationMarker = markers.value.find(
+        (m) => m.id === location.geo_object.id
+      );
+      map.value.centerAtLocation(locationMarker);
+    }
+
+    return {
+      map,
+      markers,
+      centerAtLocation,
+    };
+  },
+};
 </script>

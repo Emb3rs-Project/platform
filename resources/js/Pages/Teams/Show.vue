@@ -1,5 +1,7 @@
 <template>
-  <app-layout>
+  <AppLayout>
+
+    <SiteHead :title="`${team.name} Institution`" />
     <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
       <update-team-name-form
         :team="team"
@@ -23,12 +25,13 @@
         />
       </template>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>
 import TeamMemberManager from "./TeamMemberManager";
 import AppLayout from "@/Layouts/AppLayout";
+import SiteHead from "@/Components/SiteHead.vue";
 import DeleteTeamForm from "./DeleteTeamForm";
 import JetSectionBorder from "@/Jetstream/SectionBorder";
 import UpdateTeamNameForm from "./UpdateTeamNameForm";
@@ -55,6 +58,7 @@ export default {
 
   components: {
     AppLayout,
+    SiteHead,
     DeleteTeamForm,
     JetSectionBorder,
     TeamMemberManager,

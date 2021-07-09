@@ -73,22 +73,22 @@
               </div>
             </div>
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <secondary-outlined-button
+              <SecondaryOutlinedButton
                 type="button"
                 @click="open = false"
                 ref="cancelButtonRef"
                 class="sm:col-start-1"
               >
                 Cancel
-              </secondary-outlined-button>
-              <primary-button
+              </SecondaryOutlinedButton>
+              <PrimaryButton
                 type="button"
                 @click="onConfirmation"
                 :disabled="!canAddEquipment || processing"
                 class="sm:col-start-2"
               >
                 Confirm
-              </primary-button>
+              </PrimaryButton>
             </div>
           </div>
         </TransitionChild>

@@ -1,4 +1,6 @@
 <template>
+
+  <SiteHead />
   <div class="h-screen flex overflow-hidden bg-white">
     <TransitionRoot
       as="template"
@@ -60,7 +62,7 @@
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2">
                 <div class="space-y-1">
-                  <inertia-link
+                  <InertiaLink
                     v-for="item in navigation"
                     :key="item.name"
                     :href="route(item.href)"
@@ -73,7 +75,7 @@
                       aria-hidden="true"
                     />
                     {{ item.name }}
-                  </inertia-link>
+                  </InertiaLink>
                 </div>
                 <div class="mt-8">
                   <div class="relative">
@@ -109,12 +111,12 @@
                           <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div class="py-1">
                               <MenuItem v-slot="{ active }">
-                              <inertia-link
+                              <InertiaLink
                                 :href="route('teams.create')"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               >
                                 Create Institution
-                              </inertia-link>
+                              </InertiaLink>
                               </MenuItem>
                             </div>
                           </MenuItems>
@@ -128,14 +130,14 @@
                     aria-labelledby="institutions-headline"
                   >
                     <div
-                      v-for="institution in user.all_teams"
+                      v-for="institution in $page.props.user.all_teams"
                       :key="institution.id"
                     >
                       <form @submit.prevent="switchToTeam(institution)">
                         <div
                           class="group flex justify-between items-center w-full rounded-md"
                           :class="
-                        institution.id === user.current_team_id
+                        institution.id === $page.props.user.current_team_id
                           ? 'text-yellow-600 bg-gray-200'
                           : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
@@ -146,7 +148,7 @@
                           >
                             {{ institution.name }}
                           </button>
-                          <inertia-link
+                          <InertiaLink
                             :href="route('teams.show', institution)"
                             class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                           >
@@ -154,7 +156,7 @@
                               class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
                               aria-hidden="true"
                             />
-                          </inertia-link>
+                          </InertiaLink>
                         </div>
                       </form>
                     </div>
@@ -193,7 +195,7 @@
                     <span class="inline-block relative">
                       <img
                         class="h-10 w-10 rounded-full flex-shrink-0"
-                        :src="user.profile_photo_url"
+                        :src="$page.props.user.profile_photo_url"
                         alt=""
                       />
                       <span
@@ -203,10 +205,10 @@
                     </span>
                     <span class="flex-1 flex flex-col min-w-0">
                       <span class="text-gray-900 text-sm font-medium truncate">
-                        {{ user.name }}
+                        {{ $page.props.user.name }}
                       </span>
                       <span class="text-gray-500 text-sm truncate">
-                        {{ user.email }}
+                        {{ $page.props.user.email }}
                       </span>
                     </span>
                   </span>
@@ -228,15 +230,15 @@
               <MenuItems class="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                 <div class="py-1">
                   <MenuItem v-slot="{ active }">
-                  <inertia-link
+                  <InertiaLink
                     :href="route('profile.show')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
                     View profile
-                  </inertia-link>
+                  </InertiaLink>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                  <inertia-link
+                  <InertiaLink
                     :href="route('notifications.index')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
@@ -247,7 +249,7 @@
                     >
                       {{ unreadNotificationsCount }}
                     </span>
-                  </inertia-link>
+                  </InertiaLink>
                   </MenuItem>
                 </div>
                 <div class="py-1">
@@ -295,7 +297,7 @@
           <!-- Navigation -->
           <nav class="px-3 mt-6">
             <div class="space-y-1">
-              <inertia-link
+              <InertiaLink
                 v-for="item in navigation"
                 :key="item.name"
                 :href="route(item.href)"
@@ -308,7 +310,7 @@
                   aria-hidden="true"
                 />
                 {{ item.name }}
-              </inertia-link>
+              </InertiaLink>
             </div>
             <div class="mt-8">
               <!-- Secondary navigation -->
@@ -345,12 +347,12 @@
                       <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <inertia-link
+                          <InertiaLink
                             :href="route('teams.create')"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                           >
                             Create Institution
-                          </inertia-link>
+                          </InertiaLink>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -364,14 +366,14 @@
                 aria-labelledby="institutions-headline"
               >
                 <div
-                  v-for="institution in user.all_teams"
+                  v-for="institution in $page.props.user.all_teams"
                   :key="institution.id"
                 >
                   <form @submit.prevent="switchToTeam(institution)">
                     <div
                       class="group flex justify-between items-center w-full rounded-md"
                       :class="
-                        institution.id === user.current_team_id
+                        institution.id === $page.props.user.current_team_id
                           ? 'text-yellow-600 bg-gray-200'
                           : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
@@ -382,7 +384,7 @@
                       >
                         {{ institution.name }}
                       </button>
-                      <inertia-link
+                      <InertiaLink
                         :href="route('teams.show', institution)"
                         class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                       >
@@ -390,7 +392,7 @@
                           class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
                           aria-hidden="true"
                         />
-                      </inertia-link>
+                      </InertiaLink>
                     </div>
                   </form>
                 </div>
@@ -456,7 +458,7 @@
                   <span class="inline-block relative">
                     <img
                       class="h-10 w-10 rounded-full flex-shrink-0"
-                      :src="user.profile_photo_url"
+                      :src="$page.props.user.profile_photo_url"
                       alt=""
                     />
                     <span
@@ -477,15 +479,15 @@
                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                   <div class="py-1">
                     <MenuItem v-slot="{ active }">
-                    <inertia-link
+                    <InertiaLink
                       :href="route('profile.show')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
                       View profile
-                    </inertia-link>
+                    </InertiaLink>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                    <inertia-link
+                    <InertiaLink
                       :href="route('notifications.index')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
@@ -496,7 +498,7 @@
                       >
                         {{ unreadNotificationsCount }}
                       </span>
-                    </inertia-link>
+                    </InertiaLink>
                     </MenuItem>
                   </div>
                   <div class="py-1">
@@ -529,6 +531,9 @@ import { ref, onBeforeUnmount } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useStore } from "vuex";
 
+import SiteHead from "@/Components/SiteHead.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+
 import {
   Dialog,
   DialogOverlay,
@@ -558,8 +563,6 @@ import {
   CogIcon,
 } from "@heroicons/vue/solid";
 
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-
 const navigation = [
   {
     name: "Dashboard",
@@ -586,6 +589,7 @@ const navigation = [
 
 export default {
   components: {
+    SiteHead,
     Dialog,
     DialogOverlay,
     Menu,
@@ -606,16 +610,7 @@ export default {
     CogIcon,
   },
 
-  props: {
-    jetstream: {
-      type: Object,
-      required: true,
-    },
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: {},
 
   setup(props) {
     const store = useStore();
@@ -643,10 +638,19 @@ export default {
       { immediate: true }
     );
 
+    // const stopWatcher1 = store.watch(
+    //   (state) => state.map,
+    //   (state) => {
+    //     console.log(state);
+    //   },
+    //   { immediate: true, deep: true }
+    // );
+
     // stop watching for notifications when the component has been destroyed
     onBeforeUnmount(() => {
       store.dispatch("notifications/stopWatchingForNewNotifications");
       stopWatcher();
+      // stopWatcher1();
     });
 
     function logout() {

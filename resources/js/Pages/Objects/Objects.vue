@@ -1,5 +1,7 @@
 <template>
-  <app-layout>
+  <AppLayout>
+
+    <SiteHead title="Objects" />
     <!-- Menu Of Available Instances -->
     <div
       class="fixed right-8 top-6 z-10 p-4 rounded-full cursor-pointer bg-yellow-500 hover:animate-none"
@@ -30,7 +32,7 @@
       :is="slideComponent"
       v-show="slideComponent"
     ></component>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>
@@ -38,6 +40,7 @@ import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap";
 import SlideOver from "@/Components/SlideOver";
 import LinkIcon from "@/Components/Icons/LinkIcon";
@@ -45,6 +48,7 @@ import LinkIcon from "@/Components/Icons/LinkIcon";
 export default {
   components: {
     AppLayout,
+    SiteHead,
     AmazingMap,
     SlideOver,
     LinkIcon,
@@ -64,14 +68,15 @@ export default {
     const slideController = ref();
     const slideOpen = computed(() => store.getters["objects/slideOpen"]);
 
-    const slideComponent = computed(() =>
-      slideController.value
+    const slideComponent = computed(() => {
+      //   console.log(store.state.objects);
+      return slideController.value
         ? defineAsyncComponent({
             loader: () => import(`@/Pages/${slideController.value}`),
             delay: 300,
           })
-        : false
-    );
+        : false;
+    });
 
     const currentSlideOverPath = computed(
       () => store.getters["objects/currentRoute"]
@@ -81,7 +86,7 @@ export default {
       () => store.getters["objects/routeCheckSum"]
     );
 
-    watch(currentSlidePathCheckSum, async (_) => {
+    watch(currentSlidePathCheckSum, async () => {
       const newPath = currentSlideOverPath.value;
       if (!newPath) return;
       let _route = "";
@@ -102,7 +107,6 @@ export default {
 
         return res.json();
       });
-      console.log("geocfus", response);
 
       slideProps.value = response.props;
 

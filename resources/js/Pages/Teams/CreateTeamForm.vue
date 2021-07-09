@@ -46,9 +46,9 @@
     </template>
 
     <template #actions>
-      <primary-button :disabled="form.processing">
+      <PrimaryButton :disabled="form.processing">
         Create
-      </primary-button>
+      </PrimaryButton>
     </template>
   </jet-form-section>
 </template>

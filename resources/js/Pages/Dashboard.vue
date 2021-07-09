@@ -1,5 +1,8 @@
 <template>
   <AppLayout>
+
+    <SiteHead title="Dashboard" />
+
     <AmazingMap ref="map" />
     <div class="h-full fixed right-0 top-0 bot-0 z-10 shadow-md bg-gray-100">
       <div class="flex flex-1 flex-col pt-10 items-center w-16">
@@ -21,7 +24,7 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from "vue";
+import { ref } from "vue";
 
 import useUniqueLocations from "@/Composables/useUniqueLocations";
 
@@ -31,10 +34,12 @@ import SlideOver from "@/Components/SlideOver.vue";
 import SinkIcon from "@/Components/Icons/SinkIcon.vue";
 import SourceIcon from "@/Components/Icons/SourceIcon.vue";
 import LinkIcon from "@/Components/Icons/LinkIcon.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 
 export default {
   components: {
     AppLayout,
+    SiteHead,
     AmazingMap,
     SlideOver,
     SinkIcon,
