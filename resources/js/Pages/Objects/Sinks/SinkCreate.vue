@@ -1,5 +1,4 @@
-b<template>
-
+<template>
   <SiteHead title="Create a Sink" />
   <SlideOver
     v-model="open"
@@ -17,10 +16,10 @@ b<template>
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -35,11 +34,11 @@ b<template>
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
-          v-model="form.location_id"
+        <SelectMenu
+          v-model="selectedLocation"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -59,31 +58,45 @@ b<template>
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="form.sink.data[prop.property.symbolic_name]"
             :unit="prop.unit.symbol"
             :label="prop.property.name"
             :placeholder="prop.property.name"
             :required="prop.required"
-          >
-          </text-input>
+          />
+
         </div>
         <div v-else-if="prop.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="form.sink.data[prop.property.symbolic_name]"
             :options="prop.property.data.options"
             :disabled="selectedTemplate ? false : true"
             :required="prop.required"
             :label="prop.property.name"
-          >
-          </select-menu>
+          />
         </div>
-        <jet-input-error
-          :message="form.errors"
-          class="mt-2"
-        />
+        <div v-if="Object.keys(form.errors).length">
+          <jet-input-error
+            :message="form.errors"
+            class="mt-2"
+          />
+        </div>
+        <!-- <div
+          v-for="error in form.errors"
+          :key="error"
+        >
+          <div :v-if="error === form.sink.data[prop.property.symbolic_name]">
+            <jet-input-error
+              :message="form.errors"
+              class="mt-2"
+            />
+          </div>
+        </div> -->
+
       </div>
     </div>
+    <pre>{{form}}</pre>
 
     <template #actions>
       <SecondaryOutlinedButton
@@ -105,6 +118,7 @@ b<template>
 
 <script>
 import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -115,8 +129,6 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import { useStore } from "vuex";
-import { keyParToSelect } from "../../../Utils/array";
 
 export default {
   components: {
@@ -147,12 +159,6 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-    const templateInfo = ref(null);
-
-    const templates = keyParToSelect(props.templates);
-    const selectedTemplate = ref(templates.length ? templates[0] : null);
-
-    const locations = keyParToSelect(props.locations);
 
     const form = useForm({
       sink: {
@@ -160,52 +166,96 @@ export default {
       },
       template_id: null,
       location_id: null,
+      location: null,
     });
 
+    const templateInfo = ref(null);
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+        properties: t.template_properties,
+      }))
+    );
+    const selectedTemplate = ref(
+      templates.value.length ? templates.value[0] : null
+    );
+
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const selectedLocation = ref(null);
     watch(
       () => store.getters["map/selectedMarker"],
       (val) => {
-        console.log("marker", val);
         if (!!val) {
-          const oldLocation = locations.find(
+          const oldLocation = locations.value.find(
             (l) => l.value === "Selected Marker"
           );
           if (oldLocation) {
             oldLocation.key = val;
           } else {
-            locations.unshift({
+            locations.value.unshift({
               key: val,
               value: "Selected Marker",
             });
           }
         } else {
-          const oldLocationIndex = locations.findIndex(
+          const oldLocationIndex = locations.value.findIndex(
             (l) => l.value === "Selected Marker"
           );
           if (oldLocationIndex !== -1) {
-            locations.splice(oldLocationIndex, 1);
+            locations.value.splice(oldLocationIndex, 1);
           }
         }
-        form.location_id = locations[0];
+        selectedLocation.value = locations.value[0];
       },
       { immediate: true }
+    );
+    watch(
+      selectedLocation,
+      (location) => {
+        form.location_id = null;
+        form.location = null;
+        selectedLocation.value = locations.value.find(
+          (l) => l.key === location.key
+        );
+
+        if (typeof selectedLocation.value.key === "object") {
+          return (form.location = {
+            lat: location.key.lat,
+            lng: location.key.lng,
+          });
+        }
+
+        return (form.location_id = location.key);
+      },
+      { immediate: true, deep: true }
     );
 
     watch(
       selectedTemplate,
       (template) => {
-        templateInfo.value = props.templates.find((t) => t.id === template.key);
+        templateInfo.value = templates.value.find(
+          (t) => t.key === template.key
+        );
         form.template_id = template.key;
 
-        if (templateInfo.value?.template_properties) {
-          for (const prop of templateInfo.value?.template_properties) {
-            form.sink.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
+        if (templateInfo.value.properties.length) {
+          for (const property of templateInfo.value.properties) {
+            form.sink.data[property.property.symbolic_name] =
+              property.default_value ? property.default_value : "";
           }
         }
       },
       { immediate: true }
+    );
+
+    const properties = computed(() =>
+      Object.assign([], templateInfo.value.properties)
     );
 
     const open = computed({
@@ -213,12 +263,19 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
-    const properties = computed(() =>
-      Object.assign([], templateInfo.value?.template_properties)
-    );
-
     const submit = () => {
-      form.location_id = form.location_id?.key;
+      // validation
+      // if (templateInfo.value.properties.length) {
+      //   for (const property of templateInfo.value.properties) {
+      //     if (property.required) {
+      //       form.sink.data[property.property.symbolic_name]
+      //     }
+      //     console.log(property.);
+
+      //     // form.sink.data[property.property.symbolic_name] =
+      //     //   property.default_value ? property.default_value : "";
+      //   }
+      // }
       form.post(route("objects.sinks.store"), {
         onSuccess: () => {
           store.dispatch("map/refreshMap");
@@ -232,19 +289,17 @@ export default {
     };
 
     return {
+      form,
       templateInfo,
       templates,
       selectedTemplate,
       locations,
-      form,
-      open,
+      selectedLocation,
       properties,
+      open,
       submit,
       onCancel,
     };
   },
 };
 </script>
-
-<style>
-</style>
