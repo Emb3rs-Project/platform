@@ -6,10 +6,14 @@ use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Location;
+use App\Models\TemplateProperty;
 use App\Rules\Coordinates;
+use App\Rules\Prohibit;
 use App\Rules\Property;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class StoreSink implements StoresSinks
 {
@@ -26,9 +30,9 @@ class StoreSink implements StoresSinks
     {
         $this->authorize($user);
 
-        $this->validate($input);
+        $validated = $this->validate($input);
 
-        $sink = $this->save($user, $input);
+        $sink = $this->save($user, $validated);
 
         return $sink;
     }
@@ -37,21 +41,38 @@ class StoreSink implements StoresSinks
      * Validate the create Sink operation.
      *
      * @param  array  $input
-     * @return void
+     * @return array
      */
-    protected function validate(array $input)
+    protected function validate(array $input): array
     {
-        Validator::make($input, [
+        $validator = Validator::make($input, [
             'sink' => ['required', 'array'],
             'sink.data.*' => [new Property],
-            // 'sink.data.name' => ['filled', 'string', 'max:255'],
             'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
-            'location_id' => ['prohibited_if:location', 'numeric', 'integer', 'exists:locations,id'],
-            'location' => ['required_without:location_id', 'array'],
+            'location_id' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location') || Arr::get($input, 'location') === null;
+                }),
+                new Prohibit($input, 'location'),
+                'nullable',
+                'numeric',
+                'integer',
+                'exists:locations,id'
+            ],
+            'location' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location_id') || Arr::get($input, 'location_id') === null;
+                }),
+                new Prohibit($input, 'location_id'),
+                'nullable',
+                'array'
+            ],
             'location.lat' => ['required_with:location', 'numeric', new Coordinates],
             'location.lng' => ['required_with:location', 'numeric', new Coordinates],
-        ])->validate();
+        ]);
+
+        return $validator->validate();
     }
 
     /**
@@ -64,27 +85,17 @@ class StoreSink implements StoresSinks
     protected function save($user, array $input)
     {
         $newInstance = [
-            "name" => 'Not Defined',
-            "values" => [
-                "equipments" => []
+            'name' => Arr::get($input, 'sink.data.name') ?: 'Not Defined',
+            'values' => [
+                Arr::get($input, 'equipments')
             ],
             "template_id" => Arr::get($input, 'template_id'),
-            "location_id" => null
         ];
-
-        // Check if Property Name Exists
-        if (Arr::has($input, 'sink.data.name')) {
-            $newInstance['name'] = Arr::get($input, 'sink.data.name');
-        }
-
-        if (Arr::has($input, 'equipments')) {
-            $newInstance['name']['equipments'] = Arr::get($input, 'equipments');
-        }
 
         if (Arr::has($input, 'location')) {
             // A new location was selected to be used for this Sink
             $location = Location::create([
-                'name' => $newInstance['name'],
+                'name' => Arr::get($newInstance, 'name'),
                 'type' => 'point',
                 'data' => [
                     "center" => [
@@ -93,26 +104,12 @@ class StoreSink implements StoresSinks
                     ]
                 ]
             ]);
-            $newInstance['location_id'] = $location->id;
-        } else {
+
+            Arr::add($newInstance, 'location_id', $location->id);
+        } else if (Arr::has($input, 'location_id')) {
             // An old location was selected to be used for this Sink
-            $newInstance['location_id'] = Arr::get($input, 'location_id');
+            Arr::add($newInstance, 'location_id', Arr::get($input, 'location_id'));
         }
-
-        // if (is_array($input["location_id"])) {
-        //     $marker = $input["location_id"];
-
-        //     $location = Location::create([
-        //         'name' => $newInstance['name'],
-        //         'type' => 'point',
-        //         'data' => [
-        //             "center" => [$marker["lat"], $marker["lng"]]
-        //         ]
-        //     ]);
-        //     $newInstance['location_id'] = $location->id;
-        // } else {
-        //     $newInstance['location_id'] = $input['location_id'];
-        // }
 
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);

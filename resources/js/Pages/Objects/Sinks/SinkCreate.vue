@@ -96,7 +96,7 @@
 
       </div>
     </div>
-    <pre>{{form}}</pre>
+    <pre>{{properties}}</pre>
 
     <template #actions>
       <SecondaryOutlinedButton

@@ -2,7 +2,10 @@
 
 namespace App\Rules;
 
+use App\Models\Property as ModelsProperty;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class Property implements Rule
 {
@@ -25,7 +28,14 @@ class Property implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
+        $attribute = Str::afterLast($attribute, '.');
+
+        $property = ModelsProperty::whereSymbolicName($attribute);
+
+        if ($property->exists()) {
+            // TODO validate strongly here (its loose now)
+            return true;
+        }
     }
 
     /**
