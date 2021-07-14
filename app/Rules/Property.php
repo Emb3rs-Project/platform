@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use App\Models\Property as ModelsProperty;
+use App\Models\TemplateProperty;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -30,12 +31,52 @@ class Property implements Rule
     {
         $attribute = Str::afterLast($attribute, '.');
 
-        $property = ModelsProperty::whereSymbolicName($attribute);
+        $property = ModelsProperty::whereSymbolicName($attribute)->first();
 
-        if ($property->exists()) {
-            // TODO validate strongly here (its loose now)
-            return true;
+        if ($property->doesntExist()) return false;
+
+        $templateProperty = TemplateProperty::wherePropertyId($property->id)->first();
+
+        if ($templateProperty->doesntExist()) return false;
+
+        $type = '';
+
+        switch (Str::lower($property->dataType)) {
+            case 'text':
+                $type = 'string';
+                break;
+            case 'string':
+                $type = 'string';
+                break;
+            case 'number':
+                $type = 'numeric';
+                break;
+            case 'float':
+                $type = 'numeric';
+                break;
+
+            default:
+                break;
         }
+
+        $validator = Validator::make([
+            $attribute => $value
+        ], [
+            $attribute => [
+                $templateProperty->required ?: 'required',
+                $type
+            ]
+        ]);
+
+        info($templateProperty->required);
+
+        $t = $templateProperty->required ? 'required' : '';
+
+        info("$t, $type");
+
+        if ($validator->fails()) return false;
+
+        return true;
     }
 
     /**
