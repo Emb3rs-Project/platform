@@ -5,11 +5,22 @@ namespace App\Rules;
 use App\Models\Property as ModelsProperty;
 use App\Models\TemplateProperty;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule as ValidationRule;
 
 class Property implements Rule
 {
+    /**
+     * The validation error messages
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    private Collection $messages;
+    // private array $messages;
+
     /**
      * Create a new rule instance.
      *
@@ -17,7 +28,10 @@ class Property implements Rule
      */
     public function __construct()
     {
-        //
+        $this->messages = new Collection();
+
+        // Generic catch-all message
+        $this->messages->push('An error occured during the validation');
     }
 
     /**
@@ -40,9 +54,8 @@ class Property implements Rule
         if ($templateProperty->doesntExist()) return false;
 
         $type = '';
-
         switch (Str::lower($property->dataType)) {
-            case 'text':
+            case 'text': // THIS IS FOR LEAGACY SUPPORT FOR THE EXISTING RECORDS
                 $type = 'string';
                 break;
             case 'string':
@@ -54,6 +67,9 @@ class Property implements Rule
             case 'float':
                 $type = 'numeric';
                 break;
+            case 'datetime':
+                $type = 'numeric';
+                break;
 
             default:
                 break;
@@ -63,18 +79,20 @@ class Property implements Rule
             $attribute => $value
         ], [
             $attribute => [
-                $templateProperty->required ?: 'required',
+                ValidationRule::requiredIf(function () use ($templateProperty) {
+                    return $templateProperty->required;
+                }),
                 $type
             ]
         ]);
 
-        info($templateProperty->required);
+        if ($validator->fails()) {
+            $errors = collect($validator->errors()->all());
 
-        $t = $templateProperty->required ? 'required' : '';
+            $this->messages = $errors;
 
-        info("$t, $type");
-
-        if ($validator->fails()) return false;
+            return false;
+        }
 
         return true;
     }
@@ -86,6 +104,8 @@ class Property implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        $message = $this->messages->implode(PHP_EOL);
+
+        return $message;
     }
 }
