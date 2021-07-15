@@ -16,7 +16,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\RequiredIf;
 
 class StoreSink implements StoresSinks
 {
@@ -46,31 +45,11 @@ class StoreSink implements StoresSinks
      * @param  array  $input
      * @return array
      */
-    protected function validate(array $input): array
+    protected function validate(array $input)
     {
         $validator = Validator::make($input, [
             'sink' => ['required', 'array'],
-
-            'sink.data.*' => [
-                new Property,
-                // function ($attribute, $value, $fail) use ($input) {
-                //     $attribute = Str::afterLast($attribute, '.');
-
-                //     $property = ModelsProperty::whereSymbolicName($attribute);
-
-                //     if ($property->exists()) {
-                //         $propertyId = $property->first()->id;
-
-                //         $t = TemplateProperty::wherePropertyId($propertyId)->first();
-
-
-
-                //         info($t);
-                //         // info($t === Arr::get($input, 'template_id'));
-                //         return true;
-                //     }
-                // }
-            ],
+            'sink.data.*' => [new Property],
             'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => [
@@ -94,6 +73,10 @@ class StoreSink implements StoresSinks
             'location.lat' => ['required_with:location', 'numeric', new Coordinates],
             'location.lng' => ['required_with:location', 'numeric', new Coordinates],
         ]);
+
+        $validated = $validator->validate();
+
+        $this->checkIfPropertiesBelongToTemplate($validated);
 
         return $validator->validate();
     }
@@ -136,5 +119,13 @@ class StoreSink implements StoresSinks
         // $instance->teams()->attach($user->currentTeam);
 
         // return $instance;
+    }
+
+    /**
+     * Perform aditional checks after the validation
+     */
+    private function checkIfPropertiesBelongToTemplate(array $validated)
+    {
+        info('yes');
     }
 }
