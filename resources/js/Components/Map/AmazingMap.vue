@@ -359,11 +359,11 @@ export default {
 
       map.value.on(
         "moveend",
-        _.debounce(({ target }) => (center.value = target.getCenter()), 700)
+        _.debounce(({ target }) => (center.value = target.getCenter()), 1000)
       );
       map.value.on(
         "zoomend",
-        _.debounce(({ target }) => (zoom.value = target.getZoom()), 700)
+        _.debounce(({ target }) => (zoom.value = target.getZoom()), 1000)
       );
 
       refreshInstance();
@@ -397,6 +397,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>
