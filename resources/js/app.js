@@ -10,6 +10,7 @@ import { store } from './Stores';
 require('./bootstrap');
 
 createInertiaApp({
+  title: title => title ? `${title} | EMB3R's` : `EMB3R's`,
   resolve: name => require(`./Pages/${name}`).default,
   setup({ el, app, props, plugin }) {
     createApp({ render: () => h(app, props) })

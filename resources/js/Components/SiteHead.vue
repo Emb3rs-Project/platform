@@ -1,7 +1,7 @@
 <template>
 
   <Head>
-    <title>{{title ? `${title} | ` : ''}}EMB3R's</title>
+    <title>{{title}}</title>
     <meta
       head-key="description"
       name="description"
@@ -21,6 +21,7 @@ export default {
   props: {
     title: {
       type: String,
+      required: true,
     },
     description: {
       type: String,
