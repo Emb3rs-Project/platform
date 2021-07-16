@@ -172,12 +172,12 @@
                           {{ simulation.simulation_type.description ? simulation.simulation_type.description : "Not defined" }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
-                          <InertiaLink :href="route('projects.simulations.show', [project.id, simulation.id])">
-                            <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
-                          </InertiaLink>
-                          <InertiaLink :href="route('projects.simulations.edit', [project.id, simulation.id])">
-                            <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
-                          </InertiaLink>
+                          <Link :href="route('projects.simulations.show', [project.id, simulation.id])">
+                          <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                          </Link>
+                          <Link :href="route('projects.simulations.edit', [project.id, simulation.id])">
+                          <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                          </Link>
                           <button
                             class="focus:outline-none"
                             @click="onSimulationDelete(project, simulation)"
@@ -224,6 +224,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
@@ -238,6 +239,7 @@ import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
 export default {
   components: {
+    Link,
     AppLayout,
     LeafletMap,
     InputRow,

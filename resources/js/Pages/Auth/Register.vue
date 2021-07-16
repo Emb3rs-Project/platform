@@ -98,12 +98,12 @@
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <InertiaLink
+        <Link
           :href="route('login')"
           class="underline text-sm text-gray-600 hover:text-gray-900"
         >
-          Already registered?
-        </InertiaLink>
+        Already registered?
+        </Link>
 
         <jet-button
           class="ml-4"
@@ -118,6 +118,8 @@
 </template>
 
 <script>
+import { Link } from "@inertiajs/inertia-vue3";
+
 import JetAuthenticationCard from "@/Jetstream/AuthenticationCard";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 import JetButton from "@/Jetstream/Button";
@@ -128,6 +130,7 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors";
 
 export default {
   components: {
+    Link,
     JetAuthenticationCard,
     JetAuthenticationCardLogo,
     JetButton,

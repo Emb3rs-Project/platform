@@ -55,13 +55,13 @@
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <InertiaLink
+        <Link
           v-if="canResetPassword"
           :href="route('password.request')"
           class="underline text-sm text-gray-600 hover:text-gray-900"
         >
-          Forgot your password?
-        </InertiaLink>
+        Forgot your password?
+        </Link>
 
         <jet-button
           class="ml-4"
@@ -73,17 +73,19 @@
       </div>
     </form>
     <template #bottom-message>
-      <InertiaLink
+      <Link
         :href="route('register')"
         class="underline text-sm text-gray-600 hover:text-gray-900"
       >
-        Don't have an Account?
-      </InertiaLink>
+      Don't have an Account?
+      </Link>
     </template>
   </jet-authentication-card>
 </template>
 
 <script>
+import { Link } from "@inertiajs/inertia-vue3";
+
 import JetAuthenticationCard from "@/Jetstream/AuthenticationCard";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 import JetButton from "@/Jetstream/Button";
@@ -94,6 +96,7 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors";
 
 export default {
   components: {
+    Link,
     JetAuthenticationCard,
     JetAuthenticationCardLogo,
     JetButton,

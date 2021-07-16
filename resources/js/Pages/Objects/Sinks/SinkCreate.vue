@@ -96,7 +96,7 @@
 
       </div>
     </div>
-    <pre>{{properties}}</pre>
+    <pre>{{form}}</pre>
 
     <template #actions>
       <SecondaryOutlinedButton
@@ -158,6 +158,7 @@ export default {
   },
 
   setup(props, { emit }) {
+    console.log(props.templates);
     const store = useStore();
 
     const form = useForm({
@@ -220,9 +221,12 @@ export default {
       (location) => {
         form.location_id = null;
         form.location = null;
+
         selectedLocation.value = locations.value.find(
           (l) => l.key === location.key
         );
+
+        // console.log("SELECTED LOCATION", selectedLocation.value);
 
         if (typeof selectedLocation.value.key === "object") {
           return (form.location = {
@@ -230,6 +234,8 @@ export default {
             lng: location.key.lng,
           });
         }
+
+        console.log("SELECTED LOCATION", selectedLocation.value);
 
         return (form.location_id = location.key);
       },
@@ -276,6 +282,7 @@ export default {
       //     //   property.default_value ? property.default_value : "";
       //   }
       // }
+      console.log(form);
       form.post(route("objects.sinks.store"), {
         onSuccess: () => {
           store.dispatch("map/refreshMap");

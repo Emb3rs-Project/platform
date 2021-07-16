@@ -1,16 +1,23 @@
 <template>
-  <InertiaHead>
+
+  <Head>
     <title>{{title ? `${title} | ` : ''}}EMB3R's</title>
     <meta
       head-key="description"
       name="description"
       :content="description ? description : ''"
     />
-  </InertiaHead>
+  </Head>
 </template>
 
 <script>
+import { Head } from "@inertiajs/inertia-vue3";
+
 export default {
+  components: {
+    Head,
+  },
+
   props: {
     title: {
       type: String,
