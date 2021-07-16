@@ -20,11 +20,13 @@ trait HasEmbersProperties
      */
     protected function checkIfPropertiesBelongToTemplate(array $validated): void
     {
+        $instance = $this->getInstanceType($validated);
+
         $templateId = Arr::get($validated, 'template_id');
 
         $templateProperties = TemplateProperty::whereTemplateId($templateId)->get();
 
-        $properties = Arr::get($validated, 'sink.data');
+        $properties = Arr::get($validated, "$instance.data");
 
         $errors = new Collection();
 
@@ -43,16 +45,20 @@ trait HasEmbersProperties
                 };
             }
 
-            if (!$flag) {
-                $dotName = '';
-
-                if (Arr::has($validated, 'sink')) $dotName = "sink.data.$name";
-                if (Arr::has($validated, 'source')) $dotName = "source.data.$name";
-
-                $errors->put($dotName, "Property $name is not valid.");
-            }
+            if (!$flag) $errors->put("$instance.data.$name", "Property $name is not valid.");
         }
 
         if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());
+    }
+
+    /**
+     * Determine the Instance type of the calling class
+     *
+     * @param  array  $validated
+     * @return string
+     */
+    private function getInstanceType(array $validated): string
+    {
+        return Arr::has($validated, 'sink') ? 'sink' : 'source';
     }
 }

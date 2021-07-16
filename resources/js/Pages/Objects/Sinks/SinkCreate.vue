@@ -153,7 +153,6 @@ export default {
   },
 
   setup(props, { emit }) {
-    console.log(props.templates);
     const store = useStore();
 
     const form = useForm({
@@ -221,8 +220,6 @@ export default {
           (l) => l.key === location.key
         );
 
-        // console.log("SELECTED LOCATION", selectedLocation.value);
-
         if (typeof selectedLocation.value.key === "object") {
           return (form.location = {
             lat: location.key.lat,
@@ -265,19 +262,8 @@ export default {
     });
 
     const submit = () => {
-      // validation
-      // if (templateInfo.value.properties.length) {
-      //   for (const property of templateInfo.value.properties) {
-      //     if (property.required) {
-      //       form.sink.data[property.property.symbolic_name]
-      //     }
-      //     console.log(property.);
+      // TODO: perform client side validation as well
 
-      //     // form.sink.data[property.property.symbolic_name] =
-      //     //   property.default_value ? property.default_value : "";
-      //   }
-      // }
-      console.log(form);
       form.post(route("objects.sinks.store"), {
         onSuccess: () => {
           store.dispatch("map/refreshMap");
