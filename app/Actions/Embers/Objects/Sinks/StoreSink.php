@@ -4,22 +4,24 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\EmbersPermissionable;
+use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\Location;
-use App\Models\Property as ModelsProperty;
-use App\Models\Template;
+use App\Models\Property;
 use App\Models\TemplateProperty;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
-use App\Rules\Property;
+use App\Rules\Property as RuleProperty;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class StoreSink implements StoresSinks
 {
-    use EmbersPermissionable;
+    use EmbersPermissionable,
+        HasEmbersProperties;
 
     /**
      * Validate and create a new Sink.
@@ -48,8 +50,8 @@ class StoreSink implements StoresSinks
     protected function validate(array $input)
     {
         $validator = Validator::make($input, [
-            'sink' => ['required', 'array'],
-            'sink.data.*' => [new Property],
+            'sink' => ['required', 'array:data'],
+            'sink.data.*' => [new RuleProperty],
             'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => [
@@ -68,7 +70,7 @@ class StoreSink implements StoresSinks
                 }),
                 new Prohibit($input, 'location_id'),
                 'nullable',
-                'array'
+                'array:lat,lng',
             ],
             'location.lat' => ['required_with:location', 'numeric', new Coordinates],
             'location.lng' => ['required_with:location', 'numeric', new Coordinates],
@@ -78,7 +80,7 @@ class StoreSink implements StoresSinks
 
         $this->checkIfPropertiesBelongToTemplate($validated);
 
-        return $validator->validate();
+        return $validated;
     }
 
     /**
@@ -90,6 +92,8 @@ class StoreSink implements StoresSinks
      */
     protected function save($user, array $input)
     {
+        info($input);
+
         $newInstance = [
             'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
             'values' => [
@@ -115,17 +119,9 @@ class StoreSink implements StoresSinks
             Arr::set($newInstance, 'location_id', $location->id);
         }
 
-        // $instance = Instance::create($newInstance);
-        // $instance->teams()->attach($user->currentTeam);
+        $instance = Instance::create($newInstance);
+        $instance->teams()->attach($user->currentTeam);
 
-        // return $instance;
-    }
-
-    /**
-     * Perform aditional checks after the validation
-     */
-    private function checkIfPropertiesBelongToTemplate(array $validated)
-    {
-        info('yes');
+        return $instance;
     }
 }

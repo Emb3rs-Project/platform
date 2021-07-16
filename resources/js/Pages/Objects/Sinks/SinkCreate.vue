@@ -76,27 +76,22 @@
             :label="prop.property.name"
           />
         </div>
-        <div v-if="Object.keys(form.errors).length">
-          <jet-input-error
-            :message="form.errors"
-            class="mt-2"
-          />
-        </div>
-        <!-- <div
-          v-for="error in form.errors"
-          :key="error"
-        >
-          <div :v-if="error === form.sink.data[prop.property.symbolic_name]">
-            <jet-input-error
-              :message="form.errors"
-              class="mt-2"
-            />
+        <div v-if="form.hasErrors">
+          <div
+            v-for="(error, key) in form.errors"
+            :key="key"
+          >
+            <div v-if="key.includes(prop.property.symbolic_name)">
+              <jet-input-error
+                :message="error"
+                class="mt-2"
+              />
+            </div>
           </div>
-        </div> -->
 
+        </div>
       </div>
     </div>
-    <pre>{{form}}</pre>
 
     <template #actions>
       <SecondaryOutlinedButton
