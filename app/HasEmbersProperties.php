@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Instance;
 use App\Models\Property;
 use App\Models\TemplateProperty;
 use Illuminate\Support\Arr;
@@ -14,19 +15,20 @@ trait HasEmbersProperties
      * Check if the provided Properties belong to the provided Template
      *
      * @param  array  $validated
+     * @param  Instance  $instance
      * @return void
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfPropertiesBelongToTemplate(array $validated): void
+    protected function checkIfPropertiesBelongToTemplate(array $validated, ?Instance $instance): void
     {
-        $instance = $this->getInstanceType($validated);
+        $instanceType = $this->getInstanceType($validated);
 
-        $templateId = Arr::get($validated, 'template_id');
+        $templateId = Arr::get($validated, 'template_id') ?? $instance->template_id;
 
         $templateProperties = TemplateProperty::whereTemplateId($templateId)->get();
 
-        $properties = Arr::get($validated, "$instance.data");
+        $properties = Arr::get($validated, "$instanceType.data");
 
         $errors = new Collection();
 
@@ -45,7 +47,7 @@ trait HasEmbersProperties
                 };
             }
 
-            if (!$flag) $errors->put("$instance.data.$name", "Property $name is not valid.");
+            if (!$flag) $errors->put("$instanceType.data.$name", "Property $name is not valid.");
         }
 
         if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());

@@ -4,14 +4,16 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\EmbersPermissionable;
+use App\HasEmbersProperties;
 use App\Models\Instance;
-use App\Models\Location;
+use App\Rules\Property;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateSink implements UpdatesSinks
 {
     use EmbersPermissionable;
+    use HasEmbersProperties;
 
     /**
      * Validate, update and return an existing instance.
@@ -27,9 +29,9 @@ class UpdateSink implements UpdatesSinks
 
         $sink = Instance::findOrFail($id);
 
-        $this->validate($input);
+        $validated = $this->validate($input, $sink);
 
-        $sink = $this->save($sink, $input);
+        $sink = $this->save($sink, $validated);
 
         return $sink;
     }
@@ -38,60 +40,41 @@ class UpdateSink implements UpdatesSinks
      * Validate the create Sink operation.
      *
      * @param  array  $input
-     * @return void
+     * @param  Instance  $sink
+     * @return array
      */
-    protected function validate(array $input)
+    protected function validate(array $input, Instance $sink)
     {
-        Validator::make($input, [
-            'sink' => ['filled', 'array'],
-            'sink.data.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['filled', 'array'],
-            'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
-            'template_id' => ['filled', 'integer', 'numeric', 'exists:templates,id'],
-            // 'location_id' => ['filled', 'required_without:location' ,'string', 'exists:locations,id'],
-            // 'location' => ['filled', 'required_without:location_id', 'array', 'exists:locations,id'],
-            'location_id' => ['filled'], // for now. Later remove current line and uncomment 2 above
-        ])->validate();
+        $validator = Validator::make($input, [
+            'sink' => ['filled', 'array:data'],
+            'sink.data.*' => [new Property],
+            'template_id' => ['filled', 'numeric', 'integer', 'exists:templates,id'],
+            'location_id' => ['filled', 'numeric', 'integer', 'exists:locations,id'],
+        ]);
+
+        $validated = $validator->validate();
+
+        $this->checkIfPropertiesBelongToTemplate($validated, $sink);
+
+        return $validated;
     }
 
     /**
-     * Save the Sink in the DB.
+     * Update the Sink in the DB.
      *
-     * @param  Instance $sink
-     * @param  array    $input
+     * @param  Instance  $sink
+     * @param  array  $input
      * @return Instance
      */
     protected function save(Instance $sink, array $input)
     {
-        if (!empty($input['sink']['data']['name'])) {
-            $sink->name = $input['sink']['data']['name'];
-        }
+        info($input);
 
-        if (!empty($input['equipments'])) {
-            $newInstance['name']['equipments'] = $input['equipments'];
-        }
+        $name = Arr::get($input, 'sink.data.name');
 
-        if (!empty($input['template_id'])) {
-            $sink->template_id = $input['template_id'];
-        }
+        if (!is_null($name)) $sink->name = $name;
 
-        if (!empty($input['location_id'])) {
-            if (Arr::accessible($input["location_id"])) {
-                $marker = $input["location_id"];
-                $location = Location::create([
-                    'name' => $sink->name,
-                    'type' => 'point',
-                    'data' => [
-                        "center" => [$marker["lat"], $marker["lng"]]
-                    ]
-                ]);
-                $sink->location_id = $location->id;
-            } else {
-                $sink['location_id'] = $input['location_id'];
-            }
-        }
-
-        $sink->save();
+        $sink->update($input);
 
         return $sink;
     }

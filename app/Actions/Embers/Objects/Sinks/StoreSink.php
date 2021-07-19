@@ -16,8 +16,8 @@ use Illuminate\Validation\Rule;
 
 class StoreSink implements StoresSinks
 {
-    use EmbersPermissionable,
-        HasEmbersProperties;
+    use EmbersPermissionable;
+    use HasEmbersProperties;
 
     /**
      * Validate and create a new Sink.
@@ -48,7 +48,6 @@ class StoreSink implements StoresSinks
         $validator = Validator::make($input, [
             'sink' => ['required', 'array:data'],
             'sink.data.*' => [new Property],
-            'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => [
                 Rule::requiredIf(function () use ($input) {
@@ -74,7 +73,7 @@ class StoreSink implements StoresSinks
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesBelongToTemplate($validated);
+        $this->checkIfPropertiesBelongToTemplate($validated, null);
 
         return $validated;
     }
@@ -90,9 +89,7 @@ class StoreSink implements StoresSinks
     {
         $newInstance = [
             'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
-            'values' => [
-                'equipments' => Arr::get($input, 'equipments') ?? []
-            ],
+            'values' => [],
             'template_id' => Arr::get($input, 'template_id'),
             'location_id' => Arr::get($input, 'location_id')
         ];
