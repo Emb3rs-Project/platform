@@ -81,14 +81,12 @@
             v-for="(error, key) in form.errors"
             :key="key"
           >
-            <div v-if="key.includes(prop.property.symbolic_name)">
-              <jet-input-error
-                :message="error"
-                class="mt-2"
-              />
-            </div>
+            <jet-input-error
+              v-show="key.includes(prop.property.symbolic_name)"
+              :message="error"
+              class="mt-2"
+            />
           </div>
-
         </div>
       </div>
     </div>
@@ -227,8 +225,6 @@ export default {
           });
         }
 
-        console.log("SELECTED LOCATION", selectedLocation.value);
-
         return (form.location_id = location.key);
       },
       { immediate: true, deep: true }
@@ -262,7 +258,24 @@ export default {
     });
 
     const submit = () => {
-      // TODO: perform client side validation as well
+      // TODO: Inertia form is not compatible with the below logic, needs rework
+      // for (const _property of properties.value) {
+      //   if (_property.required) {
+      //     const errors = {};
+      //     const propertyName = `sink.data.${_property.property.symbolic_name}`;
+
+      //     errors[
+      //       propertyName
+      //     ] = `${_property.property.symbolic_name} is required.`;
+
+      //     form.errors = errors;
+      //   }
+      // }
+      // console.log(form.errors);
+
+      // if (form.errors.length) {
+      //   form.hasErrors = true;
+      // }
 
       form.post(route("objects.sinks.store"), {
         onSuccess: () => {

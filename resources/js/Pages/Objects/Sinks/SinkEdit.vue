@@ -44,23 +44,6 @@
       </div>
     </div>
 
-    <!-- Sink Name -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <TextInput
-          v-model="form.sink.data.name"
-          :label="'Name'"
-        />
-      </div>
-    </div>
-
     <!-- Sink Properties -->
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -94,6 +77,18 @@
             :label="prop.property.name"
           />
         </div>
+        <div v-if="form.hasErrors">
+          <div
+            v-for="(error, key) in form.errors"
+            :key="key"
+          >
+            <jet-input-error
+              v-show="key.includes(prop.property.symbolic_name)"
+              :message="error"
+              class="mt-2"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -101,7 +96,7 @@
       <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
-        @click="onClose"
+        @click="onCancel"
       >
         Cancel
       </SecondaryOutlinedButton>
@@ -116,9 +111,8 @@
 </template>
 
 <script>
-import { ref, watch, computed, onBeforeUpdate } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
-// import { Inertia } from '@inertiajs/inertia'
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
@@ -180,38 +174,37 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
+        properties: t.template_properties,
       }))
     );
+    const selectedTemplate = ref(
+      templates.value.find((t) => t.key === props.instance.template.id)
+    );
+
     const locations = computed(() =>
       props.locations.map((l) => ({
         key: l.id,
         value: l.name,
       }))
     );
-
-    const selectedTemplate = ref(
-      templates.value.find((t) => t.key === props.instance.template.id)
-    );
-
     const selectedLocation = ref(
       locations.value.find((l) => l.key === props.instance.location.id)
     );
 
     watch(
       selectedTemplate,
-      (selectedTemplate) => {
-        templateInfo.value = props.templates.find(
-          (t) => t.id === selectedTemplate.key
+      (template) => {
+        templateInfo.value = templates.value.find(
+          (t) => t.key === template.key
         );
-        form.template_id = selectedTemplate.key;
+        form.template_id = template.key;
         form.sink.data.name = props.instance.name;
-        console.log(props.instance.name);
 
-        if (templateInfo.value?.template_properties) {
-          for (const prop of templateInfo.value?.template_properties) {
-            form.sink.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
+        if (templateInfo.value.properties.length) {
+          for (const property of templateInfo.value.properties) {
+            console.log(property);
+            form.sink.data[property.property.symbolic_name] =
+              property.default_value ? property.default_value : "";
           }
         }
       },
@@ -232,7 +225,7 @@ export default {
     });
 
     const properties = computed(() =>
-      Object.assign([], templateInfo.value?.template_properties)
+      Object.assign([], templateInfo.value.properties)
     );
 
     const submit = () => {
@@ -245,7 +238,7 @@ export default {
       });
     };
 
-    const onClose = () =>
+    const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     const onLocationSelect = () => {};
@@ -261,7 +254,7 @@ export default {
       properties,
       submit,
       onLocationSelect,
-      onClose,
+      onCancel,
     };
   },
 };

@@ -68,8 +68,6 @@ class UpdateSink implements UpdatesSinks
      */
     protected function save(Instance $sink, array $input)
     {
-        info($input);
-
         $name = Arr::get($input, 'sink.data.name');
 
         if (!is_null($name)) $sink->name = $name;
