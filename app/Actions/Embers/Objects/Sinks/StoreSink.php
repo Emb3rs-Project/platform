@@ -7,16 +7,12 @@ use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\Location;
-use App\Models\Property;
-use App\Models\TemplateProperty;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
-use App\Rules\Property as RuleProperty;
+use App\Rules\Property;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
 
 class StoreSink implements StoresSinks
 {
@@ -51,7 +47,7 @@ class StoreSink implements StoresSinks
     {
         $validator = Validator::make($input, [
             'sink' => ['required', 'array:data'],
-            'sink.data.*' => [new RuleProperty],
+            'sink.data.*' => [new Property],
             'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => [
@@ -92,8 +88,6 @@ class StoreSink implements StoresSinks
      */
     protected function save($user, array $input)
     {
-        info($input);
-
         $newInstance = [
             'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
             'values' => [
