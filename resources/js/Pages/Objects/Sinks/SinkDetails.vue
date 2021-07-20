@@ -89,6 +89,24 @@
       </div>
     </div>
 
+    <!-- Sink Properties -->
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-for="(value, key) in instance.values"
+      :key="value"
+    >
+      <div>
+        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+          {{ key }}
+        </label>
+      </div>
+      <div class="sm:col-span-2">
+        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+          {{ value }}
+        </div>
+      </div>
+    </div>
+
     <template #actions>
       <SecondaryOutlinedButton
         type="button"
