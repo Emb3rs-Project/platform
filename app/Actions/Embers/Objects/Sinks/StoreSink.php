@@ -89,7 +89,7 @@ class StoreSink implements StoresSinks
     {
         $newInstance = [
             'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
-            'values' => [],
+            'values' => Arr::get($input, 'sink.data'),
             'template_id' => Arr::get($input, 'template_id'),
             'location_id' => Arr::get($input, 'location_id')
         ];

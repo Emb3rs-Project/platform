@@ -24,10 +24,6 @@ class SinkController extends Controller
     {
         $sinks = app(IndexesSinks::class)->index($request->user());
 
-        // return Inertia::render('Objects/Sinks/SinkIndex', [
-        //     'sinks' => $sinks
-        // ]);
-
         return response()->json([
             'sinks' => $sinks
         ]);
@@ -61,11 +57,7 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        $t = app(StoresSinks::class)->store($request->user(), $request->all());
-
-        // return response()->json([
-        //     'sink' => $t
-        // ]);
+        app(StoresSinks::class)->store($request->user(), $request->all());
 
         return redirect()->route('objects.index');
     }
@@ -127,8 +119,7 @@ class SinkController extends Controller
     {
         $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
 
-        // return Redirect::route('objects.sinks.show', $updatedSink->id);
-        return redirect()->route('objects.index');
+        return redirect()->route('objects.sinks.show', $updatedSink->id);
     }
 
     /**

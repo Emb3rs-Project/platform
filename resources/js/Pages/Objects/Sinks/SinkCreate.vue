@@ -148,9 +148,13 @@ export default {
       type: Array,
       default: [],
     },
+    errors: {
+      type: Object,
+    },
   },
 
   setup(props, { emit }) {
+    console.log(props);
     const store = useStore();
 
     const form = useForm({

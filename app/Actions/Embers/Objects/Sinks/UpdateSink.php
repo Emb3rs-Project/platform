@@ -72,6 +72,10 @@ class UpdateSink implements UpdatesSinks
 
         if (!is_null($name)) $sink->name = $name;
 
+        $data = Arr::get($input, 'sink.data');
+
+        if (!is_null($data)) $sink->values = $data;
+
         $sink->update($input);
 
         return $sink;

@@ -82,7 +82,7 @@
             v-for="(error, key) in form.errors"
             :key="key"
           >
-            <jet-input-error
+            <JetInputError
               v-show="key.includes(prop.property.symbolic_name)"
               :message="error"
               class="mt-2"
@@ -119,6 +119,7 @@ import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import JetInputError from "../../../Jetstream/InputError";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
@@ -130,6 +131,7 @@ export default {
     SlideOver,
     SelectMenu,
     TextInput,
+    JetInputError,
     PrimaryButton,
     SecondaryOutlinedButton,
   },
@@ -140,10 +142,6 @@ export default {
       default: false,
     },
     templates: {
-      type: Array,
-      default: [],
-    },
-    equipments: {
       type: Array,
       default: [],
     },
@@ -202,9 +200,15 @@ export default {
 
         if (templateInfo.value.properties.length) {
           for (const property of templateInfo.value.properties) {
-            console.log(property);
-            form.sink.data[property.property.symbolic_name] =
-              property.default_value ? property.default_value : "";
+            const value =
+              props.instance.values[property.property.symbolic_name];
+
+            if (value) {
+              form.sink.data[property.property.symbolic_name] = value;
+            } else {
+              form.sink.data[property.property.symbolic_name] =
+                property.default_value ? property.default_value : "";
+            }
           }
         }
       },

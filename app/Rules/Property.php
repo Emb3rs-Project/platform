@@ -5,8 +5,6 @@ namespace App\Rules;
 use App\Models\Property as ModelsProperty;
 use App\Models\TemplateProperty;
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule as ValidationRule;
@@ -16,9 +14,9 @@ class Property implements Rule
     /**
      * The validation error messages
      *
-     * @var \Illuminate\Support\Collection
+     * @var string
      */
-    private Collection $messages;
+    private string $message;
     // private array $messages;
 
     /**
@@ -28,10 +26,7 @@ class Property implements Rule
      */
     public function __construct()
     {
-        $this->messages = new Collection();
-
-        // Generic catch-all message
-        $this->messages->push('An error occured during the validation');
+        $this->message = 'An error occured during the validation';
     }
 
     /**
@@ -47,11 +42,19 @@ class Property implements Rule
 
         $property = ModelsProperty::whereSymbolicName($attribute)->first();
 
-        if ($property->doesntExist()) return false;
+        if (is_null($property)) {
+            $this->message = "Property $attribute is not valid.";
+
+            return false;
+        };
 
         $templateProperty = TemplateProperty::wherePropertyId($property->id)->first();
 
-        if ($templateProperty->doesntExist()) return false;
+        if (is_null($templateProperty)) {
+            $this->message = "Property $attribute is not valid.";
+
+            return false;
+        }
 
         $type = '';
         switch (Str::lower($property->dataType)) {
@@ -87,9 +90,9 @@ class Property implements Rule
         ]);
 
         if ($validator->fails()) {
-            $errors = collect($validator->errors()->all());
+            $errors = collect($validator->errors()->all())->implode(', ');
 
-            $this->messages = $errors;
+            $this->message = $errors;
 
             return false;
         }
@@ -104,8 +107,6 @@ class Property implements Rule
      */
     public function message()
     {
-        $message = $this->messages->implode(PHP_EOL);
-
-        return $message;
+        return $this->message;
     }
 }
