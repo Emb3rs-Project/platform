@@ -1,6 +1,4 @@
 <template>
-
-  <SiteHead />
   <div class="h-screen flex overflow-hidden bg-white">
     <TransitionRoot
       as="template"
@@ -532,7 +530,6 @@ import { Inertia } from "@inertiajs/inertia";
 import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
-import SiteHead from "@/Components/SiteHead.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 import {
@@ -591,7 +588,6 @@ const navigation = [
 export default {
   components: {
     Link,
-    SiteHead,
     Dialog,
     DialogOverlay,
     Menu,

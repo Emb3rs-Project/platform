@@ -2,12 +2,14 @@
 
   <Head>
     <title>{{title}}</title>
+
     <meta
       head-key="description"
       name="description"
       :content="description ? description : ''"
     />
   </Head>
+
 </template>
 
 <script>
