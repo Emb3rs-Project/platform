@@ -5,6 +5,8 @@ namespace App\Actions\Embers\Objects\Sinks;
 use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\EmbersPermissionable;
 use App\Models\Instance;
+use App\Models\Property;
+use App\Models\TemplateProperty;
 
 class ShowSink implements ShowsSinks
 {
@@ -23,6 +25,13 @@ class ShowSink implements ShowsSinks
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
-        return $sink;
+        $templateProperties = TemplateProperty::whereTemplateId($sink->template_id)->get('property_id');
+
+        $properties = Property::whereIn('id', $templateProperties)->get('*');
+
+        return [
+            $sink,
+            $properties
+        ];
     }
 }

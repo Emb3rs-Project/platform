@@ -28,7 +28,7 @@ class EditSink implements EditsSinks
 
         $sinkCategories = Category::whereType('sink')->get('id');
 
-        $equipmentCategories = Category::whereType('equipment')->get('id');
+        // $equipmentCategories = Category::whereType('equipment')->get('id');
 
         $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
             ->with([
@@ -38,19 +38,19 @@ class EditSink implements EditsSinks
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
+        // $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+        //     ->with([
+        //         'templateProperties',
+        //         'templateProperties.unit',
+        //         'templateProperties.property'
+        //     ])
+        //     ->get();
 
         $locations = Location::all();
 
         return [
             $sinkTemplates,
-            $equipmentTemplates,
+            // $equipmentTemplates,
             $locations,
             $sink
         ];

@@ -69,7 +69,6 @@ export default {
     const slideOpen = computed(() => store.getters["objects/slideOpen"]);
 
     const slideComponent = computed(() => {
-      //   console.log(store.state.objects);
       return slideController.value
         ? defineAsyncComponent({
             loader: () => import(`@/Pages/${slideController.value}`),
@@ -109,6 +108,8 @@ export default {
       });
 
       slideProps.value = response.props;
+
+      console.log(response.props);
 
       if (response.slideOver === slideController.value) {
         store.commit("objects/openSlide");
