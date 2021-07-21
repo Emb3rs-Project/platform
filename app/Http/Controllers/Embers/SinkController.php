@@ -37,14 +37,16 @@ class SinkController extends Controller
      */
     public function create(Request $request)
     {
-        [$templates, $equipments, $locations] = app(CreatesSinks::class)->create($request->user());
+        [
+            $templates,
+            $locations
+        ] = app(CreatesSinks::class)->create($request->user());
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkCreate',
-            "props" => [
-                "templates" => $templates,
-                "equipments" => $equipments,
-                "locations" => $locations
+            'slideOver' => 'Objects/Sinks/SinkCreate',
+            'props' => [
+                'templates' => $templates,
+                'locations' => $locations
             ]
         ];
     }
@@ -98,11 +100,11 @@ class SinkController extends Controller
         ] = app(EditsSinks::class)->edit($request->user(), $id);
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkEdit',
-            "props" => [
-                "templates" => $templates,
-                "locations" => $locations,
-                "instance" => $instance
+            'slideOver' => 'Objects/Sinks/SinkEdit',
+            'props' => [
+                'templates' => $templates,
+                'locations' => $locations,
+                'instance' => $instance
             ]
         ];
     }
