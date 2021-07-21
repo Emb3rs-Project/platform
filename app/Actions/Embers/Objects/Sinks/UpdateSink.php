@@ -54,7 +54,7 @@ class UpdateSink implements UpdatesSinks
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesBelongToTemplate($validated, $sink);
+        $this->checkIfPropertiesBelongToTemplate($validated, $sink->template_id);
 
         return $validated;
     }

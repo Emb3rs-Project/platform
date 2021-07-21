@@ -15,16 +15,16 @@ trait HasEmbersProperties
      * Check if the provided Properties belong to the provided Template
      *
      * @param  array  $validated
-     * @param  Instance  $instance
+     * @param  int  $templateId
      * @return void
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfPropertiesBelongToTemplate(array $validated, ?Instance $instance): void
+    protected function checkIfPropertiesBelongToTemplate(array $validated, ?int $templateId): void
     {
         $instanceType = $this->getInstanceType($validated);
 
-        $templateId = Arr::get($validated, 'template_id') ?? $instance->template_id;
+        $templateId = Arr::get($validated, 'template_id') ?? $templateId;
 
         $templateProperties = TemplateProperty::whereTemplateId($templateId)->get();
 
