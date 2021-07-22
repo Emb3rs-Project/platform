@@ -113,6 +113,7 @@
 <script>
 import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
@@ -122,7 +123,6 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "../../../Jetstream/InputError";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import { useStore } from "vuex";
 
 export default {
   components: {

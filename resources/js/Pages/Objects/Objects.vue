@@ -1,7 +1,7 @@
 <template>
-  <AppLayout>
+  <SiteHead title="Objects" />
 
-    <SiteHead title="Objects" />
+  <AppLayout>
     <!-- Menu Of Available Instances -->
     <div
       class="fixed right-8 top-6 z-10 p-4 rounded-full cursor-pointer bg-yellow-500 hover:animate-none"
