@@ -120,7 +120,7 @@ class SinkController extends Controller
     {
         $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
 
-        return redirect()->route('objects.sinks.show', $updatedSink->id);
+        return redirect()->route('objects.index');
     }
 
     /**
