@@ -1,7 +1,7 @@
 <template>
   <SiteHead title="Create a Sink" />
+
   <SlideOver
-    v-model="open"
     title="New Sink"
     subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
@@ -136,10 +136,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     templates: {
       type: Array,
       default: [],
@@ -148,13 +144,9 @@ export default {
       type: Array,
       default: [],
     },
-    errors: {
-      type: Object,
-    },
   },
 
-  setup(props, { emit }) {
-    console.log(props);
+  setup(props) {
     const store = useStore();
 
     const form = useForm({
@@ -256,11 +248,6 @@ export default {
       Object.assign([], templateInfo.value.properties)
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const submit = () => {
       // TODO: Inertia form is not compatible with the below logic, needs rework
       // for (const _property of properties.value) {
@@ -289,9 +276,8 @@ export default {
       });
     };
 
-    const onCancel = () => {
+    const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
-    };
 
     return {
       form,
@@ -301,7 +287,6 @@ export default {
       locations,
       selectedLocation,
       properties,
-      open,
       submit,
       onCancel,
     };

@@ -1,6 +1,6 @@
 const mix = require('laravel-mix');
 const path = require('path');
-const webpack = require('webpack');
+// const webpack = require('webpack');
 
 mix.js('resources/js/app.js', 'public/js')
   .vue()
@@ -9,23 +9,23 @@ mix.js('resources/js/app.js', 'public/js')
     require('tailwindcss'),
     require('autoprefixer'),
   ])
-  .sourceMaps()
+  // .sourceMaps()
   .alias({
     '@': path.resolve('resources/js'),
   })
   .webpackConfig({
-    stats: {
-      children: false,
-    },
-    output: {
-      chunkFilename: 'js/[name].js?id=[chunkhash]',
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        __VUE_OPTIONS_API__: true,
-        __VUE_PROD_DEVTOOLS__: false,
-      }),
-    ],
+    // stats: {
+    //   children: false,
+    // },
+    // output: {
+    //   chunkFilename: 'js/[name].js?id=[chunkhash]',
+    // },
+    // plugins: [
+    //   new webpack.DefinePlugin({
+    //     __VUE_OPTIONS_API__: true,
+    //     __VUE_PROD_DEVTOOLS__: false,
+    //   }),
+    // ],
   });
 
 if (mix.inProduction()) {

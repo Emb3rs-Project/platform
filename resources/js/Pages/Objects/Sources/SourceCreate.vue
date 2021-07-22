@@ -1,6 +1,5 @@
 <template>
   <SlideOver
-    v-model="open"
     title="New Source"
     subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
@@ -66,10 +65,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     templates: {
       type: Array,
       required: true,
@@ -98,7 +93,7 @@ export default {
 
   emits: ["update:modelValue"],
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
     const steps = ref([
       {
@@ -165,11 +160,6 @@ export default {
       { immediate: true, deep: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const currentStepIndex = computed(() =>
       steps.value.findIndex((step) => step.name === currentStep.value.name)
     );
@@ -208,7 +198,6 @@ export default {
       currentStepIndex,
       currentStepProps,
       stepComponent,
-      open,
       navigateToPreviousStep,
       navigateToNextStep,
       onCancel: () =>

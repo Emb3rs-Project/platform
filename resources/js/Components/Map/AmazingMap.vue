@@ -331,7 +331,6 @@ export default {
     };
 
     const loadMarkers = () => {
-      console.log("loading markers ", instances.value);
       if (instances.value?.length > 0) {
         mapUtils.addInstances(
           map.value,

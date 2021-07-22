@@ -1,7 +1,7 @@
 <template>
   <SiteHead title="Sink Details" />
+
   <SlideOver
-    v-model="open"
     title="Sink Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
@@ -147,7 +147,6 @@
 </template>
 
 <script>
-import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -170,10 +169,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instance: {
       type: Object,
       required: true,
@@ -184,23 +179,19 @@ export default {
     },
   },
 
-  setup(props, { emit }) {
+  setup() {
     const store = useStore();
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
     };
 
+    const onClose = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
     return {
-      open,
       onRouteRequest,
-      onClose: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onClose,
     };
   },
 };

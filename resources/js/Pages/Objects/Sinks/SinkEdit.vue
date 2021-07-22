@@ -3,7 +3,6 @@
   <SiteHead title="Edit a Sink" />
 
   <SlideOver
-    v-model="open"
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
@@ -137,10 +136,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
     templates: {
       type: Array,
       default: [],
@@ -223,11 +218,6 @@ export default {
       { immediate: true, deep: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const properties = computed(() =>
       Object.assign([], templateInfo.value.properties)
     );
@@ -254,7 +244,6 @@ export default {
       locations,
       selectedLocation,
       form,
-      open,
       properties,
       submit,
       onLocationSelect,

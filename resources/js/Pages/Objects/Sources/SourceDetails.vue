@@ -1,6 +1,5 @@
 <template>
   <SlideOver
-    v-model="open"
     title="Source Details"
     subtitle="Below, you can see the details that are associated to the currently selected Source."
     headerBackground="bg-red-700"
@@ -78,10 +77,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instance: {
       type: Object,
       required: true,
@@ -90,11 +85,6 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
@@ -106,14 +96,6 @@ export default {
         : currentStep.value < index
         ? "upcoming"
         : "complete";
-
-    // const mapStepStatus = computed((index) =>
-    //   currentStep.value === index
-    //     ? "current"
-    //     : currentStep.value < index
-    //     ? "upcoming"
-    //     : "complete"
-    // );
 
     const onNextStep = () => currentStep.value++;
     const onPrevStep = () => currentStep.value--;
@@ -143,7 +125,6 @@ export default {
     ]);
 
     return {
-      open,
       steps,
       onRouteRequest,
       currentStep,
