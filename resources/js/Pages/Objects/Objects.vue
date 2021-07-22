@@ -97,8 +97,6 @@ export default {
 
       slideProps.value = response.props;
 
-      console.log("BACKEND-PROPS", response.props);
-
       if (response.slideOver === slideController.value) {
         store.commit("objects/openSlide");
       } else {

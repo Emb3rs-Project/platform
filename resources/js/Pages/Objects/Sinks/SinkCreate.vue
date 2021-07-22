@@ -235,14 +235,34 @@ export default {
         form.template_id = template.key;
 
         if (templateInfo.value.properties.length) {
+          console.log("PROPERTIES EXIST");
           for (const property of templateInfo.value.properties) {
-            form.sink.data[property.property.symbolic_name] =
-              property.default_value ? property.default_value : "";
+            const prop = property.property;
+
+            if (prop) {
+              const placeholder = prop.inputType === "select" ? {} : "";
+
+              form.sink.data[prop.symbolic_name] = property.default_value
+                ? property.default_value
+                : placeholder;
+            }
           }
         }
       },
       { immediate: true }
     );
+
+    // watch(
+    //   form.sink.data,
+    //   (data) => {
+    //     for (const _datum in data) {
+    //       if (typeof data[_datum] === "object" && data[_datum] !== null) {
+    //         data[_datum] = data[_datum].value;
+    //       }
+    //     }
+    //   },
+    //   { deep: true }
+    // );
 
     const properties = computed(() =>
       Object.assign([], templateInfo.value.properties)
@@ -268,12 +288,27 @@ export default {
       //   form.hasErrors = true;
       // }
 
-      form.post(route("objects.sinks.store"), {
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      form
+        .transform((data) => {
+          const sinkData = data.sink.data;
+          console.log("KALA EISAIQ");
+          for (const _datum in sinkData) {
+            if (
+              typeof sinkData[_datum] === "object" &&
+              sinkData[_datum] !== null
+            ) {
+              sinkData[_datum] = sinkData[_datum].value;
+              console.log(_datum, "=", sinkData[_datum]);
+            }
+          }
+          return data;
+        })
+        .post(route("objects.sinks.store"), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
 
     const onCancel = () =>
