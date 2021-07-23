@@ -289,32 +289,9 @@ export default {
 
               if (prop.inputType === "select") {
                 // if the property has a value, get it and re-assign the property as a string
-                // if the porperty is an empty object, reassign it as an empty string
-                if (!Object.keys(sinkData[key]).length) {
-                  sinkData[key] = "''";
-                } else {
+                if (Object.keys(sinkData[key]).length) {
                   sinkData[key] = sinkData[key].value;
                 }
-                // } else {
-                //   // const type = prop.dataType.toLowerCase();
-                //   // let emptyValue;
-
-                //   // switch (type) {
-                //   //   case "text":
-                //   //     emptyValue = "''";
-                //   //     break;
-                //   //   case "string":
-                //   //     emptyValue = "''";
-                //   //     break;
-                //   //   case "number":
-                //   //     emptyValue = "null";
-                //   //     break;
-
-                //   //   default:
-                //   //     break;
-                //   // }
-
-                //   if (sinkData[key] === "") sinkData[key] = null;
               }
             }
           }

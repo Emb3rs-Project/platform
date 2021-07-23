@@ -109,9 +109,9 @@ class StoreSink implements StoresSinks
             Arr::set($newInstance, 'location_id', $location->id);
         }
 
-        // $instance = Instance::create($newInstance);
-        // $instance->teams()->attach($user->currentTeam);
+        $instance = Instance::create($newInstance);
+        $instance->teams()->attach($user->currentTeam);
 
-        // return $instance;
+        return $instance;
     }
 }

@@ -231,13 +231,35 @@ export default {
     );
 
     const submit = () => {
-      form.patch(route("objects.sinks.update", props.instance.id), {
-        onError: (e) => console.log(e),
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+
+          const sinkData = deepCopyOfData.sink.data;
+
+          if (templateInfo.value.properties.length) {
+            for (const property of templateInfo.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(sinkData[key]).length) {
+                  sinkData[key] = sinkData[key].value;
+                }
+              }
+            }
+          }
+          console.log(deepCopyOfData);
+          return deepCopyOfData;
+        })
+        .patch(route("objects.sinks.update", props.instance.id), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
 
     const onCancel = () =>

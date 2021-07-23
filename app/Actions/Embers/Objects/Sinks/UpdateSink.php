@@ -47,14 +47,13 @@ class UpdateSink implements UpdatesSinks
     {
         $validator = Validator::make($input, [
             'sink' => ['filled', 'array:data'],
-            'sink.data.*' => [new Property],
             'template_id' => ['filled', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => ['filled', 'numeric', 'integer', 'exists:locations,id'],
         ]);
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesBelongToTemplate($validated, $sink->template_id);
+        $this->checkIfPropertiesAreValid($validated, $sink->template_id);
 
         return $validated;
     }
