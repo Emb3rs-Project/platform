@@ -85,16 +85,16 @@
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2">
-                <InertiaLink :href="route('objects.sources.show', item.id.value)">
-                  <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
-                  <EyeIcon
-                    class="text-gray-500 font-medium text-sm w-5"
-                    aria-hidden="true"
-                  />
-                </InertiaLink>
-                <InertiaLink :href="route('objects.sources.edit', item.id.value)">
-                  <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
-                </InertiaLink>
+                <Link :href="route('objects.sources.show', item.id.value)">
+                <detail-icon class="text-gray-500 font-medium text-sm w-5"></detail-icon>
+                <EyeIcon
+                  class="text-gray-500 font-medium text-sm w-5"
+                  aria-hidden="true"
+                />
+                </Link>
+                <Link :href="route('objects.sources.edit', item.id.value)">
+                <edit-icon class="text-gray-500 font-medium text-sm w-5"></edit-icon>
+                </Link>
                 <button
                   class="focus:outline-none"
                   @click="deleteEntity(item.id.value)"
@@ -124,6 +124,7 @@
 
 <script>
 import { watch, ref } from "vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
 import DeletionModal from "@/Components/Modals/DeletionModal";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
@@ -133,6 +134,7 @@ import { EyeIcon } from "@heroicons/vue/solid";
 
 export default {
   components: {
+    Link,
     DeletionModal,
     EyeIcon,
     TrashIcon,

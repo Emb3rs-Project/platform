@@ -1,14 +1,19 @@
 <template>
-
   <SiteHead title="Sink Details" />
+
   <SlideOver
-    v-model="open"
     title="Sink Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+      <div class="block text-base font-medium text-gray-900 sm:pt-1">
+        <p>Information</p>
+      </div>
+    </div>
+
     <!-- Sink ID -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
@@ -89,6 +94,44 @@
       </div>
     </div>
 
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-if="Object.keys(instance.values).length"
+    >
+      <div class="block text-base font-medium text-gray-900 sm:pt-1">
+        <p>Properties</p>
+      </div>
+    </div>
+
+    <!-- Sink Properties -->
+    <div v-if="Object.keys(instance.values).length">
+      <div
+        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+        v-for="(value, key) in instance.values"
+        :key="value"
+      >
+        <div>
+          <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+            {{ properties.find((p) => p.symbolic_name === key).name }}
+          </label>
+        </div>
+        <div class="sm:col-span-2">
+          <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+            {{ value }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+        <div class="col-span-3 text-center">
+          <p class="block font-bold text-2xl text-gray-200">
+            No assigned properties.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <template #actions>
       <SecondaryOutlinedButton
         type="button"
@@ -104,7 +147,6 @@
 </template>
 
 <script>
-import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -127,37 +169,30 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instance: {
       type: Object,
       required: true,
     },
+    properties: {
+      type: Array,
+      required: true,
+    },
   },
 
-  setup(props, { emit }) {
+  setup() {
     const store = useStore();
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
     };
 
+    const onClose = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
     return {
-      open,
       onRouteRequest,
-      onClose: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onClose,
     };
   },
 };
 </script>
-
-<style>
-</style>

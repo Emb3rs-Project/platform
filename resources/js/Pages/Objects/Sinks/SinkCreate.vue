@@ -1,8 +1,7 @@
-b<template>
-
+<template>
   <SiteHead title="Create a Sink" />
+
   <SlideOver
-    v-model="open"
     title="New Sink"
     subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
@@ -17,10 +16,10 @@ b<template>
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -35,11 +34,11 @@ b<template>
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
-          v-model="form.location_id"
+        <SelectMenu
+          v-model="selectedLocation"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
-        ></select-menu>
+        />
       </div>
     </div>
 
@@ -59,29 +58,36 @@ b<template>
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="form.sink.data[prop.property.symbolic_name]"
             :unit="prop.unit.symbol"
             :label="prop.property.name"
             :placeholder="prop.property.name"
             :required="prop.required"
-          >
-          </text-input>
+          />
+
         </div>
         <div v-else-if="prop.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="form.sink.data[prop.property.symbolic_name]"
             :options="prop.property.data.options"
             :disabled="selectedTemplate ? false : true"
             :required="prop.required"
             :label="prop.property.name"
-          >
-          </select-menu>
+          />
         </div>
-        <jet-input-error
-          :message="form.errors"
-          class="mt-2"
-        />
+        <div v-if="form.hasErrors">
+          <div
+            v-for="(error, key) in form.errors"
+            :key="key"
+          >
+            <jet-input-error
+              v-show="key.includes(prop.property.symbolic_name)"
+              :message="error"
+              class="mt-2"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -105,6 +111,7 @@ b<template>
 
 <script>
 import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -115,8 +122,6 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import { useStore } from "vuex";
-import { keyParToSelect } from "../../../Utils/array";
 
 export default {
   components: {
@@ -131,10 +136,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     templates: {
       type: Array,
       default: [],
@@ -145,14 +146,8 @@ export default {
     },
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
-    const templateInfo = ref(null);
-
-    const templates = keyParToSelect(props.templates);
-    const selectedTemplate = ref(templates.length ? templates[0] : null);
-
-    const locations = keyParToSelect(props.locations);
 
     const form = useForm({
       sink: {
@@ -160,84 +155,167 @@ export default {
       },
       template_id: null,
       location_id: null,
+      location: null,
     });
 
+    const templateInfo = ref(null);
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+        properties: t.template_properties,
+      }))
+    );
+    const selectedTemplate = ref(
+      templates.value.length ? templates.value[0] : null
+    );
+
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const selectedLocation = ref(null);
     watch(
       () => store.getters["map/selectedMarker"],
       (val) => {
-        console.log("marker", val);
         if (!!val) {
-          const oldLocation = locations.find(
+          const oldLocation = locations.value.find(
             (l) => l.value === "Selected Marker"
           );
           if (oldLocation) {
             oldLocation.key = val;
           } else {
-            locations.unshift({
+            locations.value.unshift({
               key: val,
               value: "Selected Marker",
             });
           }
         } else {
-          const oldLocationIndex = locations.findIndex(
+          const oldLocationIndex = locations.value.findIndex(
             (l) => l.value === "Selected Marker"
           );
           if (oldLocationIndex !== -1) {
-            locations.splice(oldLocationIndex, 1);
+            locations.value.splice(oldLocationIndex, 1);
           }
         }
-        form.location_id = locations[0];
+        selectedLocation.value = locations.value[0];
       },
       { immediate: true }
+    );
+    watch(
+      selectedLocation,
+      (location) => {
+        form.location_id = null;
+        form.location = null;
+
+        selectedLocation.value = locations.value.find(
+          (l) => l.key === location.key
+        );
+
+        if (typeof selectedLocation.value.key === "object") {
+          return (form.location = {
+            lat: location.key.lat,
+            lng: location.key.lng,
+          });
+        }
+
+        return (form.location_id = location.key);
+      },
+      { immediate: true, deep: true }
     );
 
     watch(
       selectedTemplate,
       (template) => {
-        templateInfo.value = props.templates.find((t) => t.id === template.key);
+        templateInfo.value = templates.value.find(
+          (t) => t.key === template.key
+        );
         form.template_id = template.key;
 
-        if (templateInfo.value?.template_properties) {
-          for (const prop of templateInfo.value?.template_properties) {
-            form.sink.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
+        if (templateInfo.value.properties.length) {
+          for (const property of templateInfo.value.properties) {
+            const prop = property.property;
+
+            if (prop) {
+              const placeholder = prop.inputType === "select" ? {} : "";
+
+              form.sink.data[prop.symbolic_name] = property.default_value
+                ? property.default_value
+                : placeholder;
+            }
           }
         }
       },
       { immediate: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const properties = computed(() =>
-      Object.assign([], templateInfo.value?.template_properties)
+      Object.assign([], templateInfo.value.properties)
     );
 
     const submit = () => {
-      form.location_id = form.location_id?.key;
-      form.post(route("objects.sinks.store"), {
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      // TODO: Inertia form is not compatible with the below logic, needs rework
+      // for (const _property of properties.value) {
+      //   if (_property.required) {
+      //     const errors = {};
+      //     const propertyName = `sink.data.${_property.property.symbolic_name}`;
+
+      //     errors[
+      //       propertyName
+      //     ] = `${_property.property.symbolic_name} is required.`;
+
+      //     form.errors = errors;
+      //   }
+      // }
+      // console.log(form.errors);
+
+      // if (form.errors.length) {
+      //   form.hasErrors = true;
+      // }
+
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+
+          const sinkData = deepCopyOfData.sink.data;
+
+          if (templateInfo.value.properties.length) {
+            for (const property of templateInfo.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(sinkData[key]).length) {
+                  sinkData[key] = sinkData[key].value;
+                }
+              }
+            }
+          }
+          console.log(deepCopyOfData);
+          return deepCopyOfData;
+        })
+        .post(route("objects.sinks.store"), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
 
-    const onCancel = () => {
+    const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
-    };
 
     return {
+      form,
       templateInfo,
       templates,
       selectedTemplate,
       locations,
-      form,
-      open,
+      selectedLocation,
       properties,
       submit,
       onCancel,
@@ -245,6 +323,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

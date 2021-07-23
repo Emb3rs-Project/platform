@@ -1,6 +1,5 @@
 <template>
   <SlideOver
-    v-model="open"
     title="New Link"
     subtitle="Get started by selecting a marker to start your segments."
     headerBackground="bg-blue-700"
@@ -195,13 +194,8 @@ export default {
     ChevronDownIcon,
   },
 
-  props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  emits: ["update:modelValue"],
+  props: {},
+
   setup(props, { emit }) {
     const store = useStore();
     const form = useForm({
@@ -220,18 +214,12 @@ export default {
       });
     };
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const links = store.getters["map/currentLinks"];
     const linkList = computed(() => Object.values(links));
 
     return {
       form,
       submit,
-      open,
       onCancel: () =>
         store.dispatch("objects/showSlide", { route: "objects.list" }),
       linkList,

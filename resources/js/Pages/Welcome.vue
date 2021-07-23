@@ -4,29 +4,29 @@
       v-if="canLogin"
       class="hidden fixed top-0 right-0 px-6 py-4 sm:block"
     >
-      <InertiaLink
+      <Link
         v-if="$page.props.user"
         href="/dashboard"
         class="text-sm text-gray-700 underline"
       >
-        Dashboard
-      </InertiaLink>
+      Dashboard
+      </Link>
 
       <template v-else>
-        <InertiaLink
+        <Link
           :href="route('login')"
           class="text-sm text-gray-700 underline"
         >
-          Log in
-        </InertiaLink>
+        Log in
+        </Link>
 
-        <InertiaLink
+        <Link
           v-if="canRegister"
           :href="route('register')"
           class="ml-4 text-sm text-gray-700 underline"
         >
-          Register
-        </InertiaLink>
+        Register
+        </Link>
       </template>
     </div>
 
@@ -299,13 +299,20 @@
 </style>
 
 <script>
+import { Link } from "@inertiajs/inertia-vue3";
+
 export default {
+  components: {
+    Link,
+  },
+
   props: {
     canLogin: Boolean,
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
   },
+
   setup(props, context) {
     console.log("hello");
   },

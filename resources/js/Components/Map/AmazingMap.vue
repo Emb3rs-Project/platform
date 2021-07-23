@@ -331,7 +331,6 @@ export default {
     };
 
     const loadMarkers = () => {
-      console.log("loading markers ", instances.value);
       if (instances.value?.length > 0) {
         mapUtils.addInstances(
           map.value,
@@ -359,11 +358,11 @@ export default {
 
       map.value.on(
         "moveend",
-        _.debounce(({ target }) => (center.value = target.getCenter()), 700)
+        _.debounce(({ target }) => (center.value = target.getCenter()), 1000)
       );
       map.value.on(
         "zoomend",
-        _.debounce(({ target }) => (zoom.value = target.getZoom()), 700)
+        _.debounce(({ target }) => (zoom.value = target.getZoom()), 1000)
       );
 
       refreshInstance();
@@ -397,6 +396,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

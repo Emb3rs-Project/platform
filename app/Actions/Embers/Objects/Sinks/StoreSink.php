@@ -4,13 +4,20 @@ namespace App\Actions\Embers\Objects\Sinks;
 
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\EmbersPermissionable;
+use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\Location;
+use App\Rules\Coordinates;
+use App\Rules\Prohibit;
+use App\Rules\Property;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class StoreSink implements StoresSinks
 {
     use EmbersPermissionable;
+    use HasEmbersProperties;
 
     /**
      * Validate and create a new Sink.
@@ -23,9 +30,9 @@ class StoreSink implements StoresSinks
     {
         $this->authorize($user);
 
-        $this->validate($input);
+        $validated = $this->validate($input);
 
-        $sink = $this->save($user, $input);
+        $sink = $this->save($user, $validated);
 
         return $sink;
     }
@@ -34,20 +41,40 @@ class StoreSink implements StoresSinks
      * Validate the create Sink operation.
      *
      * @param  array  $input
-     * @return void
+     * @return array
      */
     protected function validate(array $input)
     {
-        Validator::make($input, [
-            'sink' => ['filled', 'array'],
-            'sink.data.name' => ['filled', 'string', 'max:255'],
-            'equipments' => ['filled', 'array'],
-            'equipments.*.key' => ['required', 'string', 'exists:instances,id'],
-            'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
-            // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
-            'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        ])->validate();
+        $validator = Validator::make($input, [
+            'sink' => ['required', 'array:data'],
+            'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
+            'location_id' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location') || Arr::get($input, 'location') === null;
+                }),
+                new Prohibit($input, 'location'),
+                'nullable',
+                'numeric',
+                'integer',
+                'exists:locations,id'
+            ],
+            'location' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location_id') || Arr::get($input, 'location_id') === null;
+                }),
+                new Prohibit($input, 'location_id'),
+                'nullable',
+                'array:lat,lng',
+            ],
+            'location.lat' => ['required_with:location', 'numeric', new Coordinates],
+            'location.lng' => ['required_with:location', 'numeric', new Coordinates],
+        ]);
+
+        $validated = $validator->validate();
+
+        $this->checkIfPropertiesAreValid($validated, null);
+
+        return $validated;
     }
 
     /**
@@ -59,41 +86,27 @@ class StoreSink implements StoresSinks
      */
     protected function save($user, array $input)
     {
-        $sink = $input['sink'];
-        $templateId = $input['template_id'];
-
         $newInstance = [
-            "name" => 'Not Defined',
-            "values" => [
-                "equipments" => []
-            ],
-            "template_id" => $templateId,
-            "location_id" => null
+            'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
+            'values' => Arr::get($input, 'sink.data'),
+            'template_id' => Arr::get($input, 'template_id'),
+            'location_id' => Arr::get($input, 'location_id')
         ];
 
-        // Check if Property Name Exists
-        if (!empty($sink['data']['name'])) {
-            $newInstance['name'] = $sink['data']['name'];
-        }
-
-        if (!empty($input['equipments'])) {
-            $newInstance['name']['equipments'] = $input['equipments'];
-        }
-
-        // TODO: Adapt it to the new validation rules i.e. accept either location or location_id ONLY
-        if (is_array($input["location_id"])) {
-            $marker = $input["location_id"];
-
+        if (!is_null(Arr::get($input, 'location'))) {
+            // A new location was selected to be used for this Sink
             $location = Location::create([
-                'name' => $newInstance['name'],
+                'name' => Arr::get($newInstance, 'name'),
                 'type' => 'point',
                 'data' => [
-                    "center" => [$marker["lat"], $marker["lng"]]
+                    "center" => [
+                        Arr::get($input, 'location.lat'),
+                        Arr::get($input, 'location.lng')
+                    ]
                 ]
             ]);
-            $newInstance['location_id'] = $location->id;
-        } else {
-            $newInstance['location_id'] = $input['location_id'];
+
+            Arr::set($newInstance, 'location_id', $location->id);
         }
 
         $instance = Instance::create($newInstance);

@@ -67,7 +67,7 @@ class TeamController extends Controller
      * Create a new team.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -99,7 +99,7 @@ class TeamController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $teamId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $teamId)
     {

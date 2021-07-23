@@ -66,15 +66,11 @@
 </template>
 
 <script>
-import { onMounted, onUnmounted, computed, onRenderTriggered } from "vue";
+import { onMounted, onUnmounted, computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     title: {
       type: String,
       default: "Not Defined",
@@ -101,14 +97,12 @@ export default {
     },
   },
 
-  emits: ["update:modelValue"],
-
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
 
     const open = computed({
       get: () => store.getters["objects/slideOpen"],
-      set: (value) => (value ? null : store.commit("objects/closeSlide")),
+      set: (value) => store.commit("objects/closeSlide"),
     });
 
     const closeOnEscape = (e) => {
@@ -117,12 +111,16 @@ export default {
       }
     };
 
-    onMounted(() => document.addEventListener("keydown", closeOnEscape));
-    onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
+    onMounted(() => {
+      console.log("SLIDEOVER COMPONENT::Mounted");
+      props.autoOpen ? store.commit("objects/openSlide") : null;
 
-    onMounted(() =>
-      props.autoOpen ? store.commit("objects/openSlide") : null
-    );
+      document.addEventListener("keydown", closeOnEscape);
+    });
+    onUnmounted(() => {
+      console.log("SLIDEOVER COMPONENT::Unmounted");
+      document.removeEventListener("keydown", closeOnEscape);
+    });
 
     return {
       open,

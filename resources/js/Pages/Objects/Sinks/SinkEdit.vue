@@ -3,7 +3,6 @@
   <SiteHead title="Edit a Sink" />
 
   <SlideOver
-    v-model="open"
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
@@ -44,23 +43,6 @@
       </div>
     </div>
 
-    <!-- Sink Name -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <TextInput
-          v-model="form.sink.data.name"
-          :label="'Name'"
-        />
-      </div>
-    </div>
-
     <!-- Sink Properties -->
     <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -94,6 +76,18 @@
             :label="prop.property.name"
           />
         </div>
+        <div v-if="form.hasErrors">
+          <div
+            v-for="(error, key) in form.errors"
+            :key="key"
+          >
+            <JetInputError
+              v-show="key.includes(prop.property.symbolic_name)"
+              :message="error"
+              class="mt-2"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -101,7 +95,7 @@
       <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
-        @click="onClose"
+        @click="onCancel"
       >
         Cancel
       </SecondaryOutlinedButton>
@@ -116,18 +110,18 @@
 </template>
 
 <script>
-import { ref, watch, computed, onBeforeUpdate } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
-// import { Inertia } from '@inertiajs/inertia'
+import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import JetInputError from "../../../Jetstream/InputError";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import { useStore } from "vuex";
 
 export default {
   components: {
@@ -136,20 +130,13 @@ export default {
     SlideOver,
     SelectMenu,
     TextInput,
+    JetInputError,
     PrimaryButton,
     SecondaryOutlinedButton,
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
     templates: {
-      type: Array,
-      default: [],
-    },
-    equipments: {
       type: Array,
       default: [],
     },
@@ -180,44 +167,57 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
+        properties: t.template_properties,
       }))
     );
-    const locations = computed(() =>
-      props.locations.map((l) => ({
-        key: l.id,
-        value: l.name,
-      }))
-    );
-
     const selectedTemplate = ref(
       templates.value.find((t) => t.key === props.instance.template.id)
     );
-
-    const selectedLocation = ref(
-      locations.value.find((l) => l.key === props.instance.location.id)
-    );
-
     watch(
       selectedTemplate,
-      (selectedTemplate) => {
-        templateInfo.value = props.templates.find(
-          (t) => t.id === selectedTemplate.key
+      (template) => {
+        templateInfo.value = templates.value.find(
+          (t) => t.key === template.key
         );
-        form.template_id = selectedTemplate.key;
+        form.template_id = template.key;
         form.sink.data.name = props.instance.name;
-        console.log(props.instance.name);
 
-        if (templateInfo.value?.template_properties) {
-          for (const prop of templateInfo.value?.template_properties) {
-            form.sink.data[prop.property.symbolic_name] = prop.default_value
-              ? prop.default_value
-              : "";
+        if (templateInfo.value.properties.length) {
+          for (const property of templateInfo.value.properties) {
+            const prop = property.property;
+
+            const value = props.instance.values[prop.symbolic_name];
+
+            if (value) {
+              if (prop.inputType === "select") {
+                form.sink.data[prop.symbolic_name] = prop.data.options.find(
+                  (o) => o.value === value
+                );
+              } else {
+                form.sink.data[prop.symbolic_name] = value;
+              }
+            } else {
+              const placeholder = prop.inputType === "select" ? {} : "";
+
+              form.sink.data[prop.symbolic_name] = property.default_value
+                ? property.default_value
+                : placeholder;
+            }
           }
         }
       },
       { immediate: true, deep: true }
     );
 
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const selectedLocation = ref(
+      locations.value.find((l) => l.key === props.instance.location.id)
+    );
     watch(
       selectedLocation,
       (selectedLocation) => {
@@ -226,26 +226,43 @@ export default {
       { immediate: true, deep: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const properties = computed(() =>
-      Object.assign([], templateInfo.value?.template_properties)
+      Object.assign([], templateInfo.value.properties)
     );
 
     const submit = () => {
-      form.patch(route("objects.sinks.update", props.instance.id), {
-        onError: (e) => console.log(e),
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+
+          const sinkData = deepCopyOfData.sink.data;
+
+          if (templateInfo.value.properties.length) {
+            for (const property of templateInfo.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(sinkData[key]).length) {
+                  sinkData[key] = sinkData[key].value;
+                }
+              }
+            }
+          }
+          console.log(deepCopyOfData);
+          return deepCopyOfData;
+        })
+        .patch(route("objects.sinks.update", props.instance.id), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
 
-    const onClose = () =>
+    const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     const onLocationSelect = () => {};
@@ -257,11 +274,10 @@ export default {
       locations,
       selectedLocation,
       form,
-      open,
       properties,
       submit,
       onLocationSelect,
-      onClose,
+      onCancel,
     };
   },
 };

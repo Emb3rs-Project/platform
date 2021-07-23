@@ -4,9 +4,18 @@
     as="div"
     v-model="selected"
   >
-    <ListboxLabel class="block text-sm font-medium text-gray-700">
-      {{ label }}
-    </ListboxLabel>
+    <div class="flex justify-between">
+      <label class="block text-sm font-medium text-gray-700">
+        {{ label }}
+      </label>
+      <span
+        v-if="required"
+        class="text-sm text-gray-500"
+        id="input-required"
+      >
+        Required
+      </span>
+    </div>
     <div class="mt-1 relative">
       <ListboxButton
         :class="[
@@ -16,7 +25,7 @@
         :disabled="disabled"
       >
         <span class="block truncate">
-          {{ selected ? selected.value : "Select an option..." }}
+          {{ selected.value ?? "Select an option..." }}
         </span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           <SelectorIcon
@@ -106,6 +115,10 @@ export default {
       type: String,
       default: "",
     },
+    required: {
+      type: Boolean,
+      default: false,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -115,6 +128,8 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
+    console.log("SelectMenu", props.modelValue);
+
     const selected = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),

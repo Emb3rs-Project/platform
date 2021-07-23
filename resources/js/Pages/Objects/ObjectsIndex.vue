@@ -1,7 +1,6 @@
 <template>
   <SlideOver
-    v-model="open"
-    :title="`Objects`"
+    title="Objects"
     subtitle="A list of all the Objects for the currently selected Instituion"
     headerBackground="bg-yellow-600"
     dismissButtonTextColor="text-gray-100"
@@ -11,7 +10,7 @@
       <FilterDropdown
         v-model="selectedObject"
         :options="filterOptions"
-      ></FilterDropdown>
+      />
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
@@ -117,7 +116,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useStore } from "vuex";
 import pluralize from "pluralize";
@@ -147,10 +146,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      default: false,
-    },
     instances: {
       type: Array,
       default: [],
@@ -163,7 +158,7 @@ export default {
 
   setup(props) {
     const store = useStore();
-    console.log();
+
     const tableColumns = ["name", "location", "actions"];
     const selectedObject = ref(
       store.state.objects.filterOption ?? filterOptions[0]
@@ -175,10 +170,7 @@ export default {
     const currentModal = ref(null);
     const itemToDelete = ref(null);
 
-    const open = computed({
-      get: () => store.getters["objects/slideOpen"],
-      set: (value) => store.commit("objects/setSlide", value),
-    });
+    onBeforeUnmount(() => console.log("thTHE GATES ARE CLOSING"));
 
     const modalComponent = computed(() =>
       currentModal.value ? currentModal.value : false
@@ -262,7 +254,6 @@ export default {
       selectedObject,
       filterDropdown,
       modalIsOpen,
-      open,
       modalComponent,
       getSingular,
       showModal,

@@ -13,7 +13,13 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): Response
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
+    public function index(Request $request)
     {
         $news = News::whereTeamId($request->user()->currentTeam->id)->get();
         $currentTeam = $request->user()->currentTeam;

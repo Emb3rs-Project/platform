@@ -1,6 +1,4 @@
 <template>
-
-  <SiteHead />
   <div class="h-screen flex overflow-hidden bg-white">
     <TransitionRoot
       as="template"
@@ -62,20 +60,20 @@
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2">
                 <div class="space-y-1">
-                  <InertiaLink
+                  <Link
                     v-for="item in navigation"
                     :key="item.name"
                     :href="route(item.href)"
                     :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                     :aria-current="item.current ? 'page' : undefined"
                   >
-                    <component
-                      :is="item.icon"
-                      :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
-                      aria-hidden="true"
-                    />
-                    {{ item.name }}
-                  </InertiaLink>
+                  <component
+                    :is="item.icon"
+                    :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    aria-hidden="true"
+                  />
+                  {{ item.name }}
+                  </Link>
                 </div>
                 <div class="mt-8">
                   <div class="relative">
@@ -111,12 +109,12 @@
                           <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div class="py-1">
                               <MenuItem v-slot="{ active }">
-                              <InertiaLink
+                              <Link
                                 :href="route('teams.create')"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               >
-                                Create Institution
-                              </InertiaLink>
+                              Create Institution
+                              </Link>
                               </MenuItem>
                             </div>
                           </MenuItems>
@@ -148,15 +146,15 @@
                           >
                             {{ institution.name }}
                           </button>
-                          <InertiaLink
+                          <Link
                             :href="route('teams.show', institution)"
                             class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                           >
-                            <CogIcon
-                              class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
-                              aria-hidden="true"
-                            />
-                          </InertiaLink>
+                          <CogIcon
+                            class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
+                            aria-hidden="true"
+                          />
+                          </Link>
                         </div>
                       </form>
                     </div>
@@ -230,26 +228,26 @@
               <MenuItems class="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                 <div class="py-1">
                   <MenuItem v-slot="{ active }">
-                  <InertiaLink
+                  <Link
                     :href="route('profile.show')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
-                    View profile
-                  </InertiaLink>
+                  View profile
+                  </Link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                  <InertiaLink
+                  <Link
                     :href="route('notifications.index')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
-                    Notifications
-                    <span
-                      v-show="newNotification"
-                      class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                    >
-                      {{ unreadNotificationsCount }}
-                    </span>
-                  </InertiaLink>
+                  Notifications
+                  <span
+                    v-show="newNotification"
+                    class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                  >
+                    {{ unreadNotificationsCount }}
+                  </span>
+                  </Link>
                   </MenuItem>
                 </div>
                 <div class="py-1">
@@ -297,20 +295,20 @@
           <!-- Navigation -->
           <nav class="px-3 mt-6">
             <div class="space-y-1">
-              <InertiaLink
+              <Link
                 v-for="item in navigation"
                 :key="item.name"
                 :href="route(item.href)"
                 :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                 :aria-current="item.current ? 'page' : undefined"
               >
-                <component
-                  :is="item.icon"
-                  :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
-                  aria-hidden="true"
-                />
-                {{ item.name }}
-              </InertiaLink>
+              <component
+                :is="item.icon"
+                :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                aria-hidden="true"
+              />
+              {{ item.name }}
+              </Link>
             </div>
             <div class="mt-8">
               <!-- Secondary navigation -->
@@ -347,12 +345,12 @@
                       <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <InertiaLink
+                          <Link
                             :href="route('teams.create')"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                           >
-                            Create Institution
-                          </InertiaLink>
+                          Create Institution
+                          </Link>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -384,15 +382,15 @@
                       >
                         {{ institution.name }}
                       </button>
-                      <InertiaLink
+                      <Link
                         :href="route('teams.show', institution)"
                         class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                       >
-                        <CogIcon
-                          class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
-                          aria-hidden="true"
-                        />
-                      </InertiaLink>
+                      <CogIcon
+                        class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
+                        aria-hidden="true"
+                      />
+                      </Link>
                     </div>
                   </form>
                 </div>
@@ -479,26 +477,26 @@
                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                   <div class="py-1">
                     <MenuItem v-slot="{ active }">
-                    <InertiaLink
+                    <Link
                       :href="route('profile.show')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
-                      View profile
-                    </InertiaLink>
+                    View profile
+                    </Link>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                    <InertiaLink
+                    <Link
                       :href="route('notifications.index')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
-                      Notifications
-                      <span
-                        v-show="newNotification"
-                        class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                      >
-                        {{ unreadNotificationsCount }}
-                      </span>
-                    </InertiaLink>
+                    Notifications
+                    <span
+                      v-show="newNotification"
+                      class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                    >
+                      {{ unreadNotificationsCount }}
+                    </span>
+                    </Link>
                     </MenuItem>
                   </div>
                   <div class="py-1">
@@ -529,9 +527,9 @@
 <script>
 import { ref, onBeforeUnmount } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
-import SiteHead from "@/Components/SiteHead.vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 import {
@@ -589,7 +587,7 @@ const navigation = [
 
 export default {
   components: {
-    SiteHead,
+    Link,
     Dialog,
     DialogOverlay,
     Menu,
@@ -618,7 +616,7 @@ export default {
     const newNotification = ref(null);
     const unreadNotificationsCount = ref(null);
 
-    // Check for new notifications
+    // Check for new notifications instantly (1-time check)
     store.dispatch("notifications/checkForNewNotifications");
 
     // start watching for new notifications (polling)
@@ -638,19 +636,10 @@ export default {
       { immediate: true }
     );
 
-    // const stopWatcher1 = store.watch(
-    //   (state) => state.map,
-    //   (state) => {
-    //     console.log(state);
-    //   },
-    //   { immediate: true, deep: true }
-    // );
-
     // stop watching for notifications when the component has been destroyed
     onBeforeUnmount(() => {
       store.dispatch("notifications/stopWatchingForNewNotifications");
       stopWatcher();
-      // stopWatcher1();
     });
 
     function logout() {

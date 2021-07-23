@@ -1,5 +1,5 @@
 <template>
-  <InertiaLink
+  <Link
     as="button"
     :href="route(path, parameter)"
     :class="[
@@ -10,12 +10,18 @@
     ]"
     :disabled="disabled"
   >
-    <slot></slot>
-  </InertiaLink>
+  <slot></slot>
+  </Link>
 </template>
 
 <script>
+import { Link } from "@inertiajs/inertia-vue3";
+
 export default {
+  components: {
+    Link,
+  },
+
   props: {
     path: {
       type: String,

@@ -24,10 +24,6 @@ class SinkController extends Controller
     {
         $sinks = app(IndexesSinks::class)->index($request->user());
 
-        // return Inertia::render('Objects/Sinks/SinkIndex', [
-        //     'sinks' => $sinks
-        // ]);
-
         return response()->json([
             'sinks' => $sinks
         ]);
@@ -41,14 +37,16 @@ class SinkController extends Controller
      */
     public function create(Request $request)
     {
-        [$templates, $equipments, $locations] = app(CreatesSinks::class)->create($request->user());
+        [
+            $templates,
+            $locations
+        ] = app(CreatesSinks::class)->create($request->user());
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkCreate',
-            "props" => [
-                "templates" => $templates,
-                "equipments" => $equipments,
-                "locations" => $locations
+            'slideOver' => 'Objects/Sinks/SinkCreate',
+            'props' => [
+                'templates' => $templates,
+                'locations' => $locations
             ]
         ];
     }
@@ -61,11 +59,7 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        $t = app(StoresSinks::class)->store($request->user(), $request->all());
-
-        // return response()->json([
-        //     'sink' => $t
-        // ]);
+        app(StoresSinks::class)->store($request->user(), $request->all());
 
         return redirect()->route('objects.index');
     }
@@ -79,12 +73,13 @@ class SinkController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $sink = app(ShowsSinks::class)->show($request->user(), $id);
+        [$sink, $properties] = app(ShowsSinks::class)->show($request->user(), $id);
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkDetails',
-            "props" => [
-                "instance" => $sink
+            'slideOver' => 'Objects/Sinks/SinkDetails',
+            'props' => [
+                'instance' => $sink,
+                'properties' => $properties
             ]
         ];
     }
@@ -100,18 +95,16 @@ class SinkController extends Controller
     {
         [
             $templates,
-            $equipments,
             $locations,
             $instance
         ] = app(EditsSinks::class)->edit($request->user(), $id);
 
         return [
-            "slideOver" => 'Objects/Sinks/SinkEdit',
-            "props" => [
-                "templates" => $templates,
-                "equipments" => $equipments,
-                "locations" => $locations,
-                "instance" => $instance
+            'slideOver' => 'Objects/Sinks/SinkEdit',
+            'props' => [
+                'templates' => $templates,
+                'locations' => $locations,
+                'instance' => $instance
             ]
         ];
     }
@@ -127,7 +120,6 @@ class SinkController extends Controller
     {
         $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
 
-        // return Redirect::route('objects.sinks.show', $updatedSink->id);
         return redirect()->route('objects.index');
     }
 
