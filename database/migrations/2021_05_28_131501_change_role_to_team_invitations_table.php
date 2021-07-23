@@ -15,6 +15,7 @@ class ChangeRoleToTeamInvitationsTable extends Migration
     {
         Schema::table('team_invitations', function (Blueprint $table) {
             $table->dropColumn('role');
+
             $table->foreignId('team_role_id')->nullable();
         });
     }
@@ -28,6 +29,7 @@ class ChangeRoleToTeamInvitationsTable extends Migration
     {
         Schema::table('team_invitations', function (Blueprint $table) {
             $table->string('role')->nullable();
+
             $table->dropColumn('team_role_id');
         });
     }

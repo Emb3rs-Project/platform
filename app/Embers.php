@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Contracts\Embers\Notifications\IndexesNotifications;
+use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
@@ -10,13 +12,6 @@ use App\Contracts\Embers\Objects\Links\SharesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
-use App\Contracts\Embers\Projects\CreatesProjects;
-use App\Contracts\Embers\Projects\DestroysProjects;
-use App\Contracts\Embers\Projects\EditsProjects;
-use App\Contracts\Embers\Projects\IndexesProjects;
-use App\Contracts\Embers\Projects\ShowsProjects;
-use App\Contracts\Embers\Projects\StoresProjects;
-use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Contracts\Embers\Objects\Sinks\CreatesSinks;
 use App\Contracts\Embers\Objects\Sinks\DestroysSinks;
 use App\Contracts\Embers\Objects\Sinks\EditsSinks;
@@ -33,6 +28,13 @@ use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
+use App\Contracts\Embers\Projects\CreatesProjects;
+use App\Contracts\Embers\Projects\DestroysProjects;
+use App\Contracts\Embers\Projects\EditsProjects;
+use App\Contracts\Embers\Projects\IndexesProjects;
+use App\Contracts\Embers\Projects\ShowsProjects;
+use App\Contracts\Embers\Projects\StoresProjects;
+use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Contracts\Embers\Projects\SharesProjects;
 use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
@@ -51,536 +53,539 @@ use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
+use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
+use App\Contracts\Embers\Users\IndexesUsersMapData;
+use App\Contracts\Embers\Users\StoresUsersMapData;
 
 class Embers
 {
     /**
-    * Register a class / callback that should be used to index all Sinks.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexSinksUsing(string $class)
+     * Register a class / callback that should be used to index all Sinks.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexSinksUsing(string $class): void
     {
-        return app()->singleton(IndexesSinks::class, $class);
+        app()->singleton(IndexesSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the creation of a Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createSinksUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the creation of a Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createSinksUsing(string $class): void
     {
-        return app()->singleton(CreatesSinks::class, $class);
+        app()->singleton(CreatesSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showSinksUsing(string $class)
+     * Register a class / callback that should be used to display a given Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showSinksUsing(string $class): void
     {
-        return app()->singleton(ShowsSinks::class, $class);
+        app()->singleton(ShowsSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create Sinks.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeSinksUsing(string $class)
+     * Register a class / callback that should be used to create Sinks.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeSinksUsing(string $class): void
     {
-        return app()->singleton(StoresSinks::class, $class);
+        app()->singleton(StoresSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editSinksUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the updating of a given Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editSinksUsing(string $class): void
     {
-        return app()->singleton(EditsSinks::class, $class);
+        app()->singleton(EditsSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateSinksUsing(string $class)
+     * Register a class / callback that should be used to update a given Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateSinksUsing(string $class): void
     {
-        return app()->singleton(UpdatesSinks::class, $class);
+        app()->singleton(UpdatesSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroySinksUsing(string $class)
+     * Register a class / callback that should be used to delete a given Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroySinksUsing(string $class): void
     {
-        return app()->singleton(DestroysSinks::class, $class);
+        app()->singleton(DestroysSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to share a given Sink.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function shareSinksUsing(string $class)
+     * Register a class / callback that should be used to share a given Sink.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function shareSinksUsing(string $class): void
     {
-        return app()->singleton(SharesSinks::class, $class);
+        app()->singleton(SharesSinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to index all Sources.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexSourcesUsing(string $class)
+     * Register a class / callback that should be used to index all Sources.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexSourcesUsing(string $class): void
     {
-        return app()->singleton(IndexesSources::class, $class);
+        app()->singleton(IndexesSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the creation of a Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createSourcesUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the creation of a Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createSourcesUsing(string $class): void
     {
-        return app()->singleton(CreatesSources::class, $class);
+        app()->singleton(CreatesSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showSourcesUsing(string $class)
+     * Register a class / callback that should be used to display a given Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showSourcesUsing(string $class): void
     {
-        return app()->singleton(ShowsSources::class, $class);
+        app()->singleton(ShowsSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create Sources.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeSourcesUsing(string $class)
+     * Register a class / callback that should be used to create Sources.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeSourcesUsing(string $class): void
     {
-        return app()->singleton(StoresSources::class, $class);
+        app()->singleton(StoresSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editSourcesUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the updating of a given Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editSourcesUsing(string $class): void
     {
-        return app()->singleton(EditsSources::class, $class);
+        app()->singleton(EditsSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateSourcesUsing(string $class)
+     * Register a class / callback that should be used to update a given Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateSourcesUsing(string $class): void
     {
-        return app()->singleton(UpdatesSources::class, $class);
+        app()->singleton(UpdatesSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroySourcesUsing(string $class)
+     * Register a class / callback that should be used to delete a given Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroySourcesUsing(string $class): void
     {
-        return app()->singleton(DestroysSources::class, $class);
+        app()->singleton(DestroysSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to share a given Source.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function shareSourcesUsing(string $class)
+     * Register a class / callback that should be used to share a given Source.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function shareSourcesUsing(string $class): void
     {
-        return app()->singleton(SharesSources::class, $class);
+        app()->singleton(SharesSources::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to index all Links.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexLinksUsing(string $class)
+     * Register a class / callback that should be used to index all Links.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexLinksUsing(string $class): void
     {
-        return app()->singleton(IndexesLinks::class, $class);
+        app()->singleton(IndexesLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the creation of a Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createLinksUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the creation of a Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createLinksUsing(string $class): void
     {
-        return app()->singleton(CreatesLinks::class, $class);
+        app()->singleton(CreatesLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create Links.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeLinksUsing(string $class)
+     * Register a class / callback that should be used to create Links.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeLinksUsing(string $class): void
     {
-        return app()->singleton(StoresLinks::class, $class);
+        app()->singleton(StoresLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showLinksUsing(string $class)
+     * Register a class / callback that should be used to display a given Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showLinksUsing(string $class): void
     {
-        return app()->singleton(ShowsLinks::class, $class);
+        app()->singleton(ShowsLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editLinksUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the updating of a given Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editLinksUsing(string $class): void
     {
-        return app()->singleton(EditsLinks::class, $class);
+        app()->singleton(EditsLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateLinksUsing(string $class)
+     * Register a class / callback that should be used to update a given Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateLinksUsing(string $class): void
     {
-        return app()->singleton(UpdatesLinks::class, $class);
+        app()->singleton(UpdatesLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroyLinksUsing(string $class)
+     * Register a class / callback that should be used to delete a given Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroyLinksUsing(string $class): void
     {
-        return app()->singleton(DestroysLinks::class, $class);
+        app()->singleton(DestroysLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to share a given Link.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function shareLinksUsing(string $class)
+     * Register a class / callback that should be used to share a given Link.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function shareLinksUsing(string $class): void
     {
-        return app()->singleton(SharesLinks::class, $class);
+        app()->singleton(SharesLinks::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to index all Projects.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexProjectsUsing(string $class)
+     * Register a class / callback that should be used to index all Projects.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexProjectsUsing(string $class): void
     {
-        return app()->singleton(IndexesProjects::class, $class);
+        app()->singleton(IndexesProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the creation of a Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createProjectsUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the creation of a Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createProjectsUsing(string $class): void
     {
-        return app()->singleton(CreatesProjects::class, $class);
+        app()->singleton(CreatesProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create Projects.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeProjectsUsing(string $class)
+     * Register a class / callback that should be used to create Projects.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeProjectsUsing(string $class): void
     {
-        return app()->singleton(StoresProjects::class, $class);
+        app()->singleton(StoresProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showProjectsUsing(string $class)
+     * Register a class / callback that should be used to display a given Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showProjectsUsing(string $class): void
     {
-        return app()->singleton(ShowsProjects::class, $class);
+        app()->singleton(ShowsProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editProjectsUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the updating of a given Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editProjectsUsing(string $class): void
     {
-        return app()->singleton(EditsProjects::class, $class);
+        app()->singleton(EditsProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateProjectsUsing(string $class)
+     * Register a class / callback that should be used to update a given Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateProjectsUsing(string $class): void
     {
-        return app()->singleton(UpdatesProjects::class, $class);
+        app()->singleton(UpdatesProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroyProjectsUsing(string $class)
+     * Register a class / callback that should be used to delete a given Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroyProjectsUsing(string $class): void
     {
-        return app()->singleton(DestroysProjects::class, $class);
+        app()->singleton(DestroysProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to share a given Project.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function shareProjectsUsing(string $class)
+     * Register a class / callback that should be used to share a given Project.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function shareProjectsUsing(string $class): void
     {
-        return app()->singleton(SharesProjects::class, $class);
+        app()->singleton(SharesProjects::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to index all Simulations.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexSimulationsUsing(string $class)
+     * Register a class / callback that should be used to index all Simulations.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexSimulationsUsing(string $class): void
     {
-        return app()->singleton(IndexesSimulations::class, $class);
+        app()->singleton(IndexesSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the creation of a Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createSimulationsUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the creation of a Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createSimulationsUsing(string $class): void
     {
-        return app()->singleton(CreatesSimulations::class, $class);
+        app()->singleton(CreatesSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeSimulationsUsing(string $class)
+     * Register a class / callback that should be used to create Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeSimulationsUsing(string $class): void
     {
-        return app()->singleton(StoresSimulations::class, $class);
+        app()->singleton(StoresSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showSimulationsUsing(string $class)
+     * Register a class / callback that should be used to display a given Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showSimulationsUsing(string $class): void
     {
-        return app()->singleton(ShowsSimulations::class, $class);
+        app()->singleton(ShowsSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * objects for the updating of a given Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editSimulationsUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * objects for the updating of a given Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editSimulationsUsing(string $class): void
     {
-        return app()->singleton(EditsSimulations::class, $class);
+        app()->singleton(EditsSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateSimulationsUsing(string $class)
+     * Register a class / callback that should be used to update a given Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateSimulationsUsing(string $class): void
     {
-        return app()->singleton(UpdatesSimulations::class, $class);
+        app()->singleton(UpdatesSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroySimulationsUsing(string $class)
+     * Register a class / callback that should be used to delete a given Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroySimulationsUsing(string $class): void
     {
-        return app()->singleton(DestroysSimulations::class, $class);
+        app()->singleton(DestroysSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to share a given Simulation.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function shareSimulationsUsing(string $class)
+     * Register a class / callback that should be used to share a given Simulation.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function shareSimulationsUsing(string $class): void
     {
-        return app()->singleton(SharesSimulations::class, $class);
+        app()->singleton(SharesSimulations::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to index all Roles.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function indexTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to index all Roles.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexTeamRolesUsing(string $class): void
     {
-        return app()->singleton(IndexesTeamRoles::class, $class);
+        app()->singleton(IndexesTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * permissions for the creation of a TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function createTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * permissions for the creation of a TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function createTeamRolesUsing(string $class): void
     {
-        return app()->singleton(CreatesTeamRoles::class, $class);
+        app()->singleton(CreatesTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to create TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function storeTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to create TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeTeamRolesUsing(string $class): void
     {
-        return app()->singleton(StoresTeamRoles::class, $class);
+        app()->singleton(StoresTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display a given TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function showTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to display a given TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showTeamRolesUsing(string $class): void
     {
-        return app()->singleton(ShowsTeamRoles::class, $class);
+        app()->singleton(ShowsTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to display the necessary
-    * permissions for the updating of a given TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function editTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to display the necessary
+     * permissions for the updating of a given TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function editTeamRolesUsing(string $class): void
     {
-        return app()->singleton(EditsTeamRoles::class, $class);
+        app()->singleton(EditsTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to update a given TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function updateTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to update a given TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateTeamRolesUsing(string $class): void
     {
-        return app()->singleton(UpdatesTeamRoles::class, $class);
+        app()->singleton(UpdatesTeamRoles::class, $class);
     }
 
     /**
-    * Register a class / callback that should be used to delete a given TeamRole.
-    *
-    * @param  string  $class
-    * @return void
-    */
-    public static function destroyTeamRolesUsing(string $class)
+     * Register a class / callback that should be used to delete a given TeamRole.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroyTeamRolesUsing(string $class): void
     {
-        return app()->singleton(DestroysTeamRoles::class, $class);
+        app()->singleton(DestroysTeamRoles::class, $class);
     }
 
     /**
@@ -589,9 +594,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function addTeamMembersUsing(string $class)
+    public static function addTeamMembersUsing(string $class): void
     {
-        return app()->singleton(AddsTeamMembers::class, $class);
+        app()->singleton(AddsTeamMembers::class, $class);
     }
 
     /**
@@ -601,8 +606,65 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function inviteTeamMembersUsing(string $class)
+    public static function inviteTeamMembersUsing(string $class): void
     {
-        return app()->singleton(InvitesTeamMembers::class, $class);
+        app()->singleton(InvitesTeamMembers::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to update a team member's
+     * role inside a team.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function updateTeamMemberRolesUsing(string $class): void
+    {
+        app()->singleton(UpdatesTeamMemberRoles::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all Notifications.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexNotificationsUsing(string $class): void
+    {
+        app()->singleton(IndexesNotifications::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to mark all Notifications
+     * as read.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function markAllNotificationsAsReadUsing(string $class): void
+    {
+        app()->singleton(MarksAllNotificationsAsRead::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all User's Map data.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexUsersMapDataUsing(string $class): void
+    {
+        app()->singleton(IndexesUsersMapData::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to create User's Map data.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function storeUsersMapDataUsing(string $class): void
+    {
+        app()->singleton(StoresUsersMapData::class, $class);
     }
 }

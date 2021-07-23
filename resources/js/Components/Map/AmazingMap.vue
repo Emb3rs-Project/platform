@@ -1,29 +1,37 @@
 <template>
-  <div id="map" class="h-screen min-w-full z-0"></div>
+  <div
+    id="map"
+    class="min-h-screen min-w-full z-0"
+  ></div>
 </template>
 
 <script>
-import mapUtils from "@/Utils/map.js";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 import L from "leaflet";
+import { usePage } from "@inertiajs/inertia-vue3";
+import mapUtils from "@/Utils/map.js";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
+
 import "beautifymarker";
 import "leaflet-contextmenu";
-
 // CSS for Markers
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
-import { useStore } from "vuex";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
   props: {
-    centerValue: {
+    center: {
       type: Array,
+      default: [],
+    },
+    zoom: {
+      type: Number,
+      default: -1,
     },
   },
+
   setup(props, { emit }) {
-    // TODO: Convert to VUEX!!!
     const store = useStore();
 
     const map = ref(null);
@@ -50,10 +58,27 @@ export default {
 
     const center = computed({
       get() {
-        return props.centerValue;
+        const user = usePage().props.value.user;
+
+        if (!props.center.length) return user.data.map.center;
+
+        return props.center;
       },
       set(value) {
-        emit("onMove", value);
+        store.dispatch("map/setData", { center: value });
+      },
+    });
+
+    const zoom = computed({
+      get() {
+        const user = usePage().props.value.user;
+
+        if (props.zoom === -1) return user.data.map.zoom;
+
+        return props.zoom;
+      },
+      set(value) {
+        store.dispatch("map/setData", { zoom: value });
       },
     });
 
@@ -168,9 +193,8 @@ export default {
       map.value.removeLayer(value);
       mapObjects.value.links.splice(segmentIndex, 1);
       if (mapObjects.value.links.length > 0)
-        currentSegment.from = mapObjects.value.links[
-          segmentIndex - 1
-        ].getLatLngs()[1];
+        currentSegment.from =
+          mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
       else {
         currentSegment.from = currentSegment.start;
       }
@@ -307,7 +331,6 @@ export default {
     };
 
     const loadMarkers = () => {
-      console.log("loading markers ", instances.value);
       if (instances.value?.length > 0) {
         mapUtils.addInstances(
           map.value,
@@ -323,26 +346,29 @@ export default {
         instances.value = data.instances;
       });
 
-    onMounted(() => {
-      map.value = mapUtils.init("map", center.value, {
+    onMounted(async () => {
+      map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
         contextmenu: true,
         contextmenuWidth: 140,
         contextmenuItems: defautMapContext,
       });
+
       window.map = map.value;
-      // throws errors
-      // store.dispatch("map/setMap", { map: map.value });
 
       map.value.on(
         "moveend",
-        ({ target }) => (center.value = target.getCenter())
+        _.debounce(({ target }) => (center.value = target.getCenter()), 1000)
+      );
+      map.value.on(
+        "zoomend",
+        _.debounce(({ target }) => (zoom.value = target.getZoom()), 1000)
       );
 
       refreshInstance();
     });
 
-    store.subscribeAction(({ type, payload }) => {
+    const unsubscribeAction = store.subscribeAction(({ type, payload }) => {
       if (type === "map/centerAt") {
         const { marker } = payload;
         onCenterLocation(marker);
@@ -352,6 +378,12 @@ export default {
         mapUtils.removeAllInstances(map.value, mapObjects.value);
         refreshInstance();
       }
+    });
+
+    onBeforeUnmount(() => {
+      map.value.off("moveend");
+      map.value.off("zoomend");
+      unsubscribeAction();
     });
 
     return {
@@ -364,6 +396,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

@@ -19,7 +19,7 @@ class UpdateSimulation implements UpdatesSimulations
      * @param  int  $projectId
      * @param  int  $simulationId
      * @param  array  $input
-     * @return Project
+     * @return Simulation
      */
     public function update($user, int $projectId, int $simulationId, array $input)
     {
@@ -50,13 +50,13 @@ class UpdateSimulation implements UpdatesSimulations
             'target_id' => ['filled', 'string', 'exists:targets,id'],
             'simulation_type_id' => ['filled', 'string', 'exists:simulation_types,id']
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
      * Save the Link in the DB.
      *
-     * @param  int  $projectId
+     * @param  Simulation  $simulation
      * @param  array  $input
      * @return Simulation
      */

@@ -14,7 +14,7 @@ class IndexProject implements IndexesProjects
      * Display all the available Projects.
      *
      * @param  mixed  $user
-     * @return [Project]
+     * @return mixed
      */
     public function index($user)
     {

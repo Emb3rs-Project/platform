@@ -1,6 +1,5 @@
 <template>
-  <slide-over
-    v-model="open"
+  <SlideOver
     title="Source Details"
     subtitle="Below, you can see the details that are associated to the currently selected Source."
     headerBackground="bg-red-700"
@@ -35,16 +34,17 @@
       >
         <i class="fas fa-chevron-right"></i>
       </secondary-button>
-      <secondary-outlined-button type="button" @click="onCancel">
-        Cancel
-      </secondary-outlined-button>
-      <primary-button
-        @click="onRouteRequest('objects.sinks.edit', instance.id)"
+      <SecondaryOutlinedButton
+        type="button"
+        @click="onCancel"
       >
+        Cancel
+      </SecondaryOutlinedButton>
+      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
         Edit
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
@@ -52,15 +52,15 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryButton from "@/Components/NewLayout/SecondaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
-import SourceDetail1 from "./SourceDetailWizard/SourceDetail-1";
-import SourceDetail2 from "./SourceDetailWizard/SourceDetail-2";
-import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SourceDetail1 from "./SourceDetailWizard/Step1";
+import SourceDetail2 from "./SourceDetailWizard/Step2";
+import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
 
 export default {
   components: {
@@ -73,14 +73,10 @@ export default {
     SecondaryOutlinedButton,
     SourceDetail1,
     BulletSteps,
-    SourceDetail2
+    SourceDetail2,
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instance: {
       type: Object,
       required: true,
@@ -89,11 +85,6 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
@@ -113,12 +104,12 @@ export default {
     const steps = computed(() => [
       {
         name: "Source Details",
-        component: "Objects/Sources/SourceCreateWizard/Step1.vue",
+        component: "Objects/Sources/SourceDetailWizard/Step1.vue",
         status: mapStepStatus(1), // status: current | complete | upcoming
       },
       {
         name: "Equipments",
-        component: "Objects/Sources/SourceCreateWizard/Step2.vue",
+        component: "Objects/Sources/SourceDetailWizard/Step2.vue",
         status: mapStepStatus(2),
       },
       {
@@ -134,7 +125,6 @@ export default {
     ]);
 
     return {
-      open,
       steps,
       onRouteRequest,
       currentStep,

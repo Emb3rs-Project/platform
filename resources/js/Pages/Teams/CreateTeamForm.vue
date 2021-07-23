@@ -46,47 +46,45 @@
     </template>
 
     <template #actions>
-      <jet-button
-        :class="{ 'opacity-25': form.processing }"
-        :disabled="form.processing"
-      >
+      <PrimaryButton :disabled="form.processing">
         Create
-      </jet-button>
+      </PrimaryButton>
     </template>
   </jet-form-section>
 </template>
 
 <script>
-  import JetButton from "@/Jetstream/Button";
-  import JetFormSection from "@/Jetstream/FormSection";
-  import JetInput from "@/Jetstream/Input";
-  import JetInputError from "@/Jetstream/InputError";
-  import JetLabel from "@/Jetstream/Label";
+import JetFormSection from "@/Jetstream/FormSection";
+import JetInput from "@/Jetstream/Input";
+import JetInputError from "@/Jetstream/InputError";
+import JetLabel from "@/Jetstream/Label";
 
-  export default {
-    components: {
-      JetButton,
-      JetFormSection,
-      JetInput,
-      JetInputError,
-      JetLabel,
-    },
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
-    data() {
-      return {
-        form: this.$inertia.form({
-          name: "",
-        }),
-      };
-    },
+export default {
+  components: {
+    JetFormSection,
+    JetInput,
+    JetInputError,
+    JetLabel,
+    PrimaryButton,
+  },
 
-    methods: {
-      createTeam() {
-        this.form.post(route("teams.store"), {
-          errorBag: "createTeam",
-          preserveScroll: true,
-        });
-      },
+  data() {
+    return {
+      form: this.$inertia.form({
+        name: "",
+      }),
+    };
+  },
+
+  methods: {
+    createTeam() {
+      this.form.post(route("teams.store"), {
+        errorBag: "createTeam",
+        preserveScroll: true,
+      });
     },
-  };
+  },
+};
 </script>

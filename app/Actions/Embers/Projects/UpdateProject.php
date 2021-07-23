@@ -17,7 +17,7 @@ class UpdateProject implements UpdatesProjects
      * @param  mixed  $user
      * @param  int  $id
      * @param  array  $input
-     * @return Instance
+     * @return Project
      */
     public function update($user, int $id, array $input)
     {
@@ -45,13 +45,13 @@ class UpdateProject implements UpdatesProjects
             'description' => ['filled', 'string'],
             'location_id' => ['filled', 'string', 'exists:locations,id']
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
      * Save the Project in the DB.
      *
-     * @param  mixed  $user
+     * @param  Project  $project
      * @param  array  $input
      * @return Project
      */

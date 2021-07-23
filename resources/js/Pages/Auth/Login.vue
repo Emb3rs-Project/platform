@@ -6,13 +6,19 @@
 
     <jet-validation-errors class="mb-4" />
 
-    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+    <div
+      v-if="status"
+      class="mb-4 font-medium text-sm text-green-600"
+    >
       {{ status }}
     </div>
 
     <form @submit.prevent="submit">
       <div>
-        <jet-label for="email" value="Email" />
+        <jet-label
+          for="email"
+          value="Email"
+        />
         <jet-input
           id="email"
           type="email"
@@ -24,7 +30,10 @@
       </div>
 
       <div class="mt-4">
-        <jet-label for="password" value="Password" />
+        <jet-label
+          for="password"
+          value="Password"
+        />
         <jet-input
           id="password"
           type="password"
@@ -37,19 +46,22 @@
 
       <div class="block mt-4">
         <label class="flex items-center">
-          <jet-checkbox name="remember" v-model:checked="form.remember" />
+          <jet-checkbox
+            name="remember"
+            v-model:checked="form.remember"
+          />
           <span class="ml-2 text-sm text-gray-600">Remember me</span>
         </label>
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <inertia-link
+        <Link
           v-if="canResetPassword"
           :href="route('password.request')"
           class="underline text-sm text-gray-600 hover:text-gray-900"
         >
-          Forgot your password?
-        </inertia-link>
+        Forgot your password?
+        </Link>
 
         <jet-button
           class="ml-4"
@@ -61,17 +73,19 @@
       </div>
     </form>
     <template #bottom-message>
-      <inertia-link
+      <Link
         :href="route('register')"
         class="underline text-sm text-gray-600 hover:text-gray-900"
       >
-        Don't have an Account?
-      </inertia-link>
+      Don't have an Account?
+      </Link>
     </template>
   </jet-authentication-card>
 </template>
 
 <script>
+import { Link } from "@inertiajs/inertia-vue3";
+
 import JetAuthenticationCard from "@/Jetstream/AuthenticationCard";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 import JetButton from "@/Jetstream/Button";
@@ -82,6 +96,7 @@ import JetValidationErrors from "@/Jetstream/ValidationErrors";
 
 export default {
   components: {
+    Link,
     JetAuthenticationCard,
     JetAuthenticationCardLogo,
     JetButton,

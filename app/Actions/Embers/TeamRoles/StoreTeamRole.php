@@ -4,11 +4,9 @@ namespace App\Actions\Embers\TeamRoles;
 
 use App\Contracts\Embers\TeamRoles\StoresTeamRoles;
 use App\EmbersPermissionable;
-use App\HasEmbersPermissions;
 use App\Models\Permission;
 use App\Models\Team;
 use App\Models\TeamRole;
-use App\Rules\Embers\TeamRole as TeamRoleRule;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,14 +14,13 @@ use Illuminate\Validation\Rule;
 class StoreTeamRole implements StoresTeamRoles
 {
     use EmbersPermissionable;
-    use HasEmbersPermissions;
 
     /**
      * Validate and create a new Role in user's current Team.
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return Project
+     * @return TeamRole
      */
     public function store($user, array $input)
     {
@@ -55,9 +52,9 @@ class StoreTeamRole implements StoresTeamRoles
                 })
             ],
             'permissions' => ['required', 'array'],
-            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new TeamRoleRule],
+            'permissions.*' => ['required', 'uuid', 'distinct', 'exists:permissions,friendly_id'],
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
@@ -65,13 +62,13 @@ class StoreTeamRole implements StoresTeamRoles
      *
      * @param  mixed  $user
      * @param  array  $input
-     * @return void
+     * @return TeamRole
      */
     protected function save($user, array $input)
     {
         // Transform the permission friendly names to their coresponding actions
         foreach ($input['permissions'] as &$permission) {
-            $permission = Permission::whereFriendlyName($permission)->first();
+            $permission = Permission::whereFriendlyId($permission)->first();
         }
         unset($permission);
 
@@ -83,5 +80,7 @@ class StoreTeamRole implements StoresTeamRoles
         $team = Team::find($user->current_team_id);
 
         $team->teamRoles()->save($role);
+
+        return $role;
     }
 }

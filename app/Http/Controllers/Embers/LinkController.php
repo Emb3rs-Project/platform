@@ -6,13 +6,11 @@ use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\Contracts\Embers\Objects\Links\DestroysLinks;
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
-use App\Contracts\Embers\Objects\Links\SharesLinks;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\Contracts\Embers\Objects\Links\StoresLinks;
 use App\Contracts\Embers\Objects\Links\UpdatesLinks;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 
 class LinkController extends Controller
 {
@@ -20,7 +18,7 @@ class LinkController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function index(Request $request)
     {
@@ -30,14 +28,14 @@ class LinkController extends Controller
         //     'links' => $links
         // ]);
 
-        return Redirect::route('objects.index');
+        return redirect()->route('objects.index');
     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function create(Request $request)
     {
@@ -53,13 +51,13 @@ class LinkController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         app(StoresLinks::class)->store($request->user(), $request->all());
 
-        return Redirect::route('objects.links.index');
+        return redirect()->route('objects.links.index');
     }
 
     /**
@@ -67,7 +65,7 @@ class LinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function show(Request $request, $id)
     {
@@ -86,7 +84,7 @@ class LinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function edit(Request $request, $id)
     {
@@ -111,13 +109,17 @@ class LinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        $updatedLink = app(UpdatesLinks::class)->update($request->user(), $id, $request->all());
+        $updatedLink = app(UpdatesLinks::class)->update(
+            $request->user(),
+            $id,
+            $request->all()
+        );
 
-        return Redirect::route('objects.links.show', $updatedLink->id);
+        return redirect()->route('objects.links.show', $updatedLink->id);
     }
 
     /**
@@ -125,35 +127,12 @@ class LinkController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
         app(DestroysLinks::class)->destroy($request->user(), $id);
 
-        return Redirect::route('objects.index');
-    }
-
-    /**
-     * Share the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function share(Request $request, $id)
-    {
-        $link = app(SharesLinks::class)->share($request->user(), $id);
-
-        // return [
-        //     "slideOver" => 'Objects/Sinks/SinkShare',
-        //     "props" => [
-        //         "instance" => $sink
-        //     ]
-        // ];
-
-        return response()->json([
-            "link" => $link
-        ]);
+        return redirect()->route('objects.index');
     }
 }

@@ -1,16 +1,21 @@
 <template>
-  <slide-over
-    v-model="open"
+  <SiteHead title="Sink Details" />
+
+  <SlideOver
     title="Sink Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+      <div class="block text-base font-medium text-gray-900 sm:pt-1">
+        <p>Information</p>
+      </div>
+    </div>
+
     <!-- Sink ID -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           ID
@@ -24,9 +29,7 @@
     </div>
 
     <!-- Sink Name -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           Name
@@ -40,9 +43,7 @@
     </div>
 
     <!-- Sink Template -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
           Template
@@ -93,33 +94,73 @@
       </div>
     </div>
 
-    <template #actions>
-      <secondary-outlined-button type="button" @click="onClose()">
-        Cancel
-      </secondary-outlined-button>
-      <primary-button
-        @click="onRouteRequest('objects.sinks.edit', instance.id)"
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-if="Object.keys(instance.values).length"
+    >
+      <div class="block text-base font-medium text-gray-900 sm:pt-1">
+        <p>Properties</p>
+      </div>
+    </div>
+
+    <!-- Sink Properties -->
+    <div v-if="Object.keys(instance.values).length">
+      <div
+        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+        v-for="(value, key) in instance.values"
+        :key="value"
       >
+        <div>
+          <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+            {{ properties.find((p) => p.symbolic_name === key).name }}
+          </label>
+        </div>
+        <div class="sm:col-span-2">
+          <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+            {{ value }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+        <div class="col-span-3 text-center">
+          <p class="block font-bold text-2xl text-gray-200">
+            No assigned properties.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <template #actions>
+      <SecondaryOutlinedButton
+        type="button"
+        @click="onClose()"
+      >
+        Cancel
+      </SecondaryOutlinedButton>
+      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
         Edit
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
-import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SiteHead from "@/Components/SiteHead.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
 export default {
   components: {
     AppLayout,
+    SiteHead,
     SlideOver,
     SelectMenu,
     TextInput,
@@ -128,37 +169,30 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     instance: {
       type: Object,
       required: true,
     },
+    properties: {
+      type: Array,
+      required: true,
+    },
   },
 
-  setup(props, { emit }) {
+  setup() {
     const store = useStore();
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
     };
 
+    const onClose = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
     return {
-      open,
       onRouteRequest,
-      onClose: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onClose,
     };
   },
 };
 </script>
-
-<style>
-</style>

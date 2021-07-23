@@ -8,7 +8,9 @@ use App\Actions\Jetstream\DeleteUser;
 use App\Actions\Jetstream\RemoveTeamMember;
 use App\Actions\Jetstream\UpdateTeamName;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 use Laravel\Jetstream\Jetstream;
+use Request;
 
 class JetstreamServiceProvider extends ServiceProvider
 {
@@ -33,7 +35,7 @@ class JetstreamServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Permission system has been changed from JetStream
+        // Permission system has been migrated from Jetstream to Embers
         // $this->configurePermissions();
 
         Jetstream::createTeamsUsing(CreateTeam::class);

@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
+use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Laravel\Jetstream\Actions\UpdateTeamMemberRole;
+use Laravel\Jetstream\Contracts\RemovesTeamMembers;
 use Laravel\Jetstream\Features;
 use Laravel\Jetstream\Jetstream;
 
@@ -23,27 +24,20 @@ class TeamMemberController extends Controller
     {
         $team = Jetstream::newTeamModel()->findOrFail($teamId);
 
-        // if (Features::sendsTeamInvitations()) {
-        //     app(InvitesTeamMembers::class)->invite(
-        //         $request->user(),
-        //         $team,
-        //         $request->email ?: '',
-        //         $request->team_role_id
-        //     );
-        // } else {
-        //     app(AddsTeamMembers::class)->add(
-        //         $request->user(),
-        //         $team,
-        //         $request->email ?: '',
-        //         $request->team_role_id
-        //     );
-        // }
-        app(AddsTeamMembers::class)->add(
-            $request->user(),
-            $team,
-            $request->email ?: '',
-            $request->team_role_id
-        );
+        if (Features::sendsTeamInvitations()) {
+            app(InvitesTeamMembers::class)->invite(
+                $request->user(),
+                $team,
+                $request->email ?: '',
+                $request->team_role_id
+            );
+        } else {
+            app(AddsTeamMembers::class)->add(
+                $request->user(),
+                $team,
+                $request->all()
+            );
+        }
 
         return back(303);
     }
@@ -58,11 +52,11 @@ class TeamMemberController extends Controller
      */
     public function update(Request $request, $teamId, $userId)
     {
-        app(UpdateTeamMemberRole::class)->update(
+        app(UpdatesTeamMemberRoles::class)->update(
             $request->user(),
             Jetstream::newTeamModel()->findOrFail($teamId),
             $userId,
-            $request->teamRoleId
+            $request->team_role_id
         );
 
         return back(303);

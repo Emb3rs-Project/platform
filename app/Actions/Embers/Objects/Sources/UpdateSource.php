@@ -17,7 +17,7 @@ class UpdateSource implements UpdatesSources
      * Validate and update an existing instance.
      *
      * @param  mixed  $user
-     * @param  int  $sink
+     * @param  int  $id
      * @param  array  $input
      * @return Instance
      */

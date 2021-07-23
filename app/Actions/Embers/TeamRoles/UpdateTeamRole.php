@@ -6,7 +6,6 @@ use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\EmbersPermissionable;
 use App\Models\Permission;
 use App\Models\TeamRole;
-use App\Rules\Embers\TeamRole as EmbersTeamRole;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -21,7 +20,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
      * @param  mixed  $user
      * @param  int  $id
      * @param  array  $input
-     * @return Instance
+     * @return TeamRole
      */
     public function update($user, int $id, array $input)
     {
@@ -55,9 +54,9 @@ class UpdateTeamRole implements UpdatesTeamRoles
                 })
             ],
             'permissions' => ['filled', 'array'],
-            'permissions.*' => ['required', 'string', 'distinct', 'max:255', new EmbersTeamRole],
+            'permissions.*' => ['required', 'uuid', 'distinct', 'exists:permissions,friendly_id'],
         ])
-        ->validate();
+            ->validate();
     }
 
     /**
@@ -65,7 +64,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
      *
      * @param  TeamRole  $role
      * @param  array  $input
-     * @return Project
+     * @return TeamRole
      */
     protected function save(TeamRole $role, array $input)
     {
@@ -76,7 +75,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
         if (!empty($input['permissions'])) {
             // Transform the permission friendly names to their coresponding actions
             foreach ($input['permissions'] as &$permission) {
-                $permission = Permission::whereFriendlyName($permission)->first();
+                $permission = Permission::whereFriendlyId($permission)->first();
             }
             unset($permission);
 

@@ -1,6 +1,8 @@
 <template>
-  <slide-over
-    v-model="open"
+
+  <SiteHead title="Edit a Sink" />
+
+  <SlideOver
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
@@ -8,26 +10,22 @@
     subtitleTextColor="text-gray-200"
   >
     <!-- Sink Template -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
           Templates
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
-        ></select-menu>
+        />
       </div>
     </div>
 
     <!-- Sink Location -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label
           for="project_name"
@@ -37,32 +35,16 @@
         </label>
       </div>
       <div class="sm:col-span-2">
-        <select-menu
+        <SelectMenu
           v-model="selectedLocation"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
-        ></select-menu>
-      </div>
-    </div>
-
-    <!-- Sink Name -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <text-input v-model="form.sink.data.name" :label="'Name'"> </text-input>
+        />
       </div>
     </div>
 
     <!-- Sink Properties -->
-    <!-- <div
+    <div
       class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
       v-for="prop in properties"
       :key="prop.id"
@@ -77,77 +59,84 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="prop.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
             :unit="prop.unit.symbol"
             :placeholder="prop.property.name"
             :required="prop.required"
-          >
-          </text-input>
+          />
         </div>
         <div v-else-if="prop.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="form.sink.data[prop.property.symbolic_name]"
             :options="prop.property.data.options"
             :disabled="selectedTemplate ? false : true"
             :required="prop.required"
             :label="prop.property.name"
+          />
+        </div>
+        <div v-if="form.hasErrors">
+          <div
+            v-for="(error, key) in form.errors"
+            :key="key"
           >
-          </select-menu>
+            <JetInputError
+              v-show="key.includes(prop.property.symbolic_name)"
+              :message="error"
+              class="mt-2"
+            />
+          </div>
         </div>
       </div>
-      <pre>{{ prop }}</pre>
-    </div> -->
+    </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
-        @click="onClose"
+        @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button @click="submit()" :disabled="form.processing">
+      </SecondaryOutlinedButton>
+      <PrimaryButton
+        @click="submit"
+        :disabled="form.processing"
+      >
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
-import { ref, watch, computed, onBeforeUpdate } from "vue";
+import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
-// import { Inertia } from '@inertiajs/inertia'
+import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
-import { useStore } from "vuex";
+import SiteHead from "@/Components/SiteHead.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import JetInputError from "../../../Jetstream/InputError";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
 export default {
   components: {
     AppLayout,
+    SiteHead,
     SlideOver,
     SelectMenu,
     TextInput,
+    JetInputError,
     PrimaryButton,
     SecondaryOutlinedButton,
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     templates: {
-      type: Array,
-      default: [],
-    },
-    equipments: {
       type: Array,
       default: [],
     },
@@ -163,15 +152,11 @@ export default {
 
   setup(props, { emit }) {
     const store = useStore();
-    onBeforeUpdate(() => {
-      console.log("onBeforeUpdate");
-    });
 
     const form = useForm({
       sink: {
         data: {},
       },
-      //   equipments: [],
       template_id: null,
       location_id: null,
     });
@@ -182,44 +167,57 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
+        properties: t.template_properties,
       }))
     );
+    const selectedTemplate = ref(
+      templates.value.find((t) => t.key === props.instance.template.id)
+    );
+    watch(
+      selectedTemplate,
+      (template) => {
+        templateInfo.value = templates.value.find(
+          (t) => t.key === template.key
+        );
+        form.template_id = template.key;
+        form.sink.data.name = props.instance.name;
+
+        if (templateInfo.value.properties.length) {
+          for (const property of templateInfo.value.properties) {
+            const prop = property.property;
+
+            const value = props.instance.values[prop.symbolic_name];
+
+            if (value) {
+              if (prop.inputType === "select") {
+                form.sink.data[prop.symbolic_name] = prop.data.options.find(
+                  (o) => o.value === value
+                );
+              } else {
+                form.sink.data[prop.symbolic_name] = value;
+              }
+            } else {
+              const placeholder = prop.inputType === "select" ? {} : "";
+
+              form.sink.data[prop.symbolic_name] = property.default_value
+                ? property.default_value
+                : placeholder;
+            }
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
     const locations = computed(() =>
       props.locations.map((l) => ({
         key: l.id,
         value: l.name,
       }))
     );
-
-    const selectedTemplate = ref(
-      templates.value.find((t) => t.key === props.instance.template.id)
-    );
-
     const selectedLocation = ref(
       locations.value.find((l) => l.key === props.instance.location.id)
     );
-
-    watch(
-      selectedTemplate,
-      (selectedTemplate) => {
-        templateInfo.value = props.templates.find(
-          (t) => t.id === selectedTemplate.key
-        );
-        form.template_id = selectedTemplate.key;
-        form.sink.data.name = props.instance.name;
-        console.log(props.instance.name);
-
-        // if (templateInfo.value?.template_properties) {
-        //   for (const prop of templateInfo.value?.template_properties) {
-        //     form.sink.data[prop.property.symbolic_name] = prop.default_value
-        //       ? prop.default_value
-        //       : "";
-        //   }
-        // }
-      },
-      { immediate: true, deep: true }
-    );
-
     watch(
       selectedLocation,
       (selectedLocation) => {
@@ -228,24 +226,46 @@ export default {
       { immediate: true, deep: true }
     );
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const properties = computed(() =>
-      Object.assign([], templateInfo.value?.template_properties)
+      Object.assign([], templateInfo.value.properties)
     );
 
     const submit = () => {
-      form.patch(route("objects.sinks.update", props.instance.id), {
-        onError: (e) => console.log(e),
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+
+          const sinkData = deepCopyOfData.sink.data;
+
+          if (templateInfo.value.properties.length) {
+            for (const property of templateInfo.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(sinkData[key]).length) {
+                  sinkData[key] = sinkData[key].value;
+                }
+              }
+            }
+          }
+          console.log(deepCopyOfData);
+          return deepCopyOfData;
+        })
+        .patch(route("objects.sinks.update", props.instance.id), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
+
+    const onCancel = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
+    const onLocationSelect = () => {};
 
     return {
       templateInfo,
@@ -254,16 +274,11 @@ export default {
       locations,
       selectedLocation,
       form,
-      open,
       properties,
       submit,
-      onClose: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onLocationSelect,
+      onCancel,
     };
-  },
-
-  methods: {
-    onLocationSelect(locId) {},
   },
 };
 </script>

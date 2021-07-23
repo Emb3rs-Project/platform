@@ -1,24 +1,20 @@
 <template>
   <!-- Source Template -->
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-  >
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
         Select a Template
       </label>
     </div>
     <div class="sm:col-span-2">
-      <select-menu
+      <SelectMenu
         v-model="selectedTemplate"
         :options="templates"
-      ></select-menu>
+      ></SelectMenu>
     </div>
   </div>
 
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-  >
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label
         for="project_name"
@@ -28,11 +24,11 @@
       </label>
     </div>
     <div class="sm:col-span-2">
-      <select-menu
+      <SelectMenu
         v-model="selectedLocation"
         :options="locationSelect"
         :disabled="selectedTemplate ? false : true"
-      ></select-menu>
+      ></SelectMenu>
     </div>
   </div>
 
@@ -49,21 +45,21 @@
       </div>
       <div class="sm:col-span-2">
         <div v-if="property.property.inputType === 'text'">
-          <text-input
+          <TextInput
             v-model="data[property.property.symbolic_name]"
             :unit="property.unit.symbol"
             :placeholder="property.property.name"
             :required="property.required"
           >
-          </text-input>
+          </TextInput>
         </div>
         <div v-else-if="property.property.inputType === 'select'">
-          <select-menu
+          <SelectMenu
             v-model="data[property.property.symbolic_name]"
             :options="property.property.data.options"
             :required="property.required"
           >
-          </select-menu>
+          </SelectMenu>
         </div>
       </div>
     </div>
@@ -74,8 +70,8 @@
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
-import SelectMenu from "../../../../Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "../../../../Components/NewLayout/Forms/TextInput.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
 import { keyParToSelect } from "../../../../Utils/array";
 
 export default {
@@ -115,14 +111,17 @@ export default {
 
     watch(
       selectedLocation,
-      () => store.commit("sources/setLocation", selectedLocation.value),
+      () =>
+        store.commit("sources/setLocation", {
+          location: selectedLocation.value,
+        }),
       { immediate: true }
     );
 
     watch(
       data,
       (data) => {
-        store.dispatch("sources/addSource", {
+        store.dispatch("sources/setSource", {
           source: JSON.parse(JSON.stringify(data)),
         });
       },
@@ -135,7 +134,7 @@ export default {
         if (!selectedTemplate) return;
         data.value = {};
 
-        store.dispatch("sources/addTemplate", { template: selectedTemplate });
+        store.dispatch("sources/setTemplate", { template: selectedTemplate });
 
         if (!Object.keys(selectedTemplate.props).length === 0) return;
 

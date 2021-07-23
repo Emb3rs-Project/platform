@@ -1,54 +1,42 @@
 <template>
-  <app-layout>
+  <SiteHead title="Objects" />
+
+  <AppLayout>
     <!-- Menu Of Available Instances -->
-    <div
-      class="fixed right-8 top-6 z-10 p-4 rounded-full cursor-pointer bg-yellow-500 hover:animate-none"
-      :class="{ 'animate-pulse': !slideOpen }"
+    <button
+      type="button"
+      class="fixed right-8 top-24 sm:top-6 z-10 p-4 rounded-full bg-yellow-500"
       @click="toggleIndexComponent"
     >
-      <svg
-        class="w-8 h-8 text-white hover:text-gray-100"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"
-        ></path>
-      </svg>
-    </div>
+      <TemplateIcon class="h-8 w-auto text-white hover:text-gray-100" />
+    </button>
 
-    <amazing-map
-      :centerValue="[38.7181959, -9.1975417]"
-      ref="map"
-    ></amazing-map>
+    <AmazingMap ref="map" />
 
     <component
-      class="z-30"
       v-bind="slideProps"
       :is="slideComponent"
-      v-show="slideComponent"
-    ></component>
-  </app-layout>
+    />
+  </AppLayout>
 </template>
 
 <script>
 import { computed, defineAsyncComponent, ref, watch } from "vue";
 import { useStore } from "vuex";
 
+import { TemplateIcon } from "@heroicons/vue/outline";
+
 import AppLayout from "@/Layouts/AppLayout.vue";
-import AmazingMap from "../../Components/Map/AmazingMap";
-import SlideOver from "../../Components/NewLayout/SlideOver";
-import LinkIcon from "../../Components/Icons/LinkIcon";
-import { Inertia } from "@inertiajs/inertia";
+import SiteHead from "@/Components/SiteHead.vue";
+import AmazingMap from "@/Components/Map/AmazingMap";
+import SlideOver from "@/Components/SlideOver";
+import LinkIcon from "@/Components/Icons/LinkIcon";
 
 export default {
   components: {
+    SiteHead,
     AppLayout,
+    TemplateIcon,
     AmazingMap,
     SlideOver,
     LinkIcon,
@@ -68,14 +56,14 @@ export default {
     const slideController = ref();
     const slideOpen = computed(() => store.getters["objects/slideOpen"]);
 
-    const slideComponent = computed(() =>
-      slideController.value
+    const slideComponent = computed(() => {
+      return slideController.value
         ? defineAsyncComponent({
             loader: () => import(`@/Pages/${slideController.value}`),
             delay: 300,
           })
-        : false
-    );
+        : false;
+    });
 
     const currentSlideOverPath = computed(
       () => store.getters["objects/currentRoute"]
@@ -85,7 +73,7 @@ export default {
       () => store.getters["objects/routeCheckSum"]
     );
 
-    watch(currentSlidePathCheckSum, async (_) => {
+    watch(currentSlidePathCheckSum, async () => {
       const newPath = currentSlideOverPath.value;
       if (!newPath) return;
       let _route = "";

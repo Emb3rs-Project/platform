@@ -35,6 +35,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'data'
     ];
 
     /**
@@ -56,13 +57,14 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'data' => 'array',
     ];
 
     /**
-    * The accessors to append to the model's array form.
-    *
-    * @var array
-    */
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
     protected $appends = [
         'profile_photo_url',
     ];

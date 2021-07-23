@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Instance;
 use App\Models\News;
-use App\Models\Notification;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,31 +13,32 @@ use Inertia\Response;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): Response
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
+    public function index(Request $request)
     {
         $news = News::whereTeamId($request->user()->currentTeam->id)->get();
-        $notifications = Notification::whereTeamId($request->user()->currentTeam->id)->get();
-        $currentTeam =$request->user()->currentTeam;
+        $currentTeam = $request->user()->currentTeam;
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
 
         $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $sources = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])
             ->get();
 
         $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get()
-            ->pluck('id');
+            ->get('id');
         $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])
@@ -46,7 +46,6 @@ class DashboardController extends Controller
 
         return Inertia::render('Dashboard', [
             'news' => $news,
-            'notifications' => $notifications,
             'users' => $users,
             'sources' => $sources,
             'sinks' => $sinks

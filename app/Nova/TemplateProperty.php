@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -34,8 +35,8 @@ class TemplateProperty extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'required',
+        // You can add any of this to your Laravel Nova Search
+        //    'required',
     ];
 
     /**
@@ -50,7 +51,7 @@ class TemplateProperty extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Boolean::make(__('REQUIRED'), 'required'),
             Boolean::make(__('IS_SUMMARY'), 'is_summary'),
-            Number::make(__('ORDER'), 'order')->min(0),
+            Number::make(__('ORDER'), 'order')->rules(['numeric', 'min:0', 'required']),
 
             BelongsTo::make(__('TEMPLATE'), 'template', Template::class),
             BelongsTo::make(__('PROPERTY'), 'property', Property::class),

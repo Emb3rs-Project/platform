@@ -27,6 +27,18 @@ trait EmbersPermissionable
     }
 
     /**
+    * The name of the group this trait is being used inside.
+    *
+    * @return string
+    */
+    public function getGroupName(): string
+    {
+        $action = $this->getActionName();
+
+        return Str::of($action)->beforeLast('\\')->afterLast('\\');
+    }
+
+    /**
      * The friendly name of the action this trait is being used inside.
      *
      * @return string
@@ -35,9 +47,7 @@ trait EmbersPermissionable
     {
         $actionName = $this->getShortActionName();
 
-        $friendlyActionName = Str::of($actionName)->kebab()->replace('-', ' ');
-
-        return $friendlyActionName;
+        return Str::of($actionName)->kebab()->replace('-', ' ');
     }
 
     /**

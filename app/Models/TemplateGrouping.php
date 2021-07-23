@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TemplateGrouping extends Model
 {
@@ -19,7 +19,7 @@ class TemplateGrouping extends Model
         return $this->belongsTo(Template::class, 'template_id');
     }
 
-    public function templateProperties()
+    public function templateProperties(): HasMany
     {
         return $this->hasMany(TemplateProperty::class, 'grouping_id');
     }

@@ -6,18 +6,11 @@ use App\Contracts\Embers\Objects\Sources\CreatesSources;
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\Contracts\Embers\Objects\Sources\EditsSources;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
-use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
-use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Http\Controllers\Controller;
-use App\Nova\Actions\InstanceProcessing;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Redirect;
-use Laravel\Nova\Fields\ActionFields;
 
 class SourceController extends Controller
 {
@@ -25,15 +18,11 @@ class SourceController extends Controller
      * Display a listing of the resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
         $sources = app(IndexesSources::class)->index($request->user());
-
-        // return Inertia::render('Objects/Sources/SourceIndex', [
-        //     'sources' => $sources
-        // ]);
 
         return response()->json([
             'sources' => $sources
@@ -44,7 +33,7 @@ class SourceController extends Controller
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function create(Request $request)
     {
@@ -74,13 +63,13 @@ class SourceController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         app(StoresSources::class)->store($request->user(), $request->all());
 
-        return Redirect::route('objects.index');
+        return redirect()->route('objects.index');
     }
 
     /**
@@ -88,7 +77,7 @@ class SourceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function show(Request $request, $id)
     {
@@ -98,20 +87,6 @@ class SourceController extends Controller
             $locations,
             $instance
         ] = app(ShowsSources::class)->show($request->user(), $id);
-
-        $action = new InstanceProcessing();
-        $user_id = Auth::user()->id;
-
-
-        // DispatchCustomAction::dispatchAction(
-        //     $action,
-        //     new ActionFields(new Collection(), new Collection()),
-        //     [$instance],
-        //     $user_id
-        // );
-
-        $action->generateScriptFile($instance);
-
 
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
@@ -129,25 +104,28 @@ class SourceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return array<string, mixed>
      */
     public function edit(Request $request, $id)
     {
         [
             $templates,
             $equipments,
+            $equipmentsCategories,
+            $processes,
+            $processesCategories,
             $locations,
             $instance
         ] = app(EditsSources::class)->edit($request->user(), $id);
-
-
-
 
         return [
             "slideOver" => "Objects/Sources/SourceEdit",
             "props" => [
                 "templates" => $templates,
                 "equipments" => $equipments,
+                "equipmentsCategories" => $equipmentsCategories,
+                "processes" => $processes,
+                "processesCategories" => $processesCategories,
                 "locations" => $locations,
                 "instance" => $instance
             ]
@@ -159,13 +137,13 @@ class SourceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         $updatedSource = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
 
-        return Redirect::route('objects.sources.show', $updatedSource->id);
+        return redirect()->route('objects.sources.show', $updatedSource->id);
     }
 
     /**
@@ -173,35 +151,12 @@ class SourceController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
     {
         app(DestroysSources::class)->destroy($request->user(), $id);
 
-        return Redirect::route('objects.index');
-    }
-
-    /**
-     * Share the specified resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function share(Request $request, $id)
-    {
-        $source = app(SharesSources::class)->share($request->user(), $id);
-
-        // return [
-        //     "slideOver" => 'Objects/Sinks/SinkShare',
-        //     "props" => [
-        //         "instance" => $sink
-        //     ]
-        // ];
-
-        return response()->json([
-            "source" => $source
-        ]);
+        return redirect()->route('objects.index');
     }
 }

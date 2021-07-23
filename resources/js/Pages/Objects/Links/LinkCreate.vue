@@ -1,15 +1,12 @@
 <template>
-  <slide-over
-    v-model="open"
+  <SlideOver
     title="New Link"
     subtitle="Get started by selecting a marker to start your segments."
     headerBackground="bg-blue-700"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <label
         for="project_name"
         class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
@@ -17,13 +14,14 @@
         Name
       </label>
       <div class="sm:col-span-2">
-        <text-input v-model="form.name" placeholder="Link's Name"> </text-input>
+        <TextInput
+          v-model="form.name"
+          placeholder="Link's Name"
+        > </TextInput>
       </div>
     </div>
 
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <h1>Segments</h1>
     </div>
 
@@ -33,14 +31,14 @@
       :key="link"
     >
       <div class="sm:col-span-3">
-        <Disclosure as="div" v-slot="{ open }">
+        <Disclosure
+          as="div"
+          v-slot="{ open }"
+        >
           <dt class="text-lg">
-            <DisclosureButton
-              class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none"
-            >
+            <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
               <span class="font-medium text-gray-900">
-                Segment #{{ index + 1 }}</span
-              >
+                Segment #{{ index + 1 }}</span>
               <span class="ml-6 h-7 flex items-center">
                 <ChevronDownIcon
                   :class="[
@@ -60,91 +58,86 @@
             leave-from-class="transform scale-100 opacity-100"
             leave-to-class="transform scale-95 opacity-0"
           >
-            <DisclosurePanel as="dd" class="mt-2 pr-12">
-              <div
-                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              >
+            <DisclosurePanel
+              as="dd"
+              class="mt-2 pr-12"
+            >
+              <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <div>
-                  <label
-                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                  >
+                  <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
                     From
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.from" :disabled="true">
-                    </text-input>
+                    <TextInput
+                      v-model="link.from"
+                      :disabled="true"
+                    >
+                    </TextInput>
                   </div>
                 </div>
               </div>
-              <div
-                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              >
+              <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <div>
-                  <label
-                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                  >
+                  <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
                     To
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.to" :disabled="true">
-                    </text-input>
+                    <TextInput
+                      v-model="link.to"
+                      :disabled="true"
+                    >
+                    </TextInput>
                   </div>
                 </div>
               </div>
-              <div
-                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              >
+              <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <div>
-                  <label
-                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                  >
+                  <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
                     Distance
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input
+                    <TextInput
                       v-model="link.distance"
                       :disabled="true"
                       unit="m"
                     >
-                    </text-input>
+                    </TextInput>
                   </div>
                 </div>
               </div>
-              <div
-                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              >
+              <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <div>
-                  <label
-                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                  >
+                  <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
                     Cost
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.cost" unit="€/m"> </text-input>
+                    <TextInput
+                      v-model="link.cost"
+                      unit="€/m"
+                    > </TextInput>
                   </div>
                 </div>
               </div>
-              <div
-                class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              >
+              <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <div>
-                  <label
-                    class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-                  >
+                  <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
                     Depth
                   </label>
                 </div>
                 <div class="sm:col-span-2">
                   <div>
-                    <text-input v-model="link.depth" unit="m"> </text-input>
+                    <TextInput
+                      v-model="link.depth"
+                      unit="m"
+                    > </TextInput>
                   </div>
                 </div>
               </div>
@@ -155,18 +148,21 @@
     </div>
 
     <template #actions>
-      <secondary-outlined-button
+      <SecondaryOutlinedButton
         type="button"
         :disabled="form.processing"
         @click="onCancel"
       >
         Cancel
-      </secondary-outlined-button>
-      <primary-button @click="submit" :disabled="form.processing">
+      </SecondaryOutlinedButton>
+      <PrimaryButton
+        @click="submit"
+        :disabled="form.processing"
+      >
         Save
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
@@ -174,11 +170,11 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/NewLayout/SlideOver.vue";
-import SelectMenu from "@/Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "@/Components/NewLayout/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/NewLayout/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/NewLayout/SecondaryOutlinedButton.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import { useStore } from "vuex";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
@@ -198,13 +194,8 @@ export default {
     ChevronDownIcon,
   },
 
-  props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  emits: ["update:modelValue"],
+  props: {},
+
   setup(props, { emit }) {
     const store = useStore();
     const form = useForm({
@@ -223,18 +214,12 @@ export default {
       });
     };
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
-
     const links = store.getters["map/currentLinks"];
     const linkList = computed(() => Object.values(links));
 
     return {
       form,
       submit,
-      open,
       onCancel: () =>
         store.dispatch("objects/showSlide", { route: "objects.list" }),
       linkList,

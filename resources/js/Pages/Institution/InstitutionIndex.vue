@@ -1,5 +1,5 @@
 <template>
-  <app-layout>
+  <AppLayout>
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Institution
@@ -24,108 +24,108 @@
                   v-for="(user, index) in users"
                   :key="index"
                 >
-                  <inertia-link
+                  <Link
                     href="#"
                     class="block hover:bg-gray-50"
                   >
-                    <div class="flex items-center px-4 py-4 sm:px-6">
-                      <div class="min-w-0 flex-1 flex items-center">
-                        <div class="flex-shrink-0">
-                          <img
-                            class="h-12 w-12 rounded-full"
-                            :src="user.profile_photo_url"
-                            alt=""
-                          >
+                  <div class="flex items-center px-4 py-4 sm:px-6">
+                    <div class="min-w-0 flex-1 flex items-center">
+                      <div class="flex-shrink-0">
+                        <img
+                          class="h-12 w-12 rounded-full"
+                          :src="user.profile_photo_url"
+                          alt=""
+                        >
+                      </div>
+                      <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                        <div>
+                          <p class="text-sm font-medium text-indigo-600 truncate">
+                            {{ user.name }}
+                          </p>
+                          <p class="mt-2 flex items-center text-sm text-gray-500">
+                            <!-- Heroicon name: solid/mail -->
+                            <svg
+                              class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            <span class="truncate">
+                              {{ user.email }}
+                            </span>
+                          </p>
                         </div>
-                        <div class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+                        <div class="hidden md:block">
                           <div>
-                            <p class="text-sm font-medium text-indigo-600 truncate">
-                              {{ user.name }}
+                            <p class="text-sm text-gray-900">
+                              Member since
+                              <time datetime="2020-01-07">
+                                {{ user.created_at }}
+                              </time>
                             </p>
-                            <p class="mt-2 flex items-center text-sm text-gray-500">
-                              <!-- Heroicon name: solid/mail -->
-                              <svg
-                                class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                aria-hidden="true"
-                              >
-                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                              </svg>
-                              <span class="truncate">
-                                {{ user.email }}
-                              </span>
-                            </p>
-                          </div>
-                          <div class="hidden md:block">
-                            <div>
-                              <p class="text-sm text-gray-900">
-                                Member since
-                                <time datetime="2020-01-07">
-                                  {{ user.created_at }}
-                                </time>
+                            <pre>{{user.email_verified_at}}</pre>
+                            <div v-if="user.email_verified_at != 'null'">
+                              <p class="mt-2 flex items-center text-sm text-gray-500">
+                                <svg
+                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                    clip-rule="evenodd"
+                                  />
+                                </svg>
+                                Email has not been verified
                               </p>
-                              <pre>{{user.email_verified_at}}</pre>
-                              <div v-if="user.email_verified_at != 'null'">
-                                <p class="mt-2 flex items-center text-sm text-gray-500">
-                                  <svg
-                                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                      clip-rule="evenodd"
-                                    />
-                                  </svg>
-                                  Email has not been verified
-                                </p>
-                              </div>
-                              <div v-else>
-                                <p class="mt-2 flex items-center text-sm text-gray-500">
-                                  <!-- Heroicon name: solid/check-circle -->
-                                  <svg
-                                    class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    aria-hidden="true"
-                                  >
-                                    <path
-                                      fill-rule="evenodd"
-                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                      clip-rule="evenodd"
-                                    />
-                                  </svg>
-                                  Email verified at {{ user.email_verified_at }}
-                                </p>
-                              </div>
+                            </div>
+                            <div v-else>
+                              <p class="mt-2 flex items-center text-sm text-gray-500">
+                                <!-- Heroicon name: solid/check-circle -->
+                                <svg
+                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd"
+                                  />
+                                </svg>
+                                Email verified at {{ user.email_verified_at }}
+                              </p>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div>
-                        <!-- Heroicon name: solid/chevron-right -->
-                        <svg
-                          class="h-5 w-5 text-gray-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                            clip-rule="evenodd"
-                          />
-                        </svg>
-                      </div>
                     </div>
-                  </inertia-link>
+                    <div>
+                      <!-- Heroicon name: solid/chevron-right -->
+                      <svg
+                        class="h-5 w-5 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -308,61 +308,65 @@
       </div>
 
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>
-  import { ref } from 'vue';
+import { ref } from "vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
-  import useUniqueLocations from "@/Composables/useUniqueLocations";
+import useUniqueLocations from "@/Composables/useUniqueLocations";
 
-  import AppLayout from "@/Layouts/AppLayout";
-  import LeafletMap from "@/Components/LeafletMap";
-  import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import AppLayout from "@/Layouts/AppLayout";
+import LeafletMap from "@/Components/LeafletMap";
+import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 
-  export default {
-    components: {
-      AppLayout,
-      LeafletMap,
-      DetailIcon
+export default {
+  components: {
+    Link,
+    AppLayout,
+    LeafletMap,
+    DetailIcon,
+  },
+
+  props: {
+    users: {
+      type: Array,
+      required: true,
     },
-
-    props: {
-      users: {
-        type: Array,
-        required: true
-      },
-      sources: {
-        type: Array,
-        required: true
-      },
-      sinks: {
-        type: Array,
-        required: true
-      },
+    sources: {
+      type: Array,
+      required: true,
     },
+    sinks: {
+      type: Array,
+      required: true,
+    },
+  },
 
-    setup(props) {
-      const map = ref(null);
-      const markers = ref([]);
-      const locations = props.sources.concat(props.sinks);
+  setup(props) {
+    const map = ref(null);
+    const markers = ref([]);
+    const locations = props.sources.concat(props.sinks);
 
-      const uniqueLocations = useUniqueLocations(locations);
+    const uniqueLocations = useUniqueLocations(locations);
 
-      for (const source of uniqueLocations.value) {
-        markers.value.push(source.data)
-      }
-
-      function centerAtLocation(location) {
-        const locationMarker = markers.value.find((m) => m.id === location.geo_object.id);
-        map.value.centerAtLocation(locationMarker);
-      }
-
-      return {
-        map,
-        markers,
-        centerAtLocation
-      };
+    for (const source of uniqueLocations.value) {
+      markers.value.push(source.data);
     }
-  };
+
+    function centerAtLocation(location) {
+      const locationMarker = markers.value.find(
+        (m) => m.id === location.geo_object.id
+      );
+      map.value.centerAtLocation(locationMarker);
+    }
+
+    return {
+      map,
+      markers,
+      centerAtLocation,
+    };
+  },
+};
 </script>

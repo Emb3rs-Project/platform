@@ -60,20 +60,20 @@
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
               <nav class="px-2">
                 <div class="space-y-1">
-                  <inertia-link
+                  <Link
                     v-for="item in navigation"
                     :key="item.name"
                     :href="route(item.href)"
                     :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                     :aria-current="item.current ? 'page' : undefined"
                   >
-                    <component
-                      :is="item.icon"
-                      :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
-                      aria-hidden="true"
-                    />
-                    {{ item.name }}
-                  </inertia-link>
+                  <component
+                    :is="item.icon"
+                    :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    aria-hidden="true"
+                  />
+                  {{ item.name }}
+                  </Link>
                 </div>
                 <div class="mt-8">
                   <div class="relative">
@@ -109,12 +109,12 @@
                           <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div class="py-1">
                               <MenuItem v-slot="{ active }">
-                              <inertia-link
+                              <Link
                                 :href="route('teams.create')"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               >
-                                Create Institution
-                              </inertia-link>
+                              Create Institution
+                              </Link>
                               </MenuItem>
                             </div>
                           </MenuItems>
@@ -128,14 +128,14 @@
                     aria-labelledby="institutions-headline"
                   >
                     <div
-                      v-for="institution in user.all_teams"
+                      v-for="institution in $page.props.user.all_teams"
                       :key="institution.id"
                     >
                       <form @submit.prevent="switchToTeam(institution)">
                         <div
                           class="group flex justify-between items-center w-full rounded-md"
                           :class="
-                        institution.id === user.current_team_id
+                        institution.id === $page.props.user.current_team_id
                           ? 'text-yellow-600 bg-gray-200'
                           : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
@@ -146,15 +146,15 @@
                           >
                             {{ institution.name }}
                           </button>
-                          <inertia-link
+                          <Link
                             :href="route('teams.show', institution)"
                             class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                           >
-                            <CogIcon
-                              class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
-                              aria-hidden="true"
-                            />
-                          </inertia-link>
+                          <CogIcon
+                            class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
+                            aria-hidden="true"
+                          />
+                          </Link>
                         </div>
                       </form>
                     </div>
@@ -193,20 +193,20 @@
                     <span class="inline-block relative">
                       <img
                         class="h-10 w-10 rounded-full flex-shrink-0"
-                        :src="user.profile_photo_url"
+                        :src="$page.props.user.profile_photo_url"
                         alt=""
                       />
                       <span
-                        v-show="notification"
+                        v-show="newNotification"
                         class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                       ></span>
                     </span>
                     <span class="flex-1 flex flex-col min-w-0">
                       <span class="text-gray-900 text-sm font-medium truncate">
-                        {{ user.name }}
+                        {{ $page.props.user.name }}
                       </span>
                       <span class="text-gray-500 text-sm truncate">
-                        {{ user.email }}
+                        {{ $page.props.user.email }}
                       </span>
                     </span>
                   </span>
@@ -228,26 +228,26 @@
               <MenuItems class="z-10 mx-3 origin-top absolute right-0 left-0 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                 <div class="py-1">
                   <MenuItem v-slot="{ active }">
-                  <inertia-link
+                  <Link
                     :href="route('profile.show')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
-                    View profile
-                  </inertia-link>
+                  View profile
+                  </Link>
                   </MenuItem>
                   <MenuItem v-slot="{ active }">
-                  <inertia-link
-                    :href="'#'"
+                  <Link
+                    :href="route('notifications.index')"
                     :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                   >
-                    Notifications
-                    <span
-                      v-show="notification"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                    >
-                      New
-                    </span>
-                  </inertia-link>
+                  Notifications
+                  <span
+                    v-show="newNotification"
+                    class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                  >
+                    {{ unreadNotificationsCount }}
+                  </span>
+                  </Link>
                   </MenuItem>
                 </div>
                 <div class="py-1">
@@ -295,20 +295,20 @@
           <!-- Navigation -->
           <nav class="px-3 mt-6">
             <div class="space-y-1">
-              <inertia-link
+              <Link
                 v-for="item in navigation"
                 :key="item.name"
                 :href="route(item.href)"
                 :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                 :aria-current="item.current ? 'page' : undefined"
               >
-                <component
-                  :is="item.icon"
-                  :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
-                  aria-hidden="true"
-                />
-                {{ item.name }}
-              </inertia-link>
+              <component
+                :is="item.icon"
+                :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                aria-hidden="true"
+              />
+              {{ item.name }}
+              </Link>
             </div>
             <div class="mt-8">
               <!-- Secondary navigation -->
@@ -345,12 +345,12 @@
                       <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                         <div class="py-1">
                           <MenuItem v-slot="{ active }">
-                          <inertia-link
+                          <Link
                             :href="route('teams.create')"
                             class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                           >
-                            Create Institution
-                          </inertia-link>
+                          Create Institution
+                          </Link>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -364,14 +364,14 @@
                 aria-labelledby="institutions-headline"
               >
                 <div
-                  v-for="institution in user.all_teams"
+                  v-for="institution in $page.props.user.all_teams"
                   :key="institution.id"
                 >
                   <form @submit.prevent="switchToTeam(institution)">
                     <div
                       class="group flex justify-between items-center w-full rounded-md"
                       :class="
-                        institution.id === user.current_team_id
+                        institution.id === $page.props.user.current_team_id
                           ? 'text-yellow-600 bg-gray-200'
                           : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
                       "
@@ -382,15 +382,15 @@
                       >
                         {{ institution.name }}
                       </button>
-                      <inertia-link
+                      <Link
                         :href="route('teams.show', institution)"
                         class="text-sm mr-1.5 hidden rounded-full group-hover:block"
                       >
-                        <CogIcon
-                          class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
-                          aria-hidden="true"
-                        />
-                      </inertia-link>
+                      <CogIcon
+                        class="h-5 w-5 rounded-full text-gray-400 hover:text-gray-600"
+                        aria-hidden="true"
+                      />
+                      </Link>
                     </div>
                   </form>
                 </div>
@@ -456,11 +456,11 @@
                   <span class="inline-block relative">
                     <img
                       class="h-10 w-10 rounded-full flex-shrink-0"
-                      :src="user.profile_photo_url"
+                      :src="$page.props.user.profile_photo_url"
                       alt=""
                     />
                     <span
-                      v-show="notification"
+                      v-show="newNotification"
                       class="absolute top-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-red-400"
                     ></span>
                   </span>
@@ -477,26 +477,26 @@
                 <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-200 focus:outline-none">
                   <div class="py-1">
                     <MenuItem v-slot="{ active }">
-                    <inertia-link
+                    <Link
                       :href="route('profile.show')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
-                      View profile
-                    </inertia-link>
+                    View profile
+                    </Link>
                     </MenuItem>
                     <MenuItem v-slot="{ active }">
-                    <inertia-link
-                      :href="'#'"
+                    <Link
+                      :href="route('notifications.index')"
                       :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm']"
                     >
-                      Notifications
-                      <span
-                        v-show="notification"
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                      >
-                        New
-                      </span>
-                    </inertia-link>
+                    Notifications
+                    <span
+                      v-show="newNotification"
+                      class="truncate inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                    >
+                      {{ unreadNotificationsCount }}
+                    </span>
+                    </Link>
                     </MenuItem>
                   </div>
                   <div class="py-1">
@@ -525,8 +525,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onBeforeUnmount } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/inertia-vue3";
+import { useStore } from "vuex";
+
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+
 import {
   Dialog,
   DialogOverlay,
@@ -556,8 +561,6 @@ import {
   CogIcon,
 } from "@heroicons/vue/solid";
 
-import ApplicationLogo from "@/Components/NewLayout/ApplicationLogo.vue";
-
 const navigation = [
   {
     name: "Dashboard",
@@ -584,6 +587,7 @@ const navigation = [
 
 export default {
   components: {
+    Link,
     Dialog,
     DialogOverlay,
     Menu,
@@ -604,20 +608,39 @@ export default {
     CogIcon,
   },
 
-  props: {
-    jetstream: {
-      type: Object,
-      required: true,
-    },
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: {},
 
-  setup() {
+  setup(props) {
+    const store = useStore();
     const sidebarOpen = ref(false);
-    const notification = ref(true);
+    const newNotification = ref(null);
+    const unreadNotificationsCount = ref(null);
+
+    // Check for new notifications instantly (1-time check)
+    store.dispatch("notifications/checkForNewNotifications");
+
+    // start watching for new notifications (polling)
+    store.dispatch("notifications/watchForNewNotifications");
+
+    const stopWatcher = store.watch(
+      (state) => state.notifications.unreadNotificationCount,
+      (unreadNotificationCount) => {
+        if (unreadNotificationCount) {
+          newNotification.value = true;
+          unreadNotificationsCount.value = unreadNotificationCount;
+        } else {
+          newNotification.value = false;
+          unreadNotificationsCount.value = null;
+        }
+      },
+      { immediate: true }
+    );
+
+    // stop watching for notifications when the component has been destroyed
+    onBeforeUnmount(() => {
+      store.dispatch("notifications/stopWatchingForNewNotifications");
+      stopWatcher();
+    });
 
     function logout() {
       Inertia.post(route("logout"));
@@ -638,7 +661,8 @@ export default {
     return {
       navigation,
       sidebarOpen,
-      notification,
+      newNotification,
+      unreadNotificationsCount,
       logout,
       switchToTeam,
     };

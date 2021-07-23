@@ -26,19 +26,9 @@ class EditSink implements EditsSinks
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
-        $sinkCategories = Category::whereType('sink')->get()->pluck('id');
-
-        $equipmentCategories = Category::whereType('equipment')->get()->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get('id');
 
         $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
-            ->get();
-
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -50,7 +40,6 @@ class EditSink implements EditsSinks
 
         return [
             $sinkTemplates,
-            $equipmentTemplates,
             $locations,
             $sink
         ];

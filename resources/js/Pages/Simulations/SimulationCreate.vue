@@ -1,5 +1,5 @@
 <template>
-  <app-layout>
+  <AppLayout>
     <div class="bg-white">
       <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
         <div class="lg:grid lg:grid-cols-3 lg:gap-8">
@@ -8,9 +8,7 @@
               <div class="md:grid md:grid-cols-3 md:gap-6">
                 <div class="md:col-span-1">
                   <div class="px-4 sm:px-0">
-                    <h3
-                      class="text-lg font-medium leading-6 text-gray-900 mb-5"
-                    >
+                    <h3 class="text-lg font-medium leading-6 text-gray-900 mb-5">
                       Simulation
                     </h3>
 
@@ -37,9 +35,7 @@
                               class="h-9 flex items-center"
                               v-if="step.completed"
                             >
-                              <span
-                                class="relative z-10 w-8 h-8 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800"
-                              >
+                              <span class="relative z-10 w-8 h-8 flex items-center justify-center bg-indigo-600 rounded-full group-hover:bg-indigo-800">
                                 <!-- Heroicon name: solid/check -->
                                 <svg
                                   class="w-5 h-5 text-white"
@@ -62,12 +58,8 @@
                               aria-hidden="true"
                               v-if="!step.completed && !step.active"
                             >
-                              <span
-                                class="relative z-10 w-8 h-8 flex items-center justify-center bg-white border-2 border-gray-300 rounded-full group-hover:border-gray-400"
-                              >
-                                <span
-                                  class="h-2.5 w-2.5 bg-transparent rounded-full group-hover:bg-gray-300"
-                                ></span>
+                              <span class="relative z-10 w-8 h-8 flex items-center justify-center bg-white border-2 border-gray-300 rounded-full group-hover:border-gray-400">
+                                <span class="h-2.5 w-2.5 bg-transparent rounded-full group-hover:bg-gray-300"></span>
                               </span>
                             </span>
                             <!-- Active -->
@@ -76,18 +68,12 @@
                               aria-hidden="true"
                               v-if="step.active"
                             >
-                              <span
-                                class="relative z-10 w-8 h-8 flex items-center justify-center bg-white border-2 border-indigo-600 rounded-full"
-                              >
-                                <span
-                                  class="h-2.5 w-2.5 bg-indigo-600 rounded-full"
-                                ></span>
+                              <span class="relative z-10 w-8 h-8 flex items-center justify-center bg-white border-2 border-indigo-600 rounded-full">
+                                <span class="h-2.5 w-2.5 bg-indigo-600 rounded-full"></span>
                               </span>
                             </span>
                             <span class="ml-4 min-w-0 flex flex-col">
-                              <span
-                                class="text-xs font-semibold tracking-wide uppercase"
-                              >
+                              <span class="text-xs font-semibold tracking-wide uppercase">
                                 {{ step.title }}
                               </span>
                               <span class="text-sm text-gray-500">
@@ -246,9 +232,7 @@
                               <span class="text-sm font-medium text-gray-900">{{
                                 source.name
                               }}</span>
-                              <span class="text-sm text-gray-500"
-                                >Template : {{ source.template.name }}</span
-                              >
+                              <span class="text-sm text-gray-500">Template : {{ source.template.name }}</span>
                             </span>
                             <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
                             <button
@@ -314,9 +298,7 @@
                               <span class="text-sm font-medium text-gray-900">{{
                                 sink.name
                               }}</span>
-                              <span class="text-sm text-gray-500"
-                                >Template : {{ sink.template.name }}</span
-                              >
+                              <span class="text-sm text-gray-500">Template : {{ sink.template.name }}</span>
                             </span>
                             <!-- Enabled: "bg-indigo-600", Not Enabled: "bg-gray-200" -->
                             <button
@@ -502,7 +484,7 @@
         </div>
       </div>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>

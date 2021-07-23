@@ -1,22 +1,24 @@
 <template>
-  <slide-over
-    v-model="open"
-    :title="`Objects`"
+  <SlideOver
+    title="Objects"
     subtitle="A list of all the Objects for the currently selected Instituion"
     headerBackground="bg-yellow-600"
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-100"
   >
     <div class="flex justify-end m-3">
-      <filter-dropdown
+      <FilterDropdown
         v-model="selectedObject"
         :options="filterOptions"
-      ></filter-dropdown>
+      />
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
       <div v-if="objects?.length">
-        <amazing-index-table v-model="objects" :columns="tableColumns">
+        <AmazingIndexTable
+          v-model="objects"
+          :columns="tableColumns"
+        >
           <!-- ID -->
           <template #header-id> ID </template>
           <template #body-id="{ item }">
@@ -60,18 +62,14 @@
           <!-- Actions -->
           <template #header-actions> </template>
           <template #body-actions="{ item }">
-            <td
-              class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
-            >
+            <td class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
               <button
                 class="focus:outline-none"
                 @click="
                   onActionRequest(`${selectedObject.paths.details}`, item.id)
                 "
               >
-                <detail-icon
-                  class="text-gray-500 font-medium text-sm w-5"
-                ></detail-icon>
+                <DetailIcon class="text-gray-500 font-medium text-sm w-5" />
               </button>
               <button
                 class="focus:outline-none"
@@ -79,19 +77,17 @@
                   onActionRequest(`${selectedObject.paths.edit}`, item.id)
                 "
               >
-                <edit-icon
-                  class="text-gray-500 font-medium text-sm w-5"
-                ></edit-icon>
+                <EditIcon class="text-gray-500 font-medium text-sm w-5" />
               </button>
               <button class="focus:outline-none">
-                <trash-icon
+                <TrashIcon
                   class="text-red-500 font-medium text-sm w-5"
                   @click="showModal(item, DeleteModal)"
-                ></trash-icon>
+                />
               </button>
             </td>
           </template>
-        </amazing-index-table>
+        </AmazingIndexTable>
       </div>
       <div
         v-else
@@ -104,13 +100,10 @@
     </div>
 
     <template #actions>
-      <primary-button
-        @click="onActionRequest(`${selectedObject.paths.create}`)"
-      >
-        Create New {{ getSingular(selectedObject.title) }}</primary-button
-      >
+      <PrimaryButton @click="onActionRequest(`${selectedObject.paths.create}`)">
+        Create New {{ getSingular(selectedObject.title) }}</PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 
   <component
     class="z-50"
@@ -123,21 +116,21 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
+import { useStore } from "vuex";
 import pluralize from "pluralize";
 
-import SlideOver from "../../Components/NewLayout/SlideOver.vue";
-import FilterDropdown from "../../Components/NewLayout/BrandedDropdown.vue";
-import AmazingIndexTable from "../../Components/Tables/AmazingIndexTable.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import FilterDropdown from "@/Components/BrandedDropdown.vue";
+import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
-import PrimaryLinkButton from "../../Components/NewLayout/PrimaryLinkButton.vue";
-import DeleteModal from "../../Components/NewLayout/Modals/DeleteModal.vue";
-import PrimaryButton from "../../Components/NewLayout/PrimaryButton.vue";
-import { useStore } from "vuex";
-import { filterOptions } from "../../Utils/objectIndex";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
+import DeleteModal from "@/Components/Modals/DeleteModal.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import { filterOptions } from "@/Utils/objectIndex";
 
 export default {
   components: {
@@ -162,11 +155,14 @@ export default {
       default: [],
     },
   },
+
   setup(props) {
     const store = useStore();
 
     const tableColumns = ["name", "location", "actions"];
-    const selectedObject = ref(filterOptions[0]);
+    const selectedObject = ref(
+      store.state.objects.filterOption ?? filterOptions[0]
+    );
 
     const objects = ref(null);
     const filterDropdown = ref(false);
@@ -174,10 +170,7 @@ export default {
     const currentModal = ref(null);
     const itemToDelete = ref(null);
 
-    const open = computed({
-      get: () => store.getters["objects/slideOpen"],
-      set: (value) => store.commit("objects/setSlide", value),
-    });
+    onBeforeUnmount(() => console.log("thTHE GATES ARE CLOSING"));
 
     const modalComponent = computed(() =>
       currentModal.value ? currentModal.value : false
@@ -186,25 +179,31 @@ export default {
     watch(
       selectedObject,
       (current) => {
-        if (current.title === "Sinks") {
-          objects.value = props.instances.filter(
-            (i) => i.template?.category?.type === "sink"
-          );
-          return;
-        }
-        if (current.title === "Sources") {
-          objects.value = props.instances.filter(
-            (i) => i.template?.category?.type === "source"
-          );
-          return;
-        }
-        if (current.title === "Links") {
-          objects.value = props.links;
-          return;
+        switch (current.title) {
+          case "Sources":
+            objects.value = props.instances.filter(
+              (i) => i.template?.category?.type === "source"
+            );
+            break;
+          case "Sinks":
+            objects.value = props.instances.filter(
+              (i) => i.template?.category?.type === "sink"
+            );
+            break;
+          case "Links":
+            objects.value = props.links;
+            break;
+
+          default:
+            break;
         }
       },
       { immediate: true }
     );
+
+    watch(selectedObject, (current) => {
+      store.commit("objects/setFilterOption", current.title);
+    });
 
     const getSingular = (val) => pluralize.singular(val);
 
@@ -244,8 +243,9 @@ export default {
       }
     };
 
-    const onActionRequest = async (route, param) =>
+    const onActionRequest = async (route, param) => {
       store.dispatch("objects/showSlide", { route, props: param });
+    };
 
     return {
       tableColumns,
@@ -254,7 +254,6 @@ export default {
       selectedObject,
       filterDropdown,
       modalIsOpen,
-      open,
       modalComponent,
       getSingular,
       showModal,

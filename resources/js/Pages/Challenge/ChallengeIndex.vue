@@ -1,15 +1,16 @@
 <template>
-  <app-layout>
+  <AppLayout>
     <div class="flex flex-col p-5 h-full gap-5">
       <div>
         <div class="bg-white shadow overflow-hidden sm:rounded-md">
           <ul class="divide-y divide-gray-200">
             <li>
-              <a href="#" class="block hover:bg-gray-50">
+              <a
+                href="#"
+                class="block hover:bg-gray-50"
+              >
                 <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div
-                    class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between"
-                  >
+                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                     <div class="truncate">
                       <div class="flex text-sm">
                         <p class="font-medium text-indigo-600 truncate">
@@ -88,11 +89,12 @@
             </li>
 
             <li>
-              <a href="#" class="block hover:bg-gray-50">
+              <a
+                href="#"
+                class="block hover:bg-gray-50"
+              >
                 <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div
-                    class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between"
-                  >
+                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                     <div class="truncate">
                       <div class="flex text-sm">
                         <p class="font-medium text-indigo-600 truncate">
@@ -171,11 +173,12 @@
             </li>
 
             <li>
-              <a href="#" class="block hover:bg-gray-50">
+              <a
+                href="#"
+                class="block hover:bg-gray-50"
+              >
                 <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div
-                    class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between"
-                  >
+                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                     <div class="truncate">
                       <div class="flex text-sm">
                         <p class="font-medium text-indigo-600 truncate">
@@ -256,7 +259,7 @@
         </div>
       </div>
     </div>
-  </app-layout>
+  </AppLayout>
 </template>
 
 <script>

@@ -1,15 +1,15 @@
 <template>
-  <slide-over
-    v-model="open"
+  <SlideOver
     title="New Source"
     subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
     headerBackground="bg-green-700"
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <!-- <keep-alive> -->
-    <component v-bind="currentStepProps" :is="stepComponent"></component>
-    <!-- </keep-alive> -->
+    <component
+      v-bind="currentStepProps"
+      :is="stepComponent"
+    ></component>
 
     <template #actions>
       <div class="flex justify-start w-full">
@@ -31,23 +31,26 @@
       >
         Previous
       </secondary-button>
-      <primary-button type="button" @click="navigateToNextStep">
+      <PrimaryButton
+        type="button"
+        @click="navigateToNextStep"
+      >
         <span v-if="currentStepIndex + 1 === steps.length">Save</span>
         <span v-else>Next</span>
-      </primary-button>
+      </PrimaryButton>
     </template>
-  </slide-over>
+  </SlideOver>
 </template>
 
 <script>
 import { ref, watch, computed, defineAsyncComponent } from "vue";
 
-import PrimaryButton from "../../../Components/NewLayout/PrimaryButton.vue";
-import SecondaryButton from "../../../Components/NewLayout/SecondaryButton.vue";
-import SlideOver from "../../../Components/NewLayout/SlideOver.vue";
-import SelectMenu from "../../../Components/NewLayout/Forms/SelectMenu.vue";
-import TextInput from "../../../Components/NewLayout/Forms/TextInput.vue";
-import BulletSteps from "../../../Components/NewLayout/Wizards/BulletSteps.vue";
+import PrimaryButton from "../../../Components/PrimaryButton.vue";
+import SecondaryButton from "../../../Components/SecondaryButton.vue";
+import SlideOver from "../../../Components/SlideOver.vue";
+import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import TextInput from "@/Components/Forms/TextInput.vue";
+import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
 import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
@@ -62,10 +65,6 @@ export default {
   },
 
   props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
     templates: {
       type: Array,
       required: true,
@@ -94,7 +93,7 @@ export default {
 
   emits: ["update:modelValue"],
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
     const steps = ref([
       {
@@ -103,7 +102,7 @@ export default {
         status: "current", // status: current | complete | upcoming
       },
       {
-        name: "Equipments",
+        name: "Equipment",
         component: "Objects/Sources/SourceCreateWizard/Step2.vue",
         status: "upcoming",
       },
@@ -140,7 +139,7 @@ export default {
             currentStepProps.value.templates = props.templates;
             currentStepProps.value.locations = props.locations;
             break;
-          case "Equipments":
+          case "Equipment":
             currentStepProps.value.equipmentsCategories =
               props.equipmentsCategories;
             currentStepProps.value.equipments = props.equipments;
@@ -160,11 +159,6 @@ export default {
       },
       { immediate: true, deep: true }
     );
-
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
 
     const currentStepIndex = computed(() =>
       steps.value.findIndex((step) => step.name === currentStep.value.name)
@@ -204,7 +198,6 @@ export default {
       currentStepIndex,
       currentStepProps,
       stepComponent,
-      open,
       navigateToPreviousStep,
       navigateToNextStep,
       onCancel: () =>

@@ -22,7 +22,7 @@ class CreateTeamRole implements CreatesTeamRoles
     {
         $this->authorize($user);
 
-        $permissions = $this->getPermissions();
+        $permissions = $this->getFriendlyPermissions();
 
         return $permissions;
     }

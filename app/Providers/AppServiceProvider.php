@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Notifications\IndexNotification;
+use App\Actions\Embers\Notifications\MarkAllNotificationsAsRead;
 use App\Actions\Embers\Objects\Links\CreateLink;
 use App\Actions\Embers\Objects\Links\DestroyLink;
 use App\Actions\Embers\Objects\Links\EditLink;
@@ -51,9 +53,11 @@ use App\Actions\Embers\TeamRoles\StoreTeamRole;
 use App\Actions\Embers\TeamRoles\UpdateTeamRole;
 use App\Actions\Embers\Teams\AddTeamMember;
 use App\Actions\Embers\Teams\InviteTeamMember;
+use App\Actions\Embers\Teams\UpdateTeamMemberRole;
+use App\Actions\Embers\Users\IndexUserMapData;
+use App\Actions\Embers\Users\StoreUserMapData;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
-use Inertia\ResponseFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -74,13 +78,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        ResponseFactory::macro('slideOver', function ($slideOver, $props) {
-            inertia()->share([
-                'slideOver' => $slideOver,
-                'slideOverProps' => $props
-            ]);
-        });
-
         Embers::indexSinksUsing(IndexSink::class);
         Embers::createSinksUsing(CreateSink::class);
         Embers::storeSinksUsing(StoreSink::class);
@@ -136,5 +133,12 @@ class AppServiceProvider extends ServiceProvider
 
         Embers::addTeamMembersUsing(AddTeamMember::class);
         Embers::inviteTeamMembersUsing(InviteTeamMember::class);
+        Embers::updateTeamMemberRolesUsing(UpdateTeamMemberRole::class);
+
+        Embers::indexNotificationsUsing(IndexNotification::class);
+        Embers::markAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
+
+        Embers::indexUsersMapDataUsing(IndexUserMapData::class);
+        Embers::storeUsersMapDataUsing(StoreUserMapData::class);
     }
 }

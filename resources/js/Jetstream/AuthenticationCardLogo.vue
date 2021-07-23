@@ -1,5 +1,18 @@
 <template>
-  <inertia-link :href="'/'">
-    <img src="../../images/logo.png" alt="" />
-  </inertia-link>
+  <Link :href="'/'">
+  <img
+    src="../../images/logo.png"
+    alt=""
+  />
+  </Link>
 </template>
+
+<script>
+import { Link } from "@inertiajs/inertia-vue3";
+
+export default {
+  components: {
+    Link,
+  },
+};
+</script>

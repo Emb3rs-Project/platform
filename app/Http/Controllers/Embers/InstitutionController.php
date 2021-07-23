@@ -15,7 +15,7 @@ class InstitutionController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
     public function index()
     {
@@ -23,23 +23,15 @@ class InstitutionController extends Controller
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
 
-        $sourceCategories = Category::whereType('source')
-            ->get()
-            ->pluck('id');
-        $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get()
-            ->pluck('id');
+        $sourceCategories = Category::whereType('source')->get('id');
+        $templates = Template::whereIn('category_id', $sourceCategories)->get('id');
         $sources = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])
             ->get();
 
-        $sinkCategories = Category::whereType('sink')
-            ->get()
-            ->pluck('id');
-        $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get()
-            ->pluck('id');
+        $sinkCategories = Category::whereType('sink')->get('id');
+        $templates = Template::whereIn('category_id', $sinkCategories)->get('id');
         $sinks = Instance::whereIn('template_id', $templates)
             ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])

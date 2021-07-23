@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Log;
 use Symfony\Component\Process\Process;
 
 class InstanceProcessing extends Action implements ShouldQueue
@@ -35,6 +36,7 @@ class InstanceProcessing extends Action implements ShouldQueue
                 $this->markAsFinished($model);
             } catch (Exception $e) {
                 $this->markAsFailed($model);
+                Log::critical($e);
             }
         }
     }

@@ -15,6 +15,7 @@ class ChangeRoleToTeamUserTable extends Migration
     {
         Schema::table('team_user', function (Blueprint $table) {
             $table->dropColumn('role');
+
             $table->foreignId('team_role_id');
         });
     }
@@ -28,6 +29,7 @@ class ChangeRoleToTeamUserTable extends Migration
     {
         Schema::table('team_user', function (Blueprint $table) {
             $table->string('role')->nullable();
+
             $table->dropColumn('team_role_id');
         });
     }

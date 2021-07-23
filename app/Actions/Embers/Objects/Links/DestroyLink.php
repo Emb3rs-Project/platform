@@ -15,7 +15,6 @@ class DestroyLink implements DestroysLinks
      *
      * @param  mixed  $user
      * @param  int  $id
-     * @param  array  $input
      * @return void
      */
     public function destroy($user, int $id)
