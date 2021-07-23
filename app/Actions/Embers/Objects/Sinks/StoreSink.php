@@ -47,7 +47,6 @@ class StoreSink implements StoresSinks
     {
         $validator = Validator::make($input, [
             'sink' => ['required', 'array:data'],
-            'sink.data.*' => [new Property],
             'template_id' => ['required', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => [
                 Rule::requiredIf(function () use ($input) {
@@ -73,7 +72,7 @@ class StoreSink implements StoresSinks
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesBelongToTemplate($validated, null);
+        $this->checkIfPropertiesAreValid($validated, null);
 
         return $validated;
     }
@@ -110,9 +109,9 @@ class StoreSink implements StoresSinks
             Arr::set($newInstance, 'location_id', $location->id);
         }
 
-        $instance = Instance::create($newInstance);
-        $instance->teams()->attach($user->currentTeam);
+        // $instance = Instance::create($newInstance);
+        // $instance->teams()->attach($user->currentTeam);
 
-        return $instance;
+        // return $instance;
     }
 }

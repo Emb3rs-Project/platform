@@ -173,17 +173,6 @@ export default {
     const selectedTemplate = ref(
       templates.value.find((t) => t.key === props.instance.template.id)
     );
-
-    const locations = computed(() =>
-      props.locations.map((l) => ({
-        key: l.id,
-        value: l.name,
-      }))
-    );
-    const selectedLocation = ref(
-      locations.value.find((l) => l.key === props.instance.location.id)
-    );
-
     watch(
       selectedTemplate,
       (template) => {
@@ -195,14 +184,24 @@ export default {
 
         if (templateInfo.value.properties.length) {
           for (const property of templateInfo.value.properties) {
-            const value =
-              props.instance.values[property.property.symbolic_name];
+            const prop = property.property;
+
+            const value = props.instance.values[prop.symbolic_name];
 
             if (value) {
-              form.sink.data[property.property.symbolic_name] = value;
+              if (prop.inputType === "select") {
+                form.sink.data[prop.symbolic_name] = prop.data.options.find(
+                  (o) => o.value === value
+                );
+              } else {
+                form.sink.data[prop.symbolic_name] = value;
+              }
             } else {
-              form.sink.data[property.property.symbolic_name] =
-                property.default_value ? property.default_value : "";
+              const placeholder = prop.inputType === "select" ? {} : "";
+
+              form.sink.data[prop.symbolic_name] = property.default_value
+                ? property.default_value
+                : placeholder;
             }
           }
         }
@@ -210,6 +209,15 @@ export default {
       { immediate: true, deep: true }
     );
 
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const selectedLocation = ref(
+      locations.value.find((l) => l.key === props.instance.location.id)
+    );
     watch(
       selectedLocation,
       (selectedLocation) => {

@@ -78,13 +78,15 @@ class Property implements Rule
                 break;
         }
 
+        info($templateProperty);
+
         $validator = Validator::make([
             $attribute => $value
         ], [
             $attribute => [
-                ValidationRule::requiredIf(function () use ($templateProperty) {
-                    return $templateProperty->required;
-                }),
+                ValidationRule::requiredIf(
+                    fn () => $templateProperty->required
+                ),
                 $type
             ]
         ]);

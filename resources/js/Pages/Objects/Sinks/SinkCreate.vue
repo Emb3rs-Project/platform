@@ -235,7 +235,6 @@ export default {
         form.template_id = template.key;
 
         if (templateInfo.value.properties.length) {
-          console.log("PROPERTIES EXIST");
           for (const property of templateInfo.value.properties) {
             const prop = property.property;
 
@@ -251,18 +250,6 @@ export default {
       },
       { immediate: true }
     );
-
-    // watch(
-    //   form.sink.data,
-    //   (data) => {
-    //     for (const _datum in data) {
-    //       if (typeof data[_datum] === "object" && data[_datum] !== null) {
-    //         data[_datum] = data[_datum].value;
-    //       }
-    //     }
-    //   },
-    //   { deep: true }
-    // );
 
     const properties = computed(() =>
       Object.assign([], templateInfo.value.properties)
@@ -298,21 +285,40 @@ export default {
           if (templateInfo.value.properties.length) {
             for (const property of templateInfo.value.properties) {
               const prop = property.property;
+              const key = prop.symbolic_name;
 
               if (prop.inputType === "select") {
-                const key = prop.symbolic_name;
-
                 // if the property has a value, get it and re-assign the property as a string
                 // if the porperty is an empty object, reassign it as an empty string
                 if (!Object.keys(sinkData[key]).length) {
-                  sinkData[key] = "";
+                  sinkData[key] = "''";
                 } else {
                   sinkData[key] = sinkData[key].value;
                 }
+                // } else {
+                //   // const type = prop.dataType.toLowerCase();
+                //   // let emptyValue;
+
+                //   // switch (type) {
+                //   //   case "text":
+                //   //     emptyValue = "''";
+                //   //     break;
+                //   //   case "string":
+                //   //     emptyValue = "''";
+                //   //     break;
+                //   //   case "number":
+                //   //     emptyValue = "null";
+                //   //     break;
+
+                //   //   default:
+                //   //     break;
+                //   // }
+
+                //   if (sinkData[key] === "") sinkData[key] = null;
               }
             }
           }
-
+          console.log(deepCopyOfData);
           return deepCopyOfData;
         })
         .post(route("objects.sinks.store"), {
