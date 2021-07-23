@@ -25,7 +25,7 @@
         :disabled="disabled"
       >
         <span class="block truncate">
-          {{ selected ? selected.value : "Select an option..." }}
+          {{ selected.value ?? "Select an option..." }}
         </span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           <SelectorIcon
@@ -77,7 +77,6 @@
       </transition>
     </div>
   </Listbox>
-  <pre>{{ selected }}</pre>
 </template>
 
 <script>

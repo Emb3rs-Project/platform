@@ -290,18 +290,30 @@ export default {
 
       form
         .transform((data) => {
-          const sinkData = data.sink.data;
-          console.log("KALA EISAIQ");
-          for (const _datum in sinkData) {
-            if (
-              typeof sinkData[_datum] === "object" &&
-              sinkData[_datum] !== null
-            ) {
-              sinkData[_datum] = sinkData[_datum].value;
-              console.log(_datum, "=", sinkData[_datum]);
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+
+          const sinkData = deepCopyOfData.sink.data;
+
+          if (templateInfo.value.properties.length) {
+            for (const property of templateInfo.value.properties) {
+              const prop = property.property;
+
+              if (prop.inputType === "select") {
+                const key = prop.symbolic_name;
+
+                // if the property has a value, get it and re-assign the property as a string
+                // if the porperty is an empty object, reassign it as an empty string
+                if (!Object.keys(sinkData[key]).length) {
+                  sinkData[key] = "";
+                } else {
+                  sinkData[key] = sinkData[key].value;
+                }
+              }
             }
           }
-          return data;
+
+          return deepCopyOfData;
         })
         .post(route("objects.sinks.store"), {
           onSuccess: () => {
