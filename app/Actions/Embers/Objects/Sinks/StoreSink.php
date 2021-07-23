@@ -94,7 +94,7 @@ class StoreSink implements StoresSinks
             'location_id' => Arr::get($input, 'location_id')
         ];
 
-        if (Arr::get($input, 'location')) {
+        if (!is_null(Arr::get($input, 'location'))) {
             // A new location was selected to be used for this Sink
             $location = Location::create([
                 'name' => Arr::get($newInstance, 'name'),
