@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Notifications\IndexesNotifications;
-use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class NotificationContoller extends Controller

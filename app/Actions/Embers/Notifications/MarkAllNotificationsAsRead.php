@@ -11,7 +11,7 @@ class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
      * as read.
      *
      * @param  mixed  $user
-     * @return array
+     * @return void
      */
     public function markAllAsRead($user)
     {
