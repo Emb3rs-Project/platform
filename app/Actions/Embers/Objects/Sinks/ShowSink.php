@@ -25,13 +25,11 @@ class ShowSink implements ShowsSinks
 
         $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
 
-        $templateProperties = TemplateProperty::whereTemplateId($sink->template_id)->get('property_id');
-
-        $properties = Property::whereIn('id', $templateProperties)->get('*');
+        $templateProperties = TemplateProperty::whereTemplateId($sink->template_id)->with(['property'])->get();
 
         return [
             $sink,
-            $properties
+            $templateProperties,
         ];
     }
 }

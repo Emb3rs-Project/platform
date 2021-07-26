@@ -73,13 +73,13 @@ class SinkController extends Controller
      */
     public function show(Request $request, $id)
     {
-        [$sink, $properties] = app(ShowsSinks::class)->show($request->user(), $id);
+        [$sink, $templateProperties] = app(ShowsSinks::class)->show($request->user(), $id);
 
         return [
             'slideOver' => 'Objects/Sinks/SinkDetails',
             'props' => [
                 'instance' => $sink,
-                'properties' => $properties
+                'templateProperties' => $templateProperties,
             ]
         ];
     }

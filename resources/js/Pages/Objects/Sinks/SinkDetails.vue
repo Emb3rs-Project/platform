@@ -8,12 +8,6 @@
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div class="block text-base font-medium text-gray-900 sm:pt-1">
-        <p>Information</p>
-      </div>
-    </div>
-
     <!-- Sink ID -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
@@ -85,39 +79,34 @@
       </div>
       <div class="sm:col-span-2">
         <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{
-            instance.location.description
-              ? instance.location.description
-              : "Not available."
-          }}
+          {{ instance.location.description ?? "Not available."}}
         </div>
-      </div>
-    </div>
-
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="Object.keys(instance.values).length"
-    >
-      <div class="block text-base font-medium text-gray-900 sm:pt-1">
-        <p>Properties</p>
       </div>
     </div>
 
     <!-- Sink Properties -->
-    <div v-if="Object.keys(instance.values).length">
+    <div
+      v-if="Object.keys(instance.values).length"
+      class="divide-y"
+    >
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+        <div class="block text-base font-medium text-gray-900 sm:pt-1">
+          <p>Properties</p>
+        </div>
+      </div>
       <div
         class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-        v-for="(value, key) in instance.values"
-        :key="value"
+        v-for="(property, propertyIdx) in properties"
+        :key="propertyIdx"
       >
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-            {{ properties.find((p) => p.symbolic_name === key).name }}
+            {{property.property.name}}
           </label>
         </div>
         <div class="sm:col-span-2">
           <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-            {{ value }}
+            {{ instance.values[property.property.symbolic_name] ?? 'Not defined.' }}
           </div>
         </div>
       </div>
@@ -125,7 +114,7 @@
     <div v-else>
       <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
         <div class="col-span-3 text-center">
-          <p class="block font-bold text-2xl text-gray-200">
+          <p class="block font-bold text-2xl text-gray-200 mt-12">
             No assigned properties.
           </p>
         </div>
@@ -147,6 +136,7 @@
 </template>
 
 <script>
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -173,14 +163,26 @@ export default {
       type: Object,
       required: true,
     },
-    properties: {
+    templateProperties: {
       type: Array,
       required: true,
     },
   },
 
-  setup() {
+  setup(props) {
     const store = useStore();
+
+    const properties = computed(() => {
+      const properties = [];
+
+      Object.assign(properties, props.templateProperties);
+
+      properties.sort((a, b) =>
+        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
+      );
+
+      return properties;
+    });
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
@@ -190,6 +192,7 @@ export default {
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
+      properties,
       onRouteRequest,
       onClose,
     };
