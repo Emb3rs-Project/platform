@@ -150,7 +150,7 @@ export default {
     },
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
 
     const form = useForm({
@@ -226,9 +226,17 @@ export default {
       { immediate: true, deep: true }
     );
 
-    const properties = computed(() =>
-      Object.assign([], templateInfo.value.properties)
-    );
+    const properties = computed(() => {
+      const properties = [];
+
+      Object.assign(properties, templateInfo.value.properties);
+
+      properties.sort((a, b) =>
+        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
+      );
+
+      return properties;
+    });
 
     const submit = () => {
       form
@@ -251,7 +259,6 @@ export default {
               }
             }
           }
-          console.log(deepCopyOfData);
           return deepCopyOfData;
         })
         .patch(route("objects.sinks.update", props.instance.id), {
