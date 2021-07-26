@@ -1,4 +1,6 @@
 <template>
+  <SiteHead title="Create a Source" />
+
   <SlideOver
     title="New Source"
     subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
@@ -6,61 +8,76 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <component
-      v-bind="currentStepProps"
-      :is="stepComponent"
-    ></component>
+    <SourceCreateStep1
+      :templates="templates"
+      :locations="locations"
+      v-if="currentStep === 1"
+    />
+
+    <!-- <SourceCreateStep2
+      :equipmentsCategories="equipmentsCategories"
+      :equipments="equipments"
+      v-if="currentStep === 2"
+    />
+
+    <SourceCreateStep3
+      :processesCategories="processesCategories"
+      :processes="processes"
+      v-if="currentStep === 3"
+    /> -->
 
     <template #actions>
       <div class="flex justify-start w-full">
-        <bullet-steps :steps="steps"></bullet-steps>
+        <BulletSteps :steps="steps" />
       </div>
-
-      <secondary-button
+      <SecondaryButton
         type="button"
         @click="onCancel"
-        v-if="currentStepIndex === 0"
       >
         Cancel
-      </secondary-button>
-
-      <secondary-button
+      </SecondaryButton>
+      <SecondaryButton
         type="button"
-        @click="navigateToPreviousStep"
-        v-if="currentStepIndex > 0"
+        @click="onPreviousStep"
+        :disabled="currentStep === 1"
       >
         Previous
-      </secondary-button>
+      </SecondaryButton>
       <PrimaryButton
         type="button"
-        @click="navigateToNextStep"
+        @click="onNextStep"
+        :disabled="currentStep !== steps.length"
       >
-        <span v-if="currentStepIndex + 1 === steps.length">Save</span>
-        <span v-else>Next</span>
+        Next
       </PrimaryButton>
     </template>
   </SlideOver>
 </template>
 
 <script>
-import { ref, watch, computed, defineAsyncComponent } from "vue";
+import { ref, computed } from "vue";
+import { useStore } from "vuex";
+// import { useForm } from "@inertiajs/inertia-vue3";
+
+import SiteHead from "@/Components/SiteHead.vue";
+import SlideOver from "../../../Components/SlideOver.vue";
+import SourceCreateStep1 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep1.vue";
+import SourceCreateStep2 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep2.vue";
+import SourceCreateStep3 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep3.vue";
 
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/SecondaryButton.vue";
-import SlideOver from "../../../Components/SlideOver.vue";
-import SelectMenu from "@/Components/Forms/SelectMenu.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
 import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
-import { useStore } from "vuex";
-import { useForm } from "@inertiajs/inertia-vue3";
 
 export default {
   components: {
+    SiteHead,
+    SlideOver,
+    SourceCreateStep1,
+    SourceCreateStep2,
+    SourceCreateStep3,
     PrimaryButton,
     SecondaryButton,
-    SlideOver,
-    SelectMenu,
-    TextInput,
     BulletSteps,
   },
 
@@ -91,117 +108,43 @@ export default {
     },
   },
 
-  emits: ["update:modelValue"],
-
   setup(props) {
     const store = useStore();
-    const steps = ref([
+    const currentStep = ref(1);
+
+    const mapStepStatus = (index) =>
+      currentStep.value === index
+        ? "current"
+        : currentStep.value < index
+        ? "upcoming"
+        : "complete";
+
+    const steps = computed(() => [
       {
         name: "Source Details",
-        component: "Objects/Sources/SourceCreateWizard/Step1.vue",
-        status: "current", // status: current | complete | upcoming
+        status: mapStepStatus(1),
       },
       {
         name: "Equipment",
-        component: "Objects/Sources/SourceCreateWizard/Step2.vue",
-        status: "upcoming",
+        status: mapStepStatus(2),
       },
       {
         name: "Processes",
-        component: "Objects/Sources/SourceCreateWizard/Step3.vue",
-        status: "upcoming",
-      },
-      {
-        name: "Scripts",
-        component: "Objects/Sources/SourceCreateWizard/Step4.vue",
-        status: "upcoming",
+        status: mapStepStatus(3),
       },
     ]);
-    const currentStep = ref(steps.value[0]);
-    const currentStepProps = ref({});
 
-    const stepComponent = computed(() => {
-      // @geocfu: i really dont like how this gets updated reactively rn.
-      // TODO: we MUST check it again
-      if (currentStep.value)
-        return defineAsyncComponent(() =>
-          import(`@/Pages/${currentStep.value.component}`)
-        );
-    });
+    const onNextStep = () => currentStep.value++;
+    const onPreviousStep = () => currentStep.value--;
 
-    watch(
-      currentStep,
-      (currentStep) => {
-        currentStepProps.value = {};
-
-        switch (currentStep.name) {
-          case "Source Details":
-            currentStepProps.value.templates = props.templates;
-            currentStepProps.value.locations = props.locations;
-            break;
-          case "Equipment":
-            currentStepProps.value.equipmentsCategories =
-              props.equipmentsCategories;
-            currentStepProps.value.equipments = props.equipments;
-            break;
-          case "Processes":
-            currentStepProps.value.processesCategories =
-              props.processesCategories;
-            currentStepProps.value.processes = props.processes;
-            break;
-          case "Scripts":
-            currentStepProps.value.objects = props.equipments;
-            break;
-
-          default:
-            break;
-        }
-      },
-      { immediate: true, deep: true }
-    );
-
-    const currentStepIndex = computed(() =>
-      steps.value.findIndex((step) => step.name === currentStep.value.name)
-    );
-
-    const navigateToPreviousStep = () => {
-      if (currentStepIndex.value !== 0) {
-        steps.value[currentStepIndex.value].status = "upcoming";
-        steps.value[currentStepIndex.value - 1].status = "current";
-        currentStep.value = steps.value[currentStepIndex.value - 1];
-
-        return;
-      }
-    };
-
-    const navigateToNextStep = () => {
-      console.log(currentStepIndex.value, steps.value.length);
-      if (currentStepIndex.value < steps.value.length - 1) {
-        steps.value[currentStepIndex.value].status = "complete";
-        steps.value[currentStepIndex.value + 1].status = "current";
-        currentStep.value = steps.value[currentStepIndex.value + 1];
-
-        return;
-      }
-      const form = useForm(store.getters["sources/form"]);
-      form.post(route("objects.sources.store"), {
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
-    };
-
+    const onCancel = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
     return {
       steps,
       currentStep,
-      currentStepIndex,
-      currentStepProps,
-      stepComponent,
-      navigateToPreviousStep,
-      navigateToNextStep,
-      onCancel: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onPreviousStep,
+      onNextStep,
+      onCancel,
     };
   },
 };

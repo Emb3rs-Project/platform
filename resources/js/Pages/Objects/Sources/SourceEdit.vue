@@ -176,10 +176,10 @@ export default {
         name: "Processes",
         status: mapStepStatus(3),
       },
-      {
-        name: "Scripts",
-        status: mapStepStatus(4),
-      },
+      // {
+      //   name: "Scripts",
+      //   status: mapStepStatus(4),
+      // },
     ]);
 
     return {
