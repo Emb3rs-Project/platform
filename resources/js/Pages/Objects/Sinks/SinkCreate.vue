@@ -251,9 +251,17 @@ export default {
       { immediate: true }
     );
 
-    const properties = computed(() =>
-      Object.assign([], templateInfo.value.properties)
-    );
+    const properties = computed(() => {
+      const properties = [];
+
+      Object.assign(properties, templateInfo.value.properties);
+
+      properties.sort((a, b) =>
+        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
+      );
+
+      return properties;
+    });
 
     const submit = () => {
       // TODO: Inertia form is not compatible with the below logic, needs rework
