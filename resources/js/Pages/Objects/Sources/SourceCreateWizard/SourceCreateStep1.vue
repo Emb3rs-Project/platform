@@ -10,69 +10,72 @@
       <SelectMenu
         v-model="selectedTemplate"
         :options="templates"
-      ></SelectMenu>
+        label="Template"
+      />
     </div>
   </div>
 
+  <!-- Source Location -->
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label
         for="project_name"
         class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
       >
-        Locations
+        Select a Location
       </label>
     </div>
     <div class="sm:col-span-2">
       <SelectMenu
         v-model="selectedLocation"
-        :options="locationSelect"
-        :disabled="selectedTemplate ? false : true"
-      ></SelectMenu>
+        :options="locations"
+        :disabled="!selectedTemplate"
+        label="Location"
+      />
     </div>
   </div>
 
-  <div v-if="selectedTemplate">
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-for="property in selectedTemplate.props"
-      :key="property"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-          {{ property.property.name }}
-        </label>
+  <!-- Source Properties -->
+  <div
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+    v-for="property in properties"
+    :key="property"
+  >
+    <div>
+      <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
+        {{ property.property.description }}
+      </label>
+    </div>
+    <div class="sm:col-span-2">
+      <div v-if="property.property.inputType === 'text'">
+        <TextInput
+          v-model="data[property.property.symbolic_name]"
+          :unit="property.unit.symbol"
+          :placeholder="property.property.name"
+          :required="property.required"
+          :label="property.property.name"
+        >
+        </TextInput>
       </div>
-      <div class="sm:col-span-2">
-        <div v-if="property.property.inputType === 'text'">
-          <TextInput
-            v-model="data[property.property.symbolic_name]"
-            :unit="property.unit.symbol"
-            :placeholder="property.property.name"
-            :required="property.required"
-          >
-          </TextInput>
-        </div>
-        <div v-else-if="property.property.inputType === 'select'">
-          <SelectMenu
-            v-model="data[property.property.symbolic_name]"
-            :options="property.property.data.options"
-            :required="property.required"
-          >
-          </SelectMenu>
-        </div>
+      <div v-else-if="property.property.inputType === 'select'">
+        <SelectMenu
+          v-model="data[property.property.symbolic_name]"
+          :options="property.property.data.options"
+          :required="property.required"
+          :label="property.property.name"
+        >
+        </SelectMenu>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import { keyParToSelect } from "../../../../Utils/array";
 
 export default {
   components: {
@@ -92,21 +95,41 @@ export default {
   },
 
   setup(props) {
+    onMounted(() => console.log("MOUNTED"));
     const store = useStore();
-    const selectedTemplate = ref(store.getters["sources/template"] ?? null);
+
     const data = ref(store.getters["sources/source"]);
-    const locationSelect = keyParToSelect(props.locations);
-    const selectedLocation = ref(
-      locationSelect.length ? locationSelect[0] : null
+
+    const templates = computed(() =>
+      props.templates.map((t) => ({
+        key: t.id,
+        value: t.name,
+        properties: t.template_properties,
+      }))
     );
 
+    const selectedTemplate = ref(
+      store.getters["sources/template"] ?? templates.value[0] ?? {}
+    );
+
+    const locations = computed(() =>
+      props.locations.map((l) => ({
+        key: l.id,
+        value: l.name,
+      }))
+    );
+    const selectedLocation = ref(store.getters["sources/location"] ?? {});
+
     const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
+
     if (selectedMarker.value) {
-      locationSelect.unshift({
+      locations.value.unshift({
         key: selectedMarker.value,
         value: "Selected Marker",
       });
-      selectedLocation.value = locationSelect[0];
+
+      if (!Object.keys(selectedLocation.value).length)
+        selectedLocation.value = locations.value[0];
     }
 
     watch(
@@ -130,35 +153,49 @@ export default {
 
     watch(
       selectedTemplate,
-      (selectedTemplate) => {
-        if (!selectedTemplate) return;
-        data.value = {};
+      (selectedTemplate, previous) => {
+        if (!selectedTemplate.properties) return; // edge case
+
+        if (!Object.keys(selectedTemplate.properties).length === 0) return; // edge case
+
+        if (!previous) data.value = {};
 
         store.dispatch("sources/setTemplate", { template: selectedTemplate });
 
-        if (!Object.keys(selectedTemplate.props).length === 0) return;
+        for (const property of selectedTemplate.properties) {
+          const prop = property.property ?? null;
 
-        for (const property of selectedTemplate.props) {
-          data.value[property.property.symbolic_name] = property.default_value;
+          if (prop) {
+            const placeholder = prop.inputType === "select" ? {} : "";
+
+            data.value[property.symbolic_name] =
+              property.default_value ?? placeholder;
+          }
         }
       },
       { immediate: true }
     );
 
-    const templates = computed(() =>
-      props.templates.map((t) => ({
-        key: t.id,
-        value: t.name,
-        props: t.template_properties,
-      }))
-    );
+    const properties = computed(() => {
+      const properties = [];
 
+      Object.assign(properties, selectedTemplate.value.properties);
+
+      properties.sort((a, b) =>
+        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
+      );
+
+      return properties;
+    });
+
+    onBeforeUnmount(() => console.log(store.state.sources));
     return {
       templates,
       selectedTemplate,
-      data,
-      locationSelect,
+      locations,
       selectedLocation,
+      data,
+      properties,
     };
   },
 };
