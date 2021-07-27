@@ -9,7 +9,7 @@ mix.js('resources/js/app.js', 'public/js')
     require('tailwindcss'),
     require('autoprefixer'),
   ])
-  // .sourceMaps()
+  .sourceMaps()
   .alias({
     '@': path.resolve('resources/js'),
   })
