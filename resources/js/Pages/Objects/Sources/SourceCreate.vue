@@ -8,13 +8,19 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
+    <!-- <Steps
+      :steps="steps"
+      class="p-4"
+    /> -->
+
     <SourceCreateStep1
       :templates="templates"
       :locations="locations"
       v-if="currentStep === 1"
+      @status="(status) => onStatusChange(status)"
     />
 
-    <!-- <SourceCreateStep2
+    <SourceCreateStep2
       :equipmentsCategories="equipmentsCategories"
       :equipments="equipments"
       v-if="currentStep === 2"
@@ -24,31 +30,41 @@
       :processesCategories="processesCategories"
       :processes="processes"
       v-if="currentStep === 3"
-    /> -->
+    />
 
     <template #actions>
       <div class="flex justify-start w-full">
         <BulletSteps :steps="steps" />
       </div>
-      <SecondaryButton
+
+      <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
       >
         Cancel
-      </SecondaryButton>
+      </SecondaryOutlinedButton>
+
       <SecondaryButton
         type="button"
         @click="onPreviousStep"
         :disabled="currentStep === 1"
       >
-        Previous
+        <ChevronLeftIcon class="h-6 w-auto" />
       </SecondaryButton>
-      <PrimaryButton
+      <SecondaryButton
         type="button"
         @click="onNextStep"
+        :disabled="currentStep === steps.length"
+      >
+        <ChevronRightIcon class="h-6 w-auto" />
+      </SecondaryButton>
+
+      <PrimaryButton
+        type="button"
+        @click="onSubmit"
         :disabled="currentStep !== steps.length"
       >
-        Next
+        Save
       </PrimaryButton>
     </template>
   </SlideOver>
@@ -67,18 +83,26 @@ import SourceCreateStep3 from "@/Pages/Objects/Sources/SourceCreateWizard/Source
 
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/SecondaryButton.vue";
+import SecondaryOutlinedButton from "../../../Components/SecondaryOutlinedButton.vue";
 import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import Steps from "@/Components/Wizards/Steps.vue";
+
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
 
 export default {
   components: {
     SiteHead,
     SlideOver,
+    Steps,
     SourceCreateStep1,
     SourceCreateStep2,
     SourceCreateStep3,
-    PrimaryButton,
-    SecondaryButton,
     BulletSteps,
+    SecondaryOutlinedButton,
+    SecondaryButton,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    PrimaryButton,
   },
 
   props: {
@@ -111,6 +135,7 @@ export default {
   setup(props) {
     const store = useStore();
     const currentStep = ref(1);
+    const status = ref("current");
 
     const mapStepStatus = (index) =>
       currentStep.value === index
@@ -121,29 +146,49 @@ export default {
 
     const steps = computed(() => [
       {
-        name: "Source Details",
+        id: "Step 1",
+        name: "Properties",
         status: mapStepStatus(1),
       },
       {
-        name: "Equipment",
+        id: "Step 2",
+        name: "Equipments",
         status: mapStepStatus(2),
       },
       {
+        id: "Step 3",
         name: "Processes",
         status: mapStepStatus(3),
       },
     ]);
 
-    const onNextStep = () => currentStep.value++;
+    // const
+
+    const onNextStep = () => {
+      // validateStep();
+      currentStep.value++;
+    };
     const onPreviousStep = () => currentStep.value--;
+
+    const onStatusChange = (status) => {
+      // if (status !== 'completed')
+      console.log("Status changed", status);
+    };
+
+    const onSubmit = () => {
+      console.log("SUBMIT THE FORM");
+    };
 
     const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
+
     return {
       steps,
       currentStep,
+      onStatusChange,
       onPreviousStep,
       onNextStep,
+      onSubmit,
       onCancel,
     };
   },

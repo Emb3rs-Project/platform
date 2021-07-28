@@ -94,7 +94,20 @@ export default {
     },
   },
 
-  setup(props) {
+  emits: {
+    status: (payload) => {
+      if (
+        payload === "current" ||
+        payload === "upcoming" ||
+        payload === "complete"
+      )
+        return true;
+
+      return false;
+    },
+  },
+
+  setup(props, ctx) {
     onMounted(() => console.log("MOUNTED"));
     const store = useStore();
 
