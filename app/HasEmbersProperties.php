@@ -14,17 +14,6 @@ use Illuminate\Validation\ValidationException;
 trait HasEmbersProperties
 {
     /**
-     * Determine the Instance type of the calling class
-     *
-     * @param  array  $validated
-     * @return string
-     */
-    private function getInstanceType(array $validated): string
-    {
-        return Arr::has($validated, 'sink') ? 'sink' : 'source';
-    }
-
-    /**
      * Check if the provided Properties belong to the provided Template
      *
      * @param  array  $validated
@@ -33,7 +22,7 @@ trait HasEmbersProperties
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfPropertiesAreValid(array $validated, ?int $templateId): void
+    protected function checkIfPropertiesAreValid(array $validated, ?int $templateId = null): void
     {
         $instanceType = $this->getInstanceType($validated);
 
@@ -41,12 +30,11 @@ trait HasEmbersProperties
 
         $templateId = Arr::get($validated, 'template_id') ?? $templateId;
 
-        // $templateProperties = TemplateProperty::whereTemplateId($templateId)->get();
         $templateProperties = Template::find($templateId)->templateProperties;
 
         $errors = new Collection();
 
-        foreach ($properties as $name => $value) {
+        foreach ($properties as $field => $value) {
             $flag = false;
 
             foreach ($templateProperties as $templateProperty) {
@@ -54,7 +42,7 @@ trait HasEmbersProperties
 
                 $property = Property::find($propertyId);
 
-                if ($property->symbolic_name === $name) {
+                if ($property->symbolic_name === $field) {
                     $flag = true;
 
                     $type = '';
@@ -79,13 +67,9 @@ trait HasEmbersProperties
                             break;
                     }
 
-                    $validator = Validator::make([
-                        $name => $value
-                    ], [
-                        "$name" => [
-                            Rule::requiredIf(function () use ($templateProperty) {
-                                return $templateProperty->required;
-                            }),
+                    $validator = Validator::make([$field => $value], [
+                        "$field" => [
+                            Rule::requiredIf(fn () => $templateProperty->required),
                             $type,
                             'nullable'
                         ]
@@ -94,14 +78,25 @@ trait HasEmbersProperties
                     if ($validator->fails()) {
                         $messages = $validator->errors()->all();
 
-                        $errors->put("$instanceType.data.$name", Arr::flatten($messages));
+                        $errors->put("$instanceType.data.$field", Arr::flatten($messages));
                     }
                 };
             }
 
-            if (!$flag) $errors->put("$instanceType.data.$name", "Property $name is not valid.");
+            if (!$flag) $errors->put("$instanceType.data.$field", "Property $field is not valid.");
         }
 
         if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());
+    }
+
+    /**
+     * Determine the Instance type of the calling class
+     *
+     * @param  array  $validated
+     * @return string
+     */
+    private function getInstanceType(array $validated): string
+    {
+        return Arr::has($validated, 'sink') ? 'sink' : 'source';
     }
 }

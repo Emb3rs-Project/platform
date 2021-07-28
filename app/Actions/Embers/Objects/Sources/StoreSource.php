@@ -4,17 +4,22 @@ namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\EmbersPermissionable;
+use App\HasEmbersProperties;
 use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Nova\Actions\InstanceProcessing;
+use App\Rules\Coordinates;
+use App\Rules\Prohibit;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Laravel\Nova\Fields\ActionFields;
 
 class StoreSource implements StoresSources
 {
-    use EmbersPermissionable;
+    use EmbersPermissionable, HasEmbersProperties;
 
     /**
      * Validate and create a new instance.
@@ -27,9 +32,9 @@ class StoreSource implements StoresSources
     {
         $this->authorize($user);
 
-        $this->validate($input);
+        $validated = $this->validate($input);
 
-        $source = $this->save($user, $input);
+        $source = $this->save($user, $validated);
 
         return $source;
     }
@@ -38,21 +43,44 @@ class StoreSource implements StoresSources
      * Validate the create Source operation.
      *
      * @param  array  $input
-     * @return void
+     * @return array
      */
     protected function validate(array $input)
     {
-        Validator::make($input, [
-            'source.name' => ['filled', 'string', 'max:255'],
-            // 'equipments' => ['filled', 'array'],
+        $validator = Validator::make($input, [
+            'source' => ['required', 'array:data'],
+            'equipments' => ['required', 'array'],
             'equipments.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            // 'processes' => ['filled', 'array'],
+            'processes' => ['required', 'array'],
             'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            // // 'location_id' => ['required_without:location' ,'string', 'exists:locations,id'],
-            // // 'location' => ['required_without:location_id', 'array', 'exists:locations,id'],
-            'location_id' => ['required'], // for now, later remove current line and uncomment 2 above
-        ])->validate();
+            'location_id' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location') || Arr::get($input, 'location') === null;
+                }),
+                new Prohibit($input, 'location'),
+                'nullable',
+                'numeric',
+                'integer',
+                'exists:locations,id'
+            ],
+            'location' => [
+                Rule::requiredIf(function () use ($input) {
+                    return !Arr::has($input, 'location_id') || Arr::get($input, 'location_id') === null;
+                }),
+                new Prohibit($input, 'location_id'),
+                'nullable',
+                'array:lat,lng',
+            ],
+            'location.lat' => ['required_with:location', 'numeric', new Coordinates],
+            'location.lng' => ['required_with:location', 'numeric', new Coordinates],
+        ]);
+
+        $validated = $validator->validate();
+
+        $this->checkIfPropertiesAreValid($validated);
+
+        return $validated;
     }
 
     /**
@@ -106,24 +134,24 @@ class StoreSource implements StoresSources
             $newInstance['location_id'] = $input['location_id'];
         }
 
-        $instance = Instance::create($newInstance);
-        $instance->teams()->attach($user->currentTeam);
+        // $instance = Instance::create($newInstance);
+        // $instance->teams()->attach($user->currentTeam);
 
 
-        /**
-         * STUFF
-         */
-        $action = new InstanceProcessing();
-        $user_id = $user->id;
+        // /**
+        //  * STUFF
+        //  */
+        // $action = new InstanceProcessing();
+        // $user_id = $user->id;
 
 
-        DispatchCustomAction::dispatchAction(
-            $action,
-            new ActionFields(new Collection(), new Collection()),
-            [$instance],
-            $user_id
-        );
+        // DispatchCustomAction::dispatchAction(
+        //     $action,
+        //     new ActionFields(new Collection(), new Collection()),
+        //     [$instance],
+        //     $user_id
+        // );
 
-        return $instance;
+        // return $instance;
     }
 }
