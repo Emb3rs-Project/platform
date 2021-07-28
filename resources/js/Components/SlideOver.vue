@@ -24,7 +24,7 @@
                 type="button"
                 class="rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                 :class="dismissButtonTextColor"
-                @click="open = false"
+                @click="onClose"
               >
                 <span class="sr-only">Close panel</span>
                 <svg
@@ -105,6 +105,15 @@ export default {
       set: (value) => store.commit("objects/closeSlide"),
     });
 
+    const currentRoute = computed(() => store.getters["objects/currentRoute"]);
+
+    const onClose = () => {
+      if (currentRoute.value !== "objects.list")
+        return store.dispatch("objects/showSlide", { route: "objects.list" });
+
+      return (open.value = false);
+    };
+
     const closeOnEscape = (e) => {
       if (open.value && e.keyCode === 27) {
         open.value = false;
@@ -112,6 +121,7 @@ export default {
     };
 
     onMounted(() => {
+      console.log(store.state.objects.currentRoute);
       console.log("SLIDEOVER COMPONENT::Mounted");
       props.autoOpen ? store.commit("objects/openSlide") : null;
 
@@ -124,6 +134,7 @@ export default {
 
     return {
       open,
+      onClose,
     };
   },
 };
