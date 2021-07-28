@@ -9,15 +9,13 @@ use App\Models\Instance;
 use App\Models\Location;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
-use App\Rules\Property;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class StoreSink implements StoresSinks
 {
-    use EmbersPermissionable;
-    use HasEmbersProperties;
+    use EmbersPermissionable, HasEmbersProperties;
 
     /**
      * Validate and create a new Sink.
@@ -72,7 +70,7 @@ class StoreSink implements StoresSinks
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesAreValid($validated, null);
+        $this->checkIfPropertiesAreValid($validated);
 
         return $validated;
     }
@@ -81,27 +79,27 @@ class StoreSink implements StoresSinks
      * Save the Sink in the DB.
      *
      * @param  mixed  $user
-     * @param  array  $input
+     * @param  array  $validated
      * @return Instance
      */
-    protected function save($user, array $input)
+    protected function save($user, array $validated)
     {
         $newInstance = [
-            'name' => Arr::get($input, 'sink.data.name') ?? 'Not Defined',
-            'values' => Arr::get($input, 'sink.data'),
-            'template_id' => Arr::get($input, 'template_id'),
-            'location_id' => Arr::get($input, 'location_id')
+            'name' => Arr::get($validated, 'sink.data.name') ?? 'Not Defined',
+            'values' => Arr::get($validated, 'sink.data'),
+            'template_id' => Arr::get($validated, 'template_id'),
+            'location_id' => Arr::get($validated, 'location_id')
         ];
 
-        if (!is_null(Arr::get($input, 'location'))) {
+        if (!is_null(Arr::get($validated, 'location'))) {
             // A new location was selected to be used for this Sink
             $location = Location::create([
                 'name' => Arr::get($newInstance, 'name'),
                 'type' => 'point',
                 'data' => [
                     "center" => [
-                        Arr::get($input, 'location.lat'),
-                        Arr::get($input, 'location.lng')
+                        Arr::get($validated, 'location.lat'),
+                        Arr::get($validated, 'location.lng')
                     ]
                 ]
             ]);
