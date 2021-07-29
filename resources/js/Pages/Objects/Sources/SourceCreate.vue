@@ -175,7 +175,7 @@ export default {
     };
     const onPreviousStep = () => currentStep.value--;
 
-    const onCompleted = () => (nextStepRequest.value = false);
+    const onCompleted = () => (nextStepRequest.value = true);
 
     const onSubmit = () => {
       if (!nextStepRequest.value) console.error("error submitting the form");
