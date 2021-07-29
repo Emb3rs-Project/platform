@@ -14,22 +14,27 @@
     /> -->
 
     <SourceCreateStep1
+      v-if="currentStep === 1"
       :templates="templates"
       :locations="locations"
-      v-if="currentStep === 1"
-      @status="(status) => onStatusChange(status)"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted()"
     />
 
     <SourceCreateStep2
+      v-if="currentStep === 2"
       :equipmentsCategories="equipmentsCategories"
       :equipments="equipments"
-      v-if="currentStep === 2"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted()"
     />
 
     <SourceCreateStep3
+      v-if="currentStep === 3"
       :processesCategories="processesCategories"
       :processes="processes"
-      v-if="currentStep === 3"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted()"
     />
 
     <template #actions>
@@ -39,9 +44,9 @@
 
       <SecondaryOutlinedButton
         type="button"
-        @click="onCancel"
+        @click="nextStepRequest = !nextStepRequest"
       >
-        Cancel
+        TESTING
       </SecondaryOutlinedButton>
 
       <SecondaryButton
@@ -71,7 +76,7 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import { useStore } from "vuex";
 // import { useForm } from "@inertiajs/inertia-vue3";
 
@@ -135,7 +140,7 @@ export default {
   setup(props) {
     const store = useStore();
     const currentStep = ref(1);
-    const status = ref("current");
+    const nextStepRequest = ref(false);
 
     const mapStepStatus = (index) =>
       currentStep.value === index
@@ -162,21 +167,21 @@ export default {
       },
     ]);
 
-    // const
-
     const onNextStep = () => {
-      // validateStep();
+      if (!nextStepRequest.value) return;
+
       currentStep.value++;
+      nextStepRequest.value = false;
     };
     const onPreviousStep = () => currentStep.value--;
 
-    const onStatusChange = (status) => {
-      // if (status !== 'completed')
-      console.log("Status changed", status);
-    };
+    const onCompleted = () => (nextStepRequest.value = false);
 
     const onSubmit = () => {
-      console.log("SUBMIT THE FORM");
+      if (!nextStepRequest.value) console.error("error submitting the form");
+      if (!nextStepRequest.value) return;
+
+      console.log("SUBMITING THE FORM");
     };
 
     const onCancel = () =>
@@ -185,14 +190,13 @@ export default {
     return {
       steps,
       currentStep,
-      onStatusChange,
       onPreviousStep,
       onNextStep,
+      onCompleted,
       onSubmit,
       onCancel,
+      nextStepRequest,
     };
   },
 };
 </script>
-
-

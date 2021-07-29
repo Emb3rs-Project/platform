@@ -6,11 +6,11 @@
       type="button"
       @click="modalIsVisible = true"
     >
-      <BeakerIcon
+      <PlusIcon
         class="h-6 w-6 mr-2"
         aria-hidden="true"
       />
-      Add Process
+      New Process
     </PrimaryButton>
   </div>
   <div
@@ -101,7 +101,8 @@ import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { ChevronDownIcon, BeakerIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -113,8 +114,8 @@ export default {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    PlusIcon,
     ChevronDownIcon,
-    BeakerIcon,
     AddProcessModal,
     SelectMenu,
     TextInput,
@@ -130,7 +131,13 @@ export default {
       type: Array,
       required: true,
     },
+    nextStepRequest: {
+      type: Boolean,
+      required: true,
+    },
   },
+
+  emits: ["completed"],
 
   setup(props) {
     const store = useStore();

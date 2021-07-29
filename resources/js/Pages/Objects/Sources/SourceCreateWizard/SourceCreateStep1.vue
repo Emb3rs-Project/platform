@@ -1,4 +1,5 @@
 <template>
+  <pre>{{ nextStepRequest }}</pre>
   <!-- Source Template -->
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
@@ -41,30 +42,25 @@
     v-for="property in properties"
     :key="property"
   >
-    <div>
-      <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-        {{ property.property.description }}
-      </label>
-    </div>
-    <div class="sm:col-span-2">
-      <div v-if="property.property.inputType === 'text'">
+    <div class="col-span-3">
+      <div v-if="property.property.inputType === 'text' || property.property.inputType === 'String'">
         <TextInput
           v-model="data[property.property.symbolic_name]"
           :unit="property.unit.symbol"
           :placeholder="property.property.name"
+          :description="property.property.description"
           :required="property.required"
           :label="property.property.name"
-        >
-        </TextInput>
+        />
       </div>
       <div v-else-if="property.property.inputType === 'select'">
         <SelectMenu
           v-model="data[property.property.symbolic_name]"
           :options="property.property.data.options"
+          :description="property.property.description"
           :required="property.required"
           :label="property.property.name"
-        >
-        </SelectMenu>
+        />
       </div>
     </div>
   </div>
@@ -92,20 +88,13 @@ export default {
       type: Array,
       required: true,
     },
-  },
-
-  emits: {
-    status: (payload) => {
-      if (
-        payload === "current" ||
-        payload === "upcoming" ||
-        payload === "complete"
-      )
-        return true;
-
-      return false;
+    nextStepRequest: {
+      type: Boolean,
+      required: true,
     },
   },
+
+  emits: ["completed"],
 
   setup(props, ctx) {
     onMounted(() => console.log("MOUNTED"));
@@ -160,6 +149,10 @@ export default {
         store.dispatch("sources/setSource", {
           source: JSON.parse(JSON.stringify(data)),
         });
+
+        // TODO: validate the values before allowing to proceed to teh next step
+        ctx.emit("completed");
+        // ctx.emit("completed", false);
       },
       { deep: true }
     );
@@ -201,7 +194,7 @@ export default {
       return properties;
     });
 
-    onBeforeUnmount(() => console.log(store.state.sources));
+    onBeforeUnmount(() => console.log("UNMOUNTED"));
     return {
       templates,
       selectedTemplate,

@@ -1,16 +1,16 @@
 <template>
-  <!-- TODO: maybe modularize it more, we'll see -->
+  <pre>{{ nextStepRequest }}</pre>
   <!-- Equipments -->
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
       @click="modalIsVisible = true"
     >
-      <DatabaseIcon
+      <PlusIcon
         class="h-6 w-6 mr-2"
         aria-hidden="true"
       />
-      Add Equipment
+      New Equipment
     </PrimaryButton>
   </div>
 
@@ -88,13 +88,12 @@
     </div>
   </div>
 
-  <add-equipment-modal
+  <AddEquipmentModal
     v-model="modalIsVisible"
     :equipmentsCategories="equipmentsCategories"
     :equipments="equipments"
     @confirmation="onAddEquipment"
-  >
-  </add-equipment-modal>
+  />
 </template>
 
 <script>
@@ -102,7 +101,8 @@ import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -115,7 +115,7 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
-    DatabaseIcon,
+    PlusIcon,
     PrimaryButton,
     AddEquipmentModal,
     SelectMenu,
@@ -131,7 +131,13 @@ export default {
       type: Array,
       required: true,
     },
+    nextStepRequest: {
+      type: Boolean,
+      required: true,
+    },
   },
+
+  emits: ["completed"],
 
   setup(props) {
     const store = useStore();
