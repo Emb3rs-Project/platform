@@ -5,13 +5,12 @@
     v-model="selected"
   >
     <div class="flex justify-between">
-      <label class="block text-sm font-medium text-gray-700">
+      <ListboxLabel class="block text-sm font-medium text-gray-700">
         {{ label }}
-      </label>
+      </ListboxLabel>
       <span
-        v-if="required"
-        class="text-sm text-gray-500"
-        id="input-required"
+        class="block text-sm font-medium text-gray-500"
+        v-show="required"
       >
         Required
       </span>
@@ -77,6 +76,7 @@
       </transition>
     </div>
   </Listbox>
+  <p class="mt-2 text-sm text-gray-500 text-justify">{{ description }}</p>
 </template>
 
 <script>
@@ -112,6 +112,10 @@ export default {
       required: true,
     },
     label: {
+      type: String,
+      default: "",
+    },
+    description: {
       type: String,
       default: "",
     },
