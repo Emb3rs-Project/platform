@@ -45,7 +45,7 @@
     <div class="col-span-3">
       <div v-if="property.property.inputType === 'text' || property.property.inputType === 'String'">
         <TextInput
-          v-model="data[property.property.symbolic_name]"
+          v-model="source.data[property.property.symbolic_name]"
           :unit="property.unit.symbol"
           :placeholder="property.property.name"
           :description="property.property.description"
@@ -55,7 +55,7 @@
       </div>
       <div v-else-if="property.property.inputType === 'select'">
         <SelectMenu
-          v-model="data[property.property.symbolic_name]"
+          v-model="source.data[property.property.symbolic_name]"
           :options="property.property.data.options"
           :description="property.property.description"
           :required="property.required"
@@ -67,7 +67,15 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+  reactive,
+} from "vue";
 import { useStore } from "vuex";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
@@ -97,10 +105,13 @@ export default {
   emits: ["completed"],
 
   setup(props, ctx) {
-    onMounted(() => console.log("MOUNTED"));
     const store = useStore();
 
-    const data = ref(store.getters["sources/source"]);
+    const errors = ref({});
+
+    // We deep copy the store data, so we manipulate it freely and commit our changes when we are ready
+    const source = ref(JSON.parse(JSON.stringify(store.state.source.source)));
+    console.log("initial source", source);
 
     const templates = computed(() =>
       props.templates.map((t) => ({
@@ -109,9 +120,8 @@ export default {
         properties: t.template_properties,
       }))
     );
-
     const selectedTemplate = ref(
-      store.getters["sources/template"] ?? templates.value[0] ?? {}
+      store.state.source.template ?? templates.value[0] ?? {}
     );
 
     const locations = computed(() =>
@@ -120,10 +130,8 @@ export default {
         value: l.name,
       }))
     );
-    const selectedLocation = ref(store.getters["sources/location"] ?? {});
-
+    const selectedLocation = ref(store.state.source.location ?? {});
     const selectedMarker = computed(() => store.getters["map/selectedMarker"]);
-
     if (selectedMarker.value) {
       locations.value.unshift({
         key: selectedMarker.value,
@@ -135,51 +143,97 @@ export default {
     }
 
     watch(
+      selectedTemplate,
+      () =>
+        store.commit("source/setTemplate", {
+          template: selectedTemplate.value,
+        }),
+      { immediate: true }
+    );
+    watch(
       selectedLocation,
       () =>
-        store.commit("sources/setLocation", {
+        store.commit("source/setLocation", {
           location: selectedLocation.value,
         }),
       { immediate: true }
     );
 
     watch(
-      data,
-      (data) => {
-        store.dispatch("sources/setSource", {
-          source: JSON.parse(JSON.stringify(data)),
-        });
-
-        // TODO: validate the values before allowing to proceed to teh next step
-        ctx.emit("completed");
-        // ctx.emit("completed", false);
-      },
-      { deep: true }
-    );
-
-    watch(
       selectedTemplate,
-      (selectedTemplate, previous) => {
+      (selectedTemplate) => {
         if (!selectedTemplate.properties) return; // edge case
+        if (!Object.keys(selectedTemplate.properties).length) return; // edge case
 
-        if (!Object.keys(selectedTemplate.properties).length === 0) return; // edge case
+        if (!Object.keys(source.value.data).length) {
+          console.log("STORE IS EMPTY SO WE FILL THE PROPS WITH PLACEHOLDERS");
 
-        if (!previous) data.value = {};
+          const properties = selectedTemplate.properties;
 
-        store.dispatch("sources/setTemplate", { template: selectedTemplate });
+          for (const property of properties) {
+            const prop = property.property ?? null;
 
-        for (const property of selectedTemplate.properties) {
-          const prop = property.property ?? null;
+            if (prop) {
+              const placeholder = prop.inputType === "select" ? {} : "";
 
-          if (prop) {
-            const placeholder = prop.inputType === "select" ? {} : "";
-
-            data.value[property.symbolic_name] =
-              property.default_value ?? placeholder;
+              source.value.data[prop.symbolic_name] =
+                prop.default_value ?? placeholder;
+              console.log(prop.symbolic_name);
+            }
           }
+
+          if (Object.keys(source.value.data).length) {
+            store.commit("source/setSourceData", {
+              data: JSON.parse(JSON.stringify(source.value.data)),
+            });
+          }
+
+          return;
         }
+
+        console.log("STORE HAS PROPS WITH PLACEHOLDERS");
       },
       { immediate: true }
+    );
+
+    // const stopWatcher = store.watch(
+    //   (state) => state.source,
+    //   (data) => {
+    //     console.log(data);
+    //   },
+    //   { immediate: true, deep: true }
+    // );
+
+    watch(
+      source,
+      (source) => {
+        store.commit("source/setSourceData", {
+          data: JSON.parse(JSON.stringify(source.data)),
+        });
+
+        const template = templates.value.find(
+          (t) => t.key === selectedTemplate.value.key
+        );
+
+        for (const property of template.properties) {
+          console.log(property);
+          const type = property.property.inputType;
+
+          if (type === "select") {
+            if (
+              property.required &&
+              !Object.keys(source.data[property.property.symbolic_name]).length
+            ) {
+              // TODO: assign the errors
+            }
+          } else {
+          }
+        }
+
+        // TODO: validate the values before allowing to proceed to the next step
+        // ctx.emit("completed");
+      },
+      { deep: true }
     );
 
     const properties = computed(() => {
@@ -194,13 +248,14 @@ export default {
       return properties;
     });
 
-    onBeforeUnmount(() => console.log("UNMOUNTED"));
+    // onBeforeUnmount(() => stopWatcher());
+
     return {
+      source,
       templates,
       selectedTemplate,
       locations,
       selectedLocation,
-      data,
       properties,
     };
   },

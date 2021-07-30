@@ -12,21 +12,23 @@ mix.js('resources/js/app.js', 'public/js')
   .sourceMaps()
   .alias({
     '@': path.resolve('resources/js'),
-  })
-  .webpackConfig({
-    // stats: {
-    //   children: false,
-    // },
-    // output: {
-    //   chunkFilename: 'js/[name].js?id=[chunkhash]',
-    // },
-    // plugins: [
-    //   new webpack.DefinePlugin({
-    //     __VUE_OPTIONS_API__: true,
-    //     __VUE_PROD_DEVTOOLS__: false,
-    //   }),
-    // ],
   });
+// .webpackConfig(webpack => {
+//   return {
+//     stats: {
+//       children: false,
+//     },
+//     output: {
+//       chunkFilename: 'js/[name].js?id=[chunkhash]',
+//     },
+//     plugins: [
+//       new webpack.DefinePlugin({
+//         __VUE_OPTIONS_API__: true,
+//         __VUE_PROD_DEVTOOLS__: false,
+//       }),
+//     ],
+//   }
+// });
 
 if (mix.inProduction()) {
   mix.version();

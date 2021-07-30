@@ -132,8 +132,6 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
-    console.log("SelectMenu", props.modelValue);
-
     const selected = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
