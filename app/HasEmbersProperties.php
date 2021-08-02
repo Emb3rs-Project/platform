@@ -60,7 +60,7 @@ trait HasEmbersProperties
                             $type = 'numeric';
                             break;
                         case 'datetime':
-                            $type = 'numeric';
+                            $type = 'date_format:d/m/Y';
                             break;
 
                         default:
