@@ -62,29 +62,35 @@
           :label="property.property.name"
         />
       </div>
+      <div
+        v-for="(error, key) in errors"
+        :key="key"
+      >
+        <JetInputError
+          v-show="key.includes(property.property.symbolic_name)"
+          :message="error"
+          class="mt-2"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-  watchEffect,
-  reactive,
-} from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
+import * as yup from "yup";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+
+import JetInputError from "@/Jetstream/InputError.vue";
 
 export default {
   components: {
     SelectMenu,
     TextInput,
+    JetInputError,
   },
 
   props: {
@@ -107,11 +113,12 @@ export default {
   setup(props, ctx) {
     const store = useStore();
 
-    const errors = ref({});
+    const validationSchema = {};
 
-    // We deep copy the store data, so we manipulate it freely and commit our changes when we are ready
+    // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
     const source = ref(JSON.parse(JSON.stringify(store.state.source.source)));
-    console.log("initial source", source);
+
+    const errors = ref({});
 
     const templates = computed(() =>
       props.templates.map((t) => ({
@@ -170,71 +177,119 @@ export default {
 
           const properties = selectedTemplate.properties;
 
+          let validationRules = "yup.";
+
           for (const property of properties) {
-            const prop = property.property ?? null;
+            const inputType = property.property.inputType;
+            const dataType = property.property.dataType;
 
-            if (prop) {
-              const placeholder = prop.inputType === "select" ? {} : "";
+            if (property.property) {
+              const placeholder = inputType === "select" ? {} : "";
 
-              source.value.data[prop.symbolic_name] =
-                prop.default_value ?? placeholder;
-              console.log(prop.symbolic_name);
+              source.value.data[property.property.symbolic_name] =
+                property.property.default_value ?? placeholder;
+
+              if (property.required) validationRules.concat("required().");
+
+              switch (dataType.toLowerCase()) {
+                case "text":
+                  validationRules.concat("string()");
+                  break;
+                case "string":
+                  validationRules.concat("string()");
+                  break;
+                case "number":
+                  validationRules.concat("number()");
+                  break;
+                case "float":
+                  validationRules.concat("number()");
+                  break;
+                case "datetime":
+                  validationRules.concat("date()");
+                  break;
+                default:
+                  break;
+              }
+              validationSchema[property.property.symbolic_name] =
+                validationRules;
             }
-          }
 
-          if (Object.keys(source.value.data).length) {
-            store.commit("source/setSourceData", {
-              data: JSON.parse(JSON.stringify(source.value.data)),
-            });
+            console.log(validationSchema);
           }
 
           return;
         }
 
-        console.log("STORE HAS PROPS WITH PLACEHOLDERS");
+        console.log("STORE HAS PROPS WITH VALUES");
+        console.log(source.value.data);
       },
       { immediate: true }
     );
 
-    // const stopWatcher = store.watch(
-    //   (state) => state.source,
-    //   (data) => {
-    //     console.log(data);
-    //   },
-    //   { immediate: true, deep: true }
-    // );
+    const commitSource = window._.debounce(
+      () =>
+        store.commit("source/setSourceData", {
+          data: JSON.parse(JSON.stringify(source.value.data)),
+        }),
+      500
+    );
+
+    watch(source, (source) => commitSource(), {
+      deep: true,
+      immediate: true,
+    });
 
     watch(
-      source,
-      (source) => {
-        store.commit("source/setSourceData", {
-          data: JSON.parse(JSON.stringify(source.data)),
-        });
+      () => props.nextStepRequest,
+      (nextStepRequest) => {
+        if (!nextStepRequest) return;
 
-        const template = templates.value.find(
-          (t) => t.key === selectedTemplate.value.key
-        );
+        const test = yup.string().required();
 
-        for (const property of template.properties) {
+        const properties = selectedTemplate.value.properties;
+
+        for (const property of properties) {
           console.log(property);
-          const type = property.property.inputType;
+          const inputType = property.property.inputType;
+          const dataType = property.property.dataType;
 
-          if (type === "select") {
+          const field = `source.data.${property.property.symbolic_name}`;
+
+          if (inputType === "select") {
             if (
               property.required &&
               !Object.keys(source.data[property.property.symbolic_name]).length
-            ) {
-              // TODO: assign the errors
+            )
+              errors.value[
+                field
+              ] = `The ${property.property.name.toLowerCase()} field is required.`;
+
+            switch (dataType.toLowerCase()) {
+              case "text":
+                break;
+              case "string":
+                break;
+              case "number":
+                break;
+              case "float":
+                break;
+              case "datetime":
+                break;
+
+              default:
+                break;
             }
           } else {
           }
         }
 
-        // TODO: validate the values before allowing to proceed to the next step
-        // ctx.emit("completed");
-      },
-      { deep: true }
+        console.log("errors", errors.value);
+
+        if (!Object.keys(errors.value).length) ctx.emit("completed");
+      }
     );
+
+    watch(errors, (errors) => console.log("errors", errors), { deep: true });
 
     const properties = computed(() => {
       const properties = [];
@@ -248,10 +303,9 @@ export default {
       return properties;
     });
 
-    // onBeforeUnmount(() => stopWatcher());
-
     return {
       source,
+      errors,
       templates,
       selectedTemplate,
       locations,

@@ -18,7 +18,7 @@
       :templates="templates"
       :locations="locations"
       :nextStepRequest="nextStepRequest"
-      @completed="onCompleted()"
+      @completed="onCompleted"
     />
 
     <SourceCreateStep2
@@ -26,7 +26,7 @@
       :equipmentsCategories="equipmentsCategories"
       :equipments="equipments"
       :nextStepRequest="nextStepRequest"
-      @completed="onCompleted()"
+      @completed="onCompleted"
     />
 
     <SourceCreateStep3
@@ -34,7 +34,7 @@
       :processesCategories="processesCategories"
       :processes="processes"
       :nextStepRequest="nextStepRequest"
-      @completed="onCompleted()"
+      @completed="onCompleted"
     />
 
     <template #actions>
