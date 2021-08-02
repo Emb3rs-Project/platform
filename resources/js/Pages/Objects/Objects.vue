@@ -21,7 +21,13 @@
 </template>
 
 <script>
-import { computed, defineAsyncComponent, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onBeforeUnmount,
+  ref,
+  watch,
+} from "vue";
 import { useStore } from "vuex";
 
 import { TemplateIcon } from "@heroicons/vue/outline";
@@ -109,6 +115,8 @@ export default {
         route: "objects.list",
         props: null,
       });
+
+    onBeforeUnmount(() => store.commit("objects/closeSlide"));
 
     return {
       map,
