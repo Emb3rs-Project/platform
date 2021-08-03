@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ nextStepRequest }}</pre>
   <!-- Source Template -->
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
@@ -79,7 +78,6 @@
 <script>
 import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import * as yup from "yup";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -108,12 +106,10 @@ export default {
     },
   },
 
-  emits: ["completed"],
+  emits: ["completed", "incompleted"],
 
   setup(props, ctx) {
     const store = useStore();
-
-    const validationSchema = {};
 
     // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
     const source = ref(JSON.parse(JSON.stringify(store.state.source.source)));
@@ -177,8 +173,6 @@ export default {
 
           const properties = selectedTemplate.properties;
 
-          let validationRules = "yup.";
-
           for (const property of properties) {
             const inputType = property.property.inputType;
             const dataType = property.property.dataType;
@@ -186,42 +180,18 @@ export default {
             if (property.property) {
               const placeholder = inputType === "select" ? {} : "";
 
-              source.value.data[property.property.symbolic_name] =
+              const key = property.property.symbolic_name;
+
+              source.value.data[key] =
                 property.property.default_value ?? placeholder;
-
-              if (property.required) validationRules.concat("required().");
-
-              switch (dataType.toLowerCase()) {
-                case "text":
-                  validationRules.concat("string()");
-                  break;
-                case "string":
-                  validationRules.concat("string()");
-                  break;
-                case "number":
-                  validationRules.concat("number()");
-                  break;
-                case "float":
-                  validationRules.concat("number()");
-                  break;
-                case "datetime":
-                  validationRules.concat("date()");
-                  break;
-                default:
-                  break;
-              }
-              validationSchema[property.property.symbolic_name] =
-                validationRules;
             }
-
-            console.log(validationSchema);
           }
 
           return;
         }
 
         console.log("STORE HAS PROPS WITH VALUES");
-        console.log(source.value.data);
+        // console.log(source.value.data);
       },
       { immediate: true }
     );
@@ -234,7 +204,7 @@ export default {
       500
     );
 
-    watch(source, (source) => commitSource(), {
+    watch(source, () => commitSource(), {
       deep: true,
       immediate: true,
     });
@@ -244,48 +214,72 @@ export default {
       (nextStepRequest) => {
         if (!nextStepRequest) return;
 
-        const test = yup.string().required();
+        // reset the errors so they are always up to date
+        errors.value = {};
 
         const properties = selectedTemplate.value.properties;
 
         for (const property of properties) {
-          console.log(property);
+          const propertyErrors = [];
+
           const inputType = property.property.inputType;
           const dataType = property.property.dataType;
+          const symbolicName = property.property.symbolic_name;
+          const value = source.value.data[property.property.symbolic_name];
+          const propertyName = property.property.name.toLowerCase();
 
-          const field = `source.data.${property.property.symbolic_name}`;
+          let propertyCopy = value;
 
           if (inputType === "select") {
-            if (
-              property.required &&
-              !Object.keys(source.data[property.property.symbolic_name]).length
-            )
-              errors.value[
-                field
-              ] = `The ${property.property.name.toLowerCase()} field is required.`;
-
-            switch (dataType.toLowerCase()) {
-              case "text":
-                break;
-              case "string":
-                break;
-              case "number":
-                break;
-              case "float":
-                break;
-              case "datetime":
-                break;
-
-              default:
-                break;
+            // if the property has a value, get it and re-assign the property as a string
+            if (Object.keys(value).length) {
+              propertyCopy = value.value;
+            } else {
+              propertyCopy = "";
             }
-          } else {
           }
+
+          if (property.required) {
+            if (!propertyCopy)
+              propertyErrors.push(`The ${propertyName} field is required.`);
+          }
+
+          switch (dataType.toLowerCase()) {
+            case "text":
+              if (typeof propertyCopy !== "string")
+                propertyErrors.push(
+                  `The ${propertyName} field must be a string.`
+                );
+              break;
+            case "string":
+              if (typeof propertyCopy !== "string")
+                propertyErrors.push(
+                  `The ${propertyName} field must be a string.`
+                );
+              break;
+            case "number":
+              if (isNaN(propertyCopy))
+                propertyErrors.push(
+                  `The ${propertyName} field must be numeric.`
+                );
+              break;
+            case "float":
+              if (Number.isInteger(propertyCopy))
+                propertyErrors.push(`The ${propertyName} field must be float.`);
+              break;
+            case "datetime":
+              break;
+
+            default:
+              break;
+          }
+
+          if (propertyErrors.length)
+            errors.value[`source.data.${symbolicName}`] = propertyErrors;
         }
 
-        console.log("errors", errors.value);
-
         if (!Object.keys(errors.value).length) ctx.emit("completed");
+        else ctx.emit("incompleted");
       }
     );
 

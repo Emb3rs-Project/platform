@@ -8,10 +8,18 @@
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <!-- <Steps
-      :steps="steps"
-      class="p-4"
-    /> -->
+    <template #stickyTop>
+      <!-- <Steps
+        :steps="steps"
+        class="p-4"
+      /> -->
+      <div :class="{ 'p-4': incompleteStepAlert }">
+        <InfoAlert
+          v-model="incompleteStepAlert"
+          content="Please, fill all the required fields before proceeding to the next step."
+        />
+      </div>
+    </template>
 
     <SourceCreateStep1
       v-if="currentStep === 1"
@@ -19,6 +27,7 @@
       :locations="locations"
       :nextStepRequest="nextStepRequest"
       @completed="onCompleted"
+      @incompleted="onIncompleted"
     />
 
     <SourceCreateStep2
@@ -27,6 +36,7 @@
       :equipments="equipments"
       :nextStepRequest="nextStepRequest"
       @completed="onCompleted"
+      @incompleted="onIncompleted"
     />
 
     <SourceCreateStep3
@@ -35,6 +45,7 @@
       :processes="processes"
       :nextStepRequest="nextStepRequest"
       @completed="onCompleted"
+      @incompleted="onIncompleted"
     />
 
     <template #actions>
@@ -44,9 +55,9 @@
 
       <SecondaryOutlinedButton
         type="button"
-        @click="nextStepRequest = !nextStepRequest"
+        @click="onCancel"
       >
-        TESTING
+        Cancel
       </SecondaryOutlinedButton>
 
       <SecondaryButton
@@ -86,6 +97,7 @@ import SourceCreateStep1 from "@/Pages/Objects/Sources/SourceCreateWizard/Source
 import SourceCreateStep2 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep2.vue";
 import SourceCreateStep3 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep3.vue";
 
+import InfoAlert from "../../../Components/Alerts/InfoAlert.vue";
 import PrimaryButton from "../../../Components/PrimaryButton.vue";
 import SecondaryButton from "../../../Components/SecondaryButton.vue";
 import SecondaryOutlinedButton from "../../../Components/SecondaryOutlinedButton.vue";
@@ -98,16 +110,17 @@ export default {
   components: {
     SiteHead,
     SlideOver,
-    Steps,
     SourceCreateStep1,
     SourceCreateStep2,
     SourceCreateStep3,
+    InfoAlert,
     BulletSteps,
-    SecondaryOutlinedButton,
-    SecondaryButton,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SecondaryOutlinedButton,
+    SecondaryButton,
     PrimaryButton,
+    Steps,
   },
 
   props: {
@@ -141,6 +154,7 @@ export default {
     const store = useStore();
     const currentStep = ref(1);
     const nextStepRequest = ref(false);
+    const incompleteStepAlert = ref(false);
 
     const mapStepStatus = (index) =>
       currentStep.value === index
@@ -167,15 +181,18 @@ export default {
       },
     ]);
 
-    const onNextStep = () => {
-      if (!nextStepRequest.value) return;
+    const onPreviousStep = () => currentStep.value--;
+    const onNextStep = () => (nextStepRequest.value = true);
 
+    const onCompleted = () => {
+      nextStepRequest.value = false;
+      incompleteStepAlert.value = false;
       currentStep.value++;
+    };
+    const onIncompleted = () => {
+      incompleteStepAlert.value = true;
       nextStepRequest.value = false;
     };
-    const onPreviousStep = () => currentStep.value--;
-
-    const onCompleted = () => (nextStepRequest.value = true);
 
     const onSubmit = () => {
       if (!nextStepRequest.value) console.error("error submitting the form");
@@ -188,14 +205,16 @@ export default {
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
-      steps,
       currentStep,
+      nextStepRequest,
+      incompleteStepAlert,
+      steps,
       onPreviousStep,
       onNextStep,
       onCompleted,
+      onIncompleted,
       onSubmit,
       onCancel,
-      nextStepRequest,
     };
   },
 };

@@ -54,9 +54,19 @@
             </p>
           </div>
         </div>
+
+        <div>
+          <slot name="stickyTop"></slot>
+        </div>
+
         <div class="overflow-y-auto h-full py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <slot></slot>
         </div>
+
+        <div>
+          <slot name="stickyBottom"></slot>
+        </div>
+
         <div class="flex-shrink-0 px-4 py-4 flex justify-end gap-5">
           <slot name="actions"></slot>
         </div>
