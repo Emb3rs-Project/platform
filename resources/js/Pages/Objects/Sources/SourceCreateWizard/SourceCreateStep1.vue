@@ -283,8 +283,6 @@ export default {
       }
     );
 
-    watch(errors, (errors) => console.log("errors", errors), { deep: true });
-
     const properties = computed(() => {
       const properties = [];
 

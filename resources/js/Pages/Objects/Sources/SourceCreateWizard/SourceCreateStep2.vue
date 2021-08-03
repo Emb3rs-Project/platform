@@ -1,5 +1,4 @@
 <template>
-  <pre>{{ nextStepRequest }}</pre>
   <!-- Equipments -->
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
@@ -137,14 +136,16 @@ export default {
     },
   },
 
-  emits: ["completed"],
+  emits: ["completed", "incompleted"],
 
-  setup(props) {
+  setup(props, ctx) {
     const store = useStore();
     const modalIsVisible = ref(false);
     const equipments = ref([]);
 
-    const storeEquipments = computed(() => store.getters["sources/equipments"]);
+    const errors = ref({});
+
+    const storeEquipments = computed(() => store.getters["source/equipments"]);
 
     const propEquipments = props.equipments.map((e) => ({
       key: e.id,
@@ -160,7 +161,7 @@ export default {
         return;
       }
 
-      store.dispatch("sources/setEquipments", {
+      store.dispatch("source/setEquipments", {
         equipments: JSON.parse(JSON.stringify(propEquipments)),
       });
 
@@ -172,7 +173,7 @@ export default {
     watch(
       equipments,
       (equipments) => {
-        store.dispatch("sources/setEquipments", {
+        store.dispatch("source/setEquipments", {
           equipments: JSON.parse(JSON.stringify(equipments)),
         });
       },
@@ -191,6 +192,80 @@ export default {
 
       equipments.value = [...equipments.value, newEquipment];
     };
+
+    watch(
+      () => props.nextStepRequest,
+      (nextStepRequest) => {
+        if (!nextStepRequest) return;
+
+        // reset the errors so they are always up to date
+        // errors.value = {};
+
+        // const properties = selectedTemplate.value.properties;
+
+        // for (const property of properties) {
+        //   const propertyErrors = [];
+
+        //   const inputType = property.property.inputType;
+        //   const dataType = property.property.dataType;
+        //   const symbolicName = property.property.symbolic_name;
+        //   const value = source.value.data[property.property.symbolic_name];
+        //   const propertyName = property.property.name.toLowerCase();
+
+        //   let propertyCopy = value;
+
+        //   if (inputType === "select") {
+        //     // if the property has a value, get it and re-assign the property as a string
+        //     if (Object.keys(value).length) {
+        //       propertyCopy = value.value;
+        //     } else {
+        //       propertyCopy = "";
+        //     }
+        //   }
+
+        //   if (property.required) {
+        //     if (!propertyCopy)
+        //       propertyErrors.push(`The ${propertyName} field is required.`);
+        //   }
+
+        //   switch (dataType.toLowerCase()) {
+        //     case "text":
+        //       if (typeof propertyCopy !== "string")
+        //         propertyErrors.push(
+        //           `The ${propertyName} field must be a string.`
+        //         );
+        //       break;
+        //     case "string":
+        //       if (typeof propertyCopy !== "string")
+        //         propertyErrors.push(
+        //           `The ${propertyName} field must be a string.`
+        //         );
+        //       break;
+        //     case "number":
+        //       if (isNaN(propertyCopy))
+        //         propertyErrors.push(
+        //           `The ${propertyName} field must be numeric.`
+        //         );
+        //       break;
+        //     case "float":
+        //       if (Number.isInteger(propertyCopy))
+        //         propertyErrors.push(`The ${propertyName} field must be float.`);
+        //       break;
+        //     case "datetime":
+        //       break;
+
+        //     default:
+        //       break;
+        //   }
+
+        //   if (propertyErrors.length)
+        //     errors.value[`source.data.${symbolicName}`] = propertyErrors;
+        // }
+
+        if (!Object.keys(errors.value).length) ctx.emit("completed");
+        else ctx.emit("incompleted");
+      }
+    );
 
     return {
       modalIsVisible,
