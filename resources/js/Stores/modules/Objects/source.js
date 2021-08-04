@@ -43,14 +43,6 @@ const getters = {
 
 // https://next.vuex.vuejs.org/api/#actions
 const actions = {
-  // setSourceData(ctx, payload) {
-  //   console.log("payload", payload);
-  // },
-
-  setEquipments(ctx, payload) {
-    ctx.commit('setEquipments', payload);
-  },
-
   setProcesses(ctx, payload) {
     ctx.commit('setProcesses', payload);
   },

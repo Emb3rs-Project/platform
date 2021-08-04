@@ -65,11 +65,16 @@
         v-for="(error, key) in errors"
         :key="key"
       >
-        <JetInputError
-          v-show="key.includes(property.property.symbolic_name)"
-          :message="error"
-          class="mt-2"
-        />
+        <div
+          v-for="subError in error"
+          :key="subError"
+        >
+          <JetInputError
+            v-if="key.includes(property.property.symbolic_name)"
+            :message="subError"
+            class="mt-2"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -169,13 +174,10 @@ export default {
         if (!Object.keys(selectedTemplate.properties).length) return; // edge case
 
         if (!Object.keys(source.value.data).length) {
-          console.log("STORE IS EMPTY SO WE FILL THE PROPS WITH PLACEHOLDERS");
-
           const properties = selectedTemplate.properties;
 
           for (const property of properties) {
             const inputType = property.property.inputType;
-            const dataType = property.property.dataType;
 
             if (property.property) {
               const placeholder = inputType === "select" ? {} : "";
@@ -186,12 +188,7 @@ export default {
                 property.property.default_value ?? placeholder;
             }
           }
-
-          return;
         }
-
-        console.log("STORE HAS PROPS WITH VALUES");
-        // console.log(source.value.data);
       },
       { immediate: true }
     );
