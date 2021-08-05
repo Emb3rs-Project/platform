@@ -52,7 +52,7 @@
                   v-for="property in equipment.props"
                   :key="property"
                 >
-                  <div class="col-span-3">
+                  <div class="sm:col-span-3">
                     <div v-if="property.property.inputType === 'text'">
                       <TextInput
                         v-model="equipment.data[property.property.symbolic_name]"
@@ -126,13 +126,13 @@ export default {
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
-    ChevronDownIcon,
+    AddEquipmentModal,
     PlusIcon,
     PrimaryButton,
+    ChevronDownIcon,
     TextInput,
     SelectMenu,
     JetInputError,
-    AddEquipmentModal,
   },
 
   props: {

@@ -266,7 +266,7 @@ export default {
       form
         .transform((data) => {
           // We want to transform the "to-send" data, not the original data
-          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+          const deepCopyOfData = window._.cloneDeep(data);
 
           const sinkData = deepCopyOfData.sink.data;
 

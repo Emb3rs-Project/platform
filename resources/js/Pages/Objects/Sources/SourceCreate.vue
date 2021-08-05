@@ -9,10 +9,10 @@
     subtitleTextColor="text-gray-200"
   >
     <template #stickyTop>
-      <!-- <Steps
+      <Steps
         :steps="steps"
         class="p-4"
-      /> -->
+      />
       <div :class="{ 'p-4': incompleteStepAlert }">
         <InfoAlert
           v-model="incompleteStepAlert"
@@ -65,31 +65,30 @@
         @click="onPreviousStep"
         :disabled="currentStep === 1"
       >
-        <ChevronLeftIcon class="h-6 w-auto" />
-      </SecondaryButton>
-      <SecondaryButton
-        type="button"
-        @click="onNextStep"
-        :disabled="currentStep === steps.length"
-      >
-        <ChevronRightIcon class="h-6 w-auto" />
+        Back
       </SecondaryButton>
 
       <PrimaryButton
         type="button"
-        @click="onSubmit"
-        :disabled="currentStep !== steps.length"
+        @click="onNextStep"
+        :disabled="form.processing"
       >
-        Save
+        <span v-if="currentStep !== steps.length">
+          Next
+        </span>
+        <span v-else>
+          Save
+        </span>
       </PrimaryButton>
+
     </template>
   </SlideOver>
 </template>
 
 <script>
-import { ref, computed, watch } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
-// import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/inertia-vue3";
 
 import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "../../../Components/SlideOver.vue";
@@ -156,6 +155,25 @@ export default {
     const nextStepRequest = ref(false);
     const incompleteStepAlert = ref(false);
 
+    const source = computed(() => store.getters["source/source"]);
+    const equipments = computed(() => store.getters["source/equipments"]);
+    const processes = computed(() => store.getters["source/processes"]);
+    const scripts = computed(() => store.getters["source/scripts"]);
+    const template = computed(() => store.getters["source/template"]);
+    const location = computed(() => store.getters["source/location"]);
+
+    const form = useForm({
+      source: {
+        data: null,
+      },
+      equipments: null,
+      processes: null,
+      scripts: null,
+      template_id: null,
+      location_id: null,
+      location: null,
+    });
+
     const mapStepStatus = (index) =>
       currentStep.value === index
         ? "current"
@@ -185,6 +203,12 @@ export default {
     const onNextStep = () => (nextStepRequest.value = true);
 
     const onCompleted = () => {
+      if (currentStep.value === steps.value.length) {
+        submit();
+
+        return;
+      }
+
       nextStepRequest.value = false;
       incompleteStepAlert.value = false;
       currentStep.value++;
@@ -194,17 +218,67 @@ export default {
       nextStepRequest.value = false;
     };
 
-    const onSubmit = () => {
-      if (!nextStepRequest.value) console.error("error submitting the form");
-      if (!nextStepRequest.value) return;
+    const submit = () => {
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfData = window._.cloneDeep(data);
 
-      console.log("SUBMITING THE FORM");
+          const deepCopyOfSource = window._.cloneDeep(source.value);
+
+          const sourceData = deepCopyOfSource.data;
+
+          if (template.value.properties.length) {
+            for (const property of template.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(sourceData[key]).length) {
+                  sourceData[key] = sourceData[key].value;
+                }
+              }
+            }
+          }
+
+          deepCopyOfData.source.data = sourceData;
+
+          if (Object.keys(equipments.value).length)
+            deepCopyOfData.equipments = equipments.value;
+
+          if (Object.keys(processes.value).length)
+            deepCopyOfData.processes = processes.value;
+
+          if (Object.keys(scripts.value).length)
+            deepCopyOfData.scripts = scripts.value;
+
+          if (Object.keys(template.value).length)
+            deepCopyOfData.template_id = template.value.key;
+
+          if (Object.keys(location.value).length) {
+            if (typeof location.value.key === "object")
+              deepCopyOfData.location = location.value.key;
+            else deepCopyOfData.location_id = location.value.key;
+          }
+
+          console.log(deepCopyOfData);
+
+          return deepCopyOfSource;
+        })
+        .post(route("objects.sources.store"), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+        });
     };
 
     const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
+      form,
       currentStep,
       nextStepRequest,
       incompleteStepAlert,
@@ -213,7 +287,6 @@ export default {
       onNextStep,
       onCompleted,
       onIncompleted,
-      onSubmit,
       onCancel,
     };
   },

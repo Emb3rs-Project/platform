@@ -43,37 +43,17 @@ const getters = {
 
 // https://next.vuex.vuejs.org/api/#actions
 const actions = {
-  setProcesses(ctx, payload) {
-    ctx.commit('setProcesses', payload);
-  },
-
   setScripts(ctx, payload) {
     ctx.commit('setScripts', payload);
-  },
-
-  setTemplate(ctx, payload) {
-    ctx.commit('setTemplate', payload);
-  },
-
-  setLocation(ctx, payload) {
-    ctx.commit('setLocation', payload);
   },
 };
 
 // https://next.vuex.vuejs.org/api/#mutations
 const mutations = {
   setSourceData(state, payload) {
-    // state.source.data = {}
     state.source.data = payload.data;
-    // console.log("payload", payload);
   },
 
-  // Equipments
-  // key: e.id,
-  // value: e.name,
-  // parent: e.category_id,
-  // props: e.template_properties,
-  // data: {},
   setEquipments(state, payload) {
     state.equipments = payload.equipments;
   },

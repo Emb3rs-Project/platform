@@ -117,7 +117,7 @@ export default {
     const store = useStore();
 
     // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
-    const source = ref(JSON.parse(JSON.stringify(store.state.source.source)));
+    const source = ref(window._.cloneDeep(store.state.source.source));
 
     const errors = ref({});
 
