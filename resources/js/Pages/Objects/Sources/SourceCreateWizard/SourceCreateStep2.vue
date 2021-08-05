@@ -61,8 +61,7 @@
                         :label="property.property.name"
                         :description="property.property.description"
                         :required="property.required"
-                      >
-                      </TextInput>
+                      />
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                       <SelectMenu
@@ -71,8 +70,22 @@
                         :label="property.property.name"
                         :description="property.property.description"
                         :required="property.required"
+                      />
+                    </div>
+                    <div
+                      v-for="(error, key) in errors"
+                      :key="key"
+                    >
+                      <div
+                        v-for="subError in error"
+                        :key="subError"
                       >
-                      </SelectMenu>
+                        <JetInputError
+                          v-if="key.includes(property.property.symbolic_name)"
+                          :message="subError"
+                          class="mt-2"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -106,6 +119,8 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AddEquipmentModal from "@/Components/Modals/AddEquipmentModal.vue";
 
+import JetInputError from "@/Jetstream/InputError.vue";
+
 export default {
   components: {
     Disclosure,
@@ -114,9 +129,10 @@ export default {
     ChevronDownIcon,
     PlusIcon,
     PrimaryButton,
-    AddEquipmentModal,
-    SelectMenu,
     TextInput,
+    SelectMenu,
+    JetInputError,
+    AddEquipmentModal,
   },
 
   props: {
@@ -143,59 +159,38 @@ export default {
 
     const addEquipmentModalIsVisible = ref(false);
 
-    const propsEquipments = computed(() =>
-      props.equipments.map((e) => ({
-        key: e.id,
-        value: e.name,
-        parent: e.category_id,
-        props: e.template_properties,
-        data: {},
-      }))
-    );
+    const transformPropsToData = (properties) => {
+      const data = {};
+
+      for (const property of properties) {
+        const inputType = property.property.inputType;
+
+        if (property.property) {
+          const placeholder = inputType === "select" ? {} : "";
+
+          const key = property.property.symbolic_name;
+
+          data[key] = property.property.default_value ?? placeholder;
+        }
+      }
+
+      return data;
+    };
+
+    const propEquipments = props.equipments.map((e) => ({
+      key: e.id,
+      value: e.name,
+      parent: e.category_id,
+      props: e.template_properties,
+      data: transformPropsToData(e.template_properties),
+    }));
 
     const storeEquipments = computed(() => store.getters["source/equipments"]);
 
     const equipments = ref(
       storeEquipments.value.length
         ? window._.cloneDeep(storeEquipments.value)
-        : propsEquipments.value
-    );
-
-    watch(
-      equipments,
-      (equipments) => {
-        for (const equipment of equipments) {
-          if (!equipment.props.length) return; // edge case
-
-          for (const property of equipment.props) {
-            const inputType = property.property.inputType;
-
-            if (property.property) {
-              const placeholder = inputType === "select" ? {} : "";
-
-              const key = property.property.symbolic_name;
-
-              console.log(
-                key,
-                "=",
-                property.property.default_value ?? placeholder
-              );
-
-              console.log(
-                (equipment.data[key] =
-                  property.property.default_value ?? placeholder)
-              );
-
-              // equipment.data[key] =
-              //   property.property.default_value ?? placeholder;
-            }
-          }
-        }
-      },
-      {
-        deep: true,
-        immediate: true,
-      }
+        : propEquipments
     );
 
     const commitEquipments = window._.debounce(
@@ -216,18 +211,7 @@ export default {
 
       if (!Object.keys(newEquipment.props).length) return;
 
-      for (const property of newEquipment.props) {
-        if (property.property) {
-          const inputType = property.property.inputType;
-
-          const placeholder = inputType === "select" ? {} : "";
-
-          const key = property.property.symbolic_name;
-
-          newEquipment.data[key] =
-            property.property.default_value ?? placeholder;
-        }
-      }
+      newEquipment.data = transformPropsToData(newEquipment.props);
 
       equipments.value.push(newEquipment);
     };
@@ -252,67 +236,62 @@ export default {
 
             let propertyCopy = value;
 
-            console.log(value);
-            console.log(equipment);
+            if (inputType === "select") {
+              // if the property has a value, get it and re-assign the property as a string
+              if (Object.keys(value).length) {
+                propertyCopy = value.value;
+              } else {
+                propertyCopy = "";
+              }
+            }
 
-            // if (inputType === "select") {
-            //   // if the property has a value, get it and re-assign the property as a string
-            //   if (Object.keys(value).length) {
-            //     propertyCopy = value.value;
-            //   } else {
-            //     propertyCopy = "";
-            //   }
-            // }
+            if (property.required)
+              propertyErrors.push(`The ${propertyName} field is required.`);
 
-            // if (property.required)
-            //   if (!propertyCopy)
-            //     propertyErrors.push(`The ${propertyName} field is required.`);
-            //   else propertyErrors.push(`EDV EIMAI GAMIOLES`);
+            switch (dataType.toLowerCase()) {
+              case "text":
+                if (typeof propertyCopy !== "string")
+                  propertyErrors.push(
+                    `The ${propertyName} field must be a string.`
+                  );
+                break;
+              case "string":
+                if (typeof propertyCopy !== "string")
+                  propertyErrors.push(
+                    `The ${propertyName} field must be a string.`
+                  );
+                break;
+              case "number":
+                if (isNaN(propertyCopy))
+                  propertyErrors.push(
+                    `The ${propertyName} field must be numeric.`
+                  );
+                break;
+              case "float":
+                if (Number.isInteger(propertyCopy))
+                  propertyErrors.push(
+                    `The ${propertyName} field must be float.`
+                  );
+                break;
+              case "datetime":
+                break;
 
-            // switch (dataType.toLowerCase()) {
-            //   case "text":
-            //     if (typeof propertyCopy !== "string")
-            //       propertyErrors.push(
-            //         `The ${propertyName} field must be a string.`
-            //       );
-            //     break;
-            //   case "string":
-            //     if (typeof propertyCopy !== "string")
-            //       propertyErrors.push(
-            //         `The ${propertyName} field must be a string.`
-            //       );
-            //     break;
-            //   case "number":
-            //     if (isNaN(propertyCopy))
-            //       propertyErrors.push(
-            //         `The ${propertyName} field must be numeric.`
-            //       );
-            //     break;
-            //   case "float":
-            //     if (Number.isInteger(propertyCopy))
-            //       propertyErrors.push(
-            //         `The ${propertyName} field must be float.`
-            //       );
-            //     break;
-            //   case "datetime":
-            //     break;
-
-            //   default:
-            //     break;
-            // }
+              default:
+                break;
+            }
 
             if (propertyErrors.length)
               errors.value[symbolicName] = propertyErrors;
           }
         }
 
-        // if (!Object.keys(errors.value).length) ctx.emit("completed");
-        // else ctx.emit("incompleted");
-        ctx.emit("incompleted");
+        if (!Object.keys(errors.value).length) ctx.emit("completed");
+        else ctx.emit("incompleted");
       }
     );
 
     return {
+      errors,
       addEquipmentModalIsVisible,
       equipments,
       onAddEquipment,
