@@ -291,7 +291,6 @@ export default {
           if (deepCopyOfEquipments.length)
             deepCopyOfFormData.equipments = deepCopyOfEquipments.map((e) => ({
               key: e.key,
-              value: e.value,
               parent: e.parent,
               data: e.data,
             }));
@@ -318,7 +317,6 @@ export default {
           if (deepCopyOfProcesses.length)
             deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
               key: p.key,
-              value: p.value,
               parent: p.parent,
               data: p.data,
             }));
