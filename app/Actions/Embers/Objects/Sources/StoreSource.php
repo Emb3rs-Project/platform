@@ -49,10 +49,17 @@ class StoreSource implements StoresSources
     {
         $validator = Validator::make($input, [
             'source' => ['required', 'array:data'],
-            'equipments' => ['required', 'array'],
+            //equipments
+            'equipments' => ['nullable', 'array'],
             'equipments.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            'processes' => ['required', 'array'],
+            'equipments.*.parent' => ['required', 'integer', 'numeric', 'exists:categories,id'],
+            'equipments.*.data' => ['required', 'array'],
+            //processes
+            'processes' => ['nullable', 'array'],
             'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            'processes.*.parent' => ['required', 'integer', 'numeric', 'exists:categories,id'],
+            'processes.*.data' => ['required', 'array'],
+            //template
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             'location_id' => [
                 Rule::requiredIf(function () use ($input) {
@@ -80,6 +87,10 @@ class StoreSource implements StoresSources
 
         $this->checkIfPropertiesAreValid($validated);
 
+        $this->checkIfEquipmentPropertiesAreValid($validated);
+
+        $this->checkIfProcessPropertiesAreValid($validated);
+
         return $validated;
     }
 
@@ -87,52 +98,81 @@ class StoreSource implements StoresSources
      * Save the Source in the DB.
      *
      * @param  mixed  $user
-     * @param  array  $input
+     * @param  array  $validated
      * @return Instance
      */
-    protected function save($user, array $input)
+    protected function save($user, array $validated)
     {
-        $source = $input['source'];
-        $equipments = $input['equipments'];
-        foreach ($equipments as $key => $value) {
-            unset($equipments[$key]['template']);
-        }
+        info('to save');
 
-        $processes = $input['processes'];
-        foreach ($processes as $key => $value) {
-            unset($processes[$key]['template']);
-        }
 
         $newInstance = [
-            "name" => 'Not Defined',
-            "values" => [
-                "equipments" => $equipments,
-                "processes" => $processes,
-                "info" => $source
-            ],
-            "template_id" => $input['template_id'],
-            "location_id" => null
+            'name' => Arr::get($validated, 'source.data.name') ?? 'Not Defined',
+            'values' => Arr::get($validated, 'source.data'),
+            'equipments' => Arr::get($validated, 'equipments'),
+            'processes' => Arr::get($validated, 'source.data'),
+            'scripts' => [],
+            'template_id' => Arr::get($validated, 'template_id'),
+            'location_id' => Arr::get($validated, 'location_id')
         ];
 
-        // Check if Property Name Exists
-        if (!empty($source['name'])) {
-            $newInstance['name'] = $source['name'];
-        }
-
-        if (is_array($input["location_id"])) {
-            $marker = $input["location_id"];
+        if (!is_null(Arr::get($validated, 'location'))) {
+            // A new location was selected to be used for this Sink
             $location = Location::create([
-                'name' => $newInstance['name'],
+                'name' => Arr::get($newInstance, 'name'),
                 'type' => 'point',
                 'data' => [
-                    "center" => [$marker["lat"], $marker["lng"]]
+                    "center" => [
+                        Arr::get($validated, 'location.lat'),
+                        Arr::get($validated, 'location.lng')
+                    ]
                 ]
             ]);
-            $newInstance['location_id'] = $location->id;
-        } else {
-            // Check if Location is Set
-            $newInstance['location_id'] = $input['location_id'];
+
+            Arr::set($newInstance, 'location_id', $location->id);
         }
+
+        // $source = $input['source'];
+        // $equipments = $input['equipments'];
+        // foreach ($equipments as $key => $value) {
+        //     unset($equipments[$key]['template']);
+        // }
+
+        // $processes = $input['processes'];
+        // foreach ($processes as $key => $value) {
+        //     unset($processes[$key]['template']);
+        // }
+
+        // $newInstance = [
+        //     "name" => 'Not Defined',
+        //     "values" => [
+        //         "equipments" => $equipments,
+        //         "processes" => $processes,
+        //         "info" => $source
+        //     ],
+        //     "template_id" => $input['template_id'],
+        //     "location_id" => null
+        // ];
+
+        // Check if Property Name Exists
+        // if (!empty($source['name'])) {
+        //     $newInstance['name'] = $source['name'];
+        // }
+
+        // if (is_array($input["location_id"])) {
+        //     $marker = $input["location_id"];
+        //     $location = Location::create([
+        //         'name' => $newInstance['name'],
+        //         'type' => 'point',
+        //         'data' => [
+        //             "center" => [$marker["lat"], $marker["lng"]]
+        //         ]
+        //     ]);
+        //     $newInstance['location_id'] = $location->id;
+        // } else {
+        //     // Check if Location is Set
+        //     $newInstance['location_id'] = $input['location_id'];
+        // }
 
         // $instance = Instance::create($newInstance);
         // $instance->teams()->attach($user->currentTeam);
