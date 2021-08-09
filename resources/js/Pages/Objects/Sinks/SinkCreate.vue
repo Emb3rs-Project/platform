@@ -234,6 +234,23 @@ export default {
         form.template_id = template.key;
 
         if (templateInfo.value.properties.length) {
+          // for (const property of templateInfo.value.properties) {
+          //   const prop = property.property;
+
+          //   if (!prop) continue;
+
+          //   let placeholder = null;
+
+          //   if (prop.inputType === "select") placeholder = {};
+
+          //   if (prop.dataType === "text" || prop.dataType === "string")
+          //     placeholder = "";
+
+          //   form.sink.data[prop.symbolic_name] = property.default_value
+          //     ? property.default_value
+          //     : placeholder;
+          // }
+
           for (const property of templateInfo.value.properties) {
             const prop = property.property;
 
@@ -279,6 +296,12 @@ export default {
                 // if the property has a value, get it and re-assign the property as a string
                 if (Object.keys(sinkData[key]).length) {
                   sinkData[key] = sinkData[key].value;
+                } else {
+                  if (prop.dataType === "text" || prop.dataType === "string") {
+                    sinkData[key] = "";
+                  } else {
+                    sinkData[key] = null;
+                  }
                 }
               }
             }

@@ -218,59 +218,133 @@ export default {
       nextStepRequest.value = false;
     };
 
+    // const transformSelectDataProperties = (properties, parentData) => {
+    //   const data = {};
+
+    //   for (const property of properties) {
+    //     const prop = property.property;
+
+    //     if (!prop) continue;
+
+    //     const key = prop.symbolic_name;
+
+    //     if (prop.inputType === "select") {
+    //       // if the property has a value, get it and re-assign the property as a string
+    //       if (Object.keys(deepCopyOfSource.data[key]).length) {
+    //         deepCopyOfSource.data[key] = deepCopyOfSource.data[key].value;
+    //       }
+    //     }
+    //   }
+
+    //   return data;
+    // };
+
     const submit = () => {
       form
         .transform((data) => {
           // We want to transform the "to-send" data, not the original data
-          const deepCopyOfData = window._.cloneDeep(data);
+          const deepCopyOfFormData = window._.cloneDeep(data);
 
+          // source.data
           const deepCopyOfSource = window._.cloneDeep(source.value);
-
-          const sourceData = deepCopyOfSource.data;
-
           if (template.value.properties.length) {
             for (const property of template.value.properties) {
               const prop = property.property;
               const key = prop.symbolic_name;
+              const dataType = prop.dataType.toLowerCase();
 
               if (prop.inputType === "select") {
                 // if the property has a value, get it and re-assign the property as a string
-                if (Object.keys(sourceData[key]).length) {
-                  sourceData[key] = sourceData[key].value;
+                if (Object.keys(deepCopyOfSource.data[key]).length) {
+                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].value;
+                } else {
+                  if (dataType === "text" || dataType === "string") {
+                    deepCopyOfSource.data[key] = "";
+                  } else {
+                    deepCopyOfSource.data[key] = null;
+                  }
                 }
               }
             }
           }
+          deepCopyOfFormData.source = deepCopyOfSource;
 
-          deepCopyOfData.source.data = sourceData;
+          // equipments
+          const deepCopyOfEquipments = window._.cloneDeep(equipments.value);
+          if (equipments.value.length) {
+            for (const [index, equipment] of equipments.value.entries()) {
+              if (!Object.keys(equipment.data).length) continue;
 
-          if (Object.keys(equipments.value).length)
-            deepCopyOfData.equipments = equipments.value;
+              for (const property of equipment.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
 
-          if (Object.keys(processes.value).length)
-            deepCopyOfData.processes = processes.value;
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (Object.keys(deepCopyOfEquipments[index].data[key]).length)
+                    deepCopyOfEquipments[index].data[key] =
+                      deepCopyOfEquipments[index].data[key].value;
+                }
+              }
+            }
+          }
+          if (deepCopyOfEquipments.length)
+            deepCopyOfFormData.equipments = deepCopyOfEquipments.map((e) => ({
+              key: e.key,
+              value: e.value,
+              parent: e.parent,
+              data: e.data,
+            }));
 
-          if (Object.keys(scripts.value).length)
-            deepCopyOfData.scripts = scripts.value;
+          //processes
+          const deepCopyOfProcesses = window._.cloneDeep(processes.value);
+          if (processes.value.length) {
+            for (const [index, process] of processes.value.entries()) {
+              if (!Object.keys(process.data).length) continue;
 
+              for (const property of process.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
+
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (Object.keys(deepCopyOfProcesses[index].data[key]).length)
+                    deepCopyOfProcesses[index].data[key] =
+                      deepCopyOfProcesses[index].data[key].value;
+                }
+              }
+            }
+          }
+          if (deepCopyOfProcesses.length)
+            deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
+              key: p.key,
+              value: p.value,
+              parent: p.parent,
+              data: p.data,
+            }));
+
+          // if (Object.keys(scripts.value).length)
+          //   deepCopyOfFormData.scripts = scripts.value;
+
+          //template
           if (Object.keys(template.value).length)
-            deepCopyOfData.template_id = template.value.key;
+            deepCopyOfFormData.template_id = template.value.key;
 
+          //location
           if (Object.keys(location.value).length) {
             if (typeof location.value.key === "object")
-              deepCopyOfData.location = location.value.key;
-            else deepCopyOfData.location_id = location.value.key;
+              deepCopyOfFormData.location = location.value.key;
+            else deepCopyOfFormData.location_id = location.value.key;
           }
-
-          console.log(deepCopyOfData);
-
-          return deepCopyOfSource;
+          console.dir(deepCopyOfFormData);
+          return deepCopyOfFormData;
         })
         .post(route("objects.sources.store"), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
+          onError: (err) => console.error(err),
         });
     };
 

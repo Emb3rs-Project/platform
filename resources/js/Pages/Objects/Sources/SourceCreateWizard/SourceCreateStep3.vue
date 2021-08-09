@@ -174,6 +174,23 @@ export default {
         }
       }
 
+      // for (const property of properties) {
+      //   const inputType = property.property.inputType.toLowerCase();
+      //   const dataType = property.property.dataType.toLowerCase();
+
+      //   if (property.property) {
+      //     let placeholder = null;
+
+      //     if (inputType === "select") placeholder = {};
+
+      //     if (dataType === "text" || dataType === "string") placeholder = "";
+
+      //     const key = property.property.symbolic_name;
+
+      //     data[key] = property.property.default_value ?? placeholder;
+      //   }
+      // }
+
       return data;
     };
 
@@ -196,7 +213,7 @@ export default {
     const commitProcesses = window._.debounce(
       () =>
         store.commit("source/setProcesses", {
-          equipments: window._.cloneDeep(processes),
+          processes: window._.cloneDeep(processes),
         }),
       500
     );
