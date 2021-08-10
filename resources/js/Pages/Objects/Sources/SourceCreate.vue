@@ -166,9 +166,8 @@ export default {
       source: {
         data: null,
       },
-      equipments: null,
-      processes: null,
-      scripts: null,
+      equipments: [],
+      processes: [],
       template_id: null,
       location_id: null,
       location: null,
@@ -218,27 +217,6 @@ export default {
       nextStepRequest.value = false;
     };
 
-    // const transformSelectDataProperties = (properties, parentData) => {
-    //   const data = {};
-
-    //   for (const property of properties) {
-    //     const prop = property.property;
-
-    //     if (!prop) continue;
-
-    //     const key = prop.symbolic_name;
-
-    //     if (prop.inputType === "select") {
-    //       // if the property has a value, get it and re-assign the property as a string
-    //       if (Object.keys(deepCopyOfSource.data[key]).length) {
-    //         deepCopyOfSource.data[key] = deepCopyOfSource.data[key].value;
-    //       }
-    //     }
-    //   }
-
-    //   return data;
-    // };
-
     const submit = () => {
       form
         .transform((data) => {
@@ -278,20 +256,30 @@ export default {
               for (const property of equipment.props) {
                 const prop = property.property;
                 const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
 
                 if (prop.inputType === "select") {
                   // if the property has a value, get it and re-assign the property as a string
-                  if (Object.keys(deepCopyOfEquipments[index].data[key]).length)
+                  if (
+                    Object.keys(deepCopyOfEquipments[index].data[key]).length
+                  ) {
                     deepCopyOfEquipments[index].data[key] =
                       deepCopyOfEquipments[index].data[key].value;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfEquipments[index].data[key] = "";
+                    } else {
+                      deepCopyOfEquipments[index].data[key] = null;
+                    }
+                  }
                 }
               }
             }
           }
           if (deepCopyOfEquipments.length)
             deepCopyOfFormData.equipments = deepCopyOfEquipments.map((e) => ({
-              key: e.key,
-              parent: e.parent,
+              id: e.key,
+              category_id: e.parent,
               data: e.data,
             }));
 
@@ -304,25 +292,32 @@ export default {
               for (const property of process.props) {
                 const prop = property.property;
                 const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
 
                 if (prop.inputType === "select") {
                   // if the property has a value, get it and re-assign the property as a string
-                  if (Object.keys(deepCopyOfProcesses[index].data[key]).length)
+                  if (
+                    Object.keys(deepCopyOfProcesses[index].data[key]).length
+                  ) {
                     deepCopyOfProcesses[index].data[key] =
                       deepCopyOfProcesses[index].data[key].value;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfProcesses[index].data[key] = "";
+                    } else {
+                      deepCopyOfProcesses[index].data[key] = null;
+                    }
+                  }
                 }
               }
             }
           }
           if (deepCopyOfProcesses.length)
             deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
-              key: p.key,
-              parent: p.parent,
+              id: p.key,
+              category_id: p.parent,
               data: p.data,
             }));
-
-          // if (Object.keys(scripts.value).length)
-          //   deepCopyOfFormData.scripts = scripts.value;
 
           //template
           if (Object.keys(template.value).length)
