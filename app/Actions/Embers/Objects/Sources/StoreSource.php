@@ -49,18 +49,19 @@ class StoreSource implements StoresSources
     {
         $validator = Validator::make($input, [
             'source' => ['required', 'array:data'],
-            //equipments
-            'equipments' => ['nullable', 'array'],
-            'equipments.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            'equipments.*.parent' => ['required', 'integer', 'numeric', 'exists:categories,id'],
+            // equipments
+            'equipments' => ['present', 'array'],
+            'equipments.*.id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            'equipments.*.category_id' => ['required', 'integer', 'numeric', 'exists:categories,id'],
             'equipments.*.data' => ['required', 'array'],
-            //processes
-            'processes' => ['nullable', 'array'],
+            // processes
+            'processes' => ['present', 'array'],
             'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
             'processes.*.parent' => ['required', 'integer', 'numeric', 'exists:categories,id'],
             'processes.*.data' => ['required', 'array'],
-            //template
+            // template
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            // location
             'location_id' => [
                 Rule::requiredIf(function () use ($input) {
                     return !Arr::has($input, 'location') || Arr::get($input, 'location') === null;
@@ -103,15 +104,11 @@ class StoreSource implements StoresSources
      */
     protected function save($user, array $validated)
     {
-        info('to save');
-
-
         $newInstance = [
             'name' => Arr::get($validated, 'source.data.name') ?? 'Not Defined',
             'values' => Arr::get($validated, 'source.data'),
             'equipments' => Arr::get($validated, 'equipments'),
-            'processes' => Arr::get($validated, 'source.data'),
-            'scripts' => [],
+            'processes' => Arr::get($validated, 'processes'),
             'template_id' => Arr::get($validated, 'template_id'),
             'location_id' => Arr::get($validated, 'location_id')
         ];
@@ -132,50 +129,8 @@ class StoreSource implements StoresSources
             Arr::set($newInstance, 'location_id', $location->id);
         }
 
-        // $source = $input['source'];
-        // $equipments = $input['equipments'];
-        // foreach ($equipments as $key => $value) {
-        //     unset($equipments[$key]['template']);
-        // }
-
-        // $processes = $input['processes'];
-        // foreach ($processes as $key => $value) {
-        //     unset($processes[$key]['template']);
-        // }
-
-        // $newInstance = [
-        //     "name" => 'Not Defined',
-        //     "values" => [
-        //         "equipments" => $equipments,
-        //         "processes" => $processes,
-        //         "info" => $source
-        //     ],
-        //     "template_id" => $input['template_id'],
-        //     "location_id" => null
-        // ];
-
-        // Check if Property Name Exists
-        // if (!empty($source['name'])) {
-        //     $newInstance['name'] = $source['name'];
-        // }
-
-        // if (is_array($input["location_id"])) {
-        //     $marker = $input["location_id"];
-        //     $location = Location::create([
-        //         'name' => $newInstance['name'],
-        //         'type' => 'point',
-        //         'data' => [
-        //             "center" => [$marker["lat"], $marker["lng"]]
-        //         ]
-        //     ]);
-        //     $newInstance['location_id'] = $location->id;
-        // } else {
-        //     // Check if Location is Set
-        //     $newInstance['location_id'] = $input['location_id'];
-        // }
-
-        // $instance = Instance::create($newInstance);
-        // $instance->teams()->attach($user->currentTeam);
+        $instance = Instance::create($newInstance);
+        $instance->teams()->attach($user->currentTeam);
 
 
         // /**
