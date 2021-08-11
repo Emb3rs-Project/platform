@@ -1,6 +1,4 @@
 export const validateProperies = (parent, properties, errors) => {
-  // const errors = {};
-
   for (const property of properties) {
     const propertyErrors = [];
 
