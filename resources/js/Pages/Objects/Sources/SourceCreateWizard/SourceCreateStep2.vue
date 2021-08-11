@@ -15,8 +15,8 @@
 
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 "
-    v-for="equipment in equipments"
-    :key="equipment"
+    v-for="equip in equipment"
+    :key="equip"
   >
     <div class="sm:col-span-3">
       <div class="bg-white overflow-hidden shadow sm:rounded-lg w-full">
@@ -28,7 +28,7 @@
             <dt class="text-lg">
               <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
                 <span class="font-medium text-gray-900">
-                  {{ equipment.value }}
+                  {{ equip.value }}
                 </span>
                 <span class="ml-6 h-7 flex items-center">
                   <ChevronDownIcon
@@ -49,13 +49,13 @@
               <DisclosurePanel as="dd">
                 <div
                   class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-                  v-for="property in equipment.props"
+                  v-for="property in equip.props"
                   :key="property"
                 >
                   <div class="sm:col-span-3">
                     <div v-if="property.property.inputType === 'text'">
                       <TextInput
-                        v-model="equipment.data[property.property.symbolic_name]"
+                        v-model="equip.data[property.property.symbolic_name]"
                         :unit="property.unit.symbol"
                         :placeholder="property.property.name"
                         :label="property.property.name"
@@ -65,7 +65,7 @@
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                       <SelectMenu
-                        v-model="equipment.data[property.property.symbolic_name]"
+                        v-model="equip.data[property.property.symbolic_name]"
                         :options="property.property.data.options"
                         :label="property.property.name"
                         :description="property.property.description"
@@ -95,13 +95,13 @@
         </div>
       </div>
     </div>
-    <pre>{{equipment.data}}</pre>
+    <pre>{{equip.data}}</pre>
   </div>
 
   <AddEquipmentModal
     v-model="addEquipmentModalIsVisible"
-    :equipmentsCategories="equipmentsCategories"
-    :equipments="equipments"
+    :equipmentCategories="equipmentCategories"
+    :equipment="equipment"
     @confirmation="onAddEquipment"
   />
 </template>
@@ -136,11 +136,11 @@ export default {
   },
 
   props: {
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
       required: true,
     },
@@ -174,27 +174,10 @@ export default {
         }
       }
 
-      // for (const property of properties) {
-      //   const inputType = property.property.inputType.toLowerCase();
-      //   const dataType = property.property.dataType.toLowerCase();
-
-      //   if (property.property) {
-      //     let placeholder = null;
-
-      //     if (inputType === "select") placeholder = {};
-
-      //     if (dataType === "text" || dataType === "string") placeholder = "";
-
-      //     const key = property.property.symbolic_name;
-
-      //     data[key] = property.property.default_value ?? placeholder;
-      //   }
-      // }
-
       return data;
     };
 
-    const propEquipments = props.equipments.map((e) => ({
+    const propEquipment = props.equipment.map((e) => ({
       key: e.id,
       value: e.name,
       parent: e.category_id,
@@ -202,23 +185,23 @@ export default {
       data: transformPropsToData(e.template_properties),
     }));
 
-    const storeEquipments = computed(() => store.getters["source/equipments"]);
+    const storeEquipment = computed(() => store.getters["source/equipment"]);
 
-    const equipments = ref(
-      storeEquipments.value.length
-        ? window._.cloneDeep(storeEquipments.value)
-        : propEquipments
+    const equipment = ref(
+      storeEquipment.value.length
+        ? window._.cloneDeep(storeEquipment.value)
+        : propEquipment
     );
 
-    const commitEquipments = window._.debounce(
+    const commitEquipment = window._.debounce(
       () =>
-        store.commit("source/setEquipments", {
-          equipments: window._.cloneDeep(equipments),
+        store.commit("source/setEquipment", {
+          equipment: window._.cloneDeep(equipment),
         }),
       500
     );
 
-    watch(equipments, () => commitEquipments(), {
+    watch(equipment, () => commitEquipment(), {
       deep: true,
       immediate: true,
     });
@@ -230,7 +213,7 @@ export default {
 
       newEquipment.data = transformPropsToData(newEquipment.props);
 
-      equipments.value.push(newEquipment);
+      equipment.value.push(newEquipment);
     };
 
     watch(
@@ -241,7 +224,7 @@ export default {
         // reset the errors so they are always up to date
         errors.value = {};
 
-        for (const equipment of equipments.value) {
+        for (const equipment of equipment.value) {
           for (const property of equipment.props) {
             const propertyErrors = [];
 
@@ -256,7 +239,7 @@ export default {
             if (inputType === "select") {
               // if the property has a value, get it and re-assign the property as a string
               if (Object.keys(value).length) {
-                propertyCopy = value.value;
+                propertyCopy = value.key;
               } else {
                 propertyCopy = "";
               }
@@ -310,7 +293,7 @@ export default {
     return {
       errors,
       addEquipmentModalIsVisible,
-      equipments,
+      equipment,
       onAddEquipment,
     };
   },

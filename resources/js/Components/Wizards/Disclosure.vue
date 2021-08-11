@@ -9,9 +9,7 @@
         v-slot="{ open }"
       >
         <dt class="text-lg">
-          <DisclosureButton
-            class="text-left w-full flex justify-between items-start text-gray-400"
-          >
+          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400">
             <span class="font-medium text-gray-900">
               {{ object.value }}
             </span>
@@ -34,7 +32,10 @@
           leave-from-class="transform scale-100 opacity-100"
           leave-to-class="transform scale-95 opacity-0"
         >
-          <DisclosurePanel as="dd" class="mt-2 pr-12">
+          <DisclosurePanel
+            as="dd"
+            class="mt-2 pr-12"
+          >
             <p
               v-for="property in object.props"
               :key="property"
@@ -79,7 +80,7 @@ export default {
   setup(props, { emit }) {
     const open = ref(false);
 
-    // used for getting the checked equipments
+    // used for getting the checked equipment
     const checked = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),

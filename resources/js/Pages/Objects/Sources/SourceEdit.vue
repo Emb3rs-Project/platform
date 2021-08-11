@@ -27,13 +27,6 @@
       v-if="currentStep === 3"
     />
 
-    <!-- <SourceEditStep4
-      :equipmentsCategories="equipmentsCategories"
-      :equipments="equipments"
-      :instance="instance"
-      v-if="currentStep === 4"
-    /> -->
-
     <template #actions>
       <div class="flex justify-start w-full">
         <BulletSteps :steps="steps" />

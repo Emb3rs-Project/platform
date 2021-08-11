@@ -3,9 +3,8 @@ const state = () => ({
   source: {
     data: {}
   },
-  equipments: [],
+  equipment: [],
   processes: [],
-  scripts: [],
   template: null,
   location: null
 });
@@ -15,14 +14,11 @@ const getters = {
   source(state) {
     return state.source;
   },
-  equipments(state) {
-    return state.equipments;
+  equipment(state) {
+    return state.equipment;
   },
   processes(state) {
     return state.processes;
-  },
-  scripts(state) {
-    return state.scripts;
   },
   template(state) {
     return state.template;
@@ -30,23 +26,10 @@ const getters = {
   location(state) {
     return state.location;
   },
-  form(state) {
-    return {
-      source: state.source,
-      equipments: state.equipments,
-      processes: state.processes,
-      template_id: state.template.key,
-      location_id: state.location.key
-    }
-  }
 };
 
 // https://next.vuex.vuejs.org/api/#actions
-const actions = {
-  setScripts(ctx, payload) {
-    ctx.commit('setScripts', payload);
-  },
-};
+const actions = {};
 
 // https://next.vuex.vuejs.org/api/#mutations
 const mutations = {
@@ -54,16 +37,12 @@ const mutations = {
     state.source.data = payload.data;
   },
 
-  setEquipments(state, payload) {
-    state.equipments = payload.equipments;
+  setEquipment(state, payload) {
+    state.equipment = payload.equipment;
   },
 
   setProcesses(state, payload) {
     state.processes = payload.processes;
-  },
-
-  setScripts(state, payload) {
-    state.scripts = payload.scripts;
   },
 
   setTemplate(state, payload) {

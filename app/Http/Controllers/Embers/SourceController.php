@@ -39,8 +39,8 @@ class SourceController extends Controller
     {
         [
             $templates,
-            $equipments,
-            $equipmentsCategories,
+            $equipment,
+            $equipmentCategories,
             $processes,
             $processesCategories,
             $locations
@@ -50,8 +50,8 @@ class SourceController extends Controller
             "slideOver" => "Objects/Sources/SourceCreate",
             "props" => [
                 "templates" => $templates,
-                "equipments" => $equipments,
-                "equipmentsCategories" => $equipmentsCategories,
+                "equipment" => $equipment,
+                "equipmentCategories" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
                 "locations" => $locations,
@@ -83,7 +83,7 @@ class SourceController extends Controller
     {
         [
             $templates,
-            $equipments,
+            $equipment,
             $locations,
             $instance
         ] = app(ShowsSources::class)->show($request->user(), $id);
@@ -92,7 +92,7 @@ class SourceController extends Controller
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
                 "templates" => $templates,
-                "equipments" => $equipments,
+                "equipment" => $equipment,
                 "locations" => $locations,
                 "instance" => $instance
             ]
@@ -110,8 +110,8 @@ class SourceController extends Controller
     {
         [
             $templates,
-            $equipments,
-            $equipmentsCategories,
+            $equipment,
+            $equipmentCategories,
             $processes,
             $processesCategories,
             $locations,
@@ -122,8 +122,8 @@ class SourceController extends Controller
             "slideOver" => "Objects/Sources/SourceEdit",
             "props" => [
                 "templates" => $templates,
-                "equipments" => $equipments,
-                "equipmentsCategories" => $equipmentsCategories,
+                "equipment" => $equipment,
+                "equipmentsCategorie" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
                 "locations" => $locations,

@@ -32,8 +32,8 @@
 
     <SourceCreateStep2
       v-if="currentStep === 2"
-      :equipmentsCategories="equipmentsCategories"
-      :equipments="equipments"
+      :equipmentCategories="equipmentCategories"
+      :equipment="equipment"
       :nextStepRequest="nextStepRequest"
       @completed="onCompleted"
       @incompleted="onIncompleted"
@@ -127,11 +127,11 @@ export default {
       type: Array,
       required: true,
     },
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
       required: true,
     },
@@ -149,16 +149,15 @@ export default {
     },
   },
 
-  setup(props) {
+  setup() {
     const store = useStore();
     const currentStep = ref(1);
     const nextStepRequest = ref(false);
     const incompleteStepAlert = ref(false);
 
     const source = computed(() => store.getters["source/source"]);
-    const equipments = computed(() => store.getters["source/equipments"]);
+    const equipment = computed(() => store.getters["source/equipment"]);
     const processes = computed(() => store.getters["source/processes"]);
-    const scripts = computed(() => store.getters["source/scripts"]);
     const template = computed(() => store.getters["source/template"]);
     const location = computed(() => store.getters["source/location"]);
 
@@ -166,7 +165,7 @@ export default {
       source: {
         data: null,
       },
-      equipments: [],
+      equipment: [],
       processes: [],
       template_id: null,
       location_id: null,
@@ -234,7 +233,7 @@ export default {
               if (prop.inputType === "select") {
                 // if the property has a value, get it and re-assign the property as a string
                 if (Object.keys(deepCopyOfSource.data[key]).length) {
-                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].value;
+                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
                 } else {
                   if (dataType === "text" || dataType === "string") {
                     deepCopyOfSource.data[key] = "";
@@ -247,13 +246,13 @@ export default {
           }
           deepCopyOfFormData.source = deepCopyOfSource;
 
-          // equipments
-          const deepCopyOfEquipments = window._.cloneDeep(equipments.value);
-          if (equipments.value.length) {
-            for (const [index, equipment] of equipments.value.entries()) {
-              if (!Object.keys(equipment.data).length) continue;
+          // equipment
+          const deepCopyOfEquipment = window._.cloneDeep(equipment.value);
+          if (equipment.value.length) {
+            for (const [index, equip] of equipment.value.entries()) {
+              if (!Object.keys(equip.data).length) continue;
 
-              for (const property of equipment.props) {
+              for (const property of equip.props) {
                 const prop = property.property;
                 const key = prop.symbolic_name;
                 const dataType = prop.dataType.toLowerCase();
@@ -261,23 +260,23 @@ export default {
                 if (prop.inputType === "select") {
                   // if the property has a value, get it and re-assign the property as a string
                   if (
-                    Object.keys(deepCopyOfEquipments[index].data[key]).length
+                    Object.keys(deepCopyOfEquipment[index].data[key]).length
                   ) {
-                    deepCopyOfEquipments[index].data[key] =
-                      deepCopyOfEquipments[index].data[key].value;
+                    deepCopyOfEquipment[index].data[key] =
+                      deepCopyOfEquipment[index].data[key].key;
                   } else {
                     if (dataType === "text" || dataType === "string") {
-                      deepCopyOfEquipments[index].data[key] = "";
+                      deepCopyOfEquipment[index].data[key] = "";
                     } else {
-                      deepCopyOfEquipments[index].data[key] = null;
+                      deepCopyOfEquipment[index].data[key] = null;
                     }
                   }
                 }
               }
             }
           }
-          if (deepCopyOfEquipments.length)
-            deepCopyOfFormData.equipments = deepCopyOfEquipments.map((e) => ({
+          if (deepCopyOfEquipment.length)
+            deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
               id: e.key,
               category_id: e.parent,
               data: e.data,
@@ -300,7 +299,7 @@ export default {
                     Object.keys(deepCopyOfProcesses[index].data[key]).length
                   ) {
                     deepCopyOfProcesses[index].data[key] =
-                      deepCopyOfProcesses[index].data[key].value;
+                      deepCopyOfProcesses[index].data[key].key;
                   } else {
                     if (dataType === "text" || dataType === "string") {
                       deepCopyOfProcesses[index].data[key] = "";

@@ -170,30 +170,11 @@ export default {
     watch(
       selectedTemplate,
       (selectedTemplate) => {
-        if (!selectedTemplate.properties) return; // edge case
-        if (!Object.keys(selectedTemplate.properties).length) return; // edge case
+        source.value.data = {};
 
         if (!Object.keys(source.value.data).length) {
           const properties = selectedTemplate.properties;
 
-          // for (const property of properties) {
-          //   const inputType = property.property.inputType.toLowerCase();
-          //   const dataType = property.property.dataType.toLowerCase();
-
-          //   if (property.property) {
-          //     let placeholder = null;
-
-          //     if (inputType === "select") placeholder = {};
-
-          //     if (dataType === "text" || dataType === "string")
-          //       placeholder = "";
-
-          //     const key = property.property.symbolic_name;
-
-          //     source.value.data[key] =
-          //       property.property.default_value ?? placeholder;
-          //   }
-          // }
           for (const property of properties) {
             const inputType = property.property.inputType;
 
@@ -248,7 +229,7 @@ export default {
           if (inputType === "select") {
             // if the property has a value, get it and re-assign the property as a string
             if (Object.keys(value).length) {
-              propertyCopy = value.value;
+              propertyCopy = value.key;
             } else {
               propertyCopy = "";
             }

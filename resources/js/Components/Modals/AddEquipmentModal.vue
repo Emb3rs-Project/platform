@@ -57,15 +57,15 @@
                 <div class="mt-2">
                   <SelectMenu
                     v-model="selectedEquipmentCategory"
-                    :options="equipmentsCategories"
+                    :options="equipmentCategories"
                     label="Category"
                   ></SelectMenu>
                 </div>
                 <div class="mt-5">
                   <SelectMenu
-                    :disabled="!equipmentsAreAvailable"
+                    :disabled="!equipmentAreAvailable"
                     v-model="selectedEquipment"
-                    :options="availableEquipments"
+                    :options="availableEquipment"
                     label="Equipment"
                   ></SelectMenu>
                 </div>
@@ -130,11 +130,11 @@ export default {
       type: Boolean,
       required: true,
     },
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
       required: true,
     },
@@ -144,25 +144,25 @@ export default {
 
   setup(props, { emit }) {
     const processing = ref(false);
-    const availableEquipments = ref([]);
+    const availableEquipment = ref([]);
     const selectedEquipmentCategory = ref({});
     const selectedEquipment = ref({});
 
-    const equipmentsCategories = computed(() =>
-      props.equipmentsCategories.map((ec) => ({
+    const equipmentCategories = computed(() =>
+      props.equipmentCategories.map((ec) => ({
         key: ec.id,
         value: ec.name,
       }))
     );
 
-    const equipmentsAreAvailable = computed(() => {
+    const equipmentAreAvailable = computed(() => {
       if (!Object.keys(selectedEquipmentCategory.value).length) return false;
 
-      const equipmentsThatMatch = props.equipments.filter(
+      const equipmentThatMatch = props.equipment.filter(
         (e) => e.parent == selectedEquipmentCategory.value.key
       );
 
-      if (!equipmentsThatMatch.length) return false;
+      if (!equipmentThatMatch.length) return false;
 
       return true;
     });
@@ -184,7 +184,7 @@ export default {
     watch(
       selectedEquipmentCategory,
       (selectedEquipmentCategory) => {
-        availableEquipments.value = props.equipments.filter(
+        availableEquipment.value = props.equipment.filter(
           (e) => e.parent == selectedEquipmentCategory.key
         );
       },
@@ -202,13 +202,13 @@ export default {
     };
 
     return {
-      equipmentsCategories,
+      equipmentCategories,
       selectedEquipmentCategory,
-      availableEquipments,
+      availableEquipment,
       selectedEquipment,
       open,
       onConfirmation,
-      equipmentsAreAvailable,
+      equipmentAreAvailable,
       canAddEquipment,
       processing,
     };
