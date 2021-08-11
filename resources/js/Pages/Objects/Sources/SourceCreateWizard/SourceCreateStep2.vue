@@ -95,7 +95,6 @@
         </div>
       </div>
     </div>
-    <pre>{{equip.data}}</pre>
   </div>
 
   <AddEquipmentModal
@@ -118,8 +117,11 @@ import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AddEquipmentModal from "@/Components/Modals/AddEquipmentModal.vue";
-
 import JetInputError from "@/Jetstream/InputError.vue";
+
+import { sortProperties } from "../helpers/sort-properties";
+import { transformPropsToData } from "../helpers/transform-props-to-data";
+import { validateProperies } from "../helpers/validate-properties";
 
 export default {
   components: {
@@ -159,29 +161,11 @@ export default {
 
     const addEquipmentModalIsVisible = ref(false);
 
-    const transformPropsToData = (properties) => {
-      const data = {};
-
-      for (const property of properties) {
-        const inputType = property.property.inputType;
-
-        if (property.property) {
-          const placeholder = inputType === "select" ? {} : "";
-
-          const key = property.property.symbolic_name;
-
-          data[key] = property.property.default_value ?? placeholder;
-        }
-      }
-
-      return data;
-    };
-
     const propEquipment = props.equipment.map((e) => ({
       key: e.id,
       value: e.name,
       parent: e.category_id,
-      props: e.template_properties,
+      props: sortProperties(e.template_properties),
       data: transformPropsToData(e.template_properties),
     }));
 
@@ -206,8 +190,8 @@ export default {
       immediate: true,
     });
 
-    const onAddEquipment = (equipment) => {
-      const newEquipment = window._.cloneDeep(equipment);
+    const onAddEquipment = (equip) => {
+      const newEquipment = window._.cloneDeep(equip);
 
       if (!Object.keys(newEquipment.props).length) return;
 
@@ -224,65 +208,10 @@ export default {
         // reset the errors so they are always up to date
         errors.value = {};
 
-        for (const equipment of equipment.value) {
-          for (const property of equipment.props) {
-            const propertyErrors = [];
+        for (const equip of equipment.value) {
+          const properties = equip.props;
 
-            const inputType = property.property.inputType;
-            const dataType = property.property.dataType;
-            const symbolicName = property.property.symbolic_name;
-            const value = equipment.data[property.property.symbolic_name];
-            const propertyName = property.property.name.toLowerCase();
-
-            let propertyCopy = value;
-
-            if (inputType === "select") {
-              // if the property has a value, get it and re-assign the property as a string
-              if (Object.keys(value).length) {
-                propertyCopy = value.key;
-              } else {
-                propertyCopy = "";
-              }
-            }
-
-            if (property.required)
-              propertyErrors.push(`The ${propertyName} field is required.`);
-
-            switch (dataType.toLowerCase()) {
-              case "text":
-                if (typeof propertyCopy !== "string")
-                  propertyErrors.push(
-                    `The ${propertyName} field must be a string.`
-                  );
-                break;
-              case "string":
-                if (typeof propertyCopy !== "string")
-                  propertyErrors.push(
-                    `The ${propertyName} field must be a string.`
-                  );
-                break;
-              case "number":
-                if (isNaN(propertyCopy))
-                  propertyErrors.push(
-                    `The ${propertyName} field must be numeric.`
-                  );
-                break;
-              case "float":
-                if (Number.isInteger(propertyCopy))
-                  propertyErrors.push(
-                    `The ${propertyName} field must be float.`
-                  );
-                break;
-              case "datetime":
-                break;
-
-              default:
-                break;
-            }
-
-            if (propertyErrors.length)
-              errors.value[symbolicName] = propertyErrors;
-          }
+          validateProperies(equip, properties, errors.value);
         }
 
         if (!Object.keys(errors.value).length) ctx.emit("completed");

@@ -38,7 +38,7 @@
   <!-- Source Properties -->
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="property in properties"
+    v-for="property in selectedTemplate.properties"
     :key="property"
   >
     <div class="col-span-3">
@@ -86,8 +86,10 @@ import { useStore } from "vuex";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-
 import JetInputError from "@/Jetstream/InputError.vue";
+
+import { validateProperies } from "../helpers/validate-properties";
+import { sortProperties } from "../helpers/sort-properties";
 
 export default {
   components: {
@@ -125,7 +127,7 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
-        properties: t.template_properties,
+        properties: sortProperties(t.template_properties),
       }))
     );
     const selectedTemplate = ref(
@@ -215,81 +217,12 @@ export default {
 
         const properties = selectedTemplate.value.properties;
 
-        for (const property of properties) {
-          const propertyErrors = [];
-
-          const inputType = property.property.inputType;
-          const dataType = property.property.dataType;
-          const symbolicName = property.property.symbolic_name;
-          const value = source.value.data[property.property.symbolic_name];
-          const propertyName = property.property.name.toLowerCase();
-
-          let propertyCopy = value;
-
-          if (inputType === "select") {
-            // if the property has a value, get it and re-assign the property as a string
-            if (Object.keys(value).length) {
-              propertyCopy = value.key;
-            } else {
-              propertyCopy = "";
-            }
-          }
-
-          if (property.required) {
-            if (!propertyCopy)
-              propertyErrors.push(`The ${propertyName} field is required.`);
-          }
-
-          switch (dataType.toLowerCase()) {
-            case "text":
-              if (typeof propertyCopy !== "string")
-                propertyErrors.push(
-                  `The ${propertyName} field must be a string.`
-                );
-              break;
-            case "string":
-              if (typeof propertyCopy !== "string")
-                propertyErrors.push(
-                  `The ${propertyName} field must be a string.`
-                );
-              break;
-            case "number":
-              if (isNaN(propertyCopy))
-                propertyErrors.push(
-                  `The ${propertyName} field must be numeric.`
-                );
-              break;
-            case "float":
-              if (Number.isInteger(propertyCopy))
-                propertyErrors.push(`The ${propertyName} field must be float.`);
-              break;
-            case "datetime":
-              break;
-
-            default:
-              break;
-          }
-
-          if (propertyErrors.length)
-            errors.value[`source.data.${symbolicName}`] = propertyErrors;
-        }
+        validateProperies(source.value, properties, errors.value);
 
         if (!Object.keys(errors.value).length) ctx.emit("completed");
         else ctx.emit("incompleted");
       }
     );
-
-    const properties = computed(() => {
-      const properties = [];
-
-      Object.assign(properties, selectedTemplate.value.properties);
-
-      properties.sort((a, b) =>
-        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
-      );
-
-      return properties;
-    });
 
     return {
       source,
@@ -298,7 +231,6 @@ export default {
       selectedTemplate,
       locations,
       selectedLocation,
-      properties,
     };
   },
 };
