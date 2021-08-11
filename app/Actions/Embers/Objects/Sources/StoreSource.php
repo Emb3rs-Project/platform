@@ -5,17 +5,13 @@ namespace App\Actions\Embers\Objects\Sources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
-use App\Helpers\Nova\Action\DispatchCustomAction;
 use App\Models\Instance;
 use App\Models\Location;
-use App\Nova\Actions\InstanceProcessing;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Nova\Fields\ActionFields;
 
 class StoreSource implements StoresSources
 {
@@ -49,19 +45,15 @@ class StoreSource implements StoresSources
     {
         $validator = Validator::make($input, [
             'source' => ['required', 'array:data'],
-            // equipments
-            'equipments' => ['present', 'array'],
-            'equipments.*.id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            'equipments.*.category_id' => ['required', 'integer', 'numeric', 'exists:categories,id'],
-            'equipments.*.data' => ['required', 'array'],
-            // processes
+            'equipment' => ['present', 'array'],
+            'equipment.*.id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            'equipment.*.category_id' => ['required', 'integer', 'numeric', 'exists:categories,id'],
+            'equipment.*.data' => ['required', 'array'],
             'processes' => ['present', 'array'],
-            'processes.*.key' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            'processes.*.parent' => ['required', 'integer', 'numeric', 'exists:categories,id'],
+            'processes.*.id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
+            'processes.*.category_id' => ['required', 'integer', 'numeric', 'exists:categories,id'],
             'processes.*.data' => ['required', 'array'],
-            // template
             'template_id' => ['required', 'integer', 'numeric', 'exists:templates,id'],
-            // location
             'location_id' => [
                 Rule::requiredIf(function () use ($input) {
                     return !Arr::has($input, 'location') || Arr::get($input, 'location') === null;
@@ -88,10 +80,6 @@ class StoreSource implements StoresSources
 
         $this->checkIfPropertiesAreValid($validated);
 
-        $this->checkIfEquipmentPropertiesAreValid($validated);
-
-        $this->checkIfProcessPropertiesAreValid($validated);
-
         return $validated;
     }
 
@@ -107,14 +95,14 @@ class StoreSource implements StoresSources
         $newInstance = [
             'name' => Arr::get($validated, 'source.data.name') ?? 'Not Defined',
             'values' => Arr::get($validated, 'source.data'),
-            'equipments' => Arr::get($validated, 'equipments'),
+            'equipment' => Arr::get($validated, 'equipments'),
             'processes' => Arr::get($validated, 'processes'),
             'template_id' => Arr::get($validated, 'template_id'),
             'location_id' => Arr::get($validated, 'location_id')
         ];
 
         if (!is_null(Arr::get($validated, 'location'))) {
-            // A new location was selected to be used for this Sink
+            // A new location was selected to be used for this Source
             $location = Location::create([
                 'name' => Arr::get($newInstance, 'name'),
                 'type' => 'point',
@@ -147,6 +135,6 @@ class StoreSource implements StoresSources
         //     $user_id
         // );
 
-        // return $instance;
+        return $instance;
     }
 }

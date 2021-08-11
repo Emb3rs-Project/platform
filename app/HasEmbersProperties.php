@@ -56,7 +56,6 @@ trait HasEmbersProperties
             }
 
             $type = '';
-
             switch (Str::lower($property->dataType)) {
                 case 'text': // THIS IS FOR LEAGACY SUPPORT FOR THE EXISTING RECORDS
                     $type = 'string';
@@ -95,7 +94,29 @@ trait HasEmbersProperties
     }
 
     /**
-     * Check if the provided Properties are valid.
+     * Check if the provided properties are valid.
+     *
+     * @param  array  $validated
+     * @param  int|null  $templateId
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function checkIfPropertiesAreValid(array $validated, ?int $templateId = null): void
+    {
+        $errors = new Collection();
+
+        $this->checkIfInstancePropertiesAreValid($validated, $templateId, $errors);
+
+        $this->checkIfAttachedTemplatePropertiesAreValid('equipment', $validated, $errors);
+
+        $this->checkIfAttachedTemplatePropertiesAreValid('processes', $validated, $errors);
+
+        if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());
+    }
+
+    /**
+     * Check if the provided instance properties are valid.
      *
      * @param  array  $validated
      * @param  int  $templateId
@@ -103,10 +124,8 @@ trait HasEmbersProperties
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfPropertiesAreValid(array $validated, int $templateId = null): void
+    protected function checkIfInstancePropertiesAreValid(array $validated, ?int $templateId, Collection &$errors): void
     {
-        $errors = new Collection();
-
         $instanceType = $this->getInstanceType($validated);
 
         $properties = Arr::get($validated, "$instanceType.data");
@@ -117,72 +136,57 @@ trait HasEmbersProperties
 
         $templateProperties = Template::find($templateId)->templateProperties;
 
-        if ($template->category->type !== $instanceType)
+        if ($template->category->type !== $instanceType) {
             $errors->put('template_id', 'Property template_id is not a valid template.');
+        }
 
-        $this->validateProperties($instanceType, null, $properties, $templateProperties, $errors);
-
-        if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());
+        $this->validateProperties($instanceType, $index = null, $properties, $templateProperties, $errors);
     }
 
     /**
-     * Check if the provided Properties belong to the provided Template
+     * Check if the provided properties belong to their provided templates. Also
+     * check if the provided templates are valid.
      *
      * @param  array  $validated
      * @return void
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfEquipmentPropertiesAreValid(array $validated): void
+    protected function checkIfAttachedTemplatePropertiesAreValid(string $entity, array $validated, Collection &$errors): void
     {
-        $equipments = Arr::get($validated, 'equipments');
+        $entityNameInPlural = Str::plural($entity);
+        $entityNameInSingular = Str::singular($entity);
 
-        if (!Arr::accessible($equipments)) return;
+        $templates = Arr::get($validated, $entityNameInPlural);
 
-        $errors = new Collection();
+        if (!Arr::accessible($templates)) return;
 
-        foreach ($equipments as $index => $equipment) {
+        foreach ($templates as $index => $template) {
             $instanceType = $this->getInstanceType($validated);
 
-            $templateId = Arr::get($equipment, 'id');
+            $templateId = Arr::get($template, 'id');
 
-            $template = Template::find($templateId);
+            $dbTemplate = Template::find($templateId);
 
-            $categoryId = Arr::get($equipment, 'category_id');
+            $categoryId = Arr::get($template, 'category_id');
 
-            $properties = Arr::get($equipment, 'data');
+            $properties = Arr::get($template, 'data');
 
             $templateProperties = Template::find($templateId)->templateProperties;
 
-            if ($template->category->type !== 'equipment')
+            if ($dbTemplate->category->type !== $entityNameInSingular)
                 $errors->put(
-                    "$instanceType.equipments.$index.id",
-                    "Property $instanceType.equipments.$index.id is not a valid template."
+                    "$entityNameInPlural.$index.id",
+                    "Property id is not a valid template."
                 );
 
-            if ($template->category->id !== $categoryId)
+            if ($dbTemplate->category->id !== $categoryId)
                 $errors->put(
-                    "$instanceType.equipments.$index.category_id",
-                    "Property $instanceType.equipments.$index.category_id is not valid."
+                    "$entityNameInPlural.$index.category_id",
+                    "Property category_id is not valid."
                 );
 
-            $this->validateProperties("$instanceType.equipments", $index, $properties, $templateProperties, $errors);
+            $this->validateProperties($entityNameInPlural, $index, $properties, $templateProperties, $errors);
         }
-
-        if ($errors->isNotEmpty()) throw ValidationException::withMessages($errors->all());
-    }
-
-    /**
-     * Check if the provided Properties belong to the provided Template
-     *
-     * @param  array  $validated
-     * @param  int  $templateId
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function checkIfProcessPropertiesAreValid(array $validated, ?int $templateId = null): void
-    {
-        //
     }
 }
