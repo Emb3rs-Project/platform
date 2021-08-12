@@ -44,10 +44,16 @@ export const validateProperies = (parent, properties, errors) => {
           );
         break;
       case "float":
-        if (Number.isInteger(propertyCopy))
+        if (isNaN(propertyCopy))
+          propertyErrors.push(
+            `The ${propertyName} field must be numeric.`
+          );
+
+        if (Number.isInteger(+propertyCopy))
           propertyErrors.push(`The ${propertyName} field must be float.`);
         break;
       case "datetime":
+        // TODO: validate the datetime
         break;
 
       default:

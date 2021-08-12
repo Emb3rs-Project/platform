@@ -47,7 +47,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: "Input...",
+      default: "",
     },
     label: {
       type: String,
@@ -73,19 +73,14 @@ export default {
 
   emits: ["update:modelValue"],
 
-  setup(props, { emit }) {
-    const input = ref(null);
-
+  setup(props, ctx) {
     const value = computed({
       get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
+      set: (value) => ctx.emit("update:modelValue", value),
     });
-
-    const focus = () => input.value.focus();
 
     return {
       value,
-      focus,
     };
   },
 };

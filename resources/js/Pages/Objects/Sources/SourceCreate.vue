@@ -328,7 +328,7 @@ export default {
               deepCopyOfFormData.location = location.value.key;
             else deepCopyOfFormData.location_id = location.value.key;
           }
-          console.dir(deepCopyOfFormData);
+
           return deepCopyOfFormData;
         })
         .post(route("objects.sources.store"), {

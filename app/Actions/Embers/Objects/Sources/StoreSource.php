@@ -92,19 +92,21 @@ class StoreSource implements StoresSources
      */
     protected function save($user, array $validated)
     {
-        $newInstance = [
+        $instance = new Instance([
             'name' => Arr::get($validated, 'source.data.name') ?? 'Not Defined',
-            'values' => Arr::get($validated, 'source.data'),
-            'equipment' => Arr::get($validated, 'equipments'),
-            'processes' => Arr::get($validated, 'processes'),
+            'values' => [
+                'properties' => Arr::get($validated, 'source.data'),
+                'equipment' => Arr::get($validated, 'equipment'),
+                'processes' => Arr::get($validated, 'processes'),
+            ],
             'template_id' => Arr::get($validated, 'template_id'),
             'location_id' => Arr::get($validated, 'location_id')
-        ];
+        ]);
 
+        // A new location was selected to be used for this Source
         if (!is_null(Arr::get($validated, 'location'))) {
-            // A new location was selected to be used for this Source
             $location = Location::create([
-                'name' => Arr::get($newInstance, 'name'),
+                'name' => $instance->name,
                 'type' => 'point',
                 'data' => [
                     "center" => [
@@ -114,10 +116,10 @@ class StoreSource implements StoresSources
                 ]
             ]);
 
-            Arr::set($newInstance, 'location_id', $location->id);
+            $instance->location_id = $location->id;
         }
 
-        $instance = Instance::create($newInstance);
+        $instance->saveOrFail();
         $instance->teams()->attach($user->currentTeam);
 
         return $instance;

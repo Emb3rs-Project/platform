@@ -46,7 +46,6 @@
         <TextInput
           v-model="source.data[property.property.symbolic_name]"
           :unit="property.unit.symbol"
-          :placeholder="property.property.name"
           :description="property.property.description"
           :required="property.required"
           :label="property.property.name"
@@ -118,8 +117,10 @@ export default {
   setup(props, ctx) {
     const store = useStore();
 
+    const storeSource = computed(() => store.getters["source/source"]);
+
     // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
-    const source = ref(window._.cloneDeep(store.state.source.source));
+    const source = ref(window._.cloneDeep(storeSource.value));
 
     const errors = ref({});
 
@@ -172,7 +173,7 @@ export default {
     watch(
       selectedTemplate,
       (selectedTemplate) => {
-        source.value.data = {};
+        if (!selectedTemplate.properties.length) source.value.data = {};
 
         if (!Object.keys(source.value.data).length) {
           const properties = selectedTemplate.properties;

@@ -56,9 +56,8 @@
                     <div v-if="property.property.inputType === 'text'">
                       <TextInput
                         v-model="equip.data[property.property.symbolic_name]"
-                        :unit="property.unit.symbol"
-                        :placeholder="property.property.name"
                         :label="property.property.name"
+                        :unit="property.unit.symbol"
                         :description="property.property.description"
                         :required="property.required"
                       />
@@ -95,6 +94,7 @@
         </div>
       </div>
     </div>
+    <pre>{{equip.data}}</pre>
   </div>
 
   <AddEquipmentModal
@@ -161,7 +161,7 @@ export default {
 
     const addEquipmentModalIsVisible = ref(false);
 
-    const propEquipment = props.equipment.map((e) => ({
+    const propsEquipment = props.equipment.map((e) => ({
       key: e.id,
       value: e.name,
       parent: e.category_id,
@@ -174,7 +174,7 @@ export default {
     const equipment = ref(
       storeEquipment.value.length
         ? window._.cloneDeep(storeEquipment.value)
-        : propEquipment
+        : propsEquipment
     );
 
     const commitEquipment = window._.debounce(
