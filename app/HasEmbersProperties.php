@@ -55,35 +55,21 @@ trait HasEmbersProperties
                 continue;
             }
 
-            $type = '';
-            switch (Str::lower($property->dataType)) {
-                case 'text': // THIS IS FOR LEAGACY SUPPORT FOR THE EXISTING RECORDS
-                    $type = 'string';
-                    break;
-                case 'string':
-                    $type = 'string';
-                    break;
-                case 'number':
-                    $type = 'numeric';
-                    break;
-                case 'float':
-                    $type = 'numeric';
-                    break;
-                case 'datetime':
-                    $type = 'date_format:d/m/Y';
-                    break;
-
-                default:
-                    break;
-            }
-
             $validator = Validator::make([$field => $value], [
                 "$field" => [
                     Rule::requiredIf(fn () => $templateProperty->required),
-                    $type,
                     'nullable'
                 ]
             ]);
+
+            match (Str::lower($property->dataType)) {
+                'text' => $validator->addRules(["$field" => ['string']]),
+                'string' => $validator->addRules(["$field" => ['string']]),
+                'number' => $validator->addRules(["$field" => ['numeric', 'integer']]),
+                'float' => $validator->addRules(["$field" => ['numeric']]),
+                'datetime' => $validator->addRules(["$field" => ['date_format:d/m/Y']]),
+                default => abort(500, "DataType of property $property->name is not configured correctly."),
+            };
 
             if ($validator->fails()) {
                 $messages = $validator->errors()->all();
