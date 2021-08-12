@@ -120,21 +120,6 @@ class StoreSource implements StoresSources
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
-
-        // /**
-        //  * STUFF
-        //  */
-        // $action = new InstanceProcessing();
-        // $user_id = $user->id;
-
-
-        // DispatchCustomAction::dispatchAction(
-        //     $action,
-        //     new ActionFields(new Collection(), new Collection()),
-        //     [$instance],
-        //     $user_id
-        // );
-
         return $instance;
     }
 }
