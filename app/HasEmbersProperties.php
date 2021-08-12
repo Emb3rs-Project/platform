@@ -148,8 +148,6 @@ trait HasEmbersProperties
         if (!Arr::accessible($templates)) return;
 
         foreach ($templates as $index => $template) {
-            $instanceType = $this->getInstanceType($validated);
-
             $templateId = Arr::get($template, 'id');
 
             $dbTemplate = Template::find($templateId);

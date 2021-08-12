@@ -91,35 +91,30 @@ import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import SiteHead from "@/Components/SiteHead.vue";
-import SlideOver from "../../../Components/SlideOver.vue";
-import SourceCreateStep1 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep1.vue";
-import SourceCreateStep2 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep2.vue";
-import SourceCreateStep3 from "@/Pages/Objects/Sources/SourceCreateWizard/SourceCreateStep3.vue";
-
-import InfoAlert from "../../../Components/Alerts/InfoAlert.vue";
-import PrimaryButton from "../../../Components/PrimaryButton.vue";
-import SecondaryButton from "../../../Components/SecondaryButton.vue";
-import SecondaryOutlinedButton from "../../../Components/SecondaryOutlinedButton.vue";
-import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import SlideOver from "@/Components/SlideOver.vue";
 import Steps from "@/Components/Wizards/Steps.vue";
-
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import InfoAlert from "@/Components/Alerts/InfoAlert.vue";
+import SourceCreateStep1 from "./SourceCreateWizard/SourceCreateStep1.vue";
+import SourceCreateStep2 from "./SourceCreateWizard/SourceCreateStep2.vue";
+import SourceCreateStep3 from "./SourceCreateWizard/SourceCreateStep3.vue";
+import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 export default {
   components: {
     SiteHead,
     SlideOver,
+    Steps,
+    InfoAlert,
     SourceCreateStep1,
     SourceCreateStep2,
     SourceCreateStep3,
-    InfoAlert,
     BulletSteps,
-    ChevronLeftIcon,
-    ChevronRightIcon,
     SecondaryOutlinedButton,
     SecondaryButton,
     PrimaryButton,
-    Steps,
   },
 
   props: {
