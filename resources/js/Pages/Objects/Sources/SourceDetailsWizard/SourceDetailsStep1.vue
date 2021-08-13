@@ -145,6 +145,7 @@ export default {
             properties.push({
               key: templateProperty["property"].name,
               value: value,
+              symbolicName: templateProperty["property"].symbolic_name,
               order: templateProperty["order"],
             });
 
