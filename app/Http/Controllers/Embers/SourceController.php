@@ -82,19 +82,17 @@ class SourceController extends Controller
     public function show(Request $request, $id)
     {
         [
-            $templates,
-            $equipment,
-            $locations,
-            $instance
+            $instance,
+            $equipmentTemplates,
+            $processesTemplates
         ] = app(ShowsSources::class)->show($request->user(), $id);
 
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
-                "templates" => $templates,
-                "equipment" => $equipment,
-                "locations" => $locations,
-                "instance" => $instance
+                "instance" => $instance,
+                "equipment" => $equipmentTemplates,
+                "processes" => $processesTemplates
             ]
         ];
     }

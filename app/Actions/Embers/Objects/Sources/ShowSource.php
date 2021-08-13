@@ -4,10 +4,9 @@ namespace App\Actions\Embers\Objects\Sources;
 
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\EmbersPermissionable;
-use App\Models\Category;
 use App\Models\Instance;
-use App\Models\Location;
 use App\Models\Template;
+use Illuminate\Support\Arr;
 
 class ShowSource implements ShowsSources
 {
@@ -24,35 +23,37 @@ class ShowSource implements ShowsSources
     {
         $this->authorize($user);
 
-        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        $source = Instance::with([
+            'template',
+            'template.templateProperties.property',
+            'template.templateProperties.unit',
+            'location'
+        ])->findOrFail($id);
 
-        $sourceCategories = Category::whereType('source')->get('id');
+        $equipment = Arr::get($source->values, 'equipment') ?? [];
 
-        $equipmentCategories = Category::whereType('equipment')->get('id');
+        $processes = Arr::get($source->values, 'processes') ?? [];
 
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        $equipmentTemplates = Template::whereIn('id', Arr::pluck($equipment, 'id'))
             ->with([
                 'templateProperties',
+                'templateProperties.property',
                 'templateProperties.unit',
-                'templateProperties.property'
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories)
+        $processesTemplates = Template::whereIn('id', Arr::pluck($processes, 'id'))
             ->with([
                 'templateProperties',
+                'templateProperties.property',
                 'templateProperties.unit',
-                'templateProperties.property'
             ])
             ->get();
-
-        $locations = Location::all();
 
         return [
-            $sourceTemplates,
+            $source,
             $equipmentTemplates,
-            $locations,
-            $source
+            $processesTemplates
         ];
     }
 }

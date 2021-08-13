@@ -1,7 +1,11 @@
 <template>
-  <h1 class="px-4 py-3 font-bold">Properties :</h1>
-  <!-- Source ID -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+    <div class="block text-base font-medium text-gray-900 sm:pt-1">
+      <p>Information</p>
+    </div>
+  </div>
+  <!-- Sink ID -->
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         ID
@@ -14,8 +18,8 @@
     </div>
   </div>
 
-  <!-- Source Name -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
+  <!-- Sink Name -->
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Name
@@ -28,8 +32,8 @@
     </div>
   </div>
 
-  <!-- Source Template -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
+  <!-- Sink Template -->
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
         Template
@@ -42,14 +46,11 @@
     </div>
   </div>
 
-  <!-- Source Location Name -->
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]"
-    v-if="instance.location_id"
-  >
+  <!-- Sink Location Name -->
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        Location's Name
+        Location
       </label>
     </div>
     <div class="sm:col-span-2">
@@ -59,93 +60,55 @@
     </div>
   </div>
 
-  <h1 class="px-4 py-3 font-bold">Calculated :</h1>
-
-  <!-- Source Template -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
+  <!-- Sink Location Description -->
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
     <div>
       <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        Excess Heat Fluid
+        Location Description
       </label>
     </div>
     <div class="sm:col-span-2">
       <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{ instance.values?.script?.excess_heat_fluid ?? "Not Yet Calculated" }}
+        {{ instance.location.description ?? "Not available."}}
       </div>
     </div>
   </div>
 
-  <!-- Source Template -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
-    <div>
-      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        Excess Heat Supply Temperature (ºc)
-      </label>
-    </div>
-    <div class="sm:col-span-2">
-      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{
-          instance.values?.script?.excess_heat_supply_temperature ??
-          "Not Yet Calculated"
-        }}
+  <!-- Source Properties -->
+  <div
+    v-if="Object.keys(instance.values).length"
+    class="divide-y"
+  >
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+      <div class="block text-base font-medium text-gray-900 sm:pt-1">
+        <p>Properties</p>
       </div>
     </div>
-  </div>
-
-  <!-- Source Template -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
-    <div>
-      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        Excess Heat Flowrate (kg/h)
-      </label>
-    </div>
-    <div class="sm:col-span-2">
-      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{
-          instance.values?.script?.excess_heat_flowrate ?? "Not Yet Calculated"
-        }}
+    <div
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+      v-for="property in properties"
+      :key="property"
+    >
+      <div class="sm:col-span-1">
+        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+          {{ property.key }}
+        </label>
       </div>
-    </div>
-  </div>
-
-  <!-- Source Template -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-2 border-b-[1px]">
-    <div>
-      <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-        Excess Heat Capacity (kW)
-      </label>
-    </div>
-    <div class="sm:col-span-2">
-      <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-        {{
-          instance.values?.script?.excess_heat_capacity ?? "Not Yet Calculated"
-        }}
+      <div class="sm:col-span-2">
+        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+          {{ property.value }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed } from "vue";
-import { useStore } from "vuex";
+import { ref } from "vue";
 
-import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/SlideOver.vue";
-import SelectMenu from "@/Components/Forms/SelectMenu.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import { sortProperties } from "../helpers/sort-properties";
 
 export default {
-  components: {
-    AppLayout,
-    SlideOver,
-    SelectMenu,
-    TextInput,
-    PrimaryButton,
-    SecondaryOutlinedButton,
-  },
-
   props: {
     instance: {
       type: Object,
@@ -153,11 +116,51 @@ export default {
     },
   },
 
-  setup() {
-    return {};
+  setup(props) {
+    const properties = ref([]);
+
+    const matchPropertiesToTemplateProperties = () => {
+      const properties = [];
+
+      const instanceProperties = props.instance.values.properties;
+      const templateProperties = props.instance.template.template_properties;
+
+      for (const instanceProperty in instanceProperties) {
+        for (const templateProperty of templateProperties) {
+          if (templateProperty["property"].symbolic_name === instanceProperty) {
+            let value = instanceProperties[instanceProperty];
+
+            if (templateProperty["property"].inputType === "select") {
+              const options = templateProperty["property"].data.options;
+
+              for (const option in options) {
+                if (options[option].key === value) {
+                  value = options[option].value;
+
+                  break;
+                }
+              }
+            }
+
+            properties.push({
+              key: templateProperty["property"].name,
+              value: value,
+              order: templateProperty["order"],
+            });
+
+            break;
+          }
+        }
+      }
+
+      return sortProperties(properties);
+    };
+
+    properties.value = matchPropertiesToTemplateProperties();
+
+    return {
+      properties,
+    };
   },
 };
 </script>
-
-<style>
-</style>

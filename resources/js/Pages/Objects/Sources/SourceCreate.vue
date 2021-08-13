@@ -182,7 +182,7 @@ export default {
       },
       {
         id: "Step 2",
-        name: "Equipments",
+        name: "Equipment",
         status: mapStepStatus(2),
       },
       {

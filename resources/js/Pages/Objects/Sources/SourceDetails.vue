@@ -23,11 +23,13 @@
     <SourceDetailsStep2
       v-if="currentStep === 2"
       :instance="instance"
+      :equipment="equipment"
     />
 
     <SourceDetailsStep3
       v-if="currentStep === 3"
       :instance="instance"
+      :processes="processes"
     />
 
     <template #actions>
@@ -40,7 +42,7 @@
             :disabled="currentStep === 1"
           >
             <ChevronLeftIcon
-              class="w-6 h-6"
+              class="h-6 w-auto"
               aria-hidden="true"
             />
             Previous
@@ -54,7 +56,7 @@
           >
             Next
             <ChevronRightIcon
-              class="w-6 h-6"
+              class="h-6 w-auto"
               aria-hidden="true"
             />
           </PrimaryButton>
@@ -117,6 +119,14 @@ export default {
       type: Object,
       required: true,
     },
+    equipment: {
+      type: Array,
+      required: true,
+    },
+    processes: {
+      type: Array,
+      required: true,
+    },
   },
 
   setup() {
@@ -136,18 +146,18 @@ export default {
 
     const steps = computed(() => [
       {
-        id: "Step 1",
-        name: "Properties",
+        id: "Properties",
+        name: "Information & Properties",
         status: mapStepStatus(1), // status: current | complete | upcoming
       },
       {
-        id: "Step 2",
-        name: "Equipments",
+        id: "Equipment",
+        name: "Equipment Information",
         status: mapStepStatus(2),
       },
       {
-        id: "Step 3",
-        name: "Processes",
+        id: "Processes",
+        name: "Processes Information",
         status: mapStepStatus(3),
       },
     ]);

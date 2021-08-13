@@ -134,6 +134,10 @@ export default {
       type: Object,
       required: true,
     },
+    equipment: {
+      type: Array,
+      required: true,
+    },
   },
 
   setup(props) {
