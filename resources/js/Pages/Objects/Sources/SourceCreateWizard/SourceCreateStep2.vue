@@ -94,7 +94,6 @@
         </div>
       </div>
     </div>
-    <pre>{{equip.data}}</pre>
   </div>
 
   <AddEquipmentModal

@@ -121,7 +121,7 @@ class SourceController extends Controller
             "props" => [
                 "templates" => $templates,
                 "equipment" => $equipment,
-                "equipmentsCategorie" => $equipmentCategories,
+                "equipmentCategories" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
                 "locations" => $locations,

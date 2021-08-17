@@ -1,5 +1,3 @@
-import { concatStatic } from "../../../../node_modules/rxjs/operator/concat";
-
 const _state = () => ({
   unreadNotificationCount: 0,
   notificationInterval: null
@@ -65,7 +63,6 @@ const mutations = {
   },
 
 };
-
 
 export default {
   namespaced: true,

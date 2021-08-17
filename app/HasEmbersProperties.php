@@ -66,7 +66,7 @@ trait HasEmbersProperties
                 'text' => $validator->addRules(["$field" => ['string']]),
                 'string' => $validator->addRules(["$field" => ['string']]),
                 'number' => $validator->addRules(["$field" => ['numeric', 'integer']]),
-                'float' => $validator->addRules(["$field" => ['numeric']]),
+                'float' => $validator->addRules(["$field" => ['numeric', 'integer']]),
                 'datetime' => $validator->addRules(["$field" => ['date_format:d/m/Y']]),
                 default => abort(500, "DataType of property $property->name is not configured correctly."),
             };

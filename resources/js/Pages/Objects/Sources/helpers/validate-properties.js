@@ -48,9 +48,6 @@ export const validateProperies = (parent, properties, errors) => {
           propertyErrors.push(
             `The ${propertyName} field must be numeric.`
           );
-
-        if (Number.isInteger(+propertyCopy))
-          propertyErrors.push(`The ${propertyName} field must be float.`);
         break;
       case "datetime":
         // TODO: validate the datetime
@@ -63,6 +60,4 @@ export const validateProperies = (parent, properties, errors) => {
     if (propertyErrors.length)
       errors[`${parent}.${symbolicName}`] = propertyErrors;
   }
-
-  // return errors;
 };

@@ -73,7 +73,7 @@
 
       <PrimaryButton
         type="button"
-        @click="onRouteRequest('objects.sinks.edit', instance.id)"
+        @click="onRouteRequest('objects.sources.edit', instance.id)"
       >
         Edit
       </PrimaryButton>

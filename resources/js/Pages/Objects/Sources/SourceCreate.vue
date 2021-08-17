@@ -4,7 +4,7 @@
   <SlideOver
     title="New Source"
     subtitle="Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
-    headerBackground="bg-green-700"
+    headerBackground="bg-red-700"
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
@@ -80,7 +80,6 @@
           Save
         </span>
       </PrimaryButton>
-
     </template>
   </SlideOver>
 </template>
@@ -146,6 +145,7 @@ export default {
 
   setup() {
     const store = useStore();
+
     const currentStep = ref(1);
     const nextStepRequest = ref(false);
     const incompleteStepAlert = ref(false);
