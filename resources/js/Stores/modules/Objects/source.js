@@ -29,10 +29,40 @@ const getters = {
 };
 
 // https://next.vuex.vuejs.org/api/#actions
-const actions = {};
+const actions = {
+  reset(ctx) {
+    ctx.commit('setTemplate', {
+      template: null
+    });
+
+    ctx.commit('setLocation', {
+      location: null
+    });
+
+    ctx.commit('setSourceData', {
+      data: {}
+    });
+
+    ctx.commit('setEquipment', {
+      equipment: []
+    });
+
+    ctx.commit('setProcesses', {
+      processes: []
+    });
+  }
+};
 
 // https://next.vuex.vuejs.org/api/#mutations
 const mutations = {
+  setTemplate(state, payload) {
+    state.template = payload.template;
+  },
+
+  setLocation(state, payload) {
+    state.location = payload.location
+  },
+
   setSourceData(state, payload) {
     state.source.data = payload.data;
   },
@@ -43,14 +73,6 @@ const mutations = {
 
   setProcesses(state, payload) {
     state.processes = payload.processes;
-  },
-
-  setTemplate(state, payload) {
-    state.template = payload.template;
-  },
-
-  setLocation(state, payload) {
-    state.location = payload.location
   }
 };
 
