@@ -21,7 +21,7 @@
       </div>
     </template>
 
-    <!-- <SourceEditStep1
+    <SourceEditStep1
       v-if="currentStep === 1"
       :instance="instance"
       :templates="templates"
@@ -41,7 +41,7 @@
       @incompleted="onIncompleted"
     />
 
-    <SourceEditStep3
+    <!-- <SourceEditStep3
       v-if="currentStep === 3"
       :instance="instance"
       :processesCategories="processesCategories"
@@ -119,23 +119,11 @@ export default {
   },
 
   props: {
+    instance: {
+      type: Object,
+      required: true,
+    },
     templates: {
-      type: Array,
-      required: true,
-    },
-    equipmentCategories: {
-      type: Array,
-      required: true,
-    },
-    equipment: {
-      type: Array,
-      required: true,
-    },
-    processesCategories: {
-      type: Array,
-      required: true,
-    },
-    processes: {
       type: Array,
       required: true,
     },
@@ -143,15 +131,31 @@ export default {
       type: Array,
       required: true,
     },
-    instance: {
-      type: Object,
+    equipment: {
+      type: Array,
+      required: true,
+    },
+    equipmentCategories: {
+      type: Array,
+      required: true,
+    },
+    processes: {
+      type: Array,
+      required: true,
+    },
+    processesCategories: {
+      type: Array,
       required: true,
     },
   },
 
   setup(props) {
-    console.log("yiiiiiiiiiies");
     const store = useStore();
+
+    // Clean the source store so we can cache only
+    // current wizard's fields for its lifetime
+
+    store.dispatch("source/reset");
 
     const currentStep = ref(1);
     const nextStepRequest = ref(false);
