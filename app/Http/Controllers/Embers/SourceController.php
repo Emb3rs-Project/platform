@@ -107,25 +107,25 @@ class SourceController extends Controller
     public function edit(Request $request, $id)
     {
         [
+            $instance,
             $templates,
+            $locations,
             $equipment,
             $equipmentCategories,
             $processes,
             $processesCategories,
-            $locations,
-            $instance
         ] = app(EditsSources::class)->edit($request->user(), $id);
 
         return [
             "slideOver" => "Objects/Sources/SourceEdit",
             "props" => [
+                "instance" => $instance,
                 "templates" => $templates,
+                "locations" => $locations,
                 "equipment" => $equipment,
                 "equipmentCategories" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
-                "locations" => $locations,
-                "instance" => $instance
             ]
         ];
     }
