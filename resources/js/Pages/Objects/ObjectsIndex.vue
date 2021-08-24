@@ -170,8 +170,6 @@ export default {
     const currentModal = ref(null);
     const itemToDelete = ref(null);
 
-    onBeforeUnmount(() => console.log("thTHE GATES ARE CLOSING"));
-
     const modalComponent = computed(() =>
       currentModal.value ? currentModal.value : false
     );

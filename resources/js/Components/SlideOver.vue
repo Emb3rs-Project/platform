@@ -131,14 +131,11 @@ export default {
     };
 
     onMounted(() => {
-      console.log(store.state.objects.currentRoute);
-      console.log("SLIDEOVER COMPONENT::Mounted");
       props.autoOpen ? store.commit("objects/openSlide") : null;
 
       document.addEventListener("keydown", closeOnEscape);
     });
     onUnmounted(() => {
-      console.log("SLIDEOVER COMPONENT::Unmounted");
       document.removeEventListener("keydown", closeOnEscape);
     });
 

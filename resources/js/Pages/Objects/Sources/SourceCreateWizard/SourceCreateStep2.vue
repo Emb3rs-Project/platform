@@ -1,5 +1,5 @@
 <template>
-  <!-- Equipments -->
+  <!-- Equipment -->
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"

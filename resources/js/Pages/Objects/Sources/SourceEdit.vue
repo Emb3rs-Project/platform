@@ -41,7 +41,7 @@
       @incompleted="onIncompleted"
     />
 
-    <!-- <SourceEditStep3
+    <SourceEditStep3
       v-if="currentStep === 3"
       :instance="instance"
       :processesCategories="processesCategories"
@@ -49,7 +49,7 @@
       :nextStepRequest="nextStepRequest"
       @completed="onCompleted"
       @incompleted="onIncompleted"
-    /> -->
+    />
 
     <template #actions>
       <div class="flex justify-start w-full">
