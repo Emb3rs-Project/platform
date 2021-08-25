@@ -18,13 +18,14 @@
     <div class="mt-1 relative rounded-md shadow-sm">
       <input
         v-model="value"
-        type="text"
+        :type="type"
         :name="value"
         :placeholder="placeholder"
-        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+        class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
         :class="{'disabled:opacity-70 cursor-not-allowed' : disabled}"
         :disabled="disabled"
         aria-describedby="input-required"
+        :ref="input"
       />
       <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
         <span class="text-gray-500 sm:text-sm">
@@ -44,6 +45,10 @@ export default {
     modelValue: {
       type: String,
       default: "",
+    },
+    type: {
+      type: String,
+      default: "text",
     },
     placeholder: {
       type: String,
@@ -74,13 +79,21 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, ctx) {
+    const input = ref(null);
+
     const value = computed({
       get: () => props.modelValue,
       set: (value) => ctx.emit("update:modelValue", value),
     });
 
+    const focus = () => {
+      if (input.value) input.value.focus();
+    };
+
     return {
       value,
+      input,
+      focus,
     };
   },
 };
