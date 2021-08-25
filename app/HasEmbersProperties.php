@@ -14,72 +14,6 @@ use Illuminate\Validation\ValidationException;
 trait HasEmbersProperties
 {
     /**
-     * Determine the Instance type of the calling class
-     *
-     * @param  array  $validated
-     * @return string
-     */
-    private function getInstanceType(array $validated): string
-    {
-        return Arr::has($validated, 'sink') ? 'sink' : 'source';
-    }
-
-    /**
-     * Validate the properties
-     *
-     * @param  string $instanceType
-     * @param  int|null  $index
-     * @param  array  $properties
-     * @param  \Illuminate\Database\Eloquent\Collection<mixed, \App\Models\TemplateProperty>  $templateProperties
-     * @param  \Illuminate\Support\Collection  $errors
-     * @return \Illuminate\Support\Collection
-     */
-    private function validateProperties(string $instanceType, ?int $index, array $properties, $templateProperties, Collection &$errors)
-    {
-        foreach ($properties as $field => $value) {
-            $key = !is_null($index) ? "$instanceType.$index.data.$field" : "$instanceType.data.$field";
-
-            $property = Property::whereSymbolicName($field)->first();
-
-            if (is_null($property)) {
-                $errors->put($key, "Property $field does not exist.");
-
-                continue;
-            }
-
-            $templateProperty = $templateProperties->firstWhere('property_id', $property->id);
-
-            if (is_null($templateProperty)) {
-                $errors->put($key, "Property $field does not belong to this template.");
-
-                continue;
-            }
-
-            $validator = Validator::make([$field => $value], [
-                "$field" => [
-                    Rule::requiredIf(fn () => $templateProperty->required),
-                    'nullable'
-                ]
-            ]);
-
-            match (Str::lower($property->dataType)) {
-                'text' => $validator->addRules(["$field" => ['string']]),
-                'string' => $validator->addRules(["$field" => ['string']]),
-                'number' => $validator->addRules(["$field" => ['numeric', 'integer']]),
-                'float' => $validator->addRules(["$field" => ['numeric', 'integer']]),
-                'datetime' => $validator->addRules(["$field" => ['date_format:d/m/Y']]),
-                default => abort(500, "DataType of property $property->name is not configured correctly."),
-            };
-
-            if ($validator->fails()) {
-                $messages = $validator->errors()->all();
-
-                $errors->put($key, Arr::flatten($messages));
-            }
-        }
-    }
-
-    /**
      * Check if the provided properties are valid.
      *
      * @param  array  $validated
@@ -171,6 +105,72 @@ trait HasEmbersProperties
                 );
 
             $this->validateProperties($entityNameInPlural, $index, $properties, $templateProperties, $errors);
+        }
+    }
+
+    /**
+     * Determine the Instance type of the calling class
+     *
+     * @param  array  $validated
+     * @return string
+     */
+    private function getInstanceType(array $validated): string
+    {
+        return Arr::has($validated, 'sink') ? 'sink' : 'source';
+    }
+
+    /**
+     * Validate the properties
+     *
+     * @param  string $instanceType
+     * @param  int|null  $index
+     * @param  array  $properties
+     * @param  \Illuminate\Database\Eloquent\Collection<mixed, \App\Models\TemplateProperty>  $templateProperties
+     * @param  \Illuminate\Support\Collection  $errors
+     * @return \Illuminate\Support\Collection
+     */
+    private function validateProperties(string $instanceType, ?int $index, array $properties, $templateProperties, Collection &$errors)
+    {
+        foreach ($properties as $field => $value) {
+            $key = !is_null($index) ? "$instanceType.$index.data.$field" : "$instanceType.data.$field";
+
+            $property = Property::whereSymbolicName($field)->first();
+
+            if (is_null($property)) {
+                $errors->put($key, "Property $field does not exist.");
+
+                continue;
+            }
+
+            $templateProperty = $templateProperties->firstWhere('property_id', $property->id);
+
+            if (is_null($templateProperty)) {
+                $errors->put($key, "Property $field does not belong to this template.");
+
+                continue;
+            }
+
+            $validator = Validator::make([$field => $value], [
+                "$field" => [
+                    Rule::requiredIf(fn () => $templateProperty->required),
+                    'nullable'
+                ]
+            ]);
+
+            match (Str::lower($property->dataType)) {
+                'text' => $validator->addRules(["$field" => ['string']]),
+                'string' => $validator->addRules(["$field" => ['string']]),
+                'number' => $validator->addRules(["$field" => ['numeric', 'integer']]),
+                'float' => $validator->addRules(["$field" => ['numeric']]),
+                'datetime' => $validator->addRules(["$field" => ['date_format:d/m/Y']]),
+                default => abort(500, "DataType of property $property->name is not configured correctly."),
+            };
+
+            if ($validator->fails()) {
+                $messages = $validator->errors()->all();
+
+                $errors->put($key, Arr::flatten($messages));
+            }
         }
     }
 }

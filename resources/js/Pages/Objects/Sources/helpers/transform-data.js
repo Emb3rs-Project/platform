@@ -10,9 +10,13 @@ export const transformData = (data, templateProperties) => {
 
     if (!templateProperty) continue;
 
-    if (templateProperty.property.inputType === "select") {
-      if (!data[key]) transformedData[key] = {};
+    if (!data[key]) {
+      transformedData[key] = templateProperty.property.inputType === "select" ? {} : '';
 
+      continue
+    }
+
+    if (templateProperty.property.inputType === "select") {
       const options = templateProperty.property.data.options;
 
       for (const option in options) {

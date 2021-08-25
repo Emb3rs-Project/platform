@@ -211,12 +211,8 @@ export default {
       if (!Object.keys(newProcess.props).length) return;
 
       for (const _templateProperty of newProcess.props) {
-        const inputType = _templateProperty.property.inputType;
-
-        const placeholder = inputType === "select" ? {} : "";
-
         newProcess.data[_templateProperty.property.symbolic_name] =
-          _templateProperty.default_value ?? placeholder;
+          _templateProperty.default_value;
       }
 
       newProcess.data = transformData(newProcess.data, newProcess.props);

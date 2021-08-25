@@ -141,7 +141,8 @@ class SourceController extends Controller
     {
         $updatedSource = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
 
-        return redirect()->route('objects.sources.show', $updatedSource->id);
+        // return redirect()->route('objects.sources.show', $updatedSource->id);
+        return redirect()->route('objects.index');
     }
 
     /**

@@ -172,8 +172,8 @@ export default {
       },
       equipment: [],
       processes: [],
-      template_id: template.value.key,
-      location_id: location.value.key,
+      template_id: null,
+      location_id: null,
     });
 
     const mapStepStatus = (index) =>
@@ -227,115 +227,113 @@ export default {
           const deepCopyOfFormData = window._.cloneDeep(data);
 
           // // source.data
-          // const deepCopyOfSource = window._.cloneDeep(source.value);
-          // if (template.value.properties.length) {
-          //   for (const property of template.value.properties) {
-          //     const prop = property.property;
-          //     const key = prop.symbolic_name;
-          //     const dataType = prop.dataType.toLowerCase();
+          const deepCopyOfSource = window._.cloneDeep(source.value);
+          if (template.value.properties.length) {
+            for (const property of template.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+              const dataType = prop.dataType.toLowerCase();
 
-          //     if (prop.inputType === "select") {
-          //       // if the property has a value, get it and re-assign the property as a string
-          //       if (Object.keys(deepCopyOfSource.data[key]).length) {
-          //         deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
-          //       } else {
-          //         if (dataType === "text" || dataType === "string") {
-          //           deepCopyOfSource.data[key] = "";
-          //         } else {
-          //           deepCopyOfSource.data[key] = null;
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
-          // deepCopyOfFormData.source = deepCopyOfSource;
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(deepCopyOfSource.data[key]).length) {
+                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+                } else {
+                  if (dataType === "text" || dataType === "string") {
+                    deepCopyOfSource.data[key] = "";
+                  } else {
+                    deepCopyOfSource.data[key] = null;
+                  }
+                }
+              }
+            }
+          }
+          deepCopyOfFormData.source = deepCopyOfSource;
 
-          // // equipment
-          // const deepCopyOfEquipment = window._.cloneDeep(equipment.value);
-          // if (equipment.value.length) {
-          //   for (const [index, equip] of equipment.value.entries()) {
-          //     if (!Object.keys(equip.data).length) continue;
+          // equipment
+          const deepCopyOfEquipment = window._.cloneDeep(equipment.value);
+          if (equipment.value.length) {
+            for (const [index, equip] of equipment.value.entries()) {
+              if (!Object.keys(equip.data).length) continue;
 
-          //     for (const property of equip.props) {
-          //       const prop = property.property;
-          //       const key = prop.symbolic_name;
-          //       const dataType = prop.dataType.toLowerCase();
+              for (const property of equip.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
 
-          //       if (prop.inputType === "select") {
-          //         // if the property has a value, get it and re-assign the property as a string
-          //         if (
-          //           Object.keys(deepCopyOfEquipment[index].data[key]).length
-          //         ) {
-          //           deepCopyOfEquipment[index].data[key] =
-          //             deepCopyOfEquipment[index].data[key].key;
-          //         } else {
-          //           if (dataType === "text" || dataType === "string") {
-          //             deepCopyOfEquipment[index].data[key] = "";
-          //           } else {
-          //             deepCopyOfEquipment[index].data[key] = null;
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
-          // if (deepCopyOfEquipment.length)
-          //   deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
-          //     id: e.key,
-          //     category_id: e.parent,
-          //     data: e.data,
-          //   }));
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (
+                    Object.keys(deepCopyOfEquipment[index].data[key]).length
+                  ) {
+                    deepCopyOfEquipment[index].data[key] =
+                      deepCopyOfEquipment[index].data[key].key;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfEquipment[index].data[key] = "";
+                    } else {
+                      deepCopyOfEquipment[index].data[key] = null;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (deepCopyOfEquipment.length)
+            deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
+              id: e.key,
+              category_id: e.parent,
+              data: e.data,
+            }));
 
-          // //processes
-          // const deepCopyOfProcesses = window._.cloneDeep(processes.value);
-          // if (processes.value.length) {
-          //   for (const [index, process] of processes.value.entries()) {
-          //     if (!Object.keys(process.data).length) continue;
+          //processes
+          const deepCopyOfProcesses = window._.cloneDeep(processes.value);
+          if (processes.value.length) {
+            for (const [index, process] of processes.value.entries()) {
+              if (!Object.keys(process.data).length) continue;
 
-          //     for (const property of process.props) {
-          //       const prop = property.property;
-          //       const key = prop.symbolic_name;
-          //       const dataType = prop.dataType.toLowerCase();
+              for (const property of process.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
 
-          //       if (prop.inputType === "select") {
-          //         // if the property has a value, get it and re-assign the property as a string
-          //         if (
-          //           Object.keys(deepCopyOfProcesses[index].data[key]).length
-          //         ) {
-          //           deepCopyOfProcesses[index].data[key] =
-          //             deepCopyOfProcesses[index].data[key].key;
-          //         } else {
-          //           if (dataType === "text" || dataType === "string") {
-          //             deepCopyOfProcesses[index].data[key] = "";
-          //           } else {
-          //             deepCopyOfProcesses[index].data[key] = null;
-          //           }
-          //         }
-          //       }
-          //     }
-          //   }
-          // }
-          // if (deepCopyOfProcesses.length)
-          //   deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
-          //     id: p.key,
-          //     category_id: p.parent,
-          //     data: p.data,
-          //   }));
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (
+                    Object.keys(deepCopyOfProcesses[index].data[key]).length
+                  ) {
+                    deepCopyOfProcesses[index].data[key] =
+                      deepCopyOfProcesses[index].data[key].key;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfProcesses[index].data[key] = "";
+                    } else {
+                      deepCopyOfProcesses[index].data[key] = null;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (deepCopyOfProcesses.length)
+            deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
+              id: p.key,
+              category_id: p.parent,
+              data: p.data,
+            }));
 
-          // //template
-          // if (Object.keys(template.value).length)
-          //   deepCopyOfFormData.template_id = template.value.key;
+          //template
+          if (Object.keys(template.value).length)
+            deepCopyOfFormData.template_id = template.value.key;
 
-          // //location
-          // if (Object.keys(location.value).length) {
-          //   if (typeof location.value.key === "object")
-          //     deepCopyOfFormData.location = location.value.key;
-          //   else deepCopyOfFormData.location_id = location.value.key;
-          // }
+          //location
+          if (Object.keys(location.value).length)
+            deepCopyOfFormData.location_id = location.value.key;
 
+          console.log(deepCopyOfFormData);
           return deepCopyOfFormData;
         })
-        .post(route("objects.sources.update"), {
+        .patch(route("objects.sources.update", props.instance.id), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
             store.dispatch("objects/showSlide", { route: "objects.list" });
