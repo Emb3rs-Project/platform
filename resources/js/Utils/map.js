@@ -168,10 +168,9 @@ export default {
         draggale: false
       }
 
-
-
       switch (type) {
         case 'sink':
+          console.log('MAP::addInstances -> Added a sink.', instance);
           iconOptions.icon = 'leaf'
           iconOptions.textClass = 'text-green-700'
           iconOptions.borderClass = 'border-green-700'
@@ -179,6 +178,7 @@ export default {
           sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
           break;
         case 'source':
+          console.log('MAP::addInstances -> Added a source.', instance);
           iconOptions.icon = 'fire'
           iconOptions.textClass = 'text-red-700'
           iconOptions.borderClass = 'border-red-700'
@@ -191,6 +191,8 @@ export default {
     mapObjects.sinks = L.layerGroup(sinks)
     mapObjects.sources = L.layerGroup(sources)
     mapObjects.all = L.layerGroup([...sinks, ...sources])
+
+    console.log('MAP::addInstances -> mapObjects', mapObjects);
   },
   createIconOptions(type, inFocus = false) {
     const iconOptions = {
