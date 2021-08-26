@@ -23,6 +23,8 @@ class DestroyProject implements DestroysProjects
 
         $project = Project::findOrFail($id);
 
-        Project::destroy($project->id);
+        info($project);
+
+        // Project::destroy($project->id);
     }
 }

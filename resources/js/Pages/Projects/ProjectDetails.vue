@@ -108,7 +108,7 @@
           <div class="col-span-2">
             <div class="flex flex-col max-h-full">
               <div class="overflow-y-auto overflow-x-auto shadow sm:rounded-b-md">
-                <div v-if="simulations.length">
+                <div v-if="project.simulations.length">
                   <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                       <tr>
@@ -152,7 +152,7 @@
                     </thead>
                     <tbody>
                       <tr
-                        v-for="(simulation, index) in simulations"
+                        v-for="(simulation, index) in project.simulations"
                         :key="index"
                         :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
                       >
@@ -255,10 +255,6 @@ export default {
   props: {
     project: {
       type: Object,
-      required: true,
-    },
-    simulations: {
-      type: Array,
       required: true,
     },
   },

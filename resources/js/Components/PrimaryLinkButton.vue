@@ -29,7 +29,7 @@ export default {
     },
     parameter: {
       type: String,
-      default: {},
+      default: "",
     },
     disabled: {
       type: Boolean,

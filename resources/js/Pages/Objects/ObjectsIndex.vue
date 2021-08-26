@@ -101,7 +101,8 @@
 
     <template #actions>
       <PrimaryButton @click="onActionRequest(`${selectedObject.paths.create}`)">
-        Create New {{ getSingular(selectedObject.title) }}</PrimaryButton>
+        Create New {{ getSingular(selectedObject.title) }}
+      </PrimaryButton>
     </template>
   </SlideOver>
 
@@ -116,7 +117,7 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useStore } from "vuex";
 import pluralize from "pluralize";
