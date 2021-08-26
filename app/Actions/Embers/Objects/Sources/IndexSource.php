@@ -25,19 +25,13 @@ class IndexSource implements IndexesSources
         $sourceCategories = Category::whereType('source')->get('id');
 
         $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
-            ->with([
-                'templateProperties',
-                'templateProperties.unit',
-                'templateProperties.property'
-            ])
             ->get('id');
 
         $teamInstances = $user->currentTeam->instances->pluck('id');
 
         $instances = Instance::whereIn('template_id', $sourceTemplates)
-            ->whereIn('id', $teamInstances)
             ->with(['location', 'template', 'template.category'])
-            ->get();
+            ->find($teamInstances);
 
         return $instances;
     }
