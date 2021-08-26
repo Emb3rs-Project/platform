@@ -258,9 +258,11 @@ export default {
       _m.setIcon(L.BeautifyIcon.icon(_opt))
     }
 
-    const iconOptions = this.createIconOptions(marker.options.instanceType, true)
-    const _icon = L.BeautifyIcon.icon(iconOptions)
+    if (!!marker) {
+      const iconOptions = this.createIconOptions(marker.options.instanceType, true)
+      const _icon = L.BeautifyIcon.icon(iconOptions)
 
-    marker.setIcon(_icon)
+      marker.setIcon(_icon)
+    }
   }
 }

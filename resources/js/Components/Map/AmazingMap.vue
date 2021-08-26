@@ -324,6 +324,7 @@ export default {
             route: "objects.sources.show",
             props: instance.id,
           });
+          onCenterLocation(instance.location, false);
           break;
         default:
           break;
@@ -377,6 +378,10 @@ export default {
       if (type === "map/refreshMap") {
         mapUtils.removeAllInstances(map.value, mapObjects.value);
         refreshInstances();
+      }
+
+      if (type === "map/unfocusMarker") {
+        mapUtils.focusMarker(map.value, null, mapObjects.value);
       }
     });
 
