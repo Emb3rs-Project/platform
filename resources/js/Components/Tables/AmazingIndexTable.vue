@@ -95,31 +95,22 @@ export default {
 
   emits: ["update:modelValue", "onUpdateSelection"],
 
-  setup(props, { emit }) {
+  setup(props, ctx) {
     const mainCheckbox = ref(null);
+
     const model = computed({
-      get() {
-        return props.modelValue;
-      },
-      set(value) {
-        emit("update:modelValue", value);
-      },
+      get: () => props.modelValue,
+      set: (value) => ctx.emit("update:modelValue", value),
     });
+
+    console.log(model.value);
 
     const allSelected = computed({
-      get() {
-        return model.value.filter((m) => m.selected).length > 0;
-      },
-      set(value) {
-        model.value.forEach((m) => (m.selected = value));
-      },
+      get: () => model.value.filter((m) => m.selected).length > 0,
+      set: (value) => model.value.forEach((m) => (m.selected = value)),
     });
 
-    watch(
-      () => model.value,
-      () => onSelectRow(),
-      { deep: true }
-    );
+    watch(model.value, () => onSelectRow(), { deep: true });
 
     const onSelectRow = () => {
       let selected = model.value.filter((m) => m.selected).length;
@@ -128,7 +119,7 @@ export default {
         mainCheckbox.value.indeterminate = true;
       else mainCheckbox.value.indeterminate = false;
 
-      emit("onUpdateSelection");
+      ctx.emit("onUpdateSelection");
     };
 
     return {
