@@ -1,96 +1,105 @@
 <template>
-  <!-- Equipments -->
+  <!-- Equipment -->
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
-      @click="modalIsVisible = true"
+      @click="addEquipmentModalIsVisible = true"
     >
-      <DatabaseIcon
+      <PlusIcon
         class="h-6 w-6 mr-2"
         aria-hidden="true"
       />
-      Add Equipment
+      New Equipment
     </PrimaryButton>
   </div>
 
   <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-    v-for="equipment in existingEquipments"
-    :key="equipment"
+    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 "
+    v-for="equip in equipment"
+    :key="equip"
   >
     <div class="sm:col-span-3">
-      <Disclosure
-        as="div"
-        v-slot="{ open }"
-      >
-        <dt class="text-lg">
-          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
-            <span class="font-medium text-gray-900">
-              {{ equipment.value }}
-            </span>
-            <span class="ml-6 h-7 flex items-center">
-              <ChevronDownIcon
-                :class="[
-                  open ? '-rotate-180' : 'rotate-0',
-                  'h-6 w-6 transform',
-                ]"
-                aria-hidden="true"
-              />
-            </span>
-          </DisclosureButton>
-        </dt>
-        <transition
-          enter-active-class="transition duration-100 ease-out"
-          enter-from-class="transform scale-95 opacity-0"
-          enter-to-class="transform scale-100 opacity-100"
-          leave-active-class="transition duration-75 ease-out"
-          leave-from-class="transform scale-100 opacity-100"
-          leave-to-class="transform scale-95 opacity-0"
-        >
-          <DisclosurePanel
-            as="dd"
-            class="mt-2 pr-12"
+      <div class="bg-white overflow-hidden shadow sm:rounded-lg w-full">
+        <div class="px-4 py-5 sm:p-6">
+          <Disclosure
+            as="div"
+            v-slot="{ open }"
           >
-            <div
-              class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-              v-for="property in equipment.props"
-              :key="property"
+            <dt class="text-lg">
+              <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
+                <span class="font-medium text-gray-900">
+                  {{ equip.value }}
+                </span>
+                <span class="ml-6 h-7 flex items-center">
+                  <ChevronDownIcon
+                    :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
+                    aria-hidden="true"
+                  />
+                </span>
+              </DisclosureButton>
+            </dt>
+            <transition
+              enter-active-class="transition duration-100 ease-out"
+              enter-from-class="transform scale-95 opacity-0"
+              enter-to-class="transform scale-100 opacity-100"
+              leave-active-class="transition duration-75 ease-out"
+              leave-from-class="transform scale-100 opacity-100"
+              leave-to-class="transform scale-95 opacity-0"
             >
-              <div>
-                <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-                  {{ property.property.name }}
-                </label>
-              </div>
-              <div class="sm:col-span-2">
-                <div v-if="property.property.inputType === 'text'">
-                  <TextInput
-                    v-model="equipment.data[property.property.symbolic_name]"
-                    :unit="property.unit.symbol"
-                    :placeholder="property.property.name"
-                    :required="property.required"
-                  >
-                  </TextInput>
+              <DisclosurePanel as="dd">
+                <div
+                  class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                  v-for="templateProperty in equip.props"
+                  :key="templateProperty"
+                >
+                  <div class="sm:col-span-3">
+                    <div v-if="templateProperty.property.inputType === 'select'">
+                      <SelectMenu
+                        v-model="equip.data[templateProperty.property.symbolic_name]"
+                        :options="templateProperty.property.data.options"
+                        :label="templateProperty.property.name"
+                        :description="templateProperty.property.description"
+                        :required="templateProperty.required"
+                      />
+                    </div>
+                    <div v-else>
+                      <TextInput
+                        v-model="equip.data[templateProperty.property.symbolic_name]"
+                        :label="templateProperty.property.name"
+                        :unit="templateProperty.unit.symbol"
+                        :description="templateProperty.property.description"
+                        :required="templateProperty.required"
+                      />
+                    </div>
+                    <div
+                      v-for="(error, key) in errors"
+                      :key="key"
+                    >
+                      <div
+                        v-for="subError in error"
+                        :key="subError"
+                      >
+                        <JetInputError
+                          v-if="key.includes(templateProperty.property.symbolic_name)"
+                          :message="subError"
+                          class="mt-2"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div v-else-if="property.property.inputType === 'select'">
-                  <SelectMenu
-                    v-model="equipment.data[property.property.symbolic_name]"
-                    :options="property.property.data.options"
-                    :required="property.required"
-                  >
-                  </SelectMenu>
-                </div>
-              </div>
-            </div>
-          </DisclosurePanel>
-        </transition>
-      </Disclosure>
+              </DisclosurePanel>
+            </transition>
+          </Disclosure>
+        </div>
+      </div>
     </div>
   </div>
 
   <AddEquipmentModal
-    v-model="modalIsVisible"
-    :equipmentsCategories="equipmentsCategories"
-    :equipments="equipments"
+    v-model="addEquipmentModalIsVisible"
+    :equipmentCategories="equipmentCategories"
+    :equipment="equipment"
     @confirmation="onAddEquipment"
   />
 </template>
@@ -100,12 +109,19 @@ import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
-import { DatabaseIcon, ChevronDownIcon } from "@heroicons/vue/outline";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+import { PlusIcon } from "@heroicons/vue/solid";
 
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import AddEquipmentModal from "@/Components/Modals/AddEquipmentModal.vue";
+import JetInputError from "@/Jetstream/InputError.vue";
+
+import { sortProperties } from "../helpers/sort-properties";
+import { transformPropsToData } from "../helpers/transform-props-to-data";
+import { transformData } from "../helpers/transform-data";
+import { validateProperies } from "../helpers/validate-properties";
 
 export default {
   components: {
@@ -113,11 +129,12 @@ export default {
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
-    DatabaseIcon,
+    PlusIcon,
     PrimaryButton,
     AddEquipmentModal,
     SelectMenu,
     TextInput,
+    JetInputError,
   },
 
   props: {
@@ -125,69 +142,122 @@ export default {
       type: Object,
       required: true,
     },
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
+      required: true,
+    },
+    nextStepRequest: {
+      type: Boolean,
       required: true,
     },
   },
 
-  setup(props) {
-    const store = useStore();
-    const modalIsVisible = ref(false);
+  emits: ["completed", "incompleted"],
 
-    const equipments = computed(() =>
-      props.equipments.map((e) => ({
+  setup(props, ctx) {
+    const store = useStore();
+
+    const errors = ref({});
+
+    const addEquipmentModalIsVisible = ref(false);
+
+    const propsEquipment = computed(() =>
+      props.equipment.map((e) => ({
         key: e.id,
         value: e.name,
         parent: e.category_id,
-        props: e.template_properties,
-        data: {},
+        props: sortProperties(e.template_properties),
+        data: transformPropsToData(e.template_properties),
       }))
     );
-    const sessionEquipments = computed(
-      () => store.getters["sources/equipments"]
-    );
-    const existingEquipments = ref(
-      sessionEquipments.value.length
-        ? sessionEquipments.value
-        : props.instance.values.equipments
-    );
 
-    watch(
-      existingEquipments,
-      (equipments) => {
-        store.dispatch("sources/setEquipments", {
-          equipments: JSON.parse(JSON.stringify(equipments)),
+    const instanceEquipment = computed(() => {
+      const equipment = [];
+
+      for (const _instanceEquipment of props.instance.values.equipment) {
+        const propsEquip = propsEquipment.value.find(
+          (propsEquip) => propsEquip.key === _instanceEquipment.id
+        );
+
+        if (!propsEquip) continue;
+
+        equipment.push({
+          key: propsEquip.key,
+          value: propsEquip.value,
+          parent: propsEquip.parent,
+          props: propsEquip.props,
+          data: transformData(_instanceEquipment.data, propsEquip.props),
         });
-      },
-      { immediate: true, deep: true }
-    );
-
-    const onAddEquipment = (equipment) => {
-      const newEquipment = JSON.parse(JSON.stringify(equipment));
-
-      if (!Object.keys(newEquipment.props).length === 0) return;
-
-      for (const property of newEquipment.props) {
-        newEquipment.data[property.property.symbolic_name] =
-          property.default_value;
       }
 
-      //   existingEquipments.value = [...existingEquipments.value, newEquipment];
-      existingEquipments.value.push(newEquipment);
+      return equipment;
+    });
+
+    const storeEquipment = computed(() => store.getters["source/equipment"]);
+
+    const equipment = ref(
+      storeEquipment.value.length
+        ? storeEquipment.value
+        : instanceEquipment.value
+    );
+
+    const onAddEquipment = (newEquipment) => {
+      const newEquip = window._.cloneDeep(newEquipment);
+
+      if (!Object.keys(newEquip.props).length) return;
+
+      for (const _templateProperty of newEquip.props) {
+        newEquip.data[_templateProperty.property.symbolic_name] =
+          _templateProperty.default_value;
+      }
+
+      newEquip.data = transformData(newEquip.data, newEquip.props);
+
+      equipment.value.push(newEquip);
     };
 
+    const commitSourceEquipment = window._.debounce(
+      () =>
+        store.commit("source/setEquipment", {
+          equipment: window._.cloneDeep(equipment.value),
+        }),
+      500
+    );
+
+    watch(equipment, () => commitSourceEquipment(), {
+      deep: true,
+      immediate: true,
+    });
+
+    watch(
+      () => props.nextStepRequest,
+      (nextStepRequest) => {
+        if (!nextStepRequest) return;
+
+        // reset the errors so they are always up to date
+        errors.value = {};
+
+        for (const equip of equipment.value) {
+          const properties = equip.props;
+
+          validateProperies(equip, properties, errors.value);
+        }
+
+        if (!Object.keys(errors.value).length) ctx.emit("completed");
+        else ctx.emit("incompleted");
+      }
+    );
+
     return {
-      modalIsVisible,
-      equipments,
-      existingEquipments,
+      errors,
+      addEquipmentModalIsVisible,
+      equipment,
       onAddEquipment,
     };
   },
 };
 </script>
-

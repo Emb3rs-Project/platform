@@ -145,8 +145,8 @@ export default {
 
   setup(props, { emit }) {
     const availableProcesses = ref([]);
-    const selectedProcessCategory = ref(null);
-    const selectedProcess = ref(null);
+    const selectedProcessCategory = ref({});
+    const selectedProcess = ref({});
 
     const processesCategories = computed(() =>
       props.processesCategories.map((p) => ({
@@ -156,7 +156,7 @@ export default {
     );
 
     const processesAreAvailable = computed(() => {
-      if (!selectedProcessCategory.value) return false;
+      if (!Object.keys(selectedProcessCategory.value).length) return false;
 
       const processesThatMatch = props.processes.filter(
         (p) => p.parent == selectedProcessCategory.value.key
@@ -168,7 +168,11 @@ export default {
     });
 
     const canAddProcess = computed(() => {
-      if (selectedProcessCategory.value && selectedProcess.value) return true;
+      if (
+        Object.keys(selectedProcessCategory.value).length &&
+        Object.keys(selectedProcess.value).length
+      )
+        return true;
       return false;
     });
 

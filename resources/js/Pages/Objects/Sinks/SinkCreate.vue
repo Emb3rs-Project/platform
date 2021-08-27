@@ -12,13 +12,14 @@
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-          Templates
+          Select a Template
         </label>
       </div>
       <div class="sm:col-span-2">
         <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
+          label="Template"
         />
       </div>
     </div>
@@ -30,7 +31,7 @@
           for="project_name"
           class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
         >
-          Locations
+          Select a Location
         </label>
       </div>
       <div class="sm:col-span-2">
@@ -38,6 +39,7 @@
           v-model="selectedLocation"
           :options="locations"
           :disabled="selectedTemplate ? false : true"
+          label="Location"
         />
       </div>
     </div>
@@ -65,7 +67,6 @@
             :placeholder="prop.property.name"
             :required="prop.required"
           />
-
         </div>
         <div v-else-if="prop.property.inputType === 'select'">
           <SelectMenu
@@ -166,9 +167,7 @@ export default {
         properties: t.template_properties,
       }))
     );
-    const selectedTemplate = ref(
-      templates.value.length ? templates.value[0] : null
-    );
+    const selectedTemplate = ref(templates.value[0] ?? {});
 
     const locations = computed(() =>
       props.locations.map((l) => ({
@@ -235,6 +234,23 @@ export default {
         form.template_id = template.key;
 
         if (templateInfo.value.properties.length) {
+          // for (const property of templateInfo.value.properties) {
+          //   const prop = property.property;
+
+          //   if (!prop) continue;
+
+          //   let placeholder = null;
+
+          //   if (prop.inputType === "select") placeholder = {};
+
+          //   if (prop.dataType === "text" || prop.dataType === "string")
+          //     placeholder = "";
+
+          //   form.sink.data[prop.symbolic_name] = property.default_value
+          //     ? property.default_value
+          //     : placeholder;
+          // }
+
           for (const property of templateInfo.value.properties) {
             const prop = property.property;
 
@@ -264,29 +280,10 @@ export default {
     });
 
     const submit = () => {
-      // TODO: Inertia form is not compatible with the below logic, needs rework
-      // for (const _property of properties.value) {
-      //   if (_property.required) {
-      //     const errors = {};
-      //     const propertyName = `sink.data.${_property.property.symbolic_name}`;
-
-      //     errors[
-      //       propertyName
-      //     ] = `${_property.property.symbolic_name} is required.`;
-
-      //     form.errors = errors;
-      //   }
-      // }
-      // console.log(form.errors);
-
-      // if (form.errors.length) {
-      //   form.hasErrors = true;
-      // }
-
       form
         .transform((data) => {
           // We want to transform the "to-send" data, not the original data
-          const deepCopyOfData = JSON.parse(JSON.stringify(data));
+          const deepCopyOfData = window._.cloneDeep(data);
 
           const sinkData = deepCopyOfData.sink.data;
 
@@ -299,11 +296,17 @@ export default {
                 // if the property has a value, get it and re-assign the property as a string
                 if (Object.keys(sinkData[key]).length) {
                   sinkData[key] = sinkData[key].value;
+                } else {
+                  if (prop.dataType === "text" || prop.dataType === "string") {
+                    sinkData[key] = "";
+                  } else {
+                    sinkData[key] = null;
+                  }
                 }
               }
             }
           }
-          console.log(deepCopyOfData);
+
           return deepCopyOfData;
         })
         .post(route("objects.sinks.store"), {

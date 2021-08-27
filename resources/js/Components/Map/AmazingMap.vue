@@ -31,7 +31,7 @@ export default {
     },
   },
 
-  setup(props, { emit }) {
+  setup(props) {
     const store = useStore();
 
     const map = ref(null);
@@ -45,7 +45,7 @@ export default {
 
     watch(
       instances,
-      (_i) => {
+      () => {
         if (map.value) loadMarkers();
       },
       { immediate: true, deep: true }
@@ -56,11 +56,11 @@ export default {
       start: null,
     };
 
+    const user = ref(usePage().props.value.user);
+
     const center = computed({
       get() {
-        const user = usePage().props.value.user;
-
-        if (!props.center.length) return user.data.map.center;
+        if (!props.center.length) return user.value.data.map.center;
 
         return props.center;
       },
@@ -71,9 +71,7 @@ export default {
 
     const zoom = computed({
       get() {
-        const user = usePage().props.value.user;
-
-        if (props.zoom === -1) return user.data.map.zoom;
+        if (props.zoom === -1) return user.value.data.map.zoom;
 
         return props.zoom;
       },
@@ -309,6 +307,8 @@ export default {
     };
 
     const onMarkerClick = (instance) => {
+      console.log("HIEEEEELLLLLOOOO");
+      console.log(store.state.map.selectedMarker);
       const _type = instance.template.category.type;
 
       switch (_type) {
@@ -324,6 +324,7 @@ export default {
             route: "objects.sources.show",
             props: instance.id,
           });
+          onCenterLocation(instance.location, false);
           break;
         default:
           break;
@@ -331,7 +332,7 @@ export default {
     };
 
     const loadMarkers = () => {
-      if (instances.value?.length > 0) {
+      if (instances.value.length) {
         mapUtils.addInstances(
           map.value,
           instances.value,
@@ -341,7 +342,7 @@ export default {
       }
     };
 
-    const refreshInstance = () =>
+    const refreshInstances = () =>
       axios.get(route("objects.markers")).then(({ data }) => {
         instances.value = data.instances;
       });
@@ -365,7 +366,7 @@ export default {
         _.debounce(({ target }) => (zoom.value = target.getZoom()), 1000)
       );
 
-      refreshInstance();
+      refreshInstances();
     });
 
     const unsubscribeAction = store.subscribeAction(({ type, payload }) => {
@@ -376,13 +377,18 @@ export default {
 
       if (type === "map/refreshMap") {
         mapUtils.removeAllInstances(map.value, mapObjects.value);
-        refreshInstance();
+        refreshInstances();
+      }
+
+      if (type === "map/unfocusMarker") {
+        mapUtils.focusMarker(map.value, null, mapObjects.value);
       }
     });
 
     onBeforeUnmount(() => {
       map.value.off("moveend");
       map.value.off("zoomend");
+
       unsubscribeAction();
     });
 
@@ -390,7 +396,6 @@ export default {
       center,
       onCenterLocation,
       selectedMarkerLatlng,
-
       instances,
     };
   },

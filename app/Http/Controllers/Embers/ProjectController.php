@@ -39,13 +39,6 @@ class ProjectController extends Controller
         $locations = app(CreatesProjects::class)->create($request->user());
 
         return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
-
-        // return [
-        //     'slideOver' => 'Projects/ProjectCreate',
-        //     'props' =>[
-        //         'locations' => $locations
-        //     ]
-        // ];
     }
 
     /**
@@ -70,18 +63,9 @@ class ProjectController extends Controller
      */
     public function show(Request $request, $id)
     {
-        [
-            $project,
-            $simulations
-        ] = app(ShowsProjects::class)->show($request->user(), $id);
+        $project = app(ShowsProjects::class)->show($request->user(), $id);
 
-        return [
-            'slideOver' => 'Projects/ProjectDetails',
-            'props' => [
-                'project' => $project,
-                'simulations' => $simulations
-            ]
-        ];
+        return Inertia::render('Projects/ProjectDetails', ['project' => $project]);
     }
 
     /**
@@ -98,13 +82,10 @@ class ProjectController extends Controller
             $locations,
         ] = app(EditsProjects::class)->edit($request->user(), $id);
 
-        return [
-            'slideOver' => 'Projects/ProjectEdit',
-            'props' => [
-                'project' => $project,
-                'locations' => $locations
-            ]
-        ];
+        return Inertia::render('Projects/ProjectDetails', [
+            'project' => $project,
+            'locations' => $locations
+        ]);
     }
 
     /**

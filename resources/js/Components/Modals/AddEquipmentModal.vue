@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
   <TransitionRoot
     as="template"
@@ -58,16 +57,16 @@
                 <div class="mt-2">
                   <SelectMenu
                     v-model="selectedEquipmentCategory"
-                    :options="equipmentsCategories"
-                    :label="'Category'"
+                    :options="equipmentCategories"
+                    label="Category"
                   ></SelectMenu>
                 </div>
                 <div class="mt-5">
                   <SelectMenu
-                    :disabled="!equipmentsAreAvailable"
+                    :disabled="!equipmentAreAvailable"
                     v-model="selectedEquipment"
-                    :options="availableEquipments"
-                    :label="'Equipment'"
+                    :options="availableEquipment"
+                    label="Equipment"
                   ></SelectMenu>
                 </div>
               </div>
@@ -75,9 +74,9 @@
             <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
               <SecondaryOutlinedButton
                 type="button"
-                @click="open = false"
                 ref="cancelButtonRef"
                 class="sm:col-start-1"
+                @click="open = false"
               >
                 Cancel
               </SecondaryOutlinedButton>
@@ -98,7 +97,7 @@
 </template>
 
 <script>
-import { ref, computed, watch, onBeforeUpdate } from "vue";
+import { ref, computed, watch } from "vue";
 
 import {
   Dialog,
@@ -131,11 +130,11 @@ export default {
       type: Boolean,
       required: true,
     },
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
       required: true,
     },
@@ -144,39 +143,35 @@ export default {
   emits: ["update:modelValue", "confirmation"],
 
   setup(props, { emit }) {
-    const processing = ref(false); // TODO: dont allow the press of more than one connfirm
+    const processing = ref(false);
+    const availableEquipment = ref([]);
+    const selectedEquipmentCategory = ref({});
+    const selectedEquipment = ref({});
 
-    // TODO: dont allow the press of more than one connfirm
-    // onBeforeUpdate(() => {
-    //   console.log("updated");
-    //   processing.value = false;
-    // });
-
-    const availableEquipments = ref([]);
-    const selectedEquipmentCategory = ref(null);
-    const selectedEquipment = ref(null);
-
-    const equipmentsCategories = computed(() =>
-      props.equipmentsCategories.map((ec) => ({
+    const equipmentCategories = computed(() =>
+      props.equipmentCategories.map((ec) => ({
         key: ec.id,
         value: ec.name,
       }))
     );
 
-    const equipmentsAreAvailable = computed(() => {
-      if (!selectedEquipmentCategory.value) return false;
+    const equipmentAreAvailable = computed(() => {
+      if (!Object.keys(selectedEquipmentCategory.value).length) return false;
 
-      const equipmentsThatMatch = props.equipments.filter(
+      const equipmentThatMatch = props.equipment.filter(
         (e) => e.parent == selectedEquipmentCategory.value.key
       );
 
-      if (!equipmentsThatMatch.length) return false;
+      if (!equipmentThatMatch.length) return false;
 
       return true;
     });
 
     const canAddEquipment = computed(() => {
-      if (selectedEquipmentCategory.value && selectedEquipment.value)
+      if (
+        Object.keys(selectedEquipmentCategory.value).length &&
+        Object.keys(selectedEquipment.value).length
+      )
         return true;
       return false;
     });
@@ -186,25 +181,34 @@ export default {
       set: (value) => emit("update:modelValue", value),
     });
 
-    watch(selectedEquipmentCategory, (selectedEquipmentCategory) => {
-      availableEquipments.value = props.equipments.filter(
-        (e) => e.parent == selectedEquipmentCategory.key
-      );
-    });
+    watch(
+      selectedEquipmentCategory,
+      (selectedEquipmentCategory) => {
+        availableEquipment.value = props.equipment.filter(
+          (e) => e.parent == selectedEquipmentCategory.key
+        );
+      },
+      { deep: true }
+    );
 
     const onConfirmation = () => {
-      emit("confirmation", selectedEquipment.value);
+      processing.value = true;
+
       open.value = false;
+
+      emit("confirmation", selectedEquipment.value);
+
+      setTimeout(() => (processing.value = false), 200); // make the confirm button pressable again
     };
 
     return {
-      equipmentsCategories,
+      equipmentCategories,
       selectedEquipmentCategory,
-      availableEquipments,
+      availableEquipment,
       selectedEquipment,
       open,
       onConfirmation,
-      equipmentsAreAvailable,
+      equipmentAreAvailable,
       canAddEquipment,
       processing,
     };

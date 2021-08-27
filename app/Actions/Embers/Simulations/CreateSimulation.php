@@ -5,7 +5,6 @@ namespace App\Actions\Embers\Simulations;
 use App\Contracts\Embers\Objects\Links\IndexesLinks;
 use App\Contracts\Embers\Objects\Sinks\IndexesSinks;
 use App\Contracts\Embers\Objects\Sources\IndexesSources;
-use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Simulations\CreatesSimulations;
 use App\EmbersPermissionable;
 use App\Models\Location;
@@ -24,8 +23,6 @@ class CreateSimulation implements CreatesSimulations
     public function create($user, int $projectId)
     {
         $this->authorize($user);
-
-        // app(ShowsProjects::class)->show($user, $projectId);
 
         $simulationTypes = SimulationType::all();
 

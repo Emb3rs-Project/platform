@@ -24,15 +24,15 @@ class IndexSink implements IndexesSinks
 
         $sinkCategories = Category::whereType('sink')->get('id');
 
-        $templates = Template::whereIn('category_id', $sinkCategories)->get('id');
+        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
+            ->get('id');
 
         $teamInstances = $user->currentTeam->instances->pluck('id');
 
-        $sinks = Instance::whereIn('template_id', $templates)
-            ->whereIn('id', $teamInstances)
-            ->with(['template', 'template.category'])
-            ->get();
+        $instances = Instance::whereIn('template_id', $sinkTemplates)
+            ->with(['location', 'template', 'template.category'])
+            ->find($teamInstances);
 
-        return $sinks;
+        return $instances;
     }
 }

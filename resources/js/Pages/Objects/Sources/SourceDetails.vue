@@ -1,4 +1,6 @@
 <template>
+  <SiteHead title="Source Details" />
+
   <SlideOver
     title="Source Details"
     subtitle="Below, you can see the details that are associated to the currently selected Source."
@@ -6,41 +8,73 @@
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <source-detail-1
-      :instance="instance"
-      v-if="currentStep === 1"
-    ></source-detail-1>
+    <template #stickyTop>
+      <Steps
+        :steps="steps"
+        class="p-4"
+      />
+    </template>
 
-    <source-detail-2
+    <SourceDetailsStep1
+      v-if="currentStep === 1"
       :instance="instance"
+    />
+
+    <SourceDetailsStep2
       v-if="currentStep === 2"
-    ></source-detail-2>
+      :instance="instance"
+      :equipment="equipment"
+    />
+
+    <SourceDetailsStep3
+      v-if="currentStep === 3"
+      :instance="instance"
+      :processes="processes"
+    />
 
     <template #actions>
-      <div class="flex justify-start w-full">
-        <bullet-steps :steps="steps"></bullet-steps>
+      <div class="flex justify-start w-full gap-x-4">
+        <!-- <BulletSteps :steps="steps" /> -->
+        <div>
+          <PrimaryButton
+            type="button"
+            @click="onPrevStep"
+            :disabled="currentStep === 1"
+          >
+            <ChevronLeftIcon
+              class="h-6 w-auto"
+              aria-hidden="true"
+            />
+            Previous
+          </PrimaryButton>
+        </div>
+        <div>
+          <PrimaryButton
+            type="button"
+            @click="onNextStep"
+            :disabled="currentStep === steps.length"
+          >
+            Next
+            <ChevronRightIcon
+              class="h-6 w-auto"
+              aria-hidden="true"
+            />
+          </PrimaryButton>
+        </div>
+
       </div>
-      <secondary-button
-        type="button"
-        @click="onPrevStep"
-        :disabled="currentStep === 1"
-      >
-        <i class="fas fa-chevron-left"></i>
-      </secondary-button>
-      <secondary-button
-        type="button"
-        @click="onNextStep"
-        :disabled="currentStep === steps.length"
-      >
-        <i class="fas fa-chevron-right"></i>
-      </secondary-button>
+
       <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
       >
         Cancel
       </SecondaryOutlinedButton>
-      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
+
+      <PrimaryButton
+        type="button"
+        @click="onRouteRequest('objects.sources.edit', instance.id)"
+      >
         Edit
       </PrimaryButton>
     </template>
@@ -51,29 +85,33 @@
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
-import AppLayout from "@/Layouts/AppLayout.vue";
+import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
-import SelectMenu from "@/Components/Forms/SelectMenu.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
-import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
-import SourceDetail1 from "./SourceDetailWizard/Step1";
-import SourceDetail2 from "./SourceDetailWizard/Step2";
+import Steps from "@/Components/Wizards/Steps.vue";
+import SourceDetailsStep1 from "./SourceDetailsWizard/SourceDetailsStep1.vue";
+import SourceDetailsStep2 from "./SourceDetailsWizard/SourceDetailsStep2.vue";
+import SourceDetailsStep3 from "./SourceDetailsWizard/SourceDetailsStep3.vue";
 import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
 
 export default {
   components: {
-    AppLayout,
+    SiteHead,
     SlideOver,
-    SelectMenu,
-    TextInput,
-    PrimaryButton,
-    SecondaryButton,
-    SecondaryOutlinedButton,
-    SourceDetail1,
+    Steps,
+    SourceDetailsStep1,
+    SourceDetailsStep2,
+    SourceDetailsStep3,
     BulletSteps,
-    SourceDetail2,
+    SecondaryOutlinedButton,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    SecondaryButton,
+    PrimaryButton,
   },
 
   props: {
@@ -81,10 +119,19 @@ export default {
       type: Object,
       required: true,
     },
+    equipment: {
+      type: Array,
+      required: true,
+    },
+    processes: {
+      type: Array,
+      required: true,
+    },
   },
 
-  setup(props, { emit }) {
+  setup() {
     const store = useStore();
+    const currentStep = ref(1);
 
     const onRouteRequest = (route, props) => {
       store.dispatch("objects/showSlide", { route, props });
@@ -97,41 +144,37 @@ export default {
         ? "upcoming"
         : "complete";
 
-    const onNextStep = () => currentStep.value++;
-    const onPrevStep = () => currentStep.value--;
-
-    const currentStep = ref(1);
     const steps = computed(() => [
       {
-        name: "Source Details",
-        component: "Objects/Sources/SourceDetailWizard/Step1.vue",
+        id: "Properties",
+        name: "Information & Properties",
         status: mapStepStatus(1), // status: current | complete | upcoming
       },
       {
-        name: "Equipments",
-        component: "Objects/Sources/SourceDetailWizard/Step2.vue",
+        id: "Equipment",
+        name: "Equipment Information",
         status: mapStepStatus(2),
       },
       {
-        name: "Processes",
-        component: "Objects/Sources/SourceCreateWizard/Step3.vue",
+        id: "Processes",
+        name: "Processes Information",
         status: mapStepStatus(3),
-      },
-      {
-        name: "Scripts",
-        component: "Objects/Sources/SourceCreateWizard/Step4.vue",
-        status: mapStepStatus(4),
       },
     ]);
 
+    const onNextStep = () => currentStep.value++;
+    const onPrevStep = () => currentStep.value--;
+
+    const onCancel = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
     return {
-      steps,
-      onRouteRequest,
       currentStep,
+      onRouteRequest,
+      steps,
       onNextStep,
       onPrevStep,
-      onCancel: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onCancel,
     };
   },
 };

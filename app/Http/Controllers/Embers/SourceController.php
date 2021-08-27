@@ -39,8 +39,8 @@ class SourceController extends Controller
     {
         [
             $templates,
-            $equipments,
-            $equipmentsCategories,
+            $equipment,
+            $equipmentCategories,
             $processes,
             $processesCategories,
             $locations
@@ -50,8 +50,8 @@ class SourceController extends Controller
             "slideOver" => "Objects/Sources/SourceCreate",
             "props" => [
                 "templates" => $templates,
-                "equipments" => $equipments,
-                "equipmentsCategories" => $equipmentsCategories,
+                "equipment" => $equipment,
+                "equipmentCategories" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
                 "locations" => $locations,
@@ -82,19 +82,17 @@ class SourceController extends Controller
     public function show(Request $request, $id)
     {
         [
-            $templates,
-            $equipments,
-            $locations,
-            $instance
+            $instance,
+            $equipmentTemplates,
+            $processesTemplates
         ] = app(ShowsSources::class)->show($request->user(), $id);
 
         return [
             "slideOver" => "Objects/Sources/SourceDetails",
             "props" => [
-                "templates" => $templates,
-                "equipments" => $equipments,
-                "locations" => $locations,
-                "instance" => $instance
+                "instance" => $instance,
+                "equipment" => $equipmentTemplates,
+                "processes" => $processesTemplates
             ]
         ];
     }
@@ -109,25 +107,25 @@ class SourceController extends Controller
     public function edit(Request $request, $id)
     {
         [
+            $instance,
             $templates,
-            $equipments,
-            $equipmentsCategories,
+            $locations,
+            $equipment,
+            $equipmentCategories,
             $processes,
             $processesCategories,
-            $locations,
-            $instance
         ] = app(EditsSources::class)->edit($request->user(), $id);
 
         return [
             "slideOver" => "Objects/Sources/SourceEdit",
             "props" => [
+                "instance" => $instance,
                 "templates" => $templates,
-                "equipments" => $equipments,
-                "equipmentsCategories" => $equipmentsCategories,
+                "locations" => $locations,
+                "equipment" => $equipment,
+                "equipmentCategories" => $equipmentCategories,
                 "processes" => $processes,
                 "processesCategories" => $processesCategories,
-                "locations" => $locations,
-                "instance" => $instance
             ]
         ];
     }
@@ -143,7 +141,8 @@ class SourceController extends Controller
     {
         $updatedSource = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
 
-        return redirect()->route('objects.sources.show', $updatedSource->id);
+        // return redirect()->route('objects.sources.show', $updatedSource->id);
+        return redirect()->route('objects.index');
     }
 
     /**

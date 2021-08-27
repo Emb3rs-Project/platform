@@ -5,13 +5,12 @@
     v-model="selected"
   >
     <div class="flex justify-between">
-      <label class="block text-sm font-medium text-gray-700">
+      <ListboxLabel class="block text-sm font-medium text-gray-700">
         {{ label }}
-      </label>
+      </ListboxLabel>
       <span
-        v-if="required"
-        class="text-sm text-gray-500"
-        id="input-required"
+        class="block text-sm font-medium text-gray-500"
+        v-show="required"
       >
         Required
       </span>
@@ -20,7 +19,7 @@
       <ListboxButton
         :class="[
           disabled ? 'disabled:opacity-70 cursor-not-allowed' : '',
-          'h-10 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm',
+          'h-10 bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base',
         ]"
         :disabled="disabled"
       >
@@ -40,7 +39,7 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
       >
-        <ListboxOptions class="z-20 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+        <ListboxOptions class="z-20 absolute mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-base">
           <ListboxOption
             as="template"
             v-for="option in options"
@@ -77,6 +76,7 @@
       </transition>
     </div>
   </Listbox>
+  <p class="mt-2 text-sm text-gray-500 text-justify">{{ description }}</p>
 </template>
 
 <script>
@@ -115,6 +115,10 @@ export default {
       type: String,
       default: "",
     },
+    description: {
+      type: String,
+      default: "",
+    },
     required: {
       type: Boolean,
       default: false,
@@ -128,8 +132,6 @@ export default {
   emits: ["update:modelValue"],
 
   setup(props, { emit }) {
-    console.log("SelectMenu", props.modelValue);
-
     const selected = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),

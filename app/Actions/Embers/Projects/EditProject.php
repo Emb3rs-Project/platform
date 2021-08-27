@@ -22,7 +22,12 @@ class EditProject implements EditsProjects
     {
         $this->authorize($user);
 
-        $project = Project::with(['location'])->findOrFail($id);
+        $project = Project::with([
+            'location',
+            'simulations',
+            'simulations.simulationType',
+            'simulations.simulationType.unit'
+        ])->findOrFail($id);
 
         $locations = Location::all();
 

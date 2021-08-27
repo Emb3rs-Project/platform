@@ -10,7 +10,7 @@
     >
       <div
         v-if="open"
-        class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200 opacity-80 hover:opacity-95"
+        class="flex flex-col justify-between z-20 w-screen max-w-2xl bg-gray-50 divide-y divide-gray-200 opacity-80 hover:opacity-100"
       >
         <!-- Header -->
         <div
@@ -24,7 +24,7 @@
                 type="button"
                 class="rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                 :class="dismissButtonTextColor"
-                @click="open = false"
+                @click="onClose"
               >
                 <span class="sr-only">Close panel</span>
                 <svg
@@ -54,9 +54,19 @@
             </p>
           </div>
         </div>
+
+        <div>
+          <slot name="stickyTop"></slot>
+        </div>
+
         <div class="overflow-y-auto h-full py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
           <slot></slot>
         </div>
+
+        <div>
+          <slot name="stickyBottom"></slot>
+        </div>
+
         <div class="flex-shrink-0 px-4 py-4 flex justify-end gap-5">
           <slot name="actions"></slot>
         </div>
@@ -105,6 +115,18 @@ export default {
       set: (value) => store.commit("objects/closeSlide"),
     });
 
+    const currentRoute = computed(() => store.getters["objects/currentRoute"]);
+
+    const onClose = () => {
+      if (currentRoute.value !== "objects.list") {
+        store.dispatch("map/unfocusMarker");
+
+        return store.dispatch("objects/showSlide", { route: "objects.list" });
+      }
+
+      return (open.value = false);
+    };
+
     const closeOnEscape = (e) => {
       if (open.value && e.keyCode === 27) {
         open.value = false;
@@ -112,18 +134,17 @@ export default {
     };
 
     onMounted(() => {
-      console.log("SLIDEOVER COMPONENT::Mounted");
       props.autoOpen ? store.commit("objects/openSlide") : null;
 
       document.addEventListener("keydown", closeOnEscape);
     });
     onUnmounted(() => {
-      console.log("SLIDEOVER COMPONENT::Unmounted");
       document.removeEventListener("keydown", closeOnEscape);
     });
 
     return {
       open,
+      onClose,
     };
   },
 };

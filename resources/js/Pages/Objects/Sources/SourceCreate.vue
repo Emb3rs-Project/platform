@@ -1,67 +1,119 @@
 <template>
+  <SiteHead title="Create a Source" />
+
   <SlideOver
     title="New Source"
-    subtitle=" Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
-    headerBackground="bg-green-700"
+    subtitle="Get started by filling in the information below to create your new Source. This Source will be attached to your currently selected Institution."
+    headerBackground="bg-red-700"
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-200"
   >
-    <component
-      v-bind="currentStepProps"
-      :is="stepComponent"
-    ></component>
+    <template #stickyTop>
+      <Steps
+        :steps="steps"
+        class="p-4"
+      />
+      <div :class="{ 'p-4': incompleteStepAlert }">
+        <InfoAlert
+          v-model="incompleteStepAlert"
+          content="Please, fill all the required fields before proceeding to the next step."
+        />
+      </div>
+    </template>
+
+    <SourceCreateStep1
+      v-if="currentStep === 1"
+      :templates="templates"
+      :locations="locations"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted"
+      @incompleted="onIncompleted"
+    />
+
+    <SourceCreateStep2
+      v-if="currentStep === 2"
+      :equipmentCategories="equipmentCategories"
+      :equipment="equipment"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted"
+      @incompleted="onIncompleted"
+    />
+
+    <SourceCreateStep3
+      v-if="currentStep === 3"
+      :processesCategories="processesCategories"
+      :processes="processes"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted"
+      @incompleted="onIncompleted"
+    />
 
     <template #actions>
       <div class="flex justify-start w-full">
-        <bullet-steps :steps="steps"></bullet-steps>
+        <BulletSteps :steps="steps" />
       </div>
 
-      <secondary-button
+      <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
-        v-if="currentStepIndex === 0"
       >
         Cancel
-      </secondary-button>
+      </SecondaryOutlinedButton>
 
-      <secondary-button
+      <SecondaryButton
         type="button"
-        @click="navigateToPreviousStep"
-        v-if="currentStepIndex > 0"
+        @click="onPreviousStep"
+        :disabled="currentStep === 1"
       >
-        Previous
-      </secondary-button>
+        Back
+      </SecondaryButton>
+
       <PrimaryButton
         type="button"
-        @click="navigateToNextStep"
+        @click="onNextStep"
+        :disabled="form.processing"
       >
-        <span v-if="currentStepIndex + 1 === steps.length">Save</span>
-        <span v-else>Next</span>
+        <span v-if="currentStep !== steps.length">
+          Next
+        </span>
+        <span v-else>
+          Save
+        </span>
       </PrimaryButton>
     </template>
   </SlideOver>
 </template>
 
 <script>
-import { ref, watch, computed, defineAsyncComponent } from "vue";
-
-import PrimaryButton from "../../../Components/PrimaryButton.vue";
-import SecondaryButton from "../../../Components/SecondaryButton.vue";
-import SlideOver from "../../../Components/SlideOver.vue";
-import SelectMenu from "@/Components/Forms/SelectMenu.vue";
-import TextInput from "@/Components/Forms/TextInput.vue";
-import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
+import SiteHead from "@/Components/SiteHead.vue";
+import SlideOver from "@/Components/SlideOver.vue";
+import Steps from "@/Components/Wizards/Steps.vue";
+import InfoAlert from "@/Components/Alerts/InfoAlert.vue";
+import SourceCreateStep1 from "./SourceCreateWizard/SourceCreateStep1.vue";
+import SourceCreateStep2 from "./SourceCreateWizard/SourceCreateStep2.vue";
+import SourceCreateStep3 from "./SourceCreateWizard/SourceCreateStep3.vue";
+import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
+import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+
 export default {
   components: {
-    PrimaryButton,
-    SecondaryButton,
+    SiteHead,
     SlideOver,
-    SelectMenu,
-    TextInput,
+    Steps,
+    InfoAlert,
+    SourceCreateStep1,
+    SourceCreateStep2,
+    SourceCreateStep3,
     BulletSteps,
+    SecondaryOutlinedButton,
+    SecondaryButton,
+    PrimaryButton,
   },
 
   props: {
@@ -69,11 +121,11 @@ export default {
       type: Array,
       required: true,
     },
-    equipmentsCategories: {
+    equipmentCategories: {
       type: Array,
       required: true,
     },
-    equipments: {
+    equipment: {
       type: Array,
       required: true,
     },
@@ -91,120 +143,213 @@ export default {
     },
   },
 
-  emits: ["update:modelValue"],
-
-  setup(props) {
+  setup() {
     const store = useStore();
-    const steps = ref([
-      {
-        name: "Source Details",
-        component: "Objects/Sources/SourceCreateWizard/Step1.vue",
-        status: "current", // status: current | complete | upcoming
-      },
-      {
-        name: "Equipment",
-        component: "Objects/Sources/SourceCreateWizard/Step2.vue",
-        status: "upcoming",
-      },
-      {
-        name: "Processes",
-        component: "Objects/Sources/SourceCreateWizard/Step3.vue",
-        status: "upcoming",
-      },
-      {
-        name: "Scripts",
-        component: "Objects/Sources/SourceCreateWizard/Step4.vue",
-        status: "upcoming",
-      },
-    ]);
-    const currentStep = ref(steps.value[0]);
-    const currentStepProps = ref({});
 
-    const stepComponent = computed(() => {
-      // @geocfu: i really dont like how this gets updated reactively rn.
-      // TODO: we MUST check it again
-      if (currentStep.value)
-        return defineAsyncComponent(() =>
-          import(`@/Pages/${currentStep.value.component}`)
-        );
+    const currentStep = ref(1);
+    const nextStepRequest = ref(false);
+    const incompleteStepAlert = ref(false);
+
+    const source = computed(() => store.getters["source/source"]);
+    const equipment = computed(() => store.getters["source/equipment"]);
+    const processes = computed(() => store.getters["source/processes"]);
+    const template = computed(() => store.getters["source/template"]);
+    const location = computed(() => store.getters["source/location"]);
+
+    const form = useForm({
+      source: {
+        data: null,
+      },
+      equipment: [],
+      processes: [],
+      template_id: null,
+      location_id: null,
+      location: null,
     });
 
-    watch(
-      currentStep,
-      (currentStep) => {
-        currentStepProps.value = {};
+    const mapStepStatus = (index) =>
+      currentStep.value === index
+        ? "current"
+        : currentStep.value < index
+        ? "upcoming"
+        : "complete";
 
-        switch (currentStep.name) {
-          case "Source Details":
-            currentStepProps.value.templates = props.templates;
-            currentStepProps.value.locations = props.locations;
-            break;
-          case "Equipment":
-            currentStepProps.value.equipmentsCategories =
-              props.equipmentsCategories;
-            currentStepProps.value.equipments = props.equipments;
-            break;
-          case "Processes":
-            currentStepProps.value.processesCategories =
-              props.processesCategories;
-            currentStepProps.value.processes = props.processes;
-            break;
-          case "Scripts":
-            currentStepProps.value.objects = props.equipments;
-            break;
-
-          default:
-            break;
-        }
+    const steps = computed(() => [
+      {
+        id: "Step 1",
+        name: "Properties",
+        status: mapStepStatus(1),
       },
-      { immediate: true, deep: true }
-    );
+      {
+        id: "Step 2",
+        name: "Equipment",
+        status: mapStepStatus(2),
+      },
+      {
+        id: "Step 3",
+        name: "Processes",
+        status: mapStepStatus(3),
+      },
+    ]);
 
-    const currentStepIndex = computed(() =>
-      steps.value.findIndex((step) => step.name === currentStep.value.name)
-    );
+    const onPreviousStep = () => currentStep.value--;
+    const onNextStep = () => (nextStepRequest.value = true);
 
-    const navigateToPreviousStep = () => {
-      if (currentStepIndex.value !== 0) {
-        steps.value[currentStepIndex.value].status = "upcoming";
-        steps.value[currentStepIndex.value - 1].status = "current";
-        currentStep.value = steps.value[currentStepIndex.value - 1];
-
-        return;
-      }
-    };
-
-    const navigateToNextStep = () => {
-      console.log(currentStepIndex.value, steps.value.length);
-      if (currentStepIndex.value < steps.value.length - 1) {
-        steps.value[currentStepIndex.value].status = "complete";
-        steps.value[currentStepIndex.value + 1].status = "current";
-        currentStep.value = steps.value[currentStepIndex.value + 1];
+    const onCompleted = () => {
+      if (currentStep.value === steps.value.length) {
+        submit();
 
         return;
       }
-      const form = useForm(store.getters["sources/form"]);
-      form.post(route("objects.sources.store"), {
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+
+      nextStepRequest.value = false;
+      incompleteStepAlert.value = false;
+      currentStep.value++;
     };
+    const onIncompleted = () => {
+      incompleteStepAlert.value = true;
+      nextStepRequest.value = false;
+    };
+
+    const submit = () => {
+      form
+        .transform((data) => {
+          // We want to transform the "to-send" data, not the original data
+          const deepCopyOfFormData = window._.cloneDeep(data);
+
+          // source.data
+          const deepCopyOfSource = window._.cloneDeep(source.value);
+          if (template.value.properties.length) {
+            for (const property of template.value.properties) {
+              const prop = property.property;
+              const key = prop.symbolic_name;
+              const dataType = prop.dataType.toLowerCase();
+
+              if (prop.inputType === "select") {
+                // if the property has a value, get it and re-assign the property as a string
+                if (Object.keys(deepCopyOfSource.data[key]).length) {
+                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+                } else {
+                  if (dataType === "text" || dataType === "string") {
+                    deepCopyOfSource.data[key] = "";
+                  } else {
+                    deepCopyOfSource.data[key] = null;
+                  }
+                }
+              }
+            }
+          }
+          deepCopyOfFormData.source = deepCopyOfSource;
+
+          // equipment
+          const deepCopyOfEquipment = window._.cloneDeep(equipment.value);
+          if (equipment.value.length) {
+            for (const [index, equip] of equipment.value.entries()) {
+              if (!Object.keys(equip.data).length) continue;
+
+              for (const property of equip.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
+
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (
+                    Object.keys(deepCopyOfEquipment[index].data[key]).length
+                  ) {
+                    deepCopyOfEquipment[index].data[key] =
+                      deepCopyOfEquipment[index].data[key].key;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfEquipment[index].data[key] = "";
+                    } else {
+                      deepCopyOfEquipment[index].data[key] = null;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (deepCopyOfEquipment.length)
+            deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
+              id: e.key,
+              category_id: e.parent,
+              data: e.data,
+            }));
+
+          //processes
+          const deepCopyOfProcesses = window._.cloneDeep(processes.value);
+          if (processes.value.length) {
+            for (const [index, process] of processes.value.entries()) {
+              if (!Object.keys(process.data).length) continue;
+
+              for (const property of process.props) {
+                const prop = property.property;
+                const key = prop.symbolic_name;
+                const dataType = prop.dataType.toLowerCase();
+
+                if (prop.inputType === "select") {
+                  // if the property has a value, get it and re-assign the property as a string
+                  if (
+                    Object.keys(deepCopyOfProcesses[index].data[key]).length
+                  ) {
+                    deepCopyOfProcesses[index].data[key] =
+                      deepCopyOfProcesses[index].data[key].key;
+                  } else {
+                    if (dataType === "text" || dataType === "string") {
+                      deepCopyOfProcesses[index].data[key] = "";
+                    } else {
+                      deepCopyOfProcesses[index].data[key] = null;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          if (deepCopyOfProcesses.length)
+            deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
+              id: p.key,
+              category_id: p.parent,
+              data: p.data,
+            }));
+
+          //template
+          if (Object.keys(template.value).length)
+            deepCopyOfFormData.template_id = template.value.key;
+
+          //location
+          if (Object.keys(location.value).length) {
+            if (typeof location.value.key === "object")
+              deepCopyOfFormData.location = location.value.key;
+            else deepCopyOfFormData.location_id = location.value.key;
+          }
+
+          return deepCopyOfFormData;
+        })
+        .post(route("objects.sources.store"), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+          onError: (err) => console.error(err),
+        });
+    };
+
+    const onCancel = () =>
+      store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
-      steps,
+      form,
       currentStep,
-      currentStepIndex,
-      currentStepProps,
-      stepComponent,
-      navigateToPreviousStep,
-      navigateToNextStep,
-      onCancel: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      nextStepRequest,
+      incompleteStepAlert,
+      steps,
+      onPreviousStep,
+      onNextStep,
+      onCompleted,
+      onIncompleted,
+      onCancel,
     };
   },
 };
 </script>
-
-
