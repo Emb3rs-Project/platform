@@ -14,7 +14,7 @@
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
-      <div v-if="objects?.length">
+      <div v-if="objects.length">
         <AmazingIndexTable
           v-model="objects"
           :columns="tableColumns"
@@ -166,7 +166,8 @@ export default {
       () => store.getters["objects/filterOption"]
     );
 
-    // const selectedObject = ref(storeFilterOption.value ?? filterOptions[0]);
+    const storeInstances = computed(() => store.getters["objects/instances"]);
+
     const selectedObject = computed({
       get: () => storeFilterOption.value ?? filterOptions[0],
       set: (value) =>
@@ -175,7 +176,28 @@ export default {
         }),
     });
 
+    // TODO: Add links when they are ready
     const objects = ref(null);
+
+    // const instances = ref(null);
+    // if (storeInstances.value.length) {
+    //   instances.value = storeInstances.value;
+    // } else {
+    //   instances.value = props.instances.map((i) => ({
+    //     ...i,
+    //     selected: true,
+    //   }));
+    // }
+
+    const instances = computed(() => {
+      if (storeInstances.value.length) return storeInstances.value;
+
+      return props.instances.map((i) => ({
+        ...i,
+        selected: true,
+      }));
+    });
+
     const filterDropdown = ref(false);
     const modalIsOpen = ref(false);
     const currentModal = ref(null);
@@ -192,12 +214,12 @@ export default {
 
         switch (title) {
           case "sources":
-            objects.value = props.instances.filter(
+            objects.value = instances.value.filter(
               (i) => i.template.category.type === "source"
             );
             break;
           case "sinks":
-            objects.value = props.instances.filter(
+            objects.value = instances.value.filter(
               (i) => i.template.category.type === "sink"
             );
             break;
@@ -208,6 +230,25 @@ export default {
           default:
             break;
         }
+      },
+      { immediate: true, deep: true }
+    );
+
+    watch(
+      instances,
+      (value) => {
+        console.log("hello");
+        // store.commit("objects/setInstances", {
+        //   instances: window._.cloneDeep(value),
+        // });
+      },
+      { deep: true }
+    );
+
+    watch(
+      () => storeInstances,
+      (value) => {
+        console.log("storeInstances", value);
       },
       { immediate: true, deep: true }
     );

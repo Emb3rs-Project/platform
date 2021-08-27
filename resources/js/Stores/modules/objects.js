@@ -2,7 +2,10 @@ const _state = () => ({
   currentRoute: null,
   currentRouteProps: null,
   slideOpen: false,
-  filterOption: null
+  filterOption: null,
+
+  instances: [],
+  links: [],
 });
 
 const getters = {
@@ -10,7 +13,10 @@ const getters = {
   currentRouteProps: (state) => state.currentRouteProps,
   routeCheckSum: (state) => `${state.currentRoute}:${JSON.stringify(state.currentRouteProps)}`,
   slideOpen: (state) => state.slideOpen,
-  filterOption: (state) => state.filterOption
+  filterOption: (state) => state.filterOption,
+
+  instances: (state) => state.instances,
+  links: (state) => state.links,
 };
 
 const actions = {
@@ -31,7 +37,10 @@ const mutations = {
   openSlide: (state) => state.slideOpen = true,
   closeSlide: (state) => state.slideOpen = false,
   setSlide: (state, status) => state.slideOpen = status,
-  setFilterOption: (state, payload) => state.filterOption = payload.filterOption
+  setFilterOption: (state, payload) => state.filterOption = payload.filterOption,
+
+  setInstances: (state, payload) => state.instances = payload.instances,
+  setLinks: (state, payload) => state.links = payload.links,
 };
 
 

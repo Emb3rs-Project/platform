@@ -13,7 +13,7 @@
               <input
                 type="checkbox"
                 class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                v-model="allSelected"
+                v-model="selectAll"
                 ref="mainCheckbox"
               />
             </div>
@@ -31,7 +31,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="(item, index) in model"
+          v-for="(item, index) in items"
           :key="index"
           :class="index % 2 ? 'bg-gray-50' : 'bg-white'"
         >
@@ -64,7 +64,8 @@
 </template>
 
 <script>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
 
 export default {
   components: {},
@@ -80,7 +81,6 @@ export default {
     },
     hasCheckbox: {
       type: Boolean,
-      required: false,
       default: true,
     },
     headerClasses: {
@@ -96,35 +96,41 @@ export default {
   emits: ["update:modelValue", "onUpdateSelection"],
 
   setup(props, ctx) {
+    const store = useStore();
+
     const mainCheckbox = ref(null);
 
-    const model = computed({
-      get: () => props.modelValue,
-      set: (value) => ctx.emit("update:modelValue", value),
+    const items = computed(() => props.modelValue);
+
+    const selectAll = computed({
+      get: () => items.value.filter((m) => m.selected).length > 0,
+      set: (value) => items.value.forEach((m) => (m.selected = value)),
     });
 
-    console.log(model.value);
-
-    const allSelected = computed({
-      get: () => model.value.filter((m) => m.selected).length > 0,
-      set: (value) => model.value.forEach((m) => (m.selected = value)),
-    });
-
-    watch(model.value, () => onSelectRow(), { deep: true });
+    watch(
+      () => items,
+      () => {
+        onSelectRow();
+      },
+      { deep: true }
+    );
 
     const onSelectRow = () => {
-      let selected = model.value.filter((m) => m.selected).length;
+      console.log("onSelectRow", onSelectRow);
+      let selectedItems = items.value.filter((m) => m.selected).length;
 
-      if (selected > 0 && selected !== model.value.length)
+      if (selectedItems > 0 && selectedItems !== items.value.length)
         mainCheckbox.value.indeterminate = true;
       else mainCheckbox.value.indeterminate = false;
 
       ctx.emit("onUpdateSelection");
     };
 
+    onMounted(() => onSelectRow());
+
     return {
-      allSelected,
-      model,
+      selectAll,
+      items,
       onSelectRow,
       mainCheckbox,
     };
