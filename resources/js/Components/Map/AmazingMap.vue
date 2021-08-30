@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="map"
-    class="min-h-screen min-w-full z-0"
-  ></div>
+  <div id="map" class="min-h-screen min-w-full z-0"></div>
 </template>
 
 <script>
@@ -60,7 +57,7 @@ export default {
 
     const center = computed({
       get() {
-        if (!props.center.length) return user.value.data.map.center;
+        if (!props.center.length) return user.value?.data?.map?.center;
 
         return props.center;
       },
@@ -71,7 +68,7 @@ export default {
 
     const zoom = computed({
       get() {
-        if (props.zoom === -1) return user.value.data.map.zoom;
+        if (props.zoom === -1) return user.value?.data?.map?.zoom;
 
         return props.zoom;
       },

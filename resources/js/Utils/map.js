@@ -239,7 +239,7 @@ export default {
     layerControl: null
   }) {
     for (let marker of Object.values(mapObjects)) {
-      map.removeLayer(marker)
+      map?.removeLayer(marker)
     }
 
     mapObjects = {
@@ -251,7 +251,7 @@ export default {
     mapObjects.layerControl?.removeFrom(map)
   },
   focusMarker(map, marker, mapObjects) {
-    const allMarkers = mapObjects.all.getLayers();
+    const allMarkers = mapObjects.all?.getLayers();
 
     for (const _m of allMarkers) {
       const _opt = this.createIconOptions(_m.options.instanceType)
