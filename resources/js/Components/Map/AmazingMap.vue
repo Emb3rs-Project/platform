@@ -372,7 +372,8 @@ export default {
         onCenterLocation(marker);
       }
 
-      if (type === "map/refreshMap") {
+      if (type === "map/doRefreshMap") {
+        console.log("hi");
         mapUtils.removeAllInstances(map.value, mapObjects.value);
         refreshInstances();
       }

@@ -1,5 +1,6 @@
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 
+
 const _state = () => ({
   focusedMarker: null,
   selectedMarker: null,
@@ -19,7 +20,14 @@ const getters = {
 
 const actions = {
   centerAt: () => { },
-  refreshMap: () => { },
+  refreshMap: ({ dispatch }) => {
+    // DO LOGIC HERE
+    // GET INFO FROM DB or FROM ANOTHER STATE OR WTV
+    // THEN TRIGGER THE doREFRESHMAP!
+
+    dispatch('doRefreshMap')
+  },
+  doRefreshMap: () => { },
   selectMarker: ({ commit, state }, { marker, color }) => {
     commit("selectMarker", marker)
     commit("selectMarkerColor", color)
