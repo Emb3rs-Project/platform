@@ -19,7 +19,18 @@ const getters = {
 
 const actions = {
   centerAt: () => { },
-  refreshMap: () => { },
+  refreshMap: ({ dispatch }) => {
+    // DO LOGIC HERE
+    // GET INFO FROM DB or FROM ANOTHER STATE OR WTV
+    // THEN TRIGGER THE doREFRESHMAP!
+    console.log("refreshMap");
+
+    dispatch('doRefreshMap')
+  },
+  doRefreshMap: () => {
+    console.log("doRefreshMap");
+
+  },
   selectMarker: ({ commit, state }, { marker, color }) => {
     commit("selectMarker", marker)
     commit("selectMarkerColor", color)

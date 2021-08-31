@@ -176,27 +176,17 @@ export default {
         }),
     });
 
-    // TODO: Add links when they are ready
     const objects = ref(null);
 
-    // const instances = ref(null);
-    // if (storeInstances.value.length) {
-    //   instances.value = storeInstances.value;
-    // } else {
-    //   instances.value = props.instances.map((i) => ({
-    //     ...i,
-    //     selected: true,
-    //   }));
-    // }
-
-    const instances = computed(() => {
-      if (storeInstances.value.length) return storeInstances.value;
-
-      return props.instances.map((i) => ({
-        ...i,
-        selected: true,
-      }));
-    });
+    // TODO: Add links when they are ready
+    const instances = ref(
+      storeInstances.value.length
+        ? window._.cloneDeep(storeInstances.value)
+        : props.instances.map((i) => ({
+            ...i,
+            selected: true,
+          }))
+    );
 
     const filterDropdown = ref(false);
     const modalIsOpen = ref(false);
@@ -236,21 +226,12 @@ export default {
 
     watch(
       instances,
-      (value) => {
-        console.log("hello");
-        // store.commit("objects/setInstances", {
-        //   instances: window._.cloneDeep(value),
-        // });
+      (values) => {
+        store.commit("objects/setInstances", {
+          instances: window._.cloneDeep(values),
+        });
       },
-      { deep: true }
-    );
-
-    watch(
-      () => storeInstances,
-      (value) => {
-        console.log("storeInstances", value);
-      },
-      { immediate: true, deep: true }
+      { deep: true, immediate: true }
     );
 
     const getSingular = (val) => pluralize.singular(val);

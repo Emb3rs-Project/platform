@@ -10,8 +10,9 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
-import mapUtils from "@/Utils/map.js";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
+
+import mapUtils from "@/Utils/map.js";
 
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -43,14 +44,15 @@ export default {
     });
 
     const instances = ref([]);
+    const storeInstances = computed(() => store.getters["objects/instances"]);
 
-    watch(
-      instances,
-      () => {
-        if (map.value) loadMarkers();
-      },
-      { immediate: true, deep: true }
-    );
+    watch(instances, () => loadMarkers(), {
+      deep: true,
+    });
+
+    watch(storeInstances, (values) => (instances.value = values), {
+      deep: true,
+    });
 
     const currentSegment = {
       from: null,
@@ -308,7 +310,6 @@ export default {
     };
 
     const onMarkerClick = (instance) => {
-      console.log("AmazingMap::onMarkerClick -> instance", instance);
       const _type = instance.template.category.type;
 
       switch (_type) {
@@ -332,22 +333,35 @@ export default {
     };
 
     const loadMarkers = () => {
-      if (instances.value.length) {
-        mapUtils.addInstances(
-          map.value,
-          instances.value,
-          mapObjects.value,
-          onMarkerClick
-        );
-      }
+      if (!instances.value.length) return;
+
+      mapUtils.removeAllInstances(map.value, mapObjects.value);
+
+      mapUtils.addInstances(
+        map.value,
+        instances.value,
+        mapObjects.value,
+        onMarkerClick
+      );
     };
 
-    const refreshInstances = () =>
-      axios.get(route("objects.markers")).then(({ data }) => {
-        instances.value = data.instances;
-      });
+    const refreshInstances = () => {
+      if (storeInstances.value.length) {
+        instances.value = storeInstances.value;
+        return;
+      }
 
-    onMounted(async () => {
+      window.axios.get(route("objects.markers")).then(({ data }) => {
+        if (!data.instances.length) return;
+
+        instances.value = data.instances.map((i) => ({
+          ...i,
+          selected: true,
+        }));
+      });
+    };
+
+    onMounted(() => {
       map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
         contextmenu: true,
@@ -376,7 +390,7 @@ export default {
           onCenterLocation(marker);
         }
 
-        if (type === "map/refreshMap") {
+        if (type === "map/doRefreshMap") {
           mapUtils.removeAllInstances(map.value, mapObjects.value);
           refreshInstances();
         }
@@ -387,21 +401,11 @@ export default {
       }
     );
 
-    const unsubscribeFromMutations = store.subscribe((mutation, state) => {
-      if (mutation.type === "objects/setInstances") {
-        mapUtils.removeAllInstances(map.value, mapObjects.value);
-      }
-
-      console.log(mutation.type);
-      console.log(mutation.payload);
-    });
-
     onBeforeUnmount(() => {
       map.value.off("moveend");
       map.value.off("zoomend");
 
       unsubscribeFromActions();
-      unsubscribeFromMutations();
     });
 
     return {
