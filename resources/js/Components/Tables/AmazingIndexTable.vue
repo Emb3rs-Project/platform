@@ -12,7 +12,7 @@
             <div class="flex justify-center items-center h-5">
               <input
                 type="checkbox"
-                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
                 v-model="selectAll"
                 ref="mainCheckbox"
               />
@@ -44,7 +44,7 @@
               <input
                 v-model="item.selected"
                 type="checkbox"
-                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:opacity-50"
+                class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded disabled:opacity-50"
               />
             </div>
           </td>
@@ -116,7 +116,6 @@ export default {
     );
 
     const onSelectRow = () => {
-      console.log("onSelectRow", onSelectRow);
       let selectedItems = items.value.filter((m) => m.selected).length;
 
       if (selectedItems > 0 && selectedItems !== items.value.length)
