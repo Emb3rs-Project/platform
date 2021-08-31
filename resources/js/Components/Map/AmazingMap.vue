@@ -35,6 +35,7 @@ export default {
     const store = useStore();
 
     const map = ref(null);
+
     const mapObjects = ref({
       sources: null,
       sinks: null,
@@ -60,7 +61,7 @@ export default {
 
     const center = computed({
       get() {
-        if (!props.center.length) return user.value.data.map.center;
+        if (!props.center.length) return user.value?.data?.map?.center;
 
         return props.center;
       },
@@ -71,7 +72,7 @@ export default {
 
     const zoom = computed({
       get() {
-        if (props.zoom === -1) return user.value.data.map.zoom;
+        if (props.zoom === -1) return user.value?.data?.map?.zoom;
 
         return props.zoom;
       },
@@ -307,8 +308,7 @@ export default {
     };
 
     const onMarkerClick = (instance) => {
-      console.log("HIEEEEELLLLLOOOO");
-      console.log(store.state.map.selectedMarker);
+      console.log("AmazingMap::onMarkerClick -> instance", instance);
       const _type = instance.template.category.type;
 
       switch (_type) {
@@ -369,27 +369,39 @@ export default {
       refreshInstances();
     });
 
-    const unsubscribeAction = store.subscribeAction(({ type, payload }) => {
-      if (type === "map/centerAt") {
-        const { marker } = payload;
-        onCenterLocation(marker);
-      }
+    const unsubscribeFromActions = store.subscribeAction(
+      ({ type, payload }) => {
+        if (type === "map/centerAt") {
+          const { marker } = payload;
+          onCenterLocation(marker);
+        }
 
-      if (type === "map/refreshMap") {
+        if (type === "map/refreshMap") {
+          mapUtils.removeAllInstances(map.value, mapObjects.value);
+          refreshInstances();
+        }
+
+        if (type === "map/unfocusMarker") {
+          mapUtils.focusMarker(map.value, null, mapObjects.value);
+        }
+      }
+    );
+
+    const unsubscribeFromMutations = store.subscribe((mutation, state) => {
+      if (mutation.type === "objects/setInstances") {
         mapUtils.removeAllInstances(map.value, mapObjects.value);
-        refreshInstances();
       }
 
-      if (type === "map/unfocusMarker") {
-        mapUtils.focusMarker(map.value, null, mapObjects.value);
-      }
+      console.log(mutation.type);
+      console.log(mutation.payload);
     });
 
     onBeforeUnmount(() => {
       map.value.off("moveend");
       map.value.off("zoomend");
 
-      unsubscribeAction();
+      unsubscribeFromActions();
+      unsubscribeFromMutations();
     });
 
     return {

@@ -28,7 +28,7 @@ export default {
     return map;
   },
   destroy(mapId) {
-    // maybe we need to distroy the map
+    // maybe we need to destroy the map
   },
   loadMarkers(map, markers = [], mapObjects = {}) {
     for (const marker of markers) {
@@ -169,14 +169,6 @@ export default {
       }
 
       switch (type) {
-        case 'sink':
-          console.log('MAP::addInstances -> Added a sink.', instance);
-          iconOptions.icon = 'leaf'
-          iconOptions.textClass = 'text-green-700'
-          iconOptions.borderClass = 'border-green-700'
-          iconOptions.type = 'sink'
-          sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
-          break;
         case 'source':
           console.log('MAP::addInstances -> Added a source.', instance);
           iconOptions.icon = 'fire'
@@ -185,11 +177,19 @@ export default {
           iconOptions.type = 'source'
           sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
           break;
+        case 'sink':
+          console.log('MAP::addInstances -> Added a sink.', instance);
+          iconOptions.icon = 'leaf'
+          iconOptions.textClass = 'text-green-700'
+          iconOptions.borderClass = 'border-green-700'
+          iconOptions.type = 'sink'
+          sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
+          break;
       }
     }
 
-    mapObjects.sinks = L.layerGroup(sinks)
     mapObjects.sources = L.layerGroup(sources)
+    mapObjects.sinks = L.layerGroup(sinks)
     mapObjects.all = L.layerGroup([...sinks, ...sources])
 
     console.log('MAP::addInstances -> mapObjects', mapObjects);
@@ -225,8 +225,6 @@ export default {
       iconOptions.borderClass = 'border-yellow-500'
     }
 
-
-
     iconOptions.customClasses = [iconOptions.textClass, iconOptions.borderClass].join(" ") + ""
 
     return iconOptions
@@ -238,8 +236,13 @@ export default {
     all: null,
     layerControl: null
   }) {
+    // map.removeLayer(mapObjects.sources);
+    // map.removeLayer(mapObjects.sinks);
+    // map.removeLayer(mapObjects.links);
+
     for (let marker of Object.values(mapObjects)) {
-      map.removeLayer(marker)
+      // console.log(marker);
+      map?.removeLayer(marker)
     }
 
     mapObjects = {
@@ -248,10 +251,12 @@ export default {
       links: null
     }
 
-    mapObjects.layerControl?.removeFrom(map)
+    mapObjects.layerControl?.removeFrom(map);
+
+    console.log(map);
   },
   focusMarker(map, marker, mapObjects) {
-    const allMarkers = mapObjects.all.getLayers();
+    const allMarkers = mapObjects.all?.getLayers();
 
     for (const _m of allMarkers) {
       const _opt = this.createIconOptions(_m.options.instanceType)
