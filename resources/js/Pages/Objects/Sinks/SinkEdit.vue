@@ -11,34 +11,25 @@
   >
     <!-- Sink Template -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-          Templates
-        </label>
-      </div>
-      <div class="sm:col-span-2">
+      <div class="sm:col-span-3">
         <SelectMenu
           v-model="selectedTemplate"
           :options="templates"
+          label="Template"
+          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
         />
       </div>
     </div>
 
     <!-- Sink Location -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-          Locations
-        </label>
-      </div>
-      <div class="sm:col-span-2">
+      <div class="sm:col-span-3">
         <SelectMenu
           v-model="selectedLocation"
           :options="locations"
+          label="Location"
           :disabled="selectedTemplate ? false : true"
+          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
         />
       </div>
     </div>
@@ -49,19 +40,12 @@
       v-for="prop in properties"
       :key="prop.id"
     >
-      <div>
-        <label
-          for="project_name"
-          class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-        >
-          {{ prop.property.description }}
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div v-if="prop.property.inputType === 'text'">
+      <div class="sm:col-span-3">
+        <div v-if="prop.property.inputType === 'text' || prop.property.inputType === 'String'">
           <TextInput
             v-model="form.sink.data[prop.property.symbolic_name]"
             :label="prop.property.name"
+            :description="prop.property.description"
             :unit="prop.unit.symbol"
             :placeholder="prop.property.name"
             :required="prop.required"
@@ -71,6 +55,7 @@
           <SelectMenu
             v-model="form.sink.data[prop.property.symbolic_name]"
             :options="prop.property.data.options"
+            :description="prop.property.description"
             :disabled="selectedTemplate ? false : true"
             :required="prop.required"
             :label="prop.property.name"
