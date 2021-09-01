@@ -1,5 +1,6 @@
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 
+
 const _state = () => ({
   focusedMarker: null,
   selectedMarker: null,
