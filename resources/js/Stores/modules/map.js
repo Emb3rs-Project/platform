@@ -1,6 +1,5 @@
 import route from "../../../../vendor/tightenco/ziggy/src/js";
 
-
 const _state = () => ({
   focusedMarker: null,
   selectedMarker: null,
@@ -8,6 +7,7 @@ const _state = () => ({
   currentLinks: {},
   center: [],
   zoom: null,
+  defaultLocation: []
 });
 
 const getters = {
@@ -16,6 +16,7 @@ const getters = {
   currentLinks: (state) => state.currentLinks,
   center: (state) => state.center,
   zoom: (state) => state.zoom,
+  defaultLocation: (state) => state.defaultLocation,
 };
 
 const actions = {
@@ -68,6 +69,20 @@ const actions = {
 
     await window.axios.post(route('user.mapData.store'), { map });
   },
+  getDefaultLocation: async (ctx) => {
+    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
+
+    if (res[0].data.map.defaultLocation) ctx.commit('setDefaultLocation', res[0].data.map.defaultLocation);
+  },
+  setDefaultLocation: async (ctx, payload) => {
+    const map = {};
+
+    map.defaultLocation = payload.defaultLocation;
+
+    ctx.commit('setDefaultLocation', payload.defaultLocation);
+
+    await window.axios.post(route('user.mapData.store'), { map });
+  },
 };
 
 const mutations = {
@@ -78,7 +93,8 @@ const mutations = {
   unsetLink: (state, id) => delete state.currentLinks[id],
   startLinks: (state) => state.currentLinks = {},
   setCenter: (state, center) => state.center = [center.lat, center.lng],
-  setZoom: (state, zoom) => state.zoom = zoom
+  setZoom: (state, zoom) => state.zoom = zoom,
+  setDefaultLocation: (state, location) => state.defaultLocation = [location.lat, location.lng],
 };
 
 

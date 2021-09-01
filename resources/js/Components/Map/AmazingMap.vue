@@ -240,6 +240,12 @@ export default {
       });
     };
 
+    const onSetDefaultLocation = (location) => {
+      store.dispatch("map/setDefaultLocation", {
+        defaultLocation: location.latlng,
+      });
+    };
+
     const defautMapContext = [
       {
         text: "Create Sink Here",
@@ -249,11 +255,16 @@ export default {
         text: "Create Source Here",
         callback: onCreateSource,
       },
-      "-",
       {
         text: "Start Link Creation",
         callback: onCreateLink,
       },
+      "-",
+      {
+        text: "Set Default Location",
+        callback: onSetDefaultLocation,
+      },
+      "-",
       {
         text: "Zoom in",
         callback: (o) => map.value.zoomIn(),

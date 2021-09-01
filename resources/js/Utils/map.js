@@ -25,6 +25,23 @@ export default {
       }
     ).addTo(map);
 
+    L.Control.DefaultLocation = L.Control.extend({
+      onAdd: (map) => {
+        var img = L.DomUtil.create('img');
+
+        img.src = '../../images/logo.png';
+        img.style.width = '200px';
+
+        return img;
+      },
+    });
+
+    L.control.watermark = function (opts) {
+      return new L.Control.DefaultLocation(opts);
+    }
+
+    L.control.watermark({ position: 'topleft' }).addTo(map);
+
     return map;
   },
   destroy(mapId) { },
