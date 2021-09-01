@@ -1763,16 +1763,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v8.57.0",
+            "version": "v8.58.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6de01746680d7bc7e239b20ec5cdfe70ce586235"
+                "reference": "1b819bf99d87bd543a4d4895e5b3350f61ea7a23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6de01746680d7bc7e239b20ec5cdfe70ce586235",
-                "reference": "6de01746680d7bc7e239b20ec5cdfe70ce586235",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/1b819bf99d87bd543a4d4895e5b3350f61ea7a23",
+                "reference": "1b819bf99d87bd543a4d4895e5b3350f61ea7a23",
                 "shasum": ""
             },
             "require": {
@@ -1927,20 +1927,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2021-08-27T13:34:11+00:00"
+            "time": "2021-08-31T13:55:57+00:00"
         },
         {
             "name": "laravel/jetstream",
-            "version": "v2.3.15",
+            "version": "v2.3.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/jetstream.git",
-                "reference": "6318fc4a734ef894f38d0298f2dee42f7ee0e90c"
+                "reference": "c4bdd9939c18785a03627e7bab540c5acd588602"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/jetstream/zipball/6318fc4a734ef894f38d0298f2dee42f7ee0e90c",
-                "reference": "6318fc4a734ef894f38d0298f2dee42f7ee0e90c",
+                "url": "https://api.github.com/repos/laravel/jetstream/zipball/c4bdd9939c18785a03627e7bab540c5acd588602",
+                "reference": "c4bdd9939c18785a03627e7bab540c5acd588602",
                 "shasum": ""
             },
             "require": {
@@ -1993,7 +1993,7 @@
                 "issues": "https://github.com/laravel/jetstream/issues",
                 "source": "https://github.com/laravel/jetstream"
             },
-            "time": "2021-08-17T15:53:22+00:00"
+            "time": "2021-08-31T15:00:06+00:00"
         },
         {
             "name": "laravel/nova",
