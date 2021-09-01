@@ -14,7 +14,7 @@
     </div>
 
     <div class="overflow-y-auto overflow-x-auto">
-      <div v-if="objects?.length">
+      <div v-if="objects.length">
         <AmazingIndexTable
           v-model="objects"
           :columns="tableColumns"
@@ -123,7 +123,7 @@ import { useStore } from "vuex";
 import pluralize from "pluralize";
 
 import SlideOver from "@/Components/SlideOver.vue";
-import FilterDropdown from "@/Components/BrandedDropdown.vue";
+import FilterDropdown from "@/Components/FilterDropdown.vue";
 import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
@@ -160,12 +160,34 @@ export default {
   setup(props) {
     const store = useStore();
 
-    const tableColumns = ["name", "location", "actions"];
-    const selectedObject = ref(
-      store.state.objects.filterOption ?? filterOptions[0]
+    const tableColumns = ["id", "name", "location", "actions"];
+
+    const storeFilterOption = computed(
+      () => store.getters["objects/filterOption"]
     );
 
+    const storeInstances = computed(() => store.getters["objects/instances"]);
+
+    const selectedObject = computed({
+      get: () => storeFilterOption.value ?? filterOptions[0],
+      set: (value) =>
+        store.commit("objects/setFilterOption", {
+          filterOption: value,
+        }),
+    });
+
     const objects = ref(null);
+
+    // TODO: Add links when they are ready
+    const instances = ref(
+      storeInstances.value.length
+        ? window._.cloneDeep(storeInstances.value)
+        : props.instances.map((i) => ({
+            ...i,
+            selected: true,
+          }))
+    );
+
     const filterDropdown = ref(false);
     const modalIsOpen = ref(false);
     const currentModal = ref(null);
@@ -177,19 +199,21 @@ export default {
 
     watch(
       selectedObject,
-      (current) => {
-        switch (current.title) {
-          case "Sources":
-            objects.value = props.instances.filter(
-              (i) => i.template?.category?.type === "source"
+      (selected) => {
+        const title = selected.title.toLowerCase();
+
+        switch (title) {
+          case "sources":
+            objects.value = instances.value.filter(
+              (i) => i.template.category.type === "source"
             );
             break;
-          case "Sinks":
-            objects.value = props.instances.filter(
-              (i) => i.template?.category?.type === "sink"
+          case "sinks":
+            objects.value = instances.value.filter(
+              (i) => i.template.category.type === "sink"
             );
             break;
-          case "Links":
+          case "links":
             objects.value = props.links;
             break;
 
@@ -197,12 +221,18 @@ export default {
             break;
         }
       },
-      { immediate: true }
+      { immediate: true, deep: true }
     );
 
-    watch(selectedObject, (current) => {
-      store.commit("objects/setFilterOption", current.title);
-    });
+    watch(
+      instances,
+      (values) => {
+        store.commit("objects/setInstances", {
+          instances: window._.cloneDeep(values),
+        });
+      },
+      { deep: true, immediate: true }
+    );
 
     const getSingular = (val) => pluralize.singular(val);
 
@@ -219,18 +249,21 @@ export default {
     const onConfirmation = (modalType) => {
       switch (modalType) {
         case "delete":
-          const _type = itemToDelete.value?.template?.category?.type;
+          const type = itemToDelete.value?.template?.category?.type;
 
-          if (_type === "source")
+          if (type === "source")
             Inertia.delete(
               route(`objects.sources.destroy`, itemToDelete.value.id),
               {
                 onSuccess: () => store.dispatch("map/refreshMap"),
               }
             );
-          if (_type === "sink")
+          if (type === "sink")
             Inertia.delete(
-              route(`objects.sinks.destroy`, itemToDelete.value.id)
+              route(`objects.sinks.destroy`, itemToDelete.value.id),
+              {
+                onSuccess: () => store.dispatch("map/refreshMap"),
+              }
             );
 
           objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);
@@ -264,6 +297,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

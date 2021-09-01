@@ -27,59 +27,59 @@ export default {
 
     return map;
   },
-  destroy(mapId) {
-    // maybe we need to distroy the map
-  },
-  loadMarkers(map, markers = [], mapObjects = {}) {
-    for (const marker of markers) {
-      const type = marker.type;
-      const data = marker.data;
-      switch (type) {
-        case "circle":
-          const circle = L.circle(data.center, {
-            color: 'red',
-            fillColor: 'red',
-            fillOpacity: 0.2,
-            radius: data.radius
-          }).addTo(map)
-          mapObjects[data.id] = circle
-          break;
-        case "polygon":
-          const polygon = L.polygon(data.points, {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 0.5,
-          }).addTo(map)
-          mapObjects[data.id] = polygon
-          break;
-        case "point":
-          const point = L.marker(data.center, {
-            icon: this.fontAwesomeIcon
-          }).addTo(map)
-          mapObjects[data.id] = point
-          break;
-      }
-    }
+  destroy(mapId) { },
+  // TODO: This is redundant but keep if for now
+  // loadMarkers(map, markers = [], mapObjects = {}) {
+  //   for (const marker of markers) {
+  //     const type = marker.type;
+  //     const data = marker.data;
+  //     switch (type) {
+  //       case "circle":
+  //         const circle = L.circle(data.center, {
+  //           color: 'red',
+  //           fillColor: 'red',
+  //           fillOpacity: 0.2,
+  //           radius: data.radius
+  //         }).addTo(map)
+  //         mapObjects[data.id] = circle
+  //         break;
+  //       case "polygon":
+  //         const polygon = L.polygon(data.points, {
+  //           color: 'blue',
+  //           fillColor: 'blue',
+  //           fillOpacity: 0.5,
+  //         }).addTo(map)
+  //         mapObjects[data.id] = polygon
+  //         break;
+  //       case "point":
+  //         const point = L.marker(data.center, {
+  //           icon: this.fontAwesomeIcon
+  //         }).addTo(map)
+  //         mapObjects[data.id] = point
+  //         break;
+  //     }
+  //   }
 
-    return mapObjects;
-  },
-  removeMarkers(map, markers) {
-    for (const marker of markers) {
-      const type = marker.type;
-      const data = marker.data;
-      switch (type) {
-        case "circle":
-          console.log('TODO: Remove Circle', data.center)
-          break;
-        case "polygon":
-          console.log('TODO: Remove Polygon', data.points)
-          break;
-        case "point":
-          console.log('TODO: Remove Point', data.center)
-          break;
-      }
-    }
-  },
+  //   return mapObjects;
+  // },
+  // TODO: This is redundant but keep if for now
+  // removeMarkers(map, markers) {
+  //   for (const marker of markers) {
+  //     const type = marker.type;
+  //     const data = marker.data;
+  //     switch (type) {
+  //       case "circle":
+  //         console.log('TODO: Remove Circle', data.center)
+  //         break;
+  //       case "polygon":
+  //         console.log('TODO: Remove Polygon', data.points)
+  //         break;
+  //       case "point":
+  //         console.log('TODO: Remove Point', data.center)
+  //         break;
+  //     }
+  //   }
+  // },
   loadLinks(map, markers = []) {
     for (const marker of markers) {
       if (marker.to)
@@ -118,8 +118,7 @@ export default {
       defaultTextClass: textClass,
       defaultBorderClass: borderClass,
       instanceType: type
-    })
-      .addTo(map);
+    }).addTo(map);
   },
   addCircle(map, center) {
     return L.circle(center, {
@@ -153,7 +152,7 @@ export default {
     const sinks = []
     const all = []
 
-    for (let instance of instances.filter((i) => i.location)) {
+    for (let instance of instances.filter((i) => i.location && i.selected)) {
 
       // Skipping Locations with areas
       if (instance.location.type !== 'point') continue;
@@ -169,30 +168,28 @@ export default {
       }
 
       switch (type) {
-        case 'sink':
-          console.log('MAP::addInstances -> Added a sink.', instance);
-          iconOptions.icon = 'leaf'
-          iconOptions.textClass = 'text-green-700'
-          iconOptions.borderClass = 'border-green-700'
-          iconOptions.type = 'sink'
-          sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
-          break;
         case 'source':
-          console.log('MAP::addInstances -> Added a source.', instance);
-          iconOptions.icon = 'fire'
-          iconOptions.textClass = 'text-red-700'
-          iconOptions.borderClass = 'border-red-700'
-          iconOptions.type = 'source'
-          sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)))
+          // console.log('MAP::addInstances -> Added a source.', instance);
+          iconOptions.icon = 'fire';
+          iconOptions.textClass = 'text-red-700';
+          iconOptions.borderClass = 'border-red-700';
+          iconOptions.type = 'source';
+          sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)));
+          break;
+        case 'sink':
+          // console.log('MAP::addInstances -> Added a sink.', instance);
+          iconOptions.icon = 'leaf';
+          iconOptions.textClass = 'text-green-700';
+          iconOptions.borderClass = 'border-green-700';
+          iconOptions.type = 'sink';
+          sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)));
           break;
       }
     }
 
-    mapObjects.sinks = L.layerGroup(sinks)
-    mapObjects.sources = L.layerGroup(sources)
-    mapObjects.all = L.layerGroup([...sinks, ...sources])
-
-    console.log('MAP::addInstances -> mapObjects', mapObjects);
+    mapObjects.sources = L.layerGroup(sources);
+    mapObjects.sinks = L.layerGroup(sinks);
+    mapObjects.all = L.layerGroup([...sinks, ...sources]);
   },
   createIconOptions(type, inFocus = false) {
     const iconOptions = {
@@ -225,8 +222,6 @@ export default {
       iconOptions.borderClass = 'border-yellow-500'
     }
 
-
-
     iconOptions.customClasses = [iconOptions.textClass, iconOptions.borderClass].join(" ") + ""
 
     return iconOptions
@@ -238,20 +233,29 @@ export default {
     all: null,
     layerControl: null
   }) {
-    for (let marker of Object.values(mapObjects)) {
-      map.removeLayer(marker)
+    const sources = mapObjects.sources?.getLayers() ?? [];
+    const sinks = mapObjects.sinks?.getLayers() ?? [];
+
+    for (const _sourceLayer of sources) {
+      map.removeLayer(_sourceLayer);
     }
+
+    for (const _sinkLayer of sinks) {
+      map.removeLayer(_sinkLayer);
+    }
+
+    mapObjects.layerControl?.removeFrom(map);
 
     mapObjects = {
+      all: null,
       sources: null,
       sinks: null,
-      links: null
+      links: null,
+      layerControl: null
     }
-
-    mapObjects.layerControl?.removeFrom(map)
   },
   focusMarker(map, marker, mapObjects) {
-    const allMarkers = mapObjects.all.getLayers();
+    const allMarkers = mapObjects.all?.getLayers();
 
     for (const _m of allMarkers) {
       const _opt = this.createIconOptions(_m.options.instanceType)

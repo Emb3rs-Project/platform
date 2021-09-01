@@ -10,8 +10,9 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
-import mapUtils from "@/Utils/map.js";
 import route from "../../../../vendor/tightenco/ziggy/src/js";
+
+import mapUtils from "@/Utils/map.js";
 
 import "beautifymarker";
 import "leaflet-contextmenu";
@@ -35,6 +36,7 @@ export default {
     const store = useStore();
 
     const map = ref(null);
+
     const mapObjects = ref({
       sources: null,
       sinks: null,
@@ -42,14 +44,15 @@ export default {
     });
 
     const instances = ref([]);
+    const storeInstances = computed(() => store.getters["objects/instances"]);
 
-    watch(
-      instances,
-      () => {
-        if (map.value) loadMarkers();
-      },
-      { immediate: true, deep: true }
-    );
+    watch(instances, () => loadMarkers(), {
+      deep: true,
+    });
+
+    watch(storeInstances, (values) => (instances.value = values), {
+      deep: true,
+    });
 
     const currentSegment = {
       from: null,
@@ -60,7 +63,7 @@ export default {
 
     const center = computed({
       get() {
-        if (!props.center.length) return user.value.data.map.center;
+        if (!props.center.length) return user.value?.data?.map?.center;
 
         return props.center;
       },
@@ -71,7 +74,7 @@ export default {
 
     const zoom = computed({
       get() {
-        if (props.zoom === -1) return user.value.data.map.zoom;
+        if (props.zoom === -1) return user.value?.data?.map?.zoom;
 
         return props.zoom;
       },
@@ -307,8 +310,6 @@ export default {
     };
 
     const onMarkerClick = (instance) => {
-      console.log("HIEEEEELLLLLOOOO");
-      console.log(store.state.map.selectedMarker);
       const _type = instance.template.category.type;
 
       switch (_type) {
@@ -332,22 +333,35 @@ export default {
     };
 
     const loadMarkers = () => {
-      if (instances.value.length) {
-        mapUtils.addInstances(
-          map.value,
-          instances.value,
-          mapObjects.value,
-          onMarkerClick
-        );
-      }
+      if (!instances.value.length) return;
+
+      mapUtils.removeAllInstances(map.value, mapObjects.value);
+
+      mapUtils.addInstances(
+        map.value,
+        instances.value,
+        mapObjects.value,
+        onMarkerClick
+      );
     };
 
-    const refreshInstances = () =>
-      axios.get(route("objects.markers")).then(({ data }) => {
-        instances.value = data.instances;
-      });
+    const refreshInstances = () => {
+      if (storeInstances.value.length) {
+        instances.value = storeInstances.value;
+        return;
+      }
 
-    onMounted(async () => {
+      window.axios.get(route("objects.markers")).then(({ data }) => {
+        if (!data.instances.length) return;
+
+        instances.value = data.instances.map((i) => ({
+          ...i,
+          selected: true,
+        }));
+      });
+    };
+
+    onMounted(() => {
       map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
         contextmenu: true,
@@ -369,27 +383,29 @@ export default {
       refreshInstances();
     });
 
-    const unsubscribeAction = store.subscribeAction(({ type, payload }) => {
-      if (type === "map/centerAt") {
-        const { marker } = payload;
-        onCenterLocation(marker);
-      }
+    const unsubscribeFromActions = store.subscribeAction(
+      ({ type, payload }) => {
+        if (type === "map/centerAt") {
+          const { marker } = payload;
+          onCenterLocation(marker);
+        }
 
-      if (type === "map/refreshMap") {
-        mapUtils.removeAllInstances(map.value, mapObjects.value);
-        refreshInstances();
-      }
+        if (type === "map/doRefreshMap") {
+          mapUtils.removeAllInstances(map.value, mapObjects.value);
+          refreshInstances();
+        }
 
-      if (type === "map/unfocusMarker") {
-        mapUtils.focusMarker(map.value, null, mapObjects.value);
+        if (type === "map/unfocusMarker") {
+          mapUtils.focusMarker(map.value, null, mapObjects.value);
+        }
       }
-    });
+    );
 
     onBeforeUnmount(() => {
       map.value.off("moveend");
       map.value.off("zoomend");
 
-      unsubscribeAction();
+      unsubscribeFromActions();
     });
 
     return {
