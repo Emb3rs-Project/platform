@@ -64,15 +64,16 @@
         v-for="(error, key) in errors"
         :key="key"
       >
-        <div
-          v-for="subError in error"
-          :key="subError"
-        >
-          <JetInputError
-            v-if="key.includes(property.property.symbolic_name)"
-            :message="subError"
-            class="mt-2"
-          />
+        <div v-if="property.property.symbolic_name === key">
+          <div
+            v-for="(e, eIdx) in error"
+            :key="eIdx"
+          >
+            <JetInputError
+              :message="e"
+              class="mt-2"
+            />
+          </div>
         </div>
       </div>
     </div>

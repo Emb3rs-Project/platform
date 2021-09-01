@@ -15,8 +15,8 @@
 
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 "
-    v-for="equip in equipment"
-    :key="equip"
+    v-for="(equip, equipIdx) in equipment"
+    :key="equipIdx"
   >
     <div class="sm:col-span-3">
       <div class="bg-white overflow-hidden shadow sm:rounded-lg w-full">
@@ -75,15 +75,16 @@
                       v-for="(error, key) in errors"
                       :key="key"
                     >
-                      <div
-                        v-for="subError in error"
-                        :key="subError"
-                      >
-                        <JetInputError
-                          v-if="key.includes(property.property.symbolic_name)"
-                          :message="subError"
-                          class="mt-2"
-                        />
+                      <div v-if="property.property.symbolic_name === key.substr(key.indexOf('.') + 1) && +key.substr(0, key.indexOf('.')) === equipIdx">
+                        <div
+                          v-for="(e, eIdx) in error"
+                          :key="eIdx"
+                        >
+                          <JetInputError
+                            :message="e"
+                            class="mt-2"
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -207,10 +208,10 @@ export default {
         // reset the errors so they are always up to date
         errors.value = {};
 
-        for (const equip of equipment.value) {
+        for (const [index, equip] of equipment.value.entries()) {
           const properties = equip.props;
 
-          validateProperies(equip, properties, errors.value);
+          validateProperies(equip, properties, errors.value, index);
         }
 
         if (!Object.keys(errors.value).length) ctx.emit("completed");
