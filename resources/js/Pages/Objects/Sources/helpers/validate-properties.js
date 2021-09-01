@@ -1,5 +1,4 @@
-export const validateProperies = (parent, properties, errors, index = -1) => {
-  console.log('parent', parent);
+export const validateProperies = (parent, properties, errors, index = null) => {
   for (const property of properties) {
     const propertyErrors = [];
 
@@ -64,9 +63,7 @@ export const validateProperies = (parent, properties, errors, index = -1) => {
 
     let key = `${symbolicName}`;
 
-    if (index !== -1) key = `${index}.${key}`;
-
-    // if (type !== "") key = `${type}.${key}`;
+    if (index) key = `${index}.${key}`;
 
     errors[key] = propertyErrors;
   }
