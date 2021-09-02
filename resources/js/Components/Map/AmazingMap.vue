@@ -395,7 +395,7 @@ export default {
     );
 
     const onDefaultLocation = () => {
-      if (!defaultLocation.value) return;
+      if (!defaultLocation.value.length) return;
 
       const location = {
         type: "point",
@@ -403,6 +403,7 @@ export default {
           center: defaultLocation.value,
         },
       };
+
       mapUtils.centerAtLocation(map.value, location);
     };
 

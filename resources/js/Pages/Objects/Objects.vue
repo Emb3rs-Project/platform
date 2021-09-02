@@ -3,17 +3,6 @@
 
   <AppLayout>
     <!-- Menu Of Available Instances -->
-    <!-- <button
-      type="button"
-      class="fixed right-8 top-24 sm:top-6 z-10 p-4 rounded-full bg-yellow-500"
-      @click="toggleIndexComponent"
-    >
-      <TemplateIcon
-        class="h-6 w-auto text-white hover:text-gray-100"
-        aria-hidden="true"
-      />
-    </button> -->
-
     <button
       type="button"
       class="fixed right-8 top-20 lg:top-5 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm bg-gray-50 hover:bg-gray-100"
