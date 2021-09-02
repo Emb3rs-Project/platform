@@ -5,10 +5,13 @@
     <!-- Menu Of Available Instances -->
     <button
       type="button"
-      class="fixed right-8 top-24 sm:top-6 z-10 p-4 rounded-full bg-yellow-500"
+      class="fixed right-8 top-20 lg:top-5 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm bg-gray-50 hover:bg-gray-100"
       @click="toggleIndexComponent"
     >
-      <TemplateIcon class="h-8 w-auto text-white hover:text-gray-100" />
+      <TemplateIcon
+        class="h-8 w-auto text-yellow-500"
+        aria-hidden="true"
+      />
     </button>
 
     <AmazingMap ref="map" />
@@ -30,7 +33,7 @@ import {
 } from "vue";
 import { useStore } from "vuex";
 
-import { TemplateIcon } from "@heroicons/vue/outline";
+import { TemplateIcon } from "@heroicons/vue/solid";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";

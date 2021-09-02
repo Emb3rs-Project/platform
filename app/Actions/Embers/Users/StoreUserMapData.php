@@ -37,7 +37,9 @@ class StoreUserMapData implements StoresUsersMapData
         Validator::make($input, [
             'map.center.lat' => ['filled', 'numeric', new Coordinates],
             'map.center.lng' => ['filled', 'numeric', new Coordinates],
-            'map.zoom' => ['filled', 'numeric', 'min:0', 'max:18']
+            'map.zoom' => ['filled', 'numeric', 'min:0', 'max:18'],
+            'map.defaultLocation.lat' => ['filled', 'numeric', new Coordinates],
+            'map.defaultLocation.lng' => ['filled', 'numeric', new Coordinates],
         ])->validate();
     }
 
@@ -70,6 +72,15 @@ class StoreUserMapData implements StoresUsersMapData
 
             Arr::set($data, 'map.zoom', $zoom);
         }
+
+        if (Arr::has($input, 'map.defaultLocation.lat') && Arr::has($input, 'map.defaultLocation.lng')) {
+            $defaultLocation = [
+                'lat' => Arr::get($input, 'map.defaultLocation.lat'),
+                'lng' => Arr::get($input, 'map.defaultLocation.lng'),
+            ];
+
+            Arr::set($data, 'map.defaultLocation', $defaultLocation);
+        };
 
         $user->data = $data;
 

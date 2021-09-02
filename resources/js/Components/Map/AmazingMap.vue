@@ -3,6 +3,18 @@
     id="map"
     class="min-h-screen min-w-full z-0"
   ></div>
+
+  <button
+    type="button"
+    class="fixed left-16 lg:left-80 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
+    @click="onDefaultLocation"
+  >
+    <BookmarkIcon
+      class="h-8 w-auto text-blue-500"
+      aria-hidden="true"
+    />
+  </button>
+
 </template>
 
 <script>
@@ -20,7 +32,13 @@ import "leaflet-contextmenu";
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
+import { BookmarkIcon } from "@heroicons/vue/solid";
+
 export default {
+  components: {
+    BookmarkIcon,
+  },
+
   props: {
     center: {
       type: Array,
@@ -240,6 +258,12 @@ export default {
       });
     };
 
+    const onSetDefaultLocation = (location) => {
+      store.dispatch("map/setDefaultLocation", {
+        defaultLocation: location.latlng,
+      });
+    };
+
     const defautMapContext = [
       {
         text: "Create Sink Here",
@@ -249,11 +273,16 @@ export default {
         text: "Create Source Here",
         callback: onCreateSource,
       },
-      "-",
       {
         text: "Start Link Creation",
         callback: onCreateLink,
       },
+      "-",
+      {
+        text: "Set Default Location",
+        callback: onSetDefaultLocation,
+      },
+      "-",
       {
         text: "Zoom in",
         callback: (o) => map.value.zoomIn(),
@@ -361,6 +390,23 @@ export default {
       });
     };
 
+    const defaultLocation = computed(
+      () => store.getters["map/defaultLocation"]
+    );
+
+    const onDefaultLocation = () => {
+      if (!defaultLocation.value.length) return;
+
+      const location = {
+        type: "point",
+        data: {
+          center: defaultLocation.value,
+        },
+      };
+
+      mapUtils.centerAtLocation(map.value, location);
+    };
+
     onMounted(() => {
       map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
@@ -409,6 +455,7 @@ export default {
     });
 
     return {
+      onDefaultLocation,
       center,
       onCenterLocation,
       selectedMarkerLatlng,
