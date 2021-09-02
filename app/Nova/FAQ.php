@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class FAQ extends Resource
@@ -43,7 +44,7 @@ class FAQ extends Resource
             ID::make(__('ID'), 'id')->sortable(),
 
             Text::make(__('QUESTION'), 'question')->sortable(),
-            Textarea::make(__('ANSWER'), 'answer')->sortable(),
+            Trix::make(__('ANSWER'), 'answer')->sortable(),
         ];
     }
 
