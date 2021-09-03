@@ -5,7 +5,7 @@
     <!-- Menu Of Available Instances -->
     <button
       type="button"
-      class="fixed right-8 top-20 lg:top-5 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm bg-gray-50 hover:bg-gray-100"
+      class="fixed right-8 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm bg-gray-50 hover:bg-gray-100"
       @click="toggleIndexComponent"
     >
       <TemplateIcon

@@ -34,6 +34,11 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
 import { BookmarkIcon } from "@heroicons/vue/solid";
 
+const DEFAULT_MAP_VALUES = {
+  center: [38.7181959, -9.1975417],
+  zoom: 13,
+};
+
 export default {
   components: {
     BookmarkIcon,
@@ -77,28 +82,72 @@ export default {
       start: null,
     };
 
-    const user = ref(usePage().props.value.user);
+    const user = computed(() => usePage().props.value.user);
 
     const center = computed({
-      get() {
-        if (!props.center.length) return user.value?.data?.map?.center;
+      get: () => {
+        const storeCenter = store.getters["map/center"];
 
-        return props.center;
+        if (storeCenter.length) return storeCenter;
+
+        if (props.center.length) return props.center;
+
+        if (user.value?.data?.map?.hasOwnProperty("center")) {
+          const center = user.value.data.map.center;
+
+          store.dispatch("map/setCenter", {
+            center: center,
+          });
+
+          return center;
+        }
+
+        return DEFAULT_MAP_VALUES.center;
       },
-      set(value) {
-        store.dispatch("map/setData", { center: value });
-      },
+      set: (value) => store.dispatch("map/setCenter", { center: value }),
     });
 
     const zoom = computed({
-      get() {
-        if (props.zoom === -1) return user.value?.data?.map?.zoom;
+      get: () => {
+        const storeZoom = store.getters["map/zoom"];
 
-        return props.zoom;
+        if (storeZoom) return storeZoom;
+
+        if (props.zoom !== -1) return props.zoom;
+
+        if (user.value?.data?.map?.hasOwnProperty("zoom")) {
+          const zoom = user.value.data.map.zoom;
+
+          store.dispatch("map/setZoom", {
+            zoom: zoom,
+          });
+
+          return zoom;
+        }
+
+        return DEFAULT_MAP_VALUES.zoom;
       },
-      set(value) {
-        store.dispatch("map/setData", { zoom: value });
+      set: (value) => store.dispatch("map/setZoom", { zoom: value }),
+    });
+
+    const defaultLocation = computed({
+      get: () => {
+        const storeDefaultLocation = store.getters["map/defaultLocation"];
+
+        if (storeDefaultLocation.length) return storeDefaultLocation;
+
+        if (user.value?.data?.map?.hasOwnProperty("defaultLocation")) {
+          store.dispatch("map/setDefaultLocation", {
+            defaultLocation: user.value.data.map.defaultLocation,
+          });
+
+          return user.value.data.map.defaultLocation;
+        }
       },
+      set: (value) =>
+        store.dispatch("map/setDefaultLocation", {
+          defaultLocation: value.latlng,
+        }),
     });
 
     const onCreateSink = (marker) => {
@@ -258,10 +307,17 @@ export default {
       });
     };
 
-    const onSetDefaultLocation = (location) => {
-      store.dispatch("map/setDefaultLocation", {
-        defaultLocation: location.latlng,
-      });
+    const onDefaultLocation = () => {
+      if (!defaultLocation.value) return;
+
+      const location = {
+        type: "point",
+        data: {
+          center: defaultLocation.value,
+        },
+      };
+
+      mapUtils.centerAtLocation(map.value, location);
     };
 
     const defautMapContext = [
@@ -280,7 +336,7 @@ export default {
       "-",
       {
         text: "Set Default Location",
-        callback: onSetDefaultLocation,
+        callback: (location) => (defaultLocation.value = location),
       },
       "-",
       {
@@ -390,23 +446,6 @@ export default {
       });
     };
 
-    const defaultLocation = computed(
-      () => store.getters["map/defaultLocation"]
-    );
-
-    const onDefaultLocation = () => {
-      if (!defaultLocation.value.length) return;
-
-      const location = {
-        type: "point",
-        data: {
-          center: defaultLocation.value,
-        },
-      };
-
-      mapUtils.centerAtLocation(map.value, location);
-    };
-
     onMounted(() => {
       map.value = mapUtils.init("map", center.value, zoom.value, {
         drawControl: true,
@@ -419,11 +458,11 @@ export default {
 
       map.value.on(
         "moveend",
-        _.debounce(({ target }) => (center.value = target.getCenter()), 1000)
+        _.debounce(({ target }) => (center.value = target.getCenter()), 500)
       );
       map.value.on(
         "zoomend",
-        _.debounce(({ target }) => (zoom.value = target.getZoom()), 1000)
+        _.debounce(({ target }) => (zoom.value = target.getZoom()), 500)
       );
 
       refreshInstances();

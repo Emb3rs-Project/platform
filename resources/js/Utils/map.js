@@ -7,8 +7,9 @@ export default {
     className: "sourceIcon",
     iconAnchor: [10, 20],
   }),
-  init(mapId, center = [38.7181959, -9.1975417], zoom, options = { drawControl: true }) {
-    const map = L.map(mapId, options).setView(center ?? [38.7181959, -9.1975417], zoom ?? 13);
+  init(mapId, center, zoom, options = { drawControl: true }) {
+    const map = L.map(mapId, options).setView(center, zoom);
+
     map.doubleClickZoom.disable();
 
     L.tileLayer(
