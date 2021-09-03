@@ -15,6 +15,13 @@
     />
   </button>
 
+  <Notification
+    v-model="notificationIsVisible"
+    :isSuccessful="notificationIsSuccessful"
+    :title="notificationTitle"
+    :body="notificationBody"
+  />
+
 </template>
 
 <script>
@@ -34,6 +41,8 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
 import { BookmarkIcon } from "@heroicons/vue/solid";
 
+import Notification from "../Notifications/Notification.vue";
+
 const DEFAULT_MAP_VALUES = {
   center: [38.7181959, -9.1975417],
   zoom: 13,
@@ -42,6 +51,7 @@ const DEFAULT_MAP_VALUES = {
 export default {
   components: {
     BookmarkIcon,
+    Notification,
   },
 
   props: {
@@ -59,6 +69,11 @@ export default {
     const store = useStore();
 
     const map = ref(null);
+
+    const notificationIsVisible = ref(false);
+    const notificationTitle = ref("Successfully saved!");
+    const notificationBody = ref("Your resource was successfuly saved!");
+    const notificationIsSuccessful = ref(true);
 
     const mapObjects = ref({
       sources: null,
@@ -308,7 +323,14 @@ export default {
     };
 
     const onDefaultLocation = () => {
-      if (!defaultLocation.value) return;
+      if (defaultLocation.value) {
+        notificationIsVisible.value = true;
+        notificationIsSuccessful.value = false;
+        notificationTitle.value = "Default Location";
+        notificationBody.value = "There is not a Default Location set yet.";
+
+        return;
+      }
 
       const location = {
         type: "point",
@@ -494,6 +516,10 @@ export default {
     });
 
     return {
+      notificationIsVisible,
+      notificationTitle,
+      notificationBody,
+      notificationIsSuccessful,
       onDefaultLocation,
       center,
       onCenterLocation,
