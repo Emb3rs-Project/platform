@@ -15,7 +15,7 @@
                 {{ faq.question }}
               </dt>
               <dd class="mt-2 text-base text-gray-500">
-                {{ faq.answer }}
+                <div v-html="faq.answer"></div>
               </dd>
             </div>
           </dl>
@@ -33,6 +33,7 @@ export default {
   components: {
     AppLayout,
   },
+
   props: {
     faqs: {
       type: Array,
