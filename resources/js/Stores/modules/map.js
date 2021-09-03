@@ -5,6 +5,7 @@ const _state = () => ({
   selectedMarker: null,
   selectedMarkerColor: 'green',
   currentLinks: {},
+
   center: [],
   zoom: null,
   defaultLocation: []
@@ -25,13 +26,11 @@ const actions = {
     // DO LOGIC HERE
     // GET INFO FROM DB or FROM ANOTHER STATE OR WTV
     // THEN TRIGGER THE doREFRESHMAP!
-    console.log("refreshMap");
 
     dispatch('doRefreshMap')
   },
   doRefreshMap: () => {
     console.log("doRefreshMap");
-
   },
   selectMarker: ({ commit, state }, { marker, color }) => {
     commit("selectMarker", marker)
@@ -44,16 +43,7 @@ const actions = {
     const links = state.currentLinks
     if (links[id]) commit("unsetLink", id)
   },
-  getCenter: async ({ commit }) => {
-    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
 
-    if (res[0].data.map.center) commit('setCenter', res[0].data.map.center);
-  },
-  getZoom: async ({ commit }) => {
-    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
-
-    if (res[0].data.map.zoom) commit('setZoom', res[0].data.map.zoom);
-  },
   setData: async (ctx, payload) => {
     const map = {};
 
@@ -69,10 +59,31 @@ const actions = {
 
     await window.axios.post(route('user.mapData.store'), { map });
   },
-  getDefaultLocation: async (ctx) => {
-    const res = await window.axios.get(route('user.mapData.index')).then(({ data }) => data);
+  setZoom: (ctx, payload) => {
+    const zoom = payload.zoom;
 
-    if (res[0].data.map.defaultLocation) ctx.commit('setDefaultLocation', res[0].data.map.defaultLocation);
+    window.axios.post(route("user.mapData.store"), {
+      map: {
+        zoom: zoom,
+      },
+    }).then(() => {
+      ctx.commit('setZoom', zoom)
+    }).catch((error) => {
+      console.error("map.js Module", error);
+    });
+  },
+  setCenter: (ctx, payload) => {
+    const center = payload.center;
+
+    window.axios.post(route("user.mapData.store"), {
+      map: {
+        center: center,
+      },
+    }).then(() => {
+      ctx.commit('setCenter', center)
+    }).catch((error) => {
+      console.error("map.js Module", error);
+    });
   },
   setDefaultLocation: async (ctx, payload) => {
     const map = {};
@@ -92,6 +103,7 @@ const mutations = {
   setLink: (state, { id, link }) => state.currentLinks[id] = link,
   unsetLink: (state, id) => delete state.currentLinks[id],
   startLinks: (state) => state.currentLinks = {},
+
   setCenter: (state, center) => state.center = [center.lat, center.lng],
   setZoom: (state, zoom) => state.zoom = zoom,
   setDefaultLocation: (state, location) => state.defaultLocation = [location.lat, location.lng],
