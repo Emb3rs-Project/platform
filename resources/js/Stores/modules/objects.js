@@ -9,7 +9,7 @@ const _state = () => ({
 });
 
 const getters = {
-  currentRoute: (state, getters, rootState) => state.currentRoute,
+  currentRoute: (state) => state.currentRoute,
   currentRouteProps: (state) => state.currentRouteProps,
   routeCheckSum: (state) => `${state.currentRoute}:${JSON.stringify(state.currentRouteProps)}`,
   slideOpen: (state) => state.slideOpen,
@@ -20,11 +20,11 @@ const getters = {
 };
 
 const actions = {
-  showSlide: ({ commit, getters, dispatch, state }, { route, props }) => {
+  showSlide: ({ commit, state }, { route, props }) => {
     commit('closeSlide')
     if (state.currentRoute === route) {
       if (state.currentRouteProps !== props) commit('updateSlide', null)
-      commit('openSlide', null)
+      commit('openSlide')
     }
     commit('updateSlide', route)
     commit('updateSlideProps', props)

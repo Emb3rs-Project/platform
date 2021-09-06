@@ -5,6 +5,7 @@ import objects from './modules/objects';
 import source from './modules/Objects/source';
 import teamRoles from './modules/team-roles';
 import notifications from './modules/notifications';
+import snackbarNotifications from './modules/notifications/snackbar-notifications';
 
 const inLocalMode = process.env.MIX_ENV !== 'production';
 
@@ -29,7 +30,8 @@ const store = createStore({
     objects,
     source,
     teamRoles,
-    notifications
+    notifications,
+    snackbarNotifications
   },
 });
 

@@ -14,14 +14,6 @@
       aria-hidden="true"
     />
   </button>
-
-  <SnackBarNotification
-    v-model="showSnackbar"
-    :type="snackbarType"
-    :width="snackbarWidth"
-    :message="snackbarMessage"
-  />
-
 </template>
 
 <script>
@@ -41,8 +33,6 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
 import { BookmarkIcon } from "@heroicons/vue/solid";
 
-import SnackBarNotification from "../Notifications/SnackBarNotification.vue";
-
 const DEFAULT_MAP_VALUES = {
   center: [38.7181959, -9.1975417],
   zoom: 13,
@@ -51,7 +41,6 @@ const DEFAULT_MAP_VALUES = {
 export default {
   components: {
     BookmarkIcon,
-    SnackBarNotification,
   },
 
   props: {
@@ -69,11 +58,6 @@ export default {
     const store = useStore();
 
     const map = ref(null);
-
-    const showSnackbar = ref(false);
-    const snackbarMessage = ref("Your resource was successfuly saved!");
-    const snackbarType = ref("success");
-    const snackbarWidth = ref("max-w-2xl");
 
     const mapObjects = ref({
       sources: null,
@@ -323,11 +307,12 @@ export default {
     };
 
     const onDefaultLocation = () => {
-      if (defaultLocation.value) {
-        showSnackbar.value = true;
-        snackbarType.value = "danger";
-        snackbarWidth.value = "small";
-        snackbarMessage.value = "Default Location has not been set yet.";
+      if (!defaultLocation.value) {
+        store.dispatch("snackbarNotifications/show", {
+          type: "info",
+          size: "medium",
+          message: "Default Location has not been set.",
+        });
 
         return;
       }
@@ -516,10 +501,6 @@ export default {
     });
 
     return {
-      showSnackbar,
-      snackbarMessage,
-      snackbarType,
-      snackbarWidth,
       onDefaultLocation,
       center,
       onCenterLocation,

@@ -519,6 +519,8 @@
       </div>
       <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-gray-50">
         <slot></slot>
+
+        <SnackBarNotification />
       </main>
     </div>
   </div>
@@ -531,6 +533,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import SnackBarNotification from "@/Components/Notifications/SnackBarNotification.vue";
 
 import {
   Dialog,
@@ -606,12 +609,12 @@ export default {
     XIcon,
     ApplicationLogo,
     CogIcon,
+    SnackBarNotification,
   },
-
-  props: {},
 
   setup(props) {
     const store = useStore();
+
     const sidebarOpen = ref(false);
     const newNotification = ref(null);
     const unreadNotificationsCount = ref(null);

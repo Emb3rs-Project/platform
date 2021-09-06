@@ -507,9 +507,7 @@ export default {
 
     const stopWatcher = store.watch(
       () => store.state.teamRoles.role,
-      (role) => {
-        roles.value.push(role);
-      },
+      (role) => roles.value.push(role),
       { deep: true }
     );
 

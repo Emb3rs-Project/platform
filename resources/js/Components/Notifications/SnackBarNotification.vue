@@ -1,5 +1,4 @@
 <template>
-
   <transition
     enter-active-class="transition duration-100 ease-out"
     enter-from-class="transform scale-95 opacity-0"
@@ -27,22 +26,22 @@
                 :class="styleClasses.icon"
               >
                 <InformationCircleIcon
-                  v-if="type.toLowerCase() === 'info'"
+                  v-if="type === 'info'"
                   class="h-6 w-6 text-white"
                   aria-hidden="true"
                 />
                 <ExclamationCircleIcon
-                  v-if="type.toLowerCase() === 'warning'"
+                  v-if="type === 'warning'"
                   class="h-6 w-6 text-white"
                   aria-hidden="true"
                 />
                 <XCircleIcon
-                  v-if="type.toLowerCase() === 'danger'"
+                  v-if="type === 'danger'"
                   class="h-6 w-6 text-white"
                   aria-hidden="true"
                 />
                 <CheckCircleIcon
-                  v-if="type.toLowerCase() === 'success'"
+                  v-if="type === 'success'"
                   class="h-6 w-6 text-white"
                   aria-hidden="true"
                 />
@@ -72,11 +71,11 @@
       </div>
     </div>
   </transition>
-
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, onUpdated } from "vue";
+import { useStore } from "vuex";
 
 import {
   InformationCircleIcon,
@@ -95,32 +94,18 @@ export default {
     XIcon,
   },
 
-  props: {
-    modelValue: {
-      type: Boolean,
-      required: true,
-    },
-    type: {
-      type: String,
-      default: "info",
-    },
-    size: {
-      type: String,
-      default: "small",
-    },
-    message: {
-      type: String,
-      required: true,
-    },
-  },
+  setup() {
+    const store = useStore();
 
-  emits: ["update:modelValue"],
-
-  setup(props, ctx) {
     const show = computed({
-      get: () => props.modelValue,
-      set: (value) => ctx.emit("update:modelValue", value),
+      get: () => store.getters["snackbarNotifications/show"],
+      set: () => store.commit("snackbarNotifications/hide"),
     });
+    const type = computed(() => store.getters["snackbarNotifications/type"]);
+    const size = computed(() => store.getters["snackbarNotifications/size"]);
+    const message = computed(
+      () => store.getters["snackbarNotifications/message"]
+    );
 
     const styleClasses = computed(
       () =>
@@ -145,7 +130,7 @@ export default {
             icon: "bg-green-700",
             dismissIcon: "hover:bg-green-400",
           },
-        }[props.type.toLowerCase()])
+        }[type.value])
     );
 
     const sizeClasses = computed(
@@ -155,11 +140,14 @@ export default {
           medium: "max-w-4xl",
           large: "max-w-6xl",
           xlarge: "max-w-7xl",
-        }[props.size.toLowerCase()])
+        }[size.value])
     );
 
     return {
       show,
+      type,
+      size,
+      message,
       styleClasses,
       sizeClasses,
     };

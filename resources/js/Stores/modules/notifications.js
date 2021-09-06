@@ -1,10 +1,11 @@
 const _state = () => ({
   unreadNotificationCount: 0,
-  notificationInterval: null
+  notificationInterval: null,
 });
 
 const getters = {
-  unreadNotificationCount: (state) => state.unreadNotificationCount
+  unreadNotificationCount: (state) => state.unreadNotificationCount,
+
 };
 
 const actions = {
@@ -61,7 +62,6 @@ const mutations = {
   unregisterUnreadNotificationWatcher: (state) => {
     clearInterval(state.notificationInterval);
   },
-
 };
 
 export default {
