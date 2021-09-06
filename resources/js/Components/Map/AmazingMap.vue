@@ -15,11 +15,11 @@
     />
   </button>
 
-  <Notification
-    v-model="notificationIsVisible"
-    :isSuccessful="notificationIsSuccessful"
-    :title="notificationTitle"
-    :body="notificationBody"
+  <SnackBarNotification
+    v-model="showSnackbar"
+    :type="snackbarType"
+    :width="snackbarWidth"
+    :message="snackbarMessage"
   />
 
 </template>
@@ -41,7 +41,7 @@ import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
 import { BookmarkIcon } from "@heroicons/vue/solid";
 
-import Notification from "../Notifications/Notification.vue";
+import SnackBarNotification from "../Notifications/SnackBarNotification.vue";
 
 const DEFAULT_MAP_VALUES = {
   center: [38.7181959, -9.1975417],
@@ -51,7 +51,7 @@ const DEFAULT_MAP_VALUES = {
 export default {
   components: {
     BookmarkIcon,
-    Notification,
+    SnackBarNotification,
   },
 
   props: {
@@ -70,10 +70,10 @@ export default {
 
     const map = ref(null);
 
-    const notificationIsVisible = ref(false);
-    const notificationTitle = ref("Successfully saved!");
-    const notificationBody = ref("Your resource was successfuly saved!");
-    const notificationIsSuccessful = ref(true);
+    const showSnackbar = ref(false);
+    const snackbarMessage = ref("Your resource was successfuly saved!");
+    const snackbarType = ref("success");
+    const snackbarWidth = ref("max-w-2xl");
 
     const mapObjects = ref({
       sources: null,
@@ -324,10 +324,10 @@ export default {
 
     const onDefaultLocation = () => {
       if (defaultLocation.value) {
-        notificationIsVisible.value = true;
-        notificationIsSuccessful.value = false;
-        notificationTitle.value = "Default Location";
-        notificationBody.value = "There is not a Default Location set yet.";
+        showSnackbar.value = true;
+        snackbarType.value = "danger";
+        snackbarWidth.value = "small";
+        snackbarMessage.value = "Default Location has not been set yet.";
 
         return;
       }
@@ -516,10 +516,10 @@ export default {
     });
 
     return {
-      notificationIsVisible,
-      notificationTitle,
-      notificationBody,
-      notificationIsSuccessful,
+      showSnackbar,
+      snackbarMessage,
+      snackbarType,
+      snackbarWidth,
       onDefaultLocation,
       center,
       onCenterLocation,

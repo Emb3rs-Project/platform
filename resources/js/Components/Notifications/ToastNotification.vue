@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { computed, onBeforeMount, onBeforeUnmount, onBeforeUpdate } from "vue";
+import { computed } from "vue";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/outline";
 import { XIcon } from "@heroicons/vue/solid";
 
