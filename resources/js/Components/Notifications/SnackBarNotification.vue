@@ -14,7 +14,7 @@
     >
       <div
         class="mx-auto px-2 sm:px-6 lg:px-8"
-        :class="widthClasses"
+        :class="sizeClasses"
       >
         <div
           class="p-2 rounded-lg shadow-lg sm:p-3"
@@ -104,7 +104,7 @@ export default {
       type: String,
       default: "info",
     },
-    width: {
+    size: {
       type: String,
       default: "small",
     },
@@ -126,42 +126,42 @@ export default {
       () =>
         ({
           info: {
-            background: "bg-blue-600",
-            icon: "bg-blue-800",
-            dismissIcon: "hover:bg-blue-500",
+            background: "bg-blue-500",
+            icon: "bg-blue-700",
+            dismissIcon: "hover:bg-blue-400",
           },
           warning: {
-            background: "bg-yellow-600",
-            icon: "bg-yellow-800",
-            dismissIcon: "hover:bg-yellow-500",
+            background: "bg-yellow-500",
+            icon: "bg-yellow-700",
+            dismissIcon: "hover:bg-yellow-400",
           },
           danger: {
-            background: "bg-red-600",
-            icon: "bg-red-800",
-            dismissIcon: "hover:bg-red-500",
+            background: "bg-red-500",
+            icon: "bg-red-700",
+            dismissIcon: "hover:bg-red-400",
           },
           success: {
-            background: "bg-green-600",
-            icon: "bg-green-800",
-            dismissIcon: "hover:bg-green-500",
+            background: "bg-green-500",
+            icon: "bg-green-700",
+            dismissIcon: "hover:bg-green-400",
           },
         }[props.type.toLowerCase()])
     );
 
-    const widthClasses = computed(
+    const sizeClasses = computed(
       () =>
         ({
           small: "max-w-2xl",
           medium: "max-w-4xl",
           large: "max-w-6xl",
           xlarge: "max-w-7xl",
-        }[props.width.toLowerCase()])
+        }[props.size.toLowerCase()])
     );
 
     return {
       show,
       styleClasses,
-      widthClasses,
+      sizeClasses,
     };
   },
 };
