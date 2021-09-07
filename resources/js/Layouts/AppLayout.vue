@@ -520,7 +520,35 @@
       <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none bg-gray-50">
         <slot></slot>
 
-        <SnackBarNotification />
+        <notifications
+          position="top right"
+          group="notifications"
+        >
+          <template #body="{item, close}">
+            <SimpleNotification
+              :type="item.data.type"
+              :title="item.title"
+              :message="item.text"
+              :close="close"
+            />
+          </template>
+        </notifications>
+
+        <notifications
+          position="bottom left"
+          group="snackbar"
+          max="4"
+        >
+          <template #body="{item, close}">
+            <SnackBarNotification
+              :type="item.data.type"
+              :title="item.title"
+              :message="item.text"
+              :close="close"
+            />
+          </template>
+        </notifications>
+
       </main>
     </div>
   </div>
@@ -533,6 +561,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import SimpleNotification from "@/Components/Notifications/SimpleNotification.vue";
 import SnackBarNotification from "@/Components/Notifications/SnackBarNotification.vue";
 
 import {
@@ -609,6 +638,7 @@ export default {
     XIcon,
     ApplicationLogo,
     CogIcon,
+    SimpleNotification,
     SnackBarNotification,
   },
 

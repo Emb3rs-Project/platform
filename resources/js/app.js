@@ -6,6 +6,7 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress';
 
 import { store } from './Stores';
+import Notifications from '@kyvg/vue3-notification'
 
 require('./bootstrap');
 
@@ -17,6 +18,7 @@ createInertiaApp({
       .mixin({ methods: { route } })
       .use(plugin)
       .use(store)
+      .use(Notifications)
       .mount(el)
   },
 })
