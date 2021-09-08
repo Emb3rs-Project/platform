@@ -327,7 +327,7 @@ export default {
           title: "Default Locations is not set.",
           text: "First, create a default location first.",
           data: {
-            type: "danger",
+            type: "warning",
           },
         });
 
@@ -441,14 +441,14 @@ export default {
       }
     };
 
-    const loadMarkers = () => {
+    const loadMarkers = (markers = null) => {
       if (!instances.value.length) return;
 
       mapUtils.removeAllInstances(map.value, mapObjects.value);
 
       mapUtils.addInstances(
         map.value,
-        instances.value,
+        markers ?? instances.value,
         mapObjects.value,
         onMarkerClick
       );
@@ -480,17 +480,30 @@ export default {
 
       window.map = map.value;
 
-      map.value.on(
-        "moveend",
-        _.debounce(({ target }) => (center.value = target.getCenter()), 500)
-      );
-      map.value.on(
-        "zoomend",
-        _.debounce(({ target }) => (zoom.value = target.getZoom()), 500)
-      );
+      map.value.on("moveend", ({ target: map }) => {
+        lazilyGetMapCenter(map);
+
+        const visibleInstances = mapUtils.getInstancesInView(
+          map,
+          instances.value
+        );
+        loadMarkers(visibleInstances);
+      });
+
+      map.value.on("zoomend", ({ target: map }) => {
+        lazilyGetMapZoom(map);
+      });
 
       refreshInstances();
     });
+
+    const lazilyGetMapCenter = window._.debounce((map) => {
+      center.value = map.getCenter();
+    }, 500);
+
+    const lazilyGetMapZoom = window._.debounce((map) => {
+      zoom.value = map.getZoom();
+    }, 500);
 
     const unsubscribeFromActions = store.subscribeAction(
       ({ type, payload }) => {
@@ -526,6 +539,10 @@ export default {
           type: "success",
         },
       });
+      console.log(
+        "say hello to my little friend",
+        mapUtils.getFeaturesInView(map.value)
+      );
     };
 
     return {

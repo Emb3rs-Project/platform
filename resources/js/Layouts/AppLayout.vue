@@ -521,8 +521,9 @@
         <slot></slot>
 
         <notifications
-          position="top right"
           group="notifications"
+          position="top right"
+          ignoreDuplicates
         >
           <template #body="{item, close}">
             <SimpleNotification
@@ -535,9 +536,10 @@
         </notifications>
 
         <notifications
-          position="bottom left"
           group="snackbar"
-          max="4"
+          position="bottom left"
+          :max="4"
+          ignoreDuplicates
         >
           <template #body="{item, close}">
             <SnackBarNotification
