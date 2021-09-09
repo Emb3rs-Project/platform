@@ -153,8 +153,6 @@ export default {
     const sinks = []
     const all = []
 
-    console.log(instances.length);
-
     for (let instance of instances.filter((i) => i.location && i.selected)) {
 
       // Skipping Locations with areas

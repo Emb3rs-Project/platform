@@ -539,10 +539,6 @@ export default {
           type: "success",
         },
       });
-      console.log(
-        "say hello to my little friend",
-        mapUtils.getFeaturesInView(map.value)
-      );
     };
 
     return {
