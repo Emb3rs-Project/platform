@@ -14,6 +14,17 @@
       aria-hidden="true"
     />
   </button>
+
+  <button
+    type="button"
+    class="fixed left-16 lg:left-96 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
+    @click="test1"
+  >
+    <BellIcon
+      class="h-8 w-auto text-blue-500"
+      aria-hidden="true"
+    />
+  </button>
 </template>
 
 <script>
@@ -31,7 +42,9 @@ import "leaflet-contextmenu";
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
-import { BookmarkIcon } from "@heroicons/vue/solid";
+import { BookmarkIcon, BellIcon } from "@heroicons/vue/solid";
+
+import { notify } from "@kyvg/vue3-notification";
 
 const DEFAULT_MAP_VALUES = {
   center: [38.7181959, -9.1975417],
@@ -41,6 +54,7 @@ const DEFAULT_MAP_VALUES = {
 export default {
   components: {
     BookmarkIcon,
+    BellIcon,
   },
 
   props: {
@@ -308,10 +322,13 @@ export default {
 
     const onDefaultLocation = () => {
       if (!defaultLocation.value) {
-        store.dispatch("snackbarNotifications/show", {
-          type: "info",
-          size: "medium",
-          message: "Default Location has not been set.",
+        notify({
+          group: "snackbar",
+          title: "Default Locations is not set.",
+          text: "First, create a default location first.",
+          data: {
+            type: "warning",
+          },
         });
 
         return;
@@ -424,14 +441,14 @@ export default {
       }
     };
 
-    const loadMarkers = () => {
+    const loadMarkers = (markers = null) => {
       if (!instances.value.length) return;
 
       mapUtils.removeAllInstances(map.value, mapObjects.value);
 
       mapUtils.addInstances(
         map.value,
-        instances.value,
+        markers ?? instances.value,
         mapObjects.value,
         onMarkerClick
       );
@@ -463,17 +480,30 @@ export default {
 
       window.map = map.value;
 
-      map.value.on(
-        "moveend",
-        _.debounce(({ target }) => (center.value = target.getCenter()), 500)
-      );
-      map.value.on(
-        "zoomend",
-        _.debounce(({ target }) => (zoom.value = target.getZoom()), 500)
-      );
+      map.value.on("moveend", ({ target: map }) => {
+        lazilyGetMapCenter(map);
+
+        const visibleInstances = mapUtils.getInstancesInView(
+          map,
+          instances.value
+        );
+        loadMarkers(visibleInstances);
+      });
+
+      map.value.on("zoomend", ({ target: map }) => {
+        lazilyGetMapZoom(map);
+      });
 
       refreshInstances();
     });
+
+    const lazilyGetMapCenter = window._.debounce((map) => {
+      center.value = map.getCenter();
+    }, 500);
+
+    const lazilyGetMapZoom = window._.debounce((map) => {
+      zoom.value = map.getZoom();
+    }, 500);
 
     const unsubscribeFromActions = store.subscribeAction(
       ({ type, payload }) => {
@@ -500,12 +530,24 @@ export default {
       unsubscribeFromActions();
     });
 
+    const test1 = () => {
+      notify({
+        group: "notifications",
+        title: "Default Locations is not set.",
+        text: "First, create a default location first.",
+        data: {
+          type: "success",
+        },
+      });
+    };
+
     return {
       onDefaultLocation,
       center,
       onCenterLocation,
       selectedMarkerLatlng,
       instances,
+      test1,
     };
   },
 };

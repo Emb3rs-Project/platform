@@ -15,6 +15,7 @@
         "@inertiajs/inertia": "^0.10.1",
         "@inertiajs/inertia-vue3": "^0.5.2",
         "@inertiajs/progress": "^0.2.6",
+        "@kyvg/vue3-notification": "^2.3.3",
         "@tailwindcss/forms": "^0.3.3",
         "@tailwindcss/typography": "^0.4.1",
         "@types/leaflet": "^1.7.4",

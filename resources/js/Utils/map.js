@@ -269,5 +269,22 @@ export default {
 
       marker.setIcon(_icon)
     }
+  },
+  getInstancesInView(map, instances) {
+    const instancesInView = [];
+
+    for (const _instance in instances) {
+      const instanceLatLng = L.latLng(
+        instances[_instance].location?.data?.center[0],
+        instances[_instance].location?.data?.center[1]
+      );
+
+      if (map.getBounds().contains(instanceLatLng)) {
+        instancesInView.push(instances[_instance]);
+      }
+
+    }
+
+    return instancesInView;
   }
 }

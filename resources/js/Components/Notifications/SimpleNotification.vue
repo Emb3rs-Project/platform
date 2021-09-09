@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2 ml-2">
+  <div class="mr-4 mt-2">
     <div :class="[styleClasses.background, 'max-w-sm w-full shadow-sm rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden']">
       <div class="p-2">
         <div class="flex items-start">
@@ -38,7 +38,7 @@
               {{ message }}
             </p>
           </div>
-          <!-- <div class="ml-4 flex-shrink-0 flex">
+          <div class="ml-4 flex-shrink-0 flex">
             <button
               @click="close"
               :class="[styleClasses.dismissIcon.text, 'rounded-md inline-flex focus:outline-none focus:ring-2 focus:ring-offset-2']"
@@ -49,7 +49,7 @@
                 aria-hidden="true"
               />
             </button>
-          </div> -->
+          </div>
         </div>
       </div>
     </div>
