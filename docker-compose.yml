@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: embers/nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx:/etc/nginx/conf.d/
+    networks:
+      - embers
+
+  app:
+    image: embers/app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: embers/app
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - embers
+    depends_on:
+      - redis
+
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'embersredis:/data'
+    networks:
+       - embers
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      retries: 3
+      timeout: 5s
+
+networks:
+  embers:
+    driver: bridge
+
+volumes:
+  embersredis:
+    driver: local
