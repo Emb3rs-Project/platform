@@ -2,6 +2,9 @@ FROM php:8.0.10-fpm
 
 WORKDIR /var/www/html
 
+ARG NOVA_USERNAME
+ARG NOVA_PASSWORD
+
 # Set Environment Variables
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ UTC
@@ -144,8 +147,8 @@ COPY . /var/www/html
 COPY --chown=embers:embers . /var/www/html
 
 # Set Environment Variable for opcache
-# RUN set -eux; \
-#     export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
+RUN set -eux; \
+    export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
 
 # Change current user to embers
 USER embers
@@ -159,12 +162,12 @@ RUN set -eux; \
     composer install --no-dev;
 
 # Migrate the db
-RUN set -eux; \
-    php artisan migrate --force --seed;
+# RUN set -eux; \
+#     php artisan migrate --force --seed;
 
 # Install node dependencies and build the frontend
 RUN set -eux; \
-    yarn i; \
+    yarn; \
     yarn prod;
 
 EXPOSE 8000

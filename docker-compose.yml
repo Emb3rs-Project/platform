@@ -9,7 +9,7 @@ services:
       - '8000:5464'
     volumes:
       - .:/var/www/html
-      - ./docker/nginx:/etc/nginx/conf.d/
+      - ./docker/nginx/:/etc/nginx/conf.d/
     networks:
       - embers
 
@@ -19,6 +19,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NOVA_USERNAME: '${NOVA_USERNAME}'
+        NOVA_PASSWORD: '${NOVA_PASSWORD}'
     volumes:
       - '.:/var/www/html'
     networks:
