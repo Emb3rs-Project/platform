@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     image: nginx:alpine
-    container_name: embers/nginx
+    container_name: embers-nginx
     restart: unless-stopped
     ports:
       - 8000:80
@@ -15,10 +15,10 @@ services:
 
   app:
     image: embers/app
+    container_name: embers-app
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: embers/app
     volumes:
       - '.:/var/www/html'
     networks:
@@ -28,6 +28,7 @@ services:
 
   redis:
     image: 'redis:alpine'
+    container_name: embers-redis
     ports:
       - '6379:6379'
     volumes:
