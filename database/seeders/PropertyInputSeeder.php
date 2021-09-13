@@ -16,36 +16,36 @@ class PropertyInputSeeder extends Seeder
     {
         // text, datetime, select, week_schedule
         $properties = [
-            ["name" => "Name", "symbolic_name" => "name" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Working Days", "symbolic_name" => "working_days" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Start Time", "symbolic_name" => "start_time" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Working Hours", "symbolic_name" => "working_hours" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Supply Capacity", "symbolic_name" => "supply_capacity" , "dataType" => "text", "inputType" => "text", "data" => []],
+            ["name" => "Name", "symbolic_name" => "name", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Working Days", "symbolic_name" => "working_days", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Start Time", "symbolic_name" => "start_time", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Working Hours", "symbolic_name" => "working_hours", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Supply Capacity", "symbolic_name" => "supply_capacity", "dataType" => "String", "inputType" => "text", "data" => []],
 
             // DATETIME
-            ["name" => "Holiday Start Date", "symbolic_name" => "holiday_start_date" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Holiday End Date", "symbolic_name" => "holiday_end_date" , "dataType" => "text", "inputType" => "text", "data" => []],
+            ["name" => "Holiday Start Date", "symbolic_name" => "holiday_start_date", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Holiday End Date", "symbolic_name" => "holiday_end_date", "dataType" => "String", "inputType" => "text", "data" => []],
 
             // SELECTS
-            ["name" => "Outflow Type", "symbolic_name" => "typer" , "dataType" => "text", "inputType" => "select", "data" => [
+            ["name" => "Outflow Type", "symbolic_name" => "typer", "dataType" => "String", "inputType" => "select", "data" => [
                 "options" => [
                     ["value" => "Type One", "key" => "typeone"],
                     ["value" => "Type Two", "key" => "typetwo"],
                 ]
             ]],
-            ["name" => "Industry Type", "symbolic_name" => "type" , "dataType" => "text", "inputType" => "select", "data" => [
+            ["name" => "Industry Type", "symbolic_name" => "type", "dataType" => "String", "inputType" => "select", "data" => [
                 "options" => [
                     ["value" => "Type One", "key" => "typeone"],
                     ["value" => "Type Two", "key" => "typetwo"],
                 ]
             ]],
-            ["name" => "Sunday Off?", "symbolic_name" => "sunday_off" , "dataType" => "text", "inputType" => "select", "data" => [
+            ["name" => "Sunday Off?", "symbolic_name" => "sunday_off", "dataType" => "String", "inputType" => "select", "data" => [
                 "options" => [
                     ["value" => "Yes", "key" => 1],
                     ["value" => "No", "key" => 0],
                 ]
             ]],
-            ["name" => "Saturday Off?", "symbolic_name" => "saturday_off" , "dataType" => "text", "inputType" => "select", "data" => [
+            ["name" => "Saturday Off?", "symbolic_name" => "saturday_off", "dataType" => "String", "inputType" => "select", "data" => [
                 "options" => [
                     ["value" => "Yes", "key" => 1],
                     ["value" => "No", "key" => 0],
@@ -54,19 +54,19 @@ class PropertyInputSeeder extends Seeder
 
 
             // OUTPUTS
-            ["name" => "Excess Heat Fluid", "symbolic_name" => "excess_heat_fluid" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Excess Heat Temperature", "symbolic_name" => "excess_heat_temperature" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "Excess Heat Flow Rate", "symbolic_name" => "excess_heat_flowrate" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "HC Fluid Type", "symbolic_name" => "hc_fluid_type" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "HC Supply Temperature", "symbolic_name" => "hc_supply_temperature" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "HC Supply Capacity", "symbolic_name" => "hc_supply_capacity" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "HC Flow Rate", "symbolic_name" => "hc_flowrate" , "dataType" => "text", "inputType" => "text", "data" => []],
-            ["name" => "OM Variable", "symbolic_name" => "OM_Variable" , "dataType" => "text", "inputType" => "text", "data" => []],
+            ["name" => "Excess Heat Fluid", "symbolic_name" => "excess_heat_fluid", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Excess Heat Temperature", "symbolic_name" => "excess_heat_temperature", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "Excess Heat Flow Rate", "symbolic_name" => "excess_heat_flowrate", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "HC Fluid Type", "symbolic_name" => "hc_fluid_type", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "HC Supply Temperature", "symbolic_name" => "hc_supply_temperature", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "HC Supply Capacity", "symbolic_name" => "hc_supply_capacity", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "HC Flow Rate", "symbolic_name" => "hc_flowrate", "dataType" => "String", "inputType" => "text", "data" => []],
+            ["name" => "OM Variable", "symbolic_name" => "OM_Variable", "dataType" => "String", "inputType" => "text", "data" => []],
         ];
 
 
 
-        foreach ($properties as $property ) {
+        foreach ($properties as $property) {
             Property::create($property);
         }
     }
