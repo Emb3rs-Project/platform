@@ -145,10 +145,8 @@ COPY --chown=embers:embers . /var/www/html
 # Change current user to embers
 USER embers
 
-# debuging
 RUN set -eux; \
-    ls -all;
-
+    php artisan migrate --force;
 # Install node dependencies and build the frontend
 RUN set -eux; \
     yarn i; \
