@@ -16,17 +16,17 @@ RUN set -eux; \
     apt-get install -y \
     apt-utils \
     build-essential \
+    ca-certificates \
+    g++ \
     curl \
     zip \
     unzip \
-    ca-certificates \
     gnupg \
     locales \
     postgresql-client \
     libmemcached-dev \
     libicu-dev \
     zlib1g-dev \
-    g++ \
     libc-client-dev \
     libkrb5-dev \
     libz-dev \
@@ -47,18 +47,23 @@ RUN set -eux; \
     libldb-dev \
     libldap2-dev;
 
+# Setup ldap configuration
 RUN set -eux; \
     ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so; \
     ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so;
 
-# Get latest Composer
+# Get the latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Get latest Node
+# Get the latest Node
+# https://deb.nodesource.com/setup_current.x
+# https://deb.nodesource.com/setup_16.x
+# https://deb.nodesource.com/setup_lts.x
 RUN set -eux; \
-    curl -fsSL https://deb.nodesource.com/setup_16.x | bash -; \
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -; \
     apt-get install -y nodejs;
 
+# Install Node yarn
 RUN set -eux; \
     npm install -g yarn;
 
@@ -146,8 +151,8 @@ RUN set -eux; \
 
 # Install node dependencies and build the frontend
 RUN set -eux; \
-    npm i; \
-    npm run prod;
+    yarn i; \
+    yarn prod;
 
 # Set Environment Variable for opcache
 # RUN set -eux; \
