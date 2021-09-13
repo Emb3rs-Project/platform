@@ -142,6 +142,10 @@ COPY . /var/www/html
 # Copy existing application directory permissions
 COPY --chown=embers:embers . /var/www/html
 
+# Set Environment Variable for opcache
+# RUN set -eux; \
+#     export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
+
 # Change current user to embers
 USER embers
 
@@ -151,10 +155,6 @@ RUN set -eux; \
 RUN set -eux; \
     yarn i; \
     yarn prod;
-
-# Set Environment Variable for opcache
-# RUN set -eux; \
-#     export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
 
 EXPOSE 8000
 
