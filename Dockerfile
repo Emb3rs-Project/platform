@@ -150,6 +150,10 @@ COPY --chown=embers:embers . /var/www/html
 # Change current user to embers
 USER embers
 
+# Configure laravel nova
+RUN set -eux; \
+    composer config http-basic.nova.laravel.com $NOVA_USERNAME $NOVA_PASSWORD;
+
 # Install php dependencies
 RUN set -eux; \
     composer install --no-dev;
