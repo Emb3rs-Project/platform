@@ -21,6 +21,7 @@ RUN set -eux; \
     curl \
     zip \
     unzip \
+    git \
     gnupg \
     locales \
     postgresql-client \
