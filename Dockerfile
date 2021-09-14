@@ -9,10 +9,11 @@ ARG NOVA_PASSWORD
 ENV DEBIAN_FRONTEND noninteractive
 ENV TZ UTC
 
+# Set the timezone
 RUN set -eux; \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# Install Linux dependencies
+# Install Linux Dependencies
 RUN set -eux; \
     apt-get update; \
     apt-get upgrade -y; \
@@ -51,7 +52,7 @@ RUN set -eux; \
     libldb-dev \
     libldap2-dev;
 
-# Setup ldap configuration
+# Setup PHP Module ldap configuration
 RUN set -eux; \
     ln -s /usr/lib/x86_64-linux-gnu/libldap.so /usr/lib/libldap.so; \
     ln -s /usr/lib/x86_64-linux-gnu/liblber.so /usr/lib/liblber.so;
@@ -60,24 +61,21 @@ RUN set -eux; \
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Get the latest Node
-# https://deb.nodesource.com/setup_current.x
-# https://deb.nodesource.com/setup_16.x
-# https://deb.nodesource.com/setup_lts.x
 RUN set -eux; \
-    curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -; \
+    curl -fsSL https://deb.nodesource.com/setup_current.x | bash -; \
     apt-get install -y nodejs;
 
-# Install Node yarn
+# Install Node Dependency yarn
 RUN set -eux; \
     npm install -g yarn;
 
-# Clear the cache
+# Clear apt cache
 RUN set -eux; \
     apt-get autoremove -y; \
     apt-get clean; \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*;
 
-# Configure PHP extension gd
+# Configure PHP Module gd
 RUN set -eux; \
     docker-php-ext-configure gd \
     --prefix=/usr \
@@ -86,50 +84,48 @@ RUN set -eux; \
     --with-xpm \
     --with-freetype;
 
-# Configure PHP extension intl
+# Configure PHP Module intl
 RUN set -eux; \
     docker-php-ext-configure intl;
 
-# Configure PHP extension imap
+# Configure PHP Module imap
 RUN set -eux; \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl;
 
-# Configure PHP extension ldap
+# Configure PHP Module ldap
 RUN set -eux; \
     docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/;
 
-# Install core PHP extensions
+# Install core PHP Modules
 RUN set -eux; \
     docker-php-ext-install \
-    pdo pdo_pgsql pgsql \
-    curl mbstring xml \
-    zip bcmath soap \
-    gd exif pcntl \
-    opcache intl imap \
-    ldap;
+    pdo pdo_pgsql pgsql curl \
+    mbstring xml zip bcmath \
+    soap gd exif pcntl \
+    opcache intl imap ldap;
 
-# Install PHP extension redis
+# Install PHP Module redis
 RUN set -eux; \
     pecl install -o -f redis; \
     rm -rf /tmp/pear; \
     docker-php-ext-enable redis;
 
-# Install PHP extension memcached
+# Install PHP Module memcached
 RUN set -eux; \
     pecl -q install memcached; \
     docker-php-ext-enable memcached;
 
-# Install PHP extension pcov
+# Install PHP Module pcov
 RUN set -eux; \
     pecl install pcov; \
     docker-php-ext-enable pcov;
 
-# Install PHP extension msgpack
+# Install PHP Module msgpack
 RUN set -eux; \
     pecl install msgpack; \
     docker-php-ext-enable msgpack;
 
-# Set the ini settings for production
+# Set the  php.ini settings for production
 RUN set -eux; \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini";
 
@@ -146,30 +142,28 @@ COPY . /var/www/html
 # Copy existing application directory permissions
 COPY --chown=embers:embers . /var/www/html
 
-# Set Environment Variable for opcache
+# Set Environment Variable for OPCache
 RUN set -eux; \
     export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
 
 # Change current user to embers
 USER embers
 
-# Configure laravel nova
+# Configure Laravel Nova composer authentication
 RUN set -eux; \
     composer config http-basic.nova.laravel.com $NOVA_USERNAME $NOVA_PASSWORD;
 
-# Install php dependencies
+# Install PHP Dependencies
 RUN set -eux; \
-    composer install --no-dev;
+    composer install --optimize-autoloader --no-dev;
 
-# Migrate the db
-# RUN set -eux; \
-#     php artisan migrate --force --seed;
-
-# Install node dependencies and build the frontend
+# Install Node Dependencies and build the frontend
 RUN set -eux; \
     yarn; \
     yarn prod;
 
-EXPOSE 8000
+# PHP-FPM image already exposes port 9000
+# We just double list it here for readability
+EXPOSE 9000
 
 CMD ["php-fpm"]
