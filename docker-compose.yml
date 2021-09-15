@@ -10,8 +10,8 @@ services:
       - '443:443'
     volumes:
       - .:/var/www/html
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./docker/nginx/certs:/etc/nginx/certs:ro
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/certs:/etc/nginx/certs
     networks:
       - embers
 
