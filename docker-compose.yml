@@ -24,8 +24,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NOVA_USERNAME: '${NOVA_USERNAME}'
-        NOVA_PASSWORD: '${NOVA_PASSWORD}'
+        NOVA_USERNAME: '${NOVA_USERNAME:?err}'
+        NOVA_PASSWORD: '${NOVA_PASSWORD:?err}'
     volumes:
       - '.:/var/www/html'
     networks:
