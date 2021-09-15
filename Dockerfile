@@ -125,11 +125,9 @@ RUN set -eux; \
     pecl install msgpack; \
     docker-php-ext-enable msgpack;
 
-# Set the  php.ini settings for production
+# Set the php.ini settings for production
 RUN set -eux; \
     mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini";
-
-COPY ./docker/php/php.ini "$PHP_INI_DIR/99-embers.ini"
 
 # Create the user that will run composer and artisan commands
 RUN set -eux; \
@@ -145,6 +143,9 @@ COPY --chown=embers:embers . /var/www/html
 # Set Environment Variable for OPCache
 RUN set -eux; \
     export PHP_OPCACHE_MAX_ACCELERATED_FILES=$(($(find . -type f -print | grep php | wc -l) + 1000));
+
+# Set the php.ini settings for our project
+COPY ./docker/php/php.ini "$PHP_INI_DIR/99-embers.ini"
 
 # Change current user to embers
 USER embers
