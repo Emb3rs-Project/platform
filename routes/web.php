@@ -94,7 +94,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
 
     // Simulations
-    Route::get('/projects/{projectId}/simulations/{simulationId}/share', ShareProjectSimulationController::class)->name('projects.simulations.share');
+    Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')->whereNumber(['projectId', 'simulationId']);
     Route::resource('/projects.simulations', ProjectSimulationController::class)->names(createResourceNames('projects.simulations'));
 
     // Challenge

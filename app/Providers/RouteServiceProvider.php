@@ -35,6 +35,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->configureRoutePatterns();
+
         $this->configureRateLimiting();
 
         $this->routes(function () {
@@ -47,6 +49,32 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+    }
+
+    /**
+     * Configure the route patterns for the application.
+     *
+     * @return void
+     */
+    protected function configureRoutePatterns()
+    {
+        Route::patterns([
+            'dashboard' => '[0-9]+',
+            'notification' => '[0-9]+',
+            'institution' => '[0-9]+',
+            'location' => '[0-9]+',
+            'source' => '[0-9]+',
+            'sink' => '[0-9]+',
+            'link' => '[0-9]+',
+            'project' => '[0-9]+',
+            'simulation' => '[0-9]+',
+            'chalenge' => '[0-9]+',
+            'help' => '[0-9]+',
+            'team_role' => '[0-9]+',
+            'team' => '[0-9]+', // jetstream
+            'user' => '[0-9]+', // jetstream
+            'invitation' => '[0-9]+', // jetstream
+        ]);
     }
 
     /**
