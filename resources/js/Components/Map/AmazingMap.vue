@@ -220,7 +220,8 @@ export default {
     };
 
     const onStopLink = () => {
-      store.dispatch("objects/closeSlide");
+      // store.dispatch("objects/closeSlide");
+      store.dispatch("objects/showSlide", { route: "objects.list" });
       map.value.contextmenu.removeAllItems();
       for (const a of defautMapContext) map.value.contextmenu.insertItem(a);
     };

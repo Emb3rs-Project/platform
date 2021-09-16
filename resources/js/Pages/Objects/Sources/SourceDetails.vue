@@ -133,8 +133,8 @@ export default {
     const store = useStore();
     const currentStep = ref(1);
 
-    const onRouteRequest = (route, props) => {
-      store.dispatch("objects/showSlide", { route, props });
+    const onRouteRequest = (route, properties) => {
+      store.dispatch("objects/showSlide", { route, properties });
     };
 
     const mapStepStatus = (index) =>
