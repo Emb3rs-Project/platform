@@ -6,18 +6,37 @@
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <label
-        for="project_name"
-        class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3"
-      >
-        Name
-      </label>
-      <div class="sm:col-span-2">
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 items-center">
+      <div class="flex flex-col place-content-center">
+        <label
+          for="name"
+          class="block text-sm font-medium text-gray-900"
+        >
+          Name
+        </label>
+      </div>
+      <div class="flex flex-col place-content-center sm:col-span-2">
         <TextInput
           v-model="form.name"
           placeholder="Link's Name"
-        > </TextInput>
+        />
+      </div>
+    </div>
+
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 items-center">
+      <div class="flex flex-col place-content-center">
+        <label
+          for="description"
+          class="block text-sm font-medium text-gray-900"
+        >
+          Description
+        </label>
+      </div>
+      <div class="flex flex-col place-content-center sm:col-span-2">
+        <TextInput
+          v-model="form.description"
+          placeholder="Link's Description"
+        />
       </div>
     </div>
 
@@ -73,8 +92,7 @@
                     <TextInput
                       v-model="link.from"
                       :disabled="true"
-                    >
-                    </TextInput>
+                    />
                   </div>
                 </div>
               </div>
@@ -89,8 +107,7 @@
                     <TextInput
                       v-model="link.to"
                       :disabled="true"
-                    >
-                    </TextInput>
+                    />
                   </div>
                 </div>
               </div>
@@ -106,8 +123,7 @@
                       v-model="link.distance"
                       :disabled="true"
                       unit="m"
-                    >
-                    </TextInput>
+                    />
                   </div>
                 </div>
               </div>
@@ -122,7 +138,7 @@
                     <TextInput
                       v-model="link.cost"
                       unit="€/m"
-                    > </TextInput>
+                    />
                   </div>
                 </div>
               </div>
@@ -137,7 +153,7 @@
                     <TextInput
                       v-model="link.depth"
                       unit="m"
-                    > </TextInput>
+                    />
                   </div>
                 </div>
               </div>
@@ -194,24 +210,32 @@ export default {
     ChevronDownIcon,
   },
 
-  props: {},
-
-  setup(props, { emit }) {
+  setup() {
     const store = useStore();
     const form = useForm({
       name: "",
+      description: "",
       segments: [],
     });
+
+    watch(form, (value) => console.log(value));
 
     const submit = () => {
       form.segments = linkList.value;
 
-      form.post(route("objects.links.store"), {
-        onSuccess: () => {
-          store.dispatch("map/refreshMap");
-          store.dispatch("objects/showSlide", { route: "objects.list" });
-        },
-      });
+      console.log(form);
+
+      form
+        .transform((data) => {
+          console.log(data);
+        })
+        .post(route("objects.links.store"), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
+          },
+          onError: (e) => console.log(e),
+        });
     };
 
     const links = store.getters["map/currentLinks"];

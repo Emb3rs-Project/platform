@@ -209,25 +209,31 @@ export default {
       store.commit("map/startLinks");
 
       map.value.contextmenu.removeAllItems();
-      for (const a of linkCreationMapContext)
-        map.value.contextmenu.insertItem(a);
 
-      for (const m of mapObjects.value.sources.getLayers()) console.log(m);
+      for (const _contextItem of linkCreationMapContext) {
+        map.value.contextmenu.insertItem(_contextItem);
+      }
 
-      for (const m of mapObjects.value.sinks.getLayers())
-        for (const a of linkCreationMarkerContext)
-          m.options.contextmenuItems.push(a(m));
+      for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+        for (const _contextItem of linkCreationMarkerContext) {
+          _sinkLayer.options.contextmenuItems.push(_contextItem(_sinkLayer));
+        }
+      }
     };
 
     const onStopLink = () => {
-      // store.dispatch("objects/closeSlide");
       store.dispatch("objects/showSlide", { route: "objects.list" });
+
       map.value.contextmenu.removeAllItems();
-      for (const a of defautMapContext) map.value.contextmenu.insertItem(a);
+
+      for (const _contextItem of defautMapContext) {
+        map.value.contextmenu.insertItem(_contextItem);
+      }
     };
 
     const onStartMarker = (value) => {
       const start = mapUtils.addCircle(map.value, value.getLatLng());
+
       currentSegment.from = start.getLatLng();
       currentSegment.start = start.getLatLng();
     };
@@ -294,6 +300,7 @@ export default {
 
     const onNextPoint = (value) => {
       const coord = value.latlng;
+
       const segment = mapUtils.addSegment(
         map.value,
         currentSegment.from,
@@ -464,6 +471,11 @@ export default {
       window.axios.get(route("objects.markers")).then(({ data }) => {
         if (!data.instances.length) return;
 
+        links.value = data.links.map((l) => ({
+          ...l,
+          selected: true,
+        }));
+
         instances.value = data.instances.map((i) => ({
           ...i,
           selected: true,
@@ -489,6 +501,9 @@ export default {
           instances.value
         );
         loadMarkers(visibleInstances);
+        // loadMarkers(instances.value);
+
+        // console.log(instances.value);
       });
 
       map.value.on("zoomend", ({ target: map }) => {

@@ -28,59 +28,58 @@ export default {
 
     return map;
   },
-  destroy(mapId) { },
   // TODO: This is redundant but keep if for now
-  // loadMarkers(map, markers = [], mapObjects = {}) {
-  //   for (const marker of markers) {
-  //     const type = marker.type;
-  //     const data = marker.data;
-  //     switch (type) {
-  //       case "circle":
-  //         const circle = L.circle(data.center, {
-  //           color: 'red',
-  //           fillColor: 'red',
-  //           fillOpacity: 0.2,
-  //           radius: data.radius
-  //         }).addTo(map)
-  //         mapObjects[data.id] = circle
-  //         break;
-  //       case "polygon":
-  //         const polygon = L.polygon(data.points, {
-  //           color: 'blue',
-  //           fillColor: 'blue',
-  //           fillOpacity: 0.5,
-  //         }).addTo(map)
-  //         mapObjects[data.id] = polygon
-  //         break;
-  //       case "point":
-  //         const point = L.marker(data.center, {
-  //           icon: this.fontAwesomeIcon
-  //         }).addTo(map)
-  //         mapObjects[data.id] = point
-  //         break;
-  //     }
-  //   }
+  loadMarkers(map, markers = [], mapObjects = {}) {
+    for (const marker of markers) {
+      const type = marker.type;
+      const data = marker.data;
+      switch (type) {
+        case "circle":
+          const circle = L.circle(data.center, {
+            color: 'red',
+            fillColor: 'red',
+            fillOpacity: 0.2,
+            radius: data.radius
+          }).addTo(map)
+          mapObjects[data.id] = circle
+          break;
+        case "polygon":
+          const polygon = L.polygon(data.points, {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 0.5,
+          }).addTo(map)
+          mapObjects[data.id] = polygon
+          break;
+        case "point":
+          const point = L.marker(data.center, {
+            icon: this.fontAwesomeIcon
+          }).addTo(map)
+          mapObjects[data.id] = point
+          break;
+      }
+    }
 
-  //   return mapObjects;
-  // },
+    return mapObjects;
+  },
   // TODO: This is redundant but keep if for now
-  // removeMarkers(map, markers) {
-  //   for (const marker of markers) {
-  //     const type = marker.type;
-  //     const data = marker.data;
-  //     switch (type) {
-  //       case "circle":
-  //         console.log('TODO: Remove Circle', data.center)
-  //         break;
-  //       case "polygon":
-  //         console.log('TODO: Remove Polygon', data.points)
-  //         break;
-  //       case "point":
-  //         console.log('TODO: Remove Point', data.center)
-  //         break;
-  //     }
-  //   }
-  // },
+  removeMarkers(map, markers) {
+    for (const marker of markers) {
+      const type = marker.type;
+      const data = marker.data;
+      switch (type) {
+        case "circle":
+          console.log('TODO: Remove Circle', data.center)
+          break;
+        case "polygon":
+          console.log('TODO: Remove Polygon', data.points)
+          break;
+        case "point":
+          console.log('TODO: Remove Point', data.center)
+          break;
+      }
+    }
+  },
   loadLinks(map, markers = []) {
     for (const marker of markers) {
       if (marker.to)
@@ -130,6 +129,7 @@ export default {
     }).addTo(map)
   },
   addSegment(map, from, to, context) {
+    console.log('MapUtils::addSegment', from, to, context);
     const polyline = L.polyline([from, to], {
       color: 'green'
     }).addTo(map);
@@ -236,6 +236,7 @@ export default {
   }) {
     const sources = mapObjects.sources?.getLayers() ?? [];
     const sinks = mapObjects.sinks?.getLayers() ?? [];
+    // const links = mapObjects.links?.getLayers() ?? [];
 
     for (const _sourceLayer of sources) {
       map.removeLayer(_sourceLayer);
@@ -244,6 +245,10 @@ export default {
     for (const _sinkLayer of sinks) {
       map.removeLayer(_sinkLayer);
     }
+
+    // for (const _linkLayer of links) {
+    //   map.removeLayer(_linkLayer);
+    // }
 
     mapObjects.layerControl?.removeFrom(map);
 

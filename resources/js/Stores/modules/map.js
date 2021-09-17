@@ -43,22 +43,6 @@ const actions = {
     const links = state.currentLinks
     if (links[id]) commit("unsetLink", id)
   },
-
-  setData: async (ctx, payload) => {
-    const map = {};
-
-    if (payload.center) {
-      map.center = payload.center;
-      ctx.commit('setCenter', payload.center);
-    }
-
-    if (payload.zoom) {
-      map.zoom = payload.zoom;
-      ctx.commit('setZoom', payload.zoom);
-    }
-
-    await window.axios.post(route('user.mapData.store'), { map });
-  },
   setZoom: (ctx, payload) => {
     const zoom = payload.zoom;
 
@@ -86,13 +70,17 @@ const actions = {
     });
   },
   setDefaultLocation: async (ctx, payload) => {
-    const map = {};
+    const location = payload.defaultLocation;
 
-    map.defaultLocation = payload.defaultLocation;
-
-    ctx.commit('setDefaultLocation', payload.defaultLocation);
-
-    await window.axios.post(route('user.mapData.store'), { map });
+    window.axios.post(route("user.mapData.store"), {
+      map: {
+        defaultLocation: location
+      }
+    }).then(() => {
+      ctx.commit('setDefaultLocation', location);
+    }).catch((error) => {
+      console.error("map.js Module", error);
+    });
   },
 };
 
