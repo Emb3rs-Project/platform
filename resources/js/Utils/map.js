@@ -1,14 +1,8 @@
 import L from 'leaflet';
 
 export default {
-  fontAwesomeIcon: L.divIcon({
-    html: '<i class="fas fa-industry fa-2x"></i>',
-    iconSize: [20, 20],
-    className: "sourceIcon",
-    iconAnchor: [10, 20],
-  }),
-  init(mapId, center, zoom, options = { drawControl: true }) {
-    const map = L.map(mapId, options).setView(center, zoom);
+  init(id = 'map', center = [38.7181959, -9.1975417], zoom = 13, options = { drawControl: true }) {
+    const map = L.map(id, options).setView(center, zoom);
 
     map.doubleClickZoom.disable();
 
@@ -27,58 +21,6 @@ export default {
     ).addTo(map);
 
     return map;
-  },
-  // TODO: This is redundant but keep if for now
-  loadMarkers(map, markers = [], mapObjects = {}) {
-    for (const marker of markers) {
-      const type = marker.type;
-      const data = marker.data;
-      switch (type) {
-        case "circle":
-          const circle = L.circle(data.center, {
-            color: 'red',
-            fillColor: 'red',
-            fillOpacity: 0.2,
-            radius: data.radius
-          }).addTo(map)
-          mapObjects[data.id] = circle
-          break;
-        case "polygon":
-          const polygon = L.polygon(data.points, {
-            color: 'blue',
-            fillColor: 'blue',
-            fillOpacity: 0.5,
-          }).addTo(map)
-          mapObjects[data.id] = polygon
-          break;
-        case "point":
-          const point = L.marker(data.center, {
-            icon: this.fontAwesomeIcon
-          }).addTo(map)
-          mapObjects[data.id] = point
-          break;
-      }
-    }
-
-    return mapObjects;
-  },
-  // TODO: This is redundant but keep if for now
-  removeMarkers(map, markers) {
-    for (const marker of markers) {
-      const type = marker.type;
-      const data = marker.data;
-      switch (type) {
-        case "circle":
-          console.log('TODO: Remove Circle', data.center)
-          break;
-        case "polygon":
-          console.log('TODO: Remove Polygon', data.points)
-          break;
-        case "point":
-          console.log('TODO: Remove Point', data.center)
-          break;
-      }
-    }
   },
   loadLinks(map, markers = []) {
     for (const marker of markers) {
@@ -99,7 +41,13 @@ export default {
         break;
     }
   },
-  addPoint(map, center, { icon = 'leaf', textClass = 'text-green-700', borderClass = 'border-green-700', draggable = false, type = 'sink' } = {}) {
+  addPoint(map, center, {
+    icon = 'leaf',
+    textClass = 'text-green-700',
+    borderClass = 'border-green-700',
+    draggable = false,
+    type = 'sink'
+  } = {}) {
     const iconOptions = {
       icon,
       textColor: null,
@@ -107,7 +55,6 @@ export default {
       iconShape: "marker",
       customClasses: [textClass, borderClass].join(" ") + ""
     };
-
 
     return L.marker(L.latLng(center), {
       icon: L.BeautifyIcon.icon(iconOptions),
@@ -117,7 +64,7 @@ export default {
       contextmenuItems: [],
       defaultTextClass: textClass,
       defaultBorderClass: borderClass,
-      instanceType: type
+      objectType: type
     }).addTo(map);
   },
   addCircle(map, center) {
@@ -142,58 +89,51 @@ export default {
 
     return polyline;
   },
-  addInstances(map, instances = [], mapObjects = {
-    sources: null,
-    sinks: null,
-    links: null,
-    all: null,
-    layerControl: null
-  }, onMarkerClick = () => { }) {
-    const sources = []
-    const sinks = []
-    const all = []
+  addInstances(map, instances = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
+    const sources = [];
+    const sinks = [];
 
-    for (let instance of instances.filter((i) => i.location && i.selected)) {
-
+    for (const _instance of instances.filter((i) => i.location && i.selected)) {
       // Skipping Locations with areas
-      if (instance.location.type !== 'point') continue;
+      if (_instance.location.type !== 'point') continue;
 
-      const type = instance.template.category.type
-      const center = instance.location.data.center
+      const type = _instance.template.category.type
+      const center = _instance.location.data.center
 
-      const iconOptions = {
-        icon: '',
-        textClass: '',
-        borderClass: '',
-        draggale: false
-      }
-
-      switch (type) {
+      switch (type.toLowerCase()) {
         case 'source':
-          // console.log('MAP::addInstances -> Added a source.', instance);
-          iconOptions.icon = 'fire';
-          iconOptions.textClass = 'text-red-700';
-          iconOptions.borderClass = 'border-red-700';
-          iconOptions.type = 'source';
-          sources.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)));
+          const source = this.addPoint(map, center, this.createIconOptions('source')).on("mousedown", () => onClick(_instance));
+          sources.push(source);
           break;
         case 'sink':
-          // console.log('MAP::addInstances -> Added a sink.', instance);
-          iconOptions.icon = 'leaf';
-          iconOptions.textClass = 'text-green-700';
-          iconOptions.borderClass = 'border-green-700';
-          iconOptions.type = 'sink';
-          sinks.push(this.addPoint(map, center, iconOptions).on("mousedown", () => onMarkerClick(instance)));
+          const sink = this.addPoint(map, center, this.createIconOptions('sink')).on("mousedown", () => onClick(_instance));
+          sinks.push(sink);
           break;
       }
     }
 
     mapObjects.sources = L.layerGroup(sources);
     mapObjects.sinks = L.layerGroup(sinks);
-    mapObjects.all = L.layerGroup([...sinks, ...sources]);
+  },
+  addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
+    const linksLayer = [];
+
+    for (const _link of links.filter((l) => l.selected)) {
+      const latLngs = [_link.geo_segments.map((gs) => ([
+        gs.data.from, gs.data.to
+      ]))];
+
+      const link = L.polyline(latLngs, { color: 'red' }).addTo(map);
+
+      linksLayer.push(link);
+    }
+
+    mapObjects.links = L.layerGroup(linksLayer);
+    console.log(mapObjects.links);
   },
   createIconOptions(type, inFocus = false) {
     const iconOptions = {
+      type: '',
       icon: '',
       textClass: '',
       borderClass: '',
@@ -227,55 +167,46 @@ export default {
 
     return iconOptions
   },
-  removeAllInstances(map, mapObjects = {
-    sources: null,
-    sinks: null,
-    links: null,
-    all: null,
-    layerControl: null
-  }) {
+  removeAllInstances(map, mapObjects = { sources: null, sinks: null, links: null }) {
     const sources = mapObjects.sources?.getLayers() ?? [];
     const sinks = mapObjects.sinks?.getLayers() ?? [];
-    // const links = mapObjects.links?.getLayers() ?? [];
 
     for (const _sourceLayer of sources) {
       map.removeLayer(_sourceLayer);
     }
+    mapObjects.sources = null;
 
     for (const _sinkLayer of sinks) {
       map.removeLayer(_sinkLayer);
     }
-
-    // for (const _linkLayer of links) {
-    //   map.removeLayer(_linkLayer);
-    // }
-
-    mapObjects.layerControl?.removeFrom(map);
-
-    mapObjects = {
-      all: null,
-      sources: null,
-      sinks: null,
-      links: null,
-      layerControl: null
-    }
+    mapObjects.sinks = null;
   },
-  focusMarker(map, marker, mapObjects) {
-    const allMarkers = mapObjects.all?.getLayers();
+  removeAllLinks(map, mapObjects = { sources: null, sinks: null, links: null }) {
+    const links = mapObjects.links?.getLayers() ?? [];
 
-    for (const _m of allMarkers) {
-      const _opt = this.createIconOptions(_m.options.instanceType)
-      _m.setIcon(L.BeautifyIcon.icon(_opt))
+    for (const _linkLayer of links) {
+      map.removeLayer(_linkLayer);
+    }
+    mapObjects.links = null;
+  },
+  focusMarker(map, marker, mapObjects = { sources: null, sinks: null, links: null }) {
+    const sources = mapObjects.sources?.getLayers();
+    const sinks = mapObjects.sinks?.getLayers();
+
+    const markers = [...sources, ...sinks];
+
+    for (const _marker of markers) {
+      const options = this.createIconOptions(_marker.options.objectType);
+      _marker.setIcon(L.BeautifyIcon.icon(options))
     }
 
     if (!!marker) {
-      const iconOptions = this.createIconOptions(marker.options.instanceType, true)
-      const _icon = L.BeautifyIcon.icon(iconOptions)
-
-      marker.setIcon(_icon)
+      const options = this.createIconOptions(marker.options.objectType, true)
+      const icon = L.BeautifyIcon.icon(options)
+      marker.setIcon(icon)
     }
   },
-  getInstancesInView(map, instances) {
+  getInstancesInView(map, instances = {}) {
     const instancesInView = [];
 
     for (const _instance in instances) {
@@ -284,12 +215,26 @@ export default {
         instances[_instance].location?.data?.center[1]
       );
 
-      if (map.getBounds().contains(instanceLatLng)) {
-        instancesInView.push(instances[_instance]);
-      }
-
+      if (map.getBounds().contains(instanceLatLng)) instancesInView.push(instances[_instance])
     }
 
     return instancesInView;
+  },
+  getLinksInView(map, links = {}) {
+    const linksInView = [];
+    console.log(links);
+    // for (const _link in links) {
+    //   const linkLngLat = L.latLng(
+    //     links[_link].location?.data?.center[0],
+    //     links[_link].location?.data?.center[1]
+    //   );
+
+    //   if (map.getBounds().contains(linkLngLat)) {
+    //     linksInView.push(links[_link]);
+    //   }
+
+    // }
+
+    return linksInView;
   }
 }

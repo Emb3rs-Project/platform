@@ -18,7 +18,7 @@
   <button
     type="button"
     class="fixed left-16 lg:left-96 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
-    @click="test1"
+    @click="showTestNotification"
   >
     <BellIcon
       class="h-8 w-auto text-blue-500"
@@ -76,17 +76,26 @@ export default {
     const mapObjects = ref({
       sources: null,
       sinks: null,
-      links: [],
+      links: null,
     });
 
     const instances = ref([]);
+    const links = ref([]);
+
     const storeInstances = computed(() => store.getters["objects/instances"]);
+    const storeLinks = computed(() => store.getters["objects/links"]);
 
     watch(instances, () => loadMarkers(), {
       deep: true,
     });
+    watch(links, () => loadLinks(), {
+      deep: true,
+    });
 
     watch(storeInstances, (values) => (instances.value = values), {
+      deep: true,
+    });
+    watch(storeLinks, (values) => (links.value = values), {
       deep: true,
     });
 
@@ -420,10 +429,17 @@ export default {
 
     const onCenterLocation = (loc, move = true) => {
       if (move) mapUtils.centerAtLocation(map.value, loc);
-      const allMarkers = mapObjects.value.all.getLayers();
-      const geo = L.latLng(loc.data?.center);
-      const m = allMarkers.find((_m) => _m.getLatLng().distanceTo(geo) === 0);
-      mapUtils.focusMarker(map.value, m, mapObjects.value);
+
+      const sources = mapObjects.value.sources.getLayers();
+      const sinks = mapObjects.value.sinks.getLayers();
+      const markers = [...sources, ...sinks];
+
+      const location = L.latLng(loc.data?.center);
+      const marker = markers.find(
+        (m) => m.getLatLng().distanceTo(location) === 0
+      );
+
+      mapUtils.focusMarker(map.value, marker, mapObjects.value);
     };
 
     const onMarkerClick = (instance) => {
@@ -449,6 +465,10 @@ export default {
       }
     };
 
+    const onLinkClick = (link) => {
+      console.log("onLinkClick()");
+    };
+
     const loadMarkers = (markers = null) => {
       if (!instances.value.length) return;
 
@@ -462,6 +482,19 @@ export default {
       );
     };
 
+    const loadLinks = (markers = null) => {
+      if (!links.value.length) return;
+
+      mapUtils.removeAllLinks(map.value, mapObjects.value);
+
+      mapUtils.addLinks(
+        map.value,
+        markers ?? links.value,
+        mapObjects.value,
+        onLinkClick
+      );
+    };
+
     const refreshInstances = () => {
       if (storeInstances.value.length) {
         instances.value = storeInstances.value;
@@ -471,15 +504,30 @@ export default {
       window.axios.get(route("objects.markers")).then(({ data }) => {
         if (!data.instances.length) return;
 
+        instances.value = data.instances.map((i) => ({
+          ...i,
+          selected: true,
+        }));
+      });
+    };
+
+    const refreshLinks = () => {
+      if (storeLinks.value.length) {
+        links.value = storeLinks.value;
+        return;
+      }
+
+      window.axios.get(route("objects.markers")).then(({ data }) => {
+        if (!data.links.length) return;
+
+        console.log(data.links);
+
         links.value = data.links.map((l) => ({
           ...l,
           selected: true,
         }));
 
-        instances.value = data.instances.map((i) => ({
-          ...i,
-          selected: true,
-        }));
+        console.log(links.value);
       });
     };
 
@@ -501,16 +549,15 @@ export default {
           instances.value
         );
         loadMarkers(visibleInstances);
-        // loadMarkers(instances.value);
 
-        // console.log(instances.value);
+        const visibleLinks = mapUtils.getLinksInView(map, links.value);
+        loadLinks(visibleLinks);
       });
 
-      map.value.on("zoomend", ({ target: map }) => {
-        lazilyGetMapZoom(map);
-      });
+      map.value.on("zoomend", ({ target: map }) => lazilyGetMapZoom(map));
 
       refreshInstances();
+      refreshLinks();
     });
 
     const lazilyGetMapCenter = window._.debounce((map) => {
@@ -531,6 +578,7 @@ export default {
         if (type === "map/doRefreshMap") {
           mapUtils.removeAllInstances(map.value, mapObjects.value);
           refreshInstances();
+          // refreshLinks();
         }
 
         if (type === "map/unfocusMarker") {
@@ -546,24 +594,20 @@ export default {
       unsubscribeFromActions();
     });
 
-    const test1 = () => {
+    const showTestNotification = () => {
       notify({
         group: "notifications",
-        title: "Default Locations is not set.",
-        text: "First, create a default location first.",
+        title: "Test Notification",
+        text: "Test notification description",
         data: {
-          type: "success",
+          type: "danger",
         },
       });
     };
 
     return {
       onDefaultLocation,
-      center,
-      onCenterLocation,
-      selectedMarkerLatlng,
-      instances,
-      test1,
+      showTestNotification,
     };
   },
 };

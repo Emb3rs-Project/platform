@@ -43,7 +43,7 @@ class StoreLink implements StoresLinks
         $validator = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['filled', 'string', 'max:255'],
-            // 'segments' => ['required', 'array'],
+            'segments' => ['required', 'array'],
             'segments.*.from' => ['required', 'numeric', new Coordinates],
             'segments.*.to' => ['required', 'numeric', new Coordinates],
             'segments.*.distance' => ['required', 'numeric'],
