@@ -40,17 +40,21 @@ class StoreLink implements StoresLinks
      */
     protected function validate(array $input)
     {
-        $validator = Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['filled', 'string', 'max:255'],
-            'segments' => ['required', 'array'],
-            'segments.*.from' => ['required', 'numeric', new Coordinates],
-            'segments.*.to' => ['required', 'numeric', new Coordinates],
-            'segments.*.distance' => ['required', 'numeric'],
-            'segments.*.data' => ['required'],
-        ]);
+        // $validator = Validator::make($input, [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'description' => ['filled', 'string', 'max:255'],
+        //     'segments' => ['required', 'array'],
+        //     'segments.*.from.lat' => ['required', 'numeric', new Coordinates],
+        //     'segments.*.from.lng' => ['required', 'numeric', new Coordinates],
+        //     'segments.*.to.lat' => ['required', 'numeric', new Coordinates],
+        //     'segments.*.to.lng' => ['required', 'numeric', new Coordinates],
+        //     'segments.*.distance' => ['required', 'numeric'],
+        //     'segments.*.data' => ['filled', 'array'],
+        // ]);
 
-        return $validator->validate();
+        // return $validator->validate();
+
+        return $input;
     }
 
     /**
@@ -73,7 +77,10 @@ class StoreLink implements StoresLinks
 
         foreach ($segments as $data) {
             $segment = GeoSegment::create([
-                'data' => $data
+                'data' => [
+                    'from' => [$data['from']['lat'], $data['from']['lng']],
+                    'to' => [$data['to']['lat'], $data['to']['lng']]
+                ]
             ]);
 
             $link->geoSegments()->attach($segment);

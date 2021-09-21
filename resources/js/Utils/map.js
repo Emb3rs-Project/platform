@@ -22,12 +22,6 @@ export default {
 
     return map;
   },
-  loadLinks(map, markers = []) {
-    for (const marker of markers) {
-      if (marker.to)
-        L.polyline([marker.from, marker.to], { color: 'green' }).addTo(map);
-    }
-  },
   centerAtLocation(map, { type, data }) {
     switch (type) {
       case "circle":
@@ -123,13 +117,13 @@ export default {
         gs.data.from, gs.data.to
       ]))];
 
-      const link = L.polyline(latLngs, { color: 'red' }).addTo(map);
+      // #3B82F6 is bg-blue-500
+      const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map);
 
       linksLayer.push(link);
     }
 
     mapObjects.links = L.layerGroup(linksLayer);
-    console.log(mapObjects.links);
   },
   createIconOptions(type, inFocus = false) {
     const iconOptions = {
@@ -206,34 +200,36 @@ export default {
       marker.setIcon(icon)
     }
   },
-  getInstancesInView(map, instances = {}) {
+  getInstancesInView(map, instances = []) {
     const instancesInView = [];
 
-    for (const _instance in instances) {
+    for (const _instance of instances) {
       const instanceLatLng = L.latLng(
-        instances[_instance].location?.data?.center[0],
-        instances[_instance].location?.data?.center[1]
+        _instance.location?.data?.center[0],
+        _instance.location?.data?.center[1]
       );
 
-      if (map.getBounds().contains(instanceLatLng)) instancesInView.push(instances[_instance])
+      if (map.getBounds().contains(instanceLatLng))
+        instancesInView.push(_instance)
     }
 
     return instancesInView;
   },
-  getLinksInView(map, links = {}) {
+  getLinksInView(map, links = []) {
     const linksInView = [];
-    console.log(links);
-    // for (const _link in links) {
-    //   const linkLngLat = L.latLng(
-    //     links[_link].location?.data?.center[0],
-    //     links[_link].location?.data?.center[1]
-    //   );
 
-    //   if (map.getBounds().contains(linkLngLat)) {
-    //     linksInView.push(links[_link]);
-    //   }
+    for (const _link of links) {
+      for (const _geoSegment of _link.geo_segments) {
+        const geoSegmentLatLngEdgeA = L.latLng(_geoSegment.data.from, _geoSegment.data.to);
+        const geoSegmentLatLngEdgeB = L.latLng(_geoSegment.data.to, _geoSegment.data.from);
 
-    // }
+        if (map.getBounds().contains(geoSegmentLatLngEdgeA) || map.getBounds().contains(geoSegmentLatLngEdgeB)) {
+          linksInView.push(_link);
+
+          break;
+        }
+      }
+    }
 
     return linksInView;
   }

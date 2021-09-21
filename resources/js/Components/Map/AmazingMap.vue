@@ -46,11 +46,6 @@ import { BookmarkIcon, BellIcon } from "@heroicons/vue/solid";
 
 import { notify } from "@kyvg/vue3-notification";
 
-const DEFAULT_MAP_VALUES = {
-  center: [38.7181959, -9.1975417],
-  zoom: 13,
-};
-
 export default {
   components: {
     BookmarkIcon,
@@ -99,6 +94,8 @@ export default {
       deep: true,
     });
 
+    const currentLinkSegments = [];
+
     const currentSegment = {
       from: null,
       start: null,
@@ -123,8 +120,6 @@ export default {
 
           return center;
         }
-
-        return DEFAULT_MAP_VALUES.center;
       },
       set: (value) => store.dispatch("map/setCenter", { center: value }),
     });
@@ -146,8 +141,6 @@ export default {
 
           return zoom;
         }
-
-        return DEFAULT_MAP_VALUES.zoom;
       },
       set: (value) => store.dispatch("map/setZoom", { zoom: value }),
     });
@@ -267,7 +260,8 @@ export default {
         },
       });
 
-      mapObjects.value.links.push(segment);
+      currentLinkSegments.push(segment);
+      // mapObjects.value.links.push(segment);
       currentSegment.from = coord;
 
       store.dispatch("objects/showSlide", {
@@ -278,7 +272,12 @@ export default {
 
     const onRemoveSegment = (value) => {
       const points = value.getLatLngs();
-      const segmentIndex = mapObjects.value.links.findIndex(
+      // const segmentIndex = mapObjects.value.links.findIndex(
+      //   (s) =>
+      //     s.getLatLngs().includes(points[0]) &&
+      //     s.getLatLngs().includes(points[1])
+      // );
+      const segmentIndex = currentLinkSegments.findIndex(
         (s) =>
           s.getLatLngs().includes(points[0]) &&
           s.getLatLngs().includes(points[1])
@@ -288,11 +287,20 @@ export default {
       store.dispatch("map/unsetLink", id);
 
       map.value.removeLayer(value);
-      mapObjects.value.links.splice(segmentIndex, 1);
-      if (mapObjects.value.links.length > 0)
+      // mapObjects.value.links.splice(segmentIndex, 1);
+      currentLinkSegments.splice(segmentIndex, 1);
+
+      // if (mapObjects.value.links.length > 0) {
+      //   currentSegment.from =
+      //     mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
+      // } else {
+      //   currentSegment.from = currentSegment.start;
+      // }
+
+      if (currentLinkSegments.length > 0) {
         currentSegment.from =
-          mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
-      else {
+          currentLinkSegments[segmentIndex - 1].getLatLngs()[1];
+      } else {
         currentSegment.from = currentSegment.start;
       }
     };
@@ -328,7 +336,8 @@ export default {
         },
       });
 
-      mapObjects.value.links.push(segment);
+      // mapObjects.value.links.push(segment);
+      currentLinkSegments.push(segment);
       currentSegment.from = coord;
 
       store.dispatch("objects/showSlide", {
@@ -520,14 +529,10 @@ export default {
       window.axios.get(route("objects.markers")).then(({ data }) => {
         if (!data.links.length) return;
 
-        console.log(data.links);
-
         links.value = data.links.map((l) => ({
           ...l,
           selected: true,
         }));
-
-        console.log(links.value);
       });
     };
 
@@ -578,7 +583,7 @@ export default {
         if (type === "map/doRefreshMap") {
           mapUtils.removeAllInstances(map.value, mapObjects.value);
           refreshInstances();
-          // refreshLinks();
+          refreshLinks();
         }
 
         if (type === "map/unfocusMarker") {

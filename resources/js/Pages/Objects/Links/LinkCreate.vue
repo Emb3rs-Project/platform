@@ -163,6 +163,8 @@
       </div>
     </div>
 
+    <pre>{{ form.errors }}</pre>
+
     <template #actions>
       <SecondaryOutlinedButton
         type="button"
@@ -218,16 +220,15 @@ export default {
       segments: [],
     });
 
-    watch(form, (value) => console.log(value));
+    // watch(form, (value) => console.log(value));
 
     const submit = () => {
       form.segments = linkList.value;
 
-      console.log(form);
-
       form
         .transform((data) => {
-          console.log(data);
+          console.log("Form data is:", data);
+          return data;
         })
         .post(route("objects.links.store"), {
           onSuccess: () => {
@@ -238,8 +239,8 @@ export default {
         });
     };
 
-    const links = store.getters["map/currentLinks"];
-    const linkList = computed(() => Object.values(links));
+    const links = computed(() => store.getters["map/currentLinks"]);
+    const linkList = computed(() => Object.values(links.value));
 
     return {
       form,
