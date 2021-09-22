@@ -1,6 +1,5 @@
 <template>
   <AppLayout>
-
     <SiteHead title="Notifications" />
     <NotificationFeed :notifications="notifications" />
   </AppLayout>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Notifications\MemberInvited;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -39,7 +41,7 @@ class NotificationContoller extends Controller
      */
     public function create(Request $request)
     {
-        //
+        // User::findOrFail($request->user()->id)->notify(new MemberInvited($user, $team));
     }
 
     /**

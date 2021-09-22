@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Teams;
 
 use App\Contracts\Embers\Teams\AddsTeamMembers;
+use App\Models\User;
 use App\Notifications\MemberInvited;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -37,7 +38,7 @@ class AddTeamMember implements AddsTeamMembers
             ['team_role_id' => $input['team_role_id']]
         );
 
-        $newTeamMember->notify(new MemberInvited($user, $team, 'THIS IS A TEST, OK?'));
+        $newTeamMember->notify(new MemberInvited($user, $team));
 
         TeamMemberAdded::dispatch($team, $newTeamMember);
     }

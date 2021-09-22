@@ -16,37 +16,36 @@
 
       <ul class="-mb-8">
         <li
-          v-for="(notificationItem, notificationItemIdx) in notifications"
-          :key="notificationItem.id"
+          v-for="(notification, notificationIdx) in notifications"
+          :key="notification.id"
         >
           <div class="relative pb-8">
             <span
-              v-if="(notificationItemIdx !== notifications.length - 1)"
+              v-if="(notificationIdx !== notifications.length - 1)"
               class="absolute top-5 left-5 -ml-px h-full w-0.5 bg-gray-200"
               aria-hidden="true"
             />
             <div class="relative flex items-start space-x-3">
-
               <template
-                v-if="notificationItem.data.type === 'invitation'"
-                condition="notificationItem.data.type === 'invitation'"
+                v-if="notification.data.type === 'invitation'"
+                condition="notification.data.type === 'invitation'"
               >
                 <div>
                   <div class="relative px-1">
                     <div :class="[
-                        notificationItem.read_at
+                        notification.read_at
                           ? 'ring-white'
                           : 'ring-blue-500',
                           'h-8 w-8 bg-gray-100 rounded-full ring-8 flex items-center justify-center'
                         ]">
                       <img
                         :class="[
-                            notificationItem.read_at
+                            notification.read_at
                               ? 'ring-white'
                               : 'ring-blue-500',
                             'rounded-full bg-gray-100 flex items-center justify-center ring-8'
                         ]"
-                        :src="notificationItem.data.from.profile_photo_url"
+                        :src="notification.data.from.profile_photo_url"
                         alt=""
                       />
                     </div>
@@ -56,17 +55,17 @@
                   <div class="text-sm leading-8 text-gray-500">
                     <span>
                       <span class="font-semibold">
-                        {{notificationItem.data.from.email}}
+                        {{notification.data.from.email}}
                       </span>
                       invited you to join
                       <span class="font-semibold">
-                        {{notificationItem.data.team.name}} Institution
+                        {{notification.data.team.name}} Institution
                       </span>
                     </span>
                     {{ ' ' }}
                     <span class="mr-0.5">
                       <template
-                        v-for="(tagItem, tagItemIdx) in notificationItem.data.tags"
+                        v-for="(tagItem, tagItemIdx) in notification.data.tags"
                         :key="tagItemIdx"
                       >
                         <div class="relative inline-flex items-center rounded-full border border-gray-300 px-3 py-0.5 text-sm">
@@ -81,13 +80,13 @@
                         {{ ' ' }}
                       </template>
                     </span>
-                    <span class="whitespace-nowrap">{{ notificationItem.created_at }}</span>
+                    <span class="whitespace-nowrap">{{ notification.created_at }}</span>
                     {{ ' ' }}
-                    <span class="whitespace-nowrap italic text-blue-500">{{ notificationItem.read_at ? "": "Unread" }}</span>
+                    <span class="whitespace-nowrap italic text-blue-500">{{ notification.read_at ? '' : "Unread" }}</span>
                   </div>
                   <div class="mt-2 text-sm text-gray-700">
                     <p>
-                      {{ notificationItem.data.description }}
+                      {{ notification.data.description }}
                     </p>
                   </div>
                 </div>
@@ -98,7 +97,7 @@
       </ul>
     </div>
     <div v-else>
-      <div class="flex flex-col place-items-center place-content-center h-screen">
+      <div class="flex flex-col place-content-center h-screen">
         <h2 class="text-3xl leading-8 font-extrabold tracking-tight text-gray-500 sm:text-4xl">
           There are no notifications at this time.
         </h2>
@@ -121,13 +120,13 @@ export default {
   props: {
     notifications: {
       type: Array,
-      default: [],
+      required: true,
     },
   },
 
   setup(props) {
-    const markAllAsRead = async () => {
-      await window.axios.post(route("notifications.markAllAsRead"));
+    const markAllAsRead = () => {
+      window.axios.post(route("notifications.markAllAsRead"));
     };
 
     return {

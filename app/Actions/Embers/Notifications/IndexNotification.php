@@ -4,6 +4,7 @@ namespace App\Actions\Embers\Notifications;
 
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 class IndexNotification implements IndexesNotifications
 {
