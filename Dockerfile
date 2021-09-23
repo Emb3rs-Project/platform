@@ -158,6 +158,18 @@ RUN set -eux; \
 RUN set -eux; \
     composer install --optimize-autoloader --no-dev;
 
+# Cache Laravel's config files
+RUN set -eux; \
+    php artisan config:cache;
+
+# Cache Laravel's route files
+RUN set -eux; \
+    php artisan route:cache;
+
+# Cache Laravel's view files
+RUN set -eux; \
+    php artisan view:cache;
+
 # Install Node Dependencies and build the frontend
 RUN set -eux; \
     yarn; \
