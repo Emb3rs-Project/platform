@@ -14,7 +14,7 @@ class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
      * @param  mixed  $user
      * @return void
      */
-    public function markAllAsRead(User $user)
+    public function markAllAsRead(User $user): void
     {
         $user->unreadNotifications->markAsRead();
     }

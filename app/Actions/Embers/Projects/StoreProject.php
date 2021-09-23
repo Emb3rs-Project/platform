@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\EmbersPermissionable;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class StoreProject implements StoresProjects
@@ -13,52 +14,41 @@ class StoreProject implements StoresProjects
 
     /**
      * Validate and create a new Link.
-     *
-     * @param  mixed  $user
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return Project
      */
-    public function store($user, array $input)
+    public function store(User $user, array $input): Project
     {
         $this->authorize($user);
 
-        $this->validate($input);
+        $validated = $this->validate($input);
 
-        $link = $this->save($user, $input);
+        $link = $this->save($user, $validated);
 
         return $link;
     }
 
     /**
      * Validate the create Project operation.
-     *
-     * @param  array  $input
-     * @return void
      */
-    protected function validate(array $input)
+    protected function validate(array $input): array
     {
-        Validator::make($input, [
+        $validator = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['filled', 'string'],
             'location_id' => ['required', 'integer', 'numeric', 'exists:locations,id']
-        ])
-            ->validate();
+        ]);
+
+        return $validator->validated();
     }
 
     /**
      * Save the Project in the DB.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return Project
      */
-    protected function save($user, array $input)
+    protected function save(User $user, array $validated): Project
     {
         $project = Project::create([
-            'name' => $input['name'],
-            'description' => $input['description'] ?? null,
-            'location_id' =>  $input['location_id']
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'location_id' =>  $validated['location_id']
         ]);
 
         $project->teams()->attach($user->currentTeam);

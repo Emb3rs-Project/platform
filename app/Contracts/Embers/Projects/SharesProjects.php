@@ -2,14 +2,13 @@
 
 namespace App\Contracts\Embers\Projects;
 
+use App\Models\Project;
+use App\Models\User;
+
 interface SharesProjects
 {
     /**
      * Share a given Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @return mixed
      */
-    public function share($user, int $id);
+    public function share(User $user, int $id): Project;
 }

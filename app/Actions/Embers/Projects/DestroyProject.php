@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\DestroysProjects;
 use App\EmbersPermissionable;
 use App\Models\Project;
+use App\Models\User;
 
 class DestroyProject implements DestroysProjects
 {
@@ -12,19 +13,13 @@ class DestroyProject implements DestroysProjects
 
     /**
      * Find and delete an existing Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @return void
      */
-    public function destroy($user, int $id)
+    public function destroy(User $user, int $id): void
     {
         $this->authorize($user);
 
         $project = Project::findOrFail($id);
 
-        info($project);
-
-        // Project::destroy($project->id);
+        Project::destroy($project->id);
     }
 }

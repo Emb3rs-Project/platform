@@ -6,6 +6,8 @@ use App\Contracts\Embers\Projects\ShowsProjects;
 use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class ShowProject implements ShowsProjects
 {
@@ -13,12 +15,8 @@ class ShowProject implements ShowsProjects
 
     /**
      * Find and return an existing Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @return mixed
      */
-    public function show($user, int $id)
+    public function show(User $user, int $id): Collection
     {
         $this->authorize($user);
 

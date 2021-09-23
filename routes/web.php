@@ -46,15 +46,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'destroy'])->whereUuid('notification');
-    Route::get('/notifications/new-notifications', ShowNewNotificationsController::class)->name('notifications.new-notifications');
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'destroy']);
+    Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
 
     // Institution
     Route::resource('/institution', InstitutionController::class);
 
     // Objects.["locations", "sources", "sinks", "links"]
-
     Route::prefix('objects')->as('objects.')->group(function () {
         Route::get('/', [ObjectsController::class, 'map'])->name('index');
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');

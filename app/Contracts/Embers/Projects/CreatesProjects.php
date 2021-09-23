@@ -2,13 +2,13 @@
 
 namespace App\Contracts\Embers\Projects;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+
 interface CreatesProjects
 {
     /**
      * Display the necessary objects for the creation of a Project.
-     *
-     * @param  mixed  $user
-     * @return mixed
      */
-    public function create($user);
+    public function create(User $user): Collection;
 }
