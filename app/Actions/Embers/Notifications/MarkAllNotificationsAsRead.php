@@ -3,6 +3,7 @@
 namespace App\Actions\Embers\Notifications;
 
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
+use App\Models\User;
 
 class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
 {
@@ -13,7 +14,7 @@ class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
      * @param  mixed  $user
      * @return void
      */
-    public function markAllAsRead($user)
+    public function markAllAsRead(User $user)
     {
         $user->unreadNotifications->markAsRead();
     }

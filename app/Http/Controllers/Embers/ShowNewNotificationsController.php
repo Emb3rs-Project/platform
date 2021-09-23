@@ -18,6 +18,7 @@ class ShowNewNotificationsController extends Controller
     {
         [
             $notifications,
+            $readNotifications,
             $unreadNotifications
         ] = app(IndexesNotifications::class)->index($request->user());
 

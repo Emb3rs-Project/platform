@@ -2,13 +2,12 @@
 
 namespace App\Contracts\Embers\Notifications;
 
+use App\Models\User;
+
 interface IndexesNotifications
 {
     /**
-     * Display all the available notifications for the currently logged in user.
-     *
-     * @param  mixed  $user
-     * @return mixed
+     * Display all the available notifications.
      */
-    public function index($user);
+    public function index(User $user): array;
 }

@@ -54,8 +54,8 @@ use App\Contracts\Embers\TeamRoles\UpdatesTeamRoles;
 use App\Contracts\Embers\Teams\AddsTeamMembers;
 use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
-use App\Contracts\Embers\Users\IndexesUsersMapData;
-use App\Contracts\Embers\Users\StoresUsersMapData;
+use App\Contracts\Embers\MapData\IndexesMapData;
+use App\Contracts\Embers\MapData\StoresMapData;
 
 class Embers
 {
@@ -652,9 +652,9 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function indexUsersMapDataUsing(string $class): void
+    public static function indexMapDataUsing(string $class): void
     {
-        app()->singleton(IndexesUsersMapData::class, $class);
+        app()->singleton(IndexesMapData::class, $class);
     }
 
     /**
@@ -663,8 +663,8 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function storeUsersMapDataUsing(string $class): void
+    public static function storeMapDataUsing(string $class): void
     {
-        app()->singleton(StoresUsersMapData::class, $class);
+        app()->singleton(StoresMapData::class, $class);
     }
 }

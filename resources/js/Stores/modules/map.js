@@ -46,7 +46,7 @@ const actions = {
   setZoom: (ctx, payload) => {
     const zoom = payload.zoom;
 
-    window.axios.post(route("user.mapData.store"), {
+    window.axios.post(route("map-data.store"), {
       map: {
         zoom: zoom,
       },
@@ -59,7 +59,7 @@ const actions = {
   setCenter: (ctx, payload) => {
     const center = payload.center;
 
-    window.axios.post(route("user.mapData.store"), {
+    window.axios.post(route("map-data.store"), {
       map: {
         center: center,
       },
@@ -72,7 +72,7 @@ const actions = {
   setDefaultLocation: async (ctx, payload) => {
     const location = payload.defaultLocation;
 
-    window.axios.post(route("user.mapData.store"), {
+    window.axios.post(route("map-data.store"), {
       map: {
         defaultLocation: location
       }

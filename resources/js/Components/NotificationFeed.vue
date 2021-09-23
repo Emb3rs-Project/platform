@@ -126,7 +126,7 @@ export default {
 
   setup(props) {
     const markAllAsRead = () => {
-      window.axios.post(route("notifications.markAllAsRead"));
+      window.axios.post(route("notifications.mark-all-as-read"));
     };
 
     return {

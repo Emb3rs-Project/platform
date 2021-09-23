@@ -2,14 +2,12 @@
 
 namespace App\Contracts\Embers\Notifications;
 
+use App\Models\User;
+
 interface MarksAllNotificationsAsRead
 {
     /**
-     * Mark all the available notifications for the currently logged in user
-     * as read.
-     *
-     * @param  mixed  $user
-     * @return mixed
+     * Mark all the available notifications as read.
      */
-    public function markAllAsRead($user);
+    public function markAllAsRead(User $user);
 }

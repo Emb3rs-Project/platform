@@ -58,9 +58,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRoutePatterns()
     {
+        // '[0-9]+': number
+        // '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}': uuid
         Route::patterns([
             'dashboard' => '[0-9]+',
-            'notification' => '[0-9]+',
+            'notification' => '[\da-fA-F]{8}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{4}-[\da-fA-F]{12}',
             'institution' => '[0-9]+',
             'location' => '[0-9]+',
             'source' => '[0-9]+',

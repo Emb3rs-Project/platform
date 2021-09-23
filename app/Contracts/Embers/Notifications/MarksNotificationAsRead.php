@@ -3,15 +3,12 @@
 namespace App\Contracts\Embers\Notifications;
 
 use App\Models\User;
+use Illuminate\Notifications\DatabaseNotification;
 
 interface MarksNotificationAsRead
 {
     /**
-     * Mark the notification for the currently logged in user as read.
-     *
-     * @param  App\Models\User  $user
-     * @param  int  $id
-     * @return mixed
+     * Mark the notification as read.
      */
-    public function markAsRead(User $user, int $id);
+    public function markAsRead(User $user, int $id): DatabaseNotification;
 }

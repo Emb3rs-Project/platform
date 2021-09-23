@@ -4,16 +4,14 @@ namespace App\Actions\Embers\Notifications;
 
 use App\Contracts\Embers\Notifications\MarksNotificationAsRead;
 use App\Models\User;
+use Illuminate\Notifications\DatabaseNotification;
 
 class MarkNotificationAsRead implements MarksNotificationAsRead
 {
     /**
-     * Display all the available notifications for the currently logged in user.
-     *
-     * @param  mixed  $user
-     * @return array
+     * Mark the notification as read.
      */
-    public function markAsRead(User $user, int $id)
+    public function markAsRead(User $user, int $id): DatabaseNotification
     {
         $notification = $user->notifications->firstOrFail($id);
 
