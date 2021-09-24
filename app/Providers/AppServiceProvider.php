@@ -56,6 +56,8 @@ use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Actions\Embers\Teams\UpdateTeamMemberRole;
 use App\Actions\Embers\MapData\IndexMapData;
 use App\Actions\Embers\MapData\StoreMapData;
+use App\Actions\Embers\Notifications\DestroyNotification;
+use App\Actions\Embers\Notifications\MarkNotificationAsRead;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 
@@ -137,6 +139,8 @@ class AppServiceProvider extends ServiceProvider
 
         Embers::indexNotificationsUsing(IndexNotification::class);
         Embers::markAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
+        Embers::markNotificationAsReadUsing(MarkNotificationAsRead::class);
+        Embers::destroyNotificationsUsing(DestroyNotification::class);
 
         Embers::indexMapDataUsing(IndexMapData::class);
         Embers::storeMapDataUsing(StoreMapData::class);

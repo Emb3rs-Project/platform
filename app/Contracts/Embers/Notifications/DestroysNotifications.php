@@ -9,5 +9,5 @@ interface DestroysNotifications
     /**
      * Destroys the notification for the currently logged in user.
      */
-    public function destroy(User $user, $id): void;
+    public function destroy(User $user, string $id): void;
 }

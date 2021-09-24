@@ -46,7 +46,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'destroy']);
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
 

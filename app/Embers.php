@@ -56,6 +56,8 @@ use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
 use App\Contracts\Embers\MapData\IndexesMapData;
 use App\Contracts\Embers\MapData\StoresMapData;
+use App\Contracts\Embers\Notifications\DestroysNotifications;
+use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
 
 class Embers
 {
@@ -644,6 +646,29 @@ class Embers
     public static function markAllNotificationsAsReadUsing(string $class): void
     {
         app()->singleton(MarksAllNotificationsAsRead::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to mark a Notification as
+     * read.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function markNotificationAsReadUsing(string $class): void
+    {
+        app()->singleton(MarksNotificationsAsRead::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to delete a given Notification.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function destroyNotificationsUsing(string $class): void
+    {
+        app()->singleton(DestroysNotifications::class, $class);
     }
 
     /**

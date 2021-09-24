@@ -616,7 +616,7 @@ const navigation = [
     href: "challenge.index",
     icon: UserGroupIcon,
   },
-  { name: "Help", href: "help.index", icon: SupportIcon, current: false },
+  { name: "Help", href: "help.index", icon: SupportIcon },
 ];
 
 export default {

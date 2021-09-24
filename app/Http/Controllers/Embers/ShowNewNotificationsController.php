@@ -18,8 +18,8 @@ class ShowNewNotificationsController extends Controller
     {
         [
             $notifications,
-            $readNotifications,
-            $unreadNotifications
+            $unreadNotifications,
+            $readNotifications
         ] = app(IndexesNotifications::class)->index($request->user());
 
         $unreadNotificationCount = $unreadNotifications->count();

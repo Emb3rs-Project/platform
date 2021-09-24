@@ -71,7 +71,7 @@ class SinkController extends Controller
      * @param  int  $id
      * @return array<string, mixed>
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         [$sink, $templateProperties] = app(ShowsSinks::class)->show($request->user(), $id);
 
@@ -91,7 +91,7 @@ class SinkController extends Controller
      * @param  int  $id
      * @return array<string, mixed>
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request, int $id)
     {
         [
             $templates,
@@ -130,7 +130,7 @@ class SinkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         app(DestroysSinks::class)->destroy($request->user(), $id);
 
