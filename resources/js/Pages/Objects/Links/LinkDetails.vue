@@ -1,14 +1,14 @@
 <template>
-  <SiteHead title="Sink Details" />
+  <SiteHead title="Link Details" />
 
   <SlideOver
-    title="Sink Details"
+    title="Link Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
     headerBackground="bg-green-700"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <!-- Sink ID -->
+    <!-- Link ID -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <!-- Sink Name -->
+    <!-- Link Name -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
@@ -36,86 +36,67 @@
       </div>
     </div>
 
-    <!-- Sink Template -->
+    <!-- Link Description -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
       <div>
         <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Template
+          Description
         </label>
       </div>
       <div class="sm:col-span-2">
         <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.template.name }}
+          {{ instance.description ?? "Not defined." }}
         </div>
       </div>
     </div>
 
-    <!-- Sink Location Name -->
+    <!-- Link Segments -->
     <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's Name
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.name }}
-        </div>
-      </div>
-    </div>
-
-    <!-- Sink Location Description -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's Description
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.description ?? "Not available."}}
-        </div>
-      </div>
-    </div>
-
-    <!-- Sink Properties -->
-    <div
-      v-if="Object.keys(instance.values).length"
+      v-if="Object.keys(instance.geo_segments).length"
       class="divide-y"
     >
       <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
         <div class="block text-base font-medium text-gray-900 sm:pt-1">
-          <p>Properties</p>
+          <p>Segments</p>
         </div>
       </div>
       <div
-        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-        v-for="(property, propertyIdx) in properties"
-        :key="propertyIdx"
+        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-4 sm:gap-4 sm:px-6 sm:py-5"
+        v-for="(segment, segmentIdx) in instance.geo_segments"
+        :key="segmentIdx"
       >
         <div>
           <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-            {{property.property.name}}
+            From
+          </label>
+          <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+            To
           </label>
         </div>
-        <div class="sm:col-span-2">
+        <div class="col-span-2">
           <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-            {{ instance.values[property.property.symbolic_name] ?? 'Not defined.' }}
+            {{ segment.data.from }}
           </div>
+          <div class="block text-sm font-medium text-gray-900 sm:pt-1">
+            {{ segment.data.to }}
+          </div>
+        </div>
+        <div class="flex place-content-center">
+          <SecondaryButton
+            variant="location"
+            type="button"
+            @click="onGoToLocation([segment.data.from, segment.data.to])"
+          >
+            View Location
+          </SecondaryButton>
         </div>
       </div>
     </div>
     <div v-else>
-      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 place-content-center">
-        <div class="col-span-3 text-center">
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 place-content-center justify-items-center">
+        <div class="col-span-3">
           <p class="block font-bold text-2xl text-gray-200 p-4">
-            No assigned properties.
+            No assigned segments.
           </p>
         </div>
       </div>
@@ -144,6 +125,7 @@ import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
@@ -154,6 +136,7 @@ export default {
     SlideOver,
     SelectMenu,
     TextInput,
+    SecondaryButton,
     PrimaryButton,
     SecondaryOutlinedButton,
   },
@@ -163,26 +146,20 @@ export default {
       type: Object,
       required: true,
     },
-    templateProperties: {
-      type: Array,
-      required: true,
-    },
   },
 
   setup(props) {
     const store = useStore();
 
-    const properties = computed(() => {
-      const properties = [];
-
-      Object.assign(properties, props.templateProperties);
-
-      properties.sort((a, b) =>
-        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
-      );
-
-      return properties;
-    });
+    const onGoToLocation = (loc) =>
+      store.dispatch("map/centerAt", {
+        marker: {
+          type: "point",
+          data: {
+            center: loc,
+          },
+        },
+      });
 
     const onRouteRequest = (route, properties) => {
       store.dispatch("objects/showSlide", { route, properties });
@@ -192,7 +169,7 @@ export default {
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
-      properties,
+      onGoToLocation,
       onRouteRequest,
       onClose,
     };

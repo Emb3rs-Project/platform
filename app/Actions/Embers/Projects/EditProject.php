@@ -6,6 +6,7 @@ use App\Contracts\Embers\Projects\EditsProjects;
 use App\EmbersPermissionable;
 use App\Models\Location;
 use App\Models\Project;
+use App\Models\User;
 
 class EditProject implements EditsProjects
 {
@@ -13,12 +14,8 @@ class EditProject implements EditsProjects
 
     /**
      * Display the necessary objects for updating a given Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @return mixed
      */
-    public function edit($user, int $id)
+    public function edit(User $user, int $id): array
     {
         $this->authorize($user);
 

@@ -5,6 +5,8 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\IndexesProjects;
 use App\EmbersPermissionable;
 use App\Models\Project;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class IndexProject implements IndexesProjects
 {
@@ -12,11 +14,8 @@ class IndexProject implements IndexesProjects
 
     /**
      * Display all the available Projects.
-     *
-     * @param  mixed  $user
-     * @return mixed
      */
-    public function index($user)
+    public function index(User $user): Collection
     {
         $this->authorize($user);
 

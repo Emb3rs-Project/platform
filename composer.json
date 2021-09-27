@@ -68,9 +68,10 @@
             "@php artisan key:generate --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan nova:publish",
-            "@php artisan optimize:clear",
-            "@php artisan ide-helper:generate -n"
+            "@php artisan optimize:clear --ansi",
+            "@php artisan nova:publish --ansi",
+            "@php artisan ide-helper:generate --no-interaction --ansi",
+            "@php artisan ide-helper:meta --no-interaction --ansi"
         ]
     },
     "repositories": [

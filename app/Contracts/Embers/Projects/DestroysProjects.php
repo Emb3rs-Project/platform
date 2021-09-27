@@ -2,14 +2,12 @@
 
 namespace App\Contracts\Embers\Projects;
 
+use App\Models\User;
+
 interface DestroysProjects
 {
     /**
      * Delete an existing Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @return void
      */
-    public function destroy($user, int $id);
+    public function destroy(User $user, int $id): void;
 }

@@ -5,6 +5,8 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\CreatesProjects;
 use App\EmbersPermissionable;
 use App\Models\Location;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class CreateProject implements CreatesProjects
 {
@@ -12,11 +14,8 @@ class CreateProject implements CreatesProjects
 
     /**
      * Display the necessary objects for the creation of a Project.
-     *
-     * @param  mixed  $user
-     * @return mixed
      */
-    public function create($user)
+    public function create(User $user): Collection
     {
         $this->authorize($user);
 

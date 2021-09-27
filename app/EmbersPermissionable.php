@@ -2,15 +2,14 @@
 
 namespace App;
 
+use App\Models\User;
 use Illuminate\Support\Str;
 
 trait EmbersPermissionable
 {
     /**
-    * The name of the action this trait is being used inside.
-    *
-    * @return string
-    */
+     * The name of the action this trait is being used inside.
+     */
     public function getActionName(): string
     {
         return self::class;
@@ -18,8 +17,6 @@ trait EmbersPermissionable
 
     /**
      * The name (excluding the namespace) of the action this trait is being used inside.
-     *
-     * @return string
      */
     public function getShortActionName(): string
     {
@@ -27,10 +24,8 @@ trait EmbersPermissionable
     }
 
     /**
-    * The name of the group this trait is being used inside.
-    *
-    * @return string
-    */
+     * The name of the group this trait is being used inside.
+     */
     public function getGroupName(): string
     {
         $action = $this->getActionName();
@@ -40,8 +35,6 @@ trait EmbersPermissionable
 
     /**
      * The friendly name of the action this trait is being used inside.
-     *
-     * @return string
      */
     public function getFriendlyActionName(): string
     {
@@ -52,11 +45,8 @@ trait EmbersPermissionable
 
     /**
      * Determine if the user is authorized to access this action.
-     *
-     * @param  mixed  $user
-     * @return void
      */
-    public function authorize($user): void
+    public function authorize(User $user): void
     {
         $team = $user->currentTeam;
 

@@ -46,6 +46,7 @@ class ObjectsController extends Controller
     public function markers(Request $request)
     {
         $teamInstances = $request->user()->currentTeam->instances->pluck('id');
+        $teamLinks = $request->user()->currentTeam->links->pluck('id');
 
         $instances = Instance::with([
             'template',
@@ -53,8 +54,13 @@ class ObjectsController extends Controller
             'location',
         ])->whereIn('id', $teamInstances)->get();
 
+        $links = Link::with([
+            'geoSegments'
+        ])->whereIn('id', $teamLinks)->get();
+
         return [
-            "instances" => $instances
+            "instances" => $instances,
+            "links" => $links
         ];
     }
 }

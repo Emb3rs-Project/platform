@@ -1,17 +1,18 @@
 <template>
   <AppLayout>
-
     <SiteHead title="Notifications" />
-    <NotificationFeed :notifications="notifications" />
+    <NotificationFeed
+      :notifications="notifications"
+      :unreadNotifications="unreadNotifications"
+      :readNotifications="readNotifications"
+    />
   </AppLayout>
 </template>
 
 <script>
-import { ref } from "vue";
-
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
-import NotificationFeed from "@/Components/NotificationFeed.vue";
+import NotificationFeed from "@/Components/Notifications/NotificationFeed.vue";
 
 export default {
   components: {
@@ -25,10 +26,14 @@ export default {
       type: Array,
       required: true,
     },
-  },
-
-  setup(props) {
-    return {};
+    unreadNotifications: {
+      type: Array,
+      required: true,
+    },
+    readNotifications: {
+      type: Array,
+      required: true,
+    },
   },
 };
 </script>

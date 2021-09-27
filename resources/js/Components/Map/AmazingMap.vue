@@ -18,7 +18,7 @@
   <button
     type="button"
     class="fixed left-16 lg:left-96 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
-    @click="test1"
+    @click="showTestNotification"
   >
     <BellIcon
       class="h-8 w-auto text-blue-500"
@@ -46,11 +46,6 @@ import { BookmarkIcon, BellIcon } from "@heroicons/vue/solid";
 
 import { notify } from "@kyvg/vue3-notification";
 
-const DEFAULT_MAP_VALUES = {
-  center: [38.7181959, -9.1975417],
-  zoom: 13,
-};
-
 export default {
   components: {
     BookmarkIcon,
@@ -76,19 +71,30 @@ export default {
     const mapObjects = ref({
       sources: null,
       sinks: null,
-      links: [],
+      links: null,
     });
 
     const instances = ref([]);
+    const links = ref([]);
+
     const storeInstances = computed(() => store.getters["objects/instances"]);
+    const storeLinks = computed(() => store.getters["objects/links"]);
 
     watch(instances, () => loadMarkers(), {
+      deep: true,
+    });
+    watch(links, () => loadLinks(), {
       deep: true,
     });
 
     watch(storeInstances, (values) => (instances.value = values), {
       deep: true,
     });
+    watch(storeLinks, (values) => (links.value = values), {
+      deep: true,
+    });
+
+    const currentLinkSegments = [];
 
     const currentSegment = {
       from: null,
@@ -114,8 +120,6 @@ export default {
 
           return center;
         }
-
-        return DEFAULT_MAP_VALUES.center;
       },
       set: (value) => store.dispatch("map/setCenter", { center: value }),
     });
@@ -137,8 +141,6 @@ export default {
 
           return zoom;
         }
-
-        return DEFAULT_MAP_VALUES.zoom;
       },
       set: (value) => store.dispatch("map/setZoom", { zoom: value }),
     });
@@ -209,24 +211,31 @@ export default {
       store.commit("map/startLinks");
 
       map.value.contextmenu.removeAllItems();
-      for (const a of linkCreationMapContext)
-        map.value.contextmenu.insertItem(a);
 
-      for (const m of mapObjects.value.sources.getLayers()) console.log(m);
+      for (const _contextItem of linkCreationMapContext) {
+        map.value.contextmenu.insertItem(_contextItem);
+      }
 
-      for (const m of mapObjects.value.sinks.getLayers())
-        for (const a of linkCreationMarkerContext)
-          m.options.contextmenuItems.push(a(m));
+      for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+        for (const _contextItem of linkCreationMarkerContext) {
+          _sinkLayer.options.contextmenuItems.push(_contextItem(_sinkLayer));
+        }
+      }
     };
 
     const onStopLink = () => {
-      store.dispatch("objects/closeSlide");
+      store.dispatch("objects/showSlide", { route: "objects.list" });
+
       map.value.contextmenu.removeAllItems();
-      for (const a of defautMapContext) map.value.contextmenu.insertItem(a);
+
+      for (const _contextItem of defautMapContext) {
+        map.value.contextmenu.insertItem(_contextItem);
+      }
     };
 
     const onStartMarker = (value) => {
       const start = mapUtils.addCircle(map.value, value.getLatLng());
+
       currentSegment.from = start.getLatLng();
       currentSegment.start = start.getLatLng();
     };
@@ -251,7 +260,8 @@ export default {
         },
       });
 
-      mapObjects.value.links.push(segment);
+      currentLinkSegments.push(segment);
+      // mapObjects.value.links.push(segment);
       currentSegment.from = coord;
 
       store.dispatch("objects/showSlide", {
@@ -262,7 +272,12 @@ export default {
 
     const onRemoveSegment = (value) => {
       const points = value.getLatLngs();
-      const segmentIndex = mapObjects.value.links.findIndex(
+      // const segmentIndex = mapObjects.value.links.findIndex(
+      //   (s) =>
+      //     s.getLatLngs().includes(points[0]) &&
+      //     s.getLatLngs().includes(points[1])
+      // );
+      const segmentIndex = currentLinkSegments.findIndex(
         (s) =>
           s.getLatLngs().includes(points[0]) &&
           s.getLatLngs().includes(points[1])
@@ -272,11 +287,20 @@ export default {
       store.dispatch("map/unsetLink", id);
 
       map.value.removeLayer(value);
-      mapObjects.value.links.splice(segmentIndex, 1);
-      if (mapObjects.value.links.length > 0)
+      // mapObjects.value.links.splice(segmentIndex, 1);
+      currentLinkSegments.splice(segmentIndex, 1);
+
+      // if (mapObjects.value.links.length > 0) {
+      //   currentSegment.from =
+      //     mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
+      // } else {
+      //   currentSegment.from = currentSegment.start;
+      // }
+
+      if (currentLinkSegments.length > 0) {
         currentSegment.from =
-          mapObjects.value.links[segmentIndex - 1].getLatLngs()[1];
-      else {
+          currentLinkSegments[segmentIndex - 1].getLatLngs()[1];
+      } else {
         currentSegment.from = currentSegment.start;
       }
     };
@@ -293,6 +317,7 @@ export default {
 
     const onNextPoint = (value) => {
       const coord = value.latlng;
+
       const segment = mapUtils.addSegment(
         map.value,
         currentSegment.from,
@@ -311,7 +336,8 @@ export default {
         },
       });
 
-      mapObjects.value.links.push(segment);
+      // mapObjects.value.links.push(segment);
+      currentLinkSegments.push(segment);
       currentSegment.from = coord;
 
       store.dispatch("objects/showSlide", {
@@ -412,10 +438,17 @@ export default {
 
     const onCenterLocation = (loc, move = true) => {
       if (move) mapUtils.centerAtLocation(map.value, loc);
-      const allMarkers = mapObjects.value.all.getLayers();
-      const geo = L.latLng(loc.data?.center);
-      const m = allMarkers.find((_m) => _m.getLatLng().distanceTo(geo) === 0);
-      mapUtils.focusMarker(map.value, m, mapObjects.value);
+
+      const sources = mapObjects.value.sources.getLayers();
+      const sinks = mapObjects.value.sinks.getLayers();
+      const markers = [...sources, ...sinks];
+
+      const location = L.latLng(loc.data?.center);
+      const marker = markers.find(
+        (m) => m.getLatLng().distanceTo(location) === 0
+      );
+
+      mapUtils.focusMarker(map.value, marker, mapObjects.value);
     };
 
     const onMarkerClick = (instance) => {
@@ -441,6 +474,10 @@ export default {
       }
     };
 
+    const onLinkClick = (link) => {
+      console.log("onLinkClick()");
+    };
+
     const loadMarkers = (markers = null) => {
       if (!instances.value.length) return;
 
@@ -451,6 +488,19 @@ export default {
         markers ?? instances.value,
         mapObjects.value,
         onMarkerClick
+      );
+    };
+
+    const loadLinks = (markers = null) => {
+      if (!links.value.length) return;
+
+      mapUtils.removeAllLinks(map.value, mapObjects.value);
+
+      mapUtils.addLinks(
+        map.value,
+        markers ?? links.value,
+        mapObjects.value,
+        onLinkClick
       );
     };
 
@@ -465,6 +515,22 @@ export default {
 
         instances.value = data.instances.map((i) => ({
           ...i,
+          selected: true,
+        }));
+      });
+    };
+
+    const refreshLinks = () => {
+      if (storeLinks.value.length) {
+        links.value = storeLinks.value;
+        return;
+      }
+
+      window.axios.get(route("objects.markers")).then(({ data }) => {
+        if (!data.links.length) return;
+
+        links.value = data.links.map((l) => ({
+          ...l,
           selected: true,
         }));
       });
@@ -488,13 +554,15 @@ export default {
           instances.value
         );
         loadMarkers(visibleInstances);
+
+        const visibleLinks = mapUtils.getLinksInView(map, links.value);
+        loadLinks(visibleLinks);
       });
 
-      map.value.on("zoomend", ({ target: map }) => {
-        lazilyGetMapZoom(map);
-      });
+      map.value.on("zoomend", ({ target: map }) => lazilyGetMapZoom(map));
 
       refreshInstances();
+      refreshLinks();
     });
 
     const lazilyGetMapCenter = window._.debounce((map) => {
@@ -515,6 +583,7 @@ export default {
         if (type === "map/doRefreshMap") {
           mapUtils.removeAllInstances(map.value, mapObjects.value);
           refreshInstances();
+          refreshLinks();
         }
 
         if (type === "map/unfocusMarker") {
@@ -530,24 +599,20 @@ export default {
       unsubscribeFromActions();
     });
 
-    const test1 = () => {
+    const showTestNotification = () => {
       notify({
         group: "notifications",
-        title: "Default Locations is not set.",
-        text: "First, create a default location first.",
+        title: "Test Notification",
+        text: "Test notification description",
         data: {
-          type: "success",
+          type: "danger",
         },
       });
     };
 
     return {
       onDefaultLocation,
-      center,
-      onCenterLocation,
-      selectedMarkerLatlng,
-      instances,
-      test1,
+      showTestNotification,
     };
   },
 };

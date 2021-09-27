@@ -32,7 +32,13 @@ class Coordinates implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match($this->pattern, $value);
+        try {
+            return preg_match($this->pattern, $value);
+        } catch (\Throwable $th) {
+            // We dont throw but we return false. This way, the parent validator
+            // instance can handle the error and display correctly
+            return false;
+        }
     }
 
     /**

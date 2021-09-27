@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Projects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\EmbersPermissionable;
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateProject implements UpdatesProjects
@@ -13,60 +14,49 @@ class UpdateProject implements UpdatesProjects
 
     /**
      * Validate, update and return an existing Project.
-     *
-     * @param  mixed  $user
-     * @param  int  $id
-     * @param  array  $input
-     * @return Project
      */
-    public function update($user, int $id, array $input)
+    public function update(User $user, int $id, array $input): Project
     {
         $this->authorize($user);
 
         $project = Project::findOrFail($id);
 
-        $this->validate($input);
+        $validated = $this->validate($input);
 
-        $project = $this->save($project, $input);
+        $project = $this->save($project, $validated);
 
         return $project;
     }
 
     /**
      * Validate the create Project operation.
-     *
-     * @param  array  $input
-     * @return void
      */
-    protected function validate(array $input)
+    protected function validate(array $input): array
     {
-        Validator::make($input, [
+        $validator = Validator::make($input, [
             'name' => ['filled', 'string', 'max:255'],
             'description' => ['filled', 'string'],
             'location_id' => ['filled', 'string', 'exists:locations,id']
-        ])
-            ->validate();
+        ]);
+
+        return $validator->validated();
     }
 
     /**
      * Save the Project in the DB.
-     *
-     * @param  Project  $project
-     * @param  array  $input
-     * @return Project
      */
-    protected function save(Project $project, array $input)
+    protected function save(Project $project, array $validated): Project
     {
-        if (!empty($input['name'])) {
-            $project->name = $input['name'];
+        if (!empty($validated['name'])) {
+            $project->name = $validated['name'];
         }
 
-        if (!empty($input['description'])) {
-            $project->name = $input['description'];
+        if (!empty($validated['description'])) {
+            $project->name = $validated['description'];
         }
 
-        if (!empty($input['location_id'])) {
-            $project->name = $input['location_id'];
+        if (!empty($validated['location_id'])) {
+            $project->name = $validated['location_id'];
         }
 
         $project->save();

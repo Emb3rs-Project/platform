@@ -11,7 +11,7 @@ const getters = {
 const actions = {
   checkForNewNotifications: async (ctx) => {
     try {
-      const response = await window.axios.get(route("notifications.newNotifications"));
+      const response = await window.axios.get(route("notifications.new"));
 
       if (response.data.unreadNotificationCount) {
         ctx.commit('updateUnreadNotificationCount', {
@@ -29,7 +29,7 @@ const actions = {
     const watcher = setInterval(async () => {
       try {
         const response = await window.axios.get(
-          route("notifications.newNotifications")
+          route("notifications.new")
         );
 
         if (response.data.unreadNotificationCount !== ctx.state.unreadNotificationCount) {

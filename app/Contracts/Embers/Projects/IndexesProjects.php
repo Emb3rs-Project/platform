@@ -2,13 +2,13 @@
 
 namespace App\Contracts\Embers\Projects;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+
 interface IndexesProjects
 {
     /**
      * Display all available Projects.
-     *
-     * @param  mixed  $user
-     * @return mixed
      */
-    public function index($user);
+    public function index(User $user): Collection;
 }

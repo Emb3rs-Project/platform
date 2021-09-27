@@ -20,7 +20,7 @@ use App\Http\Controllers\Embers\ShowNewNotificationsController;
 use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
-use App\Http\Controllers\Embers\UserMapDataController;
+use App\Http\Controllers\Embers\MapDataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,77 +34,63 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-function createResourceNames($prefix)
-{
-    return [
-        'index' => "$prefix.index",
-        'create' => "$prefix.create",
-        'store' => "$prefix.store",
-        'show' => "$prefix.show",
-        'edit' => "$prefix.edit",
-        'update' => "$prefix.update",
-        'destroy' => "$prefix.destroy",
-    ];
-}
-
 Route::get('/', function () {
     return redirect('/login');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    // User
-    Route::get('/user/map-data', [UserMapDataController::class, 'index'])->name('user.mapData.index');
-    Route::post('/user/map-data', [UserMapDataController::class, 'store'])->name('user.mapData.store');
+    // Map data
+    Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 
     // Dashboard
-    Route::resource('/dashboard', DashboardController::class)->names(createResourceNames('dashboard'));
+    Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
-    Route::get('/notifications/new-notifications', ShowNewNotificationsController::class)->name('notifications.newNotifications');
-    Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.markAllAsRead');
-    Route::resource('/notifications', NotificationContoller::class)->names(createResourceNames('notifications'));
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
+    Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
+    Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
 
     // Institution
-    Route::resource('/institution', InstitutionController::class)->names(createResourceNames('institution'));
+    Route::resource('/institution', InstitutionController::class);
 
     // Objects.["locations", "sources", "sinks", "links"]
-    Route::group(['prefix' => 'objects', 'as' => 'objects.'], function () {
+    Route::prefix('objects')->as('objects.')->group(function () {
         Route::get('/', [ObjectsController::class, 'map'])->name('index');
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');
         Route::get('/map', [ObjectsController::class, 'markers'])->name('markers');
 
         // Locations
-        Route::resource('/locations', LocationController::class)->names(createResourceNames('locations'));
+        Route::resource('/locations', LocationController::class);
 
         // Sources
-        Route::get('/sources/{id}/share', ShareSourceController::class)->name('sources.share');
-        Route::resource('/sources', SourceController::class)->names(createResourceNames('sources'));
+        Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share');
+        Route::resource('/sources', SourceController::class);
 
         // Sinks
-        Route::get('/sinks/{id}/share', ShareSinkController::class)->name('sinks.share');
-        Route::resource('/sinks', SinkController::class)->names(createResourceNames('sinks'));
+        Route::get('/sinks/{sink}/share', ShareSinkController::class)->name('sinks.share');
+        Route::resource('/sinks', SinkController::class);
 
         // Links
-        Route::get('/links/{id}/share', ShareLinkController::class)->name('links.share');
-        Route::resource('/links', LinkController::class)->names(createResourceNames('links'));
+        Route::get('/links/{link}/share', ShareLinkController::class)->name('links.share');
+        Route::resource('/links', LinkController::class);
     });
 
     // Projects
-    Route::get('/projects/{id}/share', ShareProjectController::class)->name('projects.share');
-    Route::resource('/projects', ProjectController::class)->names(createResourceNames('projects'));
+    Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share');
+    Route::resource('/projects', ProjectController::class);
 
     // Simulations
-    Route::get('/projects/{projectId}/simulations/{simulationId}/share', ShareProjectSimulationController::class)->name('projects.simulations.share');
-    Route::resource('/projects.simulations', ProjectSimulationController::class)->names(createResourceNames('projects.simulations'));
+    Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share');
+    Route::resource('/projects.simulations', ProjectSimulationController::class);
 
     // Challenge
-    Route::resource('/chalenge', ChallengeController::class)->names(createResourceNames('challenge'));
+    Route::resource('/challenge', ChallengeController::class);
 
     // Help
-    Route::resource('/help', HelpController::class)->names(createResourceNames('help'));
+    Route::resource('/help', HelpController::class);
 
     // TeamRoles
-    Route::resource('/team-roles', TeamRolesController::class)->names(createResourceNames('team-roles'));
+    Route::resource('/team-roles', TeamRolesController::class);
 });
 
 // Jetstream routes
