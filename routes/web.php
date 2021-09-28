@@ -21,6 +21,7 @@ use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
+use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,9 +47,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
+    Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
 
     // Institution
     Route::resource('/institution', InstitutionController::class);

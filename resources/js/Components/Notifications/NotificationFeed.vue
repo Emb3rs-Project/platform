@@ -12,7 +12,7 @@
             </div>
             <div
               class="flex-shrink-0 self-center flex"
-              v-if="notifications.length"
+              v-if="unreadNotifications.length || readNotifications.length"
             >
               <Menu
                 as="div"
@@ -38,17 +38,34 @@
                 >
                   <MenuItems class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div class="py-1">
-                      <MenuItem v-slot="{ active }">
+                      <MenuItem
+                        v-slot="{ active }"
+                        v-if="unreadNotifications.length"
+                      >
                       <button
                         type="button"
                         @click="markAllAsRead"
                         :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex px-4 py-2 text-sm w-full']"
                       >
                         <CheckIcon
-                          class="mr-3 h-5 w-5 text-gray-400"
+                          class="mr-3 h-5 w-5 text-green-400"
                           aria-hidden="true"
                         />
                         <span>Mark all as read</span>
+                      </button>
+                      </MenuItem>
+                      <MenuItem v-slot="{ active }">
+                      <button
+                        type="button"
+                        @click="removeAll"
+                        :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex px-4 py-2 text-sm w-full']"
+                      >
+
+                        <XCircleIcon
+                          class="mr-3 h-5 w-5 text-red-400"
+                          aria-hidden="true"
+                        />
+                        <span>Remove all notifications</span>
                       </button>
                       </MenuItem>
                     </div>
@@ -58,8 +75,10 @@
             </div>
           </div>
         </div>
+
+        <!-- New Notifications -->
         <div
-          v-if="readNotifications.length"
+          v-if="unreadNotifications.length || readNotifications.length"
           class="px-4 sm:px-6"
         >
           <!-- Title -->
@@ -121,7 +140,7 @@
                               :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex px-4 py-2 text-sm w-full']"
                             >
                               <CheckCircleIcon
-                                class="mr-3 h-5 w-5 text-gray-400"
+                                class="mr-3 h-5 w-5 text-green-400"
                                 aria-hidden="true"
                               />
                               <span>Mark as read</span>
@@ -134,10 +153,10 @@
                               :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex px-4 py-2 text-sm w-full']"
                             >
                               <XCircleIcon
-                                class="mr-3 h-5 w-5 text-gray-400"
+                                class="mr-3 h-5 w-5 text-red-400"
                                 aria-hidden="true"
                               />
-                              <span>Remove notification</span>
+                              <span>Remove</span>
                             </button>
                             </MenuItem>
                           </div>
@@ -149,7 +168,6 @@
               </li>
             </ul>
           </div>
-
           <!-- No new notifications placeholder -->
           <div
             v-else
@@ -164,6 +182,7 @@
           </div>
         </div>
 
+        <!-- Read Notifications -->
         <div
           v-if="readNotifications.length"
           class="px-4 sm:px-6"
@@ -183,7 +202,7 @@
             </div>
           </div>
 
-          <!-- Notifications -->
+          <!-- Read Notifications -->
           <div>
             <ul role="list">
               <li
@@ -226,10 +245,10 @@
                               :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'flex px-4 py-2 text-sm w-full']"
                             >
                               <XCircleIcon
-                                class="mr-3 h-5 w-5 text-gray-400"
+                                class="mr-3 h-5 w-5 text-red-400"
                                 aria-hidden="true"
                               />
-                              <span>Remove notification</span>
+                              <span>Remove</span>
                             </button>
                             </MenuItem>
                           </div>
@@ -245,7 +264,7 @@
 
         <!-- No notifications placeholder -->
         <div
-          v-if="!notifications.length || (!readNotifications.length && !unreadNotifications.length)"
+          v-if="!readNotifications.length && !unreadNotifications.length"
           class="flex items-center justify-center h-60"
         >
           <div>
@@ -260,7 +279,8 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
+import { useStore } from "vuex";
 
 import NotificationFeedItem from "@/Components/Notifications/NotificationFeedItem.vue";
 
@@ -282,10 +302,6 @@ export default {
   },
 
   props: {
-    notifications: {
-      type: Array,
-      required: true,
-    },
     unreadNotifications: {
       type: Array,
       required: true,
@@ -297,8 +313,27 @@ export default {
   },
 
   setup(props) {
+    const store = useStore();
     const unreadNotifications = ref(props.unreadNotifications);
     const readNotifications = ref(props.readNotifications);
+
+    onBeforeUnmount(() => {
+      unsubscribe();
+    });
+
+    const unsubscribe = store.subscribe((mutation, _) => {
+      if (mutation.type === "notifications/setUnreadNotifications") {
+        // prettier-ignore
+        for (const _newUnreadNotification of mutation.payload.unreadNotifications) {
+          const duplicate = unreadNotifications.value.find(
+            (n) => n.id === _newUnreadNotification.id
+          );
+
+          if (!duplicate)
+            unreadNotifications.value.unshift(_newUnreadNotification);
+        }
+      }
+    });
 
     const markAllAsRead = () => {
       window.axios.post(route("notifications.mark-all-as-read")).then(() => {
@@ -308,6 +343,13 @@ export default {
         ];
 
         unreadNotifications.value = [];
+      });
+    };
+
+    const removeAll = () => {
+      window.axios.post(route("notifications.remove-all")).then(() => {
+        unreadNotifications.value = [];
+        readNotifications.value = [];
       });
     };
 
@@ -354,6 +396,7 @@ export default {
       unreadNotifications,
       readNotifications,
       markAllAsRead,
+      removeAll,
       markAsRead,
       remove,
     };

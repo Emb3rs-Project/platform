@@ -17,15 +17,15 @@ class ShowNewNotificationsController extends Controller
     public function __invoke(Request $request)
     {
         [
-            $notifications,
             $unreadNotifications,
             $readNotifications
         ] = app(IndexesNotifications::class)->index($request->user());
 
-        $unreadNotificationCount = $unreadNotifications->count();
+        $unreadNotificationsCount = $unreadNotifications->count();
 
         return response()->json([
-            'unreadNotificationCount' => $unreadNotificationCount
+            'unreadNotifications' => $unreadNotifications,
+            'unreadNotificationsCount' => $unreadNotificationsCount
         ]);
     }
 }

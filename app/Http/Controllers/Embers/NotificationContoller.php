@@ -19,13 +19,11 @@ class NotificationContoller extends Controller
     public function index(Request $request): Response
     {
         [
-            $notifications,
             $unreadNotifications,
             $readNotifications,
         ] = app(IndexesNotifications::class)->index($request->user());
 
         return Inertia::render('Notifications/NotificationIndex', [
-            'notifications' => $notifications,
             'unreadNotifications' => $unreadNotifications,
             'readNotifications' => $readNotifications
         ]);
