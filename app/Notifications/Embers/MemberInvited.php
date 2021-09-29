@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Embers;
 
 use App\EmbersNotification;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class MemberInvited extends EmbersNotification implements ShouldQueue
 {
@@ -38,8 +37,7 @@ class MemberInvited extends EmbersNotification implements ShouldQueue
         $this->description = $description;
 
         $this->type = 'invitation';
-        $this->tags = ['invitation'];
-        // info(json_encode(get_object_vars($this)));
+        $this->tags = ['Institutions'];
     }
 
     /**

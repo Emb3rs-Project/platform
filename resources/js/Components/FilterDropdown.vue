@@ -3,7 +3,7 @@
     as="div"
     v-model="selected"
   >
-    <ListboxLabel class="sr-only"> Change published status </ListboxLabel>
+    <ListboxLabel class="sr-only"> Change object filteration </ListboxLabel>
     <div class="relative">
       <div class="inline-flex shadow-sm rounded-md divide-x divide-blue-600">
         <div class="relative z-0 inline-flex shadow-sm rounded-md divide-x divide-blue-600">
@@ -13,7 +13,7 @@
             </p>
           </div>
           <ListboxButton class="relative inline-flex items-center bg-blue-500 p-2 rounded-l-none rounded-r-md text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus:z-10 focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-blue-500">
-            <span class="sr-only">Change published status</span>
+            <span class="sr-only"> Change object filteration </span>
             <FilterIcon
               class="h-5 w-5"
               aria-hidden="true"
