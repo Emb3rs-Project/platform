@@ -61,9 +61,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');
         Route::get('/map', [ObjectsController::class, 'markers'])->name('markers');
 
-        // Locations
-        Route::resource('/locations', LocationController::class);
-
         // Sources
         Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share');
         Route::resource('/sources', SourceController::class);
