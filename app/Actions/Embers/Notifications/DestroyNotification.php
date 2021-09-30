@@ -17,7 +17,7 @@ class DestroyNotification implements DestroysNotifications
      */
     public function destroy(User $user, string $id): void
     {
-        $notification = DatabaseNotification::find($id);
+        $notification = DatabaseNotification::query()->find($id);
 
         $notification->delete();
     }

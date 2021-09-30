@@ -4,6 +4,7 @@ namespace App\Actions\Embers\Notifications;
 
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
 {

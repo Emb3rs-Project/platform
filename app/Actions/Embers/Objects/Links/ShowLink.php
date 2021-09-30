@@ -5,6 +5,8 @@ namespace App\Actions\Embers\Objects\Links;
 use App\Contracts\Embers\Objects\Links\ShowsLinks;
 use App\EmbersPermissionable;
 use App\Models\Link;
+use App\Models\User;
+use Illuminate\Support\Collection;
 
 class ShowLink implements ShowsLinks
 {
@@ -13,19 +15,24 @@ class ShowLink implements ShowsLinks
     /**
      * Find and return an existing Sink.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return \Illuminate\Support\Collection
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show($user, int $id)
+    public function show(User $user, int $id): Collection
     {
         $this->authorize($user);
 
-        $link = Link::with(['geoSegments'])->findOrFail($id);
-
         $teamLinks = $user->currentTeam->links->pluck('id');
 
-        $link->whereIn('id', $teamLinks)->get();
+        $link = Link::query()
+            ->with(['geoSegments'])
+            ->findOrFail($id)
+            ->whereIn('id', $teamLinks)
+            ->get();
 
         return $link;
     }

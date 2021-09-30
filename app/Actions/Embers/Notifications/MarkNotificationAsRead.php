@@ -17,7 +17,7 @@ class MarkNotificationAsRead implements MarksNotificationsAsRead
      */
     public function markAsRead(User $user, string $id): DatabaseNotification
     {
-        $notification = DatabaseNotification::find($id);
+        $notification = DatabaseNotification::query()->find($id);
 
         $notification->markAsRead();
 

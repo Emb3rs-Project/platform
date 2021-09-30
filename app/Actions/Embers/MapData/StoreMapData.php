@@ -16,6 +16,8 @@ class StoreMapData implements StoresMapData
      * @param  \App\Models\User  $user
      * @param  array  $input
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(User $user, array $input): array
     {
@@ -31,6 +33,8 @@ class StoreMapData implements StoresMapData
      *
      * @param  array  $input
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function validate(array $input): array
     {
@@ -49,7 +53,7 @@ class StoreMapData implements StoresMapData
      * Save the map data in the DB.
      *
      * @param  \App\Models\User  $user
-     * @param  array  $input
+     * @param  array  $validated
      * @return array
      */
     protected function save(User $user, array $validated): array
