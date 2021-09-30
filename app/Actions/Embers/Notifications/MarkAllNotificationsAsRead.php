@@ -8,8 +8,7 @@ use App\Models\User;
 class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
 {
     /**
-     * Mark all the available notifications for the currently logged in user
-     * as read.
+     * Mark all the available notifications as read.
      *
      * @param  \App\Models\User  $user
      * @return void

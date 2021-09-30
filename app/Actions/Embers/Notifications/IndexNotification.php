@@ -11,6 +11,9 @@ class IndexNotification implements IndexesNotifications
 {
     /**
      * Display all the available notifications.
+     *
+     * @param  \App\Models\User  $user
+     * @return array
      */
     public function index(User $user): array
     {

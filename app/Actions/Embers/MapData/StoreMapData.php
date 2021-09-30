@@ -12,6 +12,10 @@ class StoreMapData implements StoresMapData
 {
     /**
      * Validate and create new map data.
+     *
+     * @param  \App\Models\User  $user
+     * @param  array  $input
+     * @return array
      */
     public function store(User $user, array $input): array
     {
@@ -24,6 +28,9 @@ class StoreMapData implements StoresMapData
 
     /**
      * Validate the create map data operation.
+     *
+     * @param  array  $input
+     * @return array
      */
     protected function validate(array $input): array
     {
@@ -40,6 +47,10 @@ class StoreMapData implements StoresMapData
 
     /**
      * Save the map data in the DB.
+     *
+     * @param  \App\Models\User  $user
+     * @param  array  $input
+     * @return array
      */
     protected function save(User $user, array $validated): array
     {
