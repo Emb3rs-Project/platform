@@ -82,8 +82,6 @@ export default {
       // Convert time difference from seconds to minutes
       timeDiff = timeDiff / 60;
 
-      if (timeDiff === 60) return "1 hour ago.";
-
       if (timeDiff < 60) {
         if (timeDiff < 1) return "Just received.";
 
@@ -105,6 +103,8 @@ export default {
           return `${Math.floor(timeDiff)} days ago.`;
         }
       }
+
+      if (timeDiff === 60) return "1 hour ago.";
     };
 
     return {
