@@ -34,7 +34,7 @@ class InvitingTeamMember
     /**
      * Create a new event instance.
      *
-     * @param  Team  $team
+     * @param  \App\Models\Team  $team
      * @param  string  $email
      * @param  int  $teamRoleId
      * @return void

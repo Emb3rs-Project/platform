@@ -13,14 +13,14 @@ class AddingTeamMember
     /**
      * The team instance.
      *
-     * @var mixed
+     * @var \App\Models\Team
      */
     public Team $team;
 
     /**
      * The email address of the added member.
      *
-     * @var User
+     * @var \App\Models\User
      */
     public User $email;
 
@@ -34,8 +34,8 @@ class AddingTeamMember
     /**
      * Create a new event instance.
      *
-     * @param  Team  $team
-     * @param  User  $user
+     * @param  \App\Models\Team  $team
+     * @param  \App\Models\User  $user
      * @param  int  $teamRoleId
      * @return void
      */

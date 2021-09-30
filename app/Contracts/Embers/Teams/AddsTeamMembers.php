@@ -10,8 +10,8 @@ interface AddsTeamMembers
     /**
      * Add a new team member to the given team.
      *
-     * @param  User  $user
-     * @param  Team  $team
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Team  $team
      * @param  array  $input
      * @return void
      */

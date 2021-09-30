@@ -54,7 +54,7 @@ trait EmbersPermissionable
     /**
      * Determine if the user is authorized to access this action.
      *
-     * @param  User  $user
+     * @param  \App\Models\User  $user
      * @return void
      */
     public function authorize(User $user): void

@@ -18,8 +18,8 @@ class AddTeamMember implements AddsTeamMembers
     /**
      * Add a new team member to the given team.
      *
-     * @param  User  $user
-     * @param  Team  $team
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Team  $team
      * @param  array  $input
      * @return void
      */
@@ -46,7 +46,7 @@ class AddTeamMember implements AddsTeamMembers
     /**
      * Validate the add member operation.
      *
-     * @param  Team  $team
+     * @param  \App\Models\Team  $team
      * @param  array  $input
      * @return void
      */
@@ -79,19 +79,12 @@ class AddTeamMember implements AddsTeamMembers
     /**
      * Ensure that the user is not already on the team.
      *
-     * @param  Team  $team
+     * @param  \App\Models\Team  $team
      * @param  string|null  $email
      * @return \Closure
      */
-    protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email = '')
+    protected function ensureUserIsNotAlreadyOnTeam(Team $team, ?string $email = '')
     {
-
-        info(json_encode($email));
-        // // info(json_encode($team->allUsers()));
-        // info(json_encode($team->allUsers()->contains(
-        //     fn ($value) => info(json_encode($email))
-        // )));
-
         return function (ValidationValidator $validator) use ($team, $email) {
             $validator->errors()->addIf(
                 $team->hasUserWithEmail($email),

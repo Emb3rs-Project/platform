@@ -11,7 +11,7 @@ class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
      * Mark all the available notifications for the currently logged in user
      * as read.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @return void
      */
     public function markAllAsRead(User $user): void
