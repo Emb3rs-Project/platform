@@ -15,6 +15,8 @@ class CreateLink implements CreatesLinks
      *
      * @param  \App\Models\User  $user
      * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     public function create(User $user): array
     {

@@ -7,6 +7,7 @@ use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\Location;
+use App\Models\User;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
 use Illuminate\Support\Arr;
@@ -20,11 +21,14 @@ class StoreSink implements StoresSinks
     /**
      * Validate and create a new Sink.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $input
-     * @return Instance
+     * @return \App\Models\Instance
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($user, array $input)
+    public function store(User $user, array $input): Instance
     {
         $this->authorize($user);
 
@@ -40,8 +44,10 @@ class StoreSink implements StoresSinks
      *
      * @param  array  $input
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function validate(array $input)
+    protected function validate(array $input): array
     {
         $validator = Validator::make($input, [
             'sink' => ['required', 'array:data'],
@@ -78,11 +84,11 @@ class StoreSink implements StoresSinks
     /**
      * Save the Sink in the DB.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $validated
-     * @return Instance
+     * @return \App\Models\Instance
      */
-    protected function save($user, array $validated)
+    protected function save($user, array $validated): Instance
     {
         $newInstance = [
             'name' => Arr::get($validated, 'sink.data.name') ?? 'Not Defined',

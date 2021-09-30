@@ -63,15 +63,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
         // Sources
         Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share');
-        Route::resource('/sources', SourceController::class);
+        Route::resource('/sources', SourceController::class)->except(['index']);
 
         // Sinks
         Route::get('/sinks/{sink}/share', ShareSinkController::class)->name('sinks.share');
-        Route::resource('/sinks', SinkController::class);
+        Route::resource('/sinks', SinkController::class)->except(['index']);
 
         // Links
         Route::get('/links/{link}/share', ShareLinkController::class)->name('links.share');
-        Route::resource('/links', LinkController::class);
+        Route::resource('/links', LinkController::class)->except(['index']);
     });
 
     // Projects

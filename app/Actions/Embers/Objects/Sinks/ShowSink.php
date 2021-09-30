@@ -7,25 +7,34 @@ use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Property;
 use App\Models\TemplateProperty;
+use App\Models\User;
 
 class ShowSink implements ShowsSinks
 {
     use EmbersPermissionable;
 
     /**
-     * Find and return an existing Sink.
+     * Display the given Sink.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show($user, int $id)
+    public function show(User $user, int $id): array
     {
         $this->authorize($user);
 
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        $sink = Instance::query()
+            ->with(['location', 'template', 'template.category'])
+            ->findOrFail($id);
 
-        $templateProperties = TemplateProperty::whereTemplateId($sink->template_id)->with(['property'])->get();
+        $templateProperties = TemplateProperty::query()
+            ->whereTemplateId($sink->template_id)
+            ->with(['property'])
+            ->get();
 
         return [
             $sink,

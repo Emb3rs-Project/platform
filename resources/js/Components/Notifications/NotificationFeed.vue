@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-4">
     <div class="max-w-4xl mx-auto">
-      <div class="bg-white shadow overflow-hidden sm:rounded-md space-y-4">
+      <div class="bg-white shadow overflow-hidden sm:rounded-md space-y-4 pb-16">
         <!-- Section title -->
         <div class="px-4 py-5 sm:px-6">
           <div class="flex space-x-3 justify-between">
