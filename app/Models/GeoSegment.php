@@ -29,7 +29,11 @@ class GeoSegment extends Model
         'data'
     ];
 
-    // Table geo_segment_link
+    /**
+     * The Links that this GeoSegment belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function links(): BelongsToMany
     {
         return $this->belongsToMany(

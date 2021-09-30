@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -24,25 +24,41 @@ class Project extends Model
         'location_id'
     ];
 
-    // Table locations
+    /**
+     * The Locations that this Project has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class, 'project_id');
     }
 
-    //Table projects
+    /**
+     * The Location that this Project belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
 
-    // Table simulations
+    /**
+     * The Simulations that this Project has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function simulations(): HasMany
     {
         return $this->hasMany(Simulation::class, 'project_id');
     }
 
-    // Table team_project
+    /**
+     * The Teams that this Project belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(

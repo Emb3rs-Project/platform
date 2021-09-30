@@ -32,19 +32,31 @@ class Simulation extends Model
         'targetData' => 'array',
     ];
 
-    // Table simulations
+    /**
+     * The Project that this Simulation belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
 
-    // Table simulations
+    /**
+     * The Target that this Simulation belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function target(): BelongsTo
     {
         return $this->belongsTo(Target::class, 'target_id');
     }
 
-    // Table simulations
+    /**
+     * The Simulation Type that this Simulation belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function simulationType(): BelongsTo
     {
         return $this->belongsTo(SimulationType::class, 'simulation_type_id');

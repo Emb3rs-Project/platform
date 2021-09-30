@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Link extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,11 @@ class Link extends Model
         'description'
     ];
 
-    // Table geo_segment_link
+    /**
+     * The GeoSegments that this Link belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function geoSegments(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -32,7 +36,11 @@ class Link extends Model
         );
     }
 
-    // Table team_link
+    /**
+     * The Teams that this Link belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(

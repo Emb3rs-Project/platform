@@ -23,29 +23,51 @@ class Template extends Model
         'values' => 'array',
     ];
 
-    // Table templates
+    /**
+     * The Category that this Template belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    // Table instances
+    /**
+     * The Instances that this Template has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function instances(): HasMany
     {
         return $this->hasMany(Instance::class, 'template_id');
     }
 
-    // Table template_properties
+    /**
+     * The Template Properties that this Template has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function templateProperties(): HasMany
     {
         return $this->hasMany(TemplateProperty::class, 'template_id');
     }
 
+    /**
+     * The Template Grouping that this Template has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function templateGrouping(): HasMany
     {
         return $this->hasMany(TemplateGrouping::class, 'property_group_id');
     }
 
+    /**
+     * The Scripts that this Template belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function scripts(): BelongsToMany
     {
         return $this->belongsToMany(
