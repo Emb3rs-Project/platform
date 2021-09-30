@@ -44,7 +44,7 @@ trait HasEmbersProperties
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfInstancePropertiesAreValid(array $validated, ?int $templateId, Collection &$errors): void
+    protected function checkIfInstancePropertiesAreValid(array $validated, int $templateId, Collection &$errors): void
     {
         $instanceType = $this->getInstanceType($validated);
 
@@ -127,9 +127,9 @@ trait HasEmbersProperties
      * @param  array  $properties
      * @param  \Illuminate\Database\Eloquent\Collection<mixed, \App\Models\TemplateProperty>  $templateProperties
      * @param  \Illuminate\Support\Collection  $errors
-     * @return \Illuminate\Support\Collection
+     * @return void
      */
-    private function validateProperties(string $instanceType, ?int $index, array $properties, $templateProperties, Collection &$errors)
+    private function validateProperties(string $instanceType, ?int $index, array $properties, $templateProperties, Collection &$errors): void
     {
         foreach ($properties as $field => $value) {
             $key = !is_null($index) ? "$instanceType.$index.data.$field" : "$instanceType.data.$field";

@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\TeamRole;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Arr;
 use Laravel\Jetstream\Jetstream;
 
@@ -16,7 +17,7 @@ trait HasEmbersTeams
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function teams()
+    public function teams(): BelongsToMany
     {
         return $this->belongsToMany(
             Jetstream::teamModel(),
@@ -41,7 +42,7 @@ trait HasEmbersTeams
             return 'Owner';
         }
 
-        if (! $this->belongsToTeam($team)) {
+        if (!$this->belongsToTeam($team)) {
             return;
         }
 
@@ -67,25 +68,25 @@ trait HasEmbersTeams
 
         return $this->belongsToTeam($team) &&
             TeamRole::where('id', $team->users->where('id', $this->id)->first()->membership->team_role_id)
-                ->first(['role']) === $role;
+            ->first(['role']) === $role;
     }
 
     /**
-    * Get the user's permissions for the given team.
-    *
-    * Note: This function is overriding the teamPermissions() function from
-    *       HasTeams trait, so it can be adapted to EMB3Rs use case.
-    *
-    * @param  mixed  $team
-    * @return array
-    */
-    public function teamPermissions($team)
+     * Get the user's permissions for the given team.
+     *
+     * Note: This function is overriding the teamPermissions() function from
+     *       HasTeams trait, so it can be adapted to EMB3Rs use case.
+     *
+     * @param  mixed  $team
+     * @return array
+     */
+    public function teamPermissions($team): array
     {
         if ($this->ownsTeam($team)) {
             return ['*'];
         }
 
-        if (! $this->belongsToTeam($team)) {
+        if (!$this->belongsToTeam($team)) {
             return [];
         }
 
