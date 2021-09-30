@@ -7,6 +7,7 @@ use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -36,7 +37,7 @@ class NotificationContoller extends Controller
      * @param  string  $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         app(MarksNotificationsAsRead::class)->markAsRead($request->user(), $id);
 
@@ -48,9 +49,9 @@ class NotificationContoller extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, string $id): RedirectResponse
     {
         app(DestroysNotifications::class)->destroy($request->user(), $id);
 
