@@ -46,7 +46,7 @@ class MemberAdded extends EmbersNotification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database'];
     }
@@ -57,7 +57,7 @@ class MemberAdded extends EmbersNotification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         // ! Be careful not to override the properties from the parent class
         return array_merge(parent::share(), [
