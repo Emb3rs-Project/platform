@@ -6,7 +6,6 @@ use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
-use App\Models\Location;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,12 +16,15 @@ class UpdateSource implements UpdatesSources
     /**
      * Validate and update an existing instance.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
      * @param  array  $input
-     * @return Instance
+     * @return \App\Models\Instance
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update($user, int $id, array $input)
+    public function update($user, int $id, array $input): Instance
     {
         $this->authorize($user);
 
@@ -39,10 +41,12 @@ class UpdateSource implements UpdatesSources
      * Validate the create Source operation.
      *
      * @param  array  $input
-     * @param  Instance  $source
+     * @param  \App\Models\Instance  $source
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function validate(array $input, Instance $source)
+    protected function validate(array $input, Instance $source): array
     {
         $validator = Validator::make($input, [
             'source' => ['present', 'array:data'],
@@ -68,11 +72,11 @@ class UpdateSource implements UpdatesSources
     /**
      * Save the Source in the DB.
      *
-     * @param  Instance $source
+     * @param  \App\Models\Instance $source
      * @param  array  $input
-     * @return Instance
+     * @return \App\Models\Instance
      */
-    protected function save(Instance $source, array $input)
+    protected function save(Instance $source, array $input): Instance
     {
         $name = Arr::get($input, 'source.data.name');
 

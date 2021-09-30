@@ -11,7 +11,7 @@ class UpdateTeamName implements UpdatesTeamNames
     /**
      * Validate and update the given team's name.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  mixed  $team
      * @param  array  $input
      * @return void

@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Objects\Sources;
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\EmbersPermissionable;
 use App\Models\Instance;
+use App\Models\User;
 
 class DestroySource implements DestroysSources
 {
@@ -13,16 +14,19 @@ class DestroySource implements DestroysSources
     /**
      * Find and delete an existing Source.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
      * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($user, int $id)
+    public function destroy(User $user, int $id): void
     {
         $this->authorize($user);
 
-        $source = Instance::findOrFail($id);
+        $source = Instance::query()->findOrFail($id);
 
-        Instance::destroy($source->id);
+        Instance::query()->destroy($source->id);
     }
 }

@@ -5,19 +5,23 @@ namespace App\Actions\Embers\Objects\Sources;
 use App\Contracts\Embers\Objects\Sources\SharesSources;
 use App\EmbersPermissionable;
 use App\Models\Instance;
+use App\Models\User;
 
 class ShareSource implements SharesSources
 {
     use EmbersPermissionable;
 
     /**
-     * Find and return an existing Source.
+     * Share a given Source.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
      * @return mixed
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function share($user, int $id)
+    public function share(User $user, int $id)
     {
         $this->authorize($user);
 

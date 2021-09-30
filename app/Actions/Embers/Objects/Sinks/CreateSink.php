@@ -27,7 +27,8 @@ class CreateSink implements CreatesSinks
 
         $sinkCategories = Category::query()->whereType('sink')->get('id');
 
-        $sinkTemplates = Template::query()->whereIn('category_id', $sinkCategories)
+        $sinkTemplates = Template::query()
+            ->whereIn('category_id', $sinkCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',

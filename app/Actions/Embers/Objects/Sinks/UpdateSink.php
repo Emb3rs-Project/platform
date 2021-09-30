@@ -7,7 +7,6 @@ use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\User;
-use App\Rules\Property;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -46,6 +45,8 @@ class UpdateSink implements UpdatesSinks
      * @param  array  $input
      * @param  \App\Models\Instance  $sink
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function validate(array $input, Instance $sink): array
     {
