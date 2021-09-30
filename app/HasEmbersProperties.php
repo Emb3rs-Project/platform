@@ -39,12 +39,12 @@ trait HasEmbersProperties
      * Check if the provided instance properties are valid.
      *
      * @param  array  $validated
-     * @param  int  $templateId
+     * @param  int|null  $templateId
      * @return void
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    protected function checkIfInstancePropertiesAreValid(array $validated, int $templateId, Collection &$errors): void
+    protected function checkIfInstancePropertiesAreValid(array $validated, ?int $templateId, Collection &$errors): void
     {
         $instanceType = $this->getInstanceType($validated);
 
