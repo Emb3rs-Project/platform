@@ -613,7 +613,7 @@ const navigation = [
   },
   {
     name: "Challenge",
-    href: "challenge.index",
+    href: "challenges.index",
     icon: UserGroupIcon,
   },
   { name: "Help", href: "help.index", icon: SupportIcon },

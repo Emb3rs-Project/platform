@@ -5,7 +5,6 @@ use App\Http\Controllers\Embers\DashboardController;
 use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
-use App\Http\Controllers\Embers\LocationController;
 use App\Http\Controllers\Embers\MarkAllNotificationsAsReadController;
 use App\Http\Controllers\Embers\NotificationContoller;
 use App\Http\Controllers\Embers\ObjectsController;
@@ -83,7 +82,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects.simulations', ProjectSimulationController::class);
 
     // Challenge
-    Route::resource('/challenge', ChallengeController::class);
+    Route::resource('/challenges', ChallengeController::class);
 
     // Help
     Route::resource('/help', HelpController::class);

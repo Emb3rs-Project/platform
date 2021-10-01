@@ -35,7 +35,6 @@ class Instance extends Model
         'location_id'
     ];
 
-
     /**
      * The Template that this Instance belongs to.
      *
