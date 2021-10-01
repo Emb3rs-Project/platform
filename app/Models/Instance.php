@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Nova\Actions\Actionable;
+use Laravel\Scout\Searchable;
 
 class Instance extends Model
 {
-    use SoftDeletes, Actionable;
+    use SoftDeletes, Actionable, Searchable;
 
     /**
      * The attributes that should be cast.
