@@ -14,9 +14,9 @@ class ShareProject implements SharesProjects
     /**
      * Find and return an existing Project.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return \App\Models\Project
      */
     public function share(User $user, int $id): Project
     {

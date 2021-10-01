@@ -11,8 +11,7 @@ use Laravel\Nova\Actions\Actionable;
 
 class Instance extends Model
 {
-    use SoftDeletes;
-    use Actionable;
+    use SoftDeletes, Actionable;
 
     /**
      * The attributes that should be cast.
@@ -36,19 +35,31 @@ class Instance extends Model
     ];
 
 
-    // Table instances
+    /**
+     * The Template that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function template(): BelongsTo
     {
         return $this->belongsTo(Template::class, 'template_id');
     }
 
-    // Table instances
+    /**
+     * The Location that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
 
-    // Table team_instance
+    /**
+     * The Teams that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -59,6 +70,11 @@ class Instance extends Model
         );
     }
 
+    /**
+     * The Instance Group that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function grouping(): BelongsToMany
     {
         return $this->belongsToMany(

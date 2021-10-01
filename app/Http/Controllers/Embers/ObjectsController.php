@@ -15,17 +15,21 @@ class ObjectsController extends Controller
     {
         $teamInstances = $request->user()->currentTeam->instances->pluck('id');
 
-        $instances = Instance::with([
-            'template',
-            'template.category',
-            'location',
-        ])->whereIn('id', $teamInstances)->get();
+        $instances = Instance::query()
+            ->with([
+                'template',
+                'template.category',
+                'location',
+            ])->whereIn('id', $teamInstances)
+            ->get();
+
+        $links = $request->user()->currentTeam->links;
 
         return [
             "slideOver" => 'Objects/ObjectsIndex',
             "props" => [
                 "instances" => $instances,
-                "links" => $request->user()->currentTeam->links
+                "links" => $links
             ]
         ];
     }

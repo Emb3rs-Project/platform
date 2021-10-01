@@ -9,6 +9,7 @@ use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class InstitutionController extends Controller
 {
@@ -17,9 +18,9 @@ class InstitutionController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        $currentTeam = Auth::user()->currentTeam;
+        $currentTeam = $request->user()->currentTeam;
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
 
@@ -37,14 +38,11 @@ class InstitutionController extends Controller
             ->with(['location', 'template', 'template.category'])
             ->get();
 
-        return Inertia::render(
-            'Institution/InstitutionIndex',
-            [
-                'users' => $users,
-                'sources' => $sources,
-                'sinks' => $sinks,
-            ]
-        );
+        return Inertia::render('Institution/InstitutionIndex', [
+            'users' => $users,
+            'sources' => $sources,
+            'sinks' => $sinks,
+        ]);
     }
 
     /**

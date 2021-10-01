@@ -45,7 +45,11 @@ class Team extends JetstreamTeam
         'deleted' => TeamDeleted::class,
     ];
 
-    // Table team_instance
+    /**
+     * The Instances that this Team belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function instances(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -56,7 +60,11 @@ class Team extends JetstreamTeam
         );
     }
 
-    // Table team_link
+    /**
+     * The Links that this Team belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function links(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -67,7 +75,11 @@ class Team extends JetstreamTeam
         );
     }
 
-    // Table team_project
+    /**
+     * The Projects that this Team belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -78,7 +90,11 @@ class Team extends JetstreamTeam
         );
     }
 
-    // Table team_location
+    /**
+     * The Locations that this Team belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function locations(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -89,7 +105,11 @@ class Team extends JetstreamTeam
         );
     }
 
-    // Table team_roles
+    /**
+     * The Team Roles that this Team has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function teamRoles(): HasMany
     {
         return $this->hasMany(TeamRole::class, 'team_id');

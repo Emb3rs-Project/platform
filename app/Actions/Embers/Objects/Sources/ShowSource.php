@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\EmbersPermissionable;
 use App\Models\Instance;
 use App\Models\Template;
+use App\Models\User;
 use Illuminate\Support\Arr;
 
 class ShowSource implements ShowsSources
@@ -15,26 +16,31 @@ class ShowSource implements ShowsSources
     /**
      * Find and return an existing Source.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show($user, int $id)
+    public function show(User $user, int $id): array
     {
         $this->authorize($user);
 
-        $source = Instance::with([
-            'template',
-            'template.templateProperties.property',
-            'template.templateProperties.unit',
-            'location'
-        ])->findOrFail($id);
+        $source = Instance::query()
+            ->with([
+                'template',
+                'template.templateProperties.property',
+                'template.templateProperties.unit',
+                'location'
+            ])->findOrFail($id);
 
         $equipment = Arr::get($source->values, 'equipment') ?? [];
 
         $processes = Arr::get($source->values, 'processes') ?? [];
 
-        $equipmentTemplates = Template::whereIn('id', Arr::pluck($equipment, 'id'))
+        $equipmentTemplates = Template::query()
+            ->whereIn('id', Arr::pluck($equipment, 'id'))
             ->with([
                 'templateProperties',
                 'templateProperties.property',
@@ -42,7 +48,8 @@ class ShowSource implements ShowsSources
             ])
             ->get();
 
-        $processesTemplates = Template::whereIn('id', Arr::pluck($processes, 'id'))
+        $processesTemplates = Template::query()
+            ->whereIn('id', Arr::pluck($processes, 'id'))
             ->with([
                 'templateProperties',
                 'templateProperties.property',

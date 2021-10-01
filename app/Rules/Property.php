@@ -17,7 +17,6 @@ class Property implements Rule
      * @var string
      */
     private string $message;
-    // private array $messages;
 
     /**
      * Create a new rule instance.
@@ -77,8 +76,6 @@ class Property implements Rule
             default:
                 break;
         }
-
-        info($templateProperty);
 
         $validator = Validator::make([
             $attribute => $value

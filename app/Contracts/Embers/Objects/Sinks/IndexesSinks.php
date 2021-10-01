@@ -2,13 +2,18 @@
 
 namespace App\Contracts\Embers\Objects\Sinks;
 
+use App\Models\User;
+
 interface IndexesSinks
 {
     /**
      * Display all available Sinks.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @return mixed
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function index($user);
+    public function index(User $user);
 }

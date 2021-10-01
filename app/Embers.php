@@ -58,6 +58,7 @@ use App\Contracts\Embers\MapData\IndexesMapData;
 use App\Contracts\Embers\MapData\StoresMapData;
 use App\Contracts\Embers\Notifications\DestroysNotifications;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
+use App\Contracts\Embers\Notifications\RemovesAllNotifications;
 
 class Embers
 {
@@ -669,6 +670,18 @@ class Embers
     public static function destroyNotificationsUsing(string $class): void
     {
         app()->singleton(DestroysNotifications::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to delete all available
+     * Notifications.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function removeAllNotificationsUsing(string $class): void
+    {
+        app()->singleton(RemovesAllNotifications::class, $class);
     }
 
     /**

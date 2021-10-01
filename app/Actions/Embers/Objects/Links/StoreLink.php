@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Validator;
 
 class StoreLink implements StoresLinks
 {
+    // TODO: fix it when links are ready
+
     use EmbersPermissionable;
 
     /**
      * Validate and create a new Link.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array $input
      * @return mixed
      */
@@ -60,7 +62,7 @@ class StoreLink implements StoresLinks
     /**
      * Save the Link in the DB.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $validated
      * @return Link
      */

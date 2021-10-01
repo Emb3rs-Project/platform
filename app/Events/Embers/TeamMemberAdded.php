@@ -3,29 +3,29 @@
 namespace App\Events\Embers;
 
 use App\Models\Team;
+use App\Models\User;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class InvitingTeamMember
+class TeamMemberAdded
 {
-    use Dispatchable, SerializesModels;
+    use Dispatchable;
 
     /**
      * The team instance.
      *
-     * @var Team
+     * @var \App\Models\Team
      */
     public Team $team;
 
     /**
-     * The email address of the invitee.
+     * The email address of the added member.
      *
-     * @var string
+     * @var \App\Models\User
      */
-    public string $email;
+    public User $email;
 
     /**
-     * The teamRoleId of the invitee.
+     * The teamRoleId of the added member.
      *
      * @var int
      */
@@ -35,14 +35,14 @@ class InvitingTeamMember
      * Create a new event instance.
      *
      * @param  \App\Models\Team  $team
-     * @param  string  $email
+     * @param  \App\Models\User  $user
      * @param  int  $teamRoleId
      * @return void
      */
-    public function __construct(Team $team, string $email, int $teamRoleId)
+    public function __construct(Team $team, User $user, int $teamRoleId)
     {
         $this->team = $team;
-        $this->email = $email;
+        $this->user = $user;
         $this->teamRoleId = $teamRoleId;
     }
 }

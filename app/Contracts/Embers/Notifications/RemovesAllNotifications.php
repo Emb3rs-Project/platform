@@ -4,13 +4,13 @@ namespace App\Contracts\Embers\Notifications;
 
 use App\Models\User;
 
-interface MarksAllNotificationsAsRead
+interface RemovesAllNotifications
 {
     /**
-     * Mark all the available notifications as read.
+     * Remove all the available notifications.
      *
      * @param  \App\Models\User  $user
      * @return void
      */
-    public function markAllAsRead(User $user): void;
+    public function remove(User $user): void;
 }

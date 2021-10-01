@@ -11,13 +11,12 @@ class IndexNotification implements IndexesNotifications
 {
     /**
      * Display all the available notifications.
+     *
+     * @param  \App\Models\User  $user
+     * @return array
      */
     public function index(User $user): array
     {
-        $notifications = $user->notifications->map(function ($notification) {
-            return Arr::except($notification, ['type', 'notifiable_type', 'notifiable_id']);
-        });
-
         $unreadNotifications = $user->unreadNotifications->map(function ($notification) {
             return Arr::except($notification, ['type', 'notifiable_type', 'notifiable_id']);
         });
@@ -27,7 +26,6 @@ class IndexNotification implements IndexesNotifications
         });
 
         return [
-            $notifications,
             $unreadNotifications,
             $readNotifications,
         ];

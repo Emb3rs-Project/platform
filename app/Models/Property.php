@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Property extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that should be cast.
@@ -21,12 +21,21 @@ class Property extends Model
         'data' => 'array',
     ];
 
-    // Table template_properties
+    /**
+     * The Template Properties that this Property has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function templateProperties(): HasMany
     {
         return $this->hasMany(TemplateProperty::class, 'property_id');
     }
 
+    /**
+     * The Units that this Property belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function units(): BelongsToMany
     {
         return $this->belongsToMany(

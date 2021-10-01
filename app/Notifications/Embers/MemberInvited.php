@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Embers;
 
 use App\EmbersNotification;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 
 class MemberInvited extends EmbersNotification implements ShouldQueue
 {
@@ -18,7 +17,7 @@ class MemberInvited extends EmbersNotification implements ShouldQueue
      *
      * @var mixed
      */
-    private $team;
+    private mixed $team;
 
     /**
      * Create a new notification instance.
@@ -38,8 +37,7 @@ class MemberInvited extends EmbersNotification implements ShouldQueue
         $this->description = $description;
 
         $this->type = 'invitation';
-        $this->tags = ['invitation'];
-        // info(json_encode(get_object_vars($this)));
+        $this->tags = ['Institutions'];
     }
 
     /**
@@ -48,7 +46,7 @@ class MemberInvited extends EmbersNotification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via($notifiable): array
     {
         return ['database'];
     }
@@ -59,7 +57,7 @@ class MemberInvited extends EmbersNotification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray($notifiable): array
     {
         // ! Be careful not to override the properties from the parent class
         return array_merge(parent::share(), [

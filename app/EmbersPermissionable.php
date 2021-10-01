@@ -9,6 +9,8 @@ trait EmbersPermissionable
 {
     /**
      * The name of the action this trait is being used inside.
+     *
+     * @return string
      */
     public function getActionName(): string
     {
@@ -17,6 +19,8 @@ trait EmbersPermissionable
 
     /**
      * The name (excluding the namespace) of the action this trait is being used inside.
+     *
+     * @return string
      */
     public function getShortActionName(): string
     {
@@ -25,6 +29,8 @@ trait EmbersPermissionable
 
     /**
      * The name of the group this trait is being used inside.
+     *
+     * @return string
      */
     public function getGroupName(): string
     {
@@ -35,6 +41,8 @@ trait EmbersPermissionable
 
     /**
      * The friendly name of the action this trait is being used inside.
+     *
+     * @return string
      */
     public function getFriendlyActionName(): string
     {
@@ -45,6 +53,11 @@ trait EmbersPermissionable
 
     /**
      * Determine if the user is authorized to access this action.
+     *
+     * @param  \App\Models\User  $user
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
     public function authorize(User $user): void
     {

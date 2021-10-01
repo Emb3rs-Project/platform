@@ -658,11 +658,11 @@ export default {
     store.dispatch("notifications/watchForNewNotifications");
 
     const stopWatcher = store.watch(
-      (state) => state.notifications.unreadNotificationCount,
-      (unreadNotificationCount) => {
-        if (unreadNotificationCount) {
+      (state) => state.notifications.unreadNotificationsCount,
+      (count) => {
+        if (count) {
           newNotification.value = true;
-          unreadNotificationsCount.value = unreadNotificationCount;
+          unreadNotificationsCount.value = count;
         } else {
           newNotification.value = false;
           unreadNotificationsCount.value = null;

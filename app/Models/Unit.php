@@ -11,38 +11,63 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Unit extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 
-    // Table unit_conversions
+    /**
+     * The Unit Coversions From that this Unit has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function unitCoversionsFrom(): HasMany
     {
         return $this->hasMany(UnitConversion::class, 'from_id');
     }
 
-    // Table unit_conversions
+    /**
+     * The Unit Coversions To that this Unit has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function unitCoversionsTo(): HasMany
     {
         return $this->hasMany(UnitConversion::class, 'to_id');
     }
 
-    // Table template_properties
+    /**
+     * The Template Properties that this Unit has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function templateProperties(): HasMany
     {
         return $this->hasMany(TemplateProperty::class, 'default_unit_id');
     }
 
-    // Table targets
+    /**
+     * The Targets that this Unit has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function targets(): HasMany
     {
         return $this->hasMany(Target::class, 'default_unit_id');
     }
 
-    // Table simulation_types
+    /**
+     * The Simulation Types that this Unit has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function simulationTypes(): HasMany
     {
         return $this->hasMany(SimulationType::class, 'default_unit_id');
     }
 
+    /**
+     * The Properties that this Unit belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function properties(): BelongsToMany
     {
         return $this->belongsToMany(

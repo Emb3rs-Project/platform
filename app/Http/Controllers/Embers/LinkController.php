@@ -15,23 +15,6 @@ use Illuminate\Http\Request;
 class LinkController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function index(Request $request)
-    {
-        $links = app(IndexesLinks::class)->index($request->user());
-
-        // return response()->json([
-        //     'links' => $links
-        // ]);
-
-        return redirect()->route('objects.index');
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -57,7 +40,7 @@ class LinkController extends Controller
     {
         app(StoresLinks::class)->store($request->user(), $request->all());
 
-        return redirect()->route('objects.links.index');
+        return redirect()->route('objects.index');
     }
 
     /**

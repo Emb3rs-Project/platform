@@ -7,7 +7,7 @@ use App\EmbersPermissionable;
 use App\Models\Category;
 use App\Models\Location;
 use App\Models\Template;
-use Illuminate\Support\Arr;
+use App\Models\User;
 
 class CreateSource implements CreatesSources
 {
@@ -16,20 +16,23 @@ class CreateSource implements CreatesSources
     /**
      * Display the necessary objects for the creation of a Source.
      *
-     * @param  mixed  $user
-     * @return mixed
+     * @param  \App\Models\User  $user
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    public function create($user)
+    public function create(User $user): array
     {
         $this->authorize($user);
 
-        $sourceCategories = Category::whereType('source')->get('id');
+        $sourceCategories = Category::query()->whereType('source')->get('id');
 
-        $equipmentCategories = Category::whereType('equipment')->get();
+        $equipmentCategories = Category::query()->whereType('equipment')->get();
 
-        $processCategories = Category::whereType('process')->get();
+        $processCategories = Category::query()->whereType('process')->get();
 
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        $sourceTemplates = Template::query()
+            ->whereIn('category_id', $sourceCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -37,7 +40,8 @@ class CreateSource implements CreatesSources
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', $equipmentCategories->map(fn ($e) => $e->id))
+        $equipmentTemplates = Template::query()
+            ->whereIn('category_id', $equipmentCategories->map(fn ($e) => $e->id))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -45,9 +49,10 @@ class CreateSource implements CreatesSources
             ])
             ->get();
 
-        $locations = Location::all();
+        $locations = Location::query()->all();
 
-        $processTemplates = Template::whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
+        $processTemplates = Template::query()
+            ->whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',

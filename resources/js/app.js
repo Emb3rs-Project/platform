@@ -1,4 +1,4 @@
-import 'es6-promise/auto';
+// import 'es6-promise/auto';
 import 'leaflet/dist/leaflet.css';
 
 import { createApp, h } from 'vue'

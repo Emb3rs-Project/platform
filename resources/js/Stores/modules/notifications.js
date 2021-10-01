@@ -1,45 +1,46 @@
 const _state = () => ({
-  unreadNotificationCount: 0,
+  unreadNotifications: [],
+  notificationInterval: null,
   notificationInterval: null,
 });
 
 const getters = {
-  unreadNotificationCount: (state) => state.unreadNotificationCount,
+  unreadNotifications: (state) => state.unreadNotifications,
+  unreadNotificationsCount: (state) => state.unreadNotificationsCount,
 
 };
 
 const actions = {
-  checkForNewNotifications: async (ctx) => {
-    try {
-      const response = await window.axios.get(route("notifications.new"));
-
-      if (response.data.unreadNotificationCount) {
-        ctx.commit('updateUnreadNotificationCount', {
-          unreadNotificationCount: response.data.unreadNotificationCount
+  checkForNewNotifications: (ctx) => {
+    window.axios.get(route("notifications.new"))
+      .then(({ data }) => {
+        ctx.commit('setUnreadNotifications', {
+          unreadNotifications: data.unreadNotifications
         });
-      }
-    } catch (error) {
-      console.log(error.response.data)
-    }
 
+        ctx.commit('setUnreadNotificationCount', {
+          unreadNotificationsCount: data.unreadNotificationsCount
+        });
+
+      }).catch((e) => console.error(e));
   },
-  watchForNewNotifications: async (ctx) => {
+  watchForNewNotifications: (ctx) => {
     const watchFrequency = 5 * 1000;
 
-    const watcher = setInterval(async () => {
-      try {
-        const response = await window.axios.get(
-          route("notifications.new")
-        );
+    const watcher = setInterval(() => {
+      window.axios.get(route("notifications.new"))
+        .then(({ data }) => {
+          if (data.unreadNotificationsCount !== ctx.state.unreadNotificationsCount) {
+            ctx.commit('setUnreadNotifications', {
+              unreadNotifications: data.unreadNotifications
+            });
 
-        if (response.data.unreadNotificationCount !== ctx.state.unreadNotificationCount) {
-          ctx.commit('updateUnreadNotificationCount', {
-            unreadNotificationCount: response.data.unreadNotificationCount
-          });
-        }
-      } catch (error) {
-        console.error(error)
-      }
+            ctx.commit('setUnreadNotificationCount', {
+              unreadNotificationsCount: data.unreadNotificationsCount
+            });
+          }
+
+        }).catch((e) => console.error(e));
     }, watchFrequency);
 
 
@@ -47,14 +48,17 @@ const actions = {
       watcher: watcher
     });
   },
-  stopWatchingForNewNotifications: async (ctx) => {
+  stopWatchingForNewNotifications: (ctx) => {
     ctx.commit('unregisterUnreadNotificationWatcher');
   },
 };
 
 const mutations = {
-  updateUnreadNotificationCount: (state, payload) => {
-    state.unreadNotificationCount = payload.unreadNotificationCount;
+  setUnreadNotifications: (state, payload) => {
+    state.unreadNotifications = payload.unreadNotifications;
+  },
+  setUnreadNotificationCount: (state, payload) => {
+    state.unreadNotificationsCount = payload.unreadNotificationsCount;
   },
   registerUnreadNotificationWatcher: (state, payload) => {
     state.notificationInterval = payload.watcher;

@@ -7,6 +7,7 @@ use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
 use App\Models\Location;
+use App\Models\User;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
 use Illuminate\Support\Arr;
@@ -18,13 +19,16 @@ class StoreSource implements StoresSources
     use EmbersPermissionable, HasEmbersProperties;
 
     /**
-     * Validate and create a new instance.
+     * Validate and create a new Source.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $input
-     * @return Instance
+     * @return \App\Models\Instance
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($user, array $input)
+    public function store(User $user, array $input): Instance
     {
         $this->authorize($user);
 
@@ -40,8 +44,10 @@ class StoreSource implements StoresSources
      *
      * @param  array  $input
      * @return array
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    protected function validate(array $input)
+    protected function validate(array $input): array
     {
         $validator = Validator::make($input, [
             'source' => ['required', 'array:data'],
@@ -86,11 +92,11 @@ class StoreSource implements StoresSources
     /**
      * Save the Source in the DB.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $validated
-     * @return Instance
+     * @return \App\Models\Instance
      */
-    protected function save($user, array $validated)
+    protected function save(User $user, array $validated): Instance
     {
         $instance = new Instance([
             'name' => Arr::get($validated, 'source.data.name') ?? 'Not Defined',
