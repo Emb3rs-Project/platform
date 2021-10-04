@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Laravel\Scout\Searchable;
 
 class Location extends Model
@@ -78,5 +79,17 @@ class Location extends Model
             'location_id',
             'team_id'
         );
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $array = $this->toArray();
+
+        return Arr::only($array, ['id', 'name']);
     }
 }
