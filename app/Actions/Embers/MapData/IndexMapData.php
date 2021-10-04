@@ -16,7 +16,7 @@ class IndexMapData implements IndexesMapData
      */
     public function index(User $user): array
     {
-        $data = User::whereId($user->id)->first()->toArray();
+        $data = User::query()->whereId($user->id)->first()->toArray();
 
         return Arr::only($data, 'data');
     }
