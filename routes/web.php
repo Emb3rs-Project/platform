@@ -20,6 +20,7 @@ use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
+use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +45,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 
     // Search
-    Route::post('/search', SearchController::class)->name('search');
+    Route::get('/search', SearchController::class)->name('search.index');
+    Route::post('/search/query', QuerySearchController::class)->name('search.query');
 
     // Dashboard
     Route::resource('/dashboard', DashboardController::class);

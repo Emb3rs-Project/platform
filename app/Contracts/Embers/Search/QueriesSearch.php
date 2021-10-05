@@ -11,9 +11,7 @@ interface QueriesSearch
      *
      * @param  \App\Models\User  $user
      * @param  string  $query
-     * @return array
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @return \Illuminate\Database\Eloquent\Collection[]
      */
     public function query(User $user, string $query): array;
 }
