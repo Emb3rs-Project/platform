@@ -20,54 +20,119 @@
         />
       </div>
       <div class="mt-10">
-        <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-          Search results
-        </h3>
-
-        <div
-          v-for="(resource, resourceIdx) in results"
-          :key="resourceIdx"
-        >
-          <div v-if="resource.length">
-            <div class="relative">
-              <div
-                class="absolute inset-0 flex items-center"
-                aria-hidden="true"
-              >
-                <div class="w-full border-t border-gray-300" />
-              </div>
-              <div class="relative flex justify-start">
-                <span class="pr-3 bg-gray-50 text-sm font-medium text-gray-900">
-                  {{ resourceIdx }}
-                </span>
-              </div>
-            </div>
-
-            <div
-              v-for="(entity, entityIdx) in resource"
-              :key="entityIdx"
-            ></div>
+        <div v-if="query === ''">
+          <div class="flex items-center justify-center h-60">
+            <p class="text-2xl font-bold text-gray-500">
+              Use the search box to find what you are looking for.
+            </p>
+          </div>
+        </div>
+        <div v-else>
+          <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            Search results
+          </h3>
+          <div v-if="loading">
+            <!-- Loading placeholder -->
             <ul
               role="list"
-              class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2"
+              class="mt-4 grid grid-cols-1 gap-4"
             >
               <li
-                v-for="(entity, entityIdx) in resource"
-                :key="entityIdx"
+                v-for="index in [1, 2, 3]"
+                :key="index"
               >
-                <button
-                  type="button"
-                  class="group p-2 w-full flex items-center justify-between rounded-full border border-gray-300 shadow-sm space-x-3 text-left hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  <span class="min-w-0 flex-1 flex items-center space-x-3">
-                    <span class="block min-w-0 flex-1">
-                      <span class="block text-sm font-medium text-gray-900 truncate">{{ entity.id }}</span>
-                      <span class="block text-sm font-medium text-gray-500 truncate">{{entity.name }}</span>
-                    </span>
-                  </span>
-                </button>
+                <div class="border border-gray-300 shadow rounded-md p-4 w-full">
+                  <div class="animate-pulse flex space-x-4">
+                    <div class="flex-1 space-y-4 py-1">
+                      <div class="h-4 bg-gray-400 rounded w-3/4"></div>
+                      <div class="space-y-2">
+                        <div class="h-4 bg-gray-400 rounded"></div>
+                        <div class="h-4 bg-gray-400 rounded w-5/6"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </li>
             </ul>
+          </div>
+          <div v-else>
+            <div v-if="Object.keys(results).length">
+              <div
+                v-for="(resource, resourceName) in results"
+                :key="resourceName"
+              >
+                <div v-if="resource.length">
+                  <ul
+                    role="list"
+                    class="mt-4 grid grid-cols-1 gap-4"
+                  >
+                    <li
+                      v-for="(entity, entityIdx) in resource"
+                      :key="entityIdx"
+                    >
+                      <div class="border border-gray-300 shadow rounded-md p-4 w-full">
+                        <div class="flex space-x-4">
+                          <div class="flex-1 space-y-4 py-1">
+                            <pre>{{ entity }}</pre>
+                            <p class="text-xl font-semibold">
+                              {{ beautifyResourceName(resourceName) }}
+                            </p>
+                            <div class="space-y-2">
+                              <div v-if="resourceName === 'sources' || resourceName === 'sinks' || resourceName === 'links'">
+                                <p class="text-base">
+                                  <span class="font-semibold">
+                                    ID
+                                  </span>
+                                  : {{ entity.id }}
+                                </p>
+                                <p class="text-base">
+                                  <span class="font-semibold">
+                                    Name
+                                  </span>
+                                  : {{ entity.name }}
+                                </p>
+                                <p class="text-base">
+                                  <span class="font-semibold">
+                                    ID
+                                  </span>
+                                  : {{ entity.id }}
+                                </p>
+
+                              </div>
+                              <div v-else-if="resourceName === 'news'">
+                                <p class="text-lg">
+                                  {{ entity.title }}
+                                </p>
+                                <p
+                                  class="text-base truncate"
+                                  v-html="entity.content"
+                                ></p>
+                              </div>
+                              <div v-else-if="resourceName === 'faqs'">
+                                <p class="text-lg">{{ entity.question }}</p>
+                                <p
+                                  class="text-base truncate w-full"
+                                  v-html="entity.answer"
+                                ></p>
+                                <div class="flex justify-end bg-red-400">1</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div
+              v-else
+              class="flex items-center justify-center h-60"
+            >
+              <p class="text-2xl font-bold text-gray-400">
+                It looks like there are no results for this search.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -77,6 +142,7 @@
 
 <script>
 import { ref, watch } from "vue";
+import pluralize from "pluralize";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
@@ -99,20 +165,33 @@ export default {
   },
 
   setup(props) {
+    const loading = ref(false);
     const query = ref(props.keyword ?? "");
-    const results = ref([]);
+    const results = ref({});
 
     const lazilySearch = window._.debounce((query) => {
-      if (query !== "") onSearch(query);
-      else results.value = [];
+      if (query !== "") search(query);
+      else results.value = {};
 
       updateUrl(query);
     }, 250);
 
-    const onSearch = (query) => {
+    const search = (query) => {
+      loading.value = true;
+
       window.axios
         .post(route("search.query"), { keyword: query })
-        .then(({ data }) => (results.value = data))
+        .then(({ data }) => {
+          loading.value = false;
+
+          let counter = 0;
+          for (const resource in data) if (!data[resource].length) counter++;
+
+          if (counter === Object.keys(data).length) results.value = {};
+          else results.value = data;
+
+          console.log(Object.keys(results.value).length);
+        })
         .catch((e) => console.log(e));
     };
 
@@ -124,10 +203,19 @@ export default {
 
     watch(query, (value) => lazilySearch(value), { immediate: true });
 
+    const beautifyResourceName = (name) => {
+      const signularName = getSingular(name);
+
+      return signularName.charAt(0).toUpperCase() + signularName.slice(1);
+    };
+
+    const getSingular = (value) => pluralize.singular(value);
+
     return {
+      loading,
       query,
       results,
-      onSearch,
+      beautifyResourceName,
     };
   },
 };
