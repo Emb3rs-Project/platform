@@ -266,32 +266,7 @@
             </transition>
           </Menu>
           <!-- Sidebar Search -->
-          <div class="px-3 mt-5">
-            <label
-              for="search"
-              class="sr-only"
-            >
-              Search
-            </label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                aria-hidden="true"
-              >
-                <SearchIcon
-                  class="mr-3 h-4 w-4 text-gray-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <input
-                type="text"
-                name="search"
-                id="search"
-                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 sm:text-sm border-gray-300 rounded-md"
-                placeholder="Search"
-              />
-            </div>
-          </div>
+          <QuickSearch />
           <!-- Navigation -->
           <nav class="px-3 mt-6">
             <div class="space-y-1">
@@ -415,7 +390,7 @@
           />
         </button>
         <div class="flex-1 flex justify-between px-4 sm:px-6 lg:px-8">
-          <div class="flex-1 flex">
+          <div class="flex-1 flex w-full">
             <form
               class="w-full flex md:ml-0"
               action="#"
@@ -563,6 +538,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import QuickSearch from "@/Components/QuickSearch.vue";
 import SimpleNotification from "@/Components/Notifications/SimpleNotification.vue";
 import SnackBarNotification from "@/Components/Notifications/SnackBarNotification.vue";
 
@@ -640,6 +616,7 @@ export default {
     XIcon,
     ApplicationLogo,
     CogIcon,
+    QuickSearch,
     SimpleNotification,
     SnackBarNotification,
   },
