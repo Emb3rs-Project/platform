@@ -1,5 +1,7 @@
 <template>
   <AppLayout>
+    <SiteHead title="Help" />
+
     <div class="bg-gray-50">
       <div class="max-w-7xl mx-auto py-16 px-4 divide-y-2 divide-gray-200 sm:py-24 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-extrabold text-gray-900">
@@ -28,10 +30,12 @@
 
 <script>
 import AppLayout from "@/Layouts/AppLayout";
+import SiteHead from "@/Components/SiteHead.vue";
 
 export default {
   components: {
     AppLayout,
+    SiteHead,
   },
 
   props: {
