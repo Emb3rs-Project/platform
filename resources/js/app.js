@@ -5,6 +5,8 @@ import { createApp, h } from 'vue'
 import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import { InertiaProgress } from '@inertiajs/progress';
 
+import route from 'ziggy';
+
 import { store } from './Stores';
 import Notifications from '@kyvg/vue3-notification'
 

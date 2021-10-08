@@ -538,7 +538,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import QuickSearch from "@/Components/QuickSearch.vue";
+import QuickSearch from "@/Components/Search/QuickSearch.vue";
 import SimpleNotification from "@/Components/Notifications/SimpleNotification.vue";
 import SnackBarNotification from "@/Components/Notifications/SnackBarNotification.vue";
 

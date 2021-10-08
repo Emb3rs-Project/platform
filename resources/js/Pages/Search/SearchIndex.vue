@@ -32,28 +32,10 @@
             Search results
           </h3>
           <div v-if="loading">
-            <!-- Loading placeholder -->
-            <ul
-              role="list"
-              class="mt-4 grid grid-cols-1 gap-4"
-            >
-              <li
-                v-for="index in [1, 2, 3]"
-                :key="index"
-              >
-                <div class="border border-gray-300 shadow rounded-md p-4 w-full">
-                  <div class="animate-pulse flex space-x-4">
-                    <div class="flex-1 space-y-4 py-1">
-                      <div class="h-4 bg-gray-400 rounded w-3/4"></div>
-                      <div class="space-y-2">
-                        <div class="h-4 bg-gray-400 rounded"></div>
-                        <div class="h-4 bg-gray-400 rounded w-5/6"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
+            <TextSkeleton
+              :columns="1"
+              :count="3"
+            />
           </div>
           <div v-else>
             <div v-if="Object.keys(results).length">
@@ -70,117 +52,10 @@
                       v-for="(entity, entityIdx) in resource"
                       :key="entityIdx"
                     >
-                      <div class="border border-gray-300 shadow rounded-md p-4">
-                        <div class="flex space-x-4">
-                          <div class="space-y-4 py-1 whitespace-normal w-full">
-                            <div class="flex justify-between">
-                              <p class="text-xl font-semibold text-gray-800">
-                                {{ beautifyResourceName(resourceName) }}
-                              </p>
-                              <p class="text-sm text-gray-500">
-                                Last update: {{ getFriendlyLifetime(entity.updated_at) }}
-                              </p>
-                            </div>
-
-                            <div class="space-y-2">
-                              <div v-if="resourceName === 'sources' || resourceName === 'sinks'">
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    ID
-                                  </span>
-                                  : {{ entity.id }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Name
-                                  </span>
-                                  : {{ entity.name }}
-                                </p>
-                              </div>
-                              <div v-else-if="resourceName === 'links'">
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    ID
-                                  </span>
-                                  : {{ entity.id }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Name
-                                  </span>
-                                  : {{ entity.name }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Description
-                                  </span>
-                                  : {{ entity.description ?? 'Not provided.' }}
-                                </p>
-                              </div>
-                              <div v-else-if="resourceName === 'locations'">
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    ID
-                                  </span>
-                                  : {{ entity.id }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Name
-                                  </span>
-                                  : {{ entity.name }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Description
-                                  </span>
-                                  : {{ entity.description ?? 'Not provided.' }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Coordinates
-                                  </span>
-                                  : {{ entity.data.center[0] }} , {{ entity.data.center[1] }}
-                                </p>
-                              </div>
-                              <div v-else-if="resourceName === 'projects'">
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    ID
-                                  </span>
-                                  : {{ entity.id }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Name
-                                  </span>
-                                  : {{ entity.name }}
-                                </p>
-                                <p class="text-base">
-                                  <span class="font-semibold">
-                                    Description
-                                  </span>
-                                  : {{ entity.description ?? 'Not provided.' }}
-                                </p>
-                              </div>
-                              <div v-else-if="resourceName === 'news'">
-                                <p class="text-lg">{{ entity.title }}</p>
-                                <p
-                                  class="text-base text-gray-600"
-                                  v-html="entity.content"
-                                ></p>
-                              </div>
-                              <div v-else-if="resourceName === 'faqs'">
-                                <p class="text-lg">{{ entity.question }}</p>
-                                <p
-                                  class="text-base text-gray-600"
-                                  v-html="entity.answer"
-                                ></p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <SearchItem
+                        :resourceName="resourceName"
+                        :entity="entity"
+                      />
                     </li>
                   </ul>
                 </div>
@@ -203,12 +78,13 @@
 
 <script>
 import { ref, watch } from "vue";
-import { getFriendlyLifetime } from "@/Helpers/helpers";
-import pluralize from "pluralize";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
-import SearchInput from "@/Components/Forms/SearchInput.vue";
+import SearchInput from "@/Components/Search/SearchInput.vue";
+import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
+import SearchItem from "@/Components/Search/SearchItem.vue";
+
 import { SearchIcon } from "@heroicons/vue/outline";
 
 export default {
@@ -217,6 +93,8 @@ export default {
     SiteHead,
     SearchIcon,
     SearchInput,
+    TextSkeleton,
+    SearchItem,
   },
 
   props: {
@@ -263,20 +141,10 @@ export default {
 
     watch(query, (value) => lazilySearch(value), { immediate: true });
 
-    const beautifyResourceName = (name) => {
-      const signularName = getSingular(name);
-
-      return signularName.charAt(0).toUpperCase() + signularName.slice(1);
-    };
-
-    const getSingular = (value) => pluralize.singular(value);
-
     return {
-      getFriendlyLifetime,
       loading,
       query,
       results,
-      beautifyResourceName,
     };
   },
 };
