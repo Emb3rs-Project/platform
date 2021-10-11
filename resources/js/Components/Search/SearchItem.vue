@@ -1,111 +1,72 @@
 <template>
-  <div class="border border-gray-300 shadow rounded-md p-4">
-    <div class="flex space-x-4">
-      <div class="space-y-4 py-1 whitespace-normal w-full">
-        <div class="flex justify-between">
-          <p class="text-xl font-semibold text-gray-800">
-            {{ beautifyResourceName(resourceName) }}
-          </p>
-          <p class="text-sm text-gray-500">
-            Last update: {{ getFriendlyLifetime(entity.updated_at) }}
-          </p>
+  <div class="flex space-x-3">
+    <div v-if="resourceName === 'sources'">
+      <FireIcon class="h-6 w-6 rounded-full text-red-600" />
+    </div>
+    <div v-else-if="resourceName === 'sinks'">
+      <LightningBoltIcon class="h-6 w-6 rounded-full text-green-600" />
+    </div>
+    <div v-else-if="resourceName === 'links'">
+      <LinkIcon class="h-6 w-6 rounded-full text-blue-600" />
+    </div>
+    <div v-else-if="resourceName === 'locations'">
+      <LocationMarkerIcon class="h-6 w-6 rounded-full text-yellow-600" />
+    </div>
+    <div v-else-if="resourceName === 'projects'">
+      <BriefcaseIcon class="h-6 w-6 rounded-full text-purple-600" />
+    </div>
+    <div v-else-if="resourceName === 'news'">
+      <NewspaperIcon class="h-6 w-6 rounded-full text-teal-600" />
+    </div>
+    <div v-else-if="resourceName === 'faqs'">
+      <SupportIcon class="h-6 w-6 rounded-full text-gray-600" />
+    </div>
+
+    <div class="flex-1 space-y-1">
+      <div class="flex items-center justify-between">
+        <span class="text-base font-bold">
+          {{ beautifyResourceName(resourceName) }}
+        </span>
+        <p class="text-sm text-gray-500">
+          {{ getFriendlyLifetime(entity.updated_at) }}
+        </p>
+      </div>
+      <div class="text-sm font-medium">
+        <div
+          v-if="resourceName === 'sources' || resourceName === 'sinks' || resourceName === 'links' || resourceName === 'projects'"
+          class="text-xs text-gray-400 -mt-1 mb-2"
+        >
+          <span class="font-normal">
+            with
+          </span>
+          <FingerPrintIcon class="inline-block h-2.5 w-auto rounded-ful" />
+          <span class="font-semibold">
+            ID
+          </span>
+          <span>
+            {{ entity.id }}
+          </span>
         </div>
 
-        <div class="space-y-2">
-          <div v-if="resourceName === 'sources' || resourceName === 'sinks'">
-            <p class="text-base">
-              <span class="font-semibold">
-                ID
-              </span>
-              : {{ entity.id }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Name
-              </span>
-              : {{ entity.name }}
-            </p>
-          </div>
-          <div v-else-if="resourceName === 'links'">
-            <p class="text-base">
-              <span class="font-semibold">
-                ID
-              </span>
-              : {{ entity.id }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Name
-              </span>
-              : {{ entity.name }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Description
-              </span>
-              : {{ entity.description ?? 'Not provided.' }}
-            </p>
-          </div>
-          <div v-else-if="resourceName === 'locations'">
-            <p class="text-base">
-              <span class="font-semibold">
-                ID
-              </span>
-              : {{ entity.id }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Name
-              </span>
-              : {{ entity.name }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Description
-              </span>
-              : {{ entity.description ?? 'Not provided.' }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Coordinates
-              </span>
-              : {{ entity.data.center[0] }} , {{ entity.data.center[1] }}
-            </p>
-          </div>
-          <div v-else-if="resourceName === 'projects'">
-            <p class="text-base">
-              <span class="font-semibold">
-                ID
-              </span>
-              : {{ entity.id }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Name
-              </span>
-              : {{ entity.name }}
-            </p>
-            <p class="text-base">
-              <span class="font-semibold">
-                Description
-              </span>
-              : {{ entity.description ?? 'Not provided.' }}
-            </p>
-          </div>
-          <div v-else-if="resourceName === 'news'">
-            <p class="text-lg">{{ entity.title }}</p>
-            <p
-              class="text-base text-gray-600"
-              v-html="entity.content"
-            ></p>
-          </div>
-          <div v-else-if="resourceName === 'faqs'">
-            <p class="text-lg">{{ entity.question }}</p>
-            <p
-              class="text-base text-gray-600"
-              v-html="entity.answer"
-            ></p>
-          </div>
+        <div v-if="resourceName === 'news'">
+          {{ entity.title }}
+        </div>
+        <div v-else-if="resourceName === 'faqs'">
+          {{ entity.question }}
+        </div>
+        <div v-else>
+          {{ entity.name === 'Not Defined' ? 'Name has not been defined.' : entity.name }}
+        </div>
+      </div>
+      <div class="text-sm text-gray-500">
+        <div v-if="resourceName === 'links' || resourceName === 'locations' || resourceName === 'projects'">
+          {{ entity.description ?? 'Description has not been provided.' }}
+        </div>
+        <div v-else-if="resourceName === 'news'">
+          <p v-html="entity.content"></p>
+        </div>
+        <div v-else-if="resourceName === 'faqs'">
+          <p v-html="entity.answer"></p>
         </div>
       </div>
     </div>
@@ -115,9 +76,31 @@
 <script>
 import pluralize from "pluralize";
 
+import {
+  FireIcon,
+  LightningBoltIcon,
+  LinkIcon,
+  LocationMarkerIcon,
+  BriefcaseIcon,
+  NewspaperIcon,
+  SupportIcon,
+  FingerPrintIcon,
+} from "@heroicons/vue/solid";
+
 import { getFriendlyLifetime } from "@/Helpers/helpers";
 
 export default {
+  components: {
+    FireIcon,
+    LightningBoltIcon,
+    LinkIcon,
+    LocationMarkerIcon,
+    BriefcaseIcon,
+    NewspaperIcon,
+    SupportIcon,
+    FingerPrintIcon,
+  },
+
   props: {
     resourceName: {
       type: String,

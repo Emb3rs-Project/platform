@@ -155,7 +155,15 @@ export default {
   setup(props, ctx) {
     const open = computed({
       get: () => props.modelValue,
-      set: (value) => ctx.emit("update:modelValue", value),
+      set: (value) => {
+        // Cleanup on close
+        setTimeout(() => {
+          query.value = "";
+          results.value = {};
+        }, 500);
+
+        ctx.emit("update:modelValue", value);
+      },
     });
 
     const loading = ref(false);
