@@ -59,6 +59,7 @@ use App\Contracts\Embers\MapData\StoresMapData;
 use App\Contracts\Embers\Notifications\DestroysNotifications;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
 use App\Contracts\Embers\Notifications\RemovesAllNotifications;
+use App\Contracts\Embers\Search\QueriesSearch;
 
 class Embers
 {
@@ -176,7 +177,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Source.
+     * Register a class / callback that should be used to display a given
+     * Source.
      *
      * @param  string  $class
      * @return void
@@ -367,7 +369,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Project.
+     * Register a class / callback that should be used to display a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -390,7 +393,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given Project.
+     * Register a class / callback that should be used to update a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -401,7 +405,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Project.
+     * Register a class / callback that should be used to delete a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -457,7 +462,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Simulation.
+     * Register a class / callback that should be used to display a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -480,7 +486,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given Simulation.
+     * Register a class / callback that should be used to update a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -491,7 +498,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Simulation.
+     * Register a class / callback that should be used to delete a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -502,7 +510,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to share a given Simulation.
+     * Register a class / callback that should be used to share a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -547,7 +556,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given TeamRole.
+     * Register a class / callback that should be used to display a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -570,7 +580,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given TeamRole.
+     * Register a class / callback that should be used to update a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -581,7 +592,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given TeamRole.
+     * Register a class / callback that should be used to delete a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -627,7 +639,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to index all Notifications.
+     * Register a class / callback that should be used to index all
+     *  Notifications.
      *
      * @param  string  $class
      * @return void
@@ -662,7 +675,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Notification.
+     * Register a class / callback that should be used to delete a given
+     * Notification.
      *
      * @param  string  $class
      * @return void
@@ -685,7 +699,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to index all User's Map data.
+     * Register a class / callback that should be used to index all User's Map
+     * data.
      *
      * @param  string  $class
      * @return void
@@ -696,7 +711,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to create User's Map data.
+     * Register a class / callback that should be used to create User's Map
+     * data.
      *
      * @param  string  $class
      * @return void
@@ -704,5 +720,17 @@ class Embers
     public static function storeMapDataUsing(string $class): void
     {
         app()->singleton(StoresMapData::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to query the Searchable
+     * Models.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function querySearchableModelsUsing(string $class): void
+    {
+        app()->singleton(QueriesSearch::class, $class);
     }
 }

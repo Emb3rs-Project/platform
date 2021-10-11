@@ -7,20 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Laravel\Nova\Actions\Actionable;
+use Laravel\Scout\Searchable;
 
 class Instance extends Model
 {
-    use SoftDeletes, Actionable;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'values' => 'array',
-    ];
+    use SoftDeletes, Actionable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -34,6 +27,14 @@ class Instance extends Model
         'location_id'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'values' => 'array',
+    ];
 
     /**
      * The Template that this Instance belongs to.
@@ -83,5 +84,17 @@ class Instance extends Model
             'instance_id',
             'parent_instance_id'
         );
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $array = $this->toArray();
+
+        return Arr::only($array, ['id', 'name']);
     }
 }

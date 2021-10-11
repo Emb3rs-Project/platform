@@ -59,6 +59,7 @@ use App\Actions\Embers\MapData\StoreMapData;
 use App\Actions\Embers\Notifications\DestroyNotification;
 use App\Actions\Embers\Notifications\MarkNotificationAsRead;
 use App\Actions\Embers\Notifications\RemoveAllNotifications;
+use App\Actions\Embers\Search\QuerySearch;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 
@@ -146,5 +147,7 @@ class AppServiceProvider extends ServiceProvider
 
         Embers::indexMapDataUsing(IndexMapData::class);
         Embers::storeMapDataUsing(StoreMapData::class);
+
+        Embers::querySearchableModelsUsing(QuerySearch::class);
     }
 }

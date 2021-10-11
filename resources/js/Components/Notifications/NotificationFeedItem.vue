@@ -35,7 +35,7 @@
         </div>
         <!-- Time -->
         <div class="text-sm font-medium text-gray-500">
-          {{ getNotificationLifetime(notification.created_at) }}
+          {{ getFriendlyLifetime(notification.created_at) }}
         </div>
         <!-- Tags -->
         <div
@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { getFriendlyLifetime } from "@/Helpers/helpers";
+
 export default {
   props: {
     notification: {
@@ -69,46 +71,8 @@ export default {
   },
 
   setup() {
-    const getNotificationLifetime = (createdAt) => {
-      const currentTime = Date.now();
-      const creationTime = new Date(createdAt).getTime();
-
-      // Compute time difference in milliseconds
-      let timeDiff = currentTime - creationTime;
-
-      // Convert time difference from milliseconds to seconds
-      timeDiff = timeDiff / 1000;
-
-      // Convert time difference from seconds to minutes
-      timeDiff = timeDiff / 60;
-
-      if (timeDiff < 60) {
-        if (timeDiff < 1) return "Just received.";
-
-        return `${Math.floor(timeDiff)} minutes ago.`;
-      }
-
-      if (timeDiff > 60) {
-        // Convert time difference from minutes to hours
-        timeDiff = timeDiff / 60;
-
-        if (timeDiff === 24) return "1 day ago.";
-
-        if (timeDiff < 24) return `${Math.floor(timeDiff)} hours ago.`;
-
-        if (timeDiff > 24) {
-          // Convert time difference from hours to days
-          timeDiff = timeDiff / 24;
-
-          return `${Math.floor(timeDiff)} days ago.`;
-        }
-      }
-
-      if (timeDiff === 60) return "1 hour ago.";
-    };
-
     return {
-      getNotificationLifetime,
+      getFriendlyLifetime,
     };
   },
 };

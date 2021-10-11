@@ -12,6 +12,7 @@ mix.js('resources/js/app.js', 'public/js')
   .sourceMaps()
   .alias({
     '@': path.resolve('resources/js'),
+    'ziggy': path.resolve('vendor/tightenco/ziggy/dist'),
   })
   .webpackConfig(webpack => {
     return {

@@ -36,7 +36,7 @@ class CreateSink implements CreatesSinks
             ])
             ->get();
 
-        $locations = Location::query()->all();
+        $locations = Location::query()->get();
 
         return [
             $sinkTemplates,

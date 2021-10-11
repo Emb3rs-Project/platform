@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
+use Laravel\Scout\Searchable;
 
 class Project extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -67,5 +69,17 @@ class Project extends Model
             'project_id',
             'team_id'
         );
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $array = $this->toArray();
+
+        return Arr::only($array, ['id', 'name', 'description']);
     }
 }

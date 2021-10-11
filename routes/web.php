@@ -5,7 +5,6 @@ use App\Http\Controllers\Embers\DashboardController;
 use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
-use App\Http\Controllers\Embers\LocationController;
 use App\Http\Controllers\Embers\MarkAllNotificationsAsReadController;
 use App\Http\Controllers\Embers\NotificationContoller;
 use App\Http\Controllers\Embers\ObjectsController;
@@ -21,7 +20,9 @@ use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
+use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
+use App\Http\Controllers\Embers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,10 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
+
+    // Search
+    Route::get('/search', SearchController::class)->name('search.index');
+    Route::post('/search/query', QuerySearchController::class)->name('search.query');
 
     // Dashboard
     Route::resource('/dashboard', DashboardController::class);
@@ -83,7 +88,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects.simulations', ProjectSimulationController::class);
 
     // Challenge
-    Route::resource('/challenge', ChallengeController::class);
+    Route::resource('/challenges', ChallengeController::class);
 
     // Help
     Route::resource('/help', HelpController::class);

@@ -43,7 +43,7 @@ class EditSink implements EditsSinks
             ])
             ->get();
 
-        $locations = Location::query()->all();
+        $locations = Location::query()->get();
 
         return [
             $sinkTemplates,
