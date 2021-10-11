@@ -1,5 +1,5 @@
 <template>
-  <div class="flex space-x-3 mt-2">
+  <div class="flex space-x-3 mt-2 mb-2">
     <div v-if="entity.type === 'sources'">
       <FireIcon class="h-6 w-6 rounded-full text-red-600" />
     </div>

@@ -33,7 +33,7 @@ class EditSource implements EditsSources
             ->with(['location', 'template', 'template.category'])
             ->findOrFail($id);
 
-        $locations = Location::query()->all();
+        $locations = Location::query()->get();
 
         $sourceCategories = Category::query()->whereType('source')->get('id');
 

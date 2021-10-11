@@ -9,13 +9,17 @@
     <div v-if="results.length">
       <ul
         role="list"
-        class="mt-4 grid grid-cols-1 gap-4 divide-y divide-gray-200 p-1"
+        class="mt-4 grid grid-cols-1 divide-y divide-gray-200 p-1"
       >
         <li
           v-for="(entity, entityIdx) in results"
           :key="entityIdx"
+          class="hover:bg-gray-100 hover:rounded-md px-2 hover:cursor-pointer"
         >
-          <SearchItem :entity="entity" />
+          <SearchItem
+            :entity="entity"
+            @click="onClick(entity)"
+          />
         </li>
       </ul>
     </div>
@@ -31,8 +35,12 @@
 </template>
 
 <script>
+import { useStore } from "vuex";
+import { Inertia } from "@inertiajs/inertia";
+
 import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
 import SearchItem from "@/Components/Search/SearchItem.vue";
+import route from "../../../../vendor/tightenco/ziggy/src/js";
 
 export default {
   components: {
@@ -49,6 +57,40 @@ export default {
       type: Array,
       required: true,
     },
+  },
+
+  setup() {
+    const store = useStore();
+
+    const onClick = (entity) => {
+      if (
+        entity.type === "sources" ||
+        entity.type === "sinks" ||
+        entity.type === "links"
+      ) {
+        Inertia.visit(route("objects.index"), {
+          onSuccess: (_) => {
+            const route = `objects.${entity.type}.show`;
+
+            store.dispatch("objects/showSlide", {
+              route,
+              props: entity.id,
+            });
+          },
+        });
+      } else if (entity.type === "locations") {
+      } else if (entity.type === "projects") {
+      } else if (entity.type === "simulations") {
+      } else if (entity.type === "news") {
+      } else if (entity.type === "faqs") {
+      }
+    };
+
+    const visit = () => {};
+
+    return {
+      onClick,
+    };
   },
 };
 </script>

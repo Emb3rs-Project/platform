@@ -49,7 +49,7 @@ class CreateSource implements CreatesSources
             ])
             ->get();
 
-        $locations = Location::query()->all();
+        $locations = Location::query()->get();
 
         $processTemplates = Template::query()
             ->whereIn('category_id', $processCategories->map(fn ($p) => $p->id))
