@@ -61,47 +61,11 @@
                   </div>
 
                   <div class="overflow-y-auto sm:max-h-96">
-                    <div v-if="loading">
-                      <TextSkeleton
-                        :columns="1"
-                        :count="2"
-                      />
-                    </div>
-                    <div v-else>
-                      <div v-if="Object.keys(results).length">
-                        <div
-                          v-for="(resource, resourceName) in results"
-                          :key="resourceName"
-                        >
-                          <div v-if="resource.length">
-                            <ul
-                              role="list"
-                              class="mt-4 grid grid-cols-1 gap-4"
-                            >
-                              <li
-                                v-for="(entity, entityIdx) in resource.slice(0, 1)"
-                                :key="entityIdx"
-                              >
-                                <SearchItem
-                                  :resourceName="resourceName"
-                                  :entity="entity"
-                                />
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        v-else
-                        class="flex items-center justify-center h-60"
-                      >
-                        <p class="text-2xl font-bold text-gray-400">
-                          It looks like there are no results for this search.
-                        </p>
-                      </div>
-                    </div>
+                    <SearchResult
+                      :loading="loading"
+                      :results="results.slice(0, 10)"
+                    />
                   </div>
-
                 </div>
               </div>
             </div>
@@ -117,8 +81,7 @@ import { computed, ref, watch } from "vue";
 import { Link } from "@inertiajs/inertia-vue3";
 
 import SearchInput from "@/Components/Search/SearchInput.vue";
-import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
-import SearchItem from "@/Components/Search/SearchItem.vue";
+import SearchResult from "@/Components/Search/SearchResult.vue";
 
 import {
   Dialog,
@@ -139,8 +102,7 @@ export default {
     Link,
     SearchIcon,
     SearchInput,
-    TextSkeleton,
-    SearchItem,
+    SearchResult,
   },
 
   props: {
@@ -159,7 +121,7 @@ export default {
         // Cleanup on close
         setTimeout(() => {
           query.value = "";
-          results.value = {};
+          results.value = [];
         }, 500);
 
         ctx.emit("update:modelValue", value);
@@ -168,11 +130,11 @@ export default {
 
     const loading = ref(false);
     const query = ref("");
-    const results = ref({});
+    const results = ref([]);
 
     const lazilySearch = window._.debounce((query) => {
       if (query !== "") search(query);
-      else results.value = {};
+      else results.value = [];
     }, 250);
 
     const search = (query) => {
@@ -182,21 +144,38 @@ export default {
         .post(route("search.query"), { keyword: query })
         .then(({ data }) => {
           loading.value = false;
+          results.value = [];
 
-          let counter = 0;
-          for (const resource in data) if (!data[resource].length) counter++;
+          for (const resource in data) {
+            if (!data[resource].length) continue;
 
-          if (counter === Object.keys(data).length) results.value = {};
-          else results.value = data;
+            for (const entity of data[resource]) {
+              results.value.push({
+                ...entity,
+                type: resource,
+              });
+            }
+          }
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.error(e));
     };
 
     const showMoreResults = computed(() => {
-      const data = results.value;
-      for (const resource in data) if (data[resource].length > 1) return true;
+      const grouped = window._.groupBy(results.value, (entity) => entity.type);
 
-      return false;
+      let flag = false;
+
+      for (const resource in grouped) {
+        if (grouped[resource].length > 3) {
+          grouped[resource].length = 3;
+
+          flag = true;
+        }
+      }
+
+      if (flag) results.value = window._.flatMap(grouped);
+
+      return flag;
     });
 
     watch(query, (value) => lazilySearch(value), { immediate: true });

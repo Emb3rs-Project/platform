@@ -31,45 +31,10 @@
           <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wide">
             Search results
           </h3>
-          <div v-if="loading">
-            <TextSkeleton
-              :columns="1"
-              :count="3"
-            />
-          </div>
-          <div v-else>
-            <div v-if="Object.keys(results).length">
-              <div
-                v-for="(resource, resourceName) in results"
-                :key="resourceName"
-              >
-                <div v-if="resource.length">
-                  <ul
-                    role="list"
-                    class="mt-4 grid grid-cols-1 gap-4"
-                  >
-                    <li
-                      v-for="(entity, entityIdx) in resource"
-                      :key="entityIdx"
-                    >
-                      <SearchItem
-                        :resourceName="resourceName"
-                        :entity="entity"
-                      />
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div
-              v-else
-              class="flex items-center justify-center h-60"
-            >
-              <p class="text-2xl font-bold text-gray-400">
-                It looks like there are no results for this search.
-              </p>
-            </div>
-          </div>
+          <SearchResult
+            :loading="loading"
+            :results="results"
+          />
         </div>
       </div>
     </div>
@@ -82,8 +47,7 @@ import { ref, watch } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import SearchInput from "@/Components/Search/SearchInput.vue";
-import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
-import SearchItem from "@/Components/Search/SearchItem.vue";
+import SearchResult from "@/Components/Search/SearchResult.vue";
 
 import { SearchIcon } from "@heroicons/vue/outline";
 
@@ -93,8 +57,7 @@ export default {
     SiteHead,
     SearchIcon,
     SearchInput,
-    TextSkeleton,
-    SearchItem,
+    SearchResult,
   },
 
   props: {
@@ -107,11 +70,11 @@ export default {
   setup(props) {
     const loading = ref(false);
     const query = ref(props.keyword ?? "");
-    const results = ref({});
+    const results = ref([]);
 
     const lazilySearch = window._.debounce((query) => {
       if (query !== "") search(query);
-      else results.value = {};
+      else results.value = [];
 
       updateUrl(query);
     }, 250);
@@ -123,14 +86,20 @@ export default {
         .post(route("search.query"), { keyword: query })
         .then(({ data }) => {
           loading.value = false;
+          results.value = [];
 
-          let counter = 0;
-          for (const resource in data) if (!data[resource].length) counter++;
+          for (const resource in data) {
+            if (!data[resource].length) continue;
 
-          if (counter === Object.keys(data).length) results.value = {};
-          else results.value = data;
+            for (const entity of data[resource]) {
+              results.value.push({
+                ...entity,
+                type: resource,
+              });
+            }
+          }
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.error(e));
     };
 
     const updateUrl = (url) => {
