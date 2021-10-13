@@ -56,6 +56,8 @@ use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
 use App\Contracts\Embers\MapData\IndexesMapData;
 use App\Contracts\Embers\MapData\StoresMapData;
+use App\Contracts\Embers\News\IndexesNews;
+use App\Contracts\Embers\News\ShowsNews;
 use App\Contracts\Embers\Notifications\DestroysNotifications;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
 use App\Contracts\Embers\Notifications\RemovesAllNotifications;
@@ -732,5 +734,27 @@ class Embers
     public static function querySearchableModelsUsing(string $class): void
     {
         app()->singleton(QueriesSearch::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all News.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexNewsUsing(string $class): void
+    {
+        app()->singleton(IndexesNews::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to display a given News.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showNewsUsing(string $class): void
+    {
+        app()->singleton(ShowsNews::class, $class);
     }
 }

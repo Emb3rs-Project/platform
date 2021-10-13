@@ -553,6 +553,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
+  NewspaperIcon,
   HomeIcon,
   MenuAlt1Icon,
   ViewListIcon,
@@ -591,6 +592,11 @@ const navigation = [
     name: "Challenge",
     href: "challenges.index",
     icon: UserGroupIcon,
+  },
+  {
+    name: "News",
+    href: "news.index",
+    icon: NewspaperIcon,
   },
   { name: "Help", href: "help.index", icon: SupportIcon },
 ];

@@ -21,7 +21,6 @@ class DashboardController extends Controller
      */
     public function index(Request $request): Response
     {
-        $news = News::whereTeamId($request->user()->currentTeam->id)->get();
         $currentTeam = $request->user()->currentTeam;
         $users = $currentTeam->allUsers();
         $teamInstances = $currentTeam->instances()->get()->pluck('id');
@@ -45,7 +44,6 @@ class DashboardController extends Controller
             ->get();
 
         return Inertia::render('Dashboard', [
-            'news' => $news,
             'users' => $users,
             'sources' => $sources,
             'sinks' => $sinks
