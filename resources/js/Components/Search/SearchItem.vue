@@ -35,9 +35,8 @@
         </p>
       </div>
       <div class="text-sm font-medium">
-        <div></div>
         <div
-          v-if="entity.type !== 'locations' || entity.type !== 'news'  || entity.type !== 'faqs'"
+          v-if="entity.type === 'sources' || entity.type === 'sinks'  || entity.type === 'links' || entity.type === 'projects' || entity.type === 'simulations'"
           class="text-xs text-gray-400 -mt-1 mb-1"
         >
           <span class="font-normal">

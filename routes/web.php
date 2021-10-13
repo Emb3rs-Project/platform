@@ -91,7 +91,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/challenges', ChallengeController::class);
 
     // Help
-    Route::resource('/help', HelpController::class);
+    Route::resource('/help', HelpController::class)->only(['index']);
+
+    // News
+    Route::resource('/news', HelpController::class)->only(['index']);
 
     // TeamRoles
     Route::resource('/team-roles', TeamRolesController::class);

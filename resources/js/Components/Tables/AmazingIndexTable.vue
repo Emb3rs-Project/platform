@@ -98,7 +98,7 @@ export default {
   setup(props, ctx) {
     const store = useStore();
 
-    const mainCheckbox = ref(null);
+    const mainCheckbox = ref({});
 
     const items = computed(() => props.modelValue);
 
@@ -116,6 +116,7 @@ export default {
     );
 
     const onSelectRow = () => {
+      console.log("hello");
       let selectedItems = items.value.filter((m) => m.selected).length;
 
       if (selectedItems > 0 && selectedItems !== items.value.length)

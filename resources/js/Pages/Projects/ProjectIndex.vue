@@ -125,7 +125,7 @@ import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
-import PrimaryLinkButton from "../../Components/PrimaryLinkButton.vue";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
 
 export default {
   components: {
@@ -145,7 +145,7 @@ export default {
     },
   },
   setup(props) {
-    const tableColumns = ["name", "description", "location", "actions"];
+    const tableColumns = ["id", "name", "description", "location", "actions"];
 
     return {
       tableColumns,
