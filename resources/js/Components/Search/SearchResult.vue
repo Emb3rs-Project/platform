@@ -67,7 +67,7 @@ export default {
         entity.type === "sources" ||
         entity.type === "sinks" ||
         entity.type === "links"
-      ) {
+      )
         Inertia.visit(route("objects.index"), {
           onSuccess: (_) => {
             const route = `objects.${entity.type}.show`;
@@ -78,15 +78,22 @@ export default {
             });
           },
         });
-      } else if (entity.type === "locations") {
-      } else if (entity.type === "projects") {
-      } else if (entity.type === "simulations") {
-      } else if (entity.type === "news") {
-      } else if (entity.type === "faqs") {
-      }
+      else if (entity.type === "locations") {
+        // TODO
+      } else if (entity.type === "projects")
+        Inertia.visit(route("projects.show", entity.id));
+      else if (entity.type === "simulations")
+        Inertia.visit(
+          route("projects.simulations.show", {
+            project: entity.project_id,
+            simulation: entity.id,
+          })
+        );
+      else if (entity.type === "news") {
+        // TODO
+        // Inertia.visit(route("news.index"));
+      } else if (entity.type === "faqs") Inertia.visit(route("help.index"));
     };
-
-    const visit = () => {};
 
     return {
       onClick,
