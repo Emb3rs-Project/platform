@@ -61,6 +61,10 @@ export default {
       type: Number,
       default: -1,
     },
+    preview: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup(props) {
@@ -487,7 +491,7 @@ export default {
         map.value,
         markers ?? instances.value,
         mapObjects.value,
-        onMarkerClick
+        props.preview ? () => {} : onMarkerClick
       );
     };
 
@@ -500,7 +504,7 @@ export default {
         map.value,
         markers ?? links.value,
         mapObjects.value,
-        onLinkClick
+        props.preview ? () => {} : onLinkClick
       );
     };
 
@@ -541,7 +545,7 @@ export default {
         drawControl: true,
         contextmenu: true,
         contextmenuWidth: 140,
-        contextmenuItems: defautMapContext,
+        contextmenuItems: props.preview ? [] : defautMapContext,
       });
 
       window.map = map.value;
