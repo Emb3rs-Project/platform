@@ -89,10 +89,9 @@ export default {
             simulation: entity.id,
           })
         );
-      else if (entity.type === "news") {
-        // TODO
-        // Inertia.visit(route("news.index"));
-      } else if (entity.type === "faqs") Inertia.visit(route("help.index"));
+      else if (entity.type === "news")
+        Inertia.visit(route("news.show", entity.id));
+      else if (entity.type === "faqs") Inertia.visit(route("help.index"));
     };
 
     return {

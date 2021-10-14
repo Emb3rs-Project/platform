@@ -10,16 +10,16 @@ use Illuminate\Database\Eloquent\Collection;
 class IndexNews implements IndexesNews
 {
     /**
-     * Display all the available Projects.
+     * Display all the available News.
      *
      * @param \App\Models\User
      * @return \Illuminate\Database\Eloquent\Collection
      */
     public function index(User $user): Collection
     {
-        $real_news = News::query()->whereTeamId($user->currentTeam->id)->get();
+        $news = News::query()->whereTeamId($user->currentTeam->id)->get();
 
-        $news = $real_news->map(function (News $item) {
+        $truncatedNews = $news->map(function (News $item) {
 
             $in_html = substr($item->content, 0, 200) . "...";
             $item->content = closetags($in_html);
@@ -27,6 +27,6 @@ class IndexNews implements IndexesNews
             return $item;
         });
 
-        return $news;
+        return $truncatedNews;
     }
 }

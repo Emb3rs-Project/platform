@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-red-300">
+  <div>
     <p class="text-sm text-gray-500">
       <time :datetime="article.updated_at">
         {{ getFriendlyLifetime(article.created_at) }}

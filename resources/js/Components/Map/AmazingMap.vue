@@ -32,7 +32,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
+// import route from "../../../../vendor/tightenco/ziggy/src/js";
+import route from "ziggy";
 
 import mapUtils from "@/Utils/map.js";
 

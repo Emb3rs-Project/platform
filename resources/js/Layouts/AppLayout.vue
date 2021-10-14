@@ -63,13 +63,13 @@
                   <Link
                     v-for="item in navigation"
                     :key="item.name"
-                    :href="route(item.href)"
-                    :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                    :href="route(item.href.index.location)"
+                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                     :aria-current="item.current ? 'page' : undefined"
                   >
                   <component
                     :is="item.icon"
-                    :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                     aria-hidden="true"
                   />
                   {{ item.name }}
@@ -273,13 +273,13 @@
               <Link
                 v-for="item in navigation"
                 :key="item.name"
-                :href="route(item.href)"
-                :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                :href="route(item.href.index.location)"
+                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                 :aria-current="item.current ? 'page' : undefined"
               >
               <component
                 :is="item.icon"
-                :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                 aria-hidden="true"
               />
               {{ item.name }}
@@ -575,30 +575,64 @@ import {
 const navigation = [
   {
     name: "Dashboard",
-    href: "dashboard.index",
     icon: HomeIcon,
+    href: {
+      index: {
+        location: "dashboard.index",
+      },
+    },
   },
   {
     name: "Objects",
-    href: "objects.index",
+    href: {
+      index: {
+        location: "objects.index",
+      },
+    },
     icon: TemplateIcon,
   },
   {
     name: "Projects",
-    href: "projects.index",
+    href: {
+      index: {
+        location: "projects.index",
+      },
+      show: {
+        location: "projects.show",
+      },
+    },
     icon: ViewListIcon,
   },
   {
     name: "Challenge",
-    href: "challenges.index",
+    href: {
+      index: {
+        location: "challenges.index",
+      },
+    },
     icon: UserGroupIcon,
   },
   {
     name: "News",
-    href: "news.index",
+    href: {
+      index: {
+        location: "news.index",
+      },
+      show: {
+        location: "news.show",
+      },
+    },
     icon: NewspaperIcon,
   },
-  { name: "Help", href: "help.index", icon: SupportIcon },
+  {
+    name: "Help",
+    href: {
+      index: {
+        location: "help.index",
+      },
+    },
+    icon: SupportIcon,
+  },
 ];
 
 export default {
