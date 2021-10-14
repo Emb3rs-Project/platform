@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Embers\Help\IndexesHelp;
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
@@ -756,5 +757,16 @@ class Embers
     public static function showNewsUsing(string $class): void
     {
         app()->singleton(ShowsNews::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all Faqs.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexHelpUsing(string $class): void
+    {
+        app()->singleton(IndexesHelp::class, $class);
     }
 }

@@ -17,18 +17,26 @@
               v-slot="{ open }"
             >
               <dt class="text-lg">
-                <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400">
-                  <span class="font-medium text-gray-900">
-                    {{ faq.question }}
-                  </span>
-                  <span class="ml-6 h-7 flex items-center">
-                    <ChevronDownIcon
-                      :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </DisclosureButton>
+                <div>
+                  <DisclosureButton
+                    class="text-left w-full flex justify-between items-start text-gray-400"
+                    :class="{'bg-yellow-200 rounded-md' : shouldBeHinted(faq.id)}"
+                    @click="controlHinting(faq.id)"
+                  >
+                    <span class="font-medium text-gray-900">
+                      {{ faq.question }}
+                    </span>
+                    <span class="ml-6 h-7 flex items-center">
+                      <ChevronDownIcon
+                        :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </DisclosureButton>
+                </div>
+
               </dt>
+
               <DisclosurePanel
                 as="dd"
                 class="mt-2 pr-12"
@@ -37,7 +45,6 @@
                   class="text-base text-gray-500"
                   v-html="faq.answer"
                 >
-
                 </p>
               </DisclosurePanel>
             </Disclosure>
@@ -50,6 +57,8 @@
 
 
 <script>
+import { ref } from "vue";
+
 import AppLayout from "@/Layouts/AppLayout";
 import SiteHead from "@/Components/SiteHead.vue";
 
@@ -71,6 +80,33 @@ export default {
       type: Array,
       required: true,
     },
+    faqToFocus: {
+      type: String,
+      required: false,
+    },
+  },
+
+  setup(props) {
+    const query = ref(props.faqToFocus);
+
+    const shouldBeHinted = (id) => {
+      if (query.value == id) return true;
+
+      return false;
+    };
+
+    const controlHinting = (id) => {
+      if (query.value != id) return;
+
+      query.value = null;
+
+      window.history.pushState({}, window.document.title, "help");
+    };
+
+    return {
+      controlHinting,
+      shouldBeHinted,
+    };
   },
 };
 </script>

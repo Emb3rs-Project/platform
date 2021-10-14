@@ -40,7 +40,7 @@ import { Inertia } from "@inertiajs/inertia";
 
 import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
 import SearchItem from "@/Components/Search/SearchItem.vue";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
+import route from "ziggy";
 
 export default {
   components: {
@@ -91,7 +91,12 @@ export default {
         );
       else if (entity.type === "news")
         Inertia.visit(route("news.show", entity.id));
-      else if (entity.type === "faqs") Inertia.visit(route("help.index"));
+      else if (entity.type === "faqs")
+        Inertia.visit(
+          route("help.index", {
+            faq: entity.id,
+          })
+        );
     };
 
     return {
