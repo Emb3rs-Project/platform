@@ -20,6 +20,7 @@ use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
+use App\Http\Controllers\Embers\NewsController;
 use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
@@ -94,7 +95,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/help', HelpController::class)->only(['index']);
 
     // News
-    Route::resource('/news', HelpController::class)->only(['index']);
+    Route::resource('/news', NewsController::class)->only(['index', 'show']);
 
     // TeamRoles
     Route::resource('/team-roles', TeamRolesController::class);

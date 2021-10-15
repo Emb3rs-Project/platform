@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Help\IndexesHelp;
 use App\Http\Controllers\Controller;
-use App\Models\FAQ;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class HelpController extends Controller
 {
@@ -14,12 +17,13 @@ class HelpController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        $faqs = FAQ::all();
+        [$faqs, $faqIdToFocus] = app(IndexesHelp::class)->index($request->user(), $request->all());
 
         return Inertia::render('Help/HelpIndex', [
-            'faqs' => $faqs
+            'faqs' => $faqs,
+            'faqToFocus' => $faqIdToFocus
         ]);
     }
 }

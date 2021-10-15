@@ -37,10 +37,11 @@
 <script>
 import { useStore } from "vuex";
 import { Inertia } from "@inertiajs/inertia";
+import mapUtils from "@/Utils/map.js";
 
 import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
 import SearchItem from "@/Components/Search/SearchItem.vue";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
+import route from "ziggy";
 
 export default {
   components: {
@@ -78,9 +79,20 @@ export default {
             });
           },
         });
-      else if (entity.type === "locations") {
-        // TODO
-      } else if (entity.type === "projects")
+      else if (entity.type === "locations")
+        Inertia.visit(route("objects.index"), {
+          onSuccess: (_) => {
+            store.dispatch("map/centerAt", {
+              marker: {
+                type: "point",
+                data: {
+                  center: entity.data.center,
+                },
+              },
+            });
+          },
+        });
+      else if (entity.type === "projects")
         Inertia.visit(route("projects.show", entity.id));
       else if (entity.type === "simulations")
         Inertia.visit(
@@ -89,10 +101,14 @@ export default {
             simulation: entity.id,
           })
         );
-      else if (entity.type === "news") {
-        // TODO
-        // Inertia.visit(route("news.index"));
-      } else if (entity.type === "faqs") Inertia.visit(route("help.index"));
+      else if (entity.type === "news")
+        Inertia.visit(route("news.show", entity.id));
+      else if (entity.type === "faqs")
+        Inertia.visit(
+          route("help.index", {
+            faq: entity.id,
+          })
+        );
     };
 
     return {

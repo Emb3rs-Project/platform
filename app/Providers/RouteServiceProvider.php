@@ -72,6 +72,7 @@ class RouteServiceProvider extends ServiceProvider
             'simulation' => '[0-9]+',
             'chalenge' => '[0-9]+',
             'help' => '[0-9]+',
+            'news' => '[0-9]+',
             'team_role' => '[0-9]+',
             'team' => '[0-9]+', // jetstream
             'user' => '[0-9]+', // jetstream

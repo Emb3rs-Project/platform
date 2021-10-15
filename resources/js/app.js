@@ -17,7 +17,7 @@ createInertiaApp({
   resolve: name => require(`./Pages/${name}`).default,
   setup({ el, app, props, plugin }) {
     createApp({ render: () => h(app, props) })
-      .mixin({ methods: { route } })
+      .mixin({ methods: { route: route } })
       .use(plugin)
       .use(store)
       .use(Notifications)
