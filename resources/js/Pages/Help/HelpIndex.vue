@@ -34,9 +34,7 @@
                     </span>
                   </DisclosureButton>
                 </div>
-
               </dt>
-
               <DisclosurePanel
                 as="dd"
                 class="mt-2 pr-12"

@@ -32,7 +32,6 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
-// import route from "../../../../vendor/tightenco/ziggy/src/js";
 import route from "ziggy";
 
 import mapUtils from "@/Utils/map.js";
@@ -443,6 +442,13 @@ export default {
 
     const onCenterLocation = (loc, move = true) => {
       if (move) mapUtils.centerAtLocation(map.value, loc);
+
+      if (
+        !mapObjects.value.sources &&
+        !mapObjects.value.sinks &&
+        !mapObjects.value.links
+      )
+        return;
 
       const sources = mapObjects.value.sources.getLayers();
       const sinks = mapObjects.value.sinks.getLayers();

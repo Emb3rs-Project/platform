@@ -37,6 +37,7 @@
 <script>
 import { useStore } from "vuex";
 import { Inertia } from "@inertiajs/inertia";
+import mapUtils from "@/Utils/map.js";
 
 import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
 import SearchItem from "@/Components/Search/SearchItem.vue";
@@ -78,9 +79,20 @@ export default {
             });
           },
         });
-      else if (entity.type === "locations") {
-        // TODO
-      } else if (entity.type === "projects")
+      else if (entity.type === "locations")
+        Inertia.visit(route("objects.index"), {
+          onSuccess: (_) => {
+            store.dispatch("map/centerAt", {
+              marker: {
+                type: "point",
+                data: {
+                  center: entity.data.center,
+                },
+              },
+            });
+          },
+        });
+      else if (entity.type === "projects")
         Inertia.visit(route("projects.show", entity.id));
       else if (entity.type === "simulations")
         Inertia.visit(
