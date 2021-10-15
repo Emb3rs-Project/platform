@@ -65,7 +65,7 @@ export default {
     },
   },
 
-  setup(props, context) {
+  setup(props) {
     const map = ref(null);
     const markers = ref([]);
 
