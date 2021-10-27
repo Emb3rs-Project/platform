@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Help\IndexHelp;
 use App\Actions\Embers\Notifications\IndexNotification;
 use App\Actions\Embers\Notifications\MarkAllNotificationsAsRead;
 use App\Actions\Embers\Objects\Links\CreateLink;
@@ -56,8 +57,12 @@ use App\Actions\Embers\Teams\InviteTeamMember;
 use App\Actions\Embers\Teams\UpdateTeamMemberRole;
 use App\Actions\Embers\MapData\IndexMapData;
 use App\Actions\Embers\MapData\StoreMapData;
+use App\Actions\Embers\News\IndexNews;
+use App\Actions\Embers\News\ShowNews;
 use App\Actions\Embers\Notifications\DestroyNotification;
 use App\Actions\Embers\Notifications\MarkNotificationAsRead;
+use App\Actions\Embers\Notifications\RemoveAllNotifications;
+use App\Actions\Embers\Search\QuerySearch;
 use App\Embers;
 use Illuminate\Support\ServiceProvider;
 
@@ -141,8 +146,16 @@ class AppServiceProvider extends ServiceProvider
         Embers::markAllNotificationsAsReadUsing(MarkAllNotificationsAsRead::class);
         Embers::markNotificationAsReadUsing(MarkNotificationAsRead::class);
         Embers::destroyNotificationsUsing(DestroyNotification::class);
+        Embers::removeAllNotificationsUsing(RemoveAllNotifications::class);
 
         Embers::indexMapDataUsing(IndexMapData::class);
         Embers::storeMapDataUsing(StoreMapData::class);
+
+        Embers::querySearchableModelsUsing(QuerySearch::class);
+
+        Embers::indexNewsUsing(IndexNews::class);
+        Embers::showNewsUsing(ShowNews::class);
+
+        Embers::indexHelpUsing(IndexHelp::class);
     }
 }

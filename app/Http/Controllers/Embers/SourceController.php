@@ -15,21 +15,6 @@ use Illuminate\Http\Request;
 class SourceController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function index(Request $request)
-    {
-        $sources = app(IndexesSources::class)->index($request->user());
-
-        return response()->json([
-            'sources' => $sources
-        ]);
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request

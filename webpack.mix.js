@@ -1,6 +1,5 @@
 const mix = require('laravel-mix');
 const path = require('path');
-const { default: webpackDefault } = require('./node_modules/laravel-mix/src/builder/webpack-default');
 
 mix.js('resources/js/app.js', 'public/js')
   .vue()
@@ -12,6 +11,7 @@ mix.js('resources/js/app.js', 'public/js')
   .sourceMaps()
   .alias({
     '@': path.resolve('resources/js'),
+    'ziggy': path.resolve('vendor/tightenco/ziggy/dist'),
   })
   .webpackConfig(webpack => {
     return {
@@ -27,14 +27,12 @@ mix.js('resources/js/app.js', 'public/js')
     }
   });
 
-if (mix.inProduction()) {
-  mix.version();
-} else {
+if (mix.inProduction()) mix.version();
+else
   mix.options({
     // https://github.com/JeffreyWay/laravel-mix/blob/c67ff394bfffead9a1e2bc71ac97559e394e4cfe/src/config.js#L24
     hmrOptions: {
       host: 'localhost',
       port: +process.env.MIX_HMR_PORT,
     },
-  })
-}
+  });

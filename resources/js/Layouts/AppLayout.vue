@@ -63,13 +63,13 @@
                   <Link
                     v-for="item in navigation"
                     :key="item.name"
-                    :href="route(item.href)"
-                    :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                    :href="route(item.href.index.location)"
+                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                     :aria-current="item.current ? 'page' : undefined"
                   >
                   <component
                     :is="item.icon"
-                    :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                     aria-hidden="true"
                   />
                   {{ item.name }}
@@ -266,45 +266,20 @@
             </transition>
           </Menu>
           <!-- Sidebar Search -->
-          <div class="px-3 mt-5">
-            <label
-              for="search"
-              class="sr-only"
-            >
-              Search
-            </label>
-            <div class="mt-1 relative rounded-md shadow-sm">
-              <div
-                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                aria-hidden="true"
-              >
-                <SearchIcon
-                  class="mr-3 h-4 w-4 text-gray-400"
-                  aria-hidden="true"
-                />
-              </div>
-              <input
-                type="text"
-                name="search"
-                id="search"
-                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-9 sm:text-sm border-gray-300 rounded-md"
-                placeholder="Search"
-              />
-            </div>
-          </div>
+          <QuickSearch />
           <!-- Navigation -->
           <nav class="px-3 mt-6">
             <div class="space-y-1">
               <Link
                 v-for="item in navigation"
                 :key="item.name"
-                :href="route(item.href)"
-                :class="[route().current(item.href) ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                :href="route(item.href.index.location)"
+                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                 :aria-current="item.current ? 'page' : undefined"
               >
               <component
                 :is="item.icon"
-                :class="[route().current(item.href) ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                 aria-hidden="true"
               />
               {{ item.name }}
@@ -415,7 +390,7 @@
           />
         </button>
         <div class="flex-1 flex justify-between px-4 sm:px-6 lg:px-8">
-          <div class="flex-1 flex">
+          <div class="flex-1 flex w-full">
             <form
               class="w-full flex md:ml-0"
               action="#"
@@ -563,6 +538,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import QuickSearch from "@/Components/Search/QuickSearch.vue";
 import SimpleNotification from "@/Components/Notifications/SimpleNotification.vue";
 import SnackBarNotification from "@/Components/Notifications/SnackBarNotification.vue";
 
@@ -577,6 +553,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import {
+  NewspaperIcon,
   HomeIcon,
   MenuAlt1Icon,
   ViewListIcon,
@@ -598,25 +575,64 @@ import {
 const navigation = [
   {
     name: "Dashboard",
-    href: "dashboard.index",
     icon: HomeIcon,
+    href: {
+      index: {
+        location: "dashboard.index",
+      },
+    },
   },
   {
     name: "Objects",
-    href: "objects.index",
+    href: {
+      index: {
+        location: "objects.index",
+      },
+    },
     icon: TemplateIcon,
   },
   {
     name: "Projects",
-    href: "projects.index",
+    href: {
+      index: {
+        location: "projects.index",
+      },
+      show: {
+        location: "projects.show",
+      },
+    },
     icon: ViewListIcon,
   },
   {
     name: "Challenge",
-    href: "challenge.index",
+    href: {
+      index: {
+        location: "challenges.index",
+      },
+    },
     icon: UserGroupIcon,
   },
-  { name: "Help", href: "help.index", icon: SupportIcon },
+  {
+    name: "News",
+    href: {
+      index: {
+        location: "news.index",
+      },
+      show: {
+        location: "news.show",
+      },
+    },
+    icon: NewspaperIcon,
+  },
+  {
+    name: "Help",
+    href: {
+      index: {
+        location: "help.index",
+      },
+    },
+    icon: SupportIcon,
+  },
 ];
 
 export default {
@@ -640,6 +656,7 @@ export default {
     XIcon,
     ApplicationLogo,
     CogIcon,
+    QuickSearch,
     SimpleNotification,
     SnackBarNotification,
   },
@@ -658,11 +675,11 @@ export default {
     store.dispatch("notifications/watchForNewNotifications");
 
     const stopWatcher = store.watch(
-      (state) => state.notifications.unreadNotificationCount,
-      (unreadNotificationCount) => {
-        if (unreadNotificationCount) {
+      (state) => state.notifications.unreadNotificationsCount,
+      (count) => {
+        if (count) {
           newNotification.value = true;
-          unreadNotificationsCount.value = unreadNotificationCount;
+          unreadNotificationsCount.value = count;
         } else {
           newNotification.value = false;
           unreadNotificationsCount.value = null;

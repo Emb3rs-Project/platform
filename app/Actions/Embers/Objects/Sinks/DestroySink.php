@@ -11,18 +11,21 @@ class DestroySink implements DestroysSinks
     use EmbersPermissionable;
 
     /**
-     * Find and delete an existing Link.
+     * Delete an existing Sink.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
      * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($user, int $id)
+    public function destroy($user, int $id): void
     {
         $this->authorize($user);
 
-        $sink = Instance::findOrFail($id);
+        $sink = Instance::query()->findOrFail($id);
 
-        Instance::destroy($sink->id);
+        Instance::query()->destroy($sink->id);
     }
 }

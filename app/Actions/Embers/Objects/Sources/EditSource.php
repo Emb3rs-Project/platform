@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use App\Models\User;
 use Illuminate\Support\Arr;
 
 class EditSource implements EditsSources
@@ -17,24 +18,31 @@ class EditSource implements EditsSources
     /**
      * Display the necessary objects for updating a given Source.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($user, int $id)
+    public function edit(User $user, int $id): array
     {
         $this->authorize($user);
 
-        $source = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
-        $locations = Location::all();
+        $source = Instance::query()
+            ->with(['location', 'template', 'template.category'])
+            ->findOrFail($id);
 
-        $sourceCategories = Category::whereType('source')->get('id');
+        $locations = Location::query()->get();
 
-        $equipmentCategories = Category::whereType('equipment')->get();
+        $sourceCategories = Category::query()->whereType('source')->get('id');
 
-        $processCategories = Category::whereType('process')->get();
+        $equipmentCategories = Category::query()->whereType('equipment')->get();
 
-        $sourceTemplates = Template::whereIn('category_id', $sourceCategories)
+        $processCategories = Category::query()->whereType('process')->get();
+
+        $sourceTemplates = Template::query()
+            ->whereIn('category_id', $sourceCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -42,7 +50,8 @@ class EditSource implements EditsSources
             ])
             ->get();
 
-        $equipmentTemplates = Template::whereIn('category_id', Arr::pluck($equipmentCategories, 'id'))
+        $equipmentTemplates = Template::query()
+            ->whereIn('category_id', Arr::pluck($equipmentCategories, 'id'))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -50,7 +59,8 @@ class EditSource implements EditsSources
             ])
             ->get();
 
-        $processTemplates = Template::whereIn('category_id', Arr::pluck($processCategories, 'id'))
+        $processTemplates = Template::query()
+            ->whereIn('category_id', Arr::pluck($processCategories, 'id'))
             ->with([
                 'templateProperties',
                 'templateProperties.unit',

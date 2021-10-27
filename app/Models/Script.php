@@ -10,8 +10,11 @@ class Script extends Model
 {
     use HasFactory;
 
-
-    // Table team_link
+    /**
+     * The Templates that this Script belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function templates(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -22,7 +25,11 @@ class Script extends Model
         );
     }
 
-    // Table team_link
+    /**
+     * The Categories that this Script belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(

@@ -4,14 +4,14 @@ namespace App\Actions\Embers\Notifications;
 
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class MarkAllNotificationsAsRead implements MarksAllNotificationsAsRead
 {
     /**
-     * Mark all the available notifications for the currently logged in user
-     * as read.
+     * Mark all the available notifications as read.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @return void
      */
     public function markAllAsRead(User $user): void

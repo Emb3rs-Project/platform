@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Contracts\Embers\Help\IndexesHelp;
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
@@ -56,8 +57,12 @@ use App\Contracts\Embers\Teams\InvitesTeamMembers;
 use App\Contracts\Embers\Teams\UpdatesTeamMemberRoles;
 use App\Contracts\Embers\MapData\IndexesMapData;
 use App\Contracts\Embers\MapData\StoresMapData;
+use App\Contracts\Embers\News\IndexesNews;
+use App\Contracts\Embers\News\ShowsNews;
 use App\Contracts\Embers\Notifications\DestroysNotifications;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
+use App\Contracts\Embers\Notifications\RemovesAllNotifications;
+use App\Contracts\Embers\Search\QueriesSearch;
 
 class Embers
 {
@@ -175,7 +180,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Source.
+     * Register a class / callback that should be used to display a given
+     * Source.
      *
      * @param  string  $class
      * @return void
@@ -366,7 +372,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Project.
+     * Register a class / callback that should be used to display a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -389,7 +396,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given Project.
+     * Register a class / callback that should be used to update a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -400,7 +408,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Project.
+     * Register a class / callback that should be used to delete a given
+     * Project.
      *
      * @param  string  $class
      * @return void
@@ -456,7 +465,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given Simulation.
+     * Register a class / callback that should be used to display a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -479,7 +489,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given Simulation.
+     * Register a class / callback that should be used to update a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -490,7 +501,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Simulation.
+     * Register a class / callback that should be used to delete a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -501,7 +513,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to share a given Simulation.
+     * Register a class / callback that should be used to share a given
+     * Simulation.
      *
      * @param  string  $class
      * @return void
@@ -546,7 +559,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to display a given TeamRole.
+     * Register a class / callback that should be used to display a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -569,7 +583,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to update a given TeamRole.
+     * Register a class / callback that should be used to update a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -580,7 +595,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given TeamRole.
+     * Register a class / callback that should be used to delete a given
+     * TeamRole.
      *
      * @param  string  $class
      * @return void
@@ -626,7 +642,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to index all Notifications.
+     * Register a class / callback that should be used to index all
+     *  Notifications.
      *
      * @param  string  $class
      * @return void
@@ -661,7 +678,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to delete a given Notification.
+     * Register a class / callback that should be used to delete a given
+     * Notification.
      *
      * @param  string  $class
      * @return void
@@ -672,7 +690,20 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to index all User's Map data.
+     * Register a class / callback that should be used to delete all available
+     * Notifications.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function removeAllNotificationsUsing(string $class): void
+    {
+        app()->singleton(RemovesAllNotifications::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all User's Map
+     * data.
      *
      * @param  string  $class
      * @return void
@@ -683,7 +714,8 @@ class Embers
     }
 
     /**
-     * Register a class / callback that should be used to create User's Map data.
+     * Register a class / callback that should be used to create User's Map
+     * data.
      *
      * @param  string  $class
      * @return void
@@ -691,5 +723,50 @@ class Embers
     public static function storeMapDataUsing(string $class): void
     {
         app()->singleton(StoresMapData::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to query the Searchable
+     * Models.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function querySearchableModelsUsing(string $class): void
+    {
+        app()->singleton(QueriesSearch::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all News.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexNewsUsing(string $class): void
+    {
+        app()->singleton(IndexesNews::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to display a given News.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function showNewsUsing(string $class): void
+    {
+        app()->singleton(ShowsNews::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to index all Faqs.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function indexHelpUsing(string $class): void
+    {
+        app()->singleton(IndexesHelp::class, $class);
     }
 }

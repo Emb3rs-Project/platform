@@ -2,13 +2,17 @@
 
 namespace App\Contracts\Embers\Objects\Sinks;
 
+use App\Models\User;
+
 interface CreatesSinks
 {
     /**
      * Display the necessary objects for the creation of a Sink.
      *
-     * @param  mixed  $user
-     * @return mixed
+     * @param  \App\Models\User  $user
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    public function create($user);
+    public function create(User $user): array;
 }

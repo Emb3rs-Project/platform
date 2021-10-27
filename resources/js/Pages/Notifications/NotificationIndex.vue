@@ -1,8 +1,9 @@
 <template>
   <AppLayout>
+
     <SiteHead title="Notifications" />
+
     <NotificationFeed
-      :notifications="notifications"
       :unreadNotifications="unreadNotifications"
       :readNotifications="readNotifications"
     />
@@ -22,10 +23,6 @@ export default {
   },
 
   props: {
-    notifications: {
-      type: Array,
-      required: true,
-    },
     unreadNotifications: {
       type: Array,
       required: true,

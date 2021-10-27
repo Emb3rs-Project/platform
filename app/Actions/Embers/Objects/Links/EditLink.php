@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\EmbersPermissionable;
 use App\Models\Link;
 use App\Models\Location;
+use App\Models\User;
 
 class EditLink implements EditsLinks
 {
@@ -14,15 +15,18 @@ class EditLink implements EditsLinks
     /**
      * Display the necessary objects for updating a given Link.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($user, int $id)
+    public function edit(User $user, int $id): array
     {
         $this->authorize($user);
 
-        $link = Link::with(['geoSegments'])->findOrFail($id);
+        $link = Link::query()->with(['geoSegments'])->findOrFail($id);
 
         $teamLinks = $user->currentTeam->links->pluck('id');
 

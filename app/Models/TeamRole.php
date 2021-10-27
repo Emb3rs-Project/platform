@@ -22,15 +22,19 @@ class TeamRole extends Model
     ];
 
     /**
-    * The attributes that should be cast.
-    *
-    * @var array
-    */
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
     protected $casts = [
         'permissions' => 'array',
     ];
 
-    // teams_roles
+    /**
+     * The Team that this Team Role belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class, 'team_id');

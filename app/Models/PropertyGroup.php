@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PropertyGroup extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 }

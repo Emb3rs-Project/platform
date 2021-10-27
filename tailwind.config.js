@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors')
 
 module.exports = {
   mode: "jit",
@@ -17,9 +18,9 @@ module.exports = {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        // 'content-background': {
-        //   bluish: '#F7F8FF'
-        // }
+        orange: colors.orange,
+        teal: colors.teal,
+        purple: colors.purple
       },
       spacing: {
         'content': '70vh',

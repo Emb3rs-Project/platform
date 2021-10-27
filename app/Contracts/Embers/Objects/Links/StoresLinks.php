@@ -4,10 +4,11 @@ namespace App\Contracts\Embers\Objects\Links;
 
 interface StoresLinks
 {
+    // TODO: fix it when links are ready
     /**
      * Validate and create a new Link.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  array  $input
      * @return mixed
      */

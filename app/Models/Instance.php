@@ -7,21 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Laravel\Nova\Actions\Actionable;
+use Laravel\Scout\Searchable;
 
 class Instance extends Model
 {
-    use SoftDeletes;
-    use Actionable;
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'values' => 'array',
-    ];
+    use SoftDeletes, Actionable, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -35,20 +27,40 @@ class Instance extends Model
         'location_id'
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'values' => 'array',
+    ];
 
-    // Table instances
+    /**
+     * The Template that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function template(): BelongsTo
     {
         return $this->belongsTo(Template::class, 'template_id');
     }
 
-    // Table instances
+    /**
+     * The Location that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function location(): BelongsTo
     {
         return $this->belongsTo(Location::class, 'location_id');
     }
 
-    // Table team_instance
+    /**
+     * The Teams that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function teams(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -59,6 +71,11 @@ class Instance extends Model
         );
     }
 
+    /**
+     * The Instance Group that this Instance belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function grouping(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -67,5 +84,17 @@ class Instance extends Model
             'instance_id',
             'parent_instance_id'
         );
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray(): array
+    {
+        $array = $this->toArray();
+
+        return Arr::only($array, ['id', 'name']);
     }
 }

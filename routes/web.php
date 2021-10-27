@@ -5,7 +5,6 @@ use App\Http\Controllers\Embers\DashboardController;
 use App\Http\Controllers\Embers\HelpController;
 use App\Http\Controllers\Embers\InstitutionController;
 use App\Http\Controllers\Embers\LinkController;
-use App\Http\Controllers\Embers\LocationController;
 use App\Http\Controllers\Embers\MarkAllNotificationsAsReadController;
 use App\Http\Controllers\Embers\NotificationContoller;
 use App\Http\Controllers\Embers\ObjectsController;
@@ -21,6 +20,10 @@ use App\Http\Controllers\Embers\SinkController;
 use App\Http\Controllers\Embers\SourceController;
 use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
+use App\Http\Controllers\Embers\NewsController;
+use App\Http\Controllers\Embers\QuerySearchController;
+use App\Http\Controllers\Embers\RemoveAllNotificationsController;
+use App\Http\Controllers\Embers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,13 +45,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 
+    // Search
+    Route::get('/search', SearchController::class)->name('search.index');
+    Route::post('/search/query', QuerySearchController::class)->name('search.query');
+
     // Dashboard
     Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
+    Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
 
     // Institution
     Route::resource('/institution', InstitutionController::class);
@@ -59,20 +67,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/list', [ObjectsController::class, 'index'])->name('list');
         Route::get('/map', [ObjectsController::class, 'markers'])->name('markers');
 
-        // Locations
-        Route::resource('/locations', LocationController::class);
-
         // Sources
         Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share');
-        Route::resource('/sources', SourceController::class);
+        Route::resource('/sources', SourceController::class)->except(['index']);
 
         // Sinks
         Route::get('/sinks/{sink}/share', ShareSinkController::class)->name('sinks.share');
-        Route::resource('/sinks', SinkController::class);
+        Route::resource('/sinks', SinkController::class)->except(['index']);
 
         // Links
         Route::get('/links/{link}/share', ShareLinkController::class)->name('links.share');
-        Route::resource('/links', LinkController::class);
+        Route::resource('/links', LinkController::class)->except(['index']);
     });
 
     // Projects
@@ -84,10 +89,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects.simulations', ProjectSimulationController::class);
 
     // Challenge
-    Route::resource('/challenge', ChallengeController::class);
+    Route::resource('/challenges', ChallengeController::class);
 
     // Help
-    Route::resource('/help', HelpController::class);
+    Route::resource('/help', HelpController::class)->only(['index']);
+
+    // News
+    Route::resource('/news', NewsController::class)->only(['index', 'show']);
 
     // TeamRoles
     Route::resource('/team-roles', TeamRolesController::class);

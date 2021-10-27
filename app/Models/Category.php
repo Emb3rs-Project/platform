@@ -11,25 +11,43 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use  SoftDeletes;
+    use SoftDeletes;
 
-    // Table categories
+    /**
+     * The Categories that this Category has as its parent.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    // Table templates
-    public function templates(): HasMany
-    {
-        return $this->hasMany(Template::class, 'category_id');
-    }
-
+    /**
+     * The Categories that this Category has as its children.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    /**
+     * The Templates that this Category has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function templates(): HasMany
+    {
+        return $this->hasMany(Template::class, 'category_id');
+    }
+
+    /**
+     * The Scripts that this Category belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function scripts(): BelongsToMany
     {
         return $this->belongsToMany(

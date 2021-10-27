@@ -32,7 +32,7 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
-import route from "../../../../vendor/tightenco/ziggy/src/js";
+import route from "ziggy";
 
 import mapUtils from "@/Utils/map.js";
 
@@ -60,6 +60,10 @@ export default {
     zoom: {
       type: Number,
       default: -1,
+    },
+    preview: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -439,6 +443,13 @@ export default {
     const onCenterLocation = (loc, move = true) => {
       if (move) mapUtils.centerAtLocation(map.value, loc);
 
+      if (
+        !mapObjects.value.sources &&
+        !mapObjects.value.sinks &&
+        !mapObjects.value.links
+      )
+        return;
+
       const sources = mapObjects.value.sources.getLayers();
       const sinks = mapObjects.value.sinks.getLayers();
       const markers = [...sources, ...sinks];
@@ -487,7 +498,7 @@ export default {
         map.value,
         markers ?? instances.value,
         mapObjects.value,
-        onMarkerClick
+        props.preview ? () => {} : onMarkerClick
       );
     };
 
@@ -500,7 +511,7 @@ export default {
         map.value,
         markers ?? links.value,
         mapObjects.value,
-        onLinkClick
+        props.preview ? () => {} : onLinkClick
       );
     };
 
@@ -541,7 +552,7 @@ export default {
         drawControl: true,
         contextmenu: true,
         contextmenuWidth: 140,
-        contextmenuItems: defautMapContext,
+        contextmenuItems: props.preview ? [] : defautMapContext,
       });
 
       window.map = map.value;

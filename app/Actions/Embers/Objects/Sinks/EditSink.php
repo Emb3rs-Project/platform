@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
+use App\Models\User;
 
 class EditSink implements EditsSinks
 {
@@ -16,19 +17,25 @@ class EditSink implements EditsSinks
     /**
      * Display the necessary objects for updating a given Sink.
      *
-     * @param  mixed  $user
+     * @param  \App\Models\User  $user
      * @param  int  $id
-     * @return mixed
+     * @return array
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function edit($user, int $id)
+    public function edit(User $user, int $id): array
     {
         $this->authorize($user);
 
-        $sink = Instance::with(['location', 'template', 'template.category'])->findOrFail($id);
+        $sink = Instance::query()
+            ->with(['location', 'template', 'template.category'])
+            ->findOrFail($id);
 
-        $sinkCategories = Category::whereType('sink')->get('id');
+        $sinkCategories = Category::query()->whereType('sink')->get('id');
 
-        $sinkTemplates = Template::whereIn('category_id', $sinkCategories)
+        $sinkTemplates = Template::query()
+            ->whereIn('category_id', $sinkCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -36,7 +43,7 @@ class EditSink implements EditsSinks
             ])
             ->get();
 
-        $locations = Location::all();
+        $locations = Location::query()->get();
 
         return [
             $sinkTemplates,
