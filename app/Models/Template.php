@@ -64,6 +64,16 @@ class Template extends Model
     }
 
     /**
+     * The Simulation Metadata that this Template Triggers when creating an instance.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function triggers(): BelongsTo
+    {
+        return $this->belongsTo(SimulationMetadata::class, 'simulation_metadata_id');
+    }
+
+    /**
      * The Scripts that this Template belongs to.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

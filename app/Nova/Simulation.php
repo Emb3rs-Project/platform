@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -7,6 +8,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -35,9 +37,9 @@ class Simulation extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'status',
-//    'targetData',
+        // You can add any of this to your Laravel Nova Search
+        //    'status',
+        //    'targetData',
     ];
 
     /**
@@ -64,12 +66,14 @@ class Simulation extends Resource
                     // 'analysing' => __('Analysing'),
                     // 'stopped' => __('Stopped'),
                     // 'error' => __('Error')
-                    ]),
+                ]),
             Code::make(__('TARGETDATA'), 'targetData')->json()->rules('json'),
 
             BelongsTo::make(__('PROJECT'), 'project', Project::class),
             BelongsTo::make(__('TARGET'), 'target', Target::class),
             BelongsTo::make(__('SIMULATIONTYPE'), 'simulationType', SimulationType::class),
+
+            BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class),
 
         ];
     }

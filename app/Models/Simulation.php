@@ -65,6 +65,16 @@ class Simulation extends Model
     }
 
     /**
+     * The Simulation Metadata that this Simulation belongs to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function simulationMetadata(): BelongsTo
+    {
+        return $this->belongsTo(SimulationMetadata::class, 'simulation_metadata_id');
+    }
+
+    /**
      * Get the indexable data array for the model.
      *
      * @return array

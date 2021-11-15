@@ -1,0 +1,16 @@
+{
+    "start": "b73b2310-266e-42e0-8d51-c503aac751b1",
+    "steps": {
+        "b73b2310-266e-42e0-8d51-c503aac751b1": {
+            "module": "CF",
+            "module_id": 1,
+            "function": "sink:industry",
+            "function_id": 1
+        }
+    },
+    "requirements": {
+        "modules": [
+            1
+        ]
+    }
+}
