@@ -14,6 +14,6 @@ class SimulationModule extends Model
 
     public function functions(): HasMany
     {
-        return $this->hasMany(SimulationModuleFunctions::class, 'simulation_module_id');
+        return $this->hasMany(SimulationModuleFunction::class, 'simulation_module_id');
     }
 }
