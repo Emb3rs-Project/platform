@@ -64,12 +64,12 @@
                     v-for="item in navigation"
                     :key="item.name"
                     :href="route(item.href.index.location)"
-                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                    :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                     :aria-current="item.current ? 'page' : undefined"
                   >
                   <component
                     :is="item.icon"
-                    :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                     aria-hidden="true"
                   />
                   {{ item.name }}
@@ -274,12 +274,12 @@
                 v-for="item in navigation"
                 :key="item.name"
                 :href="route(item.href.index.location)"
-                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
+                :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'bg-gray-200 text-yellow-600' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50', 'group flex items-center px-2 py-2 text-sm font-medium rounded-md']"
                 :aria-current="item.current ? 'page' : undefined"
               >
               <component
                 :is="item.icon"
-                :class="[route().current(item.href.index.location) || route().current() === item.href.show?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
                 aria-hidden="true"
               />
               {{ item.name }}
@@ -599,6 +599,9 @@ const navigation = [
       },
       show: {
         location: "projects.show",
+      },
+      create: {
+        location: "projects.create",
       },
     },
     icon: ViewListIcon,

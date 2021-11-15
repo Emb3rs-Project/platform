@@ -50,12 +50,14 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/search/query', QuerySearchController::class)->name('search.query');
 
     // Dashboard
+    // Route::resource('/dashboard', DashboardController::class)->whereNumber(['dashboard']);
     Route::resource('/dashboard', DashboardController::class);
 
     // Notifications
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
     Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
+    // Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])->whereUuid(['notification']);
     Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
 
     // Institution

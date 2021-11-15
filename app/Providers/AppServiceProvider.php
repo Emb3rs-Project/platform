@@ -64,6 +64,7 @@ use App\Actions\Embers\Notifications\MarkNotificationAsRead;
 use App\Actions\Embers\Notifications\RemoveAllNotifications;
 use App\Actions\Embers\Search\QuerySearch;
 use App\Embers;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -85,6 +86,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if ($this->app->environment('local')) {
+            Model::preventLazyLoading();
+        }
+
         Embers::indexSinksUsing(IndexSink::class);
         Embers::createSinksUsing(CreateSink::class);
         Embers::storeSinksUsing(StoreSink::class);

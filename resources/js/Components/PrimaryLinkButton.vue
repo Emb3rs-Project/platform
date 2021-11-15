@@ -33,7 +33,7 @@ export default {
     },
     parameter: {
       type: String,
-      default: "",
+      required: false,
     },
     disabled: {
       type: Boolean,
