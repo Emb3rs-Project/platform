@@ -134,8 +134,8 @@ RUN set -eux; \
     groupadd --force -g 1000 embers; \
     useradd -ms /bin/bash --no-user-group -g embers -u 1000 embers;
 
-# Copy existing application directory contents
-COPY . /var/www/html
+# Change current user to embers
+USER embers
 
 # Copy existing application directory permissions
 COPY --chown=embers:embers . /var/www/html
@@ -146,9 +146,6 @@ RUN set -eux; \
 
 # Set the php.ini settings for our project
 COPY ./docker/php/php.ini "$PHP_INI_DIR/99-embers.ini"
-
-# Change current user to embers
-USER embers
 
 # Configure Laravel Nova composer authentication
 RUN set -eux; \

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { computed, onBeforeUnmount, ref } from "vue";
+import {} from "vue";
 import { Link, usePage } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout.vue";

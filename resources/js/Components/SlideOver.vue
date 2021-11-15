@@ -21,6 +21,7 @@
             <h2 class="text-lg font-medium text-white">{{ title }}</h2>
             <div class="ml-3 h-7 flex items-center">
               <button
+                v-if="!alwaysOpen"
                 type="button"
                 class="rounded-md hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
                 :class="dismissButtonTextColor"
@@ -105,6 +106,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    alwaysOpen: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   setup(props) {
@@ -136,10 +141,12 @@ export default {
     onMounted(() => {
       props.autoOpen ? store.commit("objects/openSlide") : null;
 
-      document.addEventListener("keydown", closeOnEscape);
+      if (!props.alwaysOpen)
+        document.addEventListener("keydown", closeOnEscape);
     });
     onUnmounted(() => {
-      document.removeEventListener("keydown", closeOnEscape);
+      if (!props.alwaysOpen)
+        document.removeEventListener("keydown", closeOnEscape);
     });
 
     return {

@@ -57,7 +57,7 @@ trait EmbersPermissionable
      * @param  \App\Models\User  $user
      * @return void
      *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function authorize(User $user): void
     {
