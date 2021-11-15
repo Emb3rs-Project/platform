@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -38,9 +39,9 @@ class Template extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'values',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'values',
     ];
 
     /**
@@ -63,6 +64,9 @@ class Template extends Resource
             HasMany::make(__('PROPERTYGROUPS'), 'templateGrouping', TemplateGrouping::class),
 
             BelongsToMany::make(__('SCRIPTS'), 'scripts', Script::class),
+
+            BelongsTo::make(__('ONCREATE'), 'triggers', SimulationMetadata::class)->nullable()
+                ->help("Triggers function on Instance Create"),
         ];
     }
 

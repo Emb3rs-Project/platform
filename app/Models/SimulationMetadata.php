@@ -12,6 +12,15 @@ class SimulationMetadata extends Model
     use HasFactory, SoftDeletes;
 
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'data' => 'array',
+    ];
+
     public function simulations(): HasMany
     {
         return $this->hasMany(Simulation::class, 'simulation_metadata_id');

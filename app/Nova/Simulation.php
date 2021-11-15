@@ -73,7 +73,8 @@ class Simulation extends Resource
             BelongsTo::make(__('TARGET'), 'target', Target::class),
             BelongsTo::make(__('SIMULATIONTYPE'), 'simulationType', SimulationType::class),
 
-            BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class),
+            BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class)
+                ->nullable(),
 
         ];
     }
