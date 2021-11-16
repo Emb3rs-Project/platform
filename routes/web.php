@@ -50,18 +50,18 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/search/query', QuerySearchController::class)->name('search.query');
 
     // Dashboard
-    // Route::resource('/dashboard', DashboardController::class)->whereNumber(['dashboard']);
-    Route::resource('/dashboard', DashboardController::class);
+    Route::resource('/dashboard', DashboardController::class)
+        ->whereNumber(['dashboard']);
 
     // Notifications
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
     Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
-    // Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])->whereUuid(['notification']);
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy']);
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])
+        ->whereUuid(['notification']);
 
     // Institution
-    Route::resource('/institution', InstitutionController::class);
+    Route::resource('/institution', InstitutionController::class)->whereNumber(['institution']);
 
     // Objects.["locations", "sources", "sinks", "links"]
     Route::prefix('objects')->as('objects.')->group(function () {
@@ -70,37 +70,53 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/map', [ObjectsController::class, 'markers'])->name('markers');
 
         // Sources
-        Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share');
-        Route::resource('/sources', SourceController::class)->except(['index']);
+        Route::get('/sources/{source}/share', ShareSourceController::class)->name('sources.share')
+            ->whereNumber(['source']);
+        Route::resource('/sources', SourceController::class)->except(['index'])
+            ->whereNumber(['source']);
 
         // Sinks
-        Route::get('/sinks/{sink}/share', ShareSinkController::class)->name('sinks.share');
-        Route::resource('/sinks', SinkController::class)->except(['index']);
+        Route::get('/sinks/{sink}/share', ShareSinkController::class)->name('sinks.share')
+            ->whereNumber(['sink']);
+        Route::resource('/sinks', SinkController::class)->except(['index'])
+            ->whereNumber(['sink']);
 
         // Links
-        Route::get('/links/{link}/share', ShareLinkController::class)->name('links.share');
-        Route::resource('/links', LinkController::class)->except(['index']);
+        Route::get('/links/{link}/share', ShareLinkController::class)->name('links.share')
+            ->whereNumber(['link']);
+        Route::resource('/links', LinkController::class)->except(['index'])
+            ->whereNumber(['link']);
     });
 
     // Projects
-    Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share');
-    Route::resource('/projects', ProjectController::class);
+    Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share')
+        ->whereNumber(['project']);
+
+    Route::resource('/projects', ProjectController::class)
+        ->whereNumber(['project']);
 
     // Simulations
-    Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share');
-    Route::resource('/projects.simulations', ProjectSimulationController::class);
+    Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')
+        ->whereNumber(['project', 'simulation']);
+
+    Route::resource('/projects.simulations', ProjectSimulationController::class)
+        ->whereNumber(['project', 'simulation']);
 
     // Challenge
-    Route::resource('/challenges', ChallengeController::class);
+    Route::resource('/challenges', ChallengeController::class)
+        ->whereNumber(['chalenge']);
 
     // Help
-    Route::resource('/help', HelpController::class)->only(['index']);
+    Route::resource('/help', HelpController::class)->only(['index'])
+        ->whereNumber(['help']);
 
     // News
-    Route::resource('/news', NewsController::class)->only(['index', 'show']);
+    Route::resource('/news', NewsController::class)->only(['index', 'show'])
+        ->whereNumber(['news']);
 
     // TeamRoles
-    Route::resource('/team-roles', TeamRolesController::class);
+    Route::resource('/team-roles', TeamRolesController::class)
+        ->whereNumber(['team_role']);
 });
 
 // Jetstream routes
