@@ -51,10 +51,10 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $question
- * @property string|null $answer
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $answer
  * @method static \Illuminate\Database\Eloquent\Builder|FAQ newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|FAQ newQuery()
  * @method static \Illuminate\Database\Query\Builder|FAQ onlyTrashed()
@@ -436,7 +436,9 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $simulation_metadata_id
  * @property-read \App\Models\Project $project
+ * @property-read \App\Models\SimulationMetadata|null $simulationMetadata
  * @property-read \App\Models\SimulationType $simulationType
  * @property-read \App\Models\Target $target
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newModelQuery()
@@ -447,6 +449,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereSimulationMetadataId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereSimulationTypeId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation whereTargetData($value)
@@ -456,6 +459,97 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|Simulation withoutTrashed()
  */
 	class Simulation extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SimulationMetadata
+ *
+ * @property int $id
+ * @property string $name
+ * @property array $data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Simulation[] $simulations
+ * @property-read int|null $simulations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
+ * @property-read int|null $templates_count
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata newQuery()
+ * @method static \Illuminate\Database\Query\Builder|SimulationMetadata onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationMetadata whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|SimulationMetadata withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|SimulationMetadata withoutTrashed()
+ */
+	class SimulationMetadata extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SimulationModule
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SimulationModuleFunction[] $functions
+ * @property-read int|null $functions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule newQuery()
+ * @method static \Illuminate\Database\Query\Builder|SimulationModule onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|SimulationModule withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|SimulationModule withoutTrashed()
+ */
+	class SimulationModule extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SimulationModuleFunction
+ *
+ * @property int $id
+ * @property int $simulation_module_id
+ * @property string $name
+ * @property string $label
+ * @property string|null $description
+ * @property array $data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\SimulationModule $module
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction newQuery()
+ * @method static \Illuminate\Database\Query\Builder|SimulationModuleFunction onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereSimulationModuleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|SimulationModuleFunction withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|SimulationModuleFunction withoutTrashed()
+ */
+	class SimulationModuleFunction extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -622,6 +716,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $simulation_metadata_id
  * @property-read \App\Models\Category $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Instance[] $instances
  * @property-read int|null $instances_count
@@ -631,6 +726,7 @@ namespace App\Models{
  * @property-read int|null $template_grouping_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
+ * @property-read \App\Models\SimulationMetadata|null $triggers
  * @method static \Database\Factories\TemplateFactory factory(...$parameters)
  * @method static \Illuminate\Database\Eloquent\Builder|Template newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Template newQuery()
@@ -641,6 +737,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Template whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Template whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Template whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Template whereSimulationMetadataId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Template whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Template whereValues($value)
  * @method static \Illuminate\Database\Query\Builder|Template withTrashed()

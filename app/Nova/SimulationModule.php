@@ -49,6 +49,12 @@ class SimulationModule extends Resource
                 ->sortable()
                 ->required(),
             Textarea::make(__('DESCRIPTION'), 'description'),
+            Text::make(__('PUBLISHCHANNEL'), 'publish_channel')
+                ->sortable()
+                ->required(),
+            Text::make(__('JOBCHANNEL'), 'job_channel')
+                ->sortable()
+                ->required(),
 
             HasMany::make(__('FUNCTIONS'), 'functions', SimulationModuleFunction::class)
         ];

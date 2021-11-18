@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -115,6 +116,18 @@ class StoreSink implements StoresSinks
 
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
+
+        $template = $instance->template;
+        if ($template->triggers) {
+            $instance->load('location');
+
+            $triggerData = [
+                "metadata" => $template->triggers['data'],
+                "instance" => $instance
+            ];
+
+            Redis::publish('simulations', json_encode($triggerData));
+        }
 
         return $instance;
     }

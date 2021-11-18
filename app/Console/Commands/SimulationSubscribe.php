@@ -38,7 +38,7 @@ class SimulationSubscribe extends Command
      */
     public function handle()
     {
-        Redis::subscribe(['test-channel', 'test-channel2'], function ($message) {
+        Redis::subscribe(['simulations'], function ($message) {
             echo $message;
         });
 
