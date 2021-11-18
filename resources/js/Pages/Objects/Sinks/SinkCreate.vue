@@ -211,6 +211,8 @@ export default {
     watch(
       selectedTemplate,
       (template) => {
+        form.sink.data = {};
+
         templateInfo.value = templates.value.find(
           (t) => t.key === template.key
         );
