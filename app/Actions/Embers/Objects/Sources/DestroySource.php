@@ -27,6 +27,6 @@ class DestroySource implements DestroysSources
 
         $source = Instance::query()->findOrFail($id);
 
-        Instance::query()->destroy($source->id);
+        Instance::destroy($source->id);
     }
 }
