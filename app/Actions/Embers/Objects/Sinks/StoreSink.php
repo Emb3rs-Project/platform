@@ -117,16 +117,17 @@ class StoreSink implements StoresSinks
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
+        // Prepare data for characterization, if trigger exists
         $template = $instance->template;
         if ($template->triggers) {
-            $instance->load('location');
+            $instanceData = $instance->getInstanceData();
 
             $triggerData = [
                 "metadata" => $template->triggers['data'],
-                "instance" => $instance
+                "instance" => $instanceData
             ];
 
-            Redis::publish('simulations', json_encode($triggerData));
+            Redis::publish('characterization', json_encode($triggerData));
         }
 
         return $instance;

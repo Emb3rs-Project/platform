@@ -97,4 +97,14 @@ class Instance extends Model
 
         return Arr::only($array, ['id', 'name']);
     }
+
+    public function getInstanceData(): array
+    {
+        $instanceData = $this->values;
+        $instanceData["id"] = $this->id;
+        $instanceData["type"] = $this->template->category->type;
+        $instanceData["location"] = $this->location->data["center"];
+
+        return $instanceData;
+    }
 }

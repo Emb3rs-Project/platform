@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
-class SimulationSubscribe extends Command
+class TestCharacterizationSubscribe extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'embers:subscribe';
+    protected $signature = 'embers:testcharsubscribe';
 
     /**
      * The console command description.
@@ -38,7 +38,7 @@ class SimulationSubscribe extends Command
      */
     public function handle()
     {
-        Redis::subscribe(['simulations'], function ($message) {
+        Redis::subscribe(['characterization'], function ($message) {
             echo $message;
         });
 

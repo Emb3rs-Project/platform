@@ -2,17 +2,18 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Instance;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
-class TestSimulationSubscribe extends Command
+class TestCharacterizationPublish extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'embers:testsubcribe';
+    protected $signature = 'embers:testcharpublish';
 
     /**
      * The console command description.
@@ -38,13 +39,21 @@ class TestSimulationSubscribe extends Command
      */
     public function handle()
     {
-        Redis::publish('test-channel', json_encode([
-            'name' => 'Channel 1'
-        ]));
 
-        Redis::publish('test-channel2', json_encode([
-            'name' => 'Channel 2'
-        ]));
+        $instance = Instance::findOrFail(120);
+
+        // Prepare data for characterization, if trigger exists
+        $template = $instance->template;
+        if ($template->triggers) {
+            $instanceData = $instance->getInstanceData();
+
+            $triggerData = [
+                "metadata" => $template->triggers['data'],
+                "instance" => $instanceData
+            ];
+
+            Redis::publish('characterization', json_encode($triggerData));
+        }
 
         return Command::SUCCESS;
     }
