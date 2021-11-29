@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sources;
 
+use App\Actions\Embers\Integration\Characterization;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
@@ -127,6 +128,8 @@ class StoreSource implements StoresSources
 
         $instance->saveOrFail();
         $instance->teams()->attach($user->currentTeam);
+
+        Characterization::characterize($instance);
 
         return $instance;
     }

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sinks;
 
+use App\Actions\Embers\Integration\Characterization;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
@@ -117,18 +118,7 @@ class StoreSink implements StoresSinks
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
-        // Prepare data for characterization, if trigger exists
-        $template = $instance->template;
-        if ($template->triggers) {
-            $instanceData = $instance->getInstanceData();
-
-            $triggerData = [
-                "metadata" => $template->triggers['data'],
-                "instance" => $instanceData
-            ];
-
-            Redis::publish('characterization', json_encode($triggerData));
-        }
+        Characterization::characterize($instance);
 
         return $instance;
     }
