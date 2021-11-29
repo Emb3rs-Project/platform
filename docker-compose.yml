@@ -7,7 +7,6 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
-      - '443:443'
     volumes:
       - .:/var/www/html
       - ./docker/nginx/templates:/etc/nginx/templates
@@ -32,7 +31,6 @@ services:
       - embers
     depends_on:
       - pgsql
-      - redis
 
   pgsql:
     image: 'postgres:13'
@@ -49,31 +47,24 @@ services:
     networks:
       - embers
     healthcheck:
-      test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
-      retries: 3
-      timeout: 5s
-
-  redis:
-    image: 'redis:alpine'
-    container_name: embers-redis
-    ports:
-      - '6379:6379'
-    volumes:
-      - 'embersredis:/data'
-    networks:
-       - embers
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-q",
+          "-d",
+          "${DB_DATABASE}",
+          "-U",
+          "${DB_USERNAME}"
+        ]
       retries: 3
       timeout: 5s
 
 networks:
   embers:
-    driver: bridge
+    external:
+      name: embers_network
 
 volumes:
   emberspgsql:
     driver: local
-  embersredis:
-    driver: local
-
