@@ -1,0 +1,26 @@
+{
+    "modules": {
+        "cf-simulation": {
+            "publish": "cf_queue",
+            "subscribe": "cf_jobs",
+            "functions": {
+                "sink:building": {
+                    "inputs": {},
+                    "outputs": {}
+                },
+                "sink:industry": {
+                    "inputs": {},
+                    "outputs": {}
+                }
+            }
+        },
+        "cf-characterization": {
+            "publish": "cf_queue",
+            "subscribe": "cf_char"
+        },
+        "teo": {
+            "publish": "teo_queue",
+            "subscribe": "teo_jobs"
+        }
+    }
+}
