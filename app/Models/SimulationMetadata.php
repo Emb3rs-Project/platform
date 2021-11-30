@@ -31,6 +31,16 @@ class SimulationMetadata extends Model
         return $this->hasMany(Template::class, 'simulation_metadata_id');
     }
 
+    /**
+     * The Integration Results that this Simulation Metadata has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function integrationReports(): HasMany
+    {
+        return $this->hasMany(IntegrationReport::class, 'simulation__metadata_id');
+    }
+
     public function modules()
     {
         return [];

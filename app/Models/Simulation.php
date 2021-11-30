@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use Laravel\Scout\Searchable;
@@ -72,6 +73,26 @@ class Simulation extends Model
     public function simulationMetadata(): BelongsTo
     {
         return $this->belongsTo(SimulationMetadata::class, 'simulation_metadata_id');
+    }
+
+    /**
+     * The Simulation Results that this Simulation has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function simulationResults(): HasMany
+    {
+        return $this->hasMany(SimulationResult::class, 'simulation_id');
+    }
+
+    /**
+     * The Integration Results that this Simulation has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function integrationReports(): HasMany
+    {
+        return $this->hasMany(IntegrationReport::class, 'simulation_id');
     }
 
     /**
