@@ -37,7 +37,7 @@ class StoreProject implements StoresProjects
             'location_id' => ['required', 'integer', 'numeric', 'exists:locations,id']
         ]);
 
-        return $validator->validated();
+        return $validator->validate();
     }
 
     /**

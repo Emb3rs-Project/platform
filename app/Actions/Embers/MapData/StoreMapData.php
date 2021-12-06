@@ -46,7 +46,7 @@ class StoreMapData implements StoresMapData
             'map.defaultLocation.lng' => ['filled', 'numeric', new Coordinates],
         ]);
 
-        return $validator->validated();
+        return $validator->validate();
     }
 
     /**

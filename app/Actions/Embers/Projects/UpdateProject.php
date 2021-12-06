@@ -39,7 +39,7 @@ class UpdateProject implements UpdatesProjects
             'location_id' => ['filled', 'string', 'exists:locations,id']
         ]);
 
-        return $validator->validated();
+        return $validator->validate();
     }
 
     /**
