@@ -19,5 +19,6 @@ Route::middleware(['reporter'])->group(function () {
     Route::prefix('/integration/reporter')->as('integration.reporter')->group(function () {
         Route::post('/characterization', IntegrationCharacterizationController::class)->name('characterization');
         Route::post('/simulation', IntegrationSimulationController::class)->name('simulation');
+        Route::post('/step')->name('step');
     });
 });
