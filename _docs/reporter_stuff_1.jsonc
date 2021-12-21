@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "type": "characterization",
+    "instance": {
+      "id": 1
+    }
+  }, // Send mongo[0],
+  "step": {
+    "output_data": {}
+  } // Send mongo[step]
+}
+/**
+  instance.values.characterization = step.output_data
+*/
