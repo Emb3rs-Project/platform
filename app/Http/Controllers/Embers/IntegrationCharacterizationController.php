@@ -15,6 +15,6 @@ class IntegrationCharacterizationController extends Controller
      */
     public function __invoke(Request $request)
     {
-        // handle the report
+        info($request->all());
     }
 }

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Embers\IntegrationCharacterizationController;
 use App\Http\Controllers\Embers\IntegrationSimulationController;
+use App\Http\Controllers\Embers\IntegrationStepController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +20,6 @@ Route::middleware(['reporter'])->group(function () {
     Route::prefix('/integration/reporter')->as('integration.reporter')->group(function () {
         Route::post('/characterization', IntegrationCharacterizationController::class)->name('characterization');
         Route::post('/simulation', IntegrationSimulationController::class)->name('simulation');
-        Route::post('/step')->name('step');
+        Route::post('/step', IntegrationStepController::class)->name('step');
     });
 });

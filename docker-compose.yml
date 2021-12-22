@@ -2,19 +2,25 @@ version: '3'
 
 services:
   nginx:
-    image: nginx:alpine
     container_name: embers-nginx
+    build:
+      context: ./docker/nginx/
+      dockerfile: Dockerfile
+      args:
+        ENABLED_MODULES: brotli
     restart: unless-stopped
     ports:
-      - '80:80'
+      - '8080:80'
     volumes:
       - .:/var/www/html
       - ./docker/nginx/templates:/etc/nginx/templates
-      - ./docker/nginx/certs:/etc/nginx/certs
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
       - NGINX_HOST='${APP_HOST:?err}'
     networks:
       - embers
+    depends_on:
+      - app
 
   app:
     image: embers/app
@@ -25,8 +31,6 @@ services:
       args:
         NOVA_USERNAME: '${NOVA_USERNAME:?err}'
         NOVA_PASSWORD: '${NOVA_PASSWORD:?err}'
-    volumes:
-      - '.:/var/www/html'
     networks:
       - embers
     depends_on:

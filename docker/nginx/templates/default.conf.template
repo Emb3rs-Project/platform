@@ -1,45 +1,40 @@
 server {
-  listen 80;
-  listen [::]:80;
+    listen 80;
+    server_name ${NGINX_HOST};
+    root /var/html/public;
 
-  server_name ${NGINX_HOST};
-  root /var/www/html/public;
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 
-  client_max_body_size 128M;
+    index index.php;
 
-  # add_header X-Frame-Options "SAMEORIGIN";
-  # add_header X-XSS-Protection "1; mode=block";
-  # add_header X-Content-Type-Options "nosniff";
+    charset utf-8;
 
-  index index.html index.htm index.php;
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
 
-  charset utf-8;
+    location = /favicon.ico {
+        access_log off;
+        log_not_found off;
+    }
+    location = /robots.txt {
+        access_log off;
+        log_not_found off;
+    }
 
-  location / {
-    try_files $uri $uri/ /index.php?$query_string;
-    gzip_static on;
-  }
+    error_page 404 /index.php;
 
-  location = /favicon.ico {
-    access_log off;
-    log_not_found off;
-  }
-  location = /robots.txt {
-    access_log off;
-    log_not_found off;
-  }
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass app:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        include fastcgi_params;
+    }
 
-  error_page 404 /index.php;
-
-  access_log off;
-  error_log /var/log/nginx/error.log;
-
-  location ~ \.php$ {
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    fastcgi_pass app:9000;
-    fastcgi_index $document_root;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-    fastcgi_param PATH_INFO $fastcgi_path_info;
-    include fastcgi_params;
-  }
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
 }

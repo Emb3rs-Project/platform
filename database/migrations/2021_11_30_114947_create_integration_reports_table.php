@@ -21,6 +21,9 @@ class CreateIntegrationReportsTable extends Migration
 
             $table->jsonb('data')->nullable();
             $table->enum('type', ['simulation', 'characterization']);
+            $table->jsonb('errors')->nullable();
+            $table->string('step_uuid');
+
 
             $table->timestamps();
         });

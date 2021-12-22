@@ -23,7 +23,7 @@ class HandleReporterConnectorRequests
 
         if (is_null($namespace) || is_null($key)) throw new AuthenticationException();
 
-        $uuid = Uuid::uuid5(config('app.reporter_connector_key'), $namespace);
+        $uuid = Uuid::uuid5(config('app.reporter_key'), $namespace);
 
         if ($uuid->toString() !== $key) throw new AuthenticationException();
 
