@@ -23,14 +23,14 @@ class ShowTeamRole implements ShowsTeamRoles
     {
         $this->authorize($user);
 
-        $role = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
+        $role = TeamRole::query()->whereTeamId($user->current_team_id)->findOrFail($id);
 
         $permissions = $role->permissions;
 
         $friendlyPermissions = [];
 
         foreach ($permissions as $action) {
-            $permission = Permission::whereAction($action)->first();
+            $permission = Permission::query()->whereAction($action)->first();
 
             array_push($friendlyPermissions, $permission->friendly_name);
         }

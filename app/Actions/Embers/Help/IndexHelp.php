@@ -6,7 +6,6 @@ use App\Contracts\Embers\Help\IndexesHelp;
 use App\Models\FAQ;
 use App\Models\User;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +23,7 @@ class IndexHelp implements IndexesHelp
         $faqs = FAQ::query()->get();
 
         $validated = Validator::make($input, [
-            'faq' => ['sometimes', 'required', 'numeric', Rule::exists(FAQ::class, 'id')]
+            'faq' => ['filled', 'numeric', 'integer', Rule::exists(FAQ::class, 'id')]
         ])->validate();
 
         $faqIdToFocus = Arr::get($validated, 'faq');

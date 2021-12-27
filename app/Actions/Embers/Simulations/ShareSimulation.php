@@ -23,9 +23,9 @@ class ShareSimulation implements SharesSimulations
     {
         $this->authorize($user);
 
-        Project::findOrFail($projectId);
+        Project::query()->findOrFail($projectId);
 
-        $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
+        $simulation = Simulation::query()->with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
 
         // TODO: generate a sharing link
 

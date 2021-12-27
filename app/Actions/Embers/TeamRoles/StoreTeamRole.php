@@ -68,7 +68,7 @@ class StoreTeamRole implements StoresTeamRoles
     {
         // Transform the permission friendly names to their coresponding actions
         foreach ($input['permissions'] as &$permission) {
-            $permission = Permission::whereFriendlyId($permission)->first();
+            $permission = Permission::query()->whereFriendlyId($permission)->first();
         }
         unset($permission);
 

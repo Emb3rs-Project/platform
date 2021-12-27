@@ -23,7 +23,7 @@ class DestroyTeamRole implements DestroysTeamRoles
     {
         $this->authorize($user);
 
-        $role = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
+        $role = TeamRole::query()->whereTeamId($user->current_team_id)->findOrFail($id);
 
         $this->ensureRoleIsNotInUse($role);
 
@@ -38,7 +38,7 @@ class DestroyTeamRole implements DestroysTeamRoles
      */
     private function ensureRoleIsNotInUse($role): void
     {
-        $usersWithThatRole = Membership::whereTeamRoleId($role->id)->get();
+        $usersWithThatRole = Membership::query()->whereTeamRoleId($role->id)->get();
 
         if ($usersWithThatRole->isNotEmpty()) {
             throw ValidationException::withMessages([

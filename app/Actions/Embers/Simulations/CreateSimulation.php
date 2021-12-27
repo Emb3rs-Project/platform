@@ -24,13 +24,13 @@ class CreateSimulation implements CreatesSimulations
     {
         $this->authorize($user);
 
-        $simulationTypes = SimulationType::all();
+        $simulationTypes = SimulationType::query()->get();
 
         $sources = app(IndexesSources::class)->index($user);
 
         $sinks = app(IndexesSinks::class)->index($user);
 
-        $locations = Location::all();
+        $locations = Location::query()->get();
 
         $links = app(IndexesLinks::class)->index($user);
 

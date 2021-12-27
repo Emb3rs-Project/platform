@@ -25,9 +25,9 @@ class UpdateSimulation implements UpdatesSimulations
     {
         $this->authorize($user);
 
-        Project::findOrFail($projectId);
+        Project::query()->findOrFail($projectId);
 
-        $simulation = Simulation::findOrFail($simulationId);
+        $simulation = Simulation::query()->findOrFail($simulationId);
 
         $this->validate($input);
 

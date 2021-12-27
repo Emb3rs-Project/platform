@@ -23,9 +23,9 @@ class ShowSimulation implements ShowsSimulations
     {
         $this->authorize($user);
 
-        $project = Project::with(['location'])->findOrFail($projectId);
+        $project = Project::query()->with(['location'])->findOrFail($projectId);
 
-        $simulation = Simulation::with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
+        $simulation = Simulation::query()->with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
 
         return [
             $simulation,

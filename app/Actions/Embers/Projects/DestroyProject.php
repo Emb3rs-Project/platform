@@ -18,8 +18,9 @@ class DestroyProject implements DestroysProjects
     {
         $this->authorize($user);
 
-        $project = Project::findOrFail($id);
+        $project = Project::query()->findOrFail($id);
 
-        Project::destroy($project->id);
+        // Project::destroy($project->id);
+        $project->delete();
     }
 }

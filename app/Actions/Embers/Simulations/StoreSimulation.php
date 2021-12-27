@@ -24,7 +24,7 @@ class StoreSimulation implements StoresSimulations
     {
         $this->authorize($user);
 
-        Project::findOrFail($projectId);
+        Project::query()->findOrFail($projectId);
 
         $this->validate($input);
 

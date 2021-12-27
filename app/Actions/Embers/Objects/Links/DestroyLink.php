@@ -27,6 +27,7 @@ class DestroyLink implements DestroysLinks
 
         $link = Link::query()->findOrFail($id);
 
-        Link::destroy($link->id);
+        // Link::destroy($link->id);
+        $link->delete();
     }
 }

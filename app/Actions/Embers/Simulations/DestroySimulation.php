@@ -23,8 +23,9 @@ class DestroySimulation implements DestroysSimulations
     {
         $this->authorize($user);
 
-        $simulation = Simulation::findOrFail($simulationId);
+        $simulation = Simulation::query()->findOrFail($simulationId);
 
-        Simulation::destroy($simulation->id);
+        // Simulation::destroy($simulation->id);
+        $simulation->delete();
     }
 }

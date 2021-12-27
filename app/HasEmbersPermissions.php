@@ -14,7 +14,7 @@ trait HasEmbersPermissions
      */
     public function getFriendlyPermissions(): Collection
     {
-        return Permission::all()->map(function ($permission) {
+        return Permission::query()->get()->map(function ($permission) {
             return [
                 'id' => $permission->friendly_id,
                 'name' => $permission->friendly_name,

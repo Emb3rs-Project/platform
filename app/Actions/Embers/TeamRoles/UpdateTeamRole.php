@@ -26,7 +26,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
     {
         $this->authorize($user);
 
-        $project = TeamRole::whereTeamId($user->current_team_id)->findOrFail($id);
+        $project = TeamRole::query()->whereTeamId($user->current_team_id)->findOrFail($id);
 
         $this->validate($user, $input);
 
@@ -75,7 +75,7 @@ class UpdateTeamRole implements UpdatesTeamRoles
         if (!empty($input['permissions'])) {
             // Transform the permission friendly names to their coresponding actions
             foreach ($input['permissions'] as &$permission) {
-                $permission = Permission::whereFriendlyId($permission)->first();
+                $permission = Permission::query()->whereFriendlyId($permission)->first();
             }
             unset($permission);
 

@@ -37,9 +37,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/login');
-});
+Route::get('/', fn () => redirect('/login'));
+
+
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Map data
@@ -57,8 +57,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/notifications/new', ShowNewNotificationsController::class)->name('notifications.new');
     Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
-    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])
-        ->whereUuid(['notification']);
+    Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])->whereUuid(['notification']);
 
     // Institution
     Route::resource('/institution', InstitutionController::class)->whereNumber(['institution']);

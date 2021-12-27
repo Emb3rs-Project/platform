@@ -26,6 +26,7 @@ class DestroySink implements DestroysSinks
 
         $sink = Instance::query()->findOrFail($id);
 
-        Instance::destroy($sink->id);
+        // Instance::destroy($sink->id);
+        $sink->delete();
     }
 }
