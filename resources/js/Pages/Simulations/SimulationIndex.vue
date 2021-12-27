@@ -8,7 +8,7 @@
     <div class="p-5">
       <h1 class="text-lg font-bold">Simulations</h1>
     </div>
-    <div class="flex p-5 h-screen md:h-content gap-2">
+    <div class="flex p-5 h-screen gap-2">
       <div class="w-6/12 md:overflow-y-auto">
         <!-- <div class="flex flex-col"> -->
         <div class="overflow-x">

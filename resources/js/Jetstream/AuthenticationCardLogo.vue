@@ -1,6 +1,7 @@
 <template>
   <Link :href="'/'">
   <img
+    class="mx-auto h-24 w-auto"
     src="../../images/logo.png"
     alt=""
   />

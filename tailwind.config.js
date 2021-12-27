@@ -2,21 +2,19 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: [
-    "./vendor/laravel/jetstream/**/*.blade.php",
-    "./resources/**/*.blade.php",
-    "./resources/**/*.js",
-    "./resources/**/*.vue",
+    // "./vendor/laravel/jetstream/**/*.blade.php",
+    "./resources/views/**/*.blade.php",
+    "./resources/js/**/*.js",
+    "./resources/js/**/*.vue",
   ],
 
   theme: {
     extend: {
       fontFamily: {
         sans: [
-          'Inter', ...defaultTheme.fontFamily.sans
+          'Inter',
+          ...defaultTheme.fontFamily.sans
         ],
-      },
-      spacing: {
-        'content': '70vh',
       },
     },
   },
