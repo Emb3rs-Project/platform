@@ -3,10 +3,13 @@ const path = require('path');
 
 mix.js('resources/js/app.js', 'public/js')
   .vue()
+  // .postCss('resources/css/app.css', 'public/css', [
+  //   require('postcss-import'),
+  //   require('tailwindcss'),
+  //   require('autoprefixer'),
+  // ])
   .postCss('resources/css/app.css', 'public/css', [
-    require('postcss-import'),
     require('tailwindcss'),
-    require('autoprefixer'),
   ])
   .sourceMaps()
   .alias({
@@ -27,8 +30,9 @@ mix.js('resources/js/app.js', 'public/js')
     }
   });
 
-if (mix.inProduction()) mix.version();
-else
+if (mix.inProduction()) {
+  mix.version();
+} else {
   mix.options({
     // https://github.com/JeffreyWay/laravel-mix/blob/c67ff394bfffead9a1e2bc71ac97559e394e4cfe/src/config.js#L24
     hmrOptions: {
@@ -36,3 +40,5 @@ else
       port: +process.env.MIX_HMR_PORT,
     },
   });
+}
+

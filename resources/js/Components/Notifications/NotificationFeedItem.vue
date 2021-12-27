@@ -3,7 +3,7 @@
     <div class="flex items-center w-full">
       <div
         v-if="notification.data.type !== 'system'"
-        class="flex-shrink-0 inline-flex rounded-full border-2 border-white"
+        class="shrink-0 inline-flex rounded-full border-2 border-white"
       >
         <img
           class="h-12 w-12 rounded-full"
@@ -44,7 +44,7 @@
           class="flex flex-wrap gap-1"
         >
           <div class="relative inline-flex items-center rounded-full border border-gray-300 px-3 py-0.5 text-sm">
-            <span class="absolute flex-shrink-0 flex items-center justify-center">
+            <span class="absolute shrink-0 flex items-center justify-center">
               <span
                 class="h-1.5 w-1.5 rounded-full bg-blue-500"
                 aria-hidden="true"

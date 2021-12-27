@@ -11,7 +11,7 @@
               </p>
             </div>
             <div
-              class="flex-shrink-0 self-center flex"
+              class="shrink-0 self-center flex"
               v-if="unreadNotifications.length || readNotifications.length"
             >
               <Menu

@@ -3,7 +3,7 @@
     <div :class="[styleClasses.background, 'max-w-sm w-full shadow-sm rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden']">
       <div class="p-2">
         <div class="flex items-start">
-          <div class="flex-shrink-0">
+          <div class="shrink-0">
             <span
               class="flex p-2 rounded-lg"
               :class="styleClasses.icon.background"
@@ -38,7 +38,7 @@
               {{ message }}
             </p>
           </div>
-          <div class="ml-4 flex-shrink-0 flex">
+          <div class="ml-4 shrink-0 flex">
             <button
               @click="close"
               :class="[styleClasses.dismissIcon.text, 'rounded-md inline-flex focus:outline-none focus:ring-2 focus:ring-offset-2']"

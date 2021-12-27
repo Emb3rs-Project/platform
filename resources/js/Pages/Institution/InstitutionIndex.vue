@@ -30,7 +30,7 @@
                   >
                   <div class="flex items-center px-4 py-4 sm:px-6">
                     <div class="min-w-0 flex-1 flex items-center">
-                      <div class="flex-shrink-0">
+                      <div class="shrink-0">
                         <img
                           class="h-12 w-12 rounded-full"
                           :src="user.profile_photo_url"
@@ -45,7 +45,7 @@
                           <p class="mt-2 flex items-center text-sm text-gray-500">
                             <!-- Heroicon name: solid/mail -->
                             <svg
-                              class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"
+                              class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
                               fill="currentColor"
@@ -71,7 +71,7 @@
                             <div v-if="user.email_verified_at != 'null'">
                               <p class="mt-2 flex items-center text-sm text-gray-500">
                                 <svg
-                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-red-400"
+                                  class="shrink-0 mr-1.5 h-5 w-5 text-red-400"
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 20 20"
                                   fill="currentColor"
@@ -89,7 +89,7 @@
                               <p class="mt-2 flex items-center text-sm text-gray-500">
                                 <!-- Heroicon name: solid/check-circle -->
                                 <svg
-                                  class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400"
+                                  class="shrink-0 mr-1.5 h-5 w-5 text-green-400"
                                   xmlns="http://www.w3.org/2000/svg"
                                   viewBox="0 0 20 20"
                                   fill="currentColor"

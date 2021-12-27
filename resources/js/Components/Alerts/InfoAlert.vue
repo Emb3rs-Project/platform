@@ -4,7 +4,7 @@
     v-if="open"
   >
     <div class="flex">
-      <div class="flex-shrink-0">
+      <div class="shrink-0">
         <ExclamationIcon
           class="h-5 w-5 text-yellow-400"
           aria-hidden="true"

@@ -68,7 +68,7 @@
           <slot name="stickyBottom"></slot>
         </div>
 
-        <div class="flex-shrink-0 px-4 py-4 flex justify-end gap-5">
+        <div class="shrink-0 px-4 py-4 flex justify-end gap-5">
           <slot name="actions"></slot>
         </div>
       </div>

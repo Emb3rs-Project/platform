@@ -54,7 +54,7 @@
                 </button>
               </div>
             </TransitionChild>
-            <div class="flex-shrink-0 flex items-center px-4">
+            <div class="shrink-0 flex items-center px-4">
               <application-logo class="h-auto w-auto" />
             </div>
             <div class="mt-5 flex-1 h-0 overflow-y-auto">
@@ -69,7 +69,7 @@
                   >
                   <component
                     :is="item.icon"
-                    :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                    :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 shrink-0 h-6 w-6']"
                     aria-hidden="true"
                   />
                   {{ item.name }}
@@ -165,7 +165,7 @@
           </div>
         </TransitionChild>
         <div
-          class="flex-shrink-0 w-14"
+          class="shrink-0 w-14"
           aria-hidden="true"
         >
           <!-- Dummy element to force sidebar to shrink to fit close icon -->
@@ -174,9 +174,9 @@
     </TransitionRoot>
 
     <!-- Static sidebar for desktop -->
-    <div class="hidden lg:flex lg:flex-shrink-0">
+    <div class="hidden lg:flex lg:shrink-0">
       <div class="flex flex-col w-64 border-r border-gray-200 pt-5 pb-4 bg-gray-100">
-        <div class="flex items-center flex-shrink-0 px-6">
+        <div class="flex items-center shrink-0 px-6">
           <application-logo class="h-auto w-auto" />
         </div>
         <!-- Sidebar component, swap this element with another sidebar if you like -->
@@ -192,7 +192,7 @@
                   <span class="flex min-w-0 items-center justify-between space-x-3">
                     <span class="inline-block relative">
                       <img
-                        class="h-10 w-10 rounded-full flex-shrink-0"
+                        class="h-10 w-10 rounded-full shrink-0"
                         :src="$page.props.user.profile_photo_url"
                         alt=""
                       />
@@ -211,7 +211,7 @@
                     </span>
                   </span>
                   <SelectorIcon
-                    class="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+                    class="shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
                 </span>
@@ -279,7 +279,7 @@
               >
               <component
                 :is="item.icon"
-                :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 flex-shrink-0 h-6 w-6']"
+                :class="[route().current() === item.href.index.location || route().current() === item.href.show?.location || route().current() === item.href.create?.location ? 'text-yellow-500' : 'text-gray-400 group-hover:text-gray-500', 'mr-3 shrink-0 h-6 w-6']"
                 aria-hidden="true"
               />
               {{ item.name }}
@@ -378,7 +378,7 @@
     <!-- Main column -->
     <div class="flex flex-col w-0 flex-1 overflow-hidden">
       <!-- Search header -->
-      <div class="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
+      <div class="relative z-10 shrink-0 flex h-16 bg-white border-b border-gray-200 lg:hidden">
         <button
           class="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-purple-500 lg:hidden"
           @click="sidebarOpen = true"
@@ -430,7 +430,7 @@
                   <span class="sr-only">Open user menu</span>
                   <span class="inline-block relative">
                     <img
-                      class="h-10 w-10 rounded-full flex-shrink-0"
+                      class="h-10 w-10 rounded-full shrink-0"
                       :src="$page.props.user.profile_photo_url"
                       alt=""
                     />
