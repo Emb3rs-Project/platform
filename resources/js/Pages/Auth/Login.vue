@@ -1,6 +1,5 @@
 <template>
-  <!--  -->
-  <div class="bg-gray-50 h-screen">
+  <div class="bg-gray-100 h-screen">
     <div class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <jet-authentication-card-logo />
@@ -114,31 +113,20 @@
       </div>
     </div>
   </div>
-
-  <!--  -->
-
 </template>
 
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
 
-import JetAuthenticationCard from "@/Jetstream/AuthenticationCard";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
-import JetButton from "@/Jetstream/Button";
-import JetInput from "@/Jetstream/Input";
 import JetCheckbox from "@/Jetstream/Checkbox";
-import JetLabel from "@/Jetstream/Label";
 import JetValidationErrors from "@/Jetstream/ValidationErrors";
 
 export default {
   components: {
     Link,
-    JetAuthenticationCard,
     JetAuthenticationCardLogo,
-    JetButton,
-    JetInput,
     JetCheckbox,
-    JetLabel,
     JetValidationErrors,
   },
 
