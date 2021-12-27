@@ -2,7 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   content: [
-    // "./vendor/laravel/jetstream/**/*.blade.php",
+    "./vendor/laravel/jetstream/**/*.blade.php",
     "./resources/views/**/*.blade.php",
     "./resources/js/**/*.js",
     "./resources/js/**/*.vue",
