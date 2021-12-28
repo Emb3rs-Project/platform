@@ -160,6 +160,37 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\IntegrationReport
+ *
+ * @property int $id
+ * @property int $simulation_metadata_id
+ * @property int|null $simulation_id
+ * @property array|null $data
+ * @property string $type
+ * @property mixed|null $errors
+ * @property string $step_uuid
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Simulation|null $simulation
+ * @property-read \App\Models\SimulationMetadata $simulationMetadata
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport query()
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereErrors($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereSimulationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereSimulationMetadataId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereStepUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereUpdatedAt($value)
+ */
+	class IntegrationReport extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Link
  *
  * @property int $id
@@ -437,8 +468,12 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $simulation_metadata_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IntegrationReport[] $integrationReports
+ * @property-read int|null $integration_reports_count
  * @property-read \App\Models\Project $project
  * @property-read \App\Models\SimulationMetadata|null $simulationMetadata
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SimulationResult[] $simulationResults
+ * @property-read int|null $simulation_results_count
  * @property-read \App\Models\SimulationType $simulationType
  * @property-read \App\Models\Target $target
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newModelQuery()
@@ -471,6 +506,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IntegrationReport[] $integrationReports
+ * @property-read int|null $integration_reports_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Simulation[] $simulations
  * @property-read int|null $simulations_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Template[] $templates
@@ -501,6 +538,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $publish_channel
+ * @property string|null $job_channel
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SimulationModuleFunction[] $functions
  * @property-read int|null $functions_count
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule newModelQuery()
@@ -511,7 +550,9 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereJobChannel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule wherePublishChannel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModule whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|SimulationModule withTrashed()
  * @method static \Illuminate\Database\Query\Builder|SimulationModule withoutTrashed()
@@ -550,6 +591,50 @@ namespace App\Models{
  * @method static \Illuminate\Database\Query\Builder|SimulationModuleFunction withoutTrashed()
  */
 	class SimulationModuleFunction extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SimulationResult
+ *
+ * @property int $id
+ * @property int $simulation_id
+ * @property array $data
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Simulation $simulation
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult whereSimulationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult whereUpdatedAt($value)
+ */
+	class SimulationResult extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * App\Models\SimulationSession
+ *
+ * @property int $id
+ * @property int $simulation_id
+ * @property string $simulation_uuid
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Simulation $simulation
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession whereSimulationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession whereSimulationUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession whereUpdatedAt($value)
+ */
+	class SimulationSession extends \Eloquent {}
 }
 
 namespace App\Models{

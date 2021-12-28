@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Embers;
 use App\Http\Controllers\Controller;
 use App\Models\IntegrationReport;
 use App\Models\Simulation;
+use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
@@ -20,34 +21,35 @@ class IntegrationStepController extends Controller
     public function __invoke(Request $request)
     {
         $validated = $request->validate([
-            // 'simulation_id' => ['required', 'numeric', 'integer', Rule::exists(Simulation::class, 'id')],
-            'simulation_id' => ['required', 'numeric', 'integer'],
-            'report' => ['required', 'array'],
-            'report.simulation_metadata' => ['required', 'array'],
-            'report.simulation_metadata.simulation_step_id' => ['required', 'numeric', 'integer'],
-            'report.simulation_metadata.simulation_step_uuid' => ['required', 'uuid'],
-            'report.simulation_metadata.initial_data' => ['required', 'array'],
-            'report.simulation_metadata.simulation_metadata' => ['required', 'array'],
-            'report.simulation_metadata.simulation_metadata.type' => ['required', Rule::in(['simulation', 'characterization'])],
-            'report.simulation_metadata.has_errors' => ['required', 'boolean'],
-            'report.data' => ['required', 'array'],
-            'report.data.simulation_step_id' => ['required', 'numeric', 'integer'],
-            'report.data.simulation_step_uuid' => ['required', 'uuid'],
-            'report.data.function_name' => ['required', 'string', 'max:255'],
-            'report.data.input_data' => ['present', 'array'],
-            'report.data.output_data' => ['present', 'array'],
-            'report.data.errors' => ['present', 'array'],
+            'simulation_uuid' => ['required', Rule::exists(SimulationSession::class, 'simulation_uuid')],
+            // 'simulation_uuid' => ['required'],
+            'simulation_metadata' => ['required', 'array'],
+            'simulation_metadata.simulation_step_id' => ['required', 'numeric', 'integer'],
+            'simulation_metadata.simulation_step_uuid' => ['required', 'uuid'],
+            'simulation_metadata.initial_data' => ['required', 'array'],
+            'simulation_metadata.simulation_metadata' => ['required', 'array'],
+            'simulation_metadata.simulation_metadata.type' => ['required', Rule::in(['simulation', 'characterization'])],
+            'simulation_metadata.has_errors' => ['required', 'boolean'],
+            'simulation_step' => ['required', 'array'],
+            'simulation_step.simulation_step_id' => ['required', 'numeric', 'integer'],
+            'simulation_step.simulation_step_uuid' => ['required', 'uuid'],
+            'simulation_step.function_name' => ['required', 'string', 'max:255'],
+            'simulation_step.input_data' => ['present', 'array'],
+            'simulation_step.output_data' => ['present', 'array'],
+            'simulation_step.errors' => ['present', 'array'],
         ]);
 
-        // info($validated);
+        $simulationId = SimulationSession::where('simulation_uuid', '=', Arr::get($validated, 'simulation_uuid'))->get('simulation_id');
 
-        IntegrationReport::query()->create([
-            'data' => Arr::get($validated, 'report.data.output_data'),
-            'type' => Arr::get($validated, 'report.simulation_metadata.simulation_metadata'),
-            'errors' => Arr::get($validated, 'report.data.errors'),
+        $simulation = Simulation::query()->find($simulationId);
+
+        $simulation->integrationReports()->create([
+            'data' => Arr::get($validated, 'simulation_step.input_data'),
+            'type' => Arr::get($validated, 'simulation_metadata.simulation_metadata.type'),
+            'errors' => Arr::get($validated, 'simulation_step.errors'),
             'step_uuid' => Arr::get($validated, 'report.data.simulation_step_uuid'),
         ]);
 
-        // return response()->json([$validated]);
+        return response()->noContent();
     }
 }

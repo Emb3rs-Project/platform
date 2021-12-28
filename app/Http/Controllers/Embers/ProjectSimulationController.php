@@ -26,10 +26,6 @@ class ProjectSimulationController extends Controller
     {
         $simulations = app(IndexesSimulations::class)->index($request->user(), $projectId);
 
-        // return response()->json([
-        //     'simulations' => $simulations
-        // ]);
-
         return Inertia::render('Simulations/SimulationIndex', [
             'simulations' => $simulations
         ]);
@@ -51,14 +47,6 @@ class ProjectSimulationController extends Controller
             $links,
             $locations
         ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
-
-        // return response()->json([
-        //     'simulationTypes' => $simulationTypes,
-        //     'sources' => $sources,
-        //     'sinks' => $sinks,
-        //     'links' => $links,
-        //     'locations' => $locations,
-        // ]);
 
         return Inertia::render('Simulations/SimulationCreate', [
             'simulationTypes' => $simulationTypes,
