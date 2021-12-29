@@ -3,7 +3,6 @@
 namespace App\Contracts\Embers\Help;
 
 use App\Models\User;
-use Illuminate\Support\Collection;
 
 interface IndexesHelp
 {

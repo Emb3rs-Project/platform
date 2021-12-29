@@ -14,7 +14,9 @@ class IntegrationReport extends Model
      */
     protected $fillable = [
         'data',
-        'type'
+        'type',
+        'errors',
+        'step_uuid'
     ];
 
     /**
@@ -24,6 +26,7 @@ class IntegrationReport extends Model
      */
     protected $casts = [
         'data' => 'array',
+        'errors' => 'array',
     ];
 
     /**

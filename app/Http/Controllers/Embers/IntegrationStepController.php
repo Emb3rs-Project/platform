@@ -8,6 +8,7 @@ use App\Models\Simulation;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class IntegrationStepController extends Controller
@@ -22,7 +23,6 @@ class IntegrationStepController extends Controller
     {
         $validated = $request->validate([
             'simulation_uuid' => ['required', Rule::exists(SimulationSession::class, 'simulation_uuid')],
-            // 'simulation_uuid' => ['required'],
             'simulation_metadata' => ['required', 'array'],
             'simulation_metadata.simulation_step_id' => ['required', 'numeric', 'integer'],
             'simulation_metadata.simulation_step_uuid' => ['required', 'uuid'],
@@ -39,15 +39,15 @@ class IntegrationStepController extends Controller
             'simulation_step.errors' => ['present', 'array'],
         ]);
 
-        $simulationId = SimulationSession::where('simulation_uuid', '=', Arr::get($validated, 'simulation_uuid'))->get('simulation_id');
+        $simulationId = SimulationSession::whereSimulationUuid(Arr::get($validated, 'simulation_uuid'))->pluck('simulation_id');
 
-        $simulation = Simulation::query()->find($simulationId);
+        $simulation = Simulation::query()->find($simulationId)->first();
 
         $simulation->integrationReports()->create([
             'data' => Arr::get($validated, 'simulation_step.input_data'),
             'type' => Arr::get($validated, 'simulation_metadata.simulation_metadata.type'),
             'errors' => Arr::get($validated, 'simulation_step.errors'),
-            'step_uuid' => Arr::get($validated, 'report.data.simulation_step_uuid'),
+            'step_uuid' => Arr::get($validated, 'simulation_step.simulation_step_uuid'),
         ]);
 
         return response()->noContent();

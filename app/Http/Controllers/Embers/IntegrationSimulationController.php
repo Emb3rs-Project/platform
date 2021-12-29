@@ -31,9 +31,9 @@ class IntegrationSimulationController extends Controller
             'simulation_metadata.has_errors' => ['required', 'boolean'],
         ]);
 
-        $simulationId = SimulationSession::where('simulation_uuid', '=', Arr::get($validated, 'simulation_uuid'))->get('simulation_id');
+        $simulationId = SimulationSession::whereSimulationUuid(Arr::get($validated, 'simulation_uuid'))->pluck('simulation_id');
 
-        $simulation = Simulation::query()->find($simulationId);
+        $simulation = Simulation::query()->find($simulationId)->first();
 
         $simulation->simulationResults()->create(['data' => Arr::get($validated, 'simulation_metadata')]);
 

@@ -17,7 +17,6 @@ class CreateIntegrationReportsTable extends Migration
             $table->id();
 
             $table->foreignId('simulation_id');
-            $table->foreignId('simulation_metadata_id');
 
             $table->jsonb('data')->nullable();
             $table->enum('type', ['simulation', 'characterization']);
