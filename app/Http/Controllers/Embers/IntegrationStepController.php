@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
-use App\Models\IntegrationReport;
 use App\Models\Simulation;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class IntegrationStepController extends Controller
