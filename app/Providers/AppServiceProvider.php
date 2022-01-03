@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\Embers\Help\IndexHelp;
+use App\Actions\Embers\Integration\ReportSimulationStep;
 use App\Actions\Embers\Notifications\IndexNotification;
 use App\Actions\Embers\Notifications\MarkAllNotificationsAsRead;
 use App\Actions\Embers\Objects\Links\CreateLink;
@@ -162,5 +163,7 @@ class AppServiceProvider extends ServiceProvider
         Embers::showNewsUsing(ShowNews::class);
 
         Embers::indexHelpUsing(IndexHelp::class);
+
+        Embers::reportSimulationStepReportsUsing(ReportSimulationStep::class);
     }
 }

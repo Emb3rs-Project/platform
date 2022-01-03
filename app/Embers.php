@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Contracts\Embers\Help\IndexesHelp;
+use App\Contracts\Embers\Integration\ReportsSimulationSteps;
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
@@ -768,5 +769,16 @@ class Embers
     public static function indexHelpUsing(string $class): void
     {
         app()->singleton(IndexesHelp::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to report simulation steps.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function reportSimulationStepReportsUsing(string $class): void
+    {
+        app()->singleton(ReportsSimulationSteps::class, $class);
     }
 }
