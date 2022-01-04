@@ -3,6 +3,9 @@
 namespace App;
 
 use App\Contracts\Embers\Help\IndexesHelp;
+use App\Contracts\Embers\Integration\CharacterizesInstances;
+use App\Contracts\Embers\Integration\ReportsCharacterizationFinishes;
+use App\Contracts\Embers\Integration\ReportsSimulationFinishes;
 use App\Contracts\Embers\Integration\ReportsSimulationSteps;
 use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
@@ -777,8 +780,41 @@ class Embers
      * @param  string  $class
      * @return void
      */
-    public static function reportSimulationStepReportsUsing(string $class): void
+    public static function reportSimulationStepsUsing(string $class): void
     {
         app()->singleton(ReportsSimulationSteps::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to characterize instances.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function characterizeInstancesUsing(string $class): void
+    {
+        app()->singleton(CharacterizesInstances::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to report simulation finishes.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function reportSimulationFinishesUsing(string $class): void
+    {
+        app()->singleton(ReportsSimulationFinishes::class, $class);
+    }
+
+    /**
+     * Register a class / callback that should be used to report simulation finishes.
+     *
+     * @param  string  $class
+     * @return void
+     */
+    public static function reportCharacterizationFinishesUsing(string $class): void
+    {
+        app()->singleton(ReportsCharacterizationFinishes::class, $class);
     }
 }

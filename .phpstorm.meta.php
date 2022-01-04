@@ -12,6 +12,8 @@ namespace PHPSTORM_META {
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -282,6 +284,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Container\Container::makeWith(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -552,6 +556,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::get(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -822,6 +828,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -1092,6 +1100,8 @@ namespace PHPSTORM_META {
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -1362,6 +1372,8 @@ namespace PHPSTORM_META {
     override(\App::get(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -1632,6 +1644,8 @@ namespace PHPSTORM_META {
     override(\App::make(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -1902,6 +1916,8 @@ namespace PHPSTORM_META {
     override(\App::makeWith(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -2172,6 +2188,8 @@ namespace PHPSTORM_META {
     override(\app(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -2442,6 +2460,8 @@ namespace PHPSTORM_META {
     override(\resolve(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,
@@ -2712,6 +2732,8 @@ namespace PHPSTORM_META {
     override(\Psr\Container\ContainerInterface::get(0), map([
         '' => '@',
             'App\Contracts\Embers\Help\IndexesHelp' => \App\Actions\Embers\Help\IndexHelp::class,
+            'App\Contracts\Embers\Integration\CharacterizesInstances' => \App\Actions\Embers\Integration\CharacterizeInstance::class,
+            'App\Contracts\Embers\Integration\ReportsSimulationSteps' => \App\Actions\Embers\Integration\ReportSimulationStep::class,
             'App\Contracts\Embers\MapData\IndexesMapData' => \App\Actions\Embers\MapData\IndexMapData::class,
             'App\Contracts\Embers\MapData\StoresMapData' => \App\Actions\Embers\MapData\StoreMapData::class,
             'App\Contracts\Embers\News\IndexesNews' => \App\Actions\Embers\News\IndexNews::class,

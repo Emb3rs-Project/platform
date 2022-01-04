@@ -11,7 +11,6 @@ class SimulationModule extends Model
 {
     use HasFactory, SoftDeletes;
 
-
     public function functions(): HasMany
     {
         return $this->hasMany(SimulationModuleFunction::class, 'simulation_module_id');

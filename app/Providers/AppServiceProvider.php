@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\Actions\Embers\Help\IndexHelp;
+use App\Actions\Embers\Integration\CharacterizeInstance;
+use App\Actions\Embers\Integration\ReportCharacterizationFinish;
+use App\Actions\Embers\Integration\ReportSimulationFinish;
 use App\Actions\Embers\Integration\ReportSimulationStep;
 use App\Actions\Embers\Notifications\IndexNotification;
 use App\Actions\Embers\Notifications\MarkAllNotificationsAsRead;
@@ -164,6 +167,10 @@ class AppServiceProvider extends ServiceProvider
 
         Embers::indexHelpUsing(IndexHelp::class);
 
-        Embers::reportSimulationStepReportsUsing(ReportSimulationStep::class);
+        Embers::characterizeInstancesUsing(CharacterizeInstance::class);
+
+        Embers::reportSimulationStepsUsing(ReportSimulationStep::class);
+        Embers::reportSimulationFinishesUsing(ReportSimulationFinish::class);
+        Embers::reportCharacterizationFinishesUsing(ReportCharacterizationFinish::class);
     }
 }

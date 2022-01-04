@@ -2,7 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sinks;
 
-use App\Actions\Embers\Integration\Characterization;
+use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
@@ -12,7 +12,6 @@ use App\Models\User;
 use App\Rules\Coordinates;
 use App\Rules\Prohibit;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -118,7 +117,7 @@ class StoreSink implements StoresSinks
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
-        Characterization::characterize($instance);
+        app(CharacterizesInstances::class)->characterize($instance);
 
         return $instance;
     }
