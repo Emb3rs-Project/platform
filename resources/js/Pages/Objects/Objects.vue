@@ -1,8 +1,6 @@
 <template>
   <SiteHead title="Objects" />
-
   <AppLayout>
-    <!-- Menu Of Available Instances -->
     <button
       type="button"
       class="fixed right-8 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm bg-gray-50 hover:bg-gray-100"
@@ -13,9 +11,7 @@
         aria-hidden="true"
       />
     </button>
-
     <AmazingMap ref="map" />
-
     <component
       v-bind="slideProps"
       :is="slideComponent"
@@ -58,9 +54,11 @@ export default {
     },
   },
 
-  setup(props) {
-    const map = ref(null);
+  setup() {
     const store = useStore();
+
+    const map = ref(null);
+
     const slideProps = ref(null);
     const slideController = ref();
     const slideOpen = computed(() => store.getters["objects/slideOpen"]);
@@ -119,7 +117,7 @@ export default {
         props: null,
       });
 
-    onBeforeUnmount(() => store.commit("objects/closeSlide"));
+    onBeforeUnmount(() => store.dispatch("objects/resetSlide"));
 
     return {
       map,
@@ -131,8 +129,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>
-
-

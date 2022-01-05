@@ -3,7 +3,6 @@ const _state = () => ({
   currentRouteProps: null,
   slideOpen: false,
   filterOption: null,
-
   instances: [],
   links: [],
 });
@@ -14,7 +13,6 @@ const getters = {
   routeCheckSum: (state) => `${state.currentRoute}:${JSON.stringify(state.currentRouteProps)}`,
   slideOpen: (state) => state.slideOpen,
   filterOption: (state) => state.filterOption,
-
   instances: (state) => state.instances,
   links: (state) => state.links,
 };
@@ -29,6 +27,11 @@ const actions = {
     commit('updateSlide', route)
     commit('updateSlideProps', props)
   },
+  resetSlide: (ctx) => {
+    ctx.commit('updateSlide', null);
+    ctx.commit('updateSlideProps', null);
+    ctx.commit('closeSlide');
+  },
 };
 
 const mutations = {
@@ -36,9 +39,7 @@ const mutations = {
   updateSlideProps: (state, props) => state.currentRouteProps = props,
   openSlide: (state) => state.slideOpen = true,
   closeSlide: (state) => state.slideOpen = false,
-  setSlide: (state, status) => state.slideOpen = status,
   setFilterOption: (state, payload) => state.filterOption = payload.filterOption,
-
   setInstances: (state, payload) => state.instances = payload.instances,
   setLinks: (state, payload) => state.links = payload.links,
 };

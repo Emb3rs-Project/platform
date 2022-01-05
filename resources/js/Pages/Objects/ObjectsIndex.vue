@@ -2,7 +2,7 @@
   <SlideOver
     title="Objects"
     subtitle="A list of all the Objects for the currently selected Instituion"
-    headerBackground="bg-yellow-600"
+    headerBackground="bg-orange-600"
     dismissButtonTextColor="text-gray-100"
     subtitleTextColor="text-gray-100"
   >
