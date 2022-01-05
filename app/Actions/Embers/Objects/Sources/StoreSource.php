@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sources;
 
+use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;

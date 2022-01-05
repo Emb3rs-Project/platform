@@ -37,7 +37,6 @@
 <script>
 import { useStore } from "vuex";
 import { Inertia } from "@inertiajs/inertia";
-import mapUtils from "@/Utils/map.js";
 
 import TextSkeleton from "@/Components/Skeletons/TextSkeleton.vue";
 import SearchItem from "@/Components/Search/SearchItem.vue";
