@@ -273,14 +273,13 @@ import { sortProperties } from "@/Utils/helpers";
 
 export default {
   components: {
+    AppLayout,
+    SiteHead,
+    SlideOver,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
     ChevronDownIcon,
-
-    AppLayout,
-    SiteHead,
-    SlideOver,
     SelectMenu,
     TextInput,
     JetInputError,
