@@ -27,24 +27,42 @@ class PropertyInputSeeder extends Seeder
             ["name" => "Holiday End Date", "symbolic_name" => "holiday_end_date", "dataType" => "String", "inputType" => "text", "data" => []],
 
             // SELECTS
-            ["name" => "Outflow Type", "symbolic_name" => "typer", "dataType" => "String", "inputType" => "select", "data" => [
-                "options" => [
-                    ["value" => "Type One", "key" => "typeone"],
-                    ["value" => "Type Two", "key" => "typetwo"],
+            [
+                "name" => "Outflow Type",
+                "symbolic_name" => "typer",
+                "dataType" => "String",
+                "inputType" => "select",
+                "data" => [
+                    "options" => [
+                        ["value" => "Type One", "key" => "typeone"],
+                        ["value" => "Type Two", "key" => "typetwo"],
+                    ]
                 ]
-            ]],
-            ["name" => "Industry Type", "symbolic_name" => "type", "dataType" => "String", "inputType" => "select", "data" => [
-                "options" => [
-                    ["value" => "Type One", "key" => "typeone"],
-                    ["value" => "Type Two", "key" => "typetwo"],
+            ],
+            [
+                "name" => "Industry Type",
+                "symbolic_name" => "type",
+                "dataType" => "String",
+                "inputType" => "select",
+                "data" => [
+                    "options" => [
+                        ["value" => "Type One", "key" => "typeone"],
+                        ["value" => "Type Two", "key" => "typetwo"],
+                    ]
                 ]
-            ]],
-            ["name" => "Sunday Off?", "symbolic_name" => "sunday_off", "dataType" => "String", "inputType" => "select", "data" => [
-                "options" => [
-                    ["value" => "Yes", "key" => 1],
-                    ["value" => "No", "key" => 0],
+            ],
+            [
+                "name" => "Sunday Off?",
+                "symbolic_name" => "sunday_off",
+                "dataType" => "String",
+                "inputType" => "select",
+                "data" => [
+                    "options" => [
+                        ["value" => "Yes", "key" => 1],
+                        ["value" => "No", "key" => 0],
+                    ]
                 ]
-            ]],
+            ],
             ["name" => "Saturday Off?", "symbolic_name" => "saturday_off", "dataType" => "String", "inputType" => "select", "data" => [
                 "options" => [
                     ["value" => "Yes", "key" => 1],

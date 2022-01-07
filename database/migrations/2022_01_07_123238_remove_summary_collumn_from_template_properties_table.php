@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAdvancedCollumnToTemplatePropertiesTable extends Migration
+class RemoveSummaryCollumnFromTemplatePropertiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddAdvancedCollumnToTemplatePropertiesTable extends Migration
     public function up()
     {
         Schema::table('template_properties', function (Blueprint $table) {
-            $table->boolean('advanced')->default(true);
+            $table->dropColumn('is_summary');
         });
     }
 
@@ -26,7 +26,7 @@ class AddAdvancedCollumnToTemplatePropertiesTable extends Migration
     public function down()
     {
         Schema::table('template_properties', function (Blueprint $table) {
-            $table->dropColumn('advanced');
+            $table->boolean('is_summary')->nullable()->default(false);
         });
     }
 }

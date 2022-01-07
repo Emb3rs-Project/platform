@@ -50,8 +50,7 @@ class TemplateProperty extends Resource
         return [
             ID::make(__('ID'), 'id')->sortable(),
             Boolean::make(__('REQUIRED'), 'required')->rules('boolean'),
-            Boolean::make(__('IS_SUMMARY'), 'is_summary')->rules('boolean'),
-            Boolean::make(__('IS_ADVANCED'), 'is_advanced')->rules('boolean'),
+            Boolean::make(__('ADVANCED'), 'advanced')->rules('boolean'),
             Number::make(__('ORDER'), 'order')->rules(['numeric', 'min:0', 'required']),
 
             BelongsTo::make(__('TEMPLATE'), 'template', Template::class),

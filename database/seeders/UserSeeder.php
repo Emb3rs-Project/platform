@@ -16,7 +16,6 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-
         $geocfu = User::factory()->create([
             'name' => 'George Mantellos',
             'email' => 'gmantellos@pdmfc.com',

@@ -124,7 +124,7 @@
     <template #actions>
       <SecondaryOutlinedButton
         type="button"
-        @click="onClose()"
+        @click="onClose"
       >
         Cancel
       </SecondaryOutlinedButton>

@@ -8,72 +8,230 @@
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
-    <!-- Sink Template -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div class="sm:col-span-3">
-        <SelectMenu
-          v-model="selectedTemplate"
-          :options="templates"
-          label="Template"
-          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
-        />
-      </div>
-    </div>
-
-    <!-- Sink Location -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div class="sm:col-span-3">
-        <SelectMenu
-          v-model="selectedLocation"
-          :options="locations"
-          label="Location"
-          :disabled="selectedTemplate ? false : true"
-          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
-        />
-      </div>
+    <!-- Sink Information -->
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
+      <Disclosure
+        as="div"
+        v-slot="{ open }"
+        defaultOpen
+      >
+        <dt class="text-lg">
+          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
+            <span class="font-bold text-gray-900">
+              Information
+            </span>
+            <span class="ml-6 h-7 flex items-center">
+              <ChevronDownIcon
+                :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
+                aria-hidden="true"
+              />
+            </span>
+          </DisclosureButton>
+        </dt>
+        <transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <DisclosurePanel as="dd">
+            <div class="my-6">
+              <SelectMenu
+                v-model="selectedTemplate"
+                :options="templates"
+                label="Template"
+                description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
+              />
+            </div>
+            <div class="my-6">
+              <SelectMenu
+                v-model="selectedLocation"
+                :options="locations"
+                label="Location"
+                :disabled="selectedTemplate ? false : true"
+                description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
+              />
+            </div>
+          </DisclosurePanel>
+        </transition>
+      </Disclosure>
     </div>
 
     <!-- Sink Properties -->
     <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-for="prop in properties"
-      :key="prop.id"
+      v-if="properties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
     >
-      <div class="sm:col-span-3">
-        <div v-if="prop.property.inputType === 'text' || prop.property.inputType === 'String'">
-          <TextInput
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            :unit="prop.unit.symbol"
-            :description="prop.property.description"
-            :label="prop.property.name"
-            :placeholder="prop.property.name"
-            :required="prop.required"
-          />
-        </div>
-        <div v-else-if="prop.property.inputType === 'select'">
-          <SelectMenu
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            :options="prop.property.data.options"
-            :description="prop.property.description"
-            :disabled="selectedTemplate ? false : true"
-            :required="prop.required"
-            :label="prop.property.name"
-          />
-        </div>
-        <div v-if="form.hasErrors">
-          <pre>{{form.errors}}</pre>
-          <div
-            v-for="(error, key) in form.errors"
-            :key="key"
-          >
-            <jet-input-error
-              v-show="key.includes(prop.property.symbolic_name)"
-              :message="error"
-              class="mt-2"
-            />
-          </div>
-        </div>
-      </div>
+      <Disclosure
+        as="div"
+        v-slot="{ open }"
+        defaultOpen
+      >
+        <dt class="text-lg">
+          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
+            <span class="font-bold text-gray-900">
+              Properties
+            </span>
+            <span class="ml-6 h-7 flex items-center">
+              <ChevronDownIcon
+                :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
+                aria-hidden="true"
+              />
+            </span>
+          </DisclosureButton>
+        </dt>
+        <transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <DisclosurePanel as="dd">
+            <div
+              class="my-6"
+              v-for="(property, propertyIdx) in properties"
+              :key="propertyIdx"
+            >
+              <div v-if="property.property.inputType === 'text'">
+                <TextInput
+                  v-model="form.sink.data[property.property.symbolic_name]"
+                  :unit="property.unit.symbol"
+                  :description="property.property.description"
+                  :label="property.property.name"
+                  :placeholder="property.property.name"
+                  :required="property.required"
+                />
+              </div>
+              <div v-else-if="property.property.inputType === 'select'">
+                <SelectMenu
+                  v-model="form.sink.data[property.property.symbolic_name]"
+                  :options="property.property.data.options"
+                  :description="property.property.description"
+                  :disabled="selectedTemplate ? false : true"
+                  :required="property.required"
+                  :label="property.property.name"
+                />
+              </div>
+              <div v-if="form.hasErrors">
+                <div
+                  v-for="(error, key) in form.errors"
+                  :key="key"
+                >
+                  <jet-input-error
+                    v-show="key.includes(property.property.symbolic_name)"
+                    :message="error"
+                    class="mt-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </DisclosurePanel>
+        </transition>
+      </Disclosure>
+    </div>
+
+    <!-- Sink Advanced Properties -->
+    <div
+      v-if="advancedProperties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <Disclosure
+        as="div"
+        v-slot="{ open }"
+      >
+        <dt class="text-lg">
+          <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
+            <span class="font-bold text-gray-900">
+              Advanced Properties
+            </span>
+            <span class="ml-6 h-7 flex items-center">
+              <ChevronDownIcon
+                :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
+                aria-hidden="true"
+              />
+            </span>
+          </DisclosureButton>
+        </dt>
+        <transition
+          enter-active-class="transition duration-100 ease-out"
+          enter-from-class="transform scale-95 opacity-0"
+          enter-to-class="transform scale-100 opacity-100"
+          leave-active-class="transition duration-75 ease-out"
+          leave-from-class="transform scale-100 opacity-100"
+          leave-to-class="transform scale-95 opacity-0"
+        >
+          <DisclosurePanel as="dd">
+            <div>
+              <fieldset class="space-y-5">
+                <legend class="sr-only">Advanced Properties Enable</legend>
+                <div class="relative flex items-start">
+                  <div class="flex items-center h-5">
+                    <input
+                      id="advancedProperties"
+                      aria-describedby="advancedProperties-description"
+                      name="advancedProperties"
+                      type="checkbox"
+                      class="focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                      v-model="withAdvancedProperties"
+                    />
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <label
+                      for="advancedProperties"
+                      class="font-medium text-gray-700"
+                    >
+                      Enable advanced properties
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+            <div
+              class="my-6"
+              v-for="(advancedProperty, advancedPropertyIdx) in advancedProperties"
+              :key="advancedPropertyIdx"
+            >
+              <div v-if="advancedProperty.property.inputType === 'text'">
+                <TextInput
+                  v-model="form.sink.data[advancedProperty.property.symbolic_name]"
+                  :unit="advancedProperty.unit.symbol"
+                  :description="advancedProperty.property.description"
+                  :label="advancedProperty.property.name"
+                  :placeholder="advancedProperty.property.name"
+                  :required="advancedProperty.required"
+                  :disabled="!withAdvancedProperties"
+                />
+              </div>
+              <div v-else-if="advancedProperty.property.inputType === 'select'">
+                <SelectMenu
+                  v-model="form.sink.data[advancedProperty.property.symbolic_name]"
+                  :options="advancedProperty.property.data.options"
+                  :description="advancedProperty.property.description"
+                  :required="advancedProperty.required"
+                  :label="advancedProperty.property.name"
+                  :disabled="!withAdvancedProperties"
+                />
+              </div>
+              <div v-if="form.hasErrors">
+                <div
+                  v-for="(error, key) in form.errors"
+                  :key="key"
+                >
+                  <jet-input-error
+                    v-show="key.includes(advancedProperty.property.symbolic_name)"
+                    :message="error"
+                    class="mt-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </DisclosurePanel>
+        </transition>
+      </Disclosure>
     </div>
 
     <template #actions>
@@ -99,6 +257,9 @@ import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
+import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
+import { ChevronDownIcon } from "@heroicons/vue/outline";
+
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -108,8 +269,15 @@ import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
+import { sortProperties } from "@/Utils/helpers";
+
 export default {
   components: {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    ChevronDownIcon,
+
     AppLayout,
     SiteHead,
     SlideOver,
@@ -160,6 +328,7 @@ export default {
       }))
     );
     const selectedLocation = ref(null);
+    const withAdvancedProperties = ref(false);
     watch(
       () => store.getters["map/selectedMarker"],
       (val) => {
@@ -212,6 +381,7 @@ export default {
     watch(
       selectedTemplate,
       (template) => {
+        withAdvancedProperties.value = false;
         form.sink.data = {};
 
         templateInfo.value = templates.value.find(
@@ -236,17 +406,21 @@ export default {
       { immediate: true }
     );
 
-    const properties = computed(() => {
-      const properties = [];
+    const properties = computed(() =>
+      sortProperties(
+        window._.cloneDeep(
+          templateInfo.value.properties.filter((p) => !p.advanced)
+        )
+      )
+    );
 
-      Object.assign(properties, templateInfo.value.properties);
-
-      properties.sort((a, b) =>
-        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
-      );
-
-      return properties;
-    });
+    const advancedProperties = computed(() =>
+      sortProperties(
+        window._.cloneDeep(
+          templateInfo.value.properties.filter((p) => p.advanced)
+        )
+      )
+    );
 
     const submit = () => {
       form
@@ -260,6 +434,11 @@ export default {
             for (const property of templateInfo.value.properties) {
               const prop = property.property;
               const key = prop.symbolic_name;
+
+              if (property.advanced && !withAdvancedProperties.value) {
+                delete sinkData[key];
+                continue;
+              }
 
               if (prop.inputType === "select") {
                 // if the property has a value, get it and re-assign the property as a string
@@ -296,7 +475,9 @@ export default {
       selectedTemplate,
       locations,
       selectedLocation,
+      withAdvancedProperties,
       properties,
+      advancedProperties,
       submit,
       onCancel,
     };
