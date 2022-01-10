@@ -13,6 +13,8 @@ class CharacterizeInstance implements CharacterizesInstances
         // Prepare data for characterization, if trigger exists
         $template = $instance->template;
 
+        if (is_null($template->triggers)) return;
+
         if ($template->triggers->doesntExist()) return;
 
         $instanceData = $instance->getInstanceData();
