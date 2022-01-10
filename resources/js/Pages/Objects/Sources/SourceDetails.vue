@@ -2,11 +2,9 @@
   <SiteHead title="Source Details" />
 
   <SlideOver
+    type="source"
     title="Source Details"
     subtitle="Below, you can see the details that are associated to the currently selected Source."
-    headerBackground="bg-red-700"
-    dismissButtonTextColor="text-gray-200"
-    subtitleTextColor="text-gray-200"
   >
     <template #stickyTop>
       <Steps
@@ -86,7 +84,7 @@ import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import SiteHead from "@/Components/SiteHead.vue";
-import SlideOver from "@/Components/SlideOver.vue";
+import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
 import Steps from "@/Components/Wizards/Steps.vue";
 import SourceDetailsStep1 from "./SourceDetailsWizard/SourceDetailsStep1.vue";
 import SourceDetailsStep2 from "./SourceDetailsWizard/SourceDetailsStep2.vue";

@@ -1,12 +1,9 @@
 <template>
   <SiteHead title="Edit Source" />
-
   <SlideOver
+    type="source"
     title="Edit Source"
     subtitle="Get started by editing the information below to edit your Source."
-    headerBackground="bg-red-700"
-    dismissButtonTextColor="text-gray-100"
-    subtitleTextColor="text-gray-200"
   >
     <template #stickyTop>
       <Steps
@@ -14,9 +11,10 @@
         class="p-4"
       />
       <div :class="{ 'p-4': incompleteStepAlert }">
-        <InfoAlert
+        <Alert
           v-model="incompleteStepAlert"
-          content="Please, fill all the required fields before proceeding to the next step."
+          type="danger"
+          message="Please, fill all the required fields before proceeding to the next step."
         />
       </div>
     </template>
@@ -92,9 +90,9 @@ import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import SiteHead from "@/Components/SiteHead.vue";
-import SlideOver from "@/Components/SlideOver.vue";
+import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
 import Steps from "@/Components/Wizards/Steps.vue";
-import InfoAlert from "@/Components/Alerts/InfoAlert.vue";
+import Alert from "@/Components/Alerts/Alert.vue";
 import SourceEditStep1 from "./SourceEditWizard/SourceEditStep1.vue";
 import SourceEditStep2 from "./SourceEditWizard/SourceEditStep2.vue";
 import SourceEditStep3 from "./SourceEditWizard/SourceEditStep3.vue";
@@ -108,7 +106,7 @@ export default {
     SiteHead,
     SlideOver,
     Steps,
-    InfoAlert,
+    Alert,
     SourceEditStep1,
     SourceEditStep2,
     SourceEditStep3,
