@@ -1,13 +1,9 @@
 <template>
-
   <SiteHead title="Edit a Sink" />
-
   <SlideOver
+    type="sink"
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
-    headerBackground="bg-green-700"
-    dismissButtonTextColor="text-gray-200"
-    subtitleTextColor="text-gray-200"
   >
     <!-- Sink Template -->
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -101,7 +97,7 @@ import { useStore } from "vuex";
 
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import SlideOver from "@/Components/SlideOver.vue";
+import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "../../../Jetstream/InputError";
