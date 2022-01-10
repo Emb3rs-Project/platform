@@ -1,10 +1,8 @@
 <template>
   <SlideOver
+    type="objects"
     title="Objects"
     subtitle="A list of all the Objects for the currently selected Instituion"
-    headerBackground="bg-orange-600"
-    dismissButtonTextColor="text-gray-100"
-    subtitleTextColor="text-gray-100"
   >
     <div class="flex justify-end m-3">
       <FilterDropdown
@@ -122,7 +120,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { useStore } from "vuex";
 import pluralize from "pluralize";
 
-import SlideOver from "@/Components/SlideOver.vue";
+import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
 import FilterDropdown from "@/Components/FilterDropdown.vue";
 import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
