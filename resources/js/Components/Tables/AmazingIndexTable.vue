@@ -116,7 +116,6 @@ export default {
     );
 
     const onSelectRow = () => {
-      console.log("hello");
       let selectedItems = items.value.filter((m) => m.selected).length;
 
       if (selectedItems > 0 && selectedItems !== items.value.length)
