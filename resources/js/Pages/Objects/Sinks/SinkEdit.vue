@@ -5,71 +5,161 @@
     title="Edit Sink"
     subtitle="Below, you can edit the details that are associated to the currently selected Sink."
   >
-    <!-- Sink Template -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div class="sm:col-span-3">
-        <SelectMenu
-          v-model="selectedTemplate"
-          :options="templates"
-          label="Template"
-          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
+    <!-- Alert -->
+    <template #stickyTop>
+      <div :class="{ 'p-4': form.hasErrors }">
+        <Alert
+          v-model="form.hasErrors"
+          type="danger"
+          message="Please, correct all the errors before saving."
+          :dismissable="false"
         />
       </div>
-    </div>
+    </template>
 
-    <!-- Sink Location -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div class="sm:col-span-3">
-        <SelectMenu
-          v-model="selectedLocation"
-          :options="locations"
-          label="Location"
-          :disabled="selectedTemplate ? false : true"
-          description="THIS IS A VERY GOOD DESCRIPTION IF I MAY SAY"
-        />
-      </div>
+    <!-- Sink Information -->
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
+      <PropertyDisclosure
+        defaultOpen
+        title="Information"
+      >
+        <div class="my-4">
+          <SelectMenu
+            v-model="selectedTemplate"
+            :options="templates"
+            label="Template"
+          />
+        </div>
+        <div class="my-4">
+          <SelectMenu
+            v-model="selectedLocation"
+            :options="locations"
+            label="Location"
+            :disabled="selectedTemplate ? false : true"
+          />
+        </div>
+      </PropertyDisclosure>
     </div>
 
     <!-- Sink Properties -->
     <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-for="prop in properties"
-      :key="prop.id"
+      v-if="properties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
     >
-      <div class="sm:col-span-3">
-        <div v-if="prop.property.inputType === 'text' || prop.property.inputType === 'String'">
-          <TextInput
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            :label="prop.property.name"
-            :description="prop.property.description"
-            :unit="prop.unit.symbol"
-            :placeholder="prop.property.name"
-            :required="prop.required"
-          />
-        </div>
-        <div v-else-if="prop.property.inputType === 'select'">
-          <SelectMenu
-            v-model="form.sink.data[prop.property.symbolic_name]"
-            :options="prop.property.data.options"
-            :description="prop.property.description"
-            :disabled="selectedTemplate ? false : true"
-            :required="prop.required"
-            :label="prop.property.name"
-          />
-        </div>
-        <div v-if="form.hasErrors">
+      <PropertyDisclosure
+        defaultOpen
+        title="Properties"
+      >
+        <div
+          class="my-6"
+          v-for="(property, propertyIdx) in properties"
+          :key="propertyIdx"
+        >
+          <div v-if="property.property.inputType === 'text'">
+            <TextInput
+              v-model="form.sink.data[property.property.symbolic_name]"
+              :unit="property.unit.symbol"
+              :description="property.property.description"
+              :label="property.property.name"
+              :placeholder="property.property.name"
+              :required="property.required"
+            />
+          </div>
+          <div v-else-if="property.property.inputType === 'select'">
+            <SelectMenu
+              v-model="form.sink.data[property.property.symbolic_name]"
+              :options="property.property.data.options"
+              :description="property.property.description"
+              :disabled="selectedTemplate ? false : true"
+              :required="property.required"
+              :label="property.property.name"
+            />
+          </div>
           <div
             v-for="(error, key) in form.errors"
             :key="key"
           >
-            <JetInputError
-              v-show="key.includes(prop.property.symbolic_name)"
+            <jet-input-error
+              v-show="key.includes(property.property.symbolic_name)"
               :message="error"
               class="mt-2"
             />
           </div>
         </div>
-      </div>
+      </PropertyDisclosure>
+    </div>
+
+    <!-- Sink Advanced Properties -->
+    <div
+      v-if="advancedProperties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <PropertyDisclosure title="Advanced Properties">
+        <div>
+          <fieldset class="space-y-5">
+            <legend class="sr-only">Advanced Properties Enable</legend>
+            <div class="relative flex items-start">
+              <div class="flex items-center h-5">
+                <input
+                  id="advancedProperties"
+                  aria-describedby="advancedProperties-description"
+                  name="advancedProperties"
+                  type="checkbox"
+                  class="focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                  v-model="withAdvancedProperties"
+                />
+              </div>
+              <div class="ml-3 text-sm">
+                <label
+                  for="advancedProperties"
+                  class="font-medium text-gray-700"
+                >
+                  Enable advanced properties
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div
+          class="my-6"
+          v-for="(advancedProperty, advancedPropertyIdx) in advancedProperties"
+          :key="advancedPropertyIdx"
+        >
+          <div v-if="advancedProperty.property.inputType === 'text'">
+            <TextInput
+              v-model="form.sink.data[advancedProperty.property.symbolic_name]"
+              :unit="advancedProperty.unit.symbol"
+              :description="advancedProperty.property.description"
+              :label="advancedProperty.property.name"
+              :placeholder="advancedProperty.property.name"
+              :required="advancedProperty.required"
+              :disabled="!withAdvancedProperties"
+            />
+          </div>
+          <div v-else-if="advancedProperty.property.inputType === 'select'">
+            <SelectMenu
+              v-model="form.sink.data[advancedProperty.property.symbolic_name]"
+              :options="advancedProperty.property.data.options"
+              :description="advancedProperty.property.description"
+              :required="advancedProperty.required"
+              :label="advancedProperty.property.name"
+              :disabled="!withAdvancedProperties"
+            />
+          </div>
+          <div v-if="form.hasErrors">
+            <div
+              v-for="(error, key) in form.errors"
+              :key="key"
+            >
+              <jet-input-error
+                v-show="key.includes(advancedProperty.property.symbolic_name)"
+                :message="error"
+                class="mt-2"
+              />
+            </div>
+          </div>
+        </div>
+      </PropertyDisclosure>
     </div>
 
     <template #actions>
@@ -98,17 +188,23 @@ import { useStore } from "vuex";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
+import Alert from "@/Components/Alerts/Alert.vue";
+import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "../../../Jetstream/InputError";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
+import { sortProperties, validateProperies } from "@/Utils/helpers";
+
 export default {
   components: {
     AppLayout,
     SiteHead,
     SlideOver,
+    Alert,
+    PropertyDisclosure,
     SelectMenu,
     TextInput,
     JetInputError,
@@ -134,6 +230,9 @@ export default {
   setup(props) {
     const store = useStore();
 
+    // TODO: make this enabled by defualt if at least one adv prop is already in place
+    const withAdvancedProperties = ref(false);
+
     const form = useForm({
       sink: {
         data: {},
@@ -141,8 +240,6 @@ export default {
       template_id: null,
       location_id: null,
     });
-
-    const templateInfo = ref(null);
 
     const templates = computed(() =>
       props.templates.map((t) => ({
@@ -154,41 +251,6 @@ export default {
     const selectedTemplate = ref(
       templates.value.find((t) => t.key === props.instance.template.id)
     );
-    watch(
-      selectedTemplate,
-      (template) => {
-        templateInfo.value = templates.value.find(
-          (t) => t.key === template.key
-        );
-        form.template_id = template.key;
-        form.sink.data.name = props.instance.name;
-
-        if (templateInfo.value.properties.length) {
-          for (const property of templateInfo.value.properties) {
-            const prop = property.property;
-
-            const value = props.instance.values[prop.symbolic_name];
-
-            if (value) {
-              if (prop.inputType === "select") {
-                form.sink.data[prop.symbolic_name] = prop.data.options.find(
-                  (o) => o.value === value
-                );
-              } else {
-                form.sink.data[prop.symbolic_name] = value;
-              }
-            } else {
-              const placeholder = prop.inputType === "select" ? {} : "";
-
-              form.sink.data[prop.symbolic_name] = property.default_value
-                ? property.default_value
-                : placeholder;
-            }
-          }
-        }
-      },
-      { immediate: true, deep: true }
-    );
 
     const locations = computed(() =>
       props.locations.map((l) => ({
@@ -199,6 +261,7 @@ export default {
     const selectedLocation = ref(
       locations.value.find((l) => l.key === props.instance.location.id)
     );
+
     watch(
       selectedLocation,
       (selectedLocation) => {
@@ -206,20 +269,78 @@ export default {
       },
       { immediate: true, deep: true }
     );
+    watch(
+      selectedTemplate,
+      (template) => {
+        withAdvancedProperties.value = false;
 
-    const properties = computed(() => {
-      const properties = [];
+        form.template_id = template.key;
+        form.sink.data.name = props.instance.name;
 
-      Object.assign(properties, templateInfo.value.properties);
+        for (const property of template.properties) {
+          const prop = property.property;
 
-      properties.sort((a, b) =>
-        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
-      );
+          const value = props.instance.values[prop.symbolic_name];
 
-      return properties;
-    });
+          if (value) {
+            if (prop.inputType === "select") {
+              form.sink.data[prop.symbolic_name] = prop.data.options.find(
+                (o) => o.key === value
+              );
+            } else {
+              form.sink.data[prop.symbolic_name] = value;
+            }
+          } else {
+            const placeholder = prop.inputType === "select" ? {} : "";
+
+            form.sink.data[prop.symbolic_name] = property.default_value
+              ? property.default_value
+              : placeholder;
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
+    const properties = computed(() =>
+      sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => !p.advanced)
+        )
+      )
+    );
+
+    const advancedProperties = computed(() =>
+      sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => p.advanced)
+        )
+      )
+    );
+
+    const userSelectedProperties = computed(() =>
+      selectedTemplate.value.properties.filter((p) => {
+        if (p.advanced && !withAdvancedProperties.value) return false;
+
+        return true;
+      })
+    );
 
     const submit = () => {
+      form.clearErrors();
+
+      const errors = validateProperies(form.sink, userSelectedProperties.value);
+
+      if (Object.keys(errors).length) {
+        for (const errorGroup in errors) {
+          for (const error of errors[errorGroup]) {
+            form.setError(errorGroup, error);
+          }
+        }
+
+        return;
+      }
+
       form
         .transform((data) => {
           // We want to transform the "to-send" data, not the original data
@@ -227,19 +348,22 @@ export default {
 
           const sinkData = deepCopyOfData.sink.data;
 
-          if (templateInfo.value.properties.length) {
-            for (const property of templateInfo.value.properties) {
-              const prop = property.property;
-              const key = prop.symbolic_name;
+          for (const property of selectedTemplate.value.properties) {
+            const prop = property.property;
+            const key = prop.symbolic_name;
 
-              if (prop.inputType === "select") {
-                // if the property has a value, get it and re-assign the property as a string
-                if (Object.keys(sinkData[key]).length) {
-                  sinkData[key] = sinkData[key].value;
-                }
-              }
+            if (property.advanced && !withAdvancedProperties.value) {
+              delete sinkData[key];
+              continue;
+            }
+
+            if (prop.inputType === "select") {
+              // if the property has a value, get it and re-assign the property as a string
+              if (Object.keys(sinkData[key]).length)
+                sinkData[key] = sinkData[key].key;
             }
           }
+
           return deepCopyOfData;
         })
         .patch(route("objects.sinks.update", props.instance.id), {
@@ -253,23 +377,18 @@ export default {
     const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
-    const onLocationSelect = () => {};
-
     return {
-      templateInfo,
+      form,
       templates,
       selectedTemplate,
       locations,
       selectedLocation,
-      form,
+      withAdvancedProperties,
       properties,
+      advancedProperties,
       submit,
-      onLocationSelect,
       onCancel,
     };
   },
 };
 </script>
-
-<style>
-</style>
