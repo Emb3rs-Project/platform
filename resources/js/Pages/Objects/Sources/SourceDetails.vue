@@ -131,10 +131,6 @@ export default {
     const store = useStore();
     const currentStep = ref(1);
 
-    const onRouteRequest = (route, properties) => {
-      store.dispatch("objects/showSlide", { route, properties });
-    };
-
     const mapStepStatus = (index) =>
       currentStep.value === index
         ? "current"
@@ -162,6 +158,10 @@ export default {
 
     const onNextStep = () => currentStep.value++;
     const onPrevStep = () => currentStep.value--;
+
+    const onRouteRequest = (route, props) => {
+      store.dispatch("objects/showSlide", { route, props });
+    };
 
     const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
