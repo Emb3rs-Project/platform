@@ -5,114 +5,97 @@
     title="Sink Details"
     subtitle="Below, you can see the details that are associated to the currently selected Sink."
   >
-    <!-- Sink ID -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          ID
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.id }}
+    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
+      <PropertyDisclosure
+        title="Information"
+        defaultOpen
+      >
+        <!-- Sink ID -->
+        <div class="my-4">
+          <TextInput
+            v-model="instance.id"
+            label="Unique Identification"
+            description="The unique identifier that identifies the Sink."
+            read-only
+          />
         </div>
-      </div>
-    </div>
 
-    <!-- Sink Name -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Name
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.name }}
+        <!-- Sink Name -->
+        <div class="my-4">
+          <TextInput
+            v-model="instance.name"
+            label="Name"
+            description="The name of the Sink."
+            read-only
+          />
         </div>
-      </div>
-    </div>
 
-    <!-- Sink Template -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Template
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.template.name }}
+        <!-- Sink Template -->
+        <div class="my-4">
+          <TextInput
+            v-model="instance.template.name"
+            label="Template Name"
+            description="The template that this Sink belongs to."
+            read-only
+          />
         </div>
-      </div>
-    </div>
-
-    <!-- Sink Location Name -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's Name
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.name }}
-        </div>
-      </div>
-    </div>
-
-    <!-- Sink Location Description -->
-    <div
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-      v-if="instance.location_id"
-    >
-      <div>
-        <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-          Location's Description
-        </label>
-      </div>
-      <div class="sm:col-span-2">
-        <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-          {{ instance.location.description ?? "Not available."}}
-        </div>
-      </div>
+      </PropertyDisclosure>
     </div>
 
     <!-- Sink Properties -->
     <div
-      v-if="Object.keys(instance.values).length"
-      class="divide-y"
+      v-if="properties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
     >
-      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-        <div class="block text-base font-medium text-gray-900 sm:pt-1">
-          <p>Properties</p>
+      <PropertyDisclosure title="Properties">
+        <div
+          class="my-6"
+          v-for="(property, propertyIdx) in properties"
+          :key="propertyIdx"
+        >
+          <TextInput
+            v-model="property.value"
+            :description="property.description"
+            :label="property.label"
+            read-only
+          />
         </div>
-      </div>
-      <div
-        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-        v-for="(property, propertyIdx) in properties"
-        :key="propertyIdx"
-      >
-        <div>
-          <label class="block text-sm font-medium text-gray-500 sm:pt-1">
-            {{property.property.name}}
-          </label>
-        </div>
-        <div class="sm:col-span-2">
-          <div class="block text-sm font-medium text-gray-900 sm:pt-1">
-            {{ instance.values[property.property.symbolic_name] ?? 'Not defined.' }}
-          </div>
-        </div>
-      </div>
+      </PropertyDisclosure>
     </div>
     <div v-else>
       <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 place-content-center">
         <div class="col-span-3 text-center">
           <p class="block font-bold text-2xl text-gray-200 p-4">
             No assigned properties.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-if="advancedProperties.length"
+      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+    >
+      <PropertyDisclosure title="Advanced Properties">
+        <div
+          class="my-6"
+          v-for="(advancedProperty, advancedPropertyIdx) in advancedProperties"
+          :key="advancedPropertyIdx"
+        >
+          <TextInput
+            v-model="advancedProperty.value"
+            :description="advancedProperty.description"
+            :label="advancedProperty.label"
+            read-only
+          />
+        </div>
+      </PropertyDisclosure>
+    </div>
+    <div v-else>
+      <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 place-content-center">
+        <div class="col-span-3 text-center">
+          <p class="block font-bold text-2xl text-gray-200 p-4">
+            No advanced assigned properties.
           </p>
         </div>
       </div>
@@ -139,16 +122,20 @@ import { useStore } from "vuex";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
+import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+
+import { sortProperties } from "@/Utils/helpers";
 
 export default {
   components: {
     AppLayout,
     SiteHead,
     SlideOver,
+    PropertyDisclosure,
     SelectMenu,
     TextInput,
     PrimaryButton,
@@ -170,26 +157,80 @@ export default {
     const store = useStore();
 
     const properties = computed(() => {
-      const properties = [];
-
-      Object.assign(properties, props.templateProperties);
-
-      properties.sort((a, b) =>
-        a.order < b.order ? -1 : a.order > b.order ? 1 : 0
+      const properties = sortProperties(
+        window._.cloneDeep(props.templateProperties.filter((p) => !p.advanced))
       );
 
-      return properties;
+      return properties.map((p) => {
+        const label = p.property.name;
+        const description = p.property.description;
+
+        if (props.instance.values[p.property.symbolic_name] == null)
+          return {
+            label: label,
+            description: description,
+            value: "Not Defined",
+          };
+
+        if (p.property.inputType === "select")
+          return {
+            label: label,
+            description: description,
+            value: p.property.data.options.find(
+              (o) => o.key === props.instance.values[p.property.symbolic_name]
+            ).value,
+          };
+
+        return {
+          label: label,
+          description: description,
+          value: props.instance.values[p.property.symbolic_name],
+        };
+      });
     });
 
-    const onRouteRequest = (route, properties) => {
-      store.dispatch("objects/showSlide", { route, properties });
-    };
+    const advancedProperties = computed(() => {
+      const advancedProperties = sortProperties(
+        window._.cloneDeep(props.templateProperties.filter((p) => p.advanced))
+      );
+
+      return advancedProperties.map((p) => {
+        const label = p.property.name;
+        const description = p.property.description;
+
+        if (props.instance.values[p.property.symbolic_name] == null)
+          return {
+            label: label,
+            description: description,
+            value: "Not Defined",
+          };
+
+        if (p.property.inputType === "select")
+          return {
+            label: label,
+            description: description,
+            value: p.property.data.options.find(
+              (o) => o.key === props.instance.values[p.property.symbolic_name]
+            ).value,
+          };
+
+        return {
+          label: label,
+          description: description,
+          value: props.instance.values[p.property.symbolic_name],
+        };
+      });
+    });
+
+    const onRouteRequest = (route, props) =>
+      store.dispatch("objects/showSlide", { route, props });
 
     const onClose = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
       properties,
+      advancedProperties,
       onRouteRequest,
       onClose,
     };
