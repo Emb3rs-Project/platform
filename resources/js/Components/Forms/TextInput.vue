@@ -22,8 +22,8 @@
         :name="value"
         :placeholder="placeholder"
         class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-        :class="{'disabled:opacity-70 cursor-not-allowed' : disabled}"
-        :disabled="disabled"
+        :class="{'disabled:opacity-70 cursor-not-allowed' : disabled, 'cursor-default': readOnly}"
+        :disabled="disabled || readOnly"
         aria-describedby="input-required"
         :ref="input"
       />
@@ -36,14 +36,14 @@
     <p class="mt-2 text-sm text-gray-500 text-justify">{{ description }}</p>
   </div>
 </template>
-70
+
 <script>
 import { computed, ref } from "vue";
 
 export default {
   props: {
     modelValue: {
-      type: String,
+      type: [String, Number],
       default: "",
     },
     type: {
@@ -71,6 +71,10 @@ export default {
       default: false,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    readOnly: {
       type: Boolean,
       default: false,
     },
