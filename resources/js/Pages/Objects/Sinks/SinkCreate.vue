@@ -11,7 +11,7 @@
         <Alert
           v-model="form.hasErrors"
           type="danger"
-          message="Please, correct all the erros before saving."
+          message="Please, correct all the errors before saving."
           :dismissable="false"
         />
       </div>
@@ -23,14 +23,14 @@
         defaultOpen
         title="Information"
       >
-        <div class="my-6">
+        <div class="my-4">
           <SelectMenu
             v-model="selectedTemplate"
             :options="templates"
             label="Template"
           />
         </div>
-        <div class="my-6">
+        <div class="my-4">
           <SelectMenu
             v-model="selectedLocation"
             :options="locations"
