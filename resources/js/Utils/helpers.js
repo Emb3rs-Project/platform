@@ -18,6 +18,8 @@ export const validateProperies = (parent, properties, index = null) => {
     const value = parent.data[property.property.symbolic_name];
     const propertyName = property.property.name.toLowerCase();
 
+    if (!value) continue;
+
     let propertyCopy = value;
 
     if (inputType === "select") {

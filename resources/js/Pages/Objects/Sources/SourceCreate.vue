@@ -15,6 +15,7 @@
           v-model="incompleteStepAlert"
           type="danger"
           message="Please, fill all the required fields before proceeding to the next step."
+          :dismissable="false"
         />
       </div>
     </template>
@@ -176,7 +177,7 @@ export default {
       },
       {
         id: "Step 2",
-        name: "Equipment",
+        name: "Equipments",
         status: mapStepStatus(2),
       },
       {
@@ -215,6 +216,7 @@ export default {
 
           // source.data
           const deepCopyOfSource = window._.cloneDeep(source.value);
+
           if (template.value.properties.length) {
             for (const property of template.value.properties) {
               const prop = property.property;
@@ -226,7 +228,7 @@ export default {
                 if (Object.keys(deepCopyOfSource.data[key]).length) {
                   deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
                 } else {
-                  if (dataType === "text" || dataType === "string") {
+                  if (dataType === "string") {
                     deepCopyOfSource.data[key] = "";
                   } else {
                     deepCopyOfSource.data[key] = null;
@@ -256,7 +258,7 @@ export default {
                     deepCopyOfEquipment[index].data[key] =
                       deepCopyOfEquipment[index].data[key].key;
                   } else {
-                    if (dataType === "text" || dataType === "string") {
+                    if (dataType === "string") {
                       deepCopyOfEquipment[index].data[key] = "";
                     } else {
                       deepCopyOfEquipment[index].data[key] = null;
@@ -292,7 +294,7 @@ export default {
                     deepCopyOfProcesses[index].data[key] =
                       deepCopyOfProcesses[index].data[key].key;
                   } else {
-                    if (dataType === "text" || dataType === "string") {
+                    if (dataType === "string") {
                       deepCopyOfProcesses[index].data[key] = "";
                     } else {
                       deepCopyOfProcesses[index].data[key] = null;
@@ -326,6 +328,7 @@ export default {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
             store.dispatch("objects/showSlide", { route: "objects.list" });
+            store.dispatch("source/reset");
           },
           onError: (err) => console.error(err),
         });
