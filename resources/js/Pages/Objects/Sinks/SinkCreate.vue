@@ -395,8 +395,6 @@ export default {
             }
           }
 
-          console.log(sinkData);
-
           return deepCopyOfData;
         })
         .post(route("objects.sinks.store"), {
