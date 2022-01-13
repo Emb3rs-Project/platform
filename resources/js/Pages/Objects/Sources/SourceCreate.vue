@@ -217,22 +217,22 @@ export default {
           // source.data
           const deepCopyOfSource = window._.cloneDeep(source.value);
 
-          if (template.value.properties.length) {
-            for (const property of template.value.properties) {
-              const prop = property.property;
-              const key = prop.symbolic_name;
-              const dataType = prop.dataType.toLowerCase();
+          for (const property of template.value.properties) {
+            const prop = property.property;
+            const key = prop.symbolic_name;
+            const dataType = prop.dataType.toLowerCase();
 
-              if (prop.inputType === "select") {
-                // if the property has a value, get it and re-assign the property as a string
-                if (Object.keys(deepCopyOfSource.data[key]).length) {
-                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+            if (!deepCopyOfSource.data.hasOwnProperty(key)) continue;
+
+            if (prop.inputType === "select") {
+              // if the property has a value, get it and re-assign the property as a string
+              if (Object.keys(deepCopyOfSource.data[key]).length) {
+                deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+              } else {
+                if (dataType === "string") {
+                  deepCopyOfSource.data[key] = "";
                 } else {
-                  if (dataType === "string") {
-                    deepCopyOfSource.data[key] = "";
-                  } else {
-                    deepCopyOfSource.data[key] = null;
-                  }
+                  deepCopyOfSource.data[key] = null;
                 }
               }
             }
@@ -330,7 +330,6 @@ export default {
             store.dispatch("objects/showSlide", { route: "objects.list" });
             store.dispatch("source/reset");
           },
-          onError: (err) => console.error(err),
         });
     };
 
