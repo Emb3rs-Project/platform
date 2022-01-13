@@ -71,7 +71,6 @@ export const validateProperies = (parent, properties, index = null) => {
 
     if (!propertyErrors.length) continue;
 
-    // let key = `${type}.data.${symbolicName}`;
     let key = `${symbolicName}`;
 
     if (index) key = `${index}.${key}`;
