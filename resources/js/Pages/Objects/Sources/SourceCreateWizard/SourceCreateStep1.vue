@@ -2,7 +2,7 @@
   <!-- Source Information -->
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
     <PropertyDisclosure
-      :defaultOpen="false"
+      defaultOpen
       title="Information"
     >
       <div class="my-4">
@@ -23,8 +23,7 @@
     </PropertyDisclosure>
   </div>
 
-  <pre>{{ source }}</pre>
-  <!-- Source Properties -->
+  <!-- Source Properties-->
   <div
     v-if="properties.length"
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
