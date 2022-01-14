@@ -13,88 +13,68 @@
     </PrimaryButton>
   </div>
 
-  <div
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 "
-    v-for="(equip, equipIdx) in equipment"
-    :key="equipIdx"
-  >
-    <div class="sm:col-span-3">
-      <div class="bg-white overflow-hidden shadow sm:rounded-lg w-full">
-        <div class="px-4 py-5 sm:p-6">
-          <Disclosure
-            as="div"
-            v-slot="{ open }"
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
+    <div
+      class="flex w-full justify-center py-2"
+      v-for="(equip, equipIdx) in equipment"
+      :key="equipIdx"
+    >
+      <div class="w-full">
+        <PropertyDisclosure :title="equip.value">
+          <div
+            class="my-6"
+            v-for="property in equip.props"
+            :key="property"
           >
-            <dt class="text-lg">
-              <DisclosureButton class="text-left w-full flex justify-between items-start text-gray-400 focus:outline-none">
-                <span class="font-medium text-gray-900">
-                  {{ equip.value }}
-                </span>
-                <span class="ml-6 h-7 flex items-center">
-                  <ChevronDownIcon
-                    :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
-                    aria-hidden="true"
-                  />
-                </span>
-              </DisclosureButton>
-            </dt>
-            <transition
-              enter-active-class="transition duration-100 ease-out"
-              enter-from-class="transform scale-95 opacity-0"
-              enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-75 ease-out"
-              leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-95 opacity-0"
+            <div v-if="property.property.inputType === 'text'">
+              <TextInput
+                v-model="equip.data[property.property.symbolic_name]"
+                :label="property.property.name"
+                :unit="property.unit.symbol"
+                :description="property.property.description"
+                :required="property.required"
+              />
+            </div>
+            <div v-else-if="property.property.inputType === 'select'">
+              <SelectMenu
+                v-model="equip.data[property.property.symbolic_name]"
+                :options="property.property.data.options"
+                :label="property.property.name"
+                :description="property.property.description"
+                :required="property.required"
+              />
+            </div>
+            <div
+              v-for="(error, key) in errors"
+              :key="key"
             >
-              <DisclosurePanel as="dd">
+              <div v-if="property.property.symbolic_name === key.substr(key.indexOf('.') + 1) && +key.substr(0, key.indexOf('.')) === equipIdx">
                 <div
-                  class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-                  v-for="property in equip.props"
-                  :key="property"
+                  v-for="(e, eIdx) in error"
+                  :key="eIdx"
                 >
-                  <div class="sm:col-span-3">
-                    <div v-if="property.property.inputType === 'text'">
-                      <TextInput
-                        v-model="equip.data[property.property.symbolic_name]"
-                        :label="property.property.name"
-                        :unit="property.unit.symbol"
-                        :description="property.property.description"
-                        :required="property.required"
-                      />
-                    </div>
-                    <div v-else-if="property.property.inputType === 'select'">
-                      <SelectMenu
-                        v-model="equip.data[property.property.symbolic_name]"
-                        :options="property.property.data.options"
-                        :label="property.property.name"
-                        :description="property.property.description"
-                        :required="property.required"
-                      />
-                    </div>
-                    <div
-                      v-for="(error, key) in errors"
-                      :key="key"
-                    >
-                      <div v-if="property.property.symbolic_name === key.substr(key.indexOf('.') + 1) && +key.substr(0, key.indexOf('.')) === equipIdx">
-                        <div
-                          v-for="(e, eIdx) in error"
-                          :key="eIdx"
-                        >
-                          <JetInputError
-                            :message="e"
-                            class="mt-2"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <JetInputError
+                    :message="e"
+                    class="mt-2"
+                  />
                 </div>
-              </DisclosurePanel>
-            </transition>
-          </Disclosure>
-        </div>
+              </div>
+            </div>
+          </div>
+        </PropertyDisclosure>
       </div>
+      <div class="ml-5">
+        <button
+          type="button"
+          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          @click="onRemoveEquipment(equipIdx)"
+        >
+          Delete
+        </button>
+      </div>
+
     </div>
+
   </div>
 
   <AddEquipmentModal
@@ -113,6 +93,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { PlusIcon } from "@heroicons/vue/solid";
 
+import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
@@ -125,6 +106,7 @@ import { validateProperies } from "../helpers/validate-properties";
 
 export default {
   components: {
+    PropertyDisclosure,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -200,6 +182,8 @@ export default {
       equipment.value.push(newEquipment);
     };
 
+    const onRemoveEquipment = (index) => equipment.value.splice(index, 1);
+
     watch(
       () => props.nextStepRequest,
       (nextStepRequest) => {
@@ -224,6 +208,7 @@ export default {
       addEquipmentModalIsVisible,
       equipment,
       onAddEquipment,
+      onRemoveEquipment,
     };
   },
 };
