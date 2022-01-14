@@ -102,6 +102,70 @@
     </div>
   </div>
 
+  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
+    <div
+      class="flex w-full justify-center py-2"
+      v-for="(process, processIdx) in processes"
+      :key="processIdx"
+    >
+      <div class="w-full">
+        <PropertyDisclosure :title="process.value">
+          <div
+            class="my-6"
+            v-for="property in process.props"
+            :key="property"
+          >
+            <div v-if="property.property.inputType === 'text'">
+              <TextInput
+                v-model="process.data[property.property.symbolic_name]"
+                :label="property.property.name"
+                :unit="property.unit.symbol"
+                :description="property.property.description"
+                :required="property.required"
+              />
+            </div>
+            <div v-else-if="property.property.inputType === 'select'">
+              <SelectMenu
+                v-model="process.data[property.property.symbolic_name]"
+                :options="property.property.data.options"
+                :label="property.property.name"
+                :description="property.property.description"
+                :required="property.required"
+              />
+            </div>
+            <div
+              v-for="(error, key) in errors"
+              :key="key"
+            >
+              <div v-if="property.property.symbolic_name === key.substr(key.indexOf('.') + 1) && +key.substr(0, key.indexOf('.')) === processIdx">
+                <div
+                  v-for="(e, eIdx) in error"
+                  :key="eIdx"
+                >
+                  <JetInputError
+                    :message="e"
+                    class="mt-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </PropertyDisclosure>
+      </div>
+      <div class="ml-5">
+        <button
+          type="button"
+          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          @click="onRemoveProcess(processIdx)"
+        >
+          Delete
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
   <add-process-modal
     v-model="addProcessModalIsVisible"
     :processesCategories="processesCategories"
@@ -119,6 +183,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import { PlusIcon } from "@heroicons/vue/solid";
 
+import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue";
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "../../../../Components/PrimaryButton.vue";
@@ -131,6 +196,7 @@ import { validateProperies } from "../helpers/validate-properties";
 
 export default {
   components: {
+    PropertyDisclosure,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -206,6 +272,8 @@ export default {
       processes.value.push(newProcess);
     };
 
+    const onRemoveProcess = (index) => processes.value.splice(index, 1);
+
     watch(
       () => props.nextStepRequest,
       (nextStepRequest) => {
@@ -230,6 +298,7 @@ export default {
       addProcessModalIsVisible,
       processes,
       onAddProcess,
+      onRemoveProcess,
     };
   },
 };
