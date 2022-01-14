@@ -50,10 +50,6 @@
     />
 
     <template #actions>
-      <div class="flex justify-start w-full">
-        <BulletSteps :steps="steps" />
-      </div>
-
       <SecondaryOutlinedButton
         type="button"
         @click="onCancel"
@@ -72,6 +68,7 @@
       <PrimaryButton
         type="button"
         @click="onNextStep"
+        :disabled="form.processing"
       >
         <span v-if="currentStep !== steps.length">
           Next
@@ -224,24 +221,25 @@ export default {
           // We want to transform the "to-send" data, not the original data
           const deepCopyOfFormData = window._.cloneDeep(data);
 
-          // // source.data
+          // source.data
           const deepCopyOfSource = window._.cloneDeep(source.value);
-          if (template.value.properties.length) {
-            for (const property of template.value.properties) {
-              const prop = property.property;
-              const key = prop.symbolic_name;
-              const dataType = prop.dataType.toLowerCase();
 
-              if (prop.inputType === "select") {
-                // if the property has a value, get it and re-assign the property as a string
-                if (Object.keys(deepCopyOfSource.data[key]).length) {
-                  deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+          for (const property of template.value.properties) {
+            const prop = property.property;
+            const key = prop.symbolic_name;
+            const dataType = prop.dataType.toLowerCase();
+
+            if (!deepCopyOfSource.data.hasOwnProperty(key)) continue;
+
+            if (prop.inputType === "select") {
+              // if the property has a value, get it and re-assign the property as a string
+              if (Object.keys(deepCopyOfSource.data[key]).length) {
+                deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
+              } else {
+                if (dataType === "string") {
+                  deepCopyOfSource.data[key] = "";
                 } else {
-                  if (dataType === "text" || dataType === "string") {
-                    deepCopyOfSource.data[key] = "";
-                  } else {
-                    deepCopyOfSource.data[key] = null;
-                  }
+                  deepCopyOfSource.data[key] = null;
                 }
               }
             }
@@ -328,7 +326,6 @@ export default {
           if (Object.keys(location.value).length)
             deepCopyOfFormData.location_id = location.value.key;
 
-          console.log(deepCopyOfFormData);
           return deepCopyOfFormData;
         })
         .patch(route("objects.sources.update", props.instance.id), {
@@ -336,7 +333,6 @@ export default {
             store.dispatch("map/refreshMap");
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
-          onError: (err) => console.error(err),
         });
     };
 
@@ -344,6 +340,7 @@ export default {
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
+      form,
       currentStep,
       nextStepRequest,
       incompleteStepAlert,
