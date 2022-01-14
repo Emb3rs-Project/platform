@@ -50,7 +50,7 @@ class IntegrationReport extends Resource
                 'characterization' => __('Characterization'),
             ]),
 
-            BelongsTo::make(__('SIMULATION_METADATA'), 'simulationMetadata', SimulationMetadata::class),
+            // BelongsTo::make(__('SIMULATION_METADATA'), 'simulationMetadata', SimulationMetadata::class),
             BelongsTo::make(__('SIMULATION'), 'simulation', Simulation::class),
         ];
     }
