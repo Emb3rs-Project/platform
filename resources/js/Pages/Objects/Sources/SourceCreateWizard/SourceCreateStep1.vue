@@ -77,7 +77,7 @@
     </PropertyDisclosure>
   </div>
 
-  <!-- Sink Advanced Properties -->
+  <!-- Source Advanced Properties -->
   <div
     v-if="advancedProperties.length"
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
@@ -164,9 +164,6 @@ import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 
-// import { validateProperies } from "../helpers/validate-properties";
-// import { sortProperties } from "../helpers/sort-properties";
-
 import { sortProperties, validateProperies } from "@/Utils/helpers";
 
 export default {
@@ -252,6 +249,8 @@ export default {
     watch(
       selectedTemplate,
       (selectedTemplate) => {
+        withAdvancedProperties.value = false;
+
         store.commit("source/setTemplate", {
           template: selectedTemplate,
         });
@@ -320,8 +319,6 @@ export default {
 
         // reset the errors so they are always up to date
         errors.value = {};
-
-        console.log("to validate", userSelectedProperties.value);
 
         errors.value = validateProperies(
           source.value,
