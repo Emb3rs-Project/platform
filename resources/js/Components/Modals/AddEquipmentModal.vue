@@ -148,6 +148,11 @@ export default {
     const selectedEquipmentCategory = ref({});
     const selectedEquipment = ref({});
 
+    const open = computed({
+      get: () => props.modelValue,
+      set: (value) => emit("update:modelValue", value),
+    });
+
     const equipmentCategories = computed(() =>
       props.equipmentCategories.map((ec) => ({
         key: ec.id,
@@ -176,10 +181,7 @@ export default {
       return false;
     });
 
-    const open = computed({
-      get: () => props.modelValue,
-      set: (value) => emit("update:modelValue", value),
-    });
+    
 
     watch(
       selectedEquipmentCategory,

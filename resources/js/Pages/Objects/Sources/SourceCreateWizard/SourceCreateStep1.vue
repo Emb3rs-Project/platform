@@ -195,19 +195,12 @@ export default {
     const store = useStore();
 
     const storeSource = computed(() => store.getters["source/source"]);
+    const storeTemplate = computed(() => store.getters["source/template"]);
 
     // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
     const source = ref(window._.cloneDeep(storeSource.value));
 
     const errors = ref({});
-
-    const withAdvancedProperties = computed({
-      get: () => store.getters["source/withAdvancedProperties"],
-      set: (value) =>
-        store.commit("source/setAdvancedPropertiesOption", {
-          withAdvancedProperties: value,
-        }),
-    });
 
     const templates = computed(() =>
       props.templates.map((t) => ({
@@ -217,7 +210,7 @@ export default {
       }))
     );
     const selectedTemplate = ref(
-      store.state.source.template ?? templates.value[0] ?? {}
+      storeTemplate.value ?? templates.value[0] ?? {}
     );
 
     const locations = computed(() =>
@@ -237,14 +230,34 @@ export default {
       if (!Object.keys(selectedLocation.value).length)
         selectedLocation.value = locations.value[0];
     }
-    watch(
-      selectedLocation,
-      () =>
-        store.commit("source/setLocation", {
-          location: selectedLocation.value,
+
+    const properties = computed(() => {
+      if (!selectedTemplate.value.properties.length) return [];
+
+      return sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => !p.advanced)
+        )
+      );
+    });
+
+    const withAdvancedProperties = computed({
+      get: () => store.getters["source/withAdvancedProperties"],
+      set: (value) =>
+        store.commit("source/setAdvancedPropertiesOption", {
+          withAdvancedProperties: value,
         }),
-      { immediate: true, deep: true }
-    );
+    });
+
+    const advancedProperties = computed(() => {
+      if (!selectedTemplate.value.properties.length) return [];
+
+      return sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => p.advanced)
+        )
+      );
+    });
 
     watch(
       selectedTemplate,
@@ -257,8 +270,44 @@ export default {
 
         if (!selectedTemplate.properties.length) source.value.data = {};
 
-        if (!Object.keys(source.value.data).length) {
-          for (const property of selectedTemplate.properties) {
+        for (const property of properties.value) {
+          const inputType = property.property.inputType;
+
+          if (property.property) {
+            const placeholder = inputType === "select" ? {} : "";
+
+            const key = property.property.symbolic_name;
+
+            source.value.data[key] =
+              property.property.default_value ?? placeholder;
+          }
+        }
+      },
+      { immediate: true, deep: true }
+    );
+
+    watch(
+      selectedLocation,
+      () =>
+        store.commit("source/setLocation", {
+          location: selectedLocation.value,
+        }),
+      { immediate: true, deep: true }
+    );
+
+    watch(
+      withAdvancedProperties,
+      (enabled) => {
+        if (!enabled) {
+          for (const property in source.value.data) {
+            const found = advancedProperties.value.find(
+              (p) => p.property.symbolic_name === property
+            );
+
+            if (found) delete source.value.data[property];
+          }
+        } else {
+          for (const property of advancedProperties.value) {
             const inputType = property.property.inputType;
 
             if (property.property) {
@@ -272,7 +321,7 @@ export default {
           }
         }
       },
-      { immediate: true, deep: true }
+      { deep: true }
     );
 
     const commitSource = window._.debounce(
@@ -288,22 +337,6 @@ export default {
       immediate: true,
     });
 
-    const properties = computed(() =>
-      sortProperties(
-        window._.cloneDeep(
-          selectedTemplate.value.properties.filter((p) => !p.advanced)
-        )
-      )
-    );
-
-    const advancedProperties = computed(() =>
-      sortProperties(
-        window._.cloneDeep(
-          selectedTemplate.value.properties.filter((p) => p.advanced)
-        )
-      )
-    );
-
     const userSelectedProperties = computed(() =>
       selectedTemplate.value.properties.filter((p) => {
         if (p.advanced && !withAdvancedProperties.value) return false;
@@ -316,9 +349,6 @@ export default {
       () => props.nextStepRequest,
       (nextStepRequest) => {
         if (!nextStepRequest) return;
-
-        // reset the errors so they are always up to date
-        errors.value = {};
 
         errors.value = validateProperies(
           source.value,

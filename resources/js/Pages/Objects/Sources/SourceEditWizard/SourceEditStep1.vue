@@ -207,14 +207,6 @@ export default {
 
     const errors = ref({});
 
-    const withAdvancedProperties = computed({
-      get: () => store.getters["source/withAdvancedProperties"],
-      set: (value) =>
-        store.commit("source/setAdvancedPropertiesOption", {
-          withAdvancedProperties: value,
-        }),
-    });
-
     const templates = computed(() =>
       props.templates.map((t) => ({
         key: t.id,
@@ -223,9 +215,7 @@ export default {
       }))
     );
     const selectedTemplate = ref(
-      templates.value.find(
-        (template) => template.key === props.instance.template_id
-      )
+      templates.value.find((t) => t.key === props.instance.template_id)
     );
 
     const locations = computed(() =>
@@ -239,6 +229,39 @@ export default {
         (location) => location.key === props.instance.location_id
       )
     );
+
+    const properties = computed(() => {
+      if (!selectedTemplate.value.properties.length) return [];
+
+      return sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => !p.advanced)
+        )
+      );
+    });
+
+    const withAdvancedProperties = computed({
+      get: () => store.getters["source/withAdvancedProperties"],
+      set: (value) =>
+        store.commit("source/setAdvancedPropertiesOption", {
+          withAdvancedProperties: value,
+        }),
+    });
+
+    const advancedProperties = computed(() => {
+      if (!selectedTemplate.value.properties.length) return [];
+
+      return sortProperties(
+        window._.cloneDeep(
+          selectedTemplate.value.properties.filter((p) => p.advanced)
+        )
+      );
+    });
+
+    const allProperties = computed(() => [
+      ...properties.value,
+      ...advancedProperties.value,
+    ]);
 
     watch(
       selectedLocation,
@@ -258,7 +281,7 @@ export default {
 
         if (!selectedTemplate.properties.length) source.value.data = {};
 
-        for (const property of selectedTemplate.properties) {
+        for (const property of allProperties.value) {
           const prop = property.property;
 
           const value = props.instance.values.properties[prop.symbolic_name];
@@ -281,6 +304,43 @@ export default {
       { immediate: true, deep: true }
     );
 
+    const userSelectedProperties = computed(() =>
+      selectedTemplate.value.properties.filter((p) => {
+        if (p.advanced && !withAdvancedProperties.value) return false;
+
+        return true;
+      })
+    );
+
+    // watch(
+    //   withAdvancedProperties,
+    //   (enabled) => {
+    //     if (!enabled) {
+    //       for (const property in source.value.data) {
+    //         const found = advancedProperties.value.find(
+    //           (p) => p.property.symbolic_name === property
+    //         );
+
+    //         if (found) delete source.value.data[property];
+    //       }
+    //     } else {
+    //       for (const property of advancedProperties.value) {
+    //         const inputType = property.property.inputType;
+
+    //         if (property.property) {
+    //           const placeholder = inputType === "select" ? {} : "";
+
+    //           const key = property.property.symbolic_name;
+
+    //           source.value.data[key] =
+    //             property.property.default_value ?? placeholder;
+    //         }
+    //       }
+    //     }
+    //   },
+    //   { deep: true }
+    // );
+
     const commitSource = window._.debounce(
       (source) =>
         store.commit("source/setSourceData", {
@@ -294,37 +354,10 @@ export default {
       immediate: true,
     });
 
-    const properties = computed(() =>
-      sortProperties(
-        window._.cloneDeep(
-          selectedTemplate.value.properties.filter((p) => !p.advanced)
-        )
-      )
-    );
-
-    const advancedProperties = computed(() =>
-      sortProperties(
-        window._.cloneDeep(
-          selectedTemplate.value.properties.filter((p) => p.advanced)
-        )
-      )
-    );
-
-    const userSelectedProperties = computed(() =>
-      selectedTemplate.value.properties.filter((p) => {
-        if (p.advanced && !withAdvancedProperties.value) return false;
-
-        return true;
-      })
-    );
-
     watch(
       () => props.nextStepRequest,
       (nextStepRequest) => {
         if (!nextStepRequest) return;
-
-        // reset the errors so they are always up to date
-        errors.value = {};
 
         errors.value = validateProperies(
           source.value,
