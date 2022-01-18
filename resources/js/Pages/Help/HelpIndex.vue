@@ -8,7 +8,10 @@
           <h2 class="text-center text-3xl font-extrabold text-gray-900 sm:text-4xl">
             Frequently Asked Questions
           </h2>
-          <dl class="mt-6 space-y-6 divide-y divide-gray-200">
+          <dl
+            v-if="faqs.length"
+            class="mt-6 space-y-6 divide-y divide-gray-200"
+          >
             <Disclosure
               as="div"
               v-for="faq in faqs"
@@ -46,6 +49,14 @@
                 </p>
               </DisclosurePanel>
             </Disclosure>
+          </dl>
+          <dl
+            v-else
+            class="flex justify-center pt-10"
+          >
+            <p class="block font-bold text-2xl text-gray-400 p-4">
+              No FAQs were found.
+            </p>
           </dl>
         </div>
       </div>
