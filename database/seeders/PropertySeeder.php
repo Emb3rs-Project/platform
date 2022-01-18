@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Property;
 use Illuminate\Database\Seeder;
 
-class PropertyInputSeeder extends Seeder
+class PropertySeeder extends Seeder
 {
     /**
      * Run the database seeds.
