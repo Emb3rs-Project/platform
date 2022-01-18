@@ -11,13 +11,25 @@
           </p>
         </div>
       </div>
-      <div class="mt-6 pt-10 grid gap-16 lg:grid-cols-2 lg:gap-x-5 lg:gap-y-12">
+
+      <div
+        v-if="news.length"
+        class="mt-6 pt-10 grid gap-16 lg:grid-cols-2 lg:gap-x-5 lg:gap-y-12"
+      >
         <div
-          v-for="newsArticle in news"
-          :key="newsArticle.id"
+          v-for="article in news"
+          :key="article.id"
         >
-          <NewsFeedItem :article="newsArticle" />
+          <NewsFeedItem :article="article" />
         </div>
+      </div>
+      <div
+        v-else
+        class="flex justify-center pt-10"
+      >
+        <p class="block font-bold text-2xl text-gray-400 p-4">
+          No news were found.
+        </p>
       </div>
     </div>
   </div>

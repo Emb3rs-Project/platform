@@ -69,13 +69,12 @@ export default {
     },
   },
 
-  setup(props) {
+  setup() {
     const previousUrl = usePage().props.value.previousUrl;
 
     const onGoBack = () => {
       if (previousUrl !== "empty") return previousUrl;
     };
-    // const onGoBack = computed(() => {});
 
     return {
       getFriendlyLifetime,

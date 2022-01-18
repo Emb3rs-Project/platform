@@ -1,7 +1,6 @@
 <template>
   <AppLayout>
     <SiteHead title="News" />
-
     <NewsFeed :news="news" />
   </AppLayout>
 
@@ -24,10 +23,6 @@ export default {
       type: Array,
       required: true,
     },
-  },
-
-  setup() {
-    // TODO anchor to the selected news item
   },
 };
 </script>
