@@ -1,10 +1,13 @@
 <template>
   <!-- Source Information -->
-  <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
-    <PropertyDisclosure
-      defaultOpen
-      title="Information"
-    >
+  <div
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+    "
+  >
+    <PropertyDisclosure defaultOpen title="Information">
       <div class="my-4">
         <SelectMenu
           v-model="selectedTemplate"
@@ -23,17 +26,17 @@
     </PropertyDisclosure>
   </div>
 
-  <pre>{{ source }}</pre>
-
   <!-- Source Properties-->
   <div
     v-if="properties.length"
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+    "
   >
-    <PropertyDisclosure
-      defaultOpen
-      title="Properties"
-    >
+    <pre>{{ source }}</pre>
+    <PropertyDisclosure defaultOpen title="Properties">
       <div
         class="my-6"
         v-for="(property, propertyIdx) in properties"
@@ -59,30 +62,40 @@
             :label="property.property.name"
           />
         </div>
-        <div
-          v-for="(error, key) in errors"
-          :key="key"
-        >
+        <div v-for="(error, key) in errors" :key="key">
           <div v-if="property.property.symbolic_name === key">
-            <div
-              v-for="(e, eIdx) in error"
-              :key="eIdx"
-            >
-              <JetInputError
-                :message="e"
-                class="mt-2"
-              />
+            <div v-for="(e, eIdx) in error" :key="eIdx">
+              <JetInputError :message="e" class="mt-2" />
             </div>
           </div>
         </div>
       </div>
     </PropertyDisclosure>
   </div>
+  <div v-else>
+    <div
+      class="
+        space-y-1
+        px-4
+        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+      "
+    >
+      <div class="col-span-3 text-center">
+        <p class="block font-bold text-2xl text-gray-200 p-4">
+          No assigned properties.
+        </p>
+      </div>
+    </div>
+  </div>
 
   <!-- Source Advanced Properties -->
   <div
     v-if="advancedProperties.length"
-    class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+    class="
+      space-y-1
+      px-4
+      sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+    "
   >
     <PropertyDisclosure title="Advanced Properties">
       <div>
@@ -95,15 +108,19 @@
                 aria-describedby="advancedProperties-description"
                 name="advancedProperties"
                 type="checkbox"
-                class="focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                class="
+                  focus:ring-indigo-500
+                  h-4
+                  w-4
+                  text-blue-600
+                  border-gray-300
+                  rounded
+                "
                 v-model="withAdvancedProperties"
               />
             </div>
             <div class="ml-3 text-sm">
-              <label
-                for="advancedProperties"
-                class="font-medium text-gray-700"
-              >
+              <label for="advancedProperties" class="font-medium text-gray-700">
                 Enable advanced properties
               </label>
             </div>
@@ -136,19 +153,10 @@
             :disabled="!withAdvancedProperties"
           />
         </div>
-        <div
-          v-for="(error, key) in errors"
-          :key="key"
-        >
+        <div v-for="(error, key) in errors" :key="key">
           <div v-if="advancedProperty.property.symbolic_name === key">
-            <div
-              v-for="(e, eIdx) in error"
-              :key="eIdx"
-            >
-              <JetInputError
-                :message="e"
-                class="mt-2"
-              />
+            <div v-for="(e, eIdx) in error" :key="eIdx">
+              <JetInputError :message="e" class="mt-2" />
             </div>
           </div>
         </div>
@@ -361,7 +369,8 @@ export default {
 
         errors.value = validateProperies(
           source.value,
-          userSelectedProperties.value
+          userSelectedProperties.value,
+          selectedTemplate.value
         );
 
         for (const property in source.value.data) {
