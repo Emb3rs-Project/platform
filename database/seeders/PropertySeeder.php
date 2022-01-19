@@ -54,7 +54,7 @@ class PropertySeeder extends Seeder
             [
                 "name" => "Sunday Off?",
                 "symbolic_name" => "sunday_off",
-                "dataType" => "String",
+                "dataType" => "Number",
                 "inputType" => "select",
                 "data" => [
                     "options" => [
@@ -63,12 +63,18 @@ class PropertySeeder extends Seeder
                     ]
                 ]
             ],
-            ["name" => "Saturday Off?", "symbolic_name" => "saturday_off", "dataType" => "String", "inputType" => "select", "data" => [
-                "options" => [
-                    ["value" => "Yes", "key" => 1],
-                    ["value" => "No", "key" => 0],
+            [
+                "name" => "Saturday Off?",
+                "symbolic_name" => "saturday_off",
+                "dataType" => "Number",
+                "inputType" => "select",
+                "data" => [
+                    "options" => [
+                        ["value" => "Yes", "key" => 1],
+                        ["value" => "No", "key" => 0],
+                    ]
                 ]
-            ]],
+            ],
 
 
             // OUTPUTS
