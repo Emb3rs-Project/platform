@@ -7,7 +7,7 @@ const state = () => ({
   processes: [],
   template: null,
   location: null,
-  withAdvancedProperties: false
+  withAdvancedProperties: null
 });
 
 // https://next.vuex.vuejs.org/api/#getters
@@ -28,7 +28,7 @@ const actions = {
     ctx.commit('setSourceData', { data: {} });
     ctx.commit('setEquipment', { equipment: [] });
     ctx.commit('setProcesses', { processes: [] });
-    ctx.commit('setAdvancedPropertiesOption', { withAdvancedProperties: false });
+    ctx.commit('setAdvancedPropertiesOption', { withAdvancedProperties: null });
   }
 };
 

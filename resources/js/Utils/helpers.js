@@ -1,3 +1,7 @@
+export const DEFAULT_TEMPLATE = {
+  properties: [],
+};
+
 export const sortProperties = (properties) => {
   return properties.length
     ? properties.sort((a, b) =>
@@ -6,7 +10,7 @@ export const sortProperties = (properties) => {
     : properties;
 };
 
-export const validateProperies = (parent, properties, index = null) => {
+export const validateProperies = (parent, properties, template, index = null) => {
   const errors = {};
 
   for (const property of properties) {
@@ -75,6 +79,8 @@ export const validateProperies = (parent, properties, index = null) => {
 
     errors[key] = propertyErrors;
   }
+
+  if (template === DEFAULT_TEMPLATE) errors['template_id'] = ['The template field required.']
 
   return errors;
 };
