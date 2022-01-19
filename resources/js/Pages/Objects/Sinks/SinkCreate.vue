@@ -18,17 +18,27 @@
     </template>
 
     <!-- Sink Information -->
-    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
-      <PropertyDisclosure
-        defaultOpen
-        title="Information"
-      >
+    <div
+      class="
+        space-y-1
+        px-4
+        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+      "
+    >
+      <PropertyDisclosure defaultOpen title="Information">
         <div class="my-4">
           <SelectMenu
             v-model="selectedTemplate"
             :options="templates"
             label="Template"
           />
+          <div v-for="(error, key) in form.errors" :key="key">
+            <jet-input-error
+              v-show="key.includes('template')"
+              :message="error"
+              class="mt-2"
+            />
+          </div>
         </div>
         <div class="my-4">
           <SelectMenu
@@ -44,12 +54,13 @@
     <!-- Sink Properties -->
     <div
       v-if="properties.length"
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+      class="
+        space-y-1
+        px-4
+        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+      "
     >
-      <PropertyDisclosure
-        defaultOpen
-        title="Properties"
-      >
+      <PropertyDisclosure defaultOpen title="Properties">
         <div
           class="my-6"
           v-for="(property, propertyIdx) in properties"
@@ -75,10 +86,7 @@
               :label="property.property.name"
             />
           </div>
-          <div
-            v-for="(error, key) in form.errors"
-            :key="key"
-          >
+          <div v-for="(error, key) in form.errors" :key="key">
             <jet-input-error
               v-show="key.includes(property.property.symbolic_name)"
               :message="error"
@@ -92,7 +100,11 @@
     <!-- Sink Advanced Properties -->
     <div
       v-if="advancedProperties.length"
-      class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5"
+      class="
+        space-y-1
+        px-4
+        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
+      "
     >
       <PropertyDisclosure title="Advanced Properties">
         <div>
@@ -105,7 +117,14 @@
                   aria-describedby="advancedProperties-description"
                   name="advancedProperties"
                   type="checkbox"
-                  class="focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300 rounded"
+                  class="
+                    focus:ring-indigo-500
+                    h-4
+                    w-4
+                    text-blue-600
+                    border-gray-300
+                    rounded
+                  "
                   v-model="withAdvancedProperties"
                 />
               </div>
@@ -147,10 +166,7 @@
             />
           </div>
           <div v-if="form.hasErrors">
-            <div
-              v-for="(error, key) in form.errors"
-              :key="key"
-            >
+            <div v-for="(error, key) in form.errors" :key="key">
               <jet-input-error
                 v-show="key.includes(advancedProperty.property.symbolic_name)"
                 :message="error"
@@ -170,10 +186,7 @@
       >
         Cancel
       </SecondaryOutlinedButton>
-      <PrimaryButton
-        @click="submit"
-        :disabled="form.processing"
-      >
+      <PrimaryButton @click="submit" :disabled="form.processing">
         Save
       </PrimaryButton>
     </template>
@@ -196,7 +209,11 @@ import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
-import { sortProperties, validateProperies } from "@/Utils/helpers";
+import {
+  sortProperties,
+  validateProperies,
+  DEFAULT_TEMPLATE,
+} from "@/Utils/helpers";
 
 export default {
   components: {
@@ -244,7 +261,7 @@ export default {
         properties: t.template_properties,
       }))
     );
-    const selectedTemplate = ref(templates.value[0] ?? {});
+    const selectedTemplate = ref(templates.value[0] ?? DEFAULT_TEMPLATE);
 
     const locations = computed(() =>
       props.locations.map((l) => ({
@@ -354,7 +371,11 @@ export default {
     const submit = () => {
       form.clearErrors();
 
-      const errors = validateProperies(form.sink, userSelectedProperties.value);
+      const errors = validateProperies(
+        form.sink,
+        userSelectedProperties.value,
+        selectedTemplate.value
+      );
 
       if (Object.keys(errors).length) {
         for (const errorGroup in errors) {
