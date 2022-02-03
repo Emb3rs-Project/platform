@@ -8,7 +8,16 @@
                 "publish_channel": "cf_queue",
                 "job_channel": "cf_jobs"
             },
-            "function": "cf:sink:convert_sinks"
+            "function": "cf:sink:convert_sinks",
+            "next": "485df2d8-bdd5-4158-ba6f-743199a522d0"
+        },
+        "dbd39c07-da5a-4ff4-88cd-e10d06ddcb21": {
+            "module": {
+                "name": "cf-module",
+                "publish_channel": "cf_queue",
+                "job_channel": "cf_jobs"
+            },
+            "function": "cf:source_detailed:convert_sources"
         }
     },
     "initial_data": {
