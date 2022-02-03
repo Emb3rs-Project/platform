@@ -1,13 +1,50 @@
 {
     "simulation_uuid": "17cf4845-f204-41f5-864f-d2ec751a7fea",
-    "simulation_step_id": 1,
-    "simulation_step_uuid": "485df2d8-bdd5-4158-ba6f-743199a522d0",
     "simulation_metadata": {
         "start": "485df2d8-bdd5-4158-ba6f-743199a522d0",
         "485df2d8-bdd5-4158-ba6f-743199a522d0": {
-            "module": "gis-module",
-            "function": "create_network"
+            "module": "cf-module",
+            "function": "cf:sink:convert_sinks"
         }
     },
-    "initial_data": {}
+    "initial_data": {
+        "group_of_sinks": [
+            {
+                "id": 1,
+                "consumer_type": "non-household",
+                "location": [10, 10],
+                "streams": [
+                    {
+                        "id": 2,
+                        "object_type": "stream",
+                        "stream_type": "inflow",
+                        "fluid": "water",
+                        "capacity": 263,
+                        "supply_temperature": 10,
+                        "target_temperature": 80,
+                        "schedule": [1, 1, 1],
+                        "hourly_generation": [1000, 1000, 1000]
+                    }
+                ]
+            },
+            {
+                "id": 56,
+                "consumer_type": "household",
+                "location": [11, 11],
+                "streams": [
+                    {
+                        "id": 2,
+                        "object_type": "stream",
+                        "stream_type": "inflow",
+                        "fluid": "water",
+                        "capacity": 263,
+                        "supply_temperature": 10,
+                        "target_temperature": 80,
+                        "schedule": [1, 1, 1],
+                        "hourly_generation": [1000, 1000, 1000]
+                    }
+                ]
+            }
+        ]
+    }
 }
