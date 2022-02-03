@@ -1,0 +1,13 @@
+{
+    "simulation_uuid": "17cf4845-f204-41f5-864f-d2ec751a7fea",
+    "simulation_step_id": 0,
+    "simulation_step_uuid": "",
+    "simulation_metadata": {
+        "start": "485df2d8-bdd5-4158-ba6f-743199a522d0",
+        "485df2d8-bdd5-4158-ba6f-743199a522d0": {
+            "module": "gis-module",
+            "function": "create_network"
+        }
+    },
+    "initial_data": {}
+}
