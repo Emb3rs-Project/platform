@@ -3,7 +3,11 @@
     "simulation_metadata": {
         "start": "485df2d8-bdd5-4158-ba6f-743199a522d0",
         "485df2d8-bdd5-4158-ba6f-743199a522d0": {
-            "module": "cf-module",
+            "module": {
+                "name": "cf-module",
+                "publish_channel": "cf_queue",
+                "job_channel": "cf_jobs"
+            },
             "function": "cf:sink:convert_sinks"
         }
     },
