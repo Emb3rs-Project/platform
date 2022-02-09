@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class IntegrationReport extends Resource
@@ -50,8 +51,11 @@ class IntegrationReport extends Resource
                 'characterization' => __('Characterization'),
             ]),
 
+
             // BelongsTo::make(__('SIMULATION_METADATA'), 'simulationMetadata', SimulationMetadata::class),
             BelongsTo::make(__('SIMULATION'), 'simulation', Simulation::class),
+
+            DateTime::make(__('CREATED_AT'), 'created_at'),
         ];
     }
 
