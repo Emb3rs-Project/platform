@@ -2,9 +2,9 @@ version: '3'
 
 services:
   nginx:
-    container_name: embers-nginx
+    container_name: emb3rs-nginx
     build:
-      context: ./docker/nginx/
+      context: ./docker/
       dockerfile: Dockerfile
       args:
         ENABLED_MODULES: brotli
@@ -17,58 +17,52 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     environment:
       - NGINX_HOST='${APP_HOST:?err}'
-    networks:
-      - embers
     depends_on:
       - app
 
   app:
-    image: embers/app
-    container_name: embers-app
+    image: emb3rs/platform
+    container_name: emb3rs-platform
     build:
       context: .
       dockerfile: Dockerfile
       args:
         NOVA_USERNAME: '${NOVA_USERNAME:?err}'
         NOVA_PASSWORD: '${NOVA_PASSWORD:?err}'
-    networks:
-      - embers
-    depends_on:
-      - pgsql
 
-  pgsql:
-    image: 'postgres:13'
-    container_name: embers-pgsql
-    ports:
-      - '${DB_PORT:-5432}:5432'
-    environment:
-      PGPASSWORD: '${DB_PASSWORD:-secret}'
-      POSTGRES_DB: '${DB_DATABASE}'
-      POSTGRES_USER: '${DB_USERNAME}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-    volumes:
-      - 'emberspgsql:/var/lib/postgresql/data'
-    networks:
-      - embers
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "pg_isready",
-          "-q",
-          "-d",
-          "${DB_DATABASE}",
-          "-U",
-          "${DB_USERNAME}"
-        ]
-      retries: 3
-      timeout: 5s
+  # pgsql:
+  #   image: 'postgres:13'
+  #   container_name: embers-pgsql
+  #   ports:
+  #     - '${DB_PORT:-5432}:5432'
+  #   environment:
+  #     PGPASSWORD: '${DB_PASSWORD:-secret}'
+  #     POSTGRES_DB: '${DB_DATABASE}'
+  #     POSTGRES_USER: '${DB_USERNAME}'
+  #     POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+  #   volumes:
+  #     - 'emberspgsql:/var/lib/postgresql/data'
+  #   networks:
+  #     - embers
+  #   healthcheck:
+  #     test:
+  #       [
+  #         "CMD",
+  #         "pg_isready",
+  #         "-q",
+  #         "-d",
+  #         "${DB_DATABASE}",
+  #         "-U",
+  #         "${DB_USERNAME}"
+  #       ]
+  #     retries: 3
+  #     timeout: 5s
 
 networks:
-  embers:
+  default:
     external:
-      name: embers_network
+      name: network_emb3rs
 
-volumes:
-  emberspgsql:
-    driver: local
+# volumes:
+#   emberspgsql:
+#     driver: local
