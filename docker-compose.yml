@@ -30,39 +30,7 @@ services:
         NOVA_USERNAME: '${NOVA_USERNAME:?err}'
         NOVA_PASSWORD: '${NOVA_PASSWORD:?err}'
 
-  # pgsql:
-  #   image: 'postgres:13'
-  #   container_name: embers-pgsql
-  #   ports:
-  #     - '${DB_PORT:-5432}:5432'
-  #   environment:
-  #     PGPASSWORD: '${DB_PASSWORD:-secret}'
-  #     POSTGRES_DB: '${DB_DATABASE}'
-  #     POSTGRES_USER: '${DB_USERNAME}'
-  #     POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-  #   volumes:
-  #     - 'emberspgsql:/var/lib/postgresql/data'
-  #   networks:
-  #     - embers
-  #   healthcheck:
-  #     test:
-  #       [
-  #         "CMD",
-  #         "pg_isready",
-  #         "-q",
-  #         "-d",
-  #         "${DB_DATABASE}",
-  #         "-U",
-  #         "${DB_USERNAME}"
-  #       ]
-  #     retries: 3
-  #     timeout: 5s
-
 networks:
   default:
     external:
       name: network_emb3rs
-
-# volumes:
-#   emberspgsql:
-#     driver: local

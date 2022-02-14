@@ -10,7 +10,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that are not reported.
      *
-     * @var array
+     * @var array<int, class-string<Throwable>>
      */
     protected $dontReport = [
         //
@@ -19,7 +19,7 @@ class Handler extends ExceptionHandler
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $dontFlash = [
         'current_password',
@@ -34,8 +34,22 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $localEnvironment = app()->environment('local');
+
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        // TODO: check inertia handling on this occasion and uncomment/delete as necessary
+        // $this->renderable(function (NotFoundHttpException $e, Request $request) use ($localEnvironment) {
+        //     if (!$localEnvironment) {
+        //         if ($request->wantsJson()) {
+        //             return response()->json(['message' => 'The request resource could not be found'], 404);
+        //         }
+
+        //         return parent::render($request, $e);
+        //     }
+        //     return parent::render($request, $e);
+        // });
     }
 }

@@ -139,7 +139,7 @@ namespace App\Models{
  * @property-read \App\Models\Location|null $location
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Team[] $teams
  * @property-read int|null $teams_count
- * @property-read \App\Models\Template $template
+ * @property-read \App\Models\Template|null $template
  * @method static \Illuminate\Database\Eloquent\Builder|Instance newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Instance newQuery()
  * @method static \Illuminate\Database\Query\Builder|Instance onlyTrashed()
@@ -163,16 +163,15 @@ namespace App\Models{
  * App\Models\IntegrationReport
  *
  * @property int $id
- * @property int $simulation_metadata_id
- * @property int|null $simulation_id
+ * @property int $simulation_id
  * @property array|null $data
  * @property string $type
- * @property mixed|null $errors
+ * @property array|null $errors
  * @property string $step_uuid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Simulation|null $simulation
- * @property-read \App\Models\SimulationMetadata $simulationMetadata
+ * @property-read \App\Models\SimulationMetadata|null $simulationMetadata
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport query()
@@ -181,7 +180,6 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereErrors($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereSimulationId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereSimulationMetadataId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereStepUuid($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|IntegrationReport whereUpdatedAt($value)
@@ -291,7 +289,7 @@ namespace App\Models{
  * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Team $team
+ * @property-read \App\Models\Team|null $team
  * @method static \Illuminate\Database\Eloquent\Builder|News newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|News newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|News query()
@@ -470,12 +468,12 @@ namespace App\Models{
  * @property int|null $simulation_metadata_id
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\IntegrationReport[] $integrationReports
  * @property-read int|null $integration_reports_count
- * @property-read \App\Models\Project $project
+ * @property-read \App\Models\Project|null $project
  * @property-read \App\Models\SimulationMetadata|null $simulationMetadata
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SimulationResult[] $simulationResults
  * @property-read int|null $simulation_results_count
- * @property-read \App\Models\SimulationType $simulationType
- * @property-read \App\Models\Target $target
+ * @property-read \App\Models\SimulationType|null $simulationType
+ * @property-read \App\Models\Target|null $target
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Simulation newQuery()
  * @method static \Illuminate\Database\Query\Builder|Simulation onlyTrashed()
@@ -573,7 +571,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Models\SimulationModule $module
+ * @property-read \App\Models\SimulationModule|null $module
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationModuleFunction newQuery()
  * @method static \Illuminate\Database\Query\Builder|SimulationModuleFunction onlyTrashed()
@@ -602,7 +600,7 @@ namespace App\Models{
  * @property array $data
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Simulation $simulation
+ * @property-read \App\Models\Simulation|null $simulation
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationResult query()
@@ -624,7 +622,7 @@ namespace App\Models{
  * @property string $simulation_uuid
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Simulation $simulation
+ * @property-read \App\Models\Simulation|null $simulation
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationSession query()
@@ -651,7 +649,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Simulation[] $simulations
  * @property-read int|null $simulations_count
- * @property-read \App\Models\Unit $unit
+ * @property-read \App\Models\Unit|null $unit
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|SimulationType newQuery()
  * @method static \Illuminate\Database\Query\Builder|SimulationType onlyTrashed()
@@ -684,7 +682,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Simulation[] $simulations
  * @property-read int|null $simulations_count
- * @property-read \App\Models\Unit $unit
+ * @property-read \App\Models\Unit|null $unit
  * @method static \Illuminate\Database\Eloquent\Builder|Target newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Target newQuery()
  * @method static \Illuminate\Database\Query\Builder|Target onlyTrashed()
@@ -719,7 +717,7 @@ namespace App\Models{
  * @property-read int|null $links_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Location[] $locations
  * @property-read int|null $locations_count
- * @property-read \App\Models\User $owner
+ * @property-read \App\Models\User|null $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects
  * @property-read int|null $projects_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TeamInvitation[] $teamInvitations
@@ -771,9 +769,9 @@ namespace App\Models{
  * App\Models\TeamRole
  *
  * @property int $id
- * @property int $team_id
  * @property string $role
  * @property array|null $permissions
+ * @property int $team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Team $team
@@ -802,7 +800,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int|null $simulation_metadata_id
- * @property-read \App\Models\Category $category
+ * @property-read \App\Models\Category|null $category
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Instance[] $instances
  * @property-read int|null $instances_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Script[] $scripts
@@ -842,8 +840,8 @@ namespace App\Models{
  * @property int $property_group_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\PropertyGroup $propertyGroup
- * @property-read \App\Models\Template $template
+ * @property-read \App\Models\PropertyGroup|null $propertyGroup
+ * @property-read \App\Models\Template|null $template
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TemplateProperty[] $templateProperties
  * @property-read int|null $template_properties_count
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateGrouping newModelQuery()
@@ -874,23 +872,23 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $default_value
  * @property int $order
- * @property bool|null $is_summary
  * @property int|null $grouping_id
- * @property-read \App\Models\Property $property
- * @property-read \App\Models\Template $template
+ * @property bool $advanced
+ * @property-read \App\Models\Property|null $property
+ * @property-read \App\Models\Template|null $template
  * @property-read \App\Models\TemplateGrouping|null $templateGroup
- * @property-read \App\Models\Unit $unit
+ * @property-read \App\Models\Unit|null $unit
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty newQuery()
  * @method static \Illuminate\Database\Query\Builder|TemplateProperty onlyTrashed()
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty query()
+ * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereAdvanced($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDefaultUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDefaultValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereGroupingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereIsSummary($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty wherePropertyId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|TemplateProperty whereRequired($value)
@@ -951,8 +949,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Unit $from
- * @property-read \App\Models\Unit $to
+ * @property-read \App\Models\Unit|null $from
+ * @property-read \App\Models\Unit|null $to
  * @method static \Illuminate\Database\Eloquent\Builder|UnitConversion newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UnitConversion newQuery()
  * @method static \Illuminate\Database\Query\Builder|UnitConversion onlyTrashed()
