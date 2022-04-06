@@ -71,7 +71,6 @@ class Category extends Resource
             HasMany::make(__('TEMPLATES'), 'templates', Template::class),
             HasMany::make(__('CHILDREN'), 'children', Category::class),
 
-            BelongsToMany::make(__('SCRIPTS'), 'scripts', Script::class),
         ];
     }
 
