@@ -16,7 +16,7 @@ class News extends Resource
      *
      * @var string
      */
-    public static $group = 'FRNT';
+    public static $group = '2.0 - Frontend';
 
     /**
      * The model the resource corresponds to.

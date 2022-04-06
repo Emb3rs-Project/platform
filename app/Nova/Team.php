@@ -17,7 +17,7 @@ class Team extends Resource
      *
      * @var string
      */
-    public static $group = 'USER';
+    public static $group = '4.0 - User Management';
 
     /**
      * The model the resource corresponds to.

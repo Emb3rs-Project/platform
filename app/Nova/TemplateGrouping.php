@@ -17,7 +17,7 @@ class TemplateGrouping extends Resource
      *
      * @var string
      */
-    public static $group = '0. Sinks&Sources';
+    public static $group = '0.0 - Configs';
 
     /**
      * The model the resource corresponds to.

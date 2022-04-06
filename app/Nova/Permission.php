@@ -14,7 +14,7 @@ class Permission extends Resource
      *
      * @var string
      */
-    public static $group = 'USER';
+    public static $group = '4.0 - User Management';
 
 
     /**

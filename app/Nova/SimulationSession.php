@@ -16,7 +16,7 @@ class SimulationSession extends Resource
      *
      * @var string
      */
-    public static $group = 'SIM';
+    public static $group = '1.0 - Simulations';
 
     /**
      * The model the resource corresponds to.
