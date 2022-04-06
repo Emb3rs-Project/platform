@@ -16,7 +16,7 @@ class GeoSegment extends Resource
      *
      * @var string
      */
-    public static $group = 'DELETE';
+    public static $group = '0.3 - Links';
 
 
     /**

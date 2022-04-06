@@ -15,7 +15,7 @@ class UnitConversion extends Resource
      *
      * @var string
      */
-    public static $group = '0.2 - Units';
+    public static $group = '0.4 - Units';
 
     /**
      * The model the resource corresponds to.
