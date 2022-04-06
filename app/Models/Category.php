@@ -42,19 +42,4 @@ class Category extends Model
     {
         return $this->hasMany(Template::class, 'category_id');
     }
-
-    /**
-     * The Scripts that this Category belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function scripts(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Script::class,
-            'scripts_categories',
-            'category_id',
-            'script_id',
-        );
-    }
 }

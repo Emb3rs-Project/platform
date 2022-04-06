@@ -72,19 +72,4 @@ class Template extends Model
     {
         return $this->belongsTo(SimulationMetadata::class, 'simulation_metadata_id');
     }
-
-    /**
-     * The Scripts that this Template belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function scripts(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            Script::class,
-            'scripts_templates',
-            'template_id',
-            'script_id'
-        );
-    }
 }
