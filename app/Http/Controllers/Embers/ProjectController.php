@@ -36,9 +36,9 @@ class ProjectController extends Controller
      */
     public function create(Request $request)
     {
-        $locations = app(CreatesProjects::class)->create($request->user());
+        app(CreatesProjects::class)->create($request->user());
 
-        return Inertia::render('Projects/ProjectCreate', ['locations' => $locations]);
+        return Inertia::render('Projects/ProjectCreate');
     }
 
     /**

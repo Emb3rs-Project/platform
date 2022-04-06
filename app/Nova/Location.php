@@ -72,8 +72,6 @@ class Location extends Resource
                 ->json()
                 ->rules('json'),
 
-            BelongsTo::make(__('PROJECT'), 'project', Project::class)->nullable(),
-            HasMany::make(__('PROJECTS'), 'projects', Project::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),
 
         ];

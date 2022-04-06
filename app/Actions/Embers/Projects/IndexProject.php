@@ -22,7 +22,6 @@ class IndexProject implements IndexesProjects
         $teamProjects = $user->currentTeam->projects->pluck('id');
 
         $projects = Project::with([
-            'location',
             'simulations',
             'simulations.simulationType',
             'simulations.simulationType.unit'

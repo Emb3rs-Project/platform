@@ -13,7 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('projects', function (Blueprint $table) {
+            $table->dropColumn('location_id');
+            $table->jsonb('data')->default('{}');
+        });
     }
 
     /**

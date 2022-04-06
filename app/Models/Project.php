@@ -23,28 +23,17 @@ class Project extends Model
     protected $fillable = [
         'name',
         'description',
-        'location_id'
+        'data'
     ];
 
     /**
-     * The Locations that this Project has.
+     * The attributes that should be cast.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @var array
      */
-    public function locations(): HasMany
-    {
-        return $this->hasMany(Location::class, 'project_id');
-    }
-
-    /**
-     * The Location that this Project belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function location(): BelongsTo
-    {
-        return $this->belongsTo(Location::class, 'location_id');
-    }
+    protected $casts = [
+        'data' => 'array',
+    ];
 
     /**
      * The Simulations that this Project has.
