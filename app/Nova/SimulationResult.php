@@ -16,7 +16,7 @@ class SimulationResult extends Resource
      *
      * @var string
      */
-    public static $group = '1.0 - Simulations';
+    public static $group = '1.2 - Reports';
 
     /**
      * The model the resource corresponds to.

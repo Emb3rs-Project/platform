@@ -19,7 +19,7 @@ class Property extends Resource
      *
      * @var string
      */
-    public static $group = '0.0 - Configs';
+    public static $group = '0.2 - Properties';
 
 
     /**

@@ -15,7 +15,7 @@ class Link extends Resource
      *
      * @var string
      */
-    public static $group = '0.0 - Configs';
+    public static $group = '0.0 - Templates';
 
 
     /**

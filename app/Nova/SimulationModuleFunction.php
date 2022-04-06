@@ -17,7 +17,7 @@ class SimulationModuleFunction extends Resource
      *
      * @var string
      */
-    public static $group = '1.0 - Simulations';
+    public static $group = '1.1 - Configs';
 
     /**
      * The model the resource corresponds to.

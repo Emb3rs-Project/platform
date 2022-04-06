@@ -18,7 +18,7 @@ class Category extends Resource
      *
      * @var string
      */
-    public static $group = '0.0 - Configs';
+    public static $group = '0.1 - Configs';
 
     /**
      * The model the resource corresponds to.
