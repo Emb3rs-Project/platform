@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -13,6 +14,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Property extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0. Sinks&Sources';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -36,11 +45,11 @@ class Property extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'dataType',
-//    'inputType',
-//    'data',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'dataType',
+        //    'inputType',
+        //    'data',
     ];
 
     /**

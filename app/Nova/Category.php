@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Category extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0. Sinks&Sources';
+
     /**
      * The model the resource corresponds to.
      *
@@ -35,9 +43,9 @@ class Category extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'type',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'type',
     ];
 
     /**

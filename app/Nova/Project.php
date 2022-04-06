@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -11,6 +12,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Project extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'SIM';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -34,9 +43,9 @@ class Project extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'description',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'description',
     ];
 
     /**

@@ -12,6 +12,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class GeneratedScript extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'DELETE';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string

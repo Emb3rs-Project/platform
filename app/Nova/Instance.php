@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Instance extends Resource
 {
+
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0. Sinks&Sources';
+
     /**
      * The model the resource corresponds to.
      *
@@ -35,9 +44,9 @@ class Instance extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'values',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'values',
     ];
 
     /**

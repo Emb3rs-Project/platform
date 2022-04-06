@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class TemplateProperty extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0. Sinks&Sources';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var  string

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -9,6 +10,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class TeamInvitation extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'USER';
+
     /**
      * The model the resource corresponds to.
      *
@@ -32,9 +40,9 @@ class TeamInvitation extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'email',
-//    'role',
+        // You can add any of this to your Laravel Nova Search
+        //    'email',
+        //    'role',
     ];
 
     /**

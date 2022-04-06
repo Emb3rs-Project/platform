@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -10,6 +11,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class GeoSegment extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'DELETE';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -33,8 +42,8 @@ class GeoSegment extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'data',
+        // You can add any of this to your Laravel Nova Search
+        //    'data',
     ];
 
     /**

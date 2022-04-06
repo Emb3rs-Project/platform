@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Script extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = 'DELETE';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string
@@ -35,7 +42,7 @@ class Script extends Resource
         'id',
     ];
 
-     /**
+    /**
      * Get the URI key for the resource.
      *
      * @return string

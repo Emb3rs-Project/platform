@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -9,6 +10,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Unit extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0. Sinks&Sources';
+
     /**
      * The model the resource corresponds to.
      *
@@ -32,8 +40,8 @@ class Unit extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
     ];
 
     /**
