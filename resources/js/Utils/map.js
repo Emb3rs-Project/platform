@@ -232,5 +232,8 @@ export default {
     }
 
     return linksInView;
+  },
+  setBoundaryView(map, boundingBox) {
+      
   }
 }
