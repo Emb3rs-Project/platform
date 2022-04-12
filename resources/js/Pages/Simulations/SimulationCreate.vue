@@ -14,7 +14,7 @@
                     </div>
 
                     <!-- Simulation Steps -->
-                    <!-- <h2 class="pt-2">
+                    <h2 class="pt-2">
                         Simulation Steps
                         <span
                             class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-green-100 text-gray-800"
@@ -53,13 +53,13 @@
                             step.function
                         }}</b
                         >)
-                    </div> -->
+                    </div>
 
                     <h2 class="text-md font-semibold">Modules Inputs</h2>
                     <!-- CF MODULE INPUTS -->
                     <!-- cf:sink:convert_sinks -->
                     <div
-                        v-if="hasCFConvertSink && false"
+                        v-if="hasCFConvertSink"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-100"
                     >
                         <p class="font-mono font-bold">cf:sink:convert_sinks</p>
@@ -67,7 +67,7 @@
                     </div>
                     <!-- cf:source_detailed:convert_sources -->
                     <div
-                        v-if="hasCFConvertSource && false"
+                        v-if="hasCFConvertSource"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-100"
                     >
                         <p class="font-mono font-bold">
@@ -78,7 +78,7 @@
                     <!-- GIS MODULE INPUTS -->
                     <!-- gis:create_network -->
                     <div
-                        v-if="hasGISCreateNetwork & false"
+                        v-if="hasGISCreateNetwork"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
                     >
                         <p class="font-mono font-bold">gis:create_network</p>
@@ -127,7 +127,7 @@
 
                     <!-- gis:optimize_network -->
                     <div
-                        v-if="hasGISOptimizeNetwork & false"
+                        v-if="hasGISOptimizeNetwork"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
                     >
                         <p class="font-mono font-bold">gis:optimize_network</p>
@@ -154,7 +154,7 @@
                     <!-- TEO MODULE INPUTS -->
                     <!-- teo:buildmodel -->
                     <div
-                        v-if="hasTEOBuildModel & false"
+                        v-if="hasTEOBuildModel"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-100"
                     >
                         <p class="font-mono font-bold">teo:buildmodel</p>
@@ -980,7 +980,7 @@
                                                 type="text"
                                                 v-model="mm_util[sink.id]"
                                                 class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
-                                                placeholder="15000"
+                                                placeholder="[1,2,3,4,5,6,7,8,9]"
                                             />
                                             <span
                                                 class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"
@@ -996,6 +996,406 @@
                                         pay for their heat
                                     </p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- market:longterm -->
+                    <div
+                        v-if="hasMMLongTerm"
+                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
+                    >
+                        <p class="font-mono font-bold">market:longterm</p>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Market Design
+                                        </label>
+                                        <span
+                                            class="text-sm text-gray-500"
+                                            id="input-required"
+                                        >
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <VSelect
+                                            :options="[
+                                                'centralized',
+                                                'decentralized',
+                                            ]"
+                                            v-model="form.extra.input_data.md"
+                                        />
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Market design to simulate.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Horizon Basis
+                                        </label>
+                                        <span
+                                            class="text-sm text-gray-500"
+                                            id="input-required"
+                                        >
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <VSelect
+                                            :options="[
+                                                'weeks',
+                                                'months',
+                                                'years',
+                                            ]"
+                                            v-model="
+                                                form.extra.input_data
+                                                    .horizon_basis
+                                            "
+                                        />
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Simulation horizon period.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Data Profile
+                                        </label>
+                                    </div>
+                                    <div
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <VSelect
+                                            :options="['hourly', 'daily']"
+                                            v-model="
+                                                form.extra.input_data
+                                                    .data_profile
+                                            "
+                                        />
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Defines the level of data aggregation
+                                        and simulation time slot between
+                                        iterations.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="form.extra.input_data.recurrence"
+                                    description="Number of instances to simulate according to Horizon Basis. weeks recurrence < 52, months recurrence < 12"
+                                    label="Recurrence"
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="
+                                        form.extra.input_data.yearly_demand_rate
+                                    "
+                                    description="Expected yearly demand rate. It can be positive or negative. [-1,1]"
+                                    label="Yearly Demand Rate"
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Product Differentiation Option
+                                        </label>
+                                    </div>
+                                    <div
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <VSelect
+                                            :options="[
+                                                'noPref',
+                                                'co2Emissions',
+                                                'networkDistance',
+                                            ]"
+                                            v-model="
+                                                form.extra.input_data
+                                                    .prod_diff_option
+                                            "
+                                        />
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Option to influence bilateral market
+                                        according to a pre-defined preference.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Agent IDs
+                                        </label>
+                                        <span
+                                            class="text-sm text-gray-500"
+                                            id="input-required"
+                                        >
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <VSelect
+                                            :options="[]"
+                                            v-model="
+                                                form.extra.input_data.agent_ids
+                                            "
+                                            :multiple="true"
+                                            :taggable="true"
+                                        />
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Agent IDs.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            v-if="
+                                form.extra.input_data.prod_diff_option ==
+                                'co2Emissions'
+                            "
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="
+                                        form.extra.input_data.co2_emissions
+                                    "
+                                    description="CO2 emissions by each agent."
+                                    label="CO2 Emissions"
+                                    :required="true"
+                                    placeholder="[1,1.1,0,1.8]"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="form.extra.input_data.gmax"
+                                    description="Maximum capacity one source is willing to offer in the market."
+                                    label="Maximum Production"
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="form.extra.input_data.lmax"
+                                    description="Maximum capacity one sinks is willing to offer in the market."
+                                    label="Maximum Demand"
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="form.extra.input_data.cost"
+                                    description="Monetary bid from sources."
+                                    label="Cost"
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Utility
+                                        </label>
+                                    </div>
+                                    <div
+                                        v-for="sink of form.extra.sinks"
+                                        :key="sink"
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <div
+                                            class="mt-1 flex rounded-md shadow-sm"
+                                        >
+                                            <input
+                                                type="text"
+                                                v-model="mm_util[sink.id]"
+                                                class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
+                                                placeholder="[1,2,3,4,5,6,7,8,9]"
+                                            />
+                                            <span
+                                                class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"
+                                            >
+                                                {{ sink.name }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Monetary bid by sinks.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BM MODULE INPUTS -->
+                    <!-- business:bm -->
+                    <div
+                        v-if="hasBMBase"
+                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
+                    >
+                        <p class="font-mono font-bold">business:bm</p>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="form.extra.input_data.rls"
+                                    description="A relationship matrix to determine the ownership structure of the different actors."
+                                    label="Relationship matrix for ownership structures."
+                                    :required="true"
+                                />
+                            </div>
+                        </div>
+
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="
+                                        form.extra.input_data.discount_rate
+                                    "
+                                    description=""
+                                    label="Socio-economic and private business discount rate."
+                                    :required="true"
+                                    placeholder="[4, 5]"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="
+                                        form.extra.input_data.project_duration
+                                    "
+                                    description=""
+                                    label="Life time in years of the project."
+                                    :required="true"
+                                    placeholder="10"
+                                />
+                            </div>
+                        </div>
+                        <div
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <TextInput
+                                    v-model="
+                                        form.extra.input_data.co2_intensity
+                                    "
+                                    description="The co2 intensity of the heat supply being used at sinks before the excess heat utilization project"
+                                    label="CO2 intensity of the existing supply at the sink. (kg/kWh)"
+                                    :required="true"
+                                    placeholder="25"
+                                />
                             </div>
                         </div>
                     </div>
@@ -1238,6 +1638,20 @@ const form = useForm({
             el_price: null,
             start_datetime: null,
             util: null,
+            rls: null,
+            discount_rate: null,
+            project_duration: null,
+            co2_intensity: null,
+            horizon_basis: null,
+            data_profile: null,
+            recurrence: null,
+            yearly_demand_rate: null,
+            prod_diff_option: null,
+            agent_ids: null,
+            co2_emissions: null,
+            gmax: null,
+            lmax: null,
+            cost: null,
         },
         sinks: [],
         sources: [],
