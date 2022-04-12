@@ -78,7 +78,7 @@
                     <!-- GIS MODULE INPUTS -->
                     <!-- gis:create_network -->
                     <div
-                        v-if="hasGISCreateNetwork & false"
+                        v-if="hasGISCreateNetwork"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
                     >
                         <p class="font-mono font-bold">gis:create_network</p>
@@ -127,7 +127,7 @@
 
                     <!-- gis:optimize_network -->
                     <div
-                        v-if="hasGISOptimizeNetwork & false"
+                        v-if="hasGISOptimizeNetwork"
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md text-xs bg-gray-50"
                     >
                         <p class="font-mono font-bold">gis:optimize_network</p>
@@ -414,10 +414,131 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div
+                            v-if="
+                                form.extra.input_data.platform_sets.EMISSION
+                                    .length > 0
+                            "
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Annual emission limit
+                                        </label>
+                                        <span
+                                            class="text-sm text-gray-500"
+                                            id="input-required"
+                                        >
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div
+                                        v-for="emission of form.extra.input_data
+                                            .platform_sets.EMISSION"
+                                        :key="emission"
+                                        class="mt-1 relative rounded-md shadow-sm"
+                                    >
+                                        <div
+                                            class="mt-1 flex rounded-md shadow-sm"
+                                        >
+                                            <input
+                                                type="text"
+                                                v-model="
+                                                    teo_platform_annual_emission_limit[
+                                                        emission
+                                                    ]
+                                                "
+                                                class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
+                                                placeholder="15000"
+                                            />
+                                            <span
+                                                class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"
+                                            >
+                                                {{ emission }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    >
+                                        Annual upper limit for a specific
+                                        emission generated in the whole modelled
+                                        region.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div
+                            v-if="
+                                form.extra.input_data.platform_sets.STORAGE
+                                    .length > 0
+                            "
+                            class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                        >
+                            <div class="sm:col-span-3">
+                                <div>
+                                    <div class="flex justify-between">
+                                        <label
+                                            for="sim_metadata"
+                                            class="block text-sm font-medium text-gray-700"
+                                        >
+                                            Platform Storages
+                                        </label>
+                                        <span
+                                            class="text-sm text-gray-500"
+                                            id="input-required"
+                                        >
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div
+                                        v-for="storage of form.extra.input_data
+                                            .platform_sets.STORAGE"
+                                        :key="storage"
+                                        class="my-5 relative rounded-md shadow-sm"
+                                    >
+                                        <h2 class="font-bold">
+                                            for Storage : {{ storage }}
+                                        </h2>
+                                        <div
+                                            v-for="prop of teo_platform_storages_props"
+                                            :key="prop"
+                                            class="mt-1 flex rounded-md shadow-sm"
+                                        >
+                                            <input
+                                                type="text"
+                                                v-model="
+                                                    teo_platform_storages[
+                                                        `${storage}_${prop.path}`
+                                                    ]
+                                                "
+                                                class="flex-1 min-w-0 block w-full px-3 py-2 rounded-none rounded-l-md focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300"
+                                                :placeholder="prop.default"
+                                                required
+                                            />
+                                            <span
+                                                class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-50 text-gray-500 sm:text-sm"
+                                            >
+                                                {{ prop.path }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <p
+                                        class="mt-2 text-sm text-gray-500 text-justify"
+                                    ></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <pre>{{ form.extra.input_data.platform_sets }}</pre>
         </div>
 
         <SlideOver
@@ -562,7 +683,7 @@
                     class="mt-2"
                 />
             </div>
-
+            <pre>{{ form.extra.input_data.platform_storages }}</pre>
             <template #actions>
                 <SecondaryOutlinedButton
                     type="button"
@@ -639,6 +760,8 @@ const form = useForm({
                 MODE_OF_OPERATION: [],
                 STORAGE: [],
             },
+            platform_annual_emission_limit: [],
+            platform_storages: [],
         },
         sinks: [],
         sources: [],
@@ -648,6 +771,34 @@ const form = useForm({
 
 const onSubmit = () => {
     form.extra.steps = stepInfo.value.length;
+    form.extra.input_data.platform_annual_emission_limit = Object.keys(
+        teo_platform_annual_emission_limit.value
+    ).map((a) => ({
+        emission: a,
+        annual_emission_limit: Number(
+            teo_platform_annual_emission_limit.value[a]
+        ),
+    }));
+
+    form.extra.input_data.platform_sets.TIMESLICE = Array(teo_timeslice).map(
+        (_, i) => i
+    );
+
+    form.extra.input_data.platform_storages =
+        form.extra.input_data.platform_sets.STORAGE.map((a) => {
+            const records = Object.keys(teo_platform_storages.value).filter(
+                (key) => key.includes(a)
+            );
+
+            return records.reduce(
+                (p, c) => {
+                    p[c.replace(`${a}_`, "")] = teo_platform_storages.value[c];
+                    return p;
+                },
+                { storage: a }
+            );
+        });
+
     form.post(route("projects.simulations.store", { id: props.project.id }));
 };
 const onCancel = () => {};
@@ -813,6 +964,49 @@ const hasTEOBuildModel = computed(() =>
 );
 
 const teo_timeslice = ref(48);
+const teo_platform_annual_emission_limit = ref({});
+const teo_platform_storages = ref({});
+const teo_platform_storages_props = [
+    {
+        label: "capital cost storage",
+        path: "capital_cost_storage",
+        default: 100,
+    },
+    { label: "dicount rate sto", path: "dicount_rate_sto", default: 0.1 },
+    {
+        label: "operational life sto",
+        path: "operational_life_sto",
+        default: 100,
+    },
+    { label: "storage max charge", path: "storage_max_charge", default: 10000 },
+    {
+        label: "storage max discharge",
+        path: "storage_max_discharge",
+        default: 10000,
+    },
+    { label: "l2d", path: "l2d", default: 1 },
+    { label: "tag heating", path: "tag_heating", default: 1 },
+    { label: "tag cooling", path: "tag_cooling", default: 0.001 },
+    { label: "storage return temp", path: "storage_return_temp", default: 50 },
+    { label: "storage supply temp", path: "storage_supply_temp", default: 80 },
+    {
+        label: "storage ambient temp",
+        path: "storage_ambient_temp",
+        default: 20,
+    },
+    {
+        label: "residual storage capacity",
+        path: "residual_storage_capacity",
+        default: 100,
+    },
+    {
+        label: "max storage capacity",
+        path: "max_storage_capacity",
+        default: 450000,
+    },
+    { label: "storage level start", path: "storage_level_start", default: 1 },
+    { label: "u value", path: "u_value", default: 0.14 },
+];
 
 const hasMMShortTerm = computed(() =>
     stepInfo.value.find((a) => a.function === "market:shortterm")
