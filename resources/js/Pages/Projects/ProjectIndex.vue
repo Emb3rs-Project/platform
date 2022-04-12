@@ -60,7 +60,7 @@
                                             type="button"
                                             class="focus:outline-none text-indigo-600 hover:text-indigo-900 divide-x"
                                         >
-                                            Attach a Simulation
+                                            Create a Simulation
                                         </Link>
 
                                         <div

@@ -10,6 +10,9 @@ use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
+use App\Models\Instance;
+use App\Models\Project;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,7 +30,7 @@ class ProjectSimulationController extends Controller
         $simulations = app(IndexesSimulations::class)->index($request->user(), $projectId);
 
         return Inertia::render('Simulations/SimulationIndex', [
-            'simulations' => $simulations
+            'simulations' => $simulations,
         ]);
     }
 
@@ -38,22 +41,22 @@ class ProjectSimulationController extends Controller
      * @param  int  $projectId
      * @return \Inertia\Response
      */
-    public function create(Request $request, int $projectId)
+    public function create(Request $request, Project $project)
     {
-        [
-            $simulationTypes,
-            $sources,
-            $sinks,
-            $links,
-            $locations
-        ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
+        // [
+        //     $simulationTypes,
+        //     $sources,
+        //     $sinks,
+        //     $links,
+        //     $locations
+        // ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
+
+        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
+        $instances = Instance::with('location')->whereIn('id', $instances_id)->get();
 
         return Inertia::render('Simulations/SimulationCreate', [
-            'simulationTypes' => $simulationTypes,
-            'sources' => $sources,
-            'sinks' => $sinks,
-            'links' => $links,
-            'locations' => $locations,
+            'instances' => $instances,
+            'project' => $project
         ]);
     }
 

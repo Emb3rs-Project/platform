@@ -19,6 +19,13 @@ class Target extends Resource
     public static $group = '1.1 - Configs';
 
     /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
+    /**
      * The model the resource corresponds to.
      *
      * @var  string

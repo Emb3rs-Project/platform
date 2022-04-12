@@ -74,11 +74,8 @@ class Simulation extends Resource
                     // 'stopped' => __('Stopped'),
                     // 'error' => __('Error')
                 ]),
-            Code::make(__('TARGETDATA'), 'targetData')->json()->rules('json'),
 
             BelongsTo::make(__('PROJECT'), 'project', Project::class),
-            BelongsTo::make(__('TARGET'), 'target', Target::class),
-            BelongsTo::make(__('SIMULATIONTYPE'), 'simulationType', SimulationType::class),
 
             BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class)
                 ->nullable(),

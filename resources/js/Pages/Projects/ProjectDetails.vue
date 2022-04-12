@@ -128,24 +128,6 @@
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Target
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Simulation Type
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Simulation Type Description
-                                                </th>
-                                                <th
-                                                    scope="col"
                                                     class="relative px-6 py-3"
                                                 >
                                                     <span class="sr-only"
@@ -177,34 +159,7 @@
                                                     {{ simulation.status }}
                                                 </td>
                                                 <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                                >
-                                                    {{ simulation.targetData }}
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                                >
-                                                    {{
-                                                        simulation
-                                                            .simulation_type
-                                                            .name
-                                                    }}
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                                                >
-                                                    {{
-                                                        simulation
-                                                            .simulation_type
-                                                            .description
-                                                            ? simulation
-                                                                  .simulation_type
-                                                                  .description
-                                                            : "Not defined"
-                                                    }}
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2"
+                                                    class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2 float-right"
                                                 >
                                                     <Link
                                                         :href="
@@ -271,22 +226,13 @@
             </div>
         </div>
 
-        <!--
-            <div class="w-full my-5 px-16 flex justify-end gap-x-10">
-            <secondary-link-button
-                :path="'projects.simulations.create'"
-                :parameter="project.id"
+        <div class="w-full my-5 px-16 flex justify-end gap-x-10">
+            <Link
+                class="px-5 py-2 bg-slate-500 font-semibold text-white rounded-sm"
+                :href="route('projects.simulations.create', { id: project.id })"
+                >Create Simulation</Link
             >
-                Create simulation
-            </secondary-link-button>
-            <primary-link-button
-                :path="'projects.edit'"
-                :parameter="project.id"
-            >
-                Edit Project
-            </primary-link-button>
         </div>
-        -->
     </AppLayout>
 </template>
 
@@ -324,7 +270,6 @@ const map = ref(null);
 
 onMounted(() => {
     const _map = map.value.map;
-    console.log(map.value.map);
 
     const { data } = props.project;
     _map.fitBounds(data.polygon);
