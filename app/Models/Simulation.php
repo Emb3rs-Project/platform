@@ -87,6 +87,11 @@ class Simulation extends Model
         return $this->hasMany(SimulationResult::class, 'simulation_id');
     }
 
+    public function simulationSessions(): HasMany
+    {
+        return $this->hasMany(SimulationSession::class, 'simulation_id');
+    }
+
     /**
      * The Integration Results that this Simulation has.
      *

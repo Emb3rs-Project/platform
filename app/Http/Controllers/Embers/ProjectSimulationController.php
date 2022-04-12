@@ -99,10 +99,7 @@ class ProjectSimulationController extends Controller
             $project
         ] = app(ShowsSimulations::class)->show($request->user(), $projectId, $simulationId);
 
-        return response()->json([
-            'simulation' => $simulation,
-            'project' => $project
-        ]);
+        return Inertia::render('Simulations/SimulationShow', ["project" => $project, "simulation" => $simulation]);
     }
 
     /**

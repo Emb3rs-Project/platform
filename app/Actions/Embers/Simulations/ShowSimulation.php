@@ -25,7 +25,7 @@ class ShowSimulation implements ShowsSimulations
 
         $project = Project::query()->findOrFail($projectId);
 
-        $simulation = Simulation::query()->with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
+        $simulation = Simulation::query()->with(['project', 'simulationMetadata', 'simulationSessions'])->findOrFail($simulationId);
 
         return [
             $simulation,
