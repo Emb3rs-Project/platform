@@ -77,6 +77,8 @@ class Simulation extends Resource
                     // 'error' => __('Error')
                 ]),
 
+            Code::make(__('extra'), 'extra'),
+
             BelongsTo::make(__('PROJECT'), 'project', Project::class),
 
             BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class)

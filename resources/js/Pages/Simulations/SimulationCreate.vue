@@ -1,24 +1,58 @@
 <template>
     <AppLayout>
-        <div class="bg-white h-screen overflow-scroll">
-            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+        <div class="bg-white h-screen overflow-y-scroll">
+            <div class="w-1/2 py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                 <h2 class="text-lg font-bold">Simulation Details</h2>
 
                 <div v-if="form.simulation_metadata" class="py-5 text-left">
                     <h2 class="text-md font-semibold">Simulation Metadata</h2>
-
-                    <pre class="py-2">
-Name        : {{ form.simulation_metadata.name }}
-Type        : {{ form.simulation_metadata.data.type }}
-                    </pre>
-
-                    <h2 class="pt-2 underline">Simulation Steps</h2>
-                    <pre v-for="step of stepInfo" :key="step">
-StepUUID    : {{ step.step }}
-Module      : {{ step.module }}
-Function    : {{ step.function }}
-                        </pre
+                    <div
+                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 bg-gray-50 text-xs"
                     >
+                        Name : <b>{{ form.simulation_metadata.name }}</b> <br />
+                        Type : <b>{{ form.simulation_metadata.data.type }}</b>
+                    </div>
+
+                    <h2 class="pt-2">
+                        Simulation Steps
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-green-100 text-gray-800"
+                        >
+                            Start
+                        </span>
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-gray-100 text-gray-800"
+                        >
+                            Middle
+                        </span>
+
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-red-100 text-gray-800"
+                        >
+                            Finish
+                        </span>
+                        <span
+                            class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-orange-100 text-gray-800"
+                        >
+                            User
+                        </span>
+                    </h2>
+                    <div
+                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs"
+                        :class="{
+                            'bg-gray-50':
+                                index != 0 && index != stepInfo.length - 1,
+                            'bg-green-100': index == 0,
+                            'bg-red-100': index == stepInfo.length - 1,
+                        }"
+                        v-for="(step, index) of stepInfo"
+                        :key="step"
+                    >
+                        {{ step.step }} - {{ step.module }} (<b>{{
+                            step.function
+                        }}</b
+                        >)
+                    </div>
                 </div>
             </div>
         </div>
@@ -210,15 +244,17 @@ const props = defineProps({
 
 const form = useForm({
     name: "Simulation Name",
-    simulation_metadata: props.simulation_metadata[0],
+    simulation_metadata: props.simulation_metadata[1],
     extra: {
         input_data: {},
         sinks: [],
         sources: [],
+        steps: 0,
     },
 });
 
 const onSubmit = () => {
+    form.extra.steps = stepInfo.value.length;
     form.post(route("projects.simulations.store", { id: props.project.id }));
 };
 const onCancel = () => {};

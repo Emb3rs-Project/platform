@@ -130,7 +130,13 @@
                                                     scope="col"
                                                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                 >
-                                                    Status
+                                                    Metadata
+                                                </th>
+                                                <th
+                                                    scope="col"
+                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                >
+                                                    Steps
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -167,7 +173,17 @@
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                                 >
-                                                    {{ simulation.status }}
+                                                    {{
+                                                        simulation
+                                                            .simulation_metadata
+                                                            .name
+                                                    }}
+                                                </td>
+                                                <td
+                                                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                                >
+                                                    {{ simulation.extra.steps }}
+                                                    Steps
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2 float-right"

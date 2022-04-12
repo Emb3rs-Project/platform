@@ -24,8 +24,7 @@ class ShowProject implements ShowsProjects
 
         $project = Project::with([
             'simulations',
-            'simulations.simulationType',
-            'simulations.simulationType.unit'
+            'simulations.simulationMetadata'
         ])->findOrFail($id);
 
         return $project;

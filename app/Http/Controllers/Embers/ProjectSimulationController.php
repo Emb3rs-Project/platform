@@ -77,7 +77,8 @@ class ProjectSimulationController extends Controller
         $project->simulations()->create([
             "status" => "NEW",
             "name" => $request->get('name'),
-            "simulation_metadata_id" => $request->get('simulation_metadata')["id"]
+            "simulation_metadata_id" => $request->get('simulation_metadata')["id"],
+            "extra" => $request->get('extra')
         ]);
 
         return redirect()->route('projects.show', $project->id);
