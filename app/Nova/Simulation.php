@@ -59,6 +59,8 @@ class Simulation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+
+            Text::make(__("NAME"), "name"),
             Select::make(__('STATUS'), 'status')
                 ->options([
                     'NEW' => __('New'),

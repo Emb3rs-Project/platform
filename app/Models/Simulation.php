@@ -23,7 +23,9 @@ class Simulation extends Model
         'targetData',
         'project_id',
         'target_id',
-        'simulation_type_id'
+        'simulation_type_id',
+        'name',
+        'simulation_metadata_id'
     ];
 
     /**

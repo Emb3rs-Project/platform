@@ -12,6 +12,7 @@ use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Project;
+use App\Models\SimulationMetadata;
 use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -52,11 +53,14 @@ class ProjectSimulationController extends Controller
         // ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
 
         $instances_id = Auth::user()->currentTeam->instances->pluck("id");
-        $instances = Instance::with('location')->whereIn('id', $instances_id)->get();
+        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+
+        $simulation_metadata = SimulationMetadata::all();
 
         return Inertia::render('Simulations/SimulationCreate', [
             'instances' => $instances,
-            'project' => $project
+            'project' => $project,
+            'simulation_metadata' => $simulation_metadata
         ]);
     }
 
@@ -67,11 +71,16 @@ class ProjectSimulationController extends Controller
      * @param  int  $projectId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, int $projectId)
+    public function store(Request $request, Project $project)
     {
-        app(StoresSimulations::class)->store($request->user(), $projectId, $request->all());
 
-        return redirect()->route('projects.simulations.index', $projectId);
+        $project->simulations()->create([
+            "status" => "NEW",
+            "name" => $request->get('name'),
+            "simulation_metadata_id" => $request->get('simulation_metadata')["id"]
+        ]);
+
+        return redirect()->route('projects.show', $project->id);
     }
 
     /**
@@ -151,6 +160,6 @@ class ProjectSimulationController extends Controller
     {
         app(DestroysSimulations::class)->destroy($request->user(), $projectId, $simulationId);
 
-        return redirect()->route('projects.simulations.index', $projectId);
+        return redirect()->route('projects.show', $projectId);
     }
 }
