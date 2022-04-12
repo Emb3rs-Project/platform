@@ -19,7 +19,7 @@ return new class extends Migration
             $table->boolean('required')->default(false);
             $table->boolean('advanced')->default(false);
             $table->integer('order')->unsigned();
-            $table->string('default_value', 100)->nullable();
+            $table->string('default_value')->nullable();
 
             $table->foreignId("simulation_module_function_id");
             $table->foreignId("property_id");

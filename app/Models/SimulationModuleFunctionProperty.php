@@ -24,6 +24,6 @@ class SimulationModuleFunctionProperty extends Model
 
     public function simulation_functions(): BelongsTo
     {
-        return $this->belongsTo(SimulationModuleFunction::class, 'simulation_module_id');
+        return $this->belongsTo(SimulationModuleFunction::class, 'simulation_module_function_id');
     }
 }
