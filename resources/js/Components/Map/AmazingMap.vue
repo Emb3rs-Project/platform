@@ -484,7 +484,10 @@ export default {
         };
 
         const onLinkClick = (link) => {
-            console.log("onLinkClick()");
+            store.dispatch("objects/showSlide", {
+                route: "objects.links.show",
+                props: link.id,
+            });
         };
 
         const loadMarkers = (markers = null) => {

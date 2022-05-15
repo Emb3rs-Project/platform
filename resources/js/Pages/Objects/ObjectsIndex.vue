@@ -130,6 +130,7 @@ import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
 import DeleteModal from "@/Components/Modals/DeleteModal.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import { filterOptions } from "@/Utils/objectIndex";
+import { notify } from "@kyvg/vue3-notification";
 
 export default {
   components: {
@@ -165,6 +166,8 @@ export default {
     );
 
     const storeInstances = computed(() => store.getters["objects/instances"]);
+
+    const selectedLocation = computed(() => store.getters["map/selectedMarker"]);
 
     const selectedObject = computed({
       get: () => storeFilterOption.value ?? filterOptions[0],
@@ -241,13 +244,24 @@ export default {
       modalIsOpen.value = true;
     };
 
+    const showTestNotification = () => {
+      notify({
+          group: "notifications",
+          title: "Sink",
+          text: "Please, Select the sink on the map",
+          data: {
+              type: "warning",
+        },
+      });
+    };
+
     const centerAtLocation = (loc) =>
       store.dispatch("map/centerAt", { marker: loc });
 
     const onConfirmation = (modalType) => {
       switch (modalType) {
         case "delete":
-          const type = itemToDelete.value?.template?.category?.type;
+          const type = itemToDelete.value?.template?.category?.type ?? selectedObject.value.title.toLowerCase();
 
           if (type === "source")
             Inertia.delete(
@@ -263,7 +277,13 @@ export default {
                 onSuccess: () => store.dispatch("map/refreshMap"),
               }
             );
-
+          if (type === 'links')
+            Inertia.delete(
+              route(`objects.links.destroy`, itemToDelete.value.id),
+              {
+                onSuccess: () => store.dispatch("map/refreshMap"),
+              }
+            );
           objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);
 
           break;
@@ -274,7 +294,12 @@ export default {
     };
 
     const onActionRequest = async (route, param) => {
-      store.dispatch("objects/showSlide", { route, props: param });
+      const type = selectedObject.value.title.toLowerCase();
+      if (type === 'sinks' && selectedLocation.value == null) {
+        showTestNotification()
+      } else {
+        store.dispatch("objects/showSlide", { route, props: param });
+      }
     };
 
     return {
