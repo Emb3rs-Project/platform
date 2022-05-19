@@ -22,10 +22,15 @@ class CharacterizeInstance implements CharacterizesInstances
             ]
         );
 
+        $data = $instance->values;
+
+        if($template->id == 15)
+            $data = $instance->values["properties"];
+
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode([
             "type_of_object" => $type,
-            "streams" => [$instance->values]
+            "streams" => [$data]
         ]));
 
         print("Sending  : ");
