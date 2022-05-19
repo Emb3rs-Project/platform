@@ -40,7 +40,9 @@ class CharacterizeInstance implements CharacterizesInstances
          list($feature, $status) = $client->char_simple($request)->wait();
 
          if($feature) {
-             $instance->values["streams"] = $feature->getStreams();
+             $values = $instance->values;
+             $values["streams"] = $feature->getStreams();
+             $instance->values = $values;
              $instance->save();
          }
     }
