@@ -332,16 +332,17 @@ const sources = computed(() => {
 });
 
 const stepInfo = computed(() => {
-    if (!form.simulation_metadata) return [];
-    const steps = Object.keys(form.simulation_metadata.data).filter(
-        (a) => !["start", "type"].includes(a)
-    );
+    return [];
+    // if (!form.simulation_metadata) return [];
+    // const steps = Object.keys(form.simulation_metadata.data).filter(
+    //     (a) => !["start", "type"].includes(a)
+    // );
 
-    return steps.map((s) => ({
-        step: s,
-        module: form.simulation_metadata.data[s].module.name,
-        function: form.simulation_metadata.data[s].function,
-    }));
+    // return steps.map((s) => ({
+    //     step: s,
+    //     module: form.simulation_metadata.data[s].module.name,
+    //     function: form.simulation_metadata.data[s].function,
+    // }));
 });
 
 const hasCFConvertSink = computed(() =>
