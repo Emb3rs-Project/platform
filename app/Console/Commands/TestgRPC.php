@@ -73,8 +73,10 @@ class TestgRPC extends Command
 
         /** @var CharacterizationSourceOutput $feature */
         list($feature, $status) = $client->char_simple($request)->wait();
+        print($status);
         print("Received : ");
-        dump($feature->getStreams());
+        if($feature)
+            dump($feature->getStreams());
 
         return 0;
     }
