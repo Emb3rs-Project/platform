@@ -36,7 +36,7 @@ class TestgRPC extends Command
     public function handle()
     {
         $client = new CFModuleClient(
-            'localhost:50051', [
+            'vali.pantherify.dev:50051', [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
         );
