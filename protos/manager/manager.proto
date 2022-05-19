@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package manager;
+
+
+service ManagerModule {
+    // Manager Module for Emb3rs Project
+
+    // Starts a simulation
+    rpc StartSimulation (StartSimulationRequest) returns (StartSimulationResponse) {}
+
+    // Starts a Characterization 2
+    rpc StartCharacterization (StartCharacterizationRequest) returns (StartCharacterizationResponse) {}
+}   
+ 
+
+message StartSimulationRequest {
+    string simulation_uuid = 1;
+    string simulation_metadata = 2;
+    string initial_data = 3;
+}
+
+message StartSimulationResponse {
+    string simulation_uuid = 1;
+    string result = 2;
+}
+
+message StartCharacterizationRequest {
+    string entity_id = 1;
+    string entity_data = 2;
+}
+
+message StartCharacterizationResponse {
+    string entity_id = 1;
+    string result = 2;
+}

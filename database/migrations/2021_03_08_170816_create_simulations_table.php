@@ -19,10 +19,10 @@ return new class extends Migration
             $table->enum('status', [
                 'NEW',
                 'IN PREPARATION',
-                'READY',
-                'ANALYSING',
-                'STOPPED',
-                'ERROR'
+                'RUNNING',
+                'WAITING FOR USER',
+                'ERROR',
+                'COMPLETED'
             ])->default('NEW');
             $table->jsonb('targetData');
 
