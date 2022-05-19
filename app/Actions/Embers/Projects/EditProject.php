@@ -20,7 +20,7 @@ class EditProject implements EditsProjects
         $this->authorize($user);
 
         $project = Project::with([
-            'location',
+            //'location',
             'simulations',
             'simulations.simulationType',
             'simulations.simulationType.unit'

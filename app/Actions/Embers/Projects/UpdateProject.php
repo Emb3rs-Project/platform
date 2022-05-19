@@ -36,7 +36,7 @@ class UpdateProject implements UpdatesProjects
         $validator = Validator::make($input, [
             'name' => ['filled', 'string', 'max:255'],
             'description' => ['filled', 'string'],
-            'location_id' => ['filled', 'string', 'exists:locations,id']
+            //'location_id' => ['filled', 'string', 'exists:locations,id']
         ]);
 
         return $validator->validate();
@@ -52,12 +52,12 @@ class UpdateProject implements UpdatesProjects
         }
 
         if (!empty($validated['description'])) {
-            $project->name = $validated['description'];
+            $project->description = $validated['description'];
         }
 
-        if (!empty($validated['location_id'])) {
-            $project->name = $validated['location_id'];
-        }
+        /*if (!empty($validated['location_id'])) {
+            $project->location_id = $validated['location_id'];
+        }*/
 
         $project->save();
 

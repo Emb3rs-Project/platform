@@ -102,7 +102,8 @@ class LinkController extends Controller
             $request->all()
         );
 
-        return redirect()->route('objects.links.show', $updatedLink->id);
+        return redirect()->route('objects.index');
+        //return redirect()->route('objects.links.show', $updatedLink->id);
     }
 
     /**

@@ -82,7 +82,7 @@ class ProjectController extends Controller
             $locations,
         ] = app(EditsProjects::class)->edit($request->user(), $id);
 
-        return Inertia::render('Projects/ProjectDetails', [
+        return Inertia::render('Projects/ProjectEdit', [
             'project' => $project,
             'locations' => $locations
         ]);
