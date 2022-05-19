@@ -126,15 +126,16 @@ const props = defineProps({
 });
 
 const stepInfo = computed(() => {
-    if (!props.simulation.simulation_metadata) return [];
-    const steps = Object.keys(props.simulation.simulation_metadata.data).filter(
-        (a) => !["start", "type"].includes(a)
-    );
+    return []
+    // if (!props.simulation.simulation_metadata) return [];
+    // const steps = Object.keys(props.simulation.simulation_metadata.data).filter(
+    //     (a) => !["start", "type"].includes(a)
+    // );
 
-    return steps.map((s) => ({
-        step: s,
-        module: props.simulation.simulation_metadata.data[s].module.name,
-        function: props.simulation.simulation_metadata.data[s].function,
-    }));
+    // return steps.map((s) => ({
+    //     step: s,
+    //     module: props.simulation.simulation_metadata.data[s].module.name,
+    //     function: props.simulation.simulation_metadata.data[s].function,
+    // }));
 });
 </script>
