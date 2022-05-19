@@ -49,13 +49,14 @@ class TestgRPC extends Command
         $request->setPlatform(json_encode([
             "type_of_object" => "source",
             "streams" => [
-                [ "name"=> "BIOPAR",
+                [
+                "name"=> "BIOPAR",
                 "fluid"=> "flue_gas",
                 "supply_temperature"=> "220",
                 "target_temperature"=> "120",
                 "fluid_cp"=> 1.4,
                 "capacity"=> 438.57522,
-                "daily_periods"=> "[[0,24]]",
+                "daily_periods"=> [[0,24]],
                 "saturday_on"=> 1,
                 "sunday_on"=> 1,
                 "shutdown_periods"=> [[274,300],[335,365]]]
