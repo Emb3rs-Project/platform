@@ -6,6 +6,10 @@ use Illuminate\Console\Command;
 use Manager\ManagerModuleClient;
 use Manager\StartSimulationRequest;
 use Manager\StartSimulationResponse;
+
+use CF\CFModuleClient;
+use Cf\CharacterizationInput;
+use Cf\CharacterizationSourceOutput;
 use Str;
 
 class TestgRPC extends Command
@@ -31,19 +35,35 @@ class TestgRPC extends Command
      */
     public function handle()
     {
-        $client = new ManagerModuleClient(
+        $client = new CFModuleClient(
             'localhost:50051', [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
         );
 
-        $request = new StartSimulationRequest();
-        $request->setSimulationUuid(Str::uuid()->toString());
-        $request->setSimulationMetadata("");
-        $request->setInitialData("");
+        // $request = new StartSimulationRequest();
+        // $request->setSimulationUuid(Str::uuid()->toString());
+        // $request->setSimulationMetadata("");
+        // $request->setInitialData("");
+        $request = new CharacterizationInput();
+        $request->setPlatform([
+            "type_of_object" => "source",
+            "streams" => [
+                [ "name"=> "BIOPAR",
+                "fluid"=> "flue_gas",
+                "supply_temperature"=> "220",
+                "target_temperature"=> "120",
+                "fluid_cp"=> 1.4,
+                "capacity"=> 438.57522,
+                "daily_periods"=> "[[0,24]]",
+                "saturday_on"=> 1,
+                "sunday_on"=> 1,
+                "shutdown_periods"=> [[274,300],[335,365]]]
+            ]
+            ]);
 
         print("Sending  : ");
-        dump($request->getSimulationUuid());
+        dump($request->getPlatform());
 
         /** @var StartSimulationResponse $feature */
         // list( $feature , $status) = $client->StartSimulation($request)->wait();
@@ -51,7 +71,10 @@ class TestgRPC extends Command
         // print("Received : ");
         // dump($feature->getSimulationUuid());
 
-        $client->StartSimulation($request);
+        /** @var CharacterizationSourceOutput $feature */
+        list($feature, $status) = $client->char_simple($request)->wait();
+        print("Received : ");
+        dump($feature->getStreams());
 
         return 0;
     }
