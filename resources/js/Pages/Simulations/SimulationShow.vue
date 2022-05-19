@@ -87,9 +87,10 @@
                     <div
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-gray-50"
                         v-for="session of simulation.simulation_sessions"
+                        @click=""
                         :key="session"
                     >
-                        session uuid : {{ session.simulation_uuid }} <br />
+                        <Link :href="session.id">session uuid : {{ session.simulation_uuid }}</Link> <br />
                         created_at : {{ session.created_at }}
                     </div>
                 </div>
