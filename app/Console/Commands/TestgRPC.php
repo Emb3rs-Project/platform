@@ -7,7 +7,7 @@ use Manager\ManagerModuleClient;
 use Manager\StartSimulationRequest;
 use Manager\StartSimulationResponse;
 
-use CF\CFModuleClient;
+use Cf\CFModuleClient;
 use Cf\CharacterizationInput;
 use Cf\CharacterizationSourceOutput;
 use Str;
