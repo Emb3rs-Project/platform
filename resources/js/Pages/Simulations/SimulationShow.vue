@@ -90,7 +90,9 @@
                         @click=""
                         :key="session"
                     >
-                        <Link :href="session.id">session uuid : {{ session.simulation_uuid }}</Link> <br />
+                        <Link :href="route(
+                            'session.show', session.id
+                        )">session uuid : {{ session.simulation_uuid }}</Link> <br />
                         created_at : {{ session.created_at }}
                     </div>
                 </div>
