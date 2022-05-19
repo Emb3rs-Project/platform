@@ -46,7 +46,7 @@ class TestgRPC extends Command
         // $request->setSimulationMetadata("");
         // $request->setInitialData("");
         $request = new CharacterizationInput();
-        $request->setPlatform([
+        $request->setPlatform(json_encode([
             "type_of_object" => "source",
             "streams" => [
                 [ "name"=> "BIOPAR",
@@ -60,7 +60,7 @@ class TestgRPC extends Command
                 "sunday_on"=> 1,
                 "shutdown_periods"=> [[274,300],[335,365]]]
             ]
-            ]);
+            ]));
 
         print("Sending  : ");
         dump($request->getPlatform());
