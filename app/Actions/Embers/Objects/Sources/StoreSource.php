@@ -83,11 +83,11 @@ class StoreSource implements StoresSources
             'location.lng' => ['required_with:location', 'numeric', new Coordinates],
         ]);
 
-        $validated = $validator->validate();
+        // $validated = $validator->validate();
 
-        $this->checkIfPropertiesAreValid($validated);
+        // $this->checkIfPropertiesAreValid($validated);
 
-        return $validated;
+        return $input;
     }
 
     /**

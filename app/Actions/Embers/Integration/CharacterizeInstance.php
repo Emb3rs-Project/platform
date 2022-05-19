@@ -4,6 +4,8 @@ namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Models\Instance;
+use Cf\CFModuleClient;
+use Cf\CharacterizationInput;
 use Illuminate\Support\Facades\Redis;
 
 class CharacterizeInstance implements CharacterizesInstances
@@ -12,18 +14,29 @@ class CharacterizeInstance implements CharacterizesInstances
     {
         // Prepare data for characterization, if trigger exists
         $template = $instance->template;
+        $type = $template->category->type;
 
-        if (is_null($template->triggers)) return;
+        $client = new CFModuleClient(
+            'vali.pantherify.dev:50051', [
+                'credentials' => \Grpc\ChannelCredentials::createInsecure(),
+            ]
+        );
 
-        if ($template->triggers->doesntExist()) return;
+        $request = new CharacterizationInput();
+        $request->setPlatform(json_encode([
+            "type_of_object" => $type,
+            "streams" => [$instance->values]
+        ]));
 
-        $instanceData = $instance->getInstanceData();
+        print("Sending  : ");
+        dump($request->getPlatform());
 
-        $triggerData = [
-            "metadata" => $template->triggers['data'],
-            "instance" => $instanceData
-        ];
+         /** @var CharacterizationSourceOutput $feature */
+         list($feature, $status) = $client->char_simple($request)->wait();
 
-        Redis::publish('characterization', json_encode($triggerData));
+         if($feature) {
+             $instance->values["streams"] = $feature->getStreams();
+             $instance->save();
+         }
     }
 }
