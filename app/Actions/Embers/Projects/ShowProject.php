@@ -23,10 +23,8 @@ class ShowProject implements ShowsProjects
         $this->authorize($user);
 
         $project = Project::with([
-            'location',
             'simulations',
-            'simulations.simulationType',
-            'simulations.simulationType.unit'
+            'simulations.simulationMetadata'
         ])->findOrFail($id);
 
         return $project;

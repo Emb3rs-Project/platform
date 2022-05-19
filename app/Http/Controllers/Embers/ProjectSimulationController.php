@@ -10,6 +10,10 @@ use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
+use App\Models\Instance;
+use App\Models\Project;
+use App\Models\SimulationMetadata;
+use Auth;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,7 +31,7 @@ class ProjectSimulationController extends Controller
         $simulations = app(IndexesSimulations::class)->index($request->user(), $projectId);
 
         return Inertia::render('Simulations/SimulationIndex', [
-            'simulations' => $simulations
+            'simulations' => $simulations,
         ]);
     }
 
@@ -38,22 +42,25 @@ class ProjectSimulationController extends Controller
      * @param  int  $projectId
      * @return \Inertia\Response
      */
-    public function create(Request $request, int $projectId)
+    public function create(Request $request, Project $project)
     {
-        [
-            $simulationTypes,
-            $sources,
-            $sinks,
-            $links,
-            $locations
-        ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
+        // [
+        //     $simulationTypes,
+        //     $sources,
+        //     $sinks,
+        //     $links,
+        //     $locations
+        // ] = app(CreatesSimulations::class)->create($request->user(), $projectId);
+
+        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
+        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+
+        $simulation_metadata = SimulationMetadata::all();
 
         return Inertia::render('Simulations/SimulationCreate', [
-            'simulationTypes' => $simulationTypes,
-            'sources' => $sources,
-            'sinks' => $sinks,
-            'links' => $links,
-            'locations' => $locations,
+            'instances' => $instances,
+            'project' => $project,
+            'simulation_metadata' => $simulation_metadata
         ]);
     }
 
@@ -64,11 +71,17 @@ class ProjectSimulationController extends Controller
      * @param  int  $projectId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, int $projectId)
+    public function store(Request $request, Project $project)
     {
-        app(StoresSimulations::class)->store($request->user(), $projectId, $request->all());
 
-        return redirect()->route('projects.simulations.index', $projectId);
+        $project->simulations()->create([
+            "status" => "NEW",
+            "name" => $request->get('name'),
+            "simulation_metadata_id" => $request->get('simulation_metadata')["id"],
+            "extra" => $request->get('extra')
+        ]);
+
+        return redirect()->route('projects.show', $project->id);
     }
 
     /**
@@ -86,10 +99,7 @@ class ProjectSimulationController extends Controller
             $project
         ] = app(ShowsSimulations::class)->show($request->user(), $projectId, $simulationId);
 
-        return response()->json([
-            'simulation' => $simulation,
-            'project' => $project
-        ]);
+        return Inertia::render('Simulations/SimulationShow', ["project" => $project, "simulation" => $simulation]);
     }
 
     /**
@@ -148,6 +158,6 @@ class ProjectSimulationController extends Controller
     {
         app(DestroysSimulations::class)->destroy($request->user(), $projectId, $simulationId);
 
-        return redirect()->route('projects.simulations.index', $projectId);
+        return redirect()->route('projects.show', $projectId);
     }
 }

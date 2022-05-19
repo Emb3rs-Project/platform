@@ -12,6 +12,7 @@ use App\Http\Controllers\Embers\ProjectController;
 use App\Http\Controllers\Embers\ProjectSimulationController;
 use App\Http\Controllers\Embers\ShareLinkController;
 use App\Http\Controllers\Embers\ShareProjectController;
+use App\Http\Controllers\Embers\RunProjectSimulationController;
 use App\Http\Controllers\Embers\ShareProjectSimulationController;
 use App\Http\Controllers\Embers\ShareSinkController;
 use App\Http\Controllers\Embers\ShareSourceController;
@@ -99,6 +100,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->whereNumber(['project', 'simulation']);
 
     Route::resource('/projects.simulations', ProjectSimulationController::class)
+        ->whereNumber(['project', 'simulation']);
+
+    Route::post('/projects/{project}/simulations/{simulation}/run', RunProjectSimulationController::class)->name('projects.simulations.run')
         ->whereNumber(['project', 'simulation']);
 
     // Challenge

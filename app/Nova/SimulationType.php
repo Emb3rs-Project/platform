@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -10,6 +11,20 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class SimulationType extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '1.1 - Configs';
+
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
     /**
      * The model the resource corresponds to.
      *
@@ -33,10 +48,10 @@ class SimulationType extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'description',
-//    'value',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'description',
+        //    'value',
     ];
 
     /**

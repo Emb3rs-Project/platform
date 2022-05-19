@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Team;
+use App\Models\User;
+use App\Notifications\Embers\MemberAdded;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -12,7 +15,7 @@ class TestKeyGetter extends Command
      *
      * @var string
      */
-    protected $signature = 'embers:getkeyList';
+    protected $signature = 'embers:notify';
 
     /**
      * The console command description.
@@ -38,12 +41,21 @@ class TestKeyGetter extends Command
      */
     public function handle()
     {
-        $in = '{"metadata":{"start":"b73b2310-266e-42e0-8d51-c503aac751b1","steps":{"b73b2310-266e-42e0-8d51-c503aac751b1":{"module":"CF","module_id":1,"function":"sink:building","function_id":2}},"requirements":{"modules":[1]}},"instance":{"name":"12","height_floor":"2","number_floor":"1","space_heating_type":"Conventional","id":120,"type":"sink","location":[38.73410062293045,-9.132492542266847]}}';
-        Redis::rpush('Module_Returns', $in);
+        // $in = '{"metadata":{"start":"b73b2310-266e-42e0-8d51-c503aac751b1","steps":{"b73b2310-266e-42e0-8d51-c503aac751b1":{"module":"CF","module_id":1,"function":"sink:building","function_id":2}},"requirements":{"modules":[1]}},"instance":{"name":"12","height_floor":"2","number_floor":"1","space_heating_type":"Conventional","id":120,"type":"sink","location":[38.73410062293045,-9.132492542266847]}}';
+        // Redis::rpush('Module_Returns', $in);
 
-        $values = Redis::lrange('Module_Returns', 0, 100);
+        // $values = Redis::lrange('Module_Returns', 0, 100);
 
-        var_dump($values);
+        // var_dump($values);
+
+        // public function __construct(User $inviter, Team $team, ?string $description = null)
+
+        $invited = User::find(3);
+        $inviter = User::find(1);
+        $team = Team::find(1);
+
+
+        $invited->notify(new MemberAdded($inviter, $team, "You've been invited :)"));
 
         return Command::SUCCESS;
     }

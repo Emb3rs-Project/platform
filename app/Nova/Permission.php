@@ -10,6 +10,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Permission extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '4.0 - User Management';
+
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string

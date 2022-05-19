@@ -13,6 +13,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class PropertyGroup extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0.2 - Properties';
+
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string
@@ -27,12 +35,18 @@ class PropertyGroup extends Resource
     public static $title = 'name';
 
     /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
+
+    /**
      * The columns that should be searched.
      *
      * @var array
      */
-    public static $search = [
-    ];
+    public static $search = [];
 
     /**
      * Get the fields displayed by the resource.

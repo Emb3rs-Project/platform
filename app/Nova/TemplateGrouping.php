@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class TemplateGrouping extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0.1 - Configs';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string
@@ -29,6 +36,12 @@ class TemplateGrouping extends Resource
         return $this->propertyGroup->name . " @ " . $this->template->name;
     }
 
+    /**
+     * Indicates if the resource should be displayed in the sidebar.
+     *
+     * @var bool
+     */
+    public static $displayInNavigation = false;
 
     /**
      * The columns that should be searched.

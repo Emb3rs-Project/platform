@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -12,6 +13,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Location extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0.0 - Templates';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -35,10 +44,10 @@ class Location extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'description',
-//    'type'
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'description',
+        //    'type'
     ];
 
     /**
@@ -58,13 +67,11 @@ class Location extends Resource
                     'point' => __('point'),
                     'circle' => __('circle'),
                     'polygon' => __('polygon')
-                    ]),
+                ]),
             Code::make(__('DATA'), 'data')
                 ->json()
                 ->rules('json'),
 
-            BelongsTo::make(__('PROJECT'), 'project', Project::class)->nullable(),
-            HasMany::make(__('PROJECTS'), 'projects', Project::class),
             HasMany::make(__('INSTANCES'), 'instances', Instance::class),
 
         ];

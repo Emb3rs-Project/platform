@@ -107,9 +107,9 @@ export default {
       location_id: null,
     });
 
-    form.value.name = props.project.name;
-    form.value.description = props.project.description;
-    form.value.location_id = props.project.location_id;
+    form.name = props.project.name;
+    form.description = props.project.description;
+    //form.value.location_id = props.project.location_id;
 
     const locationSelects = props.locations.map((location) => ({
       key: location.id,
@@ -117,7 +117,7 @@ export default {
     }));
 
     function submit() {
-      form.value.patch(route("projects.update", props.project.id));
+      form.patch(route("projects.update", props.project.id));
     }
 
     return {

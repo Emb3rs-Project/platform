@@ -17,6 +17,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Template extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0.1 - Configs';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var  string
@@ -62,8 +69,6 @@ class Template extends Resource
             HasMany::make(__('TEMPLATEPROPERTIES'), 'templateProperties', TemplateProperty::class),
 
             HasMany::make(__('PROPERTYGROUPS'), 'templateGrouping', TemplateGrouping::class),
-
-            BelongsToMany::make(__('SCRIPTS'), 'scripts', Script::class),
 
             BelongsTo::make(__('ONCREATE'), 'triggers', SimulationMetadata::class)->nullable()
                 ->help("Triggers function on Instance Create"),

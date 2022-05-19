@@ -52,7 +52,7 @@
 
     <!-- Link Segments -->
     <div
-      v-if="Object.keys(instance.geo_segments).length"
+      v-if="instance.geo_segments != null && Object.keys(instance.geo_segments).length"
       class="divide-y"
     >
       <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -109,7 +109,7 @@
       >
         Cancel
       </SecondaryOutlinedButton>
-      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
+      <PrimaryButton @click="onRouteRequest('objects.links.edit', instance.id)">
         Edit
       </PrimaryButton>
     </template>
@@ -151,18 +151,22 @@ export default {
   setup(props) {
     const store = useStore();
 
-    const onGoToLocation = (loc) =>
-      store.dispatch("map/centerAt", {
+    const onGoToLocation = (loc) => { 
+        let lat = (loc[0].lat + loc[1].lat)/2;
+        let lng = (loc[0].lng + loc[1].lng)/2;
+        
+        store.dispatch("map/centerAt", {
         marker: {
           type: "point",
           data: {
-            center: loc,
+            center: {lat, lng},
           },
         },
       });
+    };
 
-    const onRouteRequest = (route, properties) => {
-      store.dispatch("objects/showSlide", { route, properties });
+    const onRouteRequest = (route, props) => {
+      store.dispatch("objects/showSlide", { route, props });
     };
 
     const onClose = () =>

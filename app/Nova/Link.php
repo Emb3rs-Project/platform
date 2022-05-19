@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -9,6 +10,14 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Link extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '0.3 - Links';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -32,9 +41,9 @@ class Link extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'description',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'description',
     ];
 
     /**

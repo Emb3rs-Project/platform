@@ -26,10 +26,6 @@ class CreateProject implements CreatesProjects
     {
         $this->authorize($user);
 
-        $teamLocations = $user->currentTeam->instances->pluck('location_id');
-
-        $locations = Location::query()->whereIn('id', $teamLocations->toArray())->get();
-
-        return $locations;
+        return new Collection();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Nova;
 
 use Illuminate\Http\Request;
@@ -7,10 +8,19 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Project extends Resource
 {
+    /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '1.0 - Simulations';
+
+
     /**
      * The model the resource corresponds to.
      *
@@ -34,9 +44,9 @@ class Project extends Resource
         'id',
 
 
-// You can add any of this to your Laravel Nova Search
-//    'name',
-//    'description',
+        // You can add any of this to your Laravel Nova Search
+        //    'name',
+        //    'description',
     ];
 
     /**
@@ -51,9 +61,8 @@ class Project extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
             Text::make(__('DESCRIPTION'), 'description'),
+            Code::make(__('DATA'), 'data')->json()->rules('json'),
 
-            HasMany::make(__('LOCATIONS'), 'locations', Location::class),
-            BelongsTo::make(__('LOCATION'), 'location', Location::class),
             HasMany::make(__('SIMULATIONS'), 'simulations', Simulation::class),
             BelongsToMany::make(__('TEAMS'), 'teams', Team::class),
 

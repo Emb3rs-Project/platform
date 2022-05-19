@@ -118,7 +118,7 @@ export default {
       ]))];
 
       // #3B82F6 is bg-blue-500
-      const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map);
+      const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map).on("mousedown", () => onClick(_link));
 
       linksLayer.push(link);
     }
@@ -232,5 +232,8 @@ export default {
     }
 
     return linksInView;
+  },
+  setBoundaryView(map, boundingBox) {
+      
   }
 }

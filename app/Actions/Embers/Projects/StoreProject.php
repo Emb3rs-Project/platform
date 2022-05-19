@@ -34,7 +34,7 @@ class StoreProject implements StoresProjects
         $validator = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'location_id' => ['required', 'integer', 'numeric', 'exists:locations,id']
+            '_data' => ['required']
         ]);
 
         return $validator->validate();
@@ -48,7 +48,7 @@ class StoreProject implements StoresProjects
         $project = Project::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
-            'location_id' =>  $validated['location_id']
+            'data' =>  $validated['_data']
         ]);
 
         $project->teams()->attach($user->currentTeam);

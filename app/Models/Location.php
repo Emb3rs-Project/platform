@@ -37,26 +37,6 @@ class Location extends Model
     ];
 
     /**
-     * The Project that this Location belongs to.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class, 'project_id');
-    }
-
-    /**
-     * The Projects that this Location has.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function projects(): HasMany
-    {
-        return $this->hasMany(Project::class, 'location_id');
-    }
-
-    /**
      * The Instances that this Location has.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

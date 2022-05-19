@@ -12,6 +12,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class SimulationMetadata extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '1.1 - Configs';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string

@@ -20,10 +20,12 @@ class Simulation extends Model
      */
     protected $fillable = [
         'status',
-        'targetData',
+        'extra',
         'project_id',
         'target_id',
-        'simulation_type_id'
+        'simulation_type_id',
+        'name',
+        'simulation_metadata_id'
     ];
 
     /**
@@ -32,7 +34,7 @@ class Simulation extends Model
      * @var array
      */
     protected $casts = [
-        'targetData' => 'array',
+        'extra' => 'array',
     ];
 
     /**
@@ -83,6 +85,11 @@ class Simulation extends Model
     public function simulationResults(): HasMany
     {
         return $this->hasMany(SimulationResult::class, 'simulation_id');
+    }
+
+    public function simulationSessions(): HasMany
+    {
+        return $this->hasMany(SimulationSession::class, 'simulation_id');
     }
 
     /**

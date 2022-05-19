@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class FAQ extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '2.0 - Frontend';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string

@@ -15,6 +15,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class Simulation extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '1.0 - Simulations';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var  string
@@ -52,6 +59,8 @@ class Simulation extends Resource
     {
         return [
             ID::make(__('ID'), 'id')->sortable(),
+
+            Text::make(__("NAME"), "name"),
             Select::make(__('STATUS'), 'status')
                 ->options([
                     'NEW' => __('New'),
@@ -67,11 +76,10 @@ class Simulation extends Resource
                     // 'stopped' => __('Stopped'),
                     // 'error' => __('Error')
                 ]),
-            Code::make(__('TARGETDATA'), 'targetData')->json()->rules('json'),
+
+            Code::make(__('extra'), 'extra'),
 
             BelongsTo::make(__('PROJECT'), 'project', Project::class),
-            BelongsTo::make(__('TARGET'), 'target', Target::class),
-            BelongsTo::make(__('SIMULATIONTYPE'), 'simulationType', SimulationType::class),
 
             BelongsTo::make(__('SIMULATIONMETADATA'), 'simulationMetadata', SimulationMetadata::class)
                 ->nullable(),

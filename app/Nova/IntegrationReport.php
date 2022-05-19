@@ -13,6 +13,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 class IntegrationReport extends Resource
 {
     /**
+     * The logical group associated with the resource.
+     *
+     * @var string
+     */
+    public static $group = '1.2 - Reports';
+
+    /**
      * The model the resource corresponds to.
      *
      * @var string
