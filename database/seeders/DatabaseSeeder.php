@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Instance;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            CategorySeeder::class,
-            EquipmentSeeder::class,
-            PropertySeeder::class,
-            UnitSeeder::class,
-        ]);
+       $instances = Instance::all();
+       $instances->truncate();
     }
 }
