@@ -33,9 +33,6 @@ class CharacterizeInstance implements CharacterizesInstances
             "streams" => [$data]
         ]));
 
-        print("Sending  : ");
-        dump($request->getPlatform());
-
          /** @var CharacterizationSourceOutput $feature */
          list($feature, $status) = $client->char_simple($request)->wait();
 
