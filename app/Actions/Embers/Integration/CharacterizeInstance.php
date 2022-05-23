@@ -27,8 +27,10 @@ class CharacterizeInstance implements CharacterizesInstances
                 break;
 
             case 2:
-            case 8:
                 $this->building($instance, $client);
+                break;
+            case 8:
+                $this->greenhouse($instance, $client);
                 break;
 
             default:
@@ -79,6 +81,29 @@ class CharacterizeInstance implements CharacterizesInstances
 
         /** @var CharacterizationSinkOutput $feature */
         list($feature, $status) = $client->char_building($request)->wait();
+
+        if($feature) {
+            $characterization = [];
+            $values = $instance->values;
+            $characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
+            $values['characterization'] = $characterization;
+            $instance->values = $values;
+            $instance->save();
+        }
+
+    }
+
+    private function greenhouse(Instance $instance, CFModuleClient $client)
+    {
+        $data = $instance->values;
+        $location = $instance->location->data;
+        $data["location"] = $location['center'];
+
+        $request = new CharacterizationInput();
+        $request->setPlatform(json_encode($data));
+
+        /** @var CharacterizationSinkOutput $feature */
+        list($feature, $status) = $client->char_greenhouse($request)->wait();
 
         if($feature) {
             $characterization = [];
