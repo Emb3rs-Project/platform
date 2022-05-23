@@ -20,13 +20,32 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       Instance::truncate();
-       Template::truncate();
-       TemplateProperty::truncate();
-       Property::truncate();
-       Unit::truncate();
-       Category::truncate();
+        $this->command->info('Truncating Tables...');
+        $this->command->info('Truncating Instance');
+        Instance::truncate();
+        $this->command->info('Truncating Instance Done!');
+        $this->command->info('Truncating Template');
+        Template::truncate();
+        $this->command->info('Truncating Template Done!');
+        $this->command->info('Truncating TemplateProperty');
+        TemplateProperty::truncate();
+        $this->command->info('Truncating TemplateProperty Done!');
+        $this->command->info('Truncating Property');
+        Property::truncate();
+        $this->command->info('Truncating Property Done!');
+        $this->command->info('Truncating Unit');
+        Unit::truncate();
+        $this->command->info('Truncating Unit Done!');
+        $this->command->info('Truncating Category');
+        Category::truncate();
+        $this->command->info('Truncating Category Done!');
+        $this->command->info('Truncating unit_property');
+        DB::table('unit_property')->truncate();
+        $this->command->info('Truncating unit_property Done!');
 
-       DB::table('unit_property')->truncate();
+        $this->command->info('Loading SQL Files...');
+        DB::unprepared(
+            file_get_contents('database/seeders/SQL/CF - Category.SQL')
+        );
     }
 }
