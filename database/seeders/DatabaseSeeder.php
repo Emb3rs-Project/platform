@@ -9,6 +9,7 @@ use App\Models\Template;
 use App\Models\TemplateProperty;
 use App\Models\Unit;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,5 +26,7 @@ class DatabaseSeeder extends Seeder
        Property::truncate();
        Unit::truncate();
        Category::truncate();
+
+       DB::table('unit_property')->truncate();
     }
 }
