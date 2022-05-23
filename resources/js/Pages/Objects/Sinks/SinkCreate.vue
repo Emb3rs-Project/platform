@@ -347,11 +347,9 @@ export default {
                     }
 
                     for (const key of Object.keys(sinkData)) {
-                        if (sinkData[key] === null)
+                        if (sinkData[key] === null || sinkData[key] === "")
                             delete sinkData[key]
                     }
-
-                    debugger;
 
                     return deepCopyOfData;
                 })
