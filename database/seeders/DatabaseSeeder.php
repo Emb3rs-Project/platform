@@ -20,6 +20,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->truncate_tables();
+        $this->load_sql_files();
+
+    }
+
+    private function truncate_tables() {
         $this->command->info('Truncating Tables...');
         $this->command->info('Truncating Instance');
         Instance::truncate();
@@ -42,10 +48,32 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Truncating unit_property');
         DB::table('unit_property')->truncate();
         $this->command->info('Truncating unit_property Done!');
+    }
 
+
+    private function load_sql_files()
+    {
         $this->command->info('Loading SQL Files...');
+        $sql_files = [
+            'database/seeders/SQL/CF - Category.SQL',
+            'database/seeders/SQL/CF - Property.SQL',
+            'database/seeders/SQL/CF - Template.SQL',
+            'database/seeders/SQL/CF - TemplateProperty.SQL',
+            'database/seeders/SQL/CF - unit.sql',
+            'database/seeders/SQL/CF - UnitProperty.SQL'
+        ];
+
+        foreach ($sql_files as $sql_file) {
+            $this->load_sql_file($sql_file);
+        }
+    }
+
+    private function load_sql_file($sql_file)
+    {
+        $this->command->info("Loading SQL File $sql_file");
         DB::unprepared(
-            file_get_contents('database/seeders/SQL/CF - Category.SQL')
+            file_get_contents($sql_file)
         );
+        $this->command->info("Loading SQL File $sql_file [Done!]");
     }
 }
