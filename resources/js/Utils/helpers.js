@@ -34,7 +34,7 @@ export const validateProperies = (parent, properties, template, index = null) =>
     }
 
     if (property.required) {
-      if (!propertyCopy)
+      if (propertyCopy === null || propertyCopy === '')
         propertyErrors.push(`The ${propertyName} field is required.`);
     }
 
