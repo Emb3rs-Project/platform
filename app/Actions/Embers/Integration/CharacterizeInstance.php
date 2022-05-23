@@ -39,7 +39,7 @@ class CharacterizeInstance implements CharacterizesInstances
                 break;
         }
 
-        if($status['code'] !== 0) {
+        if($status->code !== 0) {
             dump($status);
             $instance->delete();
             exit();
