@@ -14,7 +14,9 @@ yarn-error.log
 /.idea
 
 /public/css/app.css
+/public/css/app.css.map
 /public/js/app.js
+/public/js/app.js.map
 /public/mix-manifest.json
 
 /public/js/app.js.LICENSE.txt
