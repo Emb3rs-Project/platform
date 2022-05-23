@@ -30,15 +30,18 @@ class CharacterizeInstance implements CharacterizesInstances
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode([
             "type_of_object" => $type,
-            "streams" => [json_decode($data)]
+            "streams" => [$data]
         ]));
 
          /** @var CharacterizationSourceOutput $feature */
          list($feature, $status) = $client->char_simple($request)->wait();
 
+         $characterization = [];
+
          if($feature) {
              $values = $instance->values;
-             $values["streams"] = $feature->getStreams();
+             $characterization["streams"] = json_decode($feature->getStreams());
+             $values['characterization'] = $characterization;
              $instance->values = $values;
              $instance->save();
          }
