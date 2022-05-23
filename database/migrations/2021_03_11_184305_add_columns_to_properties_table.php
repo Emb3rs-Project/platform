@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('properties', function (Blueprint $table) {
             $table->string('symbolic_name')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
         });
     }
 
