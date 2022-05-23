@@ -14,7 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       $instances = Instance::all();
-       $instances->truncate();
+       Instance::truncate();
     }
 }
