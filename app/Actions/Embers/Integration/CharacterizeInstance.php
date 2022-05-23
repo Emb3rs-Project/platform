@@ -27,6 +27,7 @@ class CharacterizeInstance implements CharacterizesInstances
                 break;
 
             case 2:
+            case 8:
                 $this->building($instance, $client);
                 break;
 
