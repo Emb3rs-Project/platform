@@ -20,22 +20,29 @@ class CharacterizeInstance implements CharacterizesInstances
             ]
         );
 
+        $status = 0;
         switch ($instance->template_id) {
             case 14:
             case 15:
-                $this->simple_user($instance, $client);
+                $status = $this->simple_user($instance, $client);
                 break;
 
             case 2:
-                $this->building($instance, $client);
+                $status = $this->building($instance, $client);
                 break;
             case 8:
-                $this->greenhouse($instance, $client);
+                $status = $this->greenhouse($instance, $client);
                 break;
 
             default:
                 dump("NOT DEFINED!");
                 break;
+        }
+
+        if($status['code'] !== 0) {
+            dump($status);
+            $instance->delete();
+            exit();
         }
     }
 
@@ -59,9 +66,6 @@ class CharacterizeInstance implements CharacterizesInstances
         /** @var CharacterizationSourceOutput $feature */
         list($feature, $status) = $client->char_simple($request)->wait();
 
-        dump($status);
-        exit();
-
         if ($feature) {
             $characterization = [];
             $values = $instance->values;
@@ -70,6 +74,8 @@ class CharacterizeInstance implements CharacterizesInstances
             $instance->values = $values;
             $instance->save();
         }
+
+        return $status;
     }
 
     private function building(Instance $instance, CFModuleClient $client)
@@ -93,6 +99,7 @@ class CharacterizeInstance implements CharacterizesInstances
             $instance->save();
         }
 
+        return $status;
     }
 
     private function greenhouse(Instance $instance, CFModuleClient $client)
@@ -116,5 +123,6 @@ class CharacterizeInstance implements CharacterizesInstances
             $instance->save();
         }
 
+        return $status;
     }
 }
