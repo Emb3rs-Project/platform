@@ -22,7 +22,7 @@ INSERT INTO public.units(id, name, symbol)VALUES (21,'Time - Hour','h');
 INSERT INTO public.units(id, name, symbol)VALUES (22,'Time - Month','month(s)');
 INSERT INTO public.units(id, name, symbol)VALUES (23,'Volume - Cubic meter','m^3');
 INSERT INTO public.units(id, name, symbol)VALUES (24,'Thermal - Hourly Profile','kWh');
-INSERT INTO public.units(id, name, symbol)VALUES (9999,'N/A','null');
+INSERT INTO public.units(id, name, symbol)VALUES (9999,'N/A','');
 INSERT INTO public.units(id, name, symbol)VALUES (25,'Cost- €/year','€/year');
 INSERT INTO public.units(id, name, symbol)VALUES (26,'Emssions - kgCO2/kWh','kgCO2/kWh');
 INSERT INTO public.units(id, name, symbol)VALUES (27,'Cp','kJ/kg.K');
