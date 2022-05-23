@@ -59,6 +59,8 @@ class CharacterizeInstance implements CharacterizesInstances
         /** @var CharacterizationSourceOutput $feature */
         list($feature, $status) = $client->char_simple($request)->wait();
 
+        dump($status);
+        exit();
 
         if ($feature) {
             $characterization = [];
