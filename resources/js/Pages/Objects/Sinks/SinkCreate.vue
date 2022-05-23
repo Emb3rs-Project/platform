@@ -351,6 +351,8 @@ export default {
                             delete sinkData[key]
                     }
 
+                    debugger;
+
                     return deepCopyOfData;
                 })
                 .post(route("objects.sinks.store"), {
