@@ -23,6 +23,9 @@ class StartSimulation implements StartsSimulations
             ]
         );
 
+        dump($session->simulation->extra);
+        exit();
+
         $request = new StartSimulationRequest();
         $request->setSimulationUuid($session->simulation_uuid);
         $request->setInitialData(json_encode($session->simulation->extra['initial_data']));
