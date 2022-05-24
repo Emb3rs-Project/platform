@@ -23,7 +23,7 @@ class StartSimulation implements StartsSimulations
             ]
         );
 
-        dump($session->simulation->extra);
+        print($session->simulation->extra);
         exit();
 
         $request = new StartSimulationRequest();
