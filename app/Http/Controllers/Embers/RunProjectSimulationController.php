@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Embers;
 
+use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
@@ -33,14 +34,7 @@ class RunProjectSimulationController extends Controller
         $simulation->save();
 
 
-        $package = [
-            "simulation_uuid" => $uuid,
-            "simulation_metadata" => $simulation->simulationMetadata->data,
-            "initial_data" => $simulation->extra["input_data"]
-        ];
-
-        Redis::publish('simulation_started', json_encode($package));
-
+        app(StartsSimulations::class)->run_simulation($newSession);
 
         return  redirect()->route('projects.simulations.show', ["project" => $project->id, "simulation" => $simulation->id]);
     }
