@@ -77,5 +77,6 @@ class ActionServiceProvider extends ServiceProvider
         \App\Contracts\Embers\Integration\CharacterizesInstances::class => \App\Actions\Embers\Integration\CharacterizeInstance::class,
         \App\Contracts\Embers\Integration\ReportsSimulationFinishes::class => \App\Actions\Embers\Integration\ReportSimulationFinish::class,
         \App\Contracts\Embers\Integration\ReportsCharacterizationFinishes::class => \App\Actions\Embers\Integration\ReportCharacterizationFinish::class,
+        \App\Contracts\Embers\Integration\StartsSimulations::class => \App\Actions\Embers\Integration\StartSimulation::class,
     ];
 }
