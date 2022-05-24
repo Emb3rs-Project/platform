@@ -8,6 +8,7 @@ use App\Models\Instance;
 use App\Models\SimulationSession;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
+use Str;
 
 class StartSimulation implements StartsSimulations
 {
@@ -23,14 +24,11 @@ class StartSimulation implements StartsSimulations
             ]
         );
 
-        print($session->simulation->extra);
-        exit();
-
         $request = new StartSimulationRequest();
-        $request->setSimulationUuid($session->simulation_uuid);
-        $request->setInitialData(json_encode($session->simulation->extra['initial_data']));
+        $request->setSimulationUuid(str($session->simulation_uuid)->toString());
+        $request->setInitialData(json_encode($session->simulation->extra));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
-        $client->StartSimulation($request);
+        $client->StartSimulation($request)->wait();
     }
 }
