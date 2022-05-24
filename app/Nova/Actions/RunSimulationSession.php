@@ -2,6 +2,7 @@
 
 namespace App\Nova\Actions;
 
+use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Models\SimulationSession;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,10 +27,7 @@ class RunSimulationSession extends Action
     {
         foreach ($models as $model) {
             if ($model instanceof SimulationSession) {
-                $data = $this->metadata;
-                $data['simulation_uuid'] = $model->simulation_uuid;
-
-                Redis::publish('simulation_started', json_encode($data));
+                app(StartsSimulations::class)->run_simulation($model);
             }
         }
     }
