@@ -5,7 +5,7 @@ namespace Manager;
 
 /**
  */
-class ManagerModuleClient extends \Grpc\BaseStub {
+class ManagerClient extends \Grpc\BaseStub {
 
     /**
      * @param string $hostname hostname
@@ -17,7 +17,6 @@ class ManagerModuleClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Starts a simulation
      * @param \Manager\StartSimulationRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -25,14 +24,13 @@ class ManagerModuleClient extends \Grpc\BaseStub {
      */
     public function StartSimulation(\Manager\StartSimulationRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/manager.ManagerModule/StartSimulation',
+        return $this->_simpleRequest('/manager.Manager/StartSimulation',
         $argument,
         ['\Manager\StartSimulationResponse', 'decode'],
         $metadata, $options);
     }
 
     /**
-     * Starts a Characterization 2
      * @param \Manager\StartCharacterizationRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -40,7 +38,7 @@ class ManagerModuleClient extends \Grpc\BaseStub {
      */
     public function StartCharacterization(\Manager\StartCharacterizationRequest $argument,
       $metadata = [], $options = []) {
-        return $this->_simpleRequest('/manager.ManagerModule/StartCharacterization',
+        return $this->_simpleRequest('/manager.Manager/StartCharacterization',
         $argument,
         ['\Manager\StartCharacterizationResponse', 'decode'],
         $metadata, $options);
