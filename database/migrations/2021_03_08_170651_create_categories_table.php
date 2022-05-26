@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('name');
-            $table->enum('type', ['sink', 'source','equipment'])->nullable();
+            $table->enum('type', ['sink', 'source','equipment', 'simulation'])->nullable();
 
             $table->foreignId('parent_id')->nullable();
 

@@ -1,0 +1,50 @@
+{
+    "database.connections": {
+        "1653565317515": {
+            "host": "10.0.0.4",
+            "dbPath": "",
+            "port": 5432,
+            "user": "embers",
+            "protocol": null,
+            "authType": "default",
+            "password": "embers",
+            "encoding": "utf8",
+            "clientKeyPath": null,
+            "clientCertPath": null,
+            "caPath": null,
+            "database": "embers",
+            "useSSL": false,
+            "useClearText": false,
+            "usingSSH": false,
+            "showHidden": true,
+            "includeDatabases": "embers",
+            "dbType": "PostgreSQL",
+            "encrypt": false,
+            "hideSystemSchema": true,
+            "readonly": false,
+            "savePassword": "Forever",
+            "group": null,
+            "sort": 11,
+            "isCluster": false,
+            "connectionUrl": "",
+            "srv": false,
+            "esAuth": "none",
+            "global": false,
+            "key": "1653565317515",
+            "timezone": "+00:00",
+            "ssh": {
+                "host": "",
+                "privateKeyPath": "/home/davidsf/.ssh/id_rsa",
+                "port": 22,
+                "username": "root",
+                "type": "privateKey",
+                "connectTimeout": 10000,
+                "algorithms": {
+                    "cipher": []
+                }
+            },
+            "name": "embers",
+            "connectionKey": "database.connections"
+        }
+    }
+}

@@ -34,6 +34,7 @@ class CreateSink implements CreatesSinks
                 'templateProperties.unit',
                 'templateProperties.property'
             ])
+            ->orderBy("order")
             ->get();
 
         $locations = Location::query()->get();

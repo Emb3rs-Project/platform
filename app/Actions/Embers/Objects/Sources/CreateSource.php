@@ -38,6 +38,7 @@ class CreateSource implements CreatesSources
                 'templateProperties.unit',
                 'templateProperties.property'
             ])
+            ->orderBy("order")
             ->get();
 
         $equipmentTemplates = Template::query()

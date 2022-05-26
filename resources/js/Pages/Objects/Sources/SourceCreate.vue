@@ -231,11 +231,7 @@ export default {
               if (Object.keys(deepCopyOfSource.data[key]).length) {
                 deepCopyOfSource.data[key] = deepCopyOfSource.data[key].key;
               } else {
-                if (dataType === "string") {
-                  deepCopyOfSource.data[key] = "";
-                } else {
-                  deepCopyOfSource.data[key] = null;
-                }
+               delete deepCopyOfSource.data[key]
               }
             }
           }
@@ -260,11 +256,7 @@ export default {
                     deepCopyOfEquipment[index].data[key] =
                       deepCopyOfEquipment[index].data[key].key;
                   } else {
-                    if (dataType === "string") {
-                      deepCopyOfEquipment[index].data[key] = "";
-                    } else {
-                      deepCopyOfEquipment[index].data[key] = null;
-                    }
+                    delete deepCopyOfEquipment[index].data[key]
                   }
                 }
               }
@@ -296,11 +288,7 @@ export default {
                     deepCopyOfProcesses[index].data[key] =
                       deepCopyOfProcesses[index].data[key].key;
                   } else {
-                    if (dataType === "string") {
-                      deepCopyOfProcesses[index].data[key] = "";
-                    } else {
-                      deepCopyOfProcesses[index].data[key] = null;
-                    }
+                    delete deepCopyOfProcesses[index].data[key]
                   }
                 }
               }
