@@ -3,6 +3,7 @@
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
+      :disabled="disabled"
       @click="addProcessModelIsVisible = true"
     >
       <PlusIcon
@@ -99,7 +100,7 @@
   <AddProcessModal
     v-model="addProcessModelIsVisible"
     :processesCategories="processesCategories"
-    :processes="processes"
+    :processes="propsProcesses"
     @confirmation="onAddProcess"
   />
 </template>
@@ -163,6 +164,9 @@ export default {
 
     const errors = ref({});
 
+    const storeTemplate = computed(() => store.getters["source/template"]);
+    const disabled = storeTemplate.value.value == 'Simple Source';
+
     const addProcessModelIsVisible = ref(false);
 
     const propsProcesses = computed(() =>
@@ -176,7 +180,7 @@ export default {
     );
 
     const instanceProcesses = computed(() => {
-      const processes = [];
+      const process = [];
 
       for (const _instanceProcess of props.instance.values.processes) {
         const propsProcess = propsProcesses.value.find(
@@ -185,7 +189,7 @@ export default {
 
         if (!propsProcess) continue;
 
-        processes.push({
+        process.push({
           key: propsProcess.key,
           value: propsProcess.value,
           parent: propsProcess.parent,
@@ -194,15 +198,21 @@ export default {
         });
       }
 
-      return processes;
+      return process;
     });
 
     const storeProcesses = computed(() => store.getters["source/processes"]);
 
-    const processes = ref(
+    const auxProcesses = ref(
       storeProcesses.value.length
         ? storeProcesses.value
         : instanceProcesses.value
+    );
+    
+    const processes = ref(
+      disabled
+        ? []
+        : auxProcesses
     );
 
     const onAddProcess = (process) => {
@@ -256,6 +266,8 @@ export default {
       errors,
       addProcessModelIsVisible,
       processes,
+      propsProcesses,
+      disabled,
       onAddProcess,
     };
   },

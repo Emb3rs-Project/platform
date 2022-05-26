@@ -3,6 +3,7 @@
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
+      :disabled="disabled"
       @click="addEquipmentModalIsVisible = true"
     >
       <PlusIcon
@@ -99,7 +100,7 @@
   <AddEquipmentModal
     v-model="addEquipmentModalIsVisible"
     :equipmentCategories="equipmentCategories"
-    :equipment="equipment"
+    :equipment="propsEquipment"
     @confirmation="onAddEquipment"
   />
 </template>
@@ -163,6 +164,9 @@ export default {
 
     const errors = ref({});
 
+    const storeTemplate = computed(() => store.getters["source/template"]);
+    const disabled = storeTemplate.value.value == 'Simple Source';
+
     const addEquipmentModalIsVisible = ref(false);
 
     const propsEquipment = computed(() =>
@@ -176,7 +180,7 @@ export default {
     );
 
     const instanceEquipment = computed(() => {
-      const equipment = [];
+      const equipments = [];
 
       for (const _instanceEquipment of props.instance.values.equipment) {
         const propsEquip = propsEquipment.value.find(
@@ -185,7 +189,7 @@ export default {
 
         if (!propsEquip) continue;
 
-        equipment.push({
+        equipments.push({
           key: propsEquip.key,
           value: propsEquip.value,
           parent: propsEquip.parent,
@@ -194,15 +198,21 @@ export default {
         });
       }
 
-      return equipment;
+      return equipments;
     });
 
     const storeEquipment = computed(() => store.getters["source/equipment"]);
 
-    const equipment = ref(
+    const auxEquipment = ref(
       storeEquipment.value.length
-        ? storeEquipment.value
-        : instanceEquipment.value
+          ? storeEquipment.value
+          : instanceEquipment.value
+    );
+    
+    const equipment = ref(
+      disabled
+        ? []
+        : auxEquipment
     );
 
     const onAddEquipment = (newEquipment) => {
@@ -256,6 +266,8 @@ export default {
       errors,
       addEquipmentModalIsVisible,
       equipment,
+      propsEquipment,
+      disabled,
       onAddEquipment,
     };
   },

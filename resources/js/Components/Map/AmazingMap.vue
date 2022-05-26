@@ -492,9 +492,25 @@ export default {
 
         const loadMarkers = (markers = null) => {
             if (!instances.value.length) return;
-
+            
             mapUtils.removeAllInstances(map.value, mapObjects.value);
-
+            if (props.preview) {    
+                if (localStorage.getItem('objectsSources') == 'false') {
+                    instances.value.forEach((element, index) => {
+                        if (element.template.category.type == 'source') {
+                            instances.value.splice(index, 1);
+                        }
+                    });
+                }
+                if (localStorage.getItem('objectsSinks') == 'false') {
+                    instances.value.forEach((element, index) => {
+                        if (element.template.category.type == 'sink') {
+                            instances.value.splice(index, 1);
+                        }
+                    });
+                }
+            }
+            
             mapUtils.addInstances(
                 map.value,
                 markers ?? instances.value,
@@ -507,6 +523,11 @@ export default {
             if (!links.value.length) return;
 
             mapUtils.removeAllLinks(map.value, mapObjects.value);
+            if (props.preview) { 
+                if (localStorage.getItem('objectsLinks') == 'false') {
+                    links.value = [];
+                }
+            }
 
             mapUtils.addLinks(
                 map.value,
