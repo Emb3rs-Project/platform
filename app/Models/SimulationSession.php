@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Nova\Actions\Actionable;
 
 class SimulationSession extends Model
 {
-    use HasFactory;
+    use HasFactory, Actionable;
 
     /**
      * The attributes that are mass assignable.

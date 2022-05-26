@@ -5,10 +5,17 @@ namespace App\Http\Controllers\Embers;
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Http\Controllers\Controller;
+use App\Jobs\StartSimulation;
 use App\Models\Project;
 use App\Models\Simulation;
+use App\Nova\Actions\RunSimulationSession;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Laravel\Nova\Actions\ActionMethod;
+use Laravel\Nova\Actions\CallQueuedAction;
+use Laravel\Nova\Fields\ActionFields;
+use Queue;
 use Ramsey\Uuid\Uuid;
 
 class RunProjectSimulationController extends Controller
@@ -34,7 +41,22 @@ class RunProjectSimulationController extends Controller
         $simulation->save();
 
 
-        app(StartsSimulations::class)->run_simulation($newSession);
+        StartSimulation::dispatch($newSession);
+
+        // $action = new RunSimulationSession();
+        // $models = Collection::wrap($newSession);
+        // $method = ActionMethod::determine($action, $models->first());
+
+        // Queue::connection($action->connection)->pushOn(
+        //     $action->queue,
+        //     new CallQueuedAction(
+        //         $action,
+        //         $method,
+        //         new ActionFields(new \Illuminate\Support\Collection(), new Collection()),
+        //         $models,
+        //         0
+        //     )
+        // );
 
         return  redirect()->route('projects.simulations.show', ["project" => $project->id, "simulation" => $simulation->id]);
     }

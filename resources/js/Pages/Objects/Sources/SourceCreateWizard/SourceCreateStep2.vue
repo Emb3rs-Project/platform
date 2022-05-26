@@ -74,7 +74,6 @@
       </div>
 
     </div>
-
   </div>
 
   <AddEquipmentModal
@@ -136,6 +135,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    templates : {
+        type: Array,
+        required: true
+    }
   },
 
   emits: ["completed", "incompleted"],
@@ -156,7 +159,7 @@ export default {
     }));
 
     const storeTemplate = computed(() => store.getters["source/template"]);
-    const disabled = storeTemplate.value.value == 'Simple Source';
+    const disabled = computed(() => !props.templates.find((t) => t.id === storeTemplate.value.key).values.equipments)
 
     const storeEquipment = computed(() => store.getters["source/equipment"]);
     const storeSelectedEquipment = computed(() => store.getters["source/selectedEquipment"]);
@@ -221,6 +224,7 @@ export default {
       selectedEquipment,
       onAddEquipment,
       onRemoveEquipment,
+      storeTemplate
     };
   },
 };

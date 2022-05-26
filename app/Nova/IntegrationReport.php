@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class IntegrationReport extends Resource
@@ -63,6 +64,9 @@ class IntegrationReport extends Resource
             BelongsTo::make(__('SIMULATION'), 'simulation', Simulation::class),
 
             DateTime::make(__('CREATED_AT'), 'created_at'),
+            Text::make(__('SIMULATION_UUID'), 'simulation_uuid'),
+
+            Code::make(__('ERRORS'), 'errors')->json()->rules('json')->onlyOnDetail(),
         ];
     }
 

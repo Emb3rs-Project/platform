@@ -168,4 +168,8 @@ INSERT INTO public.template_properties(required, template_id, property_id, defau
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,15,  92, 9999, -1, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,16,  92, 9999, -1, FALSE);
 
-
+-- TEMPLATE Consumer_type
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  92, 9999, 0, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,8,  92, 9999, 0, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,15,  92, 9999, 0, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,14,  92, 9999, 0, FALSE);

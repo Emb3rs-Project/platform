@@ -29,6 +29,7 @@ class StartSimulation implements StartsSimulations
         $request->setInitialData(json_encode($session->simulation->extra));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
+        print("Sending to gRPC $session->id");
         $client->StartSimulation($request)->wait();
     }
 }

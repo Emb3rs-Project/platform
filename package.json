@@ -40,6 +40,9 @@
         "vuex": "^4.0.2"
     },
     "dependencies": {
+        "@codemirror/fold": "^0.19.4",
+        "@codemirror/lang-json": "^0.20.0",
+        "vue-codemirror": "^5.0.1",
         "vue-select": "^4.0.0-beta.3"
     }
 }

@@ -137,6 +137,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    templates : {
+        type: Array,
+        required: true
+    }
   },
 
   emits: ["completed", "incompleted"],
@@ -157,7 +161,7 @@ export default {
     }));
 
     const storeTemplate = computed(() => store.getters["source/template"]);
-    const disabled = storeTemplate.value.value == 'Simple Source';
+    const disabled = computed(() => !props.templates.find((t) => t.id === storeTemplate.value.key).values.processes)
 
     const storeProcesses = computed(() => store.getters["source/processes"]);
     const storeSelectedProcesses = computed(() => store.getters["source/selectedProcesses"]);

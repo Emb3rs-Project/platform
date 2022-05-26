@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
+use App\Models\IntegrationReport;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,7 +17,6 @@ class ProjectSimulationSessionController extends Controller
      */
     public function index()
     {
-
     }
 
     /**
@@ -49,8 +49,9 @@ class ProjectSimulationSessionController extends Controller
     public function show($id)
     {
         $session = SimulationSession::findOrFail($id);
+        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->get();
 
-        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session]);
+        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reports]);
     }
 
     /**

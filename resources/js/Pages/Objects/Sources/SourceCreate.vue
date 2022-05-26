@@ -34,6 +34,7 @@
       :equipmentCategories="equipmentCategories"
       :equipment="equipment"
       :nextStepRequest="nextStepRequest"
+      :templates="templates"
       @completed="onCompleted"
       @incompleted="onIncompleted"
     />
@@ -43,6 +44,7 @@
       :processesCategories="processesCategories"
       :processes="processes"
       :nextStepRequest="nextStepRequest"
+      :templates="templates"
       @completed="onCompleted"
       @incompleted="onIncompleted"
     />
