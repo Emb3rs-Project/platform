@@ -3,6 +3,7 @@
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
+      :disabled="disabled"
       @click="addEquipmentModalIsVisible = true"
     >
       <PlusIcon
@@ -12,11 +13,10 @@
       New Equipment
     </PrimaryButton>
   </div>
-
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
     <div
       class="flex w-full justify-center py-2"
-      v-for="(equip, equipIdx) in equipment"
+      v-for="(equip, equipIdx) in selectedEquipment"
       :key="equipIdx"
     >
       <div class="w-full">
@@ -128,6 +128,10 @@ export default {
       type: Array,
       required: true,
     },
+    selectedEquipment: {
+      type: Array,
+      required: false,
+    },
     nextStepRequest: {
       type: Boolean,
       required: true,
@@ -151,7 +155,11 @@ export default {
       data: transformPropsToData(e.template_properties),
     }));
 
+    const storeTemplate = computed(() => store.getters["source/template"]);
+    const disabled = storeTemplate.value.value == 'Simple Source';
+
     const storeEquipment = computed(() => store.getters["source/equipment"]);
+    const storeSelectedEquipment = computed(() => store.getters["source/selectedEquipment"]);
 
     const equipment = ref(
       storeEquipment.value.length
@@ -159,15 +167,17 @@ export default {
         : propsEquipment
     );
 
+    const selectedEquipment = ref(window._.cloneDeep(storeSelectedEquipment.value));
+
     const commitEquipment = window._.debounce(
       () =>
-        store.commit("source/setEquipment", {
-          equipment: window._.cloneDeep(equipment),
+        store.commit("source/setSelectedEquipment", {
+          selectedEquipment: window._.cloneDeep(selectedEquipment),
         }),
       500
     );
 
-    watch(equipment, () => commitEquipment(), {
+    watch(selectedEquipment, () => commitEquipment(), {
       deep: true,
       immediate: true,
     });
@@ -179,10 +189,10 @@ export default {
 
       newEquipment.data = transformPropsToData(newEquipment.props);
 
-      equipment.value.push(newEquipment);
+      selectedEquipment.value.push(newEquipment);
     };
 
-    const onRemoveEquipment = (index) => equipment.value.splice(index, 1);
+    const onRemoveEquipment = (index) => selectedEquipment.value.splice(index, 1);
 
     watch(
       () => props.nextStepRequest,
@@ -192,7 +202,7 @@ export default {
         // reset the errors so they are always up to date
         errors.value = {};
 
-        for (const [index, equip] of equipment.value.entries()) {
+        for (const [index, equip] of selectedEquipment.value.entries()) {
           const properties = equip.props;
 
           validateProperies(equip, properties, errors.value, index);
@@ -207,6 +217,8 @@ export default {
       errors,
       addEquipmentModalIsVisible,
       equipment,
+      disabled,
+      selectedEquipment,
       onAddEquipment,
       onRemoveEquipment,
     };

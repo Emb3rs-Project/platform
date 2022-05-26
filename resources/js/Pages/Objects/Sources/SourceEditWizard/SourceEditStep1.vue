@@ -209,6 +209,7 @@ export default {
     const store = useStore();
 
     const storeSource = computed(() => store.getters["source/source"]);
+    const storeTemplate = computed(() => store.getters["source/template"]);
 
     // We deep copy the store data, so we manipulate it freely and commit our changes back, when we are ready
     const source = ref(window._.cloneDeep(storeSource.value));
@@ -223,7 +224,7 @@ export default {
       }))
     );
     const selectedTemplate = ref(
-      templates.value.find((t) => t.key === props.instance.template_id)
+      storeTemplate.value ?? templates.value.find((t) => t.key === props.instance.template_id)
     );
 
     const locations = computed(() =>
@@ -283,29 +284,31 @@ export default {
     watch(
       selectedTemplate,
       (selectedTemplate) => {
-        store.commit("source/setTemplate", {
-          template: selectedTemplate,
-        });
+        if (selectedTemplate != storeTemplate.value) {
+          store.commit("source/setTemplate", {
+            template: selectedTemplate,
+          });
 
-        if (!selectedTemplate.properties.length) source.value.data = {};
+          if (!selectedTemplate.properties.length) source.value.data = {};
 
-        for (const property of allProperties.value) {
-          const prop = property.property;
+          for (const property of allProperties.value) {
+            const prop = property.property;
 
-          const value = props.instance.values.properties[prop.symbolic_name];
+            const value = props.instance.values.properties[prop.symbolic_name];
 
-          if (value) {
-            if (prop.inputType === "select") {
-              source.value.data[prop.symbolic_name] = prop.data.options.find(
-                (o) => o.key === value
-              );
+            if (value) {
+              if (prop.inputType === "select") {
+                source.value.data[prop.symbolic_name] = prop.data.options.find(
+                  (o) => o.key === value
+                );
+              } else {
+                source.value.data[prop.symbolic_name] = value;
+              }
             } else {
-              source.value.data[prop.symbolic_name] = value;
-            }
-          } else {
-            const placeholder = prop.inputType === "select" ? {} : "";
+              const placeholder = prop.inputType === "select" ? {} : "";
 
-            source.value.data[prop.symbolic_name] = placeholder;
+              source.value.data[prop.symbolic_name] = placeholder;
+            }
           }
         }
       },

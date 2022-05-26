@@ -3,6 +3,7 @@
   <div class="flex justify-end justify-items-center p-5">
     <PrimaryButton
       type="button"
+      :disabled="disabled"
       @click="addProcessModalIsVisible = true"
     >
       <PlusIcon
@@ -16,7 +17,7 @@
   <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
     <div
       class="flex w-full justify-center py-2"
-      v-for="(process, processIdx) in processes"
+      v-for="(process, processIdx) in selectedProcesses"
       :key="processIdx"
     >
       <div class="w-full">
@@ -77,13 +78,12 @@
 
   </div>
 
-  <add-process-modal
+  <AddProcessModal
     v-model="addProcessModalIsVisible"
     :processesCategories="processesCategories"
     :processes="processes"
     @confirmation="onAddProcess"
-  >
-  </add-process-modal>
+  />
 </template>
 
 <script>
@@ -129,6 +129,10 @@ export default {
       type: Array,
       required: true,
     },
+    selectedProcesses: {
+      type: Array,
+      required: false,
+    },
     nextStepRequest: {
       type: Boolean,
       required: true,
@@ -152,7 +156,11 @@ export default {
       data: transformPropsToData(p.template_properties),
     }));
 
+    const storeTemplate = computed(() => store.getters["source/template"]);
+    const disabled = storeTemplate.value.value == 'Simple Source';
+
     const storeProcesses = computed(() => store.getters["source/processes"]);
+    const storeSelectedProcesses = computed(() => store.getters["source/selectedProcesses"]);
 
     const processes = ref(
       storeProcesses.value.length
@@ -160,15 +168,17 @@ export default {
         : propProcesses
     );
 
+    const selectedProcesses = ref(window._.cloneDeep(storeSelectedProcesses.value));
+
     const commitProcesses = window._.debounce(
       () =>
-        store.commit("source/setProcesses", {
-          processes: window._.cloneDeep(processes),
+        store.commit("source/setSelectedProcesses", {
+          selectedProcesses: window._.cloneDeep(selectedProcesses),
         }),
       500
     );
 
-    watch(processes, () => commitProcesses(), {
+    watch(selectedProcesses, () => commitProcesses(), {
       deep: true,
       immediate: true,
     });
@@ -180,10 +190,10 @@ export default {
 
       newProcess.data = transformPropsToData(newProcess.props);
 
-      processes.value.push(newProcess);
+      selectedProcesses.value.push(newProcess);
     };
 
-    const onRemoveProcess = (index) => processes.value.splice(index, 1);
+    const onRemoveProcess = (index) => selectedProcesses.value.splice(index, 1);
 
     watch(
       () => props.nextStepRequest,
@@ -193,7 +203,7 @@ export default {
         // reset the errors so they are always up to date
         errors.value = {};
 
-        for (const [index, process] of processes.value.entries()) {
+        for (const [index, process] of selectedProcesses.value.entries()) {
           const properties = process.props;
 
           validateProperies(process, properties, errors.value, index);
@@ -208,6 +218,8 @@ export default {
       errors,
       addProcessModalIsVisible,
       processes,
+      selectedProcesses,
+      disabled,
       onAddProcess,
       onRemoveProcess,
     };

@@ -4,6 +4,8 @@ const state = () => ({
     data: {}
   },
   equipment: [],
+  selectedEquipment: [],
+  selectedProcesses: [],
   processes: [],
   template: null,
   location: null,
@@ -14,7 +16,9 @@ const state = () => ({
 const getters = {
   source: (state) => state.source,
   equipment: (state) => state.equipment,
+  selectedEquipment: (state) => state.selectedEquipment,
   processes: (state) => state.processes,
+  selectedProcesses: (state) => state.selectedProcesses,
   template: (state) => state.template,
   location: (state) => state.location,
   withAdvancedProperties: (state) => state.withAdvancedProperties,
@@ -27,7 +31,9 @@ const actions = {
     ctx.commit('setLocation', { location: null });
     ctx.commit('setSourceData', { data: {} });
     ctx.commit('setEquipment', { equipment: [] });
+    ctx.commit('setSelectedEquipment', { selectedEquipment: [] });
     ctx.commit('setProcesses', { processes: [] });
+    ctx.commit('setSelectedProcesses', { selectedProcesses: [] });
     ctx.commit('setAdvancedPropertiesOption', { withAdvancedProperties: null });
   }
 };
@@ -38,7 +44,9 @@ const mutations = {
   setLocation: (state, payload) => state.location = payload.location,
   setSourceData: (state, payload) => state.source.data = payload.data,
   setEquipment: (state, payload) => state.equipment = payload.equipment,
+  setSelectedEquipment: (state, payload) => state.selectedEquipment = payload.selectedEquipment,
   setProcesses: (state, payload) => state.processes = payload.processes,
+  setSelectedProcesses: (state, payload) => state.selectedProcesses = payload.selectedProcesses,
   setAdvancedPropertiesOption: (state, payload) => state.withAdvancedProperties = payload.withAdvancedProperties
 };
 
