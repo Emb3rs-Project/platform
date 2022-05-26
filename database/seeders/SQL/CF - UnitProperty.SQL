@@ -90,3 +90,8 @@ INSERT INTO public.unit_property(property_id, unit_id)VALUES (89,25);
 INSERT INTO public.unit_property(property_id, unit_id)VALUES (90,5);
 INSERT INTO public.unit_property(property_id, unit_id)VALUES (91,24);
 INSERT INTO public.unit_property(property_id, unit_id)VALUES (92,9999);
+INSERT INTO public.unit_property(property_id, unit_id)VALUES (93,9999);
+INSERT INTO public.unit_property(property_id, unit_id)VALUES (94,13);
+INSERT INTO public.unit_property(property_id, unit_id)VALUES (95,13);
+
+

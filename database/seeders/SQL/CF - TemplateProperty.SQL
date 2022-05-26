@@ -1,29 +1,29 @@
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (1, TRUE,2,3,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (2, TRUE,2,4,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (3, TRUE,2,5,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (4, TRUE,2,6,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (5, TRUE,2,7,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (6, TRUE,2,8,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (7, TRUE,2,9,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (8, TRUE,2,10,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (9, TRUE,2,11,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (10, TRUE,2,12,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (11, TRUE,2,13,20,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (12, TRUE,2,14,21,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (13, TRUE,2,15,9999,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (1, TRUE,2,3,9999,3,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (2, TRUE,2,4,10,4,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (3, TRUE,2,5,10,5,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (4, TRUE,2,6,10,6,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (5, TRUE,2,7,9999,7,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (6, TRUE,2,8,9999,8,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (7, TRUE,2,9,9999,9,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (8, TRUE,2,10,9999,10,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (9, TRUE,2,11,9999,12,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (10, TRUE,2,12,9999,13,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (11, TRUE,2,13,20,14,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (12, TRUE,2,14,21,11,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (13, TRUE,2,15,9999,1,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (14, FALSE,2,20,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (15, FALSE,2,17,9999,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (16, TRUE,2,18,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (17, TRUE,2,19,9999,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (16, TRUE,2,18,9999,15,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (17, TRUE,2,19,9999,2,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (18, FALSE,2,20,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (19, FALSE,2,21,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (20, FALSE,2,22,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (21, FALSE,2,23,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (22, FALSE,2,24,13,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (23, FALSE,2,25,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (24, FALSE,2,26,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (25, FALSE,2,27,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (26, FALSE,2,28,13,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (23, FALSE,2,25,13,16,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (24, FALSE,2,26,13,17,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (25, FALSE,2,27,13,18,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (26, FALSE,2,28,13,19,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (27, FALSE,2,29,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (28, FALSE,2,30,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (29, FALSE,2,31,9999,0,TRUE);
@@ -40,18 +40,18 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (40, FALSE,2,42,16,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (41, FALSE,2,43,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (42, FALSE,2,44,9999,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (43, TRUE,8,45,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (44, TRUE,8,46,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (45, TRUE,8,47,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (46, TRUE,8,48,10,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (47, TRUE,8,13,20,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (48, TRUE,8,14,21,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (49, TRUE,8,49,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (50, TRUE,8,50,9999,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (43, TRUE,8,45,9999,1,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (44, TRUE,8,46,10,3,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (45, TRUE,8,47,10,4,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (46, TRUE,8,48,10,5,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (47, TRUE,8,13,20,7,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (48, TRUE,8,14,21,6,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (49, TRUE,8,49,9999,9,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (50, TRUE,8,50,9999,2,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (51, FALSE,8,51,21,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (52, FALSE,8,52,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (53, FALSE,8,25,13,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (54, TRUE,8,26,13,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (54, TRUE,8,26,13,8,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (55, FALSE,8,21,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (56, FALSE,8,22,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (57, FALSE,8,53,9999,0,TRUE);
@@ -63,31 +63,29 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (63, FALSE,8,59,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (64, FALSE,8,60,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (65, FALSE,8,61,16,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (66, FALSE,8,62,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (67, TRUE,15,63,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (68, TRUE,15,64,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (69, TRUE,15,65,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (70, TRUE,15,67,27,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (71, TRUE,15,66,6,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (72, FALSE,15,11,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (73, FALSE,15,12,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (74, FALSE,15,13,20,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (75, FALSE,15,14,21,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (76, FALSE,15,86,24,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (77, FALSE,15,85,5,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (78, TRUE,14,63,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (79, TRUE,14,64,13,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (80, TRUE,14,65,9999,0,FALSE);
-
-
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (81, TRUE,14,67,27,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (82, FALSE,14,66,6,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (83, FALSE,14,11,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (84, FALSE,14,12,9999,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (85, FALSE,14,13,20,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (86, FALSE,14,14,21,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (87, FALSE,14,85,5,0,FALSE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (88, FALSE,14,86,24,0,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (66, FALSE,8,62,9999,10,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (67, TRUE,15,63,13,1,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (68, TRUE,15,64,13,2,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (69, TRUE,15,65,9999,3,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (70, FALSE,15,67,27,5,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (71, FALSE,15,66,6,6,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (72, FALSE,15,11,9999,9,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (73, FALSE,15,12,9999,10,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (74, FALSE,15,13,20,11,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (75, FALSE,15,14,21,8,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (76, FALSE,15,86,24,7,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (77, FALSE,15,85,5,4,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (78, TRUE,14,63,13,1,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (79, TRUE,14,64,13,2,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (80, TRUE,14,65,9999,3,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (81, FALSE,14,67,27,5,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (82, FALSE,14,66,6,6,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (83, FALSE,14,11,9999,9,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (84, FALSE,14,12,9999,10,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (85, FALSE,14,13,20,11,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (86, FALSE,14,14,21,8,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (87, FALSE,14,85,5,7,FALSE);
+INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (88, FALSE,14,86,24,4,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (89, TRUE,1,63,13,0,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (90, FALSE,1,40,8,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (91, TRUE,1,11,9999,0,FALSE);
@@ -149,6 +147,7 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (147, TRUE,7,88,3,0,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (148, TRUE,7,89,25,0,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (149, TRUE,7,90,5,0,FALSE);
+
 -- TEMPLATE NAMES
 SELECT pg_catalog.setval(pg_get_serial_sequence('template_properties', 'id'), (SELECT MAX(id) FROM template_properties)+1);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,1,  92, 9999, -1, FALSE);
@@ -167,6 +166,13 @@ INSERT INTO public.template_properties(required, template_id, property_id, defau
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,14,  92, 9999, -1, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,15,  92, 9999, -1, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,16,  92, 9999, -1, FALSE);
+
+
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,17,  94, 13, 0, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,17,  95, 13, 0, FALSE);
+
+
+
 
 -- TEMPLATE Consumer_type
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  92, 9999, 0, FALSE);
