@@ -146,8 +146,8 @@ export default {
     const incompleteStepAlert = ref(false);
 
     const source = computed(() => store.getters["source/source"]);
-    const equipment = computed(() => store.getters["source/equipment"]);
-    const processes = computed(() => store.getters["source/processes"]);
+    const equipment = computed(() => store.getters["source/selectedEquipment"]);
+    const processes = computed(() => store.getters["source/selectedProcesses"]);
     const template = computed(() => store.getters["source/template"]);
     const location = computed(() => store.getters["source/location"]);
 

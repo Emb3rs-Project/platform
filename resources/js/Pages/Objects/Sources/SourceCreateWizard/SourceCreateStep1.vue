@@ -285,10 +285,6 @@ export default {
             (selectedTemplate) => {
                 withAdvancedProperties.value = false;
 
-                store.commit("source/setTemplate", {
-                    template: selectedTemplate,
-                });
-
                 if (!selectedTemplate.properties.length) source.value.data = {};
 
                 for (const property of properties.value) {
@@ -298,11 +294,22 @@ export default {
                         const placeholder = inputType === "select" ? {} : "";
 
                         const key = property.property.symbolic_name;
-
-                        source.value.data[key] =
+                        if (selectedTemplate != storeTemplate.value) {
+                            source.value.data[key] =
                             property.property.default_value ?? placeholder;
+                            store.commit("source/setSelectedEquipment", {
+                                selectedEquipment: window._.cloneDeep(ref([])),
+                            });
+                            store.commit("source/setSelectedProcesses", {
+                                selectedProcesses: window._.cloneDeep(ref([])),
+                            });
+                        }
                     }
                 }
+
+                store.commit("source/setTemplate", {
+                    template: selectedTemplate,
+                });
             },
             { immediate: true, deep: true }
         );
@@ -347,14 +354,14 @@ export default {
         );
 
         const commitSource = window._.debounce(
-            (source) =>
+            () => 
                 store.commit("source/setSourceData", {
-                    data: window._.cloneDeep(source.data),
+                    data: window._.cloneDeep(source.value.data),
                 }),
             500
         );
 
-        watch(source, (source) => commitSource(source), {
+        watch(source, () => commitSource(), {
             deep: true,
             immediate: true,
         });
