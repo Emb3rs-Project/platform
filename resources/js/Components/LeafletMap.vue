@@ -55,7 +55,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .leaflet-popup-close-button {
     display: none;
 }
@@ -75,7 +75,9 @@ export default {
     position: relative;
     left: -50%;
 }
+</style>
 
+<style scoped>
 #map {
     min-height: 70vh;
 }
