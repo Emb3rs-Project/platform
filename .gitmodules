@@ -1,0 +1,3 @@
+[submodule "ms-grpc"]
+	path = ms-grpc
+	url = git@github.com:Emb3rs-Project/ms-grpc.git
