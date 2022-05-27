@@ -38,7 +38,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "": "gRPC"
+            "": "ms-grpc/php"
         },
         "files": [
             "app/helpers.php"

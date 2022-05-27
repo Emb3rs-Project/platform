@@ -5,6 +5,7 @@ namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Models\Instance;
+use App\Models\IntegrationReport;
 use App\Models\SimulationSession;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
@@ -29,7 +30,15 @@ class StartSimulation implements StartsSimulations
         $request->setInitialData(json_encode($session->simulation->extra));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
-        print("Sending to gRPC $session->id");
-        $client->StartSimulation($request)->wait();
+        list($result, $status) = $client->StartSimulation($request)->wait();
+        dump($status);
+        if ($status->code == 2) {
+
+            // IntegrationReport::create([
+            //     "module" => "Platform",
+            //     "function" => "StartSimulation",
+            //     "errors" => ["message" => $status->details]
+            // ]);
+        }
     }
 }
