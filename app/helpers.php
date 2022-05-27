@@ -22,3 +22,18 @@ if (!function_exists('closetags')) {
         return $html;
     }
 }
+
+if (!function_exists('cleanCharacterization')) {
+    function cleanCharacterization($collection)
+    {
+        return $collection->map(function($i) {
+            if (Arr::has($i['values'], 'characterization')) {
+                //$i['values']['characterization'] = "";
+                $values = $i['values'];
+                $values['characterization'] = null;
+                $i['values'] = $values;
+            }
+            return $i;
+         });
+    }
+}

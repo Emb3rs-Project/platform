@@ -41,7 +41,9 @@
         </div>
       </PropertyDisclosure>
     </div>
-
+    <pre>
+        {{instance}}
+    </pre>
     <!-- Sink Properties -->
     <div
       v-if="properties.length"

@@ -26,14 +26,14 @@
                             <p>Error : <span class="font-bold">{{ report.errors.message }}</span></p>
                         </div>
 
-                        <div v-if="report.output.report"
+                        <div v-if="report.output.report && !report.errors"
                             class="border border-green-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-green-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
                             <p class="font-bold text-sm"><a href="#">Module Report</a></p>
                         </div>
 
-                        <div v-if="report.output"
+                        <div v-if="!report.output.report && !report.errors"
                             class="border border-green-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-green-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>

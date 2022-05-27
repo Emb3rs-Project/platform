@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Link;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,11 +25,10 @@ class ObjectsController extends Controller
             ->get();
 
         $links = $request->user()->currentTeam->links;
-
         return [
             "slideOver" => 'Objects/ObjectsIndex',
             "props" => [
-                "instances" => $instances,
+                "instances" => cleanCharacterization($instances),
                 "links" => $links
             ]
         ];
@@ -44,7 +44,8 @@ class ObjectsController extends Controller
             'location',
         ])->whereIn('id', $teamInstances)->get();
 
-        return Inertia::render('Objects/Objects', ['instances' => $instances]);
+
+        return Inertia::render('Objects/Objects', ['instances' => cleanCharacterization($instances)]);
     }
 
     public function markers(Request $request)
@@ -56,14 +57,15 @@ class ObjectsController extends Controller
             'template',
             'template.category',
             'location',
-        ])->whereIn('id', $teamInstances)->get();
+        ])->whereIn('id', $teamInstances)
+        ->get();
 
         $links = Link::with([
             'geoSegments'
         ])->whereIn('id', $teamLinks)->get();
 
         return [
-            "instances" => $instances,
+            "instances" => cleanCharacterization($instances),
             "links" => $links
         ];
     }
