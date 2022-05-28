@@ -73,11 +73,13 @@ class UpdateLink implements UpdatesLinks
 
         if (!empty($input['segments'])) {
             foreach ($input['segments'] as $data) {
-                $segment = GeoSegment::create([
-                    'data' => $data
-                ]);
+                if (!array_key_exists('id', $data)) {
+                    $segment = GeoSegment::create([
+                        'data' => $data
+                    ]);
 
-                $link->geoSegments()->attach($segment);
+                    $link->geoSegments()->attach($segment);
+                }
             }
         }
 

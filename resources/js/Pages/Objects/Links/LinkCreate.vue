@@ -250,7 +250,7 @@ export default {
     };
 
     const createSegment = () => {
-      form.segments = linkList.value;
+      form.segments = [linkList.value[linkList.value.length -1]];
 
       form
         .transform((data) => {
