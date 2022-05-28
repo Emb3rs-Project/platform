@@ -244,7 +244,7 @@ export default {
         };
 
         const onStopLink = () => {
-            //store.dispatch("objects/showSlide", { route: "objects.list" });
+            store.dispatch("objects/showSlide", { route: "objects.list" });
 
             map.value.contextmenu.removeAllItems();
             map.value.off("mousemove");

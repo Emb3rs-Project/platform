@@ -38,9 +38,9 @@ class LinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresLinks::class)->store($request->user(), $request->all());
+        $link = app(StoresLinks::class)->store($request->user(), $request->all());
 
-        return redirect()->route('objects.index');
+        return redirect()->route('objects.index', ['link' => $link->id]);
     }
 
     /**
