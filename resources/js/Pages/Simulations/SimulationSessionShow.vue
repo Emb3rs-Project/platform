@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <AppLayout>
         <div class="bg-white h-screen overflow-y-scroll">
             <div class="grid grid-cols-2 gap-4">
@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <pre>
-                        <!-- {{ reports }} -->
+                        
                     </pre>
                 </div>
             </div>
@@ -120,5 +120,5 @@ const processedReports = computed(() => {
 
 const extensions = [json()]
 </script>
-
+-->
 

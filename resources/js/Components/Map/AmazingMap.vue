@@ -228,6 +228,7 @@ export default {
                 }
             }
 
+            //map.value.on("dblclick", (e) => onNextPoint(e));
             map.value.on("mousemove", function(e) {
 
                 if (lineLink.length) {
@@ -248,6 +249,7 @@ export default {
 
             map.value.contextmenu.removeAllItems();
             map.value.off("mousemove");
+            //map.value.off("dblclick");
 
             if (lineLink.length) {
                 map.value.removeLayer(lineLink[0]);
