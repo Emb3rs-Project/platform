@@ -58,7 +58,8 @@ export default {
       contextmenuItems: [],
       defaultTextClass: textClass,
       defaultBorderClass: borderClass,
-      objectType: type
+      objectType: type,
+      riseOnHover: true
     }).addTo(map);
   },
   addCircle(map, center) {
@@ -79,7 +80,7 @@ export default {
       contextmenu: true,
       contextmenuWidth: 140,
       contextmenuItems: context(polyline)
-    })
+    });
 
     return polyline;
   },
@@ -119,6 +120,22 @@ export default {
 
       // #3B82F6 is bg-blue-500
       const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map).on("mousedown", () => onClick(_link));
+
+      link.on('mouseover', (e) => {
+        const layer = e.target;
+        layer.setStyle({
+            color: 'blue',
+            weight: 4
+        });
+      });
+
+      link.on('mouseout', (e) => {
+        const layer = e.target;
+        layer.setStyle({
+            color: '#3B82F6',
+            weight: 3
+        });
+      });
 
       linksLayer.push(link);
     }

@@ -233,7 +233,8 @@ export default {
         .post(route("objects.links.store"), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
+            store.commit("objects/closeSlide");
           },
           onError: (e) => console.log(e),
         });

@@ -93,6 +93,8 @@ export default {
 
         const currentLinkSegments = [];
 
+        const lineLink = [];
+
         const currentSegment = {
             from: null,
             start: null,
@@ -203,10 +205,12 @@ export default {
         });
 
         const onCreateLink = (value) => {
-            store.dispatch("objects/showSlide", {
+            currentSegment.from = value.latlng;
+            
+            /*store.dispatch("objects/showSlide", {
                 route: "objects.links.create",
                 props: {},
-            });
+            });*/
 
             store.commit("map/startLinks");
 
@@ -223,12 +227,32 @@ export default {
                     );
                 }
             }
+
+            map.value.on("mousemove", function(e) {
+
+                if (lineLink.length) {
+                    map.value.removeLayer(lineLink[0]);
+                    lineLink.splice(0, 1);
+                }
+
+                const segment = L.polyline([currentSegment.from, e.latlng], {
+                    color: 'green'
+                }).addTo(map.value).on("click", () => onNextPoint(e));
+
+                lineLink.push(segment);                
+            });
         };
 
         const onStopLink = () => {
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
 
             map.value.contextmenu.removeAllItems();
+            map.value.off("mousemove");
+
+            if (lineLink.length) {
+                map.value.removeLayer(lineLink[0]);
+                lineLink.splice(0, 1);
+            }
 
             for (const _contextItem of defautMapContext) {
                 map.value.contextmenu.insertItem(_contextItem);

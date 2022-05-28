@@ -152,8 +152,8 @@ export default {
     const store = useStore();
 
     const onGoToLocation = (loc) => { 
-        let lat = (loc[0].lat + loc[1].lat)/2;
-        let lng = (loc[0].lng + loc[1].lng)/2;
+        let lat = (loc[0][0] + loc[1][0])/2;
+        let lng = (loc[0][1] + loc[1][1])/2;
         
         store.dispatch("map/centerAt", {
         marker: {
