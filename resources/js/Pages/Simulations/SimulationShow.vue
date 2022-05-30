@@ -85,15 +85,15 @@
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <h2 class="text-lg font-bold">Simulation Sessions</h2>
                     <div
-                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-gray-50"
+                        class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-gray-50 hover:bg-gray-300 cursor-pointer"
                         v-for="session of simulation.simulation_sessions"
-                        @click=""
+                        @click="navigateTo(route(
+                            'session.show', session.id
+                        ))"
                         :key="session"
                     >
-                        <Link :href="route(
-                            'session.show', session.id
-                        )">session uuid : {{ session.simulation_uuid }}</Link> <br />
-                        created_at : {{ session.created_at }}
+                        <p>session uuid : {{ session.simulation_uuid }}</p>
+                        <p>created_at : {{ session.created_at }}</p>
                     </div>
                 </div>
             </div>
@@ -122,6 +122,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import { polygon, marker } from "leaflet";
 import VSelect from "vue-select";
 import { COUNTRIES } from "./data/countries";
+import { Inertia } from "@inertiajs/inertia";
 
 const props = defineProps({
     project: Object,
@@ -141,4 +142,6 @@ const stepInfo = computed(() => {
     //     function: props.simulation.simulation_metadata.data[s].function,
     // }));
 });
+
+const navigateTo = (path) => Inertia.get(path);
 </script>

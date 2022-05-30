@@ -23,6 +23,7 @@ use App\Http\Controllers\Embers\TeamRolesController;
 use App\Http\Controllers\Embers\MapDataController;
 use App\Http\Controllers\Embers\NewsController;
 use App\Http\Controllers\Embers\ProjectSimulationSessionController;
+use App\Http\Controllers\Embers\ProjectSimulationSessionReportController;
 use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
@@ -90,6 +91,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     });
 
     Route::get('/sessions/{session}', [ProjectSimulationSessionController::class, 'show'])->name("session.show");
+    Route::delete('/sessions/{session}', [ProjectSimulationSessionController::class, 'destroy'])->name("session.delete");
+
+    Route::get('/sessions/{session}/report/{report}', ProjectSimulationSessionReportController::class)->name('session.report.show');
 
     // Projects
     Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share')

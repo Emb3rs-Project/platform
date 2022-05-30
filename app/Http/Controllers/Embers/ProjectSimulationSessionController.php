@@ -10,37 +10,7 @@ use Inertia\Inertia;
 
 class ProjectSimulationSessionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
+     /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -49,32 +19,12 @@ class ProjectSimulationSessionController extends Controller
     public function show($id)
     {
         $session = SimulationSession::findOrFail($id);
-        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->get();
+        $session->load(['simulation', 'simulation.project']);
+        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
+            ->orderBy('created_at')
+            ->get();
 
         return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reports]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -85,6 +35,17 @@ class ProjectSimulationSessionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $session = SimulationSession::findOrFail($id);
+        $simulation = $session->simulation;
+        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->get();
+
+        foreach($reports as $report)
+            $report->delete();
+
+        $session->delete();
+
+        return redirect()->route('projects.simulations.show', ['simulation' => $simulation->id, 'project' => $simulation->project_id]);
     }
+
+
 }
