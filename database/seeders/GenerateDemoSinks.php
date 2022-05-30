@@ -18,7 +18,7 @@ class GenerateDemoSinks extends Seeder
     public function run()
     {
         $email = env('ADMIN_EMAIL', "davidsf@pantherify.com");
-        $user = User::where("email", "like", $email)->first();
+        $user = User::where("email", "like", $email)->firstOrFail();
         $sourcesToCreate = [
             [
                 "equipment" => [],
