@@ -75,7 +75,9 @@ export default {
     position: relative;
     left: -50%;
 }
+</style>
 
+<style scoped>
 #map {
     min-height: 70vh;
 }
