@@ -1,8 +1,8 @@
 <template>
   <SlideOver
-    title="New Link"
-    subtitle="Get started by selecting a marker to start your segments."
-    headerBackground="bg-blue-700"
+    :title="!form.segments.length ? 'New Link' : 'New Segment'"
+    :subtitle="!form.segments.length ? 'Get started by selecting a marker to start your segments.' : `Create a new segment for the link ${form.name}`"
+    :headerBackground="!form.segments.length ? 'bg-blue-700' : 'bg-green-700'"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
@@ -12,30 +12,31 @@
           for="name"
           class="block text-sm font-medium text-gray-900"
         >
-          Name
+          {{!form.segments.length ? 'Name' : 'Link Name'}}
         </label>
       </div>
       <div class="flex flex-col place-content-center sm:col-span-2">
         <TextInput
           v-model="form.name"
           placeholder="Link's Name"
+          :disabled="form.segments.length"
         />
       </div>
     </div>
-
     <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 items-center">
       <div class="flex flex-col place-content-center">
         <label
           for="description"
           class="block text-sm font-medium text-gray-900"
         >
-          Description
+          {{!form.segments.length ? 'Description' : 'Link Description'}}
         </label>
       </div>
       <div class="flex flex-col place-content-center sm:col-span-2">
         <TextInput
           v-model="form.description"
           placeholder="Link's Description"
+          :disabled="form.segments.length"
         />
       </div>
     </div>
@@ -220,9 +221,15 @@ export default {
       segments: [],
     });
 
+    let linkId = "";
+
     // watch(form, (value) => console.log(value));
 
     const submit = () => {
+      if (form.segments.length) {
+        return createSegment();
+      }
+
       form.segments = linkList.value;
 
       form
@@ -232,8 +239,28 @@ export default {
         })
         .post(route("objects.links.store"), {
           onSuccess: () => {
+            linkId = route().params.link;
+            
             store.dispatch("map/refreshMap");
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
+            store.commit("objects/closeSlide");
+          },
+          onError: (e) => console.log(e),
+        });
+    };
+
+    const createSegment = () => {
+      form.segments = [linkList.value[linkList.value.length -1]];
+
+      form
+        .transform((data) => {
+          console.log("Form data is:", data);
+          return data;
+        })
+        .patch(route("objects.links.update", linkId), {
+          onSuccess: () => {
+            store.dispatch("map/refreshMap");
+            store.commit("objects/closeSlide");
           },
           onError: (e) => console.log(e),
         });

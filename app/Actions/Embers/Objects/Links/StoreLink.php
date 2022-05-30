@@ -79,10 +79,7 @@ class StoreLink implements StoresLinks
 
         foreach ($segments as $data) {
             $segment = GeoSegment::create([
-                'data' => [
-                    'from' => [$data['from']['lat'], $data['from']['lng']],
-                    'to' => [$data['to']['lat'], $data['to']['lng']]
-                ]
+                'data' => $data
             ]);
 
             $link->geoSegments()->attach($segment);
