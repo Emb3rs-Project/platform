@@ -93,7 +93,7 @@ import CheckboxRow from "@/Components/CheckboxRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-import { computed, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref } from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -129,6 +129,11 @@ const extensions = [json()]
 const showReport = (id) => Inertia.get(route('session.report.show', {session : props.session.id, report: id}))
 const deleteSession = () => Inertia.delete(route('session.delete', props.session.id))
 const back = () => Inertia.get(route('projects.simulations.show', { project: props.session.simulation.project_id, simulation: props.session.simulation_id }))
+
+let updateInterval = 0;
+
+onMounted(() => updateInterval = setInterval(Inertia.get(route('session.show', {session: props.session.id})), 5000))
+onUnmounted(() => clearInterval(updateInterval))
 </script>
 
 
