@@ -3,6 +3,7 @@
     :title="!form.segments.length ? 'New Link' : 'New Segment'"
     :subtitle="!form.segments.length ? 'Get started by selecting a marker to start your segments.' : `Create a new segment for the link ${form.name}`"
     :headerBackground="!form.segments.length ? 'bg-blue-700' : 'bg-green-700'"
+    :closeOnEscape="false"
     dismissButtonTextColor="text-gray-200"
     subtitleTextColor="text-gray-200"
   >
@@ -240,17 +241,17 @@ export default {
         .post(route("objects.links.store"), {
           onSuccess: () => {
             linkId = route().params.link;
-            
+            store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
-            //store.dispatch("objects/showSlide", { route: "objects.list" });
-            store.commit("objects/closeSlide");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
           },
           onError: (e) => console.log(e),
         });
     };
 
     const createSegment = () => {
-      form.segments = [linkList.value[linkList.value.length -1]];
+      
+      form.segments = linkList.value.filter((el, index) => index > form.segments.length -1);
 
       form
         .transform((data) => {
@@ -259,6 +260,7 @@ export default {
         })
         .patch(route("objects.links.update", linkId), {
           onSuccess: () => {
+            store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
             store.commit("objects/closeSlide");
           },
@@ -268,7 +270,7 @@ export default {
 
     const links = computed(() => store.getters["map/currentLinks"]);
     const linkList = computed(() => Object.values(links.value));
-
+  
     return {
       form,
       submit,
