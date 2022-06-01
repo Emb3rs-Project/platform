@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Integration;
 
+use App;
 use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Models\Instance;
 use Cf\CFModuleClient;
@@ -13,8 +14,11 @@ class CharacterizeInstance implements CharacterizesInstances
 {
     public function characterize(Instance $instance): void
     {
+        $cf_host = \Config::get("grpc.GRPC_CF_HOST");
+        $cf_port = \Config::get("grpc.GRPC_CF_PORT");
+
         $client = new CFModuleClient(
-            'vali.pantherify.dev:50051',
+            "$cf_host:$cf_port",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]

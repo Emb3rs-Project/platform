@@ -29,7 +29,7 @@ if (mix.inProduction()) {
     mix.options({
         // https://github.com/JeffreyWay/laravel-mix/blob/c67ff394bfffead9a1e2bc71ac97559e394e4cfe/src/config.js#L24
         hmrOptions: {
-            host: "159.69.217.232",
+            host: "localhost",
             port: +process.env.MIX_HMR_PORT,
         },
     });
