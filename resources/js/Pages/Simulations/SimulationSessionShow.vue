@@ -67,7 +67,7 @@
                                 </Disclosure>
                             </div>
                             <div class="mt-5 mb-2">
-                             <a 
+                             <a
                              v-if="report.output_data.report"
                              target="_blank"
                              :href="route('session.report.show', {session : session.id, report: report.id})"
@@ -132,8 +132,6 @@ const back = () => Inertia.get(route('projects.simulations.show', { project: pro
 
 let updateInterval = 0;
 
-onMounted(() => updateInterval = setInterval(Inertia.get(route('session.show', {session: props.session.id})), 5000))
-onUnmounted(() => clearInterval(updateInterval))
 </script>
 
 
