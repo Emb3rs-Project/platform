@@ -26,12 +26,7 @@
               for="email"
               value="Email"
             />
-            <jet-input
-              id="email"
-              type="email"
-              class="mt-1 block w-full"
-              v-model="addTeamMemberForm.email"
-            />
+            <VSelect :options="users" v-model="addTeamMemberForm.email" />
             <jet-input-error
               :message="addTeamMemberForm.errors.email"
               class="mt-2"
@@ -453,9 +448,12 @@ import CreateRoleModal from "@/Components/Modals/CreateRoleModal.vue";
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import VSelect from "vue-select";
+
 
 export default {
   components: {
+    VSelect,
     RadioGroup,
     RadioGroupDescription,
     RadioGroupLabel,
@@ -497,6 +495,10 @@ export default {
     userPermissions: {
       type: Object,
       required: true,
+    },
+    users: {
+        type: Array,
+        required: true
     },
   },
 

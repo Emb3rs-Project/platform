@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\TeamRoles\CreatesTeamRoles;
 use App\Contracts\Embers\TeamRoles\IndexesTeamRoles;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
@@ -36,11 +37,14 @@ class TeamController extends Controller
 
         $availablePermissions = app(CreatesTeamRoles::class)->create($request->user());
 
+        $users = User::all()->pluck('email');
+
         return Jetstream::inertia()->render($request, 'Teams/Show', [
             'team' => $team->load('owner', 'users', 'teamInvitations'),
             'availableRoles' => $availableRoles,
             'availablePermissions' => $availablePermissions,
             'defaultPermissions' => [],
+            'users' => $users,
             'permissions' => [
                 'canAddTeamMembers' => Gate::check('addTeamMember', $team),
                 'canDeleteTeam' => Gate::check('delete', $team),
