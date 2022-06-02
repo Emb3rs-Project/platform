@@ -49,7 +49,6 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (49, TRUE,8,49,9999,9,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (50, TRUE,8,50,9999,2,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (51, FALSE,8,51,21,0,TRUE);
-INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (52, FALSE,8,52,9999,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (53, FALSE,8,25,13,0,TRUE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (54, TRUE,8,26,13,8,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (55, FALSE,8,21,13,0,TRUE);
