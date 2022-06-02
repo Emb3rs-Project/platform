@@ -243,7 +243,8 @@ export default {
             linkId = route().params.link;
             store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            store.commit("objects/closeSlide");
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
           },
           onError: (e) => console.log(e),
         });
@@ -270,6 +271,21 @@ export default {
 
     const links = computed(() => store.getters["map/currentLinks"]);
     const linkList = computed(() => Object.values(links.value));
+
+    watch(
+      linkList,
+      (value) => {
+        if(!value.length) {
+          form.name = "";
+          form.description = "";
+          form.segments = [];
+        }
+      }, 
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
   
     return {
       form,

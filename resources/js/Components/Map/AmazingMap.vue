@@ -204,19 +204,16 @@ export default {
             });
         });
 
-        const onCreateLink = (value) => {
+        const onCreateLink = (value, newSegment = false) => {
             currentSegment.from = value.latlng;
 
             store.dispatch("map/saveLink", false);
     
-            /*store.dispatch("objects/showSlide", {
-                route: "objects.links.create",
-                props: {},
-            }); */
-
-            store.commit("map/startLinks");
-            const saveLink = store.getters["map/saveLink"];
-
+            if (!newSegment) {
+                currentLinkSegments.map((element) => map.value.removeLayer(element));
+                store.commit("map/startLinks");
+            }
+                
             map.value.contextmenu.removeAllItems();
 
             for (const _contextItem of linkCreationMapContext) {
@@ -250,7 +247,7 @@ export default {
                     lineLink.splice(0, 1);
                 }
 
-                if (saveLink) return onStopLink();
+                if (store.getters["map/saveLink"]) return onStopLink();
 
                 const segment = L.polyline([currentSegment.from, e.latlng], {
                     color: 'green'
@@ -272,9 +269,15 @@ export default {
                 lineLink.splice(0, 1);
             }
 
-            for (const _contextItem of defautMapContext) {
+            defautMapContext.map((_contextItem, i) => {
                 map.value.contextmenu.insertItem(_contextItem);
-            }
+                if (i == 2) {
+                    map.value.contextmenu.insertItem({
+                        text: "Start New Segment",
+                        callback: (e) => onCreateLink(e, true),
+                    });
+                }
+            });
 
             for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
                 _sinkLayer.options.contextmenuItems = [];
