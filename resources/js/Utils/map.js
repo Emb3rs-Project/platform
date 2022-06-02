@@ -107,6 +107,8 @@ export default {
           sinks.push(sink);
           break;
       }
+
+      this.addCircle(map, center);
     }
 
     mapObjects.sources = L.layerGroup(sources);
