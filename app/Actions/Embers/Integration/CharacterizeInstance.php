@@ -18,7 +18,7 @@ class CharacterizeInstance implements CharacterizesInstances
         $cf_port = \Config::get("grpc.GRPC_CF_PORT");
 
         $client = new CFModuleClient(
-            "$cf_host:$cf_port",
+            "vali.pantherify.dev:50051",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
