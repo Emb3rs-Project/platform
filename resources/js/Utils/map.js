@@ -82,6 +82,8 @@ export default {
       contextmenuItems: context(polyline)
     });
 
+    this.addCircle(map, to);
+
     return polyline;
   },
   addInstances(map, instances = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
@@ -120,6 +122,11 @@ export default {
 
       // #3B82F6 is bg-blue-500
       const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map).on("mousedown", () => onClick(_link));
+
+      latLngs[0].map((element) => {
+        this.addCircle(map, element[0]);
+        this.addCircle(map, element[1]);
+      });
 
       link.on('mouseover', (e) => {
         const layer = e.target;
