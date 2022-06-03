@@ -316,7 +316,12 @@ export default {
         })
         .post(route("objects.sources.store"), {
           onSuccess: () => {
-            store.dispatch("map/refreshMap");
+            //store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Source',
+                text: 'Source Created Successfully',
+                type: 'success'
+            });
             store.dispatch("objects/showSlide", { route: "objects.list" });
             store.dispatch("source/reset");
           },
