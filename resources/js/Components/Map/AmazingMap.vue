@@ -204,10 +204,21 @@ export default {
             });
         });
 
-        const onCreateLink = (value, newSegment = false) => {
-            currentSegment.from = value.latlng;
+        watch(
+            () => store.getters["map/saveLink"],
+            (e) => {
+                if (e) {
+                    map.value.contextmenu.removeAllItems();
+                    defautMapContext.map(_contextItem => map.value.contextmenu.insertItem(_contextItem));
+                    store.commit("map/startLinks");
+                    store.dispatch("map/saveLink", false);
+                }
+            },
+            { immediate: true }
+        );
 
-            store.dispatch("map/saveLink", false);
+        const onCreateLink = (value, newSegment = false) => {
+            currentSegment.from = value.latlng ?? value.getLatLng();
     
             if (!newSegment) {
                 currentLinkSegments.map((element) => map.value.removeLayer(element));
@@ -269,22 +280,26 @@ export default {
                 lineLink.splice(0, 1);
             }
 
-            defautMapContext.map((_contextItem, i) => {
+            for (const _contextItem of linkStopMapContext) {
                 map.value.contextmenu.insertItem(_contextItem);
-                if (i == 2) {
-                    map.value.contextmenu.insertItem({
-                        text: "Start New Segment",
-                        callback: (e) => onCreateLink(e, true),
-                    });
-                }
-            });
+            }
 
             for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
                 _sinkLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkStopMarkerContext) {
+                    _sinkLayer.options.contextmenuItems.push(
+                        _contextItem(_sinkLayer)
+                    );
+                }
             }
 
             for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
                 _sourceLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkStopMarkerContext) {
+                    _sourceLayer.options.contextmenuItems.push(
+                        _contextItem(_sourceLayer)
+                    );
+                }
             }
         };
 
@@ -293,6 +308,14 @@ export default {
 
             currentSegment.from = start.getLatLng();
             currentSegment.start = start.getLatLng();
+        };
+
+        const onFinishLink = () => {
+            map.value.off("mousemove");
+            store.dispatch("objects/showSlide", {
+                route: "objects.links.create",
+                props: {},
+            });            
         };
 
         const onFinishMarker = (value) => {
@@ -467,6 +490,17 @@ export default {
             },
         ];
 
+        const linkStopMapContext = [
+            {
+                text: "Finish Link Creation",
+                callback: onFinishLink,
+            },
+            {
+                text: "Start New Segment",
+                callback: (m) => onCreateLink(m, true),
+            }
+        ];
+
         const linkCreationMarkerContext = [
             () => "-",
             (m) => ({
@@ -480,6 +514,14 @@ export default {
             (m) => ({
                 text: "Finish here",
                 callback: () => onFinishMarker(m),
+            }),
+        ];
+
+        const linkStopMarkerContext = [
+            () => "-",
+            (m) => ({
+                text: "Start Segment Here",
+                callback: () => onCreateLink(m, true),
             }),
         ];
 

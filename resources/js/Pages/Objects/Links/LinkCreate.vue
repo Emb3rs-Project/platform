@@ -222,15 +222,9 @@ export default {
       segments: [],
     });
 
-    let linkId = "";
-
     // watch(form, (value) => console.log(value));
 
     const submit = () => {
-      if (form.segments.length) {
-        return createSegment();
-      }
-
       form.segments = linkList.value;
 
       form
@@ -240,30 +234,10 @@ export default {
         })
         .post(route("objects.links.store"), {
           onSuccess: () => {
-            linkId = route().params.link;
             store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
-            store.commit("objects/closeSlide");
-            //store.dispatch("objects/showSlide", { route: "objects.list" });
-          },
-          onError: (e) => console.log(e),
-        });
-    };
-
-    const createSegment = () => {
-      
-      form.segments = linkList.value.filter((el, index) => index > form.segments.length -1);
-
-      form
-        .transform((data) => {
-          console.log("Form data is:", data);
-          return data;
-        })
-        .patch(route("objects.links.update", linkId), {
-          onSuccess: () => {
-            store.dispatch("map/saveLink", true);
-            store.dispatch("map/refreshMap");
-            store.commit("objects/closeSlide");
+            //store.commit("objects/closeSlide");
+            store.dispatch("objects/showSlide", { route: "objects.list" });
           },
           onError: (e) => console.log(e),
         });
@@ -272,21 +246,6 @@ export default {
     const links = computed(() => store.getters["map/currentLinks"]);
     const linkList = computed(() => Object.values(links.value));
 
-    watch(
-      linkList,
-      (value) => {
-        if(!value.length) {
-          form.name = "";
-          form.description = "";
-          form.segments = [];
-        }
-      }, 
-      {
-        deep: true,
-        immediate: true,
-      }
-    );
-  
     return {
       form,
       submit,
