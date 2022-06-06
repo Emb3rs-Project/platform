@@ -67,10 +67,13 @@ export default {
       color: 'red',
       fillColor: 'red',
       fillOpacity: 0.2,
-      radius: 5
-    }).addTo(map)
+      radius: 5,
+      contextmenu: true,
+      contextmenuWidth: 140,
+      contextmenuItems: [],
+    }).addTo(map);
   },
-  addSegment(map, from, to, context) {
+  addSegment(map, from, to, context, contextCircle) {
     console.log('MapUtils::addSegment', from, to, context);
     const polyline = L.polyline([from, to], {
       color: 'green'
@@ -82,13 +85,20 @@ export default {
       contextmenuItems: context(polyline)
     });
 
-    this.addCircle(map, to);
+    const circleSegment = this.addCircle(map, to);
+
+    circleSegment.bindContextMenu({
+      contextmenu: true,
+      contextmenuWidth: 140,
+      contextmenuItems: contextCircle(circleSegment)
+    });
 
     return polyline;
   },
   addInstances(map, instances = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
     const sources = [];
     const sinks = [];
+    const circleInstances = [];
 
     for (const _instance of instances.filter((i) => i.location && i.selected)) {
       // Skipping Locations with areas
@@ -108,14 +118,20 @@ export default {
           break;
       }
 
-      this.addCircle(map, center);
+      circleInstances.push(this.addCircle(map, center).bringToFront());
     }
 
     mapObjects.sources = L.layerGroup(sources);
     mapObjects.sinks = L.layerGroup(sinks);
+
+    if (mapObjects.circleLinks)
+      mapObjects.circleLinks.getLayers().forEach(circle => circleInstances.push(circle));
+
+    mapObjects.circleLinks = L.layerGroup(circleInstances);
   },
   addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
     const linksLayer = [];
+    const circleLink = [];
 
     for (const _link of links.filter((l) => l.selected)) {
       const latLngs = [_link.geo_segments.map((gs) => ([
@@ -126,8 +142,8 @@ export default {
       const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map).on("mousedown", () => onClick(_link));
 
       latLngs[0].map((element) => {
-        this.addCircle(map, element[0]);
-        this.addCircle(map, element[1]);
+        circleLink.push(this.addCircle(map, element[0]).bringToFront());
+        circleLink.push(this.addCircle(map, element[1]).bringToFront());
       });
 
       link.on('mouseover', (e) => {
@@ -150,6 +166,11 @@ export default {
     }
 
     mapObjects.links = L.layerGroup(linksLayer);
+
+    if (mapObjects.circleLinks)
+      mapObjects.circleLinks.getLayers().forEach(circle => circleLink.push(circle));
+
+    mapObjects.circleLinks = L.layerGroup(circleLink);
   },
   createIconOptions(type, inFocus = false) {
     const iconOptions = {
@@ -203,11 +224,18 @@ export default {
   },
   removeAllLinks(map, mapObjects = { sources: null, sinks: null, links: null }) {
     const links = mapObjects.links?.getLayers() ?? [];
+    const circleLinks = mapObjects.circleLinks?.getLayers() ?? [];
 
     for (const _linkLayer of links) {
       map.removeLayer(_linkLayer);
     }
+
+    for (const _circleLayer of circleLinks) {
+      map.removeLayer(_circleLayer);
+    }
+
     mapObjects.links = null;
+    mapObjects.circleLinks = null;
   },
   focusMarker(map, marker, mapObjects = { sources: null, sinks: null, links: null }) {
     const sources = mapObjects.sources?.getLayers();
