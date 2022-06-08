@@ -354,8 +354,19 @@ export default {
                     return deepCopyOfData;
                 })
                 .post(route("objects.sinks.store"), {
-                    onSuccess: () => {
+                    onSuccess: (data) => {
+                        store.commit("objects/setInstances", {
+                            instances: data.props.instances.map((i) => ({
+                                ...i,
+                                selected: true,
+                            }))
+                        });
                         store.dispatch("map/refreshMap");
+                        store.commit("objects/setNotify", {
+                            title: 'Sink',
+                            text: 'Sink Created Successfully',
+                            type: 'success'
+                        });
                         store.dispatch("objects/showSlide", { route: "objects.list" });
                     },
                 });

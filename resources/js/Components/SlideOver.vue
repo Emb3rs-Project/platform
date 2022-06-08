@@ -110,6 +110,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    closeOnEscape: {
+      type: Boolean,
+      default: true,
+    }
   },
 
   setup(props) {
@@ -133,7 +137,7 @@ export default {
     };
 
     const closeOnEscape = (e) => {
-      if (open.value && e.keyCode === 27) {
+      if (open.value && e.keyCode === 27 && props.closeOnEscape) {
         open.value = false;
       }
     };

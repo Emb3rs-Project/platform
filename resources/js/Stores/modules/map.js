@@ -5,6 +5,7 @@ const _state = () => ({
     selectedMarker: null,
     selectedMarkerColor: "green",
     currentLinks: {},
+    saveLink: false,
 
     center: [],
     zoom: null,
@@ -13,6 +14,7 @@ const _state = () => ({
 });
 
 const getters = {
+    saveLink: (state) => state.saveLink,
     selectedMarker: (state) => state.selectedMarker,
     selectedMarkerColor: (state) => state.selectedMarkerColor,
     currentLinks: (state) => state.currentLinks,
@@ -44,6 +46,7 @@ const actions = {
     unfocusMarker: ({ commit }) => {
         commit("focusMarker", null);
     },
+    saveLink: ({ commit }, saveLink) => commit("saveLink", saveLink ),
     setLink: ({ commit }, { id, link }) => commit("setLink", { id, link }),
     unsetLink: ({ commit, state }, id) => {
         const links = state.currentLinks;
@@ -112,6 +115,7 @@ const mutations = {
     selectMarker: (state, marker) => (state.selectedMarker = marker),
     selectMarkerColor: (state, color) => (state.selectedMarkerColor = color),
     focusMarker: (state, marker) => (state.focusedMarker = marker),
+    saveLink: (state, saveLink) => (state.saveLink = saveLink),
     setLink: (state, { id, link }) => (state.currentLinks[id] = link),
     unsetLink: (state, id) => delete state.currentLinks[id],
     startLinks: (state) => (state.currentLinks = {}),

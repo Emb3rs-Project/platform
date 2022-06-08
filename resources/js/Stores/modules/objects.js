@@ -5,6 +5,11 @@ const _state = () => ({
   filterOption: null,
   instances: [],
   links: [],
+  notify: {
+    title: '',
+    text: '',
+    type: ''
+  }
 });
 
 const getters = {
@@ -15,6 +20,7 @@ const getters = {
   filterOption: (state) => state.filterOption,
   instances: (state) => state.instances,
   links: (state) => state.links,
+  notify: (state) => state.notify
 };
 
 const actions = {
@@ -42,6 +48,7 @@ const mutations = {
   setFilterOption: (state, payload) => state.filterOption = payload.filterOption,
   setInstances: (state, payload) => state.instances = payload.instances,
   setLinks: (state, payload) => state.links = payload.links,
+  setNotify: (state, payload) => state.notify = payload,
 };
 
 
