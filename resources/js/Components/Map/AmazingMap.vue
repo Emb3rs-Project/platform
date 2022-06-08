@@ -67,6 +67,7 @@ export default {
             sources: null,
             sinks: null,
             links: null,
+            circleLinks: null,
         });
 
         const instances = ref([]);
@@ -240,11 +241,29 @@ export default {
                 }
             }
 
+            for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                _sinkLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkCreationMarkerContext) {
+                    _sinkLayer.options.contextmenuItems.push(
+                        _contextItem(_sinkLayer)
+                    );
+                }
+            }
+
             for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
                 _sourceLayer.options.contextmenuItems = [];
                 for (const _contextItem of linkCreationMarkerContext) {
                     _sourceLayer.options.contextmenuItems.push(
                         _contextItem(_sourceLayer)
+                    );
+                }
+            }
+
+            for (const _circleLinkLayer of mapObjects.value.circleLinks.getLayers()) {
+                _circleLinkLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkCreationMarkerContext) {
+                    _circleLinkLayer.options.contextmenuItems.push(
+                        _contextItem(_circleLinkLayer)
                     );
                 }
             }
@@ -262,7 +281,7 @@ export default {
 
                 const segment = L.polyline([currentSegment.from, e.latlng], {
                     color: 'green'
-                }).addTo(map.value).on("dblclick", () => onNextPoint(e));
+                }).addTo(map.value).on("dblclick", () => onNextPoint(e)).bringToBack();
 
                 lineLink.push(segment);                
             });
@@ -324,7 +343,8 @@ export default {
                 map.value,
                 currentSegment.from,
                 coord,
-                linkCreationSegmentContext
+                linkCreationSegmentContext,
+                circleCreationSegmentContext
             );
 
             const id = `${currentSegment.from}${coord}`;
@@ -402,8 +422,9 @@ export default {
                 map.value,
                 currentSegment.from,
                 coord,
-                linkCreationSegmentContext
-            );
+                linkCreationSegmentContext,
+                circleCreationSegmentContext
+            ).bringToBack();
 
             const id = `${currentSegment.from}${coord}`;
             store.dispatch("map/setLink", {
@@ -535,6 +556,24 @@ export default {
                 {
                     text: "Segment Properties",
                     callback: () => onSegmentProperties(m),
+                },
+            ];
+        };
+
+        const circleCreationSegmentContext = (m) => {
+            return [
+                "-",
+                {
+                    text: "Start here",
+                    callback: () => onStartMarker(m),
+                },
+                {
+                    text: "Connect here",
+                    callback: () => onNextPoint(m),
+                },
+                {
+                    text: "Finish here",
+                    callback: () => onFinishMarker(m),
                 },
             ];
         };
