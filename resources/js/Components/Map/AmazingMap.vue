@@ -93,6 +93,7 @@ export default {
         });
 
         const currentLinkSegments = [];
+        const currentCircleSegments = [];
 
         const lineLink = [];
 
@@ -218,6 +219,25 @@ export default {
             { immediate: true }
         );
 
+        watch(
+            () => store.getters["map/removeAllSegment"],
+            (e) => {
+                if (e) {
+                    currentCircleSegments.map((circle, i) => {
+                        map.value.removeLayer(circle);
+                        currentCircleSegments.slice(i, 1);
+                    });
+                    currentLinkSegments.map((segment, i) => {
+                        map.value.removeLayer(segment);
+                        currentLinkSegments.slice(i, 1);
+                    });
+                    store.dispatch("map/saveLink", true);
+                    store.dispatch("map/removeAllSegment", false);
+                }
+            },
+            { immediate: true }
+        );
+
         const onCreateLink = (value, newSegment = false) => {
             currentSegment.from = value.latlng ?? value.getLatLng();
     
@@ -230,15 +250,6 @@ export default {
 
             for (const _contextItem of linkCreationMapContext) {
                 map.value.contextmenu.insertItem(_contextItem);
-            }
-
-            for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
-                _sinkLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkCreationMarkerContext) {
-                    _sinkLayer.options.contextmenuItems.push(
-                        _contextItem(_sinkLayer)
-                    );
-                }
             }
 
             for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
@@ -377,6 +388,13 @@ export default {
             //     s.getLatLngs().includes(points[0]) &&
             //     s.getLatLngs().includes(points[1])
             // );
+            let circleIndex = currentCircleSegments.findIndex(e => e._latlng == points[0]);
+            map.value.removeLayer(currentCircleSegments[circleIndex]);
+            currentCircleSegments.splice(circleIndex, 1);
+            circleIndex = currentCircleSegments.findIndex(e => e._latlng == points[1]);
+	        map.value.removeLayer(currentCircleSegments[circleIndex]);
+            currentCircleSegments.splice(circleIndex, 1);
+
             const segmentIndex = currentLinkSegments.findIndex(
                 (s) =>
                     s.getLatLngs().includes(points[0]) &&
@@ -423,8 +441,25 @@ export default {
                 currentSegment.from,
                 coord,
                 linkCreationSegmentContext,
-                circleCreationSegmentContext
             ).bringToBack();
+
+            let circle = '';
+            
+            circle = mapUtils.addCircle(map.value, currentSegment.from);
+            circle.bindContextMenu({
+                contextmenu: true,
+                contextmenuWidth: 140,
+                contextmenuItems: circleCreationSegmentContext(circle)
+            });
+            currentCircleSegments.push(circle);
+
+            circle = mapUtils.addCircle(map.value, coord);
+            circle.bindContextMenu({
+                contextmenu: true,
+                contextmenuWidth: 140,
+                contextmenuItems: circleCreationSegmentContext(circle)
+            });
+            currentCircleSegments.push(circle);
 
             const id = `${currentSegment.from}${coord}`;
             store.dispatch("map/setLink", {
@@ -697,6 +732,8 @@ export default {
             );
         };
 
+        const loadCircles = () => mapUtils.removeAllCircles(map.value, mapObjects.value);
+
         const refreshInstances = () => {
             if (storeInstances.value.length) {
                 instances.value = storeInstances.value;
@@ -740,6 +777,8 @@ export default {
 
             map.value.on("moveend", ({ target: map }) => {
                 lazilyGetMapCenter(map);
+
+                loadCircles();
 
                 const visibleInstances = mapUtils.getInstancesInView(
                     map,
