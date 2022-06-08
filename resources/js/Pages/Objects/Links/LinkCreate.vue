@@ -249,8 +249,11 @@ export default {
     return {
       form,
       submit,
-      onCancel: () =>
-        store.dispatch("objects/showSlide", { route: "objects.list" }),
+      onCancel: () => {
+        store.dispatch("map/removeAllSegment", {removeAllSegment: true});
+        store.dispatch("map/refreshMap");
+        store.dispatch("objects/showSlide", { route: "objects.list" })
+      },
       linkList,
     };
   },

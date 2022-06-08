@@ -73,7 +73,7 @@ export default {
       contextmenuItems: [],
     }).addTo(map);
   },
-  addSegment(map, from, to, context, contextCircle) {
+  addSegment(map, from, to, context) {
     console.log('MapUtils::addSegment', from, to, context);
     const polyline = L.polyline([from, to], {
       color: 'green'
@@ -83,14 +83,6 @@ export default {
       contextmenu: true,
       contextmenuWidth: 140,
       contextmenuItems: context(polyline)
-    });
-
-    const circleSegment = this.addCircle(map, to);
-
-    circleSegment.bindContextMenu({
-      contextmenu: true,
-      contextmenuWidth: 140,
-      contextmenuItems: contextCircle(circleSegment)
     });
 
     return polyline;
@@ -118,7 +110,7 @@ export default {
           break;
       }
 
-      circleInstances.push(this.addCircle(map, center).bringToFront());
+      //circleInstances.push(this.addCircle(map, center).bringToFront());
     }
 
     mapObjects.sources = L.layerGroup(sources);
@@ -126,7 +118,6 @@ export default {
 
     if (mapObjects.circleLinks)
       mapObjects.circleLinks.getLayers().forEach(circle => circleInstances.push(circle));
-
     mapObjects.circleLinks = L.layerGroup(circleInstances);
   },
   addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
@@ -224,17 +215,18 @@ export default {
   },
   removeAllLinks(map, mapObjects = { sources: null, sinks: null, links: null }) {
     const links = mapObjects.links?.getLayers() ?? [];
-    const circleLinks = mapObjects.circleLinks?.getLayers() ?? [];
 
     for (const _linkLayer of links) {
       map.removeLayer(_linkLayer);
     }
 
+    mapObjects.links = null;
+  },
+  removeAllCircles(map, mapObjects = { sources: null, sinks: null, links: null, circleLinks: null }) {
+    const circleLinks = mapObjects.circleLinks?.getLayers() ?? [];
     for (const _circleLayer of circleLinks) {
       map.removeLayer(_circleLayer);
     }
-
-    mapObjects.links = null;
     mapObjects.circleLinks = null;
   },
   focusMarker(map, marker, mapObjects = { sources: null, sinks: null, links: null }) {
