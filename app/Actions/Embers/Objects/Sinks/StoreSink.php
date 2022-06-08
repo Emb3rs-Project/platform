@@ -118,7 +118,7 @@ class StoreSink implements StoresSinks
         $instance = Instance::create($newInstance);
         $instance->teams()->attach($user->currentTeam);
 
-        //app(CharacterizesInstances::class)->characterize($instance);
+        app(CharacterizesInstances::class)->characterize($instance);
 
         return $instance;
     }
