@@ -315,8 +315,19 @@ export default {
           return deepCopyOfFormData;
         })
         .post(route("objects.sources.store"), {
-          onSuccess: () => {
+          onSuccess: (data) => {
+            store.commit("objects/setInstances", {
+              instances: data.props.instances.map((i) => ({
+                ...i,
+                selected: true,
+              }))
+            });
             store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Source',
+                text: 'Source Created Successfully',
+                type: 'success'
+            });
             store.dispatch("objects/showSlide", { route: "objects.list" });
             store.dispatch("source/reset");
           },

@@ -244,16 +244,26 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const showTestNotification = () => {
+    const showNotification = (title, text, type) => {
       notify({
           group: "notifications",
-          title: "Sink",
-          text: "Please, Select the sink on the map",
+          title: title,
+          text: text,
           data: {
-              type: "warning",
+              type: type,
         },
       });
+      store.commit("objects/setNotify", {});
     };
+
+    watch(
+        () => store.getters["objects/notify"],
+        (e) => {
+            if (e.title)
+              showNotification(e.title, e.text, e.type);
+        },
+        { immediate: true }
+    );
 
     const centerAtLocation = (loc) =>
       store.dispatch("map/centerAt", { marker: loc });
@@ -296,7 +306,7 @@ export default {
     const onActionRequest = async (route, param) => {
       const type = selectedObject.value.title.toLowerCase();
       if (type === 'sinks' && selectedLocation.value == null) {
-        showTestNotification()
+        showNotification("Sink", "Please, Select the sink on the map", "warning");
       } else {
         store.dispatch("objects/showSlide", { route, props: param });
       }

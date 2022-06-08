@@ -666,7 +666,6 @@ export default {
 
             window.axios.get(route("objects.markers")).then(({ data }) => {
                 if (!data.instances.length) return;
-
                 instances.value = data.instances.map((i) => ({
                     ...i,
                     selected: true,

@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <pre>
-                        <!-- {{ reports }} -->
+                    <!-- {{ reports }} -->
                     </pre>
                 </div>
             </div>
@@ -133,5 +133,4 @@ const back = () => Inertia.get(route('projects.simulations.show', { project: pro
 let updateInterval = 0;
 
 </script>
-
 
