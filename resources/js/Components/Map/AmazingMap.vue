@@ -204,16 +204,27 @@ export default {
             });
         });
 
-        const onCreateLink = (value) => {
-            currentSegment.from = value.latlng;
-            
-            /*store.dispatch("objects/showSlide", {
-                route: "objects.links.create",
-                props: {},
-            });*/
+        watch(
+            () => store.getters["map/saveLink"],
+            (e) => {
+                if (e) {
+                    map.value.contextmenu.removeAllItems();
+                    defautMapContext.map(_contextItem => map.value.contextmenu.insertItem(_contextItem));
+                    store.commit("map/startLinks");
+                    store.dispatch("map/saveLink", false);
+                }
+            },
+            { immediate: true }
+        );
 
-            store.commit("map/startLinks");
-
+        const onCreateLink = (value, newSegment = false) => {
+            currentSegment.from = value.latlng ?? value.getLatLng();
+    
+            if (!newSegment) {
+                currentLinkSegments.map((element) => map.value.removeLayer(element));
+                store.commit("map/startLinks");
+            }
+                
             map.value.contextmenu.removeAllItems();
 
             for (const _contextItem of linkCreationMapContext) {
@@ -221,6 +232,7 @@ export default {
             }
 
             for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                _sinkLayer.options.contextmenuItems = [];
                 for (const _contextItem of linkCreationMarkerContext) {
                     _sinkLayer.options.contextmenuItems.push(
                         _contextItem(_sinkLayer)
@@ -228,24 +240,36 @@ export default {
                 }
             }
 
-            //map.value.on("dblclick", (e) => onNextPoint(e));
-            map.value.on("mousemove", function(e) {
+            for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
+                _sourceLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkCreationMarkerContext) {
+                    _sourceLayer.options.contextmenuItems.push(
+                        _contextItem(_sourceLayer)
+                    );
+                }
+            }
 
+            //map.value.on("dblclick", (e) => onNextPoint(e));
+            map.value.on("keydown", (e) => e.originalEvent.keyCode === 27 ? onStopLink():'');
+            map.value.on("mousemove", (e) => {
+                document.getElementById("map").focus();
                 if (lineLink.length) {
                     map.value.removeLayer(lineLink[0]);
                     lineLink.splice(0, 1);
                 }
 
+                if (store.getters["map/saveLink"]) return onStopLink();
+
                 const segment = L.polyline([currentSegment.from, e.latlng], {
                     color: 'green'
-                }).addTo(map.value).on("click", () => onNextPoint(e));
+                }).addTo(map.value).on("dblclick", () => onNextPoint(e));
 
                 lineLink.push(segment);                
             });
         };
 
         const onStopLink = () => {
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
 
             map.value.contextmenu.removeAllItems();
             map.value.off("mousemove");
@@ -256,8 +280,26 @@ export default {
                 lineLink.splice(0, 1);
             }
 
-            for (const _contextItem of defautMapContext) {
+            for (const _contextItem of linkStopMapContext) {
                 map.value.contextmenu.insertItem(_contextItem);
+            }
+
+            for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                _sinkLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkStopMarkerContext) {
+                    _sinkLayer.options.contextmenuItems.push(
+                        _contextItem(_sinkLayer)
+                    );
+                }
+            }
+
+            for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
+                _sourceLayer.options.contextmenuItems = [];
+                for (const _contextItem of linkStopMarkerContext) {
+                    _sourceLayer.options.contextmenuItems.push(
+                        _contextItem(_sourceLayer)
+                    );
+                }
             }
         };
 
@@ -266,6 +308,14 @@ export default {
 
             currentSegment.from = start.getLatLng();
             currentSegment.start = start.getLatLng();
+        };
+
+        const onFinishLink = () => {
+            map.value.off("mousemove");
+            store.dispatch("objects/showSlide", {
+                route: "objects.links.create",
+                props: {},
+            });            
         };
 
         const onFinishMarker = (value) => {
@@ -291,6 +341,8 @@ export default {
             currentLinkSegments.push(segment);
             // mapObjects.value.links.push(segment);
             currentSegment.from = coord;
+
+            onStopLink();
 
             store.dispatch("objects/showSlide", {
                 route: "objects.links.create",
@@ -344,7 +396,7 @@ export default {
         };
 
         const onNextPoint = (value) => {
-            const coord = value.latlng;
+            const coord = value.latlng ?? value.getLatLng();
 
             const segment = mapUtils.addSegment(
                 map.value,
@@ -438,6 +490,17 @@ export default {
             },
         ];
 
+        const linkStopMapContext = [
+            {
+                text: "Finish Link Creation",
+                callback: onFinishLink,
+            },
+            {
+                text: "Start New Segment",
+                callback: (m) => onCreateLink(m, true),
+            }
+        ];
+
         const linkCreationMarkerContext = [
             () => "-",
             (m) => ({
@@ -445,8 +508,20 @@ export default {
                 callback: () => onStartMarker(m),
             }),
             (m) => ({
+                text: "Connect here",
+                callback: () => onNextPoint(m),
+            }),
+            (m) => ({
                 text: "Finish here",
                 callback: () => onFinishMarker(m),
+            }),
+        ];
+
+        const linkStopMarkerContext = [
+            () => "-",
+            (m) => ({
+                text: "Start Segment Here",
+                callback: () => onCreateLink(m, true),
             }),
         ];
 
@@ -543,6 +618,26 @@ export default {
                 mapObjects.value,
                 props.preview ? () => {} : onMarkerClick
             );
+
+            if (lineLink.length) {
+                for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
+                    _sourceLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkCreationMarkerContext) {
+                        _sourceLayer.options.contextmenuItems.push(
+                            _contextItem(_sourceLayer)
+                        );
+                    }
+                }
+
+                for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                    _sinkLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkCreationMarkerContext) {
+                        _sinkLayer.options.contextmenuItems.push(
+                            _contextItem(_sinkLayer)
+                        );
+                    }
+                }
+            }
         };
 
         const loadLinks = (markers = null) => {
