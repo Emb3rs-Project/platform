@@ -214,6 +214,8 @@ export default {
                     defautMapContext.map(_contextItem => map.value.contextmenu.insertItem(_contextItem));
                     store.commit("map/startLinks");
                     store.dispatch("map/saveLink", false);
+                    loadCircles();
+                    currentSegment.from = null;
                 }
             },
             { immediate: true }
@@ -239,7 +241,18 @@ export default {
         );
 
         const onCreateLink = (value, newSegment = false) => {
-            currentSegment.from = value.latlng ?? value.getLatLng();
+            if (!currentSegment.from) {
+                const circleLinks = [];
+                mapObjects.value.links.getLayers().forEach(points => {
+                    points._latlngs[0].map((element) => {
+                        circleLinks.push(mapUtils.addCircle(map.value, element[0]).bringToFront());
+                        circleLinks.push(mapUtils.addCircle(map.value, element[1]).bringToFront());
+                    });
+                });
+                mapObjects.value.circleLinks = L.layerGroup(circleLinks);
+            }
+
+            currentSegment.from = value.latlng ?? value.getLatLng();            
     
             if (!newSegment) {
                 currentLinkSegments.map((element) => map.value.removeLayer(element));
