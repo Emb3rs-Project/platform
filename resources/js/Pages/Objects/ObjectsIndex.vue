@@ -71,17 +71,19 @@
               </button>
               <button
                 class="focus:outline-none"
+                :disabled="startLinks"
                 @click="
                   onActionRequest(`${selectedObject.paths.edit}`, item.id)
                 "
               >
                 <EditIcon class="text-gray-500 font-medium text-sm w-5" />
               </button>
-              <button class="focus:outline-none">
-                <TrashIcon
-                  class="text-red-500 font-medium text-sm w-5"
-                  @click="showModal(item, DeleteModal)"
-                />
+              <button 
+                class="focus:outline-none"
+                :disabled="startLinks"
+                @click="showModal(item, DeleteModal)"
+              >
+                <TrashIcon class="text-red-500 font-medium text-sm w-5" />
               </button>
             </td>
           </template>
@@ -98,7 +100,10 @@
     </div>
 
     <template #actions>
-      <PrimaryButton @click="onActionRequest(`${selectedObject.paths.create}`)">
+      <PrimaryButton 
+        :disabled="startLinks && selectedObject.title != 'Links'" 
+        @click="onActionRequest(`${selectedObject.paths.create}`)"
+      >
         Create New {{ getSingular(selectedObject.title) }}
       </PrimaryButton>
     </template>
@@ -163,6 +168,10 @@ export default {
 
     const storeFilterOption = computed(
       () => store.getters["objects/filterOption"]
+    );
+
+    const startLinks = computed(
+      () => store.getters["map/startLinks"]
     );
 
     const storeInstances = computed(() => store.getters["objects/instances"]);
@@ -304,8 +313,7 @@ export default {
     };
 
     const onActionRequest = async (route, param) => {
-      const type = selectedObject.value.title.toLowerCase();
-      if (type === 'sinks' && selectedLocation.value == null) {
+      if (route === 'objects.sinks.create' && selectedLocation.value == null) {
         showNotification("Sink", "Please, Select the sink on the map", "warning");
       } else {
         store.dispatch("objects/showSlide", { route, props: param });
@@ -320,6 +328,7 @@ export default {
       filterDropdown,
       modalIsOpen,
       modalComponent,
+      startLinks,
       getSingular,
       showModal,
       centerAtLocation,

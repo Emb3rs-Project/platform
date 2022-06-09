@@ -107,7 +107,10 @@
       >
         Cancel
       </SecondaryOutlinedButton>
-      <PrimaryButton @click="onRouteRequest('objects.sinks.edit', instance.id)">
+      <PrimaryButton 
+        @click="onRouteRequest('objects.sinks.edit', instance.id)"
+        :disabled="startLinks"
+      >
         Edit
       </PrimaryButton>
     </template>
@@ -154,6 +157,10 @@ export default {
 
   setup(props) {
     const store = useStore();
+
+    const startLinks = computed(
+      () => store.getters["map/startLinks"]
+    );
 
     const properties = computed(() => {
       const properties = sortProperties(
@@ -230,6 +237,7 @@ export default {
     return {
       properties,
       advancedProperties,
+      startLinks,
       onRouteRequest,
       onClose,
     };
