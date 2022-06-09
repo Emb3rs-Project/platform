@@ -234,6 +234,7 @@ export default {
         })
         .post(route("objects.links.store"), {
           onSuccess: () => {
+            store.dispatch("map/removeAllSegment", true);
             store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
             //store.commit("objects/closeSlide");
@@ -250,7 +251,7 @@ export default {
       form,
       submit,
       onCancel: () => {
-        store.dispatch("map/removeAllSegment", {removeAllSegment: true});
+        store.dispatch("map/removeAllSegment", true);
         store.dispatch("map/refreshMap");
         store.dispatch("objects/showSlide", { route: "objects.list" })
       },

@@ -213,9 +213,9 @@ export default {
                     map.value.contextmenu.removeAllItems();
                     defautMapContext.map(_contextItem => map.value.contextmenu.insertItem(_contextItem));
                     store.commit("map/startLinks");
-                    store.dispatch("map/saveLink", false);
                     loadCircles();
                     currentSegment.from = null;
+                    store.dispatch("map/saveLink", false);
                 }
             },
             { immediate: true }

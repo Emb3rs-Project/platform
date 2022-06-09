@@ -109,7 +109,10 @@
       >
         Cancel
       </SecondaryOutlinedButton>
-      <PrimaryButton @click="onRouteRequest('objects.links.edit', instance.id)">
+      <PrimaryButton 
+        @click="onRouteRequest('objects.links.edit', instance.id)"
+        :disabled="startLinks"
+      >
         Edit
       </PrimaryButton>
     </template>
@@ -151,6 +154,10 @@ export default {
   setup(props) {
     const store = useStore();
 
+    const startLinks = computed(
+      () => store.getters["map/startLinks"]
+    );
+
     const onGoToLocation = (loc) => { 
         let lat = (loc[0].lat + loc[1].lat)/2;
         let lng = (loc[0].lng + loc[1].lng)/2;
@@ -173,6 +180,7 @@ export default {
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
     return {
+      startLinks,
       onGoToLocation,
       onRouteRequest,
       onClose,

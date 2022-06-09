@@ -72,6 +72,7 @@
       <PrimaryButton
         type="button"
         @click="onRouteRequest('objects.sources.edit', instance.id)"
+        :disabled="startLinks"
       >
         Edit
       </PrimaryButton>
@@ -131,6 +132,10 @@ export default {
     const store = useStore();
     const currentStep = ref(1);
 
+    const startLinks = computed(
+      () => store.getters["map/startLinks"]
+    );
+
     const mapStepStatus = (index) =>
       currentStep.value === index
         ? "current"
@@ -169,6 +174,7 @@ export default {
     return {
       currentStep,
       onRouteRequest,
+      startLinks,
       steps,
       onNextStep,
       onPrevStep,
