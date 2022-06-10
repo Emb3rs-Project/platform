@@ -4,10 +4,12 @@ const _state = () => ({
     focusedMarker: null,
     selectedMarker: null,
     selectedMarkerColor: "green",
+    selectedMarkerType: null,
     currentLinks: {},
     saveLink: false,
     startLinks: false,
     removeAllSegment: false,
+    removeMarker: false,
 
     center: [],
     zoom: null,
@@ -18,7 +20,9 @@ const _state = () => ({
 const getters = {
     saveLink: (state) => state.saveLink,
     removeAllSegment: (state) => state.removeAllSegment,
+    removeMarker: (state) => state.removeMarker,
     selectedMarker: (state) => state.selectedMarker,
+    selectedMarkerType: (state) => state.selectedMarkerType,
     selectedMarkerColor: (state) => state.selectedMarkerColor,
     currentLinks: (state) => state.currentLinks,
     startLinks: (state) => state.startLinks,
@@ -40,8 +44,9 @@ const actions = {
     doRefreshMap: () => {
         console.log("doRefreshMap");
     },
-    selectMarker: ({ commit, state }, { marker, color }) => {
+    selectMarker: ({ commit, state }, { marker, type, color }) => {
         commit("selectMarker", marker);
+        commit("selectedMarkerType", type);
         commit("selectMarkerColor", color);
     },
     focusMarker: ({ commit }, marker) => {
@@ -52,6 +57,7 @@ const actions = {
     },
     saveLink: ({ commit }, saveLink) => commit("saveLink", saveLink ),
     removeAllSegment: ({ commit }, removeAllSegment) => commit("removeAllSegment", removeAllSegment ),
+    removeMarker: ({ commit }, removeMarker) => commit("removeMarker", removeMarker ),
     setLink: ({ commit }, { id, link }) => commit("setLink", { id, link }),
     unsetLink: ({ commit, state }, id) => {
         const links = state.currentLinks;
@@ -119,9 +125,11 @@ const actions = {
 const mutations = {
     selectMarker: (state, marker) => (state.selectedMarker = marker),
     selectMarkerColor: (state, color) => (state.selectedMarkerColor = color),
+    selectedMarkerType: (state, type) => (state.selectedMarkerType = type),
     focusMarker: (state, marker) => (state.focusedMarker = marker),
     saveLink: (state, saveLink) => {(state.saveLink = saveLink, state.startLinks = saveLink)},
     removeAllSegment: (state, removeAllSegment) => (state.removeAllSegment = removeAllSegment),
+    removeMarker: (state, removeMarker) => (state.removeMarker = removeMarker),
     setLink: (state, { id, link }) => (state.currentLinks[id] = link),
     unsetLink: (state, id) => delete state.currentLinks[id],
     startLinks: (state) => {(state.currentLinks = {}, state.startLinks = true)},

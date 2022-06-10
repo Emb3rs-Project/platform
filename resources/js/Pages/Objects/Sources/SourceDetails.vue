@@ -72,7 +72,7 @@
       <PrimaryButton
         type="button"
         @click="onRouteRequest('objects.sources.edit', instance.id)"
-        :disabled="startLinks"
+        :disabled="startLinks || startMarker"
       >
         Edit
       </PrimaryButton>
@@ -136,6 +136,10 @@ export default {
       () => store.getters["map/startLinks"]
     );
 
+    const startMarker = computed(
+      () => store.getters["map/selectedMarkerType"]
+    );
+
     const mapStepStatus = (index) =>
       currentStep.value === index
         ? "current"
@@ -175,6 +179,7 @@ export default {
       currentStep,
       onRouteRequest,
       startLinks,
+      startMarker,
       steps,
       onNextStep,
       onPrevStep,

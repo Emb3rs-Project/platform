@@ -111,7 +111,7 @@
       </SecondaryOutlinedButton>
       <PrimaryButton 
         @click="onRouteRequest('objects.links.edit', instance.id)"
-        :disabled="startLinks"
+        :disabled="startLinks || startMarker"
       >
         Edit
       </PrimaryButton>
@@ -158,6 +158,10 @@ export default {
       () => store.getters["map/startLinks"]
     );
 
+    const startMarker = computed(
+      () => store.getters["map/selectedMarkerType"]
+    );
+
     const onGoToLocation = (loc) => { 
         let lat = (loc[0].lat + loc[1].lat)/2;
         let lng = (loc[0].lng + loc[1].lng)/2;
@@ -181,6 +185,7 @@ export default {
 
     return {
       startLinks,
+      startMarker,
       onGoToLocation,
       onRouteRequest,
       onClose,

@@ -109,7 +109,7 @@
       </SecondaryOutlinedButton>
       <PrimaryButton 
         @click="onRouteRequest('objects.sinks.edit', instance.id)"
-        :disabled="startLinks"
+        :disabled="startLinks || startMarker"
       >
         Edit
       </PrimaryButton>
@@ -160,6 +160,10 @@ export default {
 
     const startLinks = computed(
       () => store.getters["map/startLinks"]
+    );
+
+    const startMarker = computed(
+      () => store.getters["map/selectedMarkerType"]
     );
 
     const properties = computed(() => {
@@ -238,6 +242,7 @@ export default {
       properties,
       advancedProperties,
       startLinks,
+      startMarker,
       onRouteRequest,
       onClose,
     };
