@@ -372,8 +372,11 @@ export default {
                 });
         };
 
-        const onCancel = () =>
+        const onCancel = () => {
+            store.dispatch("map/removeMarker", true);
+            store.dispatch("map/refreshMap");
             store.dispatch("objects/showSlide", { route: "objects.list" });
+        };
 
         return {
             form,

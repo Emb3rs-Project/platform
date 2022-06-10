@@ -171,7 +171,7 @@ export default {
     const currentRoute = computed(() => store.getters["objects/currentRoute"]);
 
     const onClose = () => {
-      if (currentRoute.value !== "objects.list") {
+      if (currentRoute.value !== "objects.list" && currentRoute.value !== "objects.sinks.create") {
         store.dispatch("map/unfocusMarker");
 
         return store.dispatch("objects/showSlide", { route: "objects.list" });

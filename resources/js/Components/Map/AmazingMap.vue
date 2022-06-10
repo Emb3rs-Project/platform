@@ -170,23 +170,37 @@ export default {
         const onCreateSink = (marker) => {
             store.dispatch("map/selectMarker", {
                 marker: marker.latlng,
+                type: 'Sinks',
                 color: "green-700",
             });
             store.dispatch("objects/showSlide", {
                 route: "objects.sinks.create",
                 props: {},
             });
+
+            map.value.contextmenu.removeAllItems();
+
+            for (const _contextItem of sinkCreationMapContext) {
+                map.value.contextmenu.insertItem(_contextItem);
+            }
         };
 
         const onCreateSource = (marker) => {
             store.dispatch("map/selectMarker", {
                 marker: marker.latlng,
+                type: 'Sources',
                 color: "red-700",
             });
             store.dispatch("objects/showSlide", {
                 route: "objects.sources.create",
                 props: {},
             });
+
+            map.value.contextmenu.removeAllItems();
+
+            for (const _contextItem of sourceCreationMapContext) {
+                map.value.contextmenu.insertItem(_contextItem);
+            }
         };
 
         const selectedMarkerLatlng = computed(
@@ -198,12 +212,14 @@ export default {
             if (selectedMarker.value)
                 map.value.removeLayer(selectedMarker.value);
 
-            selectedMarker.value = mapUtils.addPoint(map.value, newValue, {
-                icon: "plus",
-                textClass: "text-" + store.getters["map/selectedMarkerColor"],
-                borderClass:
-                    "border-" + store.getters["map/selectedMarkerColor"],
-            });
+            if (newValue) {
+                selectedMarker.value = mapUtils.addPoint(map.value, newValue, {
+                    icon: "plus",
+                    textClass: "text-" + store.getters["map/selectedMarkerColor"],
+                    borderClass:
+                        "border-" + store.getters["map/selectedMarkerColor"],
+                });
+            }
         });
 
         watch(
@@ -239,6 +255,34 @@ export default {
             },
             { immediate: true }
         );
+
+        watch(
+            () => store.getters["map/removeMarker"],
+            (e) => {
+                if (e) {
+                    removeMarker();
+                    store.dispatch("map/removeMarker", false);
+                }
+            },
+            { immediate: true }
+        );
+
+        const removeMarker = () => {
+            if (selectedMarker.value) {
+                map.value.removeLayer(selectedMarker.value);
+
+                map.value.contextmenu.removeAllItems();
+                defautMapContext.map(_contextItem => map.value.contextmenu.insertItem(_contextItem));
+
+                store.dispatch("map/selectMarker", {
+                    marker: null,
+                    type: null,
+                    color: "green",
+                }); 
+                store.dispatch("source/reset");
+                store.dispatch("objects/showSlide", { route: "objects.list" });
+            }     
+        };
 
         const onCreateLink = (value, newSegment = false) => {
             if (!currentSegment.from) {
@@ -367,8 +411,7 @@ export default {
                 map.value,
                 currentSegment.from,
                 coord,
-                linkCreationSegmentContext,
-                circleCreationSegmentContext
+                linkCreationSegmentContext
             );
 
             const id = `${currentSegment.from}${coord}`;
@@ -545,6 +588,34 @@ export default {
             {
                 text: "Zoom out",
                 callback: (o) => map.value.zoomOut(),
+            },
+        ];
+
+        const sinkCreationMapContext = [
+            {
+                text: "Finish Sink Creation",
+                callback: () => store.dispatch("objects/showSlide", {
+                    route: "objects.sinks.create",
+                    props: {},
+                }),
+            },
+            {
+                text: "Remove Sink",
+                callback: removeMarker,
+            },
+        ];
+
+        const sourceCreationMapContext = [
+            {
+                text: "Finish Source Creation",
+                callback: () => store.dispatch("objects/showSlide", {
+                    route: "objects.sources.create",
+                    props: {},
+                }),
+            },
+            {
+                text: "Remove Source",
+                callback: removeMarker,
             },
         ];
 

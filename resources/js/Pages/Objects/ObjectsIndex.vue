@@ -71,7 +71,7 @@
               </button>
               <button
                 class="focus:outline-none"
-                :disabled="startLinks"
+                :disabled="startLinks || startMarker"
                 @click="
                   onActionRequest(`${selectedObject.paths.edit}`, item.id)
                 "
@@ -80,7 +80,7 @@
               </button>
               <button 
                 class="focus:outline-none"
-                :disabled="startLinks"
+                :disabled="startLinks || startMarker"
                 @click="showModal(item, DeleteModal)"
               >
                 <TrashIcon class="text-red-500 font-medium text-sm w-5" />
@@ -101,7 +101,8 @@
 
     <template #actions>
       <PrimaryButton 
-        :disabled="startLinks && selectedObject.title != 'Links'" 
+        :disabled="(startLinks && selectedObject.title != 'Links') 
+                    || (startMarker && selectedObject.title != startMarker)" 
         @click="onActionRequest(`${selectedObject.paths.create}`)"
       >
         Create New {{ getSingular(selectedObject.title) }}
@@ -172,6 +173,10 @@ export default {
 
     const startLinks = computed(
       () => store.getters["map/startLinks"]
+    );
+
+    const startMarker = computed(
+      () => store.getters["map/selectedMarkerType"]
     );
 
     const storeInstances = computed(() => store.getters["objects/instances"]);
@@ -329,6 +334,7 @@ export default {
       modalIsOpen,
       modalComponent,
       startLinks,
+      startMarker,
       getSingular,
       showModal,
       centerAtLocation,
