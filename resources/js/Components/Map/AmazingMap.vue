@@ -391,10 +391,10 @@ export default {
         };
 
         const onStartMarker = (value) => {
-            const start = mapUtils.addCircle(map.value, value.getLatLng());
+            //const start = mapUtils.addCircle(map.value, value.getLatLng());
 
-            currentSegment.from = start.getLatLng();
-            currentSegment.start = start.getLatLng();
+            currentSegment.from = value.getLatLng();
+            currentSegment.start = value.getLatLng();
         };
 
         const onFinishLink = () => {
