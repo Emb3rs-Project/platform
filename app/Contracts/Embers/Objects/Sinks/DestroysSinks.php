@@ -2,6 +2,7 @@
 
 namespace App\Contracts\Embers\Objects\Sinks;
 
+use App\Models\Instance;
 use App\Models\User;
 
 interface DestroysSinks
@@ -16,5 +17,5 @@ interface DestroysSinks
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy(User $user, int $id): void;
+    public function destroy(User $user, int $id): Instance;
 }

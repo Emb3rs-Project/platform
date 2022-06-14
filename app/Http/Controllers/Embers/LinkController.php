@@ -40,7 +40,13 @@ class LinkController extends Controller
     {
         $link = app(StoresLinks::class)->store($request->user(), $request->all());
 
-        return redirect()->route('objects.index', ['link' => $link->id]);
+        $linkName = $link->name;
+        $team = $request->user()->currentTeam;
+        $message = 'created a new Link at';
+        $tag = [['name' => "Link #$linkName", 'path' => 'objects.links.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $link->id);
+
+        return redirect()->route('objects.index');
     }
 
     /**
@@ -96,11 +102,17 @@ class LinkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedLink = app(UpdatesLinks::class)->update(
+        $link = app(UpdatesLinks::class)->update(
             $request->user(),
             $id,
             $request->all()
         );
+
+        $linkName = $link->name;
+        $team = $request->user()->currentTeam;
+        $message = 'updated a Link at';
+        $tag = [['name' => "Link #$linkName", 'path' => 'objects.links.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $link->id);
 
         return redirect()->route('objects.index');
         //return redirect()->route('objects.links.show', $updatedLink->id);
@@ -115,7 +127,13 @@ class LinkController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        app(DestroysLinks::class)->destroy($request->user(), $id);
+        $link = app(DestroysLinks::class)->destroy($request->user(), $id);
+
+        $linkName = $link->name;
+        $team = $request->user()->currentTeam;
+        $message = 'destroyed a Link at';
+        $tag = [['name' => "Link #$linkName", 'path' => 'objects.links.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $link->id);
 
         return redirect()->route('objects.index');
     }

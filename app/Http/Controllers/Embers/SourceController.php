@@ -52,7 +52,13 @@ class SourceController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSources::class)->store($request->user(), $request->all());
+        $source = app(StoresSources::class)->store($request->user(), $request->all());
+
+        $sourceName = $source->name;
+        $team = $request->user()->currentTeam;
+        $message = 'created a new Source at';
+        $tag = [['name' => "Source #$sourceName", 'path' => 'objects.sources.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $source->id);
 
         return redirect()->route('objects.index');
     }
@@ -124,7 +130,13 @@ class SourceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updatedSource = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
+        $source = app(UpdatesSources::class)->update($request->user(), $id, $request->all());
+
+        $sourceName = $source->name;
+        $team = $request->user()->currentTeam;
+        $message = 'updated a Source at';
+        $tag = [['name' => "Source #$sourceName", 'path' => 'objects.sources.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $source->id);
 
         // return redirect()->route('objects.sources.show', $updatedSource->id);
         return redirect()->route('objects.index');
@@ -139,7 +151,13 @@ class SourceController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        app(DestroysSources::class)->destroy($request->user(), $id);
+        $source = app(DestroysSources::class)->destroy($request->user(), $id);
+
+        $sourceName = $source->name;
+        $team = $request->user()->currentTeam;
+        $message = 'destroyed a Source at';
+        $tag = [['name' => "Source #$sourceName", 'path' => 'objects.sources.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $source->id);
 
         return redirect()->route('objects.index');
     }

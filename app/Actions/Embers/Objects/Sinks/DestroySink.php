@@ -20,7 +20,7 @@ class DestroySink implements DestroysSinks
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy($user, int $id): void
+    public function destroy($user, int $id): Instance
     {
         $this->authorize($user);
 
@@ -28,5 +28,7 @@ class DestroySink implements DestroysSinks
 
         // Instance::destroy($sink->id);
         $sink->delete();
+
+        return $sink;
     }
 }
