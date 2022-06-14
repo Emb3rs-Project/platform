@@ -862,8 +862,6 @@ export default {
             map.value.on("moveend", ({ target: map }) => {
                 lazilyGetMapCenter(map);
 
-                loadCircles();
-
                 const visibleInstances = mapUtils.getInstancesInView(
                     map,
                     instances.value
