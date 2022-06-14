@@ -31,6 +31,15 @@
             </span>
             Institution
           </div>
+          <div v-else-if="notification.data.type === 'object'">
+            <span class="font-semibold">{{ notification.data.from.name }}</span>
+            ({{ notification.data.from.email }})
+            {{ notification.data.description }}
+            <span class="font-semibold">
+              {{ notification.data.team.name }}
+            </span>
+            Institution
+          </div>
           <div v-else>DEBUG: Unknown notification type passed</div>
         </div>
         <!-- Time -->
@@ -50,7 +59,18 @@
                 aria-hidden="true"
               />
             </span>
-            <span class="ml-3.5 font-medium text-gray-900">{{ tag }}</span>
+            <span class="ml-3.5 font-medium text-gray-900">
+              <Link
+                :key="tag.name"
+                :href="route('objects.index')"
+                class="group flex items-center text-sm font-medium rounded-md focus:outline-none"
+                @click.prevent="
+                  onActionRequest(`${tag.path}`, notification.data.contentId, notification.id)
+                "
+              >
+              {{ tag.name }}
+              </Link>
+            </span>
           </div>
         </div>
       </div>
@@ -61,6 +81,8 @@
 
 <script>
 import { getFriendlyLifetime } from "@/Helpers/helpers";
+import { Link } from "@inertiajs/inertia-vue3";
+import { useStore } from "vuex";
 
 export default {
   props: {
@@ -70,8 +92,24 @@ export default {
     },
   },
 
+  components: {
+    Link,
+  },
+
   setup() {
+    const store = useStore();
+
+    const onActionRequest = (route, param, uuid) => {
+      markAsRead(uuid);
+      setTimeout(() => store.dispatch("objects/showSlide", { route, props: param }), 500);
+    };
+
+    const markAsRead = (uuid) => {
+      window.axios.patch(route("notifications.update", uuid));
+    };
+
     return {
+      onActionRequest,
       getFriendlyLifetime,
     };
   },

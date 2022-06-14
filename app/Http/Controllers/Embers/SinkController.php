@@ -44,7 +44,13 @@ class SinkController extends Controller
      */
     public function store(Request $request)
     {
-        app(StoresSinks::class)->store($request->user(), $request->all());
+        $sink = app(StoresSinks::class)->store($request->user(), $request->all());
+
+        $sinkName = $sink->name;
+        $team = $request->user()->currentTeam;
+        $message = 'created a new Sink at';
+        $tag = [['name' => "Sink #$sinkName", 'path' => 'objects.sinks.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $sink->id);
 
         return redirect()->route('objects.index');
     }
@@ -103,7 +109,13 @@ class SinkController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $updatedSink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
+        $sink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
+        
+        $sinkName = $sink->name;
+        $team = $request->user()->currentTeam;
+        $message = 'updated a new Sink at';
+        $tag = [['name' => "Sink #$sinkName", 'path' => 'objects.sinks.show']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $id);
 
         return redirect()->route('objects.index');
     }
@@ -117,7 +129,13 @@ class SinkController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        app(DestroysSinks::class)->destroy($request->user(), $id);
+        $sink = app(DestroysSinks::class)->destroy($request->user(), $id);
+
+        $sinkName = $sink->name;
+        $team = $request->user()->currentTeam;
+        $message = 'destroyed a Sink at';
+        $tag = [['name' => "Sink #$sinkName", 'path' => '']];
+        app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $id);
 
         return redirect()->route('objects.index');
     }

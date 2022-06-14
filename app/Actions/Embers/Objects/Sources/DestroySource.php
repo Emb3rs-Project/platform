@@ -21,7 +21,7 @@ class DestroySource implements DestroysSources
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy(User $user, int $id): void
+    public function destroy(User $user, int $id): Instance
     {
         $this->authorize($user);
 
@@ -29,5 +29,7 @@ class DestroySource implements DestroysSources
 
         // Instance::destroy($source->id);
         $source->delete();
+
+        return $source;
     }
 }

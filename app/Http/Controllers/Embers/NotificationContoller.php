@@ -7,6 +7,9 @@ use App\Contracts\Embers\Notifications\IndexesNotifications;
 use App\Contracts\Embers\Notifications\MarksAllNotificationsAsRead;
 use App\Contracts\Embers\Notifications\MarksNotificationsAsRead;
 use App\Http\Controllers\Controller;
+use App\Models\Team;
+use App\Models\User;
+use App\Notifications\Embers\ObjectNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -56,5 +59,14 @@ class NotificationContoller extends Controller
         app(DestroysNotifications::class)->destroy($request->user(), $id);
 
         return back(303);
+    }
+
+    public function objectNotify(User $user, Team $team, array $tag, string $message, $id)
+    {
+        $users = $team->allUsers();
+
+        foreach ($users as $userTeam) {
+            $userTeam->notify(new ObjectNotification($user, $team, $tag, $message, $id));
+        }
     }
 }

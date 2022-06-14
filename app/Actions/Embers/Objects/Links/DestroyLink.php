@@ -21,7 +21,7 @@ class DestroyLink implements DestroysLinks
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy(User $user, int $id): void
+    public function destroy(User $user, int $id): Link
     {
         $this->authorize($user);
 
@@ -29,5 +29,7 @@ class DestroyLink implements DestroysLinks
 
         // Link::destroy($link->id);
         $link->delete();
+
+        return $link;
     }
 }

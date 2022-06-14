@@ -2,6 +2,7 @@
 
 namespace App\Contracts\Embers\Objects\Links;
 
+use App\Models\Link;
 use App\Models\User;
 
 interface DestroysLinks
@@ -16,5 +17,5 @@ interface DestroysLinks
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function destroy(User $user, int $id): void;
+    public function destroy(User $user, int $id): Link;
 }
