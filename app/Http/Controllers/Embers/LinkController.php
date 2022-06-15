@@ -22,11 +22,17 @@ class LinkController extends Controller
      */
     public function create(Request $request)
     {
-        $props = app(CreatesLinks::class)->create($request->user());
+        [
+            $templates,
+            $locations
+        ] = app(CreatesLinks::class)->create($request->user());
 
         return [
             "slideOver" => 'Objects/Links/LinkCreate',
-            "props" => $props
+            'props' => [
+                'templates' => $templates,
+                'locations' => $locations
+            ]
         ];
     }
 

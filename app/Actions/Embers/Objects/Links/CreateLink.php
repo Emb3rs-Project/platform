@@ -4,6 +4,9 @@ namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\CreatesLinks;
 use App\EmbersPermissionable;
+use App\Models\Category;
+use App\Models\Location;
+use App\Models\Template;
 use App\Models\User;
 
 class CreateLink implements CreatesLinks
@@ -22,6 +25,23 @@ class CreateLink implements CreatesLinks
     {
         $this->authorize($user);
 
-        return [];
+        $sinkCategories = Category::query()->whereType('link')->get('id');
+
+        $sinkTemplates = Template::query()
+            ->whereIn('category_id', $sinkCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->orderBy("order")
+            ->get();
+
+        $locations = Location::query()->get();
+
+        return [
+            $sinkTemplates,
+            $locations
+        ];
     }
 }

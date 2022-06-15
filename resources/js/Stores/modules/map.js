@@ -130,7 +130,7 @@ const mutations = {
     saveLink: (state, saveLink) => {(state.saveLink = saveLink, state.startLinks = saveLink)},
     removeAllSegment: (state, removeAllSegment) => (state.removeAllSegment = removeAllSegment),
     removeMarker: (state, removeMarker) => (state.removeMarker = removeMarker),
-    setLink: (state, { id, link }) => (state.currentLinks[id] = link),
+    setLink: (state, { id, link }) => {(state.currentLinks[id] = link, state.currentLinks[id]['data'] = {})},
     unsetLink: (state, id) => delete state.currentLinks[id],
     startLinks: (state) => {(state.currentLinks = {}, state.startLinks = true)},
 
