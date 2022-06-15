@@ -267,6 +267,17 @@ export default {
             { immediate: true }
         );
 
+        watch(
+            () => store.getters["objects/showObject"],
+            (show) => {
+                if(show.route != '') {
+                    setTimeout(() => store.dispatch("objects/showSlide", { route: show.route, props: show.param }), 500);
+                    store.commit("objects/setShowObject", { route: '', param: '' });
+                } 
+            },
+            { immediate: true }
+        );
+
         const removeMarker = () => {
             if (selectedMarker.value) {
                 map.value.removeLayer(selectedMarker.value);

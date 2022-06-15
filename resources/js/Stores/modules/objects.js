@@ -5,6 +5,10 @@ const _state = () => ({
   filterOption: null,
   instances: [],
   links: [],
+  showObject: {
+    route: '',
+    param: ''
+  },
   notify: {
     title: '',
     text: '',
@@ -20,7 +24,8 @@ const getters = {
   filterOption: (state) => state.filterOption,
   instances: (state) => state.instances,
   links: (state) => state.links,
-  notify: (state) => state.notify
+  notify: (state) => state.notify,
+  showObject: (state) => state.showObject
 };
 
 const actions = {
@@ -49,6 +54,7 @@ const mutations = {
   setInstances: (state, payload) => state.instances = payload.instances,
   setLinks: (state, payload) => state.links = payload.links,
   setNotify: (state, payload) => state.notify = payload,
+  setShowObject: (state, payload) => state.showObject = payload,
 };
 
 
