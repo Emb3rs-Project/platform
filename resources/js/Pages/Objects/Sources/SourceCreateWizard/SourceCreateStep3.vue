@@ -161,7 +161,10 @@ export default {
     }));
 
     const storeTemplate = computed(() => store.getters["source/template"]);
-    const disabled = computed(() => !props.templates.find((t) => t.id === storeTemplate.value.key).values.processes)
+    const disabled = computed(() => storeTemplate.value 
+      ? !props.templates.find((t) => t.id === storeTemplate.value.key).values.processes 
+      : true
+    );
 
     const storeProcesses = computed(() => store.getters["source/processes"]);
     const storeSelectedProcesses = computed(() => store.getters["source/selectedProcesses"]);

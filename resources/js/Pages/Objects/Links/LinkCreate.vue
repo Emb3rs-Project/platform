@@ -237,6 +237,11 @@ export default {
             store.dispatch("map/removeAllSegment", true);
             store.dispatch("map/saveLink", true);
             store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Link',
+                text: 'Link Created Successfully',
+                type: 'success'
+            });
             //store.commit("objects/closeSlide");
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },

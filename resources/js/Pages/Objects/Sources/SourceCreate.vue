@@ -328,6 +328,7 @@ export default {
                 text: 'Source Created Successfully',
                 type: 'success'
             });
+            store.dispatch("map/removeMarker", true);
             store.dispatch("objects/showSlide", { route: "objects.list" });
             store.dispatch("source/reset");
           },

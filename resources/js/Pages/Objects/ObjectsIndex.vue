@@ -291,21 +291,42 @@ export default {
             Inertia.delete(
               route(`objects.sources.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  showNotification("Source", "Source Deleted Successfully", "success");
+                },
               }
             );
           if (type === "sink")
             Inertia.delete(
               route(`objects.sinks.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  showNotification("Sink", "Sink Deleted Successfully", "success");
+                },
               }
             );
           if (type === 'links')
             Inertia.delete(
               route(`objects.links.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  showNotification("Link", "Link Deleted Successfully", "success");
+                },
               }
             );
           objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);

@@ -331,6 +331,11 @@ export default {
         .patch(route("objects.sources.update", props.instance.id), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Source',
+                text: 'Source Updated Successfully',
+                type: 'success'
+            });
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
         });

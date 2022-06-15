@@ -379,6 +379,11 @@ export default {
         .patch(route("objects.sinks.update", props.instance.id), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Sink',
+                text: 'Sink Updated Successfully',
+                type: 'success'
+            });
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
         });

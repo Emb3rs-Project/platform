@@ -186,10 +186,12 @@ export default {
           return {
             label: label,
             description: description,
-            value: p.property.data.options.find(
-              (o) => o.key === props.instance.values[p.property.symbolic_name]
-            ).value,
-          };
+            value: props.instance.values[p.property.symbolic_name].length
+              ? p.property.data.options.find(
+                  (o) => o.key === props.instance.values[p.property.symbolic_name]
+                ).value
+              : 'Not Defined',
+          };          
 
         return {
           label: label,
