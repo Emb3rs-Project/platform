@@ -35,7 +35,6 @@
       sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
     "
   >
-    <pre>{{ source }}</pre>
     <PropertyDisclosure defaultOpen title="Properties">
       <div
         class="my-6"
