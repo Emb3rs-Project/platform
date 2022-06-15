@@ -258,27 +258,6 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const showNotification = (title, text, type) => {
-      notify({
-          group: "notifications",
-          title: title,
-          text: text,
-          data: {
-              type: type,
-        },
-      });
-      store.commit("objects/setNotify", {});
-    };
-
-    watch(
-        () => store.getters["objects/notify"],
-        (e) => {
-            if (e.title)
-              showNotification(e.title, e.text, e.type);
-        },
-        { immediate: true }
-    );
-
     const centerAtLocation = (loc) =>
       store.dispatch("map/centerAt", { marker: loc });
 
@@ -297,7 +276,11 @@ export default {
                     selected: true,
                   }));
                   store.dispatch("map/refreshMap");
-                  showNotification("Source", "Source Deleted Successfully", "success");
+                  store.commit("objects/setNotify", {
+                      title: 'Source',
+                      text: "Source Deleted Successfully",
+                      type: 'success'
+                  });
                 },
               }
             );
@@ -311,7 +294,11 @@ export default {
                     selected: true,
                   }));
                   store.dispatch("map/refreshMap");
-                  showNotification("Sink", "Sink Deleted Successfully", "success");
+                  store.commit("objects/setNotify", {
+                      title: 'Sink',
+                      text: "Sink Deleted Successfully",
+                      type: 'success'
+                  });
                 },
               }
             );
@@ -325,7 +312,11 @@ export default {
                     selected: true,
                   }));
                   store.dispatch("map/refreshMap");
-                  showNotification("Link", "Link Deleted Successfully", "success");
+                  store.commit("objects/setNotify", {
+                      title: 'Link',
+                      text: "Link Deleted Successfully",
+                      type: 'success'
+                  });
                 },
               }
             );
@@ -340,7 +331,11 @@ export default {
 
     const onActionRequest = async (route, param) => {
       if (route === 'objects.sinks.create' && selectedLocation.value == null) {
-        showNotification("Sink", "Please, Select the sink on the map", "warning");
+        store.commit("objects/setNotify", {
+            title: 'Sink',
+            text: "Please, Select the sink on the map",
+            type: 'warning'
+        });
       } else {
         store.dispatch("objects/showSlide", { route, props: param });
       }
