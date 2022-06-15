@@ -242,6 +242,11 @@ export default {
         .patch(route("objects.links.update", props.instance.id), {
           onSuccess: () => {
             store.dispatch("map/refreshMap");
+            store.commit("objects/setNotify", {
+                title: 'Link',
+                text: 'Link Updated Successfully',
+                type: 'success'
+            });
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
           onError: (e) => console.log(e),
