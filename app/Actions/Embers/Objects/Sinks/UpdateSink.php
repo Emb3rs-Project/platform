@@ -32,9 +32,9 @@ class UpdateSink implements UpdatesSinks
 
         $sink = Instance::query()->findOrFail($id);
 
-        $validated = $this->validate($input, $sink);
+        //$validated = $this->validate($input, $sink);
 
-        $sink = $this->save($sink, $validated);
+        $sink = $this->save($sink, $input);
 
         return $sink;
     }
