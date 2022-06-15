@@ -101,7 +101,7 @@ export default {
 
     const onActionRequest = (route, param, uuid) => {
       markAsRead(uuid);
-      setTimeout(() => store.dispatch("objects/showSlide", { route, props: param }), 500);
+      store.commit("objects/setShowObject", { route, param });
     };
 
     const markAsRead = (uuid) => {
