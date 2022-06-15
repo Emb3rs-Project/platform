@@ -194,13 +194,13 @@ export default {
     const onNextStep = () => (nextStepRequest.value = true);
 
     const onCompleted = () => {
+      nextStepRequest.value = false;
       if (currentStep.value === steps.value.length) {
         submit();
 
         return;
       }
 
-      nextStepRequest.value = false;
       incompleteStepAlert.value = false;
       currentStep.value++;
     };

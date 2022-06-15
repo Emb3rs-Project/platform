@@ -860,6 +860,27 @@ export default {
             });
         };
 
+        const showNotification = (title, text, type) => {
+            notify({
+                group: "notifications",
+                title: title,
+                text: text,
+                data: {
+                    type: type,
+                },
+            });
+            store.commit("objects/setNotify", {});
+        };
+
+        watch(
+            () => store.getters["objects/notify"],
+            (e) => {
+                if (e.title)
+                    showNotification(e.title, e.text, e.type);
+            },
+            { immediate: true }
+        );
+
         onMounted(() => {
             map.value = mapUtils.init("map", center.value, zoom.value, {
                 drawControl: true,
@@ -873,14 +894,16 @@ export default {
             map.value.on("moveend", ({ target: map }) => {
                 lazilyGetMapCenter(map);
 
-                const visibleInstances = mapUtils.getInstancesInView(
-                    map,
-                    instances.value
-                );
-                loadMarkers(visibleInstances);
+                if (!selectedMarker.value) {
+                    const visibleInstances = mapUtils.getInstancesInView(
+                        map,
+                        instances.value
+                    );
+                    loadMarkers(visibleInstances);
 
-                const visibleLinks = mapUtils.getLinksInView(map, links.value);
-                loadLinks(visibleLinks);
+                    const visibleLinks = mapUtils.getLinksInView(map, links.value);
+                    loadLinks(visibleLinks);
+                }
             });
 
             map.value.on("zoomend", ({ target: map }) => lazilyGetMapZoom(map));
