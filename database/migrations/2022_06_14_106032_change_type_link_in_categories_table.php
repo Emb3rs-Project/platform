@@ -13,7 +13,19 @@ return new class extends Migration
      */
     public function up()
     {
-       \DB::statement("ALTER TABLE `categories` CHANGE `type` `type` ENUM('sink', 'source','equipment', 'process', 'simulation', 'link') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;");
+        Schema::table('categories', function (Blueprint $table) {
+            $table->renameColumn('type', 'old_type');
+        });
+
+        Schema::table('categories', function (Blueprint $table) {
+            $table->enum('type', ['sink', 'source', 'equipment', 'process', 'simulation', 'link'])->nullable();
+        });
+
+        DB::statement('UPDATE categories SET type = old_type');
+
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn('old_type');
+        });
     }
 
     /**
@@ -23,6 +35,18 @@ return new class extends Migration
      */
     public function down()
     {
-        \DB::statement("ALTER TABLE `categories` CHANGE `type` `type` ENUM('sink', 'source','equipment', 'process', 'simulation') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL;");
+        Schema::table('categories', function (Blueprint $table) {
+            $table->renameColumn('type', 'old_type');
+        });
+
+        Schema::table('categories', function (Blueprint $table) {
+            $table->enum('type', ['sink', 'source', 'equipment', 'process', 'simulation'])->nullable();
+        });
+
+        DB::statement('UPDATE categories SET type = old_type');
+
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropColumn('old_type');
+        });
     }
 };
