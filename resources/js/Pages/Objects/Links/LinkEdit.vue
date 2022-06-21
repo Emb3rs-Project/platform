@@ -345,7 +345,7 @@ export default {
             const placeholder = prop.inputType === "select" ? {} : "";
 
             if (prop.inputType === "select" 
-                && form.segments[i].data.data[prop.symbolic_name] 
+                && form.segments[i].data.data.hasOwnProperty(prop.symbolic_name) 
                 && !Array.isArray(form.segments[i].data.data[prop.symbolic_name])) {
 
               form.segments[i].data.data[prop.symbolic_name] = prop.data.options.find(
