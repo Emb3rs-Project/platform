@@ -18,7 +18,7 @@ class CharacterizeInstance implements CharacterizesInstances
         $cf_port = \Config::get("grpc.GRPC_CF_PORT");
 
         $client = new CFModuleClient(
-            "m_cf:50051",
+            "vali.pantherify.dev:50051",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
@@ -43,7 +43,7 @@ class CharacterizeInstance implements CharacterizesInstances
                 break;
         }
 
-        if($status->code !== 0) {
+        if ($status->code !== 0) {
             dump($status);
             $instance->delete();
             exit();
@@ -94,7 +94,7 @@ class CharacterizeInstance implements CharacterizesInstances
         /** @var CharacterizationSinkOutput $feature */
         list($feature, $status) = $client->char_building($request)->wait();
 
-        if($feature) {
+        if ($feature) {
             $characterization = [];
             $values = $instance->values;
             $characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
@@ -118,7 +118,7 @@ class CharacterizeInstance implements CharacterizesInstances
         /** @var CharacterizationSinkOutput $feature */
         list($feature, $status) = $client->char_greenhouse($request)->wait();
 
-        if($feature) {
+        if ($feature) {
             $characterization = [];
             $values = $instance->values;
             $characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];

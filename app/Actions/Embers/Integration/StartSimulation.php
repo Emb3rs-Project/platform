@@ -25,9 +25,13 @@ class StartSimulation implements StartsSimulations
             ]
         );
 
+        $initialData = $session->simulation->extra;
+        $initialData["project"] = $session->simulation->project;
+
+
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
-        $request->setInitialData(json_encode($session->simulation->extra));
+        $request->setInitialData(json_encode($initialData));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
         list($result, $status) = $client->StartSimulation($request)->wait();

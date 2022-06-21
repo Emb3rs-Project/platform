@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sinks;
 
+use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
@@ -81,6 +82,8 @@ class UpdateSink implements UpdatesSinks
         if (!is_null($data)) $sink->values = $data;
 
         $sink->update($input);
+
+        app(CharacterizesInstances::class)->characterize($sink);
 
         return $sink;
     }
