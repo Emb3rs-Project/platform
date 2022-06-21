@@ -285,7 +285,7 @@ export default {
         };
 
         const onCreateLink = (value, newSegment = false) => {
-            if (!currentSegment.from) {
+            if (!currentSegment.from && mapObjects.value.links) {
                 const circleLinks = [];
                 mapObjects.value.links.getLayers().forEach(points => {
                     points._latlngs[0].map((element) => {
@@ -309,32 +309,35 @@ export default {
                 map.value.contextmenu.insertItem(_contextItem);
             }
 
-            for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
-                _sinkLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkCreationMarkerContext) {
-                    _sinkLayer.options.contextmenuItems.push(
-                        _contextItem(_sinkLayer)
-                    );
+            if (mapObjects.value.sinks)
+                for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                    _sinkLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkCreationMarkerContext) {
+                        _sinkLayer.options.contextmenuItems.push(
+                            _contextItem(_sinkLayer)
+                        );
+                    }
                 }
-            }
 
-            for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
-                _sourceLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkCreationMarkerContext) {
-                    _sourceLayer.options.contextmenuItems.push(
-                        _contextItem(_sourceLayer)
-                    );
+            if (mapObjects.value.sources)
+                for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
+                    _sourceLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkCreationMarkerContext) {
+                        _sourceLayer.options.contextmenuItems.push(
+                            _contextItem(_sourceLayer)
+                        );
+                    }
                 }
-            }
 
-            for (const _circleLinkLayer of mapObjects.value.circleLinks.getLayers()) {
-                _circleLinkLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkCreationMarkerContext) {
-                    _circleLinkLayer.options.contextmenuItems.push(
-                        _contextItem(_circleLinkLayer)
-                    );
+            if (mapObjects.value.circleLinks)
+                for (const _circleLinkLayer of mapObjects.value.circleLinks.getLayers()) {
+                    _circleLinkLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkCreationMarkerContext) {
+                        _circleLinkLayer.options.contextmenuItems.push(
+                            _contextItem(_circleLinkLayer)
+                        );
+                    }
                 }
-            }
 
             //map.value.on("dblclick", (e) => onNextPoint(e));
             map.value.on("keydown", (e) => e.originalEvent.keyCode === 27 ? onStopLink():'');
@@ -371,23 +374,25 @@ export default {
                 map.value.contextmenu.insertItem(_contextItem);
             }
 
-            for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
-                _sinkLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkStopMarkerContext) {
-                    _sinkLayer.options.contextmenuItems.push(
-                        _contextItem(_sinkLayer)
-                    );
+            if (mapObjects.value.sinks)
+                for (const _sinkLayer of mapObjects.value.sinks.getLayers()) {
+                    _sinkLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkStopMarkerContext) {
+                        _sinkLayer.options.contextmenuItems.push(
+                            _contextItem(_sinkLayer)
+                        );
+                    }
                 }
-            }
 
-            for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
-                _sourceLayer.options.contextmenuItems = [];
-                for (const _contextItem of linkStopMarkerContext) {
-                    _sourceLayer.options.contextmenuItems.push(
-                        _contextItem(_sourceLayer)
-                    );
+            if (mapObjects.value.sources)
+                for (const _sourceLayer of mapObjects.value.sources.getLayers()) {
+                    _sourceLayer.options.contextmenuItems = [];
+                    for (const _contextItem of linkStopMarkerContext) {
+                        _sourceLayer.options.contextmenuItems.push(
+                            _contextItem(_sourceLayer)
+                        );
+                    }
                 }
-            }
         };
 
         const onStartMarker = (value) => {
@@ -524,7 +529,7 @@ export default {
                     from: currentSegment.from,
                     to: coord,
                     distance: L.latLng(coord).distanceTo(currentSegment.from),
-                    data: {},
+                    data: [],
                 },
             });
 

@@ -64,12 +64,13 @@ class LinkController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $link = app(ShowsLinks::class)->show($request->user(), $id);
+        [$link, $templateProperties] = app(ShowsLinks::class)->show($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Links/LinkDetails',
             "props" => [
-                "instance" => $link
+                "instance" => $link,
+                'templateProperties' => $templateProperties,
             ]
         ];
     }
@@ -84,16 +85,14 @@ class LinkController extends Controller
     public function edit(Request $request, $id)
     {
         [
-            $links,
-            $locations,
+            $templates,
             $link
         ] = app(EditsLinks::class)->edit($request->user(), $id);
 
         return [
             "slideOver" => 'Objects/Links/LinkEdit',
             "props" => [
-                "links" => $links,
-                "locations" => $locations,
+                "templates" => $templates,
                 "instance" => $link
             ]
         ];

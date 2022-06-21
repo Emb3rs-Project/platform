@@ -4,8 +4,11 @@ namespace App\Actions\Embers\Objects\Links;
 
 use App\Contracts\Embers\Objects\Links\EditsLinks;
 use App\EmbersPermissionable;
+use App\Models\Category;
 use App\Models\Link;
 use App\Models\Location;
+use App\Models\Template;
+use App\Models\TemplateProperty;
 use App\Models\User;
 
 class EditLink implements EditsLinks
@@ -28,15 +31,20 @@ class EditLink implements EditsLinks
 
         $link = Link::query()->with(['geoSegments'])->findOrFail($id);
 
-        $teamLinks = $user->currentTeam->links->pluck('id');
+        $linkCategories = Category::query()->whereType('link')->get('id');
 
-        $links = Link::with(['geoSegments'])->whereIn('id', $teamLinks)->get();
-
-        $locations = Location::all();
+        $linkTemplates = Template::query()
+            ->whereIn('category_id', $linkCategories)
+            ->with([
+                'templateProperties',
+                'templateProperties.unit',
+                'templateProperties.property'
+            ])
+            ->orderBy("order")
+            ->get();
 
         return [
-            $links,
-            $locations,
+            $linkTemplates,
             $link
         ];
     }

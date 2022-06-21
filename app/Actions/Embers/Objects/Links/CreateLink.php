@@ -25,10 +25,10 @@ class CreateLink implements CreatesLinks
     {
         $this->authorize($user);
 
-        $sinkCategories = Category::query()->whereType('link')->get('id');
+        $linkCategories = Category::query()->whereType('link')->get('id');
 
-        $sinkTemplates = Template::query()
-            ->whereIn('category_id', $sinkCategories)
+        $linkTemplates = Template::query()
+            ->whereIn('category_id', $linkCategories)
             ->with([
                 'templateProperties',
                 'templateProperties.unit',
@@ -40,7 +40,7 @@ class CreateLink implements CreatesLinks
         $locations = Location::query()->get();
 
         return [
-            $sinkTemplates,
+            $linkTemplates,
             $locations
         ];
     }

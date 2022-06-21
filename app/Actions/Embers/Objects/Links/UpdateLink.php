@@ -67,11 +67,16 @@ class UpdateLink implements UpdatesLinks
             $link->name = $input['name'];
         }
 
-        // if (!empty($input['description'])) {
-        //     $link->description = $input['description'];
-        // }
+        if (!empty($input['description'])) {
+            $link->description = $input['description'];
+        }
 
         if (!empty($input['segments'])) {
+            $segments = $link->geoSegments()->get();
+            $link->geoSegments()->detach();
+            foreach ($segments as $segment) {
+                $segment->delete();
+            }
             foreach ($input['segments'] as $data) {
                 if (!array_key_exists('id', $data)) {
                     $segment = GeoSegment::create([
