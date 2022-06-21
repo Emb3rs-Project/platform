@@ -35,17 +35,11 @@ class ShowLink implements ShowsLinks
             ->with(['geoSegments'])
             ->whereIn('id', $teamLinks)
             ->findOrFail($id);
-
-        $linkCategories = Category::query()->whereType('link')->first();
-
-        $linkTemplate = Template::query()
-            ->where('category_id', $linkCategories->id)
-            ->first();
         
         $templateProperties = [];
         foreach($link->geoSegments as $geoSegment) {
             array_push($templateProperties, TemplateProperty::query()
-                ->whereTemplateId(array_key_exists('template_id', $geoSegment['data']) ? $geoSegment['data']['template_id'] : $linkTemplate->id)
+                ->whereTemplateId(array_key_exists('template_id', $geoSegment['data']) ? $geoSegment['data']['template_id'] : '')
                 ->with(['property'])
                 ->get()
             );
