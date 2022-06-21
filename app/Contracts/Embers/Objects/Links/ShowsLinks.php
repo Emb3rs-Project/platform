@@ -18,5 +18,5 @@ interface ShowsLinks
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
-    public function show(User $user, int $id): Link;
+    public function show(User $user, int $id): array;
 }

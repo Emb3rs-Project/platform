@@ -20,6 +20,7 @@
         <TextInput
           v-model="form.name"
           placeholder="Link's Name"
+          required
         />
       </div>
     </div>
@@ -382,6 +383,16 @@ export default {
     const submit = () => {
       let propertyError = false;
       form.clearErrors();
+
+      if (form.name == "") {
+        store.commit("objects/setNotify", {
+            title: `Link`,
+            text: 'The link name field is required.',
+            type: 'danger'
+        });
+        return;
+      }
+        
 
       linkList.value.forEach((value, key) => {
         const errors = validateProperies(
