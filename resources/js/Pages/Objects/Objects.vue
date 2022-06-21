@@ -94,6 +94,11 @@ export default {
 
       const response = await fetch(_route).then((res) => {
         if (!res.ok) {
+          store.commit("objects/setNotify", {
+              title: 'Error',
+              text: res.statusText,
+              type: 'danger'
+          });
           const error = new Error(res.statusText);
           error.json = res.json();
           throw error;

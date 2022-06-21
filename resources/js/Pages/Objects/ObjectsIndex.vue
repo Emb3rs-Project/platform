@@ -258,27 +258,6 @@ export default {
       modalIsOpen.value = true;
     };
 
-    const showNotification = (title, text, type) => {
-      notify({
-          group: "notifications",
-          title: title,
-          text: text,
-          data: {
-              type: type,
-        },
-      });
-      store.commit("objects/setNotify", {});
-    };
-
-    watch(
-        () => store.getters["objects/notify"],
-        (e) => {
-            if (e.title)
-              showNotification(e.title, e.text, e.type);
-        },
-        { immediate: true }
-    );
-
     const centerAtLocation = (loc) =>
       store.dispatch("map/centerAt", { marker: loc });
 
@@ -291,21 +270,54 @@ export default {
             Inertia.delete(
               route(`objects.sources.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  store.commit("objects/setNotify", {
+                      title: 'Source',
+                      text: "Source Deleted Successfully",
+                      type: 'success'
+                  });
+                },
               }
             );
           if (type === "sink")
             Inertia.delete(
               route(`objects.sinks.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  store.commit("objects/setNotify", {
+                      title: 'Sink',
+                      text: "Sink Deleted Successfully",
+                      type: 'success'
+                  });
+                },
               }
             );
           if (type === 'links')
             Inertia.delete(
               route(`objects.links.destroy`, itemToDelete.value.id),
               {
-                onSuccess: () => store.dispatch("map/refreshMap"),
+                onSuccess: (data) => {
+                  instances.value = data.props.instances.map((i) => ({
+                    ...i,
+                    selected: true,
+                  }));
+                  store.dispatch("map/refreshMap");
+                  store.commit("objects/setNotify", {
+                      title: 'Link',
+                      text: "Link Deleted Successfully",
+                      type: 'success'
+                  });
+                },
               }
             );
           objects.value.splice(objects.value.indexOf(itemToDelete.value), 1);
@@ -319,7 +331,11 @@ export default {
 
     const onActionRequest = async (route, param) => {
       if (route === 'objects.sinks.create' && selectedLocation.value == null) {
-        showNotification("Sink", "Please, Select the sink on the map", "warning");
+        store.commit("objects/setNotify", {
+            title: 'Sink',
+            text: "Please, Select the sink on the map",
+            type: 'warning'
+        });
       } else {
         store.dispatch("objects/showSlide", { route, props: param });
       }

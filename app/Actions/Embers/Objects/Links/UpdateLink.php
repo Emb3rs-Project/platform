@@ -30,7 +30,7 @@ class UpdateLink implements UpdatesLinks
 
         $link = Link::query()->with(['geoSegments'])->findOrFail($id);
 
-        $this->validate($input);
+        //$this->validate($input);
 
         $link = $this->save($link, $input);
 

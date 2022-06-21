@@ -367,6 +367,7 @@ export default {
                             text: 'Sink Created Successfully',
                             type: 'success'
                         });
+                        store.dispatch("map/removeMarker", true);
                         store.dispatch("objects/showSlide", { route: "objects.list" });
                     },
                 });
