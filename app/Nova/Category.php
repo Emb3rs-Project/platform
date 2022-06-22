@@ -60,6 +60,7 @@ class Category extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('NAME'), 'name'),
             Select::make(__('TYPE'), 'type')->options([
+                'link'  => __('link'),
                 'sink' => __('sink'),
                 'source' => __('source'),
                 'equipment' => __('equipment'),
