@@ -35,10 +35,11 @@ export default {
         break;
     }
   },
-  addPoint(map, center, draggable, {
+  addPoint(map, center, {
     icon = 'leaf',
     textClass = 'text-green-700',
     borderClass = 'border-green-700',
+    draggable = false,
     type = 'sink'
   } = {}) {
     const iconOptions = {
@@ -60,13 +61,6 @@ export default {
       objectType: type,
       riseOnHover: true
     }).addTo(map);
-  },
-  setPoint(location) {
-    map.eachLayer(function (layer) { 
-      if (layer.options.objectType === 'sink') {
-          layer.setLatLng([location.lat, location.lng])
-      } 
-    });
   },
   addCircle(map, center) {
     return L.circle(center, {
