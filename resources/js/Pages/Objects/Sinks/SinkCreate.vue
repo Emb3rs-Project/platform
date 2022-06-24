@@ -33,7 +33,10 @@
                     <div>
                         <TextInput
                         v-model="form.location.lat"
+                        @update:modelValue="updateMarker()"
                         :disabled="!form.custom"
+                        min="-90"
+                        max="90"
                         type="number"
                         unit="lat"
                         />
@@ -43,7 +46,10 @@
                     <div>
                         <TextInput
                         v-model="form.location.lng"
+                        @update:modelValue="updateMarker()"
                         :disabled="!form.custom"
+                        min="-180"
+                        max="180"
                         type="number"
                         unit="lng"
                         />
@@ -169,6 +175,7 @@ import { ref, watch, computed } from "vue";
 import { useStore } from "vuex";
 import { useForm } from "@inertiajs/inertia-vue3";
 
+import mapUtils from "@/Utils/map.js";
 import JetCheckbox from "@/Jetstream/Checkbox";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SiteHead from "@/Components/SiteHead.vue";
@@ -247,7 +254,6 @@ export default {
         watch(
             () => store.getters["map/selectedMarker"],
             (val) => {
-                console.log(selectedLocation.value)
                 if (!!val) {
                     const oldLocation = locations.value.find(
                         (l) => l.value === "Selected Marker"
@@ -281,7 +287,6 @@ export default {
                 selectedLocation.value = locations.value.find(
                     (l) => l.key === location.key
                 );
-console.log('antes: ', form.location_id)
                 if (typeof selectedLocation.value.key === "object" && form.location_id == null) {
                     form.location = {
                         lat: location.key.lat,
@@ -296,24 +301,14 @@ console.log('antes: ', form.location_id)
             { immediate: true, deep: true }
         );
 
-        watch(
-            form,
-            (location) => {
-                console.log(location.location)
-                
-                if (location.location) {
-                    console.log(selectedLocation.value.key)
-                    console.log('aqui')
-                    document.getElementById("map").focus();
-                    store.dispatch("map/selectMarker", {
-                        marker: location.location,
-                        type: 'Sinks',
-                        color: "green-700",
-                    });
-                }
-            },
-            { immediate: true, deep: true }
+        const selectedMarkerLatlng = computed(
+            () => store.getters["map/selectedMarkerPosition"]
         );
+
+        watch(selectedMarkerLatlng, (position) => {
+            const newPosition = window._.cloneDeep(position)
+            form.location = newPosition.position;
+        });
 
         watch(
             selectedTemplate,
@@ -437,6 +432,16 @@ console.log('antes: ', form.location_id)
                 });
         };
 
+        const updateMarker = () => {
+            if (form.location.lat > 90) form.location.lat = 90;
+            else if (form.location.lat < -90) form.location.lat = -90;
+
+            if (form.location.lng > 180) form.location.lng = 180;
+            else if (form.location.lng < -180) form.location.lng = -180;
+
+            mapUtils.setPoint(form.location)
+        };
+
         const onCancel = () => {
             store.dispatch("map/removeMarker", true);
             store.dispatch("map/refreshMap");
@@ -452,6 +457,7 @@ console.log('antes: ', form.location_id)
             withAdvancedProperties,
             properties,
             advancedProperties,
+            updateMarker,
             submit,
             onCancel,
         };
