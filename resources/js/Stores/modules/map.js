@@ -5,7 +5,6 @@ const _state = () => ({
     selectedMarker: null,
     selectedMarkerColor: "green",
     selectedMarkerType: null,
-    selectedMarkerPosition: {},
     currentLinks: {},
     saveLink: false,
     startLinks: false,
@@ -25,7 +24,6 @@ const getters = {
     selectedMarker: (state) => state.selectedMarker,
     selectedMarkerType: (state) => state.selectedMarkerType,
     selectedMarkerColor: (state) => state.selectedMarkerColor,
-    selectedMarkerPosition: (state) => state.selectedMarkerPosition,
     currentLinks: (state) => state.currentLinks,
     startLinks: (state) => state.startLinks,
     center: (state) => state.center,
@@ -61,7 +59,6 @@ const actions = {
     removeAllSegment: ({ commit }, removeAllSegment) => commit("removeAllSegment", removeAllSegment ),
     removeMarker: ({ commit }, removeMarker) => commit("removeMarker", removeMarker ),
     setLink: ({ commit }, { id, link }) => commit("setLink", { id, link }),
-    setSelectedMarkerPosition: ({ commit }, { position }) => commit("setSelectedMarkerPosition", { position }),
     unsetLink: ({ commit, state }, id) => {
         const links = state.currentLinks;
         if (links[id]) commit("unsetLink", id);
@@ -129,7 +126,6 @@ const mutations = {
     selectMarker: (state, marker) => (state.selectedMarker = marker),
     selectMarkerColor: (state, color) => (state.selectedMarkerColor = color),
     selectedMarkerType: (state, type) => (state.selectedMarkerType = type),
-    setSelectedMarkerPosition: (state, position) => (state.selectedMarkerPosition = position),
     focusMarker: (state, marker) => (state.focusedMarker = marker),
     saveLink: (state, saveLink) => {(state.saveLink = saveLink, state.startLinks = saveLink)},
     removeAllSegment: (state, removeAllSegment) => (state.removeAllSegment = removeAllSegment),

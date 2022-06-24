@@ -213,19 +213,12 @@ export default {
                 map.value.removeLayer(selectedMarker.value);
 
             if (newValue) {
-                const draggable = store.getters["map/selectedMarkerType"] == 'Sinks';
-                selectedMarker.value = mapUtils.addPoint(map.value, newValue, draggable, {
+                selectedMarker.value = mapUtils.addPoint(map.value, newValue, {
                     icon: "plus",
                     textClass: "text-" + store.getters["map/selectedMarkerColor"],
                     borderClass:
                         "border-" + store.getters["map/selectedMarkerColor"],
                 });
-                
-                if (store.getters["map/selectedMarkerType"] == 'Sinks') {
-                    selectedMarker.value.on('dragend', (event) => {
-                        store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
-                    });
-                }
             }
         });
 
