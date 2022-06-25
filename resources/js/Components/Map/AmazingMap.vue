@@ -213,19 +213,17 @@ export default {
                 map.value.removeLayer(selectedMarker.value);
 
             if (newValue) {
-                const draggable = store.getters["map/selectedMarkerType"] == 'Sinks';
-                selectedMarker.value = mapUtils.addPoint(map.value, newValue, draggable, {
+                const draggable = true;
+                selectedMarker.value = mapUtils.addPoint(map.value, newValue, draggable, 'instance', {
                     icon: "plus",
                     textClass: "text-" + store.getters["map/selectedMarkerColor"],
                     borderClass:
                         "border-" + store.getters["map/selectedMarkerColor"],
                 });
                 
-                if (store.getters["map/selectedMarkerType"] == 'Sinks') {
-                    selectedMarker.value.on('dragend', (event) => {
-                        store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
-                    });
-                }
+                selectedMarker.value.on('dragend', (event) => {
+                    store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
+                });
             }
         });
 
@@ -296,7 +294,7 @@ export default {
                     marker: null,
                     type: null,
                     color: "green",
-                }); 
+                });
                 store.dispatch("source/reset");
                 store.dispatch("objects/showSlide", { route: "objects.list" });
             }     

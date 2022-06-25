@@ -70,10 +70,6 @@
                         </label>
                     </div>
                 </div>
-                <!--<div class="my-4">
-                    <SelectMenu v-model="selectedLocation" :options="locations" label="Location"
-                        :disabled="selectedTemplate ? false : true" />
-                </div> -->
             </PropertyDisclosure>
         </div>
 
@@ -413,13 +409,7 @@ export default {
                     return deepCopyOfData;
                 })
                 .post(route("objects.sinks.store"), {
-                    onSuccess: (data) => {
-                        store.commit("objects/setInstances", {
-                            instances: data.props.instances.map((i) => ({
-                                ...i,
-                                selected: true,
-                            }))
-                        });
+                    onSuccess: () => {
                         store.dispatch("map/refreshMap");
                         store.commit("objects/setNotify", {
                             title: 'Sink',
@@ -439,13 +429,13 @@ export default {
             if (form.location.lng > 180) form.location.lng = 180;
             else if (form.location.lng < -180) form.location.lng = -180;
 
-            mapUtils.setPoint(form.location)
+            mapUtils.setPoint(form.location, 'instance')
         };
 
         const onCancel = () => {
             store.dispatch("map/removeMarker", true);
             store.dispatch("map/refreshMap");
-            store.dispatch("objects/showSlide", { route: "objects.list" });
+            //store.dispatch("objects/showSlide", { route: "objects.list" });
         };
 
         return {

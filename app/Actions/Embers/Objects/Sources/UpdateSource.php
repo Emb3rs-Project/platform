@@ -6,6 +6,7 @@ use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
+use App\Models\Location;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
 
@@ -87,6 +88,21 @@ class UpdateSource implements UpdatesSources
             'equipment' => Arr::get($input, 'equipment'),
             'processes' => Arr::get($input, 'processes'),
         ];
+
+        if (!is_null(Arr::get($input, 'location'))) {
+            $location = Location::create([
+                'name' => $source->name,
+                'type' => 'point',
+                'data' => [
+                    "center" => [
+                        Arr::get($input, 'location.lat'),
+                        Arr::get($input, 'location.lng')
+                    ]
+                ]
+            ]);
+
+            $input['location_id'] = $location->id;
+        }
 
         $source->values = $values;
 

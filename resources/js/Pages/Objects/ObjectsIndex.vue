@@ -195,12 +195,10 @@ export default {
 
     // TODO: Add links when they are ready
     const instances = ref(
-      storeInstances.value.length
-        ? window._.cloneDeep(storeInstances.value)
-        : props.instances.map((i) => ({
-            ...i,
-            selected: true,
-          }))
+      props.instances.map((i) => ({
+        ...i,
+        selected: true,
+      }))
     );
 
     const filterDropdown = ref(false);
