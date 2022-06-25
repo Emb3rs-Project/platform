@@ -315,13 +315,7 @@ export default {
           return deepCopyOfFormData;
         })
         .post(route("objects.sources.store"), {
-          onSuccess: (data) => {
-            store.commit("objects/setInstances", {
-              instances: data.props.instances.map((i) => ({
-                ...i,
-                selected: true,
-              }))
-            });
+          onSuccess: () => {
             store.dispatch("map/refreshMap");
             store.commit("objects/setNotify", {
                 title: 'Source',
