@@ -19,7 +19,9 @@
 		"bradlc.vscode-tailwindcss"
 	],
 	"remoteUser": "sail",
-	// "forwardPorts": [],
+	"forwardPorts": [
+		8100
+	],
 	// "runServices": [],
 	// "postCreateCommand": "apt-get update && apt-get install -y curl",
 	// "shutdownAction": "none",
