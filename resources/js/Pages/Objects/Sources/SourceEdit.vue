@@ -323,8 +323,10 @@ export default {
             deepCopyOfFormData.template_id = template.value.key;
 
           //location
-          if (Object.keys(location.value).length)
-            deepCopyOfFormData.location_id = location.value.key;
+          if (Object.keys(location.value).length) {
+            deepCopyOfFormData.location = location.value.key;
+            deepCopyOfFormData.location_id = location.value.id;
+          }
 
           return deepCopyOfFormData;
         })

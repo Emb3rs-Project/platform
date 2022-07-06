@@ -33,14 +33,53 @@
             label="Template"
           />
         </div>
-        <div class="my-4">
-          <SelectMenu
-            v-model="selectedLocation"
-            :options="locations"
-            label="Location"
-            :disabled="selectedTemplate ? false : true"
-          />
-        </div>
+        <div class="space-y-1 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:py-5">
+          <div class="col-span-2">
+            <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
+                Location
+            </label>
+          </div>
+          <div class="sm:col-span-1">
+            <div>
+                <TextInput
+                  v-model="form.location.lat"
+                  @update:modelValue="updateMarker()"
+                  :disabled="!form.custom"
+                  min="-90"
+                  max="90"
+                  type="number"
+                  unit="lat"
+                />
+            </div>
+          </div>
+          <div class="sm:col-span-1">
+            <div>
+                <TextInput
+                  v-model="form.location.lng"
+                  @update:modelValue="updateMarker()"
+                  :disabled="!form.custom"
+                  min="-180"
+                  max="180"
+                  type="number"
+                  unit="lng"
+                />
+            </div>
+          </div>
+          <div class="flex items-center">
+              <jet-checkbox
+                  id="custom-marker"
+                  name="custom-marker"
+                  v-model:checked="form.custom"
+                  class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  />
+                  <label
+                  for="custom-marker"
+                  class="ml-2 block text-sm text-gray-900"
+                  >
+                  Custom Marker
+                  </label>
+              </div>
+          </div>
       </PropertyDisclosure>
     </div>
 
@@ -191,6 +230,8 @@ import { ref, watch, computed } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
 
+import mapUtils from "@/Utils/map.js";
+import JetCheckbox from "@/Jetstream/Checkbox";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import SlideOver from "@/Components/SlideOvers/SlideOver.vue";
@@ -206,6 +247,7 @@ import { sortProperties, validateProperies } from "@/Utils/helpers";
 
 export default {
   components: {
+    JetCheckbox,
     AppLayout,
     SiteHead,
     SlideOver,
@@ -243,8 +285,10 @@ export default {
       sink: {
         data: {},
       },
+      custom: false,
       template_id: null,
       location_id: null,
+      location: null,
     });
 
     const templates = computed(() =>
@@ -262,6 +306,7 @@ export default {
       props.locations.map((l) => ({
         key: l.id,
         value: l.name,
+        location: l.data.center
       }))
     );
     const selectedLocation = ref(
@@ -271,6 +316,7 @@ export default {
     watch(
       selectedLocation,
       (selectedLocation) => {
+        form.location = {lat: selectedLocation.location[0], lng: selectedLocation.location[1]}
         form.location_id = selectedLocation.key;
       },
       { immediate: true, deep: true }
@@ -389,6 +435,16 @@ export default {
         });
     };
 
+    const updateMarker = () => {
+        if (form.location.lat > 90) form.location.lat = 90;
+        else if (form.location.lat < -90) form.location.lat = -90;
+
+        if (form.location.lng > 180) form.location.lng = 180;
+        else if (form.location.lng < -180) form.location.lng = -180;
+
+        mapUtils.setPoint(form.location, props.instance.id)
+    };
+
     const onCancel = () =>
       store.dispatch("objects/showSlide", { route: "objects.list" });
 
@@ -401,6 +457,7 @@ export default {
       withAdvancedProperties,
       properties,
       advancedProperties,
+      updateMarker,
       submit,
       onCancel,
     };
