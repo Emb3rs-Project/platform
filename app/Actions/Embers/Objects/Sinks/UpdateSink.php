@@ -7,6 +7,7 @@ use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
 use App\Models\Instance;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Validator;
@@ -80,6 +81,22 @@ class UpdateSink implements UpdatesSinks
         $data = Arr::get($input, 'sink.data');
 
         if (!is_null($data)) $sink->values = $data;
+
+        if (!is_null(Arr::get($input, 'location'))) {
+            // A new location was selected to be used for this Sink
+            $location = Location::create([
+                'name' => $sink->name,
+                'type' => 'point',
+                'data' => [
+                    "center" => [
+                        Arr::get($input, 'location.lat'),
+                        Arr::get($input, 'location.lng')
+                    ]
+                ]
+            ]);
+
+            $input['location_id'] = $location->id;
+        }
 
         $sink->update($input);
 

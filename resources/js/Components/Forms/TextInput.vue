@@ -21,6 +21,8 @@
         :type="type"
         :name="value"
         :placeholder="placeholder"
+        :min="min"
+        :max="max"
         class="focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
         :class="{'disabled:opacity-70 cursor-not-allowed' : disabled, 'cursor-default': readOnly}"
         :disabled="disabled || readOnly"
@@ -63,6 +65,14 @@ export default {
       default: "",
     },
     description: {
+      type: String,
+      default: "",
+    },
+    min: {
+      type: String,
+      default: "",
+    },
+    max: {
       type: String,
       default: "",
     },

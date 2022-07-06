@@ -35,11 +35,10 @@ export default {
         break;
     }
   },
-  addPoint(map, center, {
+  addPoint(map, center, draggable, id, {
     icon = 'leaf',
     textClass = 'text-green-700',
     borderClass = 'border-green-700',
-    draggable = false,
     type = 'sink'
   } = {}) {
     const iconOptions = {
@@ -52,6 +51,7 @@ export default {
 
     return L.marker(L.latLng(center), {
       icon: L.BeautifyIcon.icon(iconOptions),
+      alt: id,
       draggable,
       contextmenu: true,
       contextmenuWidth: 140,
@@ -61,6 +61,13 @@ export default {
       objectType: type,
       riseOnHover: true
     }).addTo(map);
+  },
+  setPoint(location, id) {
+    map.eachLayer(function (layer) { 
+      if (layer.options.alt == id) {
+          layer.setLatLng([location.lat, location.lng])
+      } 
+    });
   },
   addCircle(map, center) {
     return L.circle(center, {
@@ -95,16 +102,17 @@ export default {
       // Skipping Locations with areas
       if (_instance.location.type !== 'point') continue;
 
-      const type = _instance.template.category.type
-      const center = _instance.location.data.center
+      const type = _instance.template.category.type;
+      const center = _instance.location.data.center;
+      const id = _instance.id;
 
       switch (type.toLowerCase()) {
         case 'source':
-          const source = this.addPoint(map, center, this.createIconOptions('source')).on("mousedown", () => onClick(_instance));
+          const source = this.addPoint(map, center, false, id, this.createIconOptions('source')).on("mousedown", () => onClick(_instance));
           sources.push(source);
           break;
         case 'sink':
-          const sink = this.addPoint(map, center, this.createIconOptions('sink')).on("mousedown", () => onClick(_instance));
+          const sink = this.addPoint(map, center, false, id, this.createIconOptions('sink')).on("mousedown", () => onClick(_instance));
           sinks.push(sink);
           break;
       }
