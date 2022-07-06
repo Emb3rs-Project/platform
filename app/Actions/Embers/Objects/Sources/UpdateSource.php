@@ -2,6 +2,7 @@
 
 namespace App\Actions\Embers\Objects\Sources;
 
+use App\Contracts\Embers\Integration\CharacterizesInstances;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\EmbersPermissionable;
 use App\HasEmbersProperties;
@@ -107,6 +108,8 @@ class UpdateSource implements UpdatesSources
         $source->values = $values;
 
         $source->update($input);
+
+        app(CharacterizesInstances::class)->characterize($source);
 
         return $source;
     }
