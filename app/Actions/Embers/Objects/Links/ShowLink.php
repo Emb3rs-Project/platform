@@ -38,10 +38,13 @@ class ShowLink implements ShowsLinks
         
         $templateProperties = [];
         foreach($link->geoSegments as $geoSegment) {
-            array_push($templateProperties, TemplateProperty::query()
-                ->whereTemplateId(array_key_exists('template_id', $geoSegment['data']) ? $geoSegment['data']['template_id'] : '')
-                ->with(['property'])
-                ->get()
+            array_push($templateProperties, 
+                array_key_exists('template_id', $geoSegment['data']) 
+                    ? TemplateProperty::query()
+                        ->whereTemplateId($geoSegment['data']['template_id'])
+                        ->with(['property'])
+                        ->get()
+                    : []
             );
         }
 
