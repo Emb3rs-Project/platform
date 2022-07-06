@@ -63,6 +63,7 @@ export default {
     }).addTo(map);
   },
   setPoint(location, id) {
+    this.centerAtLocation(map, {type: 'point', data: {center: location}});
     map.eachLayer(function (layer) { 
       if (layer.options.alt == id) {
           layer.setLatLng([location.lat, location.lng])
