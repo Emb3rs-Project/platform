@@ -21,15 +21,17 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
         $this->hideSensitiveRequestDetails();
 
         Telescope::filter(function (IncomingEntry $entry) {
-            if ($this->app->environment('local')) {
-                return true;
-            }
+            return true;
 
-            return $entry->isReportableException() ||
-                   $entry->isFailedRequest() ||
-                   $entry->isFailedJob() ||
-                   $entry->isScheduledTask() ||
-                   $entry->hasMonitoredTag();
+            // if ($this->app->environment('local')) {
+            //     return true;
+            // }
+
+            // return $entry->isReportableException() ||
+            //        $entry->isFailedRequest() ||
+            //        $entry->isFailedJob() ||
+            //        $entry->isScheduledTask() ||
+            //        $entry->hasMonitoredTag();
         });
     }
 
@@ -40,17 +42,17 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     protected function hideSensitiveRequestDetails()
     {
-        if ($this->app->environment('local')) {
-            return;
-        }
+        // if ($this->app->environment('local')) {
+        //     return;
+        // }
 
-        Telescope::hideRequestParameters(['_token']);
+        // Telescope::hideRequestParameters(['_token']);
 
-        Telescope::hideRequestHeaders([
-            'cookie',
-            'x-csrf-token',
-            'x-xsrf-token',
-        ]);
+        // Telescope::hideRequestHeaders([
+        //     'cookie',
+        //     'x-csrf-token',
+        //     'x-xsrf-token',
+        // ]);
     }
 
     /**
