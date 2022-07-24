@@ -32,6 +32,7 @@
     <SourceEditStep2
       v-if="currentStep === 2"
       :instance="instance"
+      :templates="templates"
       :equipmentCategories="equipmentCategories"
       :equipment="equipment"
       :nextStepRequest="nextStepRequest"
@@ -42,6 +43,8 @@
     <SourceEditStep3
       v-if="currentStep === 3"
       :instance="instance"
+      :templates="templates"
+      :equipment="equipment"
       :processesCategories="processesCategories"
       :processes="processes"
       :nextStepRequest="nextStepRequest"
@@ -278,6 +281,7 @@ export default {
           if (deepCopyOfEquipment.length)
             deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
               id: e.key,
+              identify: e.identify,
               category_id: e.parent,
               data: e.data,
             }));
@@ -296,7 +300,7 @@ export default {
                 if (prop.inputType === "select") {
                   // if the property has a value, get it and re-assign the property as a string
                   if (
-                    Object.keys(deepCopyOfProcesses[index].data[key]).length
+                    process.data[key] && Object.keys(deepCopyOfProcesses[index].data[key]).length
                   ) {
                     deepCopyOfProcesses[index].data[key] =
                       deepCopyOfProcesses[index].data[key].key;
@@ -316,6 +320,7 @@ export default {
               id: p.key,
               category_id: p.parent,
               data: p.data,
+              processElements: p.processElements,
             }));
 
           //template

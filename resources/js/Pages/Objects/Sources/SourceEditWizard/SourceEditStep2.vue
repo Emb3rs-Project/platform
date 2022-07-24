@@ -16,11 +16,11 @@
 
   <div
     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5 "
-    v-for="equip in equipment"
-    :key="equip"
+    v-for="(equip, equipIdx) in equipment"
+    :key="equipIdx"
   >
-    <div class="sm:col-span-3">
-      <div class="bg-white overflow-hidden shadow sm:rounded-lg w-full">
+    <div class="sm:col-span-3 flex">
+      <div class="bg-white shadow sm:rounded-lg w-5/6">
         <div class="px-4 py-5 sm:p-6">
           <Disclosure
             as="div"
@@ -94,7 +94,17 @@
           </Disclosure>
         </div>
       </div>
+      <div class="ml-5 py-5">
+        <button
+          type="button"
+          class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          @click="onRemoveEquipment(equipIdx)"
+        >
+          Delete
+        </button>
+      </div>
     </div>
+    
   </div>
 
   <AddEquipmentModal
@@ -155,6 +165,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    templates: {
+      type: Array,
+      required: true,
+    },
   },
 
   emits: ["completed", "incompleted"],
@@ -165,7 +179,7 @@ export default {
     const errors = ref({});
 
     const storeTemplate = computed(() => store.getters["source/template"]);
-    const disabled = storeTemplate.value.value == 'Simple Source';
+    const disabled = computed(() => !props.templates.find((t) => t.id === storeTemplate.value.key).values.equipments);
 
     const addEquipmentModalIsVisible = ref(false);
 
@@ -191,6 +205,7 @@ export default {
 
         equipments.push({
           key: propsEquip.key,
+          identify: _instanceEquipment.identify ?? Date.now(),
           value: propsEquip.value,
           parent: propsEquip.parent,
           props: propsEquip.props,
@@ -209,11 +224,28 @@ export default {
           : instanceEquipment.value
     );
     
-    const equipment = ref(
-      disabled
-        ? []
-        : auxEquipment
+    const equipment = ref([]);
+
+    const commitSourceEquipment = window._.debounce(
+      () =>
+        store.commit("source/setEquipment", {
+          equipment: window._.cloneDeep(equipment.value),
+        }),
+      500
     );
+
+    watch(
+      () => equipment,
+      () => {
+        commitSourceEquipment();
+      },
+      {
+        deep: true,
+        immediate: true,
+      }
+    );
+
+    equipment.value = disabled.value ? [] : auxEquipment.value;
 
     const onAddEquipment = (newEquipment) => {
       const newEquip = window._.cloneDeep(newEquipment);
@@ -230,18 +262,7 @@ export default {
       equipment.value.push(newEquip);
     };
 
-    const commitSourceEquipment = window._.debounce(
-      () =>
-        store.commit("source/setEquipment", {
-          equipment: window._.cloneDeep(equipment.value),
-        }),
-      500
-    );
-
-    watch(equipment, () => commitSourceEquipment(), {
-      deep: true,
-      immediate: true,
-    });
+    const onRemoveEquipment = (index) => equipment.value.splice(index, 1);
 
     watch(
       () => props.nextStepRequest,
@@ -269,6 +290,7 @@ export default {
       propsEquipment,
       disabled,
       onAddEquipment,
+      onRemoveEquipment,
     };
   },
 };

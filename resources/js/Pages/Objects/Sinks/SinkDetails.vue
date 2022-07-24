@@ -31,13 +31,25 @@
         </div>
 
         <!-- Sink Template -->
-        <div class="my-4">
-          <TextInput
-            v-model="instance.template.name"
-            label="Template Name"
-            description="The template that this Sink belongs to."
-            read-only
-          />
+        <div class="my-4 flex">
+          <div class="w-full">
+            <TextInput
+              v-model="instance.template.name"
+              label="Template Name"
+              description="The template that this Sink belongs to."
+              read-only
+            />
+          </div>
+          <div class="mt-6" v-if="instance.template.values.help">
+              <button
+                  title="Info"
+                  type="button"
+                  class="inline-flex items-center h-10 px-2.5 py-2 border border-transparent text-xs font-medium border-gray-300 rounded shadow-sm text-blue-600 hover:text-white bg-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  @click="infoTemplateModalIsVisible = true"
+              >
+                  <InfoIcon class="font-medium text-sm w-5" />
+              </button>
+          </div>     
         </div>
       </PropertyDisclosure>
     </div>
@@ -115,10 +127,14 @@
       </PrimaryButton>
     </template>
   </SlideOver>
+  <InfoTemplateModal
+    v-model="infoTemplateModalIsVisible"
+    :info="instance.template.values.help"
+  />
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout.vue";
@@ -129,6 +145,8 @@ import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import InfoIcon from "@/Components/Icons/InfoIcon.vue";
+import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
 
 import { sortProperties } from "@/Utils/helpers";
 
@@ -142,6 +160,8 @@ export default {
     TextInput,
     PrimaryButton,
     SecondaryOutlinedButton,
+    InfoIcon,
+    InfoTemplateModal,
   },
 
   props: {
@@ -165,6 +185,8 @@ export default {
     const startMarker = computed(
       () => store.getters["map/selectedMarkerType"]
     );
+
+    const infoTemplateModalIsVisible = ref(false);
 
     const properties = computed(() => {
       const properties = sortProperties(
@@ -247,6 +269,7 @@ export default {
       advancedProperties,
       startLinks,
       startMarker,
+      infoTemplateModalIsVisible,
       onRouteRequest,
       onClose,
     };
