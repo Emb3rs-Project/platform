@@ -26,13 +26,25 @@
       </div>
 
       <!-- Sink Template -->
-      <div class="my-4">
-        <TextInput
-          v-model="instance.template.name"
-          label="Template Name"
-          description="The template that this Sink belongs to."
-          read-only
-        />
+      <div class="my-4 flex">
+        <div class="w-full">
+          <TextInput
+            v-model="instance.template.name"
+            label="Template Name"
+            description="The template that this Sink belongs to."
+            read-only
+          />
+        </div>
+        <div class="mt-6" v-if="instance.template.values.help">
+            <button
+                title="Info"
+                type="button"
+                class="inline-flex items-center h-10 px-2.5 py-2 border border-transparent text-xs font-medium border-gray-300 rounded shadow-sm text-blue-600 hover:text-white bg-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                @click="infoTemplateModalIsVisible = true"
+            >
+                <InfoIcon class="font-medium text-sm w-5" />
+            </button>
+        </div> 
       </div>
     </PropertyDisclosure>
   </div>
@@ -94,13 +106,19 @@
       </div>
     </div>
   </div>
+  <InfoTemplateModal
+    v-model="infoTemplateModalIsVisible"
+    :info="instance.template.values.help"
+  />
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 
 import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
+import InfoIcon from "@/Components/Icons/InfoIcon.vue";
+import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
 
 import { sortProperties } from "@/Utils/helpers";
 
@@ -108,6 +126,8 @@ export default {
   components: {
     PropertyDisclosure,
     TextInput,
+    InfoIcon,
+    InfoTemplateModal,
   },
 
   props: {
@@ -119,6 +139,8 @@ export default {
 
   setup(props) {
     const templateProperties = props.instance.template.template_properties;
+
+    const infoTemplateModalIsVisible = ref(false);
 
     const properties = computed(() => {
       const properties = sortProperties(
@@ -193,6 +215,7 @@ export default {
     return {
       properties,
       advancedProperties,
+      infoTemplateModalIsVisible,
     };
   },
 };

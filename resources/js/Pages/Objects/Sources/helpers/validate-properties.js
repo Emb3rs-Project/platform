@@ -5,7 +5,7 @@ export const validateProperies = (parent, properties, errors, index = null) => {
     const inputType = property.property.inputType;
     const dataType = property.property.dataType;
     const symbolicName = property.property.symbolic_name;
-    const value = parent.data[property.property.symbolic_name];
+    const value = parent.data[property.property.symbolic_name] ?? "";
     const propertyName = property.property.name.toLowerCase();
 
     let propertyCopy = value;

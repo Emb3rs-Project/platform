@@ -186,6 +186,7 @@ export default {
         };
 
         const onCreateSource = (marker) => {
+            store.dispatch("source/reset");
             store.dispatch("map/selectMarker", {
                 marker: marker.latlng,
                 type: 'Sources',

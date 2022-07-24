@@ -26,12 +26,24 @@
       "
     >
       <PropertyDisclosure defaultOpen title="Information">
-        <div class="my-4">
-          <SelectMenu
-            v-model="selectedTemplate"
-            :options="templates"
-            label="Template"
-          />
+        <div class="my-4 flex">
+          <div class="w-full">
+            <SelectMenu :class="{'w-5/6': selectedTemplate.info}"
+              v-model="selectedTemplate"
+              :options="templates"
+              label="Template"
+            />
+          </div>
+          <div class="mt-6" v-if="selectedTemplate.info">
+              <button
+                  title="Info"
+                  type="button"
+                  class="inline-flex items-center h-10 px-2.5 py-2 border border-transparent text-xs font-medium border-gray-300 rounded shadow-sm text-blue-600 hover:text-white bg-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  @click="infoTemplateModalIsVisible = true"
+              >
+                  <InfoIcon class="font-medium text-sm w-5" />
+              </button>
+          </div>          
         </div>
         <div class="space-y-1 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:py-5">
           <div class="col-span-2">
@@ -223,6 +235,10 @@
       </PrimaryButton>
     </template>
   </SlideOver>
+  <InfoTemplateModal
+    v-model="infoTemplateModalIsVisible"
+    :info="selectedTemplate.info"
+  />
 </template>
 
 <script>
@@ -242,6 +258,8 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "../../../Jetstream/InputError";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import InfoIcon from "@/Components/Icons/InfoIcon.vue";
+import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
 
 import { sortProperties, validateProperies } from "@/Utils/helpers";
 
@@ -258,6 +276,8 @@ export default {
     JetInputError,
     PrimaryButton,
     SecondaryOutlinedButton,
+    InfoIcon,
+    InfoTemplateModal,
   },
 
   props: {
@@ -280,6 +300,7 @@ export default {
 
     // TODO: make this enabled by defualt if at least one adv prop is already in place
     const withAdvancedProperties = ref(false);
+    const infoTemplateModalIsVisible = ref(false);
 
     const form = useForm({
       sink: {
@@ -295,6 +316,7 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
+        info: t.values.help,
         properties: t.template_properties,
       }))
     );
@@ -457,6 +479,7 @@ export default {
       withAdvancedProperties,
       properties,
       advancedProperties,
+      infoTemplateModalIsVisible,
       updateMarker,
       submit,
       onCancel,

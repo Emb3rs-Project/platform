@@ -191,6 +191,7 @@ export default {
       if (!Object.keys(newEquipment.props).length) return;
 
       newEquipment.data = transformPropsToData(newEquipment.props);
+      newEquipment.identify = Date.now();
 
       selectedEquipment.value.push(newEquipment);
     };

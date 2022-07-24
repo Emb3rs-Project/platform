@@ -52,7 +52,7 @@
                   as="h3"
                   class="text-lg text-center leading-6 font-medium text-gray-900"
                 >
-                  Add an Process
+                  Add a Process Element
                 </DialogTitle>
                 <div class="mt-2">
                   <SelectMenu

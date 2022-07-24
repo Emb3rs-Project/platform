@@ -265,6 +265,7 @@ export default {
           if (deepCopyOfEquipment.length)
             deepCopyOfFormData.equipment = deepCopyOfEquipment.map((e) => ({
               id: e.key,
+              identify: e.identify,
               category_id: e.parent,
               data: e.data,
             }));
@@ -298,6 +299,7 @@ export default {
             deepCopyOfFormData.processes = deepCopyOfProcesses.map((p) => ({
               id: p.key,
               category_id: p.parent,
+              processElements: p.processElements,
               data: p.data,
             }));
 

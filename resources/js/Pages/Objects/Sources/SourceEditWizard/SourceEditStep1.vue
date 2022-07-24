@@ -8,12 +8,24 @@
     "
   >
     <PropertyDisclosure defaultOpen title="Information">
-      <div class="my-4">
-        <SelectMenu
-          v-model="selectedTemplate"
-          :options="templates"
-          label="Template"
-        />
+      <div class="my-4 flex">
+        <div class="w-full">
+          <SelectMenu :class="{'w-5/6': selectedTemplate.info}"
+            v-model="selectedTemplate"
+            :options="templates"
+            label="Template"
+          />
+        </div>
+        <div class="mt-6" v-if="selectedTemplate.info">
+          <button
+            title="Info"
+            type="button"
+            class="inline-flex items-center h-10 px-2.5 py-2 border border-transparent text-xs font-medium border-gray-300 rounded shadow-sm text-blue-600 hover:text-white bg-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            @click="infoTemplateModalIsVisible = true"
+          >
+            <InfoIcon class="font-medium text-sm w-5" />
+          </button>
+        </div>
       </div>
       <div class="space-y-1 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:py-5">
           <div class="col-span-2">
@@ -201,6 +213,10 @@
       </div>
     </PropertyDisclosure>
   </div>
+  <InfoTemplateModal
+      v-model="infoTemplateModalIsVisible"
+      :info="selectedTemplate.info"
+  />
 </template>
 
 <script>
@@ -213,6 +229,8 @@ import PropertyDisclosure from "@/Components/Disclosures/PropertyDisclosure.vue"
 import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
+import InfoIcon from "@/Components/Icons/InfoIcon.vue";
+import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
 
 import { sortProperties, validateProperies } from "@/Utils/helpers";
 
@@ -223,6 +241,8 @@ export default {
     SelectMenu,
     TextInput,
     JetInputError,
+    InfoIcon,
+    InfoTemplateModal,
   },
 
   props: {
@@ -250,6 +270,7 @@ export default {
     const store = useStore();
 
     const custom = ref(false);
+    const infoTemplateModalIsVisible = ref(false);
 
     const storeSource = computed(() => store.getters["source/source"]);
     const storeTemplate = computed(() => store.getters["source/template"]);
@@ -263,6 +284,7 @@ export default {
       props.templates.map((t) => ({
         key: t.id,
         value: t.name,
+        info: t.values.help,
         properties: sortProperties(t.template_properties),
       }))
     );
@@ -451,6 +473,7 @@ export default {
       properties,
       advancedProperties,
       errors,
+      infoTemplateModalIsVisible,
       updateMarker
     };
   },
