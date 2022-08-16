@@ -56,6 +56,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        simulation: {
+            type: Boolean,
+            default: false,
+        },
     },
 
     setup(props) {
@@ -101,6 +105,10 @@ export default {
             from: null,
             start: null,
         };
+
+        const selectedLink = computed(
+            () => store.getters["map/currentLinks"]
+        );
 
         const user = computed(() => usePage().props.value.user);
 
@@ -210,21 +218,23 @@ export default {
         const selectedMarker = ref();
 
         watch(selectedMarkerLatlng, (newValue) => {
-            if (selectedMarker.value)
-                map.value.removeLayer(selectedMarker.value);
+            if (!props.simulation) {
+                if (selectedMarker.value)
+                    map.value.removeLayer(selectedMarker.value);
 
-            if (newValue) {
-                const draggable = true;
-                selectedMarker.value = mapUtils.addPoint(map.value, newValue, draggable, 'instance', {
-                    icon: "plus",
-                    textClass: "text-" + store.getters["map/selectedMarkerColor"],
-                    borderClass:
-                        "border-" + store.getters["map/selectedMarkerColor"],
-                });
-                
-                selectedMarker.value.on('dragend', (event) => {
-                    store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
-                });
+                if (newValue) {
+                    const draggable = true;
+                    selectedMarker.value = mapUtils.addPoint(map.value, newValue, draggable, 'instance', {
+                        icon: "plus",
+                        textClass: "text-" + store.getters["map/selectedMarkerColor"],
+                        borderClass:
+                            "border-" + store.getters["map/selectedMarkerColor"],
+                    });
+                    
+                    selectedMarker.value.on('dragend', (event) => {
+                        store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
+                    });
+                }
             }
         });
 
@@ -746,18 +756,32 @@ export default {
 
             switch (_type) {
                 case "sink":
-                    store.dispatch("objects/showSlide", {
-                        route: "objects.sinks.show",
-                        props: instance.id,
-                    });
-                    onCenterLocation(instance.location, false);
+                    if (props.simulation) {
+                        store.dispatch("map/selectMarker", {
+                            marker: instance.location.data.center,
+                            type: 'sinks',
+                        });
+                    } else {
+                        store.dispatch("objects/showSlide", {
+                            route: "objects.sinks.show",
+                            props: instance.id,
+                        });
+                        onCenterLocation(instance.location, false);
+                    }
                     break;
                 case "source":
-                    store.dispatch("objects/showSlide", {
-                        route: "objects.sources.show",
-                        props: instance.id,
-                    });
-                    onCenterLocation(instance.location, false);
+                    if (props.simulation) {
+                        store.dispatch("map/selectMarker", {
+                            marker: instance.location.data.center,
+                            type: 'sources',
+                        });
+                    } else {
+                        store.dispatch("objects/showSlide", {
+                            route: "objects.sources.show",
+                            props: instance.id,
+                        });
+                        onCenterLocation(instance.location, false);
+                    }
                     break;
                 default:
                     break;
@@ -765,10 +789,25 @@ export default {
         };
 
         const onLinkClick = (link) => {
-            store.dispatch("objects/showSlide", {
-                route: "objects.links.show",
-                props: link.id,
-            });
+            if (!props.preview) {
+                store.dispatch("objects/showSlide", {
+                    route: "objects.links.show",
+                    props: link.id,
+                });
+            } else {
+                if (selectedLink.value[link.id]) {
+                    store.dispatch("map/unsetLink", link.id);
+                } else {
+                    store.dispatch("map/setLink", {
+                        id: link.id,
+                        link,
+                    });
+                }
+                store.dispatch("map/selectMarker", {
+                    marker: link,
+                    type: 'links',
+                });
+            }
         };
 
         const loadMarkers = (markers = null) => {
@@ -796,7 +835,8 @@ export default {
                 map.value,
                 markers ?? instances.value,
                 mapObjects.value,
-                props.preview ? () => {} : onMarkerClick
+                props.preview && !props.simulation ? () => {} : onMarkerClick,
+                props.simulation
             );
 
             if (lineLink.length) {
@@ -834,7 +874,9 @@ export default {
                 map.value,
                 markers ?? links.value,
                 mapObjects.value,
-                props.preview ? () => {} : onLinkClick
+                props.preview && !props.simulation ? () => {} : onLinkClick,
+                props.simulation,
+                selectedLink.value
             );
         };
 
@@ -905,7 +947,7 @@ export default {
             map.value.on("moveend", ({ target: map }) => {
                 lazilyGetMapCenter(map);
 
-                if (!selectedMarker.value) {
+                if (!selectedMarker.value && !props.simulation) {
                     const visibleInstances = mapUtils.getInstancesInView(
                         map,
                         instances.value

@@ -64,11 +64,36 @@ export default {
   },
   setPoint(location, id) {
     this.centerAtLocation(map, {type: 'point', data: {center: location}});
-    map.eachLayer(function (layer) { 
+    map.eachLayer(function (layer) {
       if (layer.options.alt == id) {
           layer.setLatLng([location.lat, location.lng])
       } 
     });
+  },
+  setMarker(instances) {
+    map.eachLayer(function (layer) {
+      if (layer._latlng) {
+        if (instances.sinks.find(e => layer._latlng.equals(e.location.data.center))) {
+          layer.setIcon(L.BeautifyIcon.icon(this.createIconOptions('sink')))
+        } else if (instances.sources.find(e => layer._latlng.equals(e.location.data.center))) {
+          layer.setIcon(L.BeautifyIcon.icon(this.createIconOptions('source')))
+        } else {
+          layer.setIcon(L.BeautifyIcon.icon(this.createIconOptions(layer.options.objectType, false, true)))
+        }
+      } else if (layer.options.hasOwnProperty('attribution') && !isNaN(layer.options.attribution)) {
+        if (instances.links.find(e => layer.options.attribution == e.id)) {
+          layer.setStyle({
+              color: '#3B82F6',
+              weight: 3
+          });
+        } else {
+          layer.setStyle({
+              color: '#6b7280',
+              weight: 3
+          });
+        }
+      }
+    }.bind(this));
   },
   addCircle(map, center) {
     return L.circle(center, {
@@ -95,7 +120,7 @@ export default {
 
     return polyline;
   },
-  addInstances(map, instances = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
+  addInstances(map, instances = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }, simulation = false) {
     const sources = [];
     const sinks = [];
 
@@ -109,11 +134,11 @@ export default {
 
       switch (type.toLowerCase()) {
         case 'source':
-          const source = this.addPoint(map, center, false, id, this.createIconOptions('source')).on("mousedown", () => onClick(_instance));
+          const source = this.addPoint(map, center, false, id, this.createIconOptions('source', false, simulation)).on("mousedown", () => onClick(_instance));
           sources.push(source);
           break;
         case 'sink':
-          const sink = this.addPoint(map, center, false, id, this.createIconOptions('sink')).on("mousedown", () => onClick(_instance));
+          const sink = this.addPoint(map, center, false, id, this.createIconOptions('sink', false, simulation)).on("mousedown", () => onClick(_instance));
           sinks.push(sink);
           break;
       }
@@ -122,16 +147,15 @@ export default {
     mapObjects.sources = L.layerGroup(sources);
     mapObjects.sinks = L.layerGroup(sinks);
   },
-  addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }) {
+  addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }, simulation = false, selectedLink = null) {
     const linksLayer = [];
-
+    
     for (const _link of links.filter((l) => l.selected)) {
       const latLngs = [_link.geo_segments.map((gs) => ([
         gs.data.from, gs.data.to
       ]))];
-
       // #3B82F6 is bg-blue-500
-      const link = L.polyline(latLngs, { color: '#3B82F6' }).addTo(map).on("mousedown", () => onClick(_link)).bringToBack();
+      const link = L.polyline(latLngs, { color: simulation ? '#6b7280' : '#3B82F6', attribution: _link.id }).addTo(map).on("mousedown", () => onClick(_link)).bringToBack();
 
       link.on('mouseover', (e) => {
         const layer = e.target;
@@ -144,7 +168,7 @@ export default {
       link.on('mouseout', (e) => {
         const layer = e.target;
         layer.setStyle({
-            color: '#3B82F6',
+            color: simulation  && !selectedLink[e.target.options.attribution] ? '#6b7280' : '#3B82F6',
             weight: 3
         });
       });
@@ -154,7 +178,7 @@ export default {
 
     mapObjects.links = L.layerGroup(linksLayer);
   },
-  createIconOptions(type, inFocus = false) {
+  createIconOptions(type, inFocus = false, simulation = false) {
     const iconOptions = {
       type: '',
       icon: '',
@@ -169,14 +193,14 @@ export default {
     switch (type) {
       case 'sink':
         iconOptions.icon = 'leaf'
-        iconOptions.textClass = 'text-green-700'
-        iconOptions.borderClass = 'border-green-700'
+        iconOptions.textClass = simulation ? 'text-gray-500' : 'text-green-700'
+        iconOptions.borderClass = simulation ? 'text-gray-500' : 'border-green-700'
         iconOptions.type = 'sink'
         break;
       case 'source':
         iconOptions.icon = 'fire'
-        iconOptions.textClass = 'text-red-700'
-        iconOptions.borderClass = 'border-red-700'
+        iconOptions.textClass = simulation ? 'text-gray-500' : 'text-red-700'
+        iconOptions.borderClass = simulation ? 'text-gray-500' : 'border-red-700'
         iconOptions.type = 'source'
         break;
     }
