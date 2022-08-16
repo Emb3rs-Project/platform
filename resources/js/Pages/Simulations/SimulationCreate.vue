@@ -167,15 +167,100 @@ const form = useForm({
             factor_street_terrain: 0.1,
             factor_street_overland: 0.4,
             platform_sets: {
-                REGION: [],
-                EMISSION: [],
-                TIMESLICE: [],
-                YEAR: [],
-                MODE_OF_OPERATION: [],
-                STORAGE: [],
+                REGION: [
+                    "Greece"
+                ],
+                EMISSION: [
+                    "co2"
+                ],
+                TIMESLICE: [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                    16,
+                    17,
+                    18,
+                    19,
+                    20,
+                    21,
+                    22,
+                    23,
+                    24,
+                    25,
+                    26,
+                    27,
+                    28,
+                    29,
+                    30,
+                    31,
+                    32,
+                    33,
+                    34,
+                    35,
+                    36,
+                    37,
+                    38,
+                    39,
+                    40,
+                    41,
+                    42,
+                    43,
+                    44,
+                    45,
+                    46,
+                    47,
+                    48
+                ],
+                YEAR: [
+                    2023
+                ],
+                MODE_OF_OPERATION: [
+                    1,
+                    2
+
+                ],
+                STORAGE: [
+                    "tankstorage"
+                ],
             },
-            platform_annual_emission_limit: [],
-            platform_storages: [],
+            platform_annual_emission_limit: [
+                {
+                    "emission": "co2",
+                    "annual_emission_limit": 15000000000000
+                }
+            ],
+            platform_storages: [
+                {
+                    "storage": "tankstorage",
+                    "capital_cost_storage": 750,
+                    "dicount_rate_sto": 0.04,
+                    "operational_life_sto": 100,
+                    "storage_max_charge": 1500,
+                    "storage_max_discharge": 1500,
+                    "l2d": 0,
+                    "tag_heating": 1,
+                    "tag_cooling": 0,
+                    "storage_return_temp": 50,
+                    "storage_supply_temp": 80,
+                    "storage_ambient_temp": 15,
+                    "residual_storage_capacity": 0,
+                    "max_storage_capacity": 1500,
+                    "storage_level_start": 0,
+                    "u_value": 0.21
+                }
+            ],
             md: "pool",
             offer_type: null,
             prod_diff: null,
@@ -204,6 +289,31 @@ const form = useForm({
             gmax: null,
             lmax: null,
             cost: null,
+            user: {
+                md: "centralized",
+                horizon_basis: "years",
+                recurrence: 1,
+                data_profile: "hourly",
+                yearly_demand_rate: 0.05,
+                start_datetime: "2018-01-01",
+                prod_diff_option: "noPref",
+                util: [
+                    0.7,
+                    0.7,
+                    0.66,
+                    0.66,
+                    0.65,
+                    0.65,
+                    0.85,
+                    0.85,
+                    0.68,
+                    0.68,
+                    0.69,
+                    0.69,
+                    0.84,
+                    0.88
+                ]
+            }
         },
         sinks: [],
         sources: [],
