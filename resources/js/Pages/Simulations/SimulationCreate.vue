@@ -1,10 +1,12 @@
 <template>
     <AppLayout>
-        <div class="bg-white h-screen overflow-y-scroll">
-            <div class="w-1/2 py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
-                <h2 class="text-lg font-bold">Simulation Details</h2>
+        <AmazingMap preview simulation/>
+        <div v-if="form.simulation_metadata" class="absolute left-2 bg-gray-50 opacity-80 hover:opacity-100
+                z-10 overflow-y-hidden inset-y-0 mt-20 h-40 rounded-md">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <!-- <h2 class="text-lg font-bold">Simulation Details</h2> -->
 
-                <div v-if="form.simulation_metadata" class="py-5 text-left">
+                <div class="py-5 text-left">
                     <h2 class="text-md font-semibold">Simulation Metadata</h2>
                     <div
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 bg-gray-50 text-xs">
@@ -16,7 +18,6 @@
                 </div>
             </div>
         </div>
-
         <SlideOver title="Create a Simulation" headerBackground="bg-purple-600" subtitleTextColor="text-gray-100"
             alwaysOpen>
             <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -102,6 +103,33 @@
                 <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2" />
             </div>
 
+            <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div class="sm:col-span-3">
+                    <div>
+                        <div class="flex justify-end">
+                            <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllLinks">Select All</button>
+                        </div>
+                        <div class="flex justify-between">
+                            <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
+                                Links
+                            </label>
+                            <span class="text-sm text-gray-500" id="input-required">
+                                Required
+                            </span>
+                        </div>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <VSelect :options="links" label="name" value="id" :multiple="true" 
+                                @option:deselected="onDeselected" @option:selected="onSelected"
+                                v-model="form.extra.links" />
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            Links to use in this Simulation
+                        </p>
+                    </div>
+                </div>
+                <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2" />
+            </div>
+
             <template #actions>
                 <SecondaryOutlinedButton type="button" :disabled="form.processing" @click="onCancel">
                     Cancel
@@ -114,21 +142,17 @@
     </AppLayout>
 </template>
 
-<script setup>
-import AppLayout from "@/Layouts/AppLayout";
+<script>
 import { useForm } from "@inertiajs/inertia-vue3";
-import InputRow from "@/Components/InputRow";
-import RadioRow from "@/Components/RadioRow";
-import CheckboxRow from "@/Components/CheckboxRow";
-import SelectRow from "@/Components/SelectRow";
-import JetButton from "@/Jetstream/Button";
+import { useStore } from "vuex";
+
+import AppLayout from "@/Layouts/AppLayout";
 import JetInputError from "@/Jetstream/InputError";
-import { computed, ref } from "vue";
-import SiteHead from "@/Components/SiteHead.vue";
+import { computed, ref, watch } from "vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
-import SelectMenu from "@/Components/Forms/SelectMenu.vue";
+import mapUtils from "@/Utils/map.js";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 
@@ -136,230 +160,267 @@ import { polygon, marker } from "leaflet";
 import VSelect from "vue-select";
 import { COUNTRIES } from "./data/countries";
 
-const props = defineProps({
-    instances: Array,
-    project: Object,
-    simulation_metadata: Array,
-});
+export default {
+  components: {
+    AppLayout,
+    AmazingMap,
+    JetInputError,
+    SlideOver,
+    TextInput,
+    PrimaryButton,
+    SecondaryOutlinedButton,
+    VSelect
+  },
 
-const form = useForm({
-    name: "Simulation Name",
-    simulation_metadata: props.simulation_metadata[1],
-    extra: {
-        input_data: {
-            network_resolution: "low",
-            invest_pumps: 0,
-            fc_dig_st: 350,
-            vc_dig_st: 700,
-            vc_dig_st_ex: 1.1,
-            fc_dig_tr: 200,
-            vc_dig_tr: 500,
-            vc_dig_tr_ex: 1.3,
-            ambient_temp: 25,
-            ground_temp: 8,
-            flow_temp: 100,
-            return_temp: 70,
-            heat_capacity: 4.18,
-            water_den: 1000,
-            fc_pip: 50,
-            vc_pip: 700,
-            vc_pip_ex: 1.3,
-            factor_street_terrain: 0.1,
-            factor_street_overland: 0.4,
-            platform_sets: {
-                REGION: [
-                    "Greece"
-                ],
-                EMISSION: [
-                    "co2"
-                ],
-                TIMESLICE: [
-                    1,
-                    2,
-                    3,
-                    4,
-                    5,
-                    6,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                    16,
-                    17,
-                    18,
-                    19,
-                    20,
-                    21,
-                    22,
-                    23,
-                    24,
-                    25,
-                    26,
-                    27,
-                    28,
-                    29,
-                    30,
-                    31,
-                    32,
-                    33,
-                    34,
-                    35,
-                    36,
-                    37,
-                    38,
-                    39,
-                    40,
-                    41,
-                    42,
-                    43,
-                    44,
-                    45,
-                    46,
-                    47,
-                    48
-                ],
-                YEAR: [
-                    2023
-                ],
-                MODE_OF_OPERATION: [
-                    1,
-                    2
+  props: {
+    instances: {
+      type: Array,
+      required: true,
+    },
+    links: {
+      type: Array,
+      required: true,
+    },
+    project: {
+      type: Object,
+      required: true,
+    },
+    simulation_metadata: {
+      type: Array,
+      required: true,
+    },
+  },
 
-                ],
-                STORAGE: [
-                    "tankstorage"
-                ],
+  setup(props) {
+    const store = useStore();
+
+    const selectedMarker = computed(
+        () => store.getters["map/selectedMarker"]
+    );
+    const selectedLink = computed(
+        () => store.getters["map/currentLinks"]
+    );
+
+    const form = useForm({
+        name: "Simulation Name",
+        simulation_metadata: props.simulation_metadata[1],
+        extra: {
+            input_data: {
+                network_resolution: "low",
+                invest_pumps: 0,
+                fc_dig_st: 350,
+                vc_dig_st: 700,
+                vc_dig_st_ex: 1.1,
+                fc_dig_tr: 200,
+                vc_dig_tr: 500,
+                vc_dig_tr_ex: 1.3,
+                ambient_temp: 25,
+                ground_temp: 8,
+                flow_temp: 100,
+                return_temp: 70,
+                heat_capacity: 4.18,
+                water_den: 1000,
+                fc_pip: 50,
+                vc_pip: 700,
+                vc_pip_ex: 1.3,
+                factor_street_terrain: 0.1,
+                factor_street_overland: 0.4,
+                platform_sets: {
+                    REGION: [],
+                    EMISSION: [],
+                    TIMESLICE: [],
+                    YEAR: [],
+                    MODE_OF_OPERATION: [],
+                    STORAGE: [],
+                },
+                platform_annual_emission_limit: [],
+                platform_storages: [],
+                md: "pool",
+                offer_type: null,
+                prod_diff: null,
+                network: null,
+                el_dependent: null,
+                nr_of_hours: 48,
+                objective: null,
+                community_settings: null,
+                block_offer: null,
+                is_in_community: {},
+                chp_pars: null,
+                el_price: null,
+                start_datetime: null,
+                util: null,
+                rls: null,
+                discount_rate: null,
+                project_duration: null,
+                co2_intensity: null,
+                horizon_basis: null,
+                data_profile: null,
+                recurrence: null,
+                yearly_demand_rate: null,
+                prod_diff_option: null,
+                agent_ids: null,
+                co2_emissions: null,
+                gmax: null,
+                lmax: null,
+                cost: null,
             },
-            platform_annual_emission_limit: [
-                {
-                    "emission": "co2",
-                    "annual_emission_limit": 15000000000000
-                }
-            ],
-            platform_storages: [
-                {
-                    "storage": "tankstorage",
-                    "capital_cost_storage": 750,
-                    "dicount_rate_sto": 0.04,
-                    "operational_life_sto": 100,
-                    "storage_max_charge": 1500,
-                    "storage_max_discharge": 1500,
-                    "l2d": 0,
-                    "tag_heating": 1,
-                    "tag_cooling": 0,
-                    "storage_return_temp": 50,
-                    "storage_supply_temp": 80,
-                    "storage_ambient_temp": 15,
-                    "residual_storage_capacity": 0,
-                    "max_storage_capacity": 1500,
-                    "storage_level_start": 0,
-                    "u_value": 0.21
-                }
-            ],
-            md: "pool",
-            offer_type: null,
-            prod_diff: null,
-            network: null,
-            el_dependent: null,
-            nr_of_hours: 48,
-            objective: null,
-            community_settings: null,
-            block_offer: null,
-            is_in_community: {},
-            chp_pars: null,
-            el_price: null,
-            start_datetime: null,
-            util: null,
-            rls: null,
-            discount_rate: null,
-            project_duration: null,
-            co2_intensity: null,
-            horizon_basis: null,
-            data_profile: null,
-            recurrence: null,
-            yearly_demand_rate: null,
-            prod_diff_option: null,
-            agent_ids: null,
-            co2_emissions: null,
-            gmax: null,
-            lmax: null,
-            cost: null,
-            user: {
-                md: "centralized",
-                horizon_basis: "years",
-                recurrence: 1,
-                data_profile: "hourly",
-                yearly_demand_rate: 0.05,
-                start_datetime: "2018-01-01",
-                prod_diff_option: "noPref",
-                util: [
-                    0.7,
-                    0.7,
-                    0.66,
-                    0.66,
-                    0.65,
-                    0.65,
-                    0.85,
-                    0.85,
-                    0.68,
-                    0.68,
-                    0.69,
-                    0.69,
-                    0.84,
-                    0.88
-                ]
+            links: [],
+            sinks: [],
+            sources: [],
+            steps: 0,
+        },
+    });
+
+    const onSubmit = () => {
+        form.post(route("projects.simulations.store", { id: props.project.id }));
+    };
+    const onCancel = () => { 
+        form.extra.links.forEach((link) => onDeselected(link));
+        form.extra.links = [];
+        form.extra.sinks = [];
+        form.extra.sources = [];
+    };
+
+    const selectAllSinks = () => { form.extra.sinks = sinks.value }
+    const selectAllSources = () => { form.extra.sources = sources.value }
+    const selectAllLinks = () => { form.extra.links = links.value }
+
+    const project_poly = polygon(props.project.data.polygon);
+    const project_instances = props.instances.filter((r) =>
+        project_poly
+            .getBounds()
+            .contains(marker(r.location.data.center).getLatLng())
+    );
+
+    const sinks = computed(() => {
+        if (!project_instances) return [];
+        return project_instances.filter((i) => i.template.category.type == "sink");
+    });
+
+    const sources = computed(() => {
+        if (!project_instances) return [];
+        return project_instances.filter((i) => i.template.category.type == "source");
+    });
+
+    const links = computed(() => {
+        return props.links;
+    });
+
+    const stepInfo = computed(() => {
+        return [];
+        // if (!form.simulation_metadata) return [];
+        // const steps = Object.keys(form.simulation_metadata.data).filter(
+        //     (a) => !["start", "type"].includes(a)
+        // );
+
+        // return steps.map((s) => ({
+        //     step: s,
+        //     module: form.simulation_metadata.data[s].module.name,
+        //     function: form.simulation_metadata.data[s].function,
+        // }));
+    });
+
+    const onSelected = (value) => {
+        value.forEach(element => {
+            if (!selectedLink.value[element.id]) {
+                store.dispatch("map/setLink", {
+                    id: element.id,
+                    link: element,
+                });
+            }
+        });
+    };
+
+    const onDeselected = (value) => {
+        store.dispatch("map/unsetLink", value.id);
+    };
+
+    watch(
+        form.extra,
+        (instances, oldInstances) => {
+            if (oldInstances) {
+                mapUtils.setMarker(instances);
+
+                store.dispatch("map/selectMarker", {
+                    marker: null,
+                    type: null,
+                });
             }
         },
-        sinks: [],
-        sources: [],
-        steps: 0,
-    },
-});
-
-const onSubmit = () => {
-    form.post(route("projects.simulations.store", { id: props.project.id }));
-};
-const onCancel = () => { };
-
-const selectAllSinks = () => { form.extra.sinks = sinks}
-const selectAllSources = () =>{ form.extra.sources = sources}
-
-const project_poly = polygon(props.project.data.polygon);
-const project_instances = props.instances.filter((r) =>
-    project_poly
-        .getBounds()
-        .contains(marker(r.location.data.center).getLatLng())
-);
-
-const sinks = computed(() => {
-    if (!project_instances) return [];
-    return project_instances.filter((i) => i.template.category.type == "sink");
-});
-
-const sources = computed(() => {
-    if (!project_instances) return [];
-    return project_instances.filter(
-        (i) => i.template.category.type == "source"
+        { immediate: true, deep: true }
     );
-});
 
-const stepInfo = computed(() => {
-    return [];
-    // if (!form.simulation_metadata) return [];
-    // const steps = Object.keys(form.simulation_metadata.data).filter(
-    //     (a) => !["start", "type"].includes(a)
-    // );
+    watch(
+        selectedMarker, 
+        () => {
+            const type = store.getters["map/selectedMarkerType"];
+            let index = -1;
+            switch (type) {
+                case 'sources':
+                    index = form.extra.sources.findIndex((e) => JSON.stringify(e.location.data.center) == JSON.stringify(selectedMarker.value));
+                    if (index != -1) {
+                        form.extra.sources.splice(index, 1)
+                    } else {
+                        let elementSource = sources.value.find((e) => JSON.stringify(e.location.data.center) == JSON.stringify(selectedMarker.value));
+                        if (elementSource) {
+                            form.extra.sources.push(elementSource);
+                        } else {
+                            store.commit("objects/setNotify", {
+                                title: 'Source',
+                                text: 'Marker outside the simulation area',
+                                type: 'warning'
+                            });
+                        }
+                    }
+                    break;
+                case 'sinks':
+                    index = form.extra.sinks.findIndex((e) => JSON.stringify(e.location.data.center) == JSON.stringify(selectedMarker.value));
+                    if (index != -1) {
+                        form.extra.sinks.splice(index, 1);
+                    } else {
+                        let elementSink = sinks.value.find((e) => JSON.stringify(e.location.data.center) == JSON.stringify(selectedMarker.value));
+                        if (elementSink) {
+                            form.extra.sinks.push(elementSink);
+                        } else {
+                            store.commit("objects/setNotify", {
+                                title: 'Sink',
+                                text: 'Marker outside the simulation area',
+                                type: 'warning'
+                            });
+                        }
+                    }
+                    break;
+                case 'links':
+                    index = form.extra.links.findIndex((e) => e.id == selectedMarker.value.id);
+                    if (index != -1) {
+                        store.dispatch("map/unsetLink", selectedMarker.value.id);
+                        form.extra.links.splice(index, 1)
+                    } else {
+                        store.dispatch("map/setLink", {
+                            id: selectedMarker.value.id,
+                            link: selectedMarker.value,
+                        });
+                        form.extra.links.push(links.value.find((e) => e.id == selectedMarker.value.id));
+                    }
+                    break;
+            }
+        },
+        { immediate: true, deep: true }
+    );
 
-    // return steps.map((s) => ({
-    //     step: s,
-    //     module: form.simulation_metadata.data[s].module.name,
-    //     function: form.simulation_metadata.data[s].function,
-    // }));
-});
-
+    return {
+        form,
+        links,
+        sinks,
+        sources,
+        onDeselected,
+        onSelected,
+        onSubmit,
+        onCancel,
+        selectAllLinks,
+        selectAllSinks,
+        selectAllSources
+    };
+  },
+}
 </script>
