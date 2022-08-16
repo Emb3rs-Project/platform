@@ -17,9 +17,10 @@ class StartSimulation implements StartsSimulations
     public function run_simulation(SimulationSession $session): void
     {
         $session->load(['simulation', 'simulation.simulationMetadata']);
-
+        $host = config('grpc.grpc_manager_host');
+        $port = config('grpc.grpc_manager_port');
         $client = new ManagerClient(
-            'vali.pantherify.dev:50041',
+            "$host:$port",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
