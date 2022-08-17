@@ -9,7 +9,6 @@ use App\Models\IntegrationReport;
 use App\Models\SimulationSession;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
-use Str;
 
 class StartSimulation implements StartsSimulations
 {
@@ -17,9 +16,10 @@ class StartSimulation implements StartsSimulations
     public function run_simulation(SimulationSession $session): void
     {
         $session->load(['simulation', 'simulation.simulationMetadata']);
-
+        $host = config('grpc.grpc_manager_host');
+        $port = config('grpc.grpc_manager_port');
         $client = new ManagerClient(
-            'vali.pantherify.dev:50041',
+            "$host:$port",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
@@ -35,14 +35,16 @@ class StartSimulation implements StartsSimulations
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
         list($result, $status) = $client->StartSimulation($request)->wait();
-        dump($status);
+
+        logger()->error('[simulation_error]:', [$status]);
+
         if ($status->code == 2) {
 
-            // IntegrationReport::create([
-            //     "module" => "Platform",
-            //     "function" => "StartSimulation",
-            //     "errors" => ["message" => $status->details]
-            // ]);
+             IntegrationReport::create([
+                 "module" => "Platform",
+                 "function" => "StartSimulation",
+                 "errors" => ["message" => $status->details]
+             ]);
         }
     }
 }

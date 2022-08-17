@@ -14,11 +14,11 @@ class CharacterizeInstance implements CharacterizesInstances
 {
     public function characterize(Instance $instance): void
     {
-        $cf_host = \Config::get("grpc.GRPC_CF_HOST");
-        $cf_port = \Config::get("grpc.GRPC_CF_PORT");
+        $cf_host = \Config::get("grpc.grpc_cf_host");
+        $cf_port = \Config::get("grpc.grpc_cf_port");
 
         $client = new CFModuleClient(
-            "vali.pantherify.dev:50051",
+            "$cf_host:$cf_port",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]

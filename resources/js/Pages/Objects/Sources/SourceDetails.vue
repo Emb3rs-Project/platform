@@ -28,6 +28,7 @@
       v-if="currentStep === 3"
       :instance="instance"
       :processes="processes"
+      :equipment="equipment"
     />
 
     <template #actions>
