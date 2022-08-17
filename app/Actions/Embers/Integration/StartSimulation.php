@@ -9,7 +9,6 @@ use App\Models\IntegrationReport;
 use App\Models\SimulationSession;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
-use Str;
 
 class StartSimulation implements StartsSimulations
 {
