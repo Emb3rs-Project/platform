@@ -118,7 +118,7 @@
                             </span>
                         </div>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                            <VSelect :options="links" label="name" value="id" :multiple="true" 
+                            <VSelect :options="links" label="name" value="id" :multiple="true"
                                 @option:deselected="onDeselected" @option:selected="onSelected"
                                 v-model="form.extra.links" />
                         </div>
@@ -206,63 +206,172 @@ export default {
         simulation_metadata: props.simulation_metadata[1],
         extra: {
             input_data: {
-                network_resolution: "low",
-                invest_pumps: 0,
-                fc_dig_st: 350,
-                vc_dig_st: 700,
-                vc_dig_st_ex: 1.1,
-                fc_dig_tr: 200,
-                vc_dig_tr: 500,
-                vc_dig_tr_ex: 1.3,
-                ambient_temp: 25,
-                ground_temp: 8,
-                flow_temp: 100,
-                return_temp: 70,
-                heat_capacity: 4.18,
-                water_den: 1000,
-                fc_pip: 50,
-                vc_pip: 700,
-                vc_pip_ex: 1.3,
-                factor_street_terrain: 0.1,
-                factor_street_overland: 0.4,
-                platform_sets: {
-                    REGION: [],
-                    EMISSION: [],
-                    TIMESLICE: [],
-                    YEAR: [],
-                    MODE_OF_OPERATION: [],
-                    STORAGE: [],
-                },
-                platform_annual_emission_limit: [],
-                platform_storages: [],
+                actorshare: [0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0, 0, 0, 0],
                 md: "pool",
-                offer_type: null,
-                prod_diff: null,
-                network: null,
-                el_dependent: null,
-                nr_of_hours: 48,
-                objective: null,
-                community_settings: null,
-                block_offer: null,
-                is_in_community: {},
-                chp_pars: null,
-                el_price: null,
-                start_datetime: null,
-                util: null,
-                rls: null,
-                discount_rate: null,
-                project_duration: null,
-                co2_intensity: null,
-                horizon_basis: null,
-                data_profile: null,
-                recurrence: null,
-                yearly_demand_rate: null,
-                prod_diff_option: null,
-                agent_ids: null,
-                co2_emissions: null,
+                rls: [
+                    ["source 1", "source 1 ext tech"],
+                    ["source 2", "source 2 ext tech"],
+                    ["source 3", "source 3 ext tech"],
+                    ["source 4", "source 4 ext tech"],
+                    ["sink 5", "sink 5 ext tech"],
+                    ["sink 6", "sink 6 ext tech"],
+                    ["sink 7", "sink 7 ext tech"],
+                    ["sink 8", "sink 8 ext tech"],
+                    ["sink 9", "sink 9 ext tech"],
+                    ["sink 10", "sink 10 ext tech"],
+                    ["sink 11", "sink 11 ext tech"]
+                ],
+                cost: null,
                 gmax: null,
                 lmax: null,
-                cost: null,
+                util: null,
+                fc_pip: 50,
+                vc_pip: 700,
+                network: null,
+                chp_pars: null,
+                el_price: null,
+                agent_ids: null,
+                fc_dig_st: 350,
+                fc_dig_tr: 200,
+                flow_temp: 100,
+                objective: null,
+                prod_diff: null,
+                vc_dig_st: 700,
+                vc_dig_tr: 500,
+                vc_pip_ex: 1.3,
+                water_den: 1000,
+                offer_type: null,
+                recurrence: null,
+                block_offer: null,
+                ground_temp: 8,
+                nr_of_hours: 48,
+                return_temp: 70,
+                ambient_temp: 25,
+                data_profile: null,
+                el_dependent: null,
+                invest_pumps: 0,
+                vc_dig_st_ex: 1.1,
+                vc_dig_tr_ex: 1.3,
+                co2_emissions: null,
+                co2_intensity: 25.0,
+                discount_rate: [4, 5],
+                heat_capacity: 4.18,
+                horizon_basis: null,
+                platform_sets: {
+                    "REGION": [
+                        "Greece"
+                    ],
+                    "EMISSION": [
+                        "co2"
+                    ],
+                    "TIMESLICE": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25,
+                        26,
+                        27,
+                        28,
+                        29,
+                        30,
+                        31,
+                        32,
+                        33,
+                        34,
+                        35,
+                        36,
+                        37,
+                        38,
+                        39,
+                        40,
+                        41,
+                        42,
+                        43,
+                        44,
+                        45,
+                        46,
+                        47,
+                        48
+                    ],
+                    "YEAR": [
+                        2023
+                    ],
+                    "MODE_OF_OPERATION": [
+                        1,
+                        2
+                    ],
+                    "STORAGE": [
+                        "tankstorage"
+                    ],
+                    "platform_budget_limit": 150000000.0
+                },
+                "start_datetime": null,
+                "is_in_community": [],
+                "prod_diff_option": null,
+                "project_duration": 10,
+                "platform_storages": [
+                    {
+                        "storage": "tankstorage",
+                        "capital_cost_storage": 750,
+                        "dicount_rate_sto": 0.04,
+                        "operational_life_sto": 100,
+                        "storage_max_charge": 1500,
+                        "storage_max_discharge": 1500,
+                        "l2d": 0,
+                        "tag_heating": 1,
+                        "tag_cooling": 0,
+                        "storage_return_temp": 50,
+                        "storage_supply_temp": 80,
+                        "storage_ambient_temp": 15,
+                        "residual_storage_capacity": 0,
+                        "max_storage_capacity": 1500,
+                        "storage_level_start": 0,
+                        "u_value": 0.21
+                    }
+                ],
+                community_settings: null,
+                network_resolution: "low",
+                yearly_demand_rate: null,
+                factor_street_terrain: 0.1,
+                factor_street_overland: 0.4,
+                platform_annual_emission_limit: [
+                    {
+                        emission: "co2",
+                        annual_emission_limit: 15000000000000
+                    }
+                ],
+                ex_grid: [],
+                user: {
+                    md: "centralized",
+                    horizon_basis: "years",
+                    recurrence: 1,
+                    data_profile: "hourly",
+                    yearly_demand_rate: 0.05,
+                    start_datetime: "2018-01-01",
+                    prod_diff_option: "noPref",
+                    util: [0.7]
+                }
             },
             links: [],
             sinks: [],
@@ -274,7 +383,7 @@ export default {
     const onSubmit = () => {
         form.post(route("projects.simulations.store", { id: props.project.id }));
     };
-    const onCancel = () => { 
+    const onCancel = () => {
         form.extra.links.forEach((link) => onDeselected(link));
         form.extra.links = [];
         form.extra.sinks = [];
@@ -351,7 +460,7 @@ export default {
     );
 
     watch(
-        selectedMarker, 
+        selectedMarker,
         () => {
             const type = store.getters["map/selectedMarkerType"];
             let index = -1;
