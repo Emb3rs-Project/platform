@@ -86,7 +86,8 @@
                             <div class="px-4 py-5 sm:p-6">
                                 <LeafletMap
                                     ref="map"
-                                    :markers="[]"
+                                    :instances="instances"
+                                    :links="links"
                                 ></LeafletMap>
                             </div>
                         </div>
@@ -293,6 +294,14 @@ import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 const props = defineProps({
     project: {
         type: Object,
+        required: true,
+    },
+    instances: {
+        type: Array,
+        required: true,
+    },
+    links: {
+        type: Array,
         required: true,
     },
 });
