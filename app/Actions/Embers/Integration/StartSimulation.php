@@ -36,14 +36,14 @@ class StartSimulation implements StartsSimulations
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
         list($result, $status) = $client->StartSimulation($request)->wait();
-        dump($status);
+        logger()->error('[Error]:', [$result]);
         if ($status->code == 2) {
 
-            // IntegrationReport::create([
-            //     "module" => "Platform",
-            //     "function" => "StartSimulation",
-            //     "errors" => ["message" => $status->details]
-            // ]);
+             IntegrationReport::create([
+                 "module" => "Platform",
+                 "function" => "StartSimulation",
+                 "errors" => ["message" => $status->details]
+             ]);
         }
     }
 }
