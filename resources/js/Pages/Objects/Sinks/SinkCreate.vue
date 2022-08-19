@@ -48,41 +48,41 @@
                     <div class="sm:col-span-1">
                     <div>
                         <TextInput
-                        v-model="form.location.lat"
-                        @update:modelValue="updateMarker()"
-                        :disabled="!form.custom"
-                        min="-90"
-                        max="90"
-                        type="number"
-                        unit="lat"
+                            v-model="form.location.lat"
+                            @update:modelValue="updateMarker()"
+                            :disabled="!form.custom"
+                            min="-90"
+                            max="90"
+                            type="number"
+                            unit="lat"
                         />
                     </div>
                     </div>
                     <div class="sm:col-span-1">
                     <div>
                         <TextInput
-                        v-model="form.location.lng"
-                        @update:modelValue="updateMarker()"
-                        :disabled="!form.custom"
-                        min="-180"
-                        max="180"
-                        type="number"
-                        unit="lng"
+                            v-model="form.location.lng"
+                            @update:modelValue="updateMarker()"
+                            :disabled="!form.custom"
+                            min="-180"
+                            max="180"
+                            type="number"
+                            unit="lng"
                         />
                     </div>
                     </div>
                     <div class="flex items-center">
-                    <jet-checkbox
-                        id="custom-marker"
-                        name="custom-marker"
-                        v-model:checked="form.custom"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        <jet-checkbox
+                            id="custom-marker"
+                            name="custom-marker"
+                            v-model:checked="form.custom"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                         />
                         <label
-                        for="custom-marker"
-                        class="ml-2 block text-sm text-gray-900"
+                            for="custom-marker"
+                            class="ml-2 block text-sm text-gray-900"
                         >
-                        Custom Marker
+                            Custom Marker
                         </label>
                     </div>
                 </div>
@@ -130,14 +130,10 @@
                         <div class="relative flex items-start">
                             <div class="flex items-center h-5">
                                 <input id="advancedProperties" aria-describedby="advancedProperties-description"
-                                    name="advancedProperties" type="checkbox" class="
-                    focus:ring-indigo-500
-                    h-4
-                    w-4
-                    text-blue-600
-                    border-gray-300
-                    rounded
-                  " v-model="withAdvancedProperties" />
+                                    name="advancedProperties" type="checkbox" class="rounded
+                                    focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300"
+                                    v-model="withAdvancedProperties" 
+                                />
                             </div>
                             <div class="ml-3 text-sm">
                                 <label for="advancedProperties" class="font-medium text-gray-700">
@@ -253,7 +249,7 @@ export default {
             custom: false,
             template_id: null,
             location_id: null,
-            location: null,
+            location: {},
         });
 
         const templates = computed(() =>
@@ -304,7 +300,6 @@ export default {
             selectedLocation,
             (location) => {
                 form.location_id = null;
-                form.location = null;
 
                 selectedLocation.value = locations.value.find(
                     (l) => l.key === location.key
@@ -373,9 +368,7 @@ export default {
 
         const userSelectedProperties = computed(() =>
             selectedTemplate.value.properties.filter((p) => {
-                if (p.advanced && !withAdvancedProperties.value) return false;
-
-                return true;
+                return !(p.advanced && !withAdvancedProperties.value);
             })
         );
 
