@@ -27,6 +27,7 @@ use App\Http\Controllers\Embers\ProjectSimulationSessionReportController;
 use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
+use App\Http\Controllers\Embers\MySimulationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -101,6 +102,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::resource('/projects', ProjectController::class)
         ->whereNumber(['project']);
+
+    // My Simulations
+    Route::resource('/my-simulations', MySimulationController::class)
+        ->whereNumber(['my-simulations']);
 
     // Simulations
     Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')

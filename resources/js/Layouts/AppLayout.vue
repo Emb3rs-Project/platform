@@ -605,7 +605,15 @@ const navigation = [
       },
     },
     icon: ViewListIcon,
-  },
+  },{
+        name: "My Simulations",
+        href: {
+            index: {
+                location: "my-simulations.index",
+            },
+        },
+        icon: ViewListIcon,
+    },
   {
     name: "Challenge",
     href: {
