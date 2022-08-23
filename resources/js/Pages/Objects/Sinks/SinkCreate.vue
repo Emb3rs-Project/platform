@@ -22,7 +22,7 @@
                         <SelectMenu :class="{'w-5/6': selectedTemplate.info}"
                             v-model="selectedTemplate"
                             :options="templates"
-                            label="Template" 
+                            label="Template"
                         />
                     </div>
                     <div class="mt-6" v-if="selectedTemplate.info">
@@ -121,8 +121,7 @@
         <div v-if="advancedProperties.length" class="
         space-y-1
         px-4
-        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
-      ">
+        sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5">
             <PropertyDisclosure title="Advanced Properties">
                 <div>
                     <fieldset class="space-y-5">
@@ -132,7 +131,7 @@
                                 <input id="advancedProperties" aria-describedby="advancedProperties-description"
                                     name="advancedProperties" type="checkbox" class="rounded
                                     focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300"
-                                    v-model="withAdvancedProperties" 
+                                    v-model="withAdvancedProperties"
                                 />
                             </div>
                             <div class="ml-3 text-sm">

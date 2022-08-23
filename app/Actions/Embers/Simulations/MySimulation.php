@@ -26,7 +26,9 @@ class MySimulation implements MySimulations
             'simulationType',
             'simulationType.unit',
             'simulationMetadata'
-        ])->whereIn('project_id', $teamProjects)->paginate(5);
+        ])->whereIn('project_id', $teamProjects)
+            ->orderBy('created_at','desc')
+            ->paginate(5);
 
     }
 }
