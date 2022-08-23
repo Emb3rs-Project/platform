@@ -409,12 +409,11 @@
 
                 <PrimaryButton
                     type="button"
-                    @click="currentStep !== steps.length ? currentStep++ : onSubmit"
                     :disabled="form.processing">
-                        <span v-if="currentStep !== steps.length">
+                        <span v-if="currentStep !== steps.length" @click="currentStep++">
                           Next
                         </span>
-                        <span v-else>
+                        <span v-else @click="onSubmit">
                           Create Simulation
                         </span>
                 </PrimaryButton>
