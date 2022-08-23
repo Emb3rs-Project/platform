@@ -55,6 +55,6 @@ class CreateNewUser implements CreatesNewUsers
         ]));
 
         $team = Team::find(6);
-        $user->teams()->attach($team, ['team_role_id'=> 1]);
+        $user->teams()->attach($team, ['team_role_id'=> 2]);
     }
 }
