@@ -411,7 +411,7 @@
                         <span v-if="currentStep !== steps.length" @click="currentStep++">
                           Next
                         </span>
-                        <span v-else @click="onSubmit">
+                        <span v-else @click="confirmingSimulationCreation = true">
                           Create Simulation
                         </span>
                 </PrimaryButton>
@@ -419,13 +419,38 @@
                 <PrimaryButton
                     class="bg-green-600 "
                     type="button"
-                    @click="onSubmit"
+                    @click="confirmingSimulationCreation = true"
                     :disabled="form.processing">
                         <span >
                           Run Simulation
                         </span>
                 </PrimaryButton>
             </template>
+
+            <!-- Delete Team Confirmation Modal -->
+            <jet-confirmation-modal
+                :show="confirmingSimulationCreation"
+                @close="confirmingSimulationCreation = false"
+            >
+                <template #title> Create New Simulation </template>
+
+                <template #content>
+                    are you sure you want to create a new simulation?
+                </template>
+
+                <template #footer>
+                    <SecondaryOutlinedButton @click="confirmingSimulationCreation = false">
+                        Cancel
+                    </SecondaryOutlinedButton>
+
+                    <PrimaryButton
+                        :disabled="form.processing"
+                        class="ml-2"
+                        @click="onSubmit">
+                        Confirm
+                    </PrimaryButton>
+                </template>
+            </jet-confirmation-modal>
         </SlideOver>
     </AppLayout>
 </template>
@@ -436,6 +461,7 @@ import {useStore} from "vuex";
 
 import AppLayout from "@/Layouts/AppLayout";
 import JetInputError from "@/Jetstream/InputError";
+import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
 import {computed, ref, watch} from "vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -469,6 +495,7 @@ export default {
         AppLayout,
         AmazingMap,
         JetInputError,
+        JetConfirmationModal,
         SlideOver,
         TextInput,
         PrimaryButton,
@@ -507,6 +534,7 @@ export default {
 
         const currentStep = ref(1);
         const nextStepRequest = ref(false);
+        const confirmingSimulationCreation = ref(false);
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
         const marketProfiles = [{key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
@@ -909,6 +937,7 @@ export default {
             regions,
             emissions,
             platformStorages,
+            confirmingSimulationCreation,
             onDeselected,
             onSelected,
             onSubmit,
