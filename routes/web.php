@@ -40,9 +40,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', fn () => redirect('/login'));
-
+Route::get('/importsink', function () {
+    App\Jobs\ImportSink::dispatch('sink_import_sample.xlsx', request()->user());
+    return request()->user();
+});
+Route::get('/importsource', function () {
+    App\Jobs\ImportSource::dispatch('source_import_sample.xlsx', request()->user());
+    return request()->user();
+});
+Route::get('/', fn() => redirect('/login'));
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
