@@ -286,9 +286,7 @@
 <!--                        </field>-->
 
                         <field label="YEAR">
-                            <TextInput
-                                v-model="form.extra.input_data.platform_sets.YEAR"
-                            />
+                            <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.YEAR"></VSelect>
                         </field>
 
 <!--                        <field label="MODE_OF_OPERATION">-->
