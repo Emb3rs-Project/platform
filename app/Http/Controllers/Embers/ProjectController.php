@@ -81,7 +81,7 @@ class ProjectController extends Controller
             'instances' => $instances,
             'links'     => $links,
             'project'   => $project,
-            
+
         ]);
     }
 

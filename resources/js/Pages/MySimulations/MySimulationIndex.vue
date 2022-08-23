@@ -78,7 +78,17 @@
                                         {{ item.status }}
                                     </td>
                                 </template>
-
+                                <!-- Created at -->
+                                <template #header-created_at>
+                                    Created at
+                                </template>
+                                <template #body-created_at="{ item }">
+                                    <td
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                    >
+                                        {{ item.created_at }}
+                                    </td>
+                                </template>
                                 <!-- Actions -->
                                 <template #header-actions></template>
                                 <template #body-actions="{ item }">
@@ -176,7 +186,7 @@ export default {
         },
     },
     setup (props) {
-        const tableColumns = ["id", "name", "project", "metadata", "status", "actions"];
+        const tableColumns = ["id", "name", "project", "metadata","created_at", "status", "actions"];
 
         return {
             tableColumns,

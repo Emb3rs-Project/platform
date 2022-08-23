@@ -88,7 +88,7 @@ class ProjectSimulationController extends Controller
             "extra" => $request->except(['extra.links'])['extra']
         ]);
 
-        return redirect()->route('projects.show', $project->id);
+        return redirect()->route('my-simulations.index');
     }
 
     /**
