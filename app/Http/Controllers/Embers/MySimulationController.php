@@ -18,9 +18,16 @@ class MySimulationController extends Controller
     public function index(Request $request)
     {
         $simulations = app(MySimulations::class)->index($request->user());
+        $user = $request->user();
 
         return Inertia::render('MySimulations/MySimulationIndex', [
-            'mySimulations' => $simulations
+            'mySimulations' => $simulations,
+            'projects' => $user->currentTeam->projects?->map(fn($item) =>
+                     [
+                        'key' => $item->id,
+                        'value' => $item->name,
+                    ]
+            )
         ]);
     }
 

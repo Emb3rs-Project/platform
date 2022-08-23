@@ -12,6 +12,10 @@
             <div class="mt-1 relative rounded-md shadow-sm">
                <slot></slot>
             </div>
+            <p class="mt-2 text-sm text-gray-500 text-justify" v-if="hint">
+                {{hint}}
+            </p>
+
         </div>
     </div>
 </template>
@@ -21,7 +25,8 @@ export default {
     name: "Field",
     props: {
         label: String,
-        required: Boolean
+        required: Boolean,
+        hint: String
     }
 }
 </script>

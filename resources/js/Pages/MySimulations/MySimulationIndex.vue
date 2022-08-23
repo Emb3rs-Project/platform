@@ -2,8 +2,18 @@
     <SiteHead title="My Simulations"/>
 
     <AppLayout>
-        <div class="bg-white">
+
+        <div>
+
             <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                <h1 class="mb-8 font-bold text-3xl">My Simulations</h1>
+
+                <div class="flex justify-end mb-5">
+                    <PrimaryButton class="w-48" @click="executeAction = true">
+                        New Simulation
+                    </PrimaryButton>
+                </div>
+
                 <div class="flex flex-col gap-8">
                     <div class="shadow">
                         <div v-if="mySimulations.data.length">
@@ -57,7 +67,7 @@
 
                                 <!-- Metadata -->
                                 <template #header-metadata>
-                                    Metadata
+                                    Simulation Type
                                 </template>
                                 <template #body-metadata="{ item }">
                                     <td
@@ -86,7 +96,7 @@
                                     <td
                                         class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
                                     >
-                                        {{ item.created_at }}
+                                        {{ moment(item.created_at).format('DD/MM/YYYY HH:mm:ss') }}
                                     </td>
                                 </template>
                                 <!-- Actions -->
@@ -135,10 +145,8 @@
                             v-else
                             class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
                         >
-                            <h1
-                                class="text-2xl font-extrabold text-gray-300 uppercase"
-                            >
-                                No Objects Found
+                            <h1 class="text-2xl font-extrabold text-gray-300 uppercase">
+                                No Simulations Found
                             </h1>
                         </div>
                     </div>
@@ -148,13 +156,40 @@
                     </div>
                 </div>
             </div>
+
+            <DialogModal :show="executeAction" @close="executeAction = false">
+                <template #title>
+                    Create new simulation
+                </template>
+
+                <template #content class="my-auto">
+                    <Field label="Project"
+                        hint="Select a project first to create a new a simulation">
+                        <SelectMenu v-model="currentProject" :options="projects"></SelectMenu>
+                    </Field>
+                </template>
+
+                <template #footer>
+
+                    <SecondaryOutlinedButton
+                        class="mr-2"
+                        @click="executeAction = false">
+                        Cancel
+                    </SecondaryOutlinedButton>
+
+                    <PrimaryButton @click="sendToCreateSimulation">
+                        Create Simulation
+                    </PrimaryButton>
+                </template>
+
+            </DialogModal>
         </div>
     </AppLayout>
 </template>
 
 <script>
 import {Link} from "@inertiajs/inertia-vue3";
-
+import { ref} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
 import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
@@ -165,9 +200,21 @@ import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
 import PlayIcon from "@/Components/Icons/PlayIcon.vue";
 import Pagination from "@/Components/Pagination";
 import { notify } from "@kyvg/vue3-notification";
+import moment from 'moment'
+import PrimaryButton from "../../Components/PrimaryButton";
+import DialogModal from "../../Jetstream/DialogModal";
+import SelectMenu from "../../Components/Forms/SelectMenu";
+import Field from "../../Components/Field";
+import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
     components: {
+        SecondaryOutlinedButton,
+        Field,
+        SelectMenu,
+        DialogModal,
+        PrimaryButton,
         SiteHead,
         AppLayout,
         AmazingIndexTable,
@@ -184,12 +231,31 @@ export default {
             type: [Array, Object],
             required: true,
         },
+        projects: {
+            type: [Array, Object],
+            required: true,
+        },
+
     },
     setup (props) {
         const tableColumns = ["id", "name", "project", "metadata","created_at", "status", "actions"];
+        const executeAction = ref(false)
+        const currentProject = ref({})
+
+        const sendToCreateSimulation = () => {
+           let project = currentProject.value
+            Inertia.visit(route(
+                'projects.simulations.create',
+                project.key
+            ))
+        }
 
         return {
             tableColumns,
+            executeAction,
+            currentProject,
+            sendToCreateSimulation,
+            moment
         };
     },
     watch: {

@@ -26,6 +26,7 @@
                 <Steps
                     :steps="steps"
                     class="p-4"
+                    @click="(val) => currentStep = val"
                 />
                 <div :class="{ 'p-4': form.hasErrors }">
                     <Alert v-model="form.hasErrors" type="danger"
@@ -53,15 +54,18 @@
                                 </span>
                             </div>
                             <div class="mt-1 relative rounded-md shadow-sm">
-                                <VSelect :options="simulation_metadata" label="name" value="id"
+                                <VSelect :options="simulation_metadata"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                         label="name" value="id"
                                          v-model="form.simulation_metadata"/>
                             </div>
                             <p class="mt-2 text-sm text-gray-500 text-justify">
                                 The simulation Metadata to use
                             </p>
+                            <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
                         </div>
                     </div>
-                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
+
                 </div>
 
                 <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -82,14 +86,16 @@
                             </div>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <VSelect :options="sinks" label="name" value="id" :multiple="true"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                          v-model="form.extra.sinks"/>
                             </div>
                             <p class="mt-2 text-sm text-gray-500 text-justify">
                                 Sinks to use in this Simulation
                             </p>
+                            <JetInputError v-show="form.errors['extra.sinks']" :message="form.errors['extra.sinks']" class="mt-2"/>
                         </div>
                     </div>
-                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
+
                 </div>
 
                 <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -110,170 +116,221 @@
                             </div>
                             <div class="mt-1 relative rounded-md shadow-sm">
                                 <VSelect :options="sources" label="name" value="id" :multiple="true"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                          v-model="form.extra.sources"/>
                             </div>
                             <p class="mt-2 text-sm text-gray-500 text-justify">
                                 Sinks to use in this Simulation
                             </p>
+                            <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
                         </div>
                     </div>
-                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
                 </div>
 
-                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                    <div class="sm:col-span-3">
-                        <div>
-                            <div class="flex justify-end">
-                                <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllLinks">
-                                    Select All
-                                </button>
-                            </div>
-                            <div class="flex justify-between">
-                                <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
-                                    Links
-                                </label>
-                                <span class="text-sm text-gray-500" id="input-required">
-                                    Required
-                                </span>
-                            </div>
-                            <div class="mt-1 relative rounded-md shadow-sm">
-                                <VSelect :options="links" label="name" value="id" :multiple="true"
-                                         @option:deselected="onDeselected" @option:selected="onSelected"
-                                         v-model="form.extra.links"/>
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500 text-justify">
-                                Links to use in this Simulation
-                            </p>
-                        </div>
-                    </div>
-                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
-                </div>
+<!--                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">-->
+<!--                    <div class="sm:col-span-3">-->
+<!--                        <div>-->
+<!--                            <div class="flex justify-end">-->
+<!--                                <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllLinks">-->
+<!--                                    Select All-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <div class="flex justify-between">-->
+<!--                                <label for="sim_metadata" class="block text-sm font-medium text-gray-700">-->
+<!--                                    Links-->
+<!--                                </label>-->
+<!--                                <span class="text-sm text-gray-500" id="input-required">-->
+<!--                                    Required-->
+<!--                                </span>-->
+<!--                            </div>-->
+<!--                            <div class="mt-1 relative rounded-md shadow-sm">-->
+<!--                                <VSelect :options="links" label="name" value="id" :multiple="true"-->
+<!--                                         @option:deselected="onDeselected" @option:selected="onSelected"-->
+<!--                                         v-model="form.extra.links"/>-->
+<!--                            </div>-->
+<!--                            <p class="mt-2 text-sm text-gray-500 text-justify">-->
+<!--                                Links to use in this Simulation-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>-->
+<!--                </div>-->
             </div>
             <div v-show="currentStep === 2" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                <field label="Network Resolution">
+                <field label="Network Resolution (network_resolution)"
+                    required
+                    hint="Defines if network resolution is high or low, i.e. how detailed the streets are loaded. If a large network is used, network resolution should be set to low to decrease computational time.">
                     <SelectMenu
                         :modelValue="resolutions.find((item) => item.key === form.extra.input_data.network_resolution)"
                         :options="resolutions"
                         @update:modelValue="(val) => form.extra.input_data.network_resolution = val.key"
                     />
                 </field>
-                <field label="invest_pumps">
+
+                <field label="Investment Costs for Pumps (invest_pumps)"
+                       hint="Investment costs for pumps in EUR.">
                     <TextInput
                         v-model="form.extra.input_data.invest_pumps"
                     />
                 </field>
-                <field label="fc_dig_st">
-                    <TextInput
-                        v-model="form.extra.input_data.fc_dig_st"
-                    />
-                </field>
-                <field label="vc_dig_st">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_dig_st"
-                    />
-                </field>
 
-                <field label="vc_dig_st_ex">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_dig_st_ex"
-                    />
-                </field>
+                <PropertyDisclosure title="Default Properties" class="sm:col-span-3">
 
-                <field label="fc_dig_tr">
-                    <TextInput
-                        v-model="form.extra.input_data.fc_dig_tr"
-                    />
-                </field>
+                    <field label="Fixed Digging Cost for Street (fc_dig_st)"
+                        required
+                        hint="Fixed digging cost for streets in EUR/m.">
+                        <TextInput
+                            v-model="form.extra.input_data.fc_dig_st"
+                        />
+                    </field>
 
-                <field label="vc_dig_tr">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_dig_tr"
-                    />
-                </field>
+                    <field label="Variable Digging Cost for Street (vc_dig_st)"
+                        required
+                        hint="Variable digging cost for streets in EUR/m².">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_dig_st"
+                        />
+                    </field>
 
-                <field label="vc_dig_tr_ex">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_dig_tr_ex"
-                    />
-                </field>
+                    <field label="Exponent Street (vc_dig_st_ex)"
+                        required
+                        hint="Exponent of the digging cost for street.">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_dig_st_ex"
+                        />
+                    </field>
 
-                <field label="ambient_temp">
-                    <TextInput
-                        v-model="form.extra.input_data.ambient_temp"
-                    />
-                </field>
+                    <field label="Fixed Digging Cost for Terrain (fc_dig_tr)"
+                        required
+                        hint="Fixed digging cost for terrains in EUR/m.">
+                        <TextInput
+                            v-model="form.extra.input_data.fc_dig_tr"
+                        />
+                    </field>
 
-                <field label="ground_temp">
-                    <TextInput
-                        v-model="form.extra.input_data.ground_temp"
-                    />
-                </field>
+                    <field label="Variable Digging Cost for Terrain (vc_dig_tr)"
+                        required
+                        hint="Variable digging cost for terrains in EUR/m².">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_dig_tr"
+                        />
+                    </field>
 
-                <field label="flow_temp">
-                    <TextInput
-                        v-model="form.extra.input_data.flow_temp"
-                    />
-                </field>
+                    <field label="Exponent Terrain (vc_dig_tr_ex)"
+                        required
+                        hint="Exponent of the digging cost for terrain.">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_dig_tr_ex"
+                        />
+                    </field>
 
-                <field label="return_temp">
-                    <TextInput
-                        v-model="form.extra.input_data.return_temp"
-                    />
-                </field>
+                    <field label="Average Ambient Temperature (ambient_temp)"
+                        required
+                        hint="Yearly average ambient temperature in °C.">
+                        <TextInput
+                            v-model="form.extra.input_data.ambient_temp"
+                        />
+                    </field>
 
-                <field label="heat_capacity">
-                    <TextInput
-                        v-model="form.extra.input_data.heat_capacity"
-                    />
-                </field>
+                    <field label="Average Ground Temperature (ground_temp)"
+                        required
+                        hint="Yearly average ground temperature in °C.">
+                        <TextInput
+                            v-model="form.extra.input_data.ground_temp"
+                        />
+                    </field>
 
-                <field label="water_den">
-                    <TextInput
-                        v-model="form.extra.input_data.water_den"
-                    />
-                </field>
+                    <field label="Average Flow Temperature (flow_temp)"
+                        required
+                        hint="Yearly average flow temperature in °C.">
+                        <TextInput
+                            v-model="form.extra.input_data.flow_temp"
+                        />
+                    </field>
 
-                <field label="fc_pip">
-                    <TextInput
-                        v-model="form.extra.input_data.fc_pip"
-                    />
-                </field>
+                    <field label="Average Return Temperature (return_temp)"
+                        required
+                        hint="Yearly average return temperature in °C.">
+                        <TextInput
+                            v-model="form.extra.input_data.return_temp"
+                        />
+                    </field>
 
-                <field label="vc_pip">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_pip"
-                    />
-                </field>
+                    <field label="Heat Capacity (heat_capacity)"
+                        required
+                        hint="Heat capacity in J/kgK at a certain temperature (average of flow and return temperatures).">
+                        <TextInput
+                            v-model="form.extra.input_data.heat_capacity"
+                        />
+                    </field>
 
-                <field label="vc_pip_ex">
-                    <TextInput
-                        v-model="form.extra.input_data.vc_pip_ex"
-                    />
-                </field>
+                    <field label="Water Density (water_den)"
+                        required
+                        hint="Water density in kg/m3 at a certain temperature (average of flow and return temperatures).">
+                        <TextInput
+                            v-model="form.extra.input_data.water_den"
+                        />
+                    </field>
 
-                <field label="factor_street_terrain">
-                    <TextInput
-                        v-model="form.extra.input_data.factor_street_terrain"
-                    />
-                </field>
+                    <field label="Fixed Piping Cost (fc_pip)"
+                        required
+                        hint="Fixed component of the piping cost in EUR/m.">
+                        <TextInput
+                            v-model="form.extra.input_data.fc_pip"
+                        />
+                    </field>
 
-                <field label="factor_street_overland">
-                    <TextInput
-                        v-model="form.extra.input_data.factor_street_overland"
-                    />
-                </field>
+                    <field label="Variable Piping Cost (vc_pip)"
+                        required
+                        hint="Fixed component of the piping cost in EUR/m².">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_pip"
+                        />
+                    </field>
+
+                    <field label="Exponent Piping (vc_pip_ex)"
+                        required
+                        hint="Exponent of the piping cost.">
+                        <TextInput
+                            v-model="form.extra.input_data.vc_pip_ex"
+                        />
+                    </field>
+
+                    <field label="Cost Factor Street vs Terrain (factor_street_terrain)"
+                        required
+                        hint="Determines how much cheaper it is to lay 1 m of pipe into a terrain than into a street. Expressed in decimals: 0.1 means it is 10% cheaper.">
+                        <TextInput
+                            v-model="form.extra.input_data.factor_street_terrain"
+                        />
+                    </field>
+
+                    <field label="Cost Factor Street vs Overland (factor_street_overland)"
+                        required
+                        hint="Determines how much cheaper it is to place 1 m of the pipe over the ground than putting it into the street. Expressed in decimals: 0.4 means it is 40% cheaper.">
+                        <TextInput
+                            v-model="form.extra.input_data.factor_street_overland"
+                        />
+                    </field>
+
+                </PropertyDisclosure>
 
             </div>
             <div v-show="currentStep === 3" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
-                <field label="Regions"  class="mt-1 relative rounded-md shadow-sm">
+                <field label="Regions"  class="mt-1 relative rounded-md shadow-sm"
+                    hint="It sets the regions to be modelled, e.g. different countries, cities, counties etc. For the prupose of this analysis it is enough to have one region name. For each of them, the supply-demand balances for all the energy vectors are ensured. In some occasions it might be computationally more convenient to model different countries within the same region and differentiate them simply by creating ad hoc fuels and technologies for each of them.">
+
                     <VSelect :options="regions"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                              multiple
                              v-model="form.extra.input_data.platform_sets.REGION"/>
                 </field>
 
-                <field label="Emissions" class="mt-1 relative rounded-md shadow-sm">
+                <field label="Emissions" class="mt-1 relative rounded-md shadow-sm"
+                    hint="It includes any kind of emission potentially deriving from the operation of the defined technologies. Typical examples would include atmospheric emissions of greenhouse gasses, such as CO2. The user must fill in 'co2' as a mandatory entry. Other entries are also allowed">
+
                     <VSelect :options="emissions"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                              multiple
                              v-model="form.extra.input_data.platform_sets.EMISSION"/>
                 </field>
@@ -285,28 +342,49 @@
                 <!--                            />-->
                 <!--                        </field>-->
 
-                <field label="YEAR">
-                    <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.YEAR"></VSelect>
+                <field label="Time periodo (YEAR)"
+                    hint="It represents the time frame of the model, it contains all the years to be considered in the analysis. ">
+                    <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.YEAR"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                    ></VSelect>
+                    <p class="mt-2 text-sm text-gray-500 text-justify">
+                        Type a year in the select to add a new one
+                    </p>
                 </field>
 
-                <!--                        <field label="MODE_OF_OPERATION">-->
-                <!--                            <TextInput-->
-                <!--                                v-model="form.extra.input_data.platform_sets.MODE_OF_OPERATION"-->
-                <!--                                type="text"-->
-                <!--                            />-->
-                <!--                        </field>-->
+                <field label="Mode of operation (MODE_OF_OPERATION)"
+                    hint="It defines the number of modes of operation that the technologies can have. If a technology can have various input or output fuels and it can choose the mix (i.e. any linear combination) of these input or output fuels, each mix can be accounted as a separate mode of operation.  The user must input at least 1 mode of operation. There muts be two modes of operation if storage is used in the model">
 
-                <field label="Storage" class="mt-1 relative rounded-md shadow-sm">
+                    <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.MODE_OF_OPERATION"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                             sm:text-base border-gray-300 rounded-md"
+                    />
+
+                </field>
+
+                <field label="Storage (STORAGE)"
+                       hint="It includes storage facilities in the model."
+                       class="mt-1 relative rounded-md shadow-sm">
                     <!-- TODO: add storages on backoffice -->
                     <VSelect :options="platformStorages"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                              multiple
                              v-model="form.extra.input_data.platform_sets.STORAGE"/>
 
                 </field>
 
+                <field label="Maximum Budget limit (platform_budget_limit)"
+                       hint="It represent the maximum investment budget for the project (€)">
+                    <TextInput
+                        v-model="form.extra.input_data.platform_sets.platform_budget_limit"
+                        type="number"
+                    />
+                </field>
             </div>
             <div v-show="currentStep === 4" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                <field label="Market Design (md)">
+
+                <field label="Market Design (md)"
+                 hint="centralized or decentralized are the options; Select centralized for the simplest simulation.">
                     <SelectMenu
                         :modelValue="marketProfiles.find((item) => item.key === form.extra.input_data.md)"
                         :options="marketProfiles"
@@ -314,7 +392,8 @@
                     />
                 </field>
 
-                <field label="Horizon Basis(horizon_basis)">
+                <field label="Horizon Basis(horizon_basis)"
+                    hint="weeks, months, or years. ">
                     <SelectMenu
                         :modelValue="horizonBasisProfiles.find((item) => item.key === form.extra.input_data.user.horizon_basis)"
                         :options="horizonBasisProfiles"
@@ -323,14 +402,16 @@
 
                 </field>
 
-                <field label="Recurrence Period (recurrence)">
+                <field label="Recurrence Period (recurrence)"
+                    hint="how many of those horizons do you want to simulate ">
                     <TextInput
                         v-model="form.extra.input_data.user.recurrence"
                         type="number"
                     />
                 </field>
 
-                <field label="Data Profile (data_profile)">
+                <field label="Data Profile (data_profile)"
+                       hint="hourly or daily? If you want to check hourly or daily results.">
                     <SelectMenu
                         :modelValue="dataProfiles.find((item) => item.key === form.extra.input_data.user.data_profile)"
                         :options="dataProfiles"
@@ -338,47 +419,60 @@
                     />
                 </field>
 
-                <field label="yearly_demand_rate">
+                <field label="Yearly Demand Rate (yearly_demand_rate)"
+                    hint="How much is the demand increasing per year? Not relevant if you are simulating 1 year or less.">
                     <TextInput
                         v-model="form.extra.input_data.user.yearly_demand_rate"
                         type="number"
                     />
                 </field>
 
-                <field label="start_datetime">
+                <field label="Date (start_datetime)"
+                    hint="What date does your input data start? what day do you want to start from?">
                     <!-- TODO: datetime component -->
                     <TextInput
                         v-model="form.extra.input_data.user.start_datetime"
                     />
                 </field>
 
-                <field label="prod_diff_option">
+                <field label="Product Differentiation Option (prod_diff_option)"
+                    hint="in case md=decentralized, this is relevant, otherwise not. noPref, co2Emissions or networkDistance are the options.">
                     <TextInput
                         v-model="form.extra.input_data.user.prod_diff_option"
                     />
                 </field>
 
-<!--                <field label="util">-->
-<!--                    <TextInput-->
-<!--                        v-model="form.extra.input_data.user.util"-->
-<!--                    />-->
-<!--                </field>-->
+                <field label="Utility (util)"
+                hint="Monetary bid by sinks. Please, provide one value per each sink.">
+                    <VSelect taggable multiple  v-model="form.extra.input_data.user.util"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                             sm:text-base border-gray-300 rounded-md"/>
+                </field>
             </div>
+
             <div v-show="currentStep === 5" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
-                <!--                        <field label="discount_rate">-->
-                <!--                            <TextInput-->
-                <!--                                v-model="form.extra.input_data.discount_rate"-->
-                <!--                            />-->
-                <!--                        </field>-->
-                <field label="project_duration">
+                <field label="Socio-economic and private business discount rate % (discount_rate)"
+                   required
+                    hint="unit %">
+                    <VSelect taggable multiple v-model="form.extra.input_data.discount_rate"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                             sm:text-base border-gray-300 rounded-md"/>
+
+                </field>
+                <field label="Life time in years of the project (project_duration)"
+                    required
+                    hint="unit Years">
                     <TextInput
                         v-model="form.extra.input_data.project_duration"
                     />
                 </field>
-                <field label="co2_intensity">
+                <field label="CO2 intensity of the existing supply at the sink (co2_intensity)"
+                    hint="The co2 intensity of the heat supply being used at sinks before the excess heat utilization project">
                     <TextInput
+                        unit="kg/kWh"
                         v-model="form.extra.input_data.co2_intensity"
+                        type="number"
                     />
                 </field>
 
@@ -388,11 +482,14 @@
                 <!--                            />-->
                 <!--                        </field>-->
 
-                <!--                        <field label="Actorshare">-->
-                <!--                            <TextInput-->
-                <!--                                v-model="form.extra.input_data.actorshare"-->
-                <!--                            />-->
-                <!--                        </field>-->
+                <field label="Grid ownership (actorshare) %/100"
+                    required
+                    hint="Share of network cost shared by different actors.">
+                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"
+                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                             sm:text-base border-gray-300 rounded-md"/>
+
+                </field>
             </div>
 
             <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
@@ -416,15 +513,15 @@
                         </span>
                 </PrimaryButton>
 
-                <PrimaryButton
-                    class="bg-green-600 "
-                    type="button"
-                    @click="confirmingSimulationCreation = true"
-                    :disabled="form.processing">
-                        <span >
-                          Run Simulation
-                        </span>
-                </PrimaryButton>
+<!--                <PrimaryButton-->
+<!--                    class="bg-green-600 "-->
+<!--                    type="button"-->
+<!--                    @click="confirmingSimulationCreation = true"-->
+<!--                    :disabled="form.processing">-->
+<!--                        <span >-->
+<!--                          Run Simulation-->
+<!--                        </span>-->
+<!--                </PrimaryButton>-->
             </template>
 
             <!-- create Simulation Confirmation Modal -->
@@ -752,7 +849,7 @@ export default {
                     ],
                     community_settings: null,
                     network_resolution: "low",
-                    yearly_demand_rate: null,
+                    yearly_demand_rate: 0.05,
                     factor_street_terrain: 0.1,
                     factor_street_overland: 0.4,
                     platform_annual_emission_limit: [
@@ -770,7 +867,7 @@ export default {
                         yearly_demand_rate: 0.05,
                         start_datetime: "2018-01-01",
                         prod_diff_option: "noPref",
-                        util: [0.7]
+                        util: [0.7, 0.7, 0.66,0.66, 0.65,0.65, 0.85,0.85,0.68, 0.68, 0.69,0.69, 0.84,0.88]
                     }
                 },
                 links: [],
@@ -781,7 +878,12 @@ export default {
         });
 
         const onSubmit = () => {
-            form.post(route("projects.simulations.store", {id: props.project.id}));
+            form.post(route("projects.simulations.store", {id: props.project.id}), {
+                onError: (errors) => {
+                    confirmingSimulationCreation.value = false
+                }
+            })
+
         };
 
         const onCancel = () => {

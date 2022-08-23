@@ -10,12 +10,14 @@ use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\Contracts\Embers\Simulations\StoresSimulations;
 use App\Contracts\Embers\Simulations\UpdatesSimulations;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SimulationRequest;
 use App\Models\Instance;
 use App\Models\Link;
 use App\Models\Project;
 use App\Models\SimulationMetadata;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 
 class ProjectSimulationController extends Controller
@@ -79,8 +81,21 @@ class ProjectSimulationController extends Controller
      * @param  int  $projectId
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, Project $project)
+    public function store(SimulationRequest $request, Project $project)
     {
+//        $data = $request->extra;
+//        $rules = [
+//          'sinks' => ['array','required'],
+//           'sources' =>['array','required'],
+//        ];
+//
+//        $validator = Validator::make($data,$rules);
+//
+//        if(!$validator->passes()) {
+//            return response()->json($validator->errors()->all(),422);
+//        }
+//
+
         $project->simulations()->create([
             "status" => "NEW",
             "name" => $request->get('name'),
