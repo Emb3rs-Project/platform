@@ -409,7 +409,7 @@
 
                 <PrimaryButton
                     type="button"
-                    @click="currentStep++"
+                    @click="currentStep !== steps.length ? currentStep++ : onSubmit"
                     :disabled="form.processing">
                         <span v-if="currentStep !== steps.length">
                           Next
