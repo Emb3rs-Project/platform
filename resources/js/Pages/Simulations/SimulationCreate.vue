@@ -319,7 +319,7 @@
                         <field label="Horizon Basis(horizon_basis)">
                             <SelectMenu
                                 :modelValue="horizonBasisProfiles.find((item) => item.key === form.extra.input_data.user.horizon_basis)"
-                                :options="marketProfiles"
+                                :options="horizonBasisProfiles"
                                 @update:modelValue="(val) => form.extra.input_data.user.horizon_basis = val.key"
                             />
 
