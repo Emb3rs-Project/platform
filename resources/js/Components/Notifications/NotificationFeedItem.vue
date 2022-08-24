@@ -72,7 +72,7 @@
               <Link
                 v-if="tag && tag.hasOwnProperty('path')"
                 :key="tag.name"
-                :href="route(tag.path, notification.data.contentId).exists() ? route(tag.path, notification.data.contentId): '' "
+                :href="route(tag.path, notification.data.contentId)"
                 class="group flex items-center text-sm font-medium rounded-md focus:outline-none"
                 @click.prevent="
                   onActionRequest(`${tag.path}`, notification.data.contentId, notification.id)
