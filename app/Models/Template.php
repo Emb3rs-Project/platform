@@ -14,6 +14,9 @@ class Template extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const SIMPLE_SINK = 14;
+    public const SIMPLE_SOURCE = 14;
+
     /**
      * The attributes that should be cast.
      *

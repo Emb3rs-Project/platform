@@ -19,9 +19,10 @@
         "laravel/nova": "^3.0",
         "laravel/sanctum": "^2.14",
         "laravel/scout": "^9.4",
-        "laravel/tinker": "^2.7",
         "laravel/telescope": "^4.9",
+        "laravel/tinker": "^2.7",
         "predis/predis": "^1.1",
+        "rap2hpoutre/fast-excel": "^4.1",
         "tightenco/ziggy": "^1.4"
     },
     "require-dev": {
@@ -59,9 +60,7 @@
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
             "@php artisan optimize:clear --ansi",
-            "@php artisan nova:publish --ansi",
-            "@php artisan ide-helper:generate --no-interaction --ansi",
-            "@php artisan ide-helper:meta --no-interaction --ansi"
+            "@php artisan nova:publish --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -87,8 +86,8 @@
     "prefer-stable": true,
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://nova.laravel.com"
+            "type": "path",
+            "url": "./nova"
         }
     ]
 }

@@ -41,11 +41,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => redirect('/login'));
-
+Route::get('/', fn() => redirect('/login'));
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::get('/storage/{disk}/{file}', function ($disk, $file) {
+        return \Illuminate\Support\Facades\Storage::disk($disk)->download($file);
+    });
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 

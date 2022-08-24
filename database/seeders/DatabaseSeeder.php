@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->truncate_tables();
-        $this->load_sql_files();
+        //$this->truncate_tables();
+        //$this->load_sql_files();
 
     }
 
