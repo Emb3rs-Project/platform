@@ -328,12 +328,8 @@ export default {
     };
 
     const onActionRequest = async (route, param) => {
-      if (route === 'objects.sinks.create' && selectedLocation.value == null) {
-        store.commit("objects/setNotify", {
-            title: 'Sink',
-            text: "Please, Select the sink on the map",
-            type: 'warning'
-        });
+      if (!param) {
+        store.dispatch("map/startMarker", selectedObject.value.title.toLowerCase());
       } else {
         store.dispatch("objects/showSlide", { route, props: param });
       }

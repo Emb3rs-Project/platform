@@ -239,6 +239,30 @@ export default {
         });
 
         watch(
+            () => store.getters["map/startMarker"],
+            (marker) => {
+                const centerValue = store.getters["map/center"];
+                const value = {
+                    latlng: {
+                        lat: centerValue[0],
+                        lng: centerValue[1]
+                    }
+                };
+                
+                if (marker === 'sinks') {
+                   onCreateSink(value);
+                } else if (marker === 'sources') {
+                    onCreateSource(value);
+                } else if (marker === 'links') {
+                    store.commit("objects/closeSlide");
+                    onCreateLink(value);
+                }
+                store.dispatch("map/startMarker", null);
+            },
+            { immediate: true }
+        );
+
+        watch(
             () => store.getters["map/saveLink"],
             (e) => {
                 if (e) {

@@ -9,6 +9,7 @@ const _state = () => ({
     currentLinks: {},
     saveLink: false,
     startLinks: false,
+    startMarker: null,
     removeAllSegment: false,
     removeMarker: false,
 
@@ -28,6 +29,7 @@ const getters = {
     selectedMarkerPosition: (state) => state.selectedMarkerPosition,
     currentLinks: (state) => state.currentLinks,
     startLinks: (state) => state.startLinks,
+    startMarker: (state) => state.startMarker,
     center: (state) => state.center,
     zoom: (state) => state.zoom,
     defaultLocation: (state) => state.defaultLocation,
@@ -57,6 +59,7 @@ const actions = {
     unfocusMarker: ({ commit }) => {
         commit("focusMarker", null);
     },
+    startMarker: ({ commit }, startMarker) => commit("startMarker", startMarker ),
     saveLink: ({ commit }, saveLink) => commit("saveLink", saveLink ),
     removeAllSegment: ({ commit }, removeAllSegment) => commit("removeAllSegment", removeAllSegment ),
     removeMarker: ({ commit }, removeMarker) => commit("removeMarker", removeMarker ),
@@ -137,7 +140,7 @@ const mutations = {
     setLink: (state, { id, link }) => {(state.currentLinks[id] = link)},
     unsetLink: (state, id) => delete state.currentLinks[id],
     startLinks: (state) => {(state.currentLinks = {}, state.startLinks = true)},
-
+    startMarker: (state, startMarker) => {(state.startMarker = startMarker)},
     setCenter: (state, center) => (state.center = [center.lat, center.lng]),
     setZoom: (state, zoom) => (state.zoom = zoom),
     setDefaultLocation: (state, location) =>
