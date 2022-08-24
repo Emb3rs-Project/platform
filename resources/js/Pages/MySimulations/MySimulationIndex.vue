@@ -103,9 +103,11 @@
                                 <template #header-actions></template>
                                 <template #body-actions="{ item }">
                                     <td
-                                        class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
-                                    >
+                                        class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
+
+                                        <spinner-icon v-if="item.status === 'RUNNING'" class="text-green-600 font-medium text-sm w-5"></spinner-icon>
                                         <Link
+                                            v-else
                                             method="post"
                                             as="button"
                                             :href="
@@ -114,10 +116,8 @@
                                     simulation: item.id,
                                     onRow: true,
                                     page: mySimulations.current_page
-                                })
-                            "
-                                        >
-                                            <play-icon class="text-gray-500 font-medium text-sm w-5"></play-icon>
+                                })">
+                                            <play-icon class="text-green-600 font-medium text-sm w-5"></play-icon>
 
                                         </Link>
 
@@ -207,9 +207,11 @@ import SelectMenu from "../../Components/Forms/SelectMenu";
 import Field from "../../Components/Field";
 import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
 import {Inertia} from "@inertiajs/inertia";
+import SpinnerIcon from "../../Components/Icons/SpinnerIcon";
 
 export default {
     components: {
+        SpinnerIcon,
         SecondaryOutlinedButton,
         Field,
         SelectMenu,

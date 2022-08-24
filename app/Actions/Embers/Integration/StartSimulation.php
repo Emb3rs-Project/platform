@@ -4,9 +4,10 @@
 namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
-use App\Models\Instance;
-use App\Models\IntegrationReport;
+use App\Models\Simulation;
 use App\Models\SimulationSession;
+use App\Models\User;
+use App\Notifications\Embers\SimulationNotification;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
 
@@ -34,17 +35,24 @@ class StartSimulation implements StartsSimulations
         $request->setInitialData(json_encode($initialData));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
+        $session->simulation->changeStatusTo(Simulation::RUNNING);
+
         list($result, $status) = $client->StartSimulation($request)->wait();
 
-        logger()?->error('[simulation_output]:', [$status]);
+        logger()?->error('[simulatison_output]:', [$status]);
 
-        if ($status->code === 2) {
-
-//             IntegrationReport::create([
-//                 "module" => "Platform",
-//                 "function" => "StartSimulation",
-//                 "errors" => ["message" => $status->details]
-//             ]);
+        if ($status->code == 2) {
+            $session->simulation->changeStatusTo(Simulation::ERROR);
+        } else {
+            $session->simulation->changeStatusTo(Simulation::COMPLETED);
         }
+
+        $user = User::find($session->simulation->requested_by);
+        $tag = [['name' => "Simulation #$session->simulation_uuid", 'path' => 'session.show']];
+        $user->notify(new SimulationNotification($user, $session->simulation->project->teams->first(),
+            $tag,
+            'The Simulation has finished',
+            $session->id
+        ));
     }
 }
