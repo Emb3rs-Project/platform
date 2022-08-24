@@ -40,18 +40,15 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/importsink', function () {
-    App\Jobs\ImportSink::dispatch('sink_import_sample.xlsx', request()->user());
-    return request()->user();
-});
-Route::get('/importsource', function () {
-    App\Jobs\ImportSource::dispatch('source_import_sample.xlsx', request()->user());
-    return request()->user();
-});
+
 Route::get('/', fn() => redirect('/login'));
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::get('/storage/{disk}/{file}', function ($disk, $file) {
+        return \Illuminate\Support\Facades\Storage::disk($disk)->download($file);
+    });
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 

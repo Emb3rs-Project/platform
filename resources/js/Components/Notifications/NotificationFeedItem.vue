@@ -49,6 +49,15 @@
         </span>
             Institution
         </div>
+            <div v-else-if="notification.data.type === 'import'">
+                <span class="font-semibold">{{ notification.data.from.name }}</span>
+                ({{ notification.data.from.email }})
+                <span v-html="notification.data.description"></span>
+                <span class="font-semibold">
+          {{ notification.data.team.name }}
+        </span>
+                Institution
+            </div>
           <div v-else>DEBUG: Unknown notification type passed</div>
         </div>
         <!-- Time -->

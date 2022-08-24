@@ -7,6 +7,8 @@ use App\Models\Instance;
 use App\Models\Location;
 use App\Models\Template;
 use App\Models\User;
+use App\Notifications\Embers\ImportNotification;
+use App\Notifications\Embers\SimulationNotification;
 use App\Rules\Coordinates;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -46,30 +48,18 @@ class ImportSink implements ShouldQueue
     {
         $errors = [];
         $lineCount = 1;
-        $data = (FastExcel::import(Storage::disk('imports')->path($this->filename)))
-            ->map(function ($value) {
-                return collect($value)->keyBy(function ($value, $key) {
-                    return \Str::snake($key);
-                });
-            });
+        $data = (FastExcel::import(Storage::disk('imports')->path($this->filename)));
 
-        $data->each(function ($line) use (&$errors, &$lineCount) {
+        list($rules, $props) = $this->getPropsAndRules();
+        $rules = array_merge([
+            'template' => ['required', 'exists:templates,name'],
+            'latitude' => ['required', 'numeric', new Coordinates],
+            'longitude' => ['required', 'numeric', new Coordinates]
+        ], $rules);
+
+        $data->each(function ($line) use (&$errors, &$lineCount, $rules, $props) {
             $line = collect($line)->toArray();
-            info('data', $line);
-            $validator = Validator::make($line, [
-                'sink_type' => ['required', 'exists:templates,name'],
-                'latitude' => ['required', 'numeric', new Coordinates],
-                'longitude' => ['required', 'numeric', new Coordinates],
-                'name' => ['required'],
-                'fluid' => ['required'],
-                'supply_temperature' => ['required'],
-                'target_temperature' => ['required'],
-                'capacity' => ['required'],
-                'shutdown_periods' => ['required'],
-                'daily_periods' => ['required'],
-                'saturday_on' => ['required'],
-                'sunday_on' => ['required']
-            ]);
+            $validator = Validator::make($line, $rules);
 
             if ($validator->fails()) {
                 info('fail', [collect($validator->getMessageBag()->getMessages())->flatten(0)->join(' ')]);
@@ -78,20 +68,16 @@ class ImportSink implements ShouldQueue
                     $lineCount);
             } else {
                 try {
-                    $values = [
-                        'capacity' => Arr::get($line, 'capacity'),
-                        'consumer_type' => Arr::get($line, 'consumer_type'),
-                        'daily_periods' => Arr::get($line, 'daily_periods', "[]"),
-                        'fluid' => Arr::get($line, 'fluid'),
-                        'fluid_cp' => empty(Arr::get($line, 'fluid_cp')) ? null : Arr::get($line, 'fluid_cp'),
-                        'name' => Arr::get($line, 'name'),
-                        'saturday_on' => Arr::get($line, 'saturday_on') === 'yes' ? 1 : 0,
-                        'shutdown_periods' => Arr::get($line, 'shutdown_periods', "[]"),
-                        'sunday_on' => Arr::get($line, 'sunday_on') === 'yes' ? 1 : 0,
-                        'supply_temperature' => Arr::get($line, 'supply_temperature'),
-                        'target_temperature' => Arr::get($line, 'target_temperature'),
-                        'flowrate' => empty(Arr::get($line, 'mass_flowrate')) ? null : Arr::get($line, 'mass_flowrate')
-                    ];
+                    $values = [];
+                    foreach ($props as $prop) {
+                        if (in_array($prop, ['shutdown_periods', 'daily_periods'])) {
+                            $values[$prop] = Arr::get($line, $prop, "[]");
+                        } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
+                            $values[$prop] = Arr::get($line, $prop) === 'yes' ? 1 : 0;
+                        } else {
+                            $values[$prop] = empty(Arr::get($line, $prop)) ? null : Arr::get($line, $prop);
+                        }
+                    }
 
                     foreach ($values as $key => $value) {
                         if ($value === null || $value === '') {
@@ -99,7 +85,7 @@ class ImportSink implements ShouldQueue
                         }
                     }
 
-                    $template = Template::whereName(Arr::get($line, 'sink_type'))->first()->toArray();
+                    $template = Template::whereName(Arr::get($line, 'template'))->first()->toArray();
                     $newInstance = [
                         'name' => Arr::get($line, 'name'),
                         'values' => $values,
@@ -138,10 +124,20 @@ class ImportSink implements ShouldQueue
 
         if (!count($errors)) {
             info(__('File imported successfully'));
+            $this->user->notify(new ImportNotification($this->user, $this->user->currentTeam,
+                [],
+                'The Excel file was imported successfully. '
+            ));
 
         } else {
+            $filename = $this->createErrorReport($errors);
             info(__('File not imported. Check the report file.'),
-                [$this->createErrorReport($errors)]);
+                [$filename]);
+            $this->user->notify(new ImportNotification($this->user, $this->user->currentTeam,
+                [],
+                'The Excel file was imported but some line(s) got failed. Download the failed report:
+                <a style="text-decoration-line: underline;text-decoration-thickness: 2px;" target="_blank" href="' . config('app.url') . '/storage/failures/' . $filename . '">' . $filename . '</a> '
+            ));
         }
         Storage::disk('imports')->delete($this->filename);
     }
@@ -193,5 +189,25 @@ class ImportSink implements ShouldQueue
     private function importHeaders(): array
     {
         return [];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getPropsAndRules(): array
+    {
+        $templates = Template::with('templateProperties', 'templateProperties.property')->get();
+        $rules = [];
+        $allProps = [];
+        $templates->each(function ($item) use (&$rules, &$allProps) {
+            $item->templateProperties->each(function ($tempProp) use (&$allProps, &$rules, $item) {
+                if ($tempProp->required) {
+                    $rules[$tempProp->property['symbolic_name']][] = 'required_if:template,' . $item->name;
+                }
+                $allProps[] = $tempProp->property['symbolic_name'];
+            });
+        });
+
+        return [$rules, array_unique($allProps)];
     }
 }
