@@ -33,6 +33,21 @@
                             class="border border-red-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-red-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <div class="my-2">
+                                <Disclosure v-slot="{ open }">
+                                    <DisclosureButton
+                                        class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                        <span>Input Data</span>
+                                        <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
+                                                       class="h-5 w-5 " />
+                                    </DisclosureButton>
+                                    <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                        <Codemirror v-model="report.data" :extensions="extensions"
+                                                    :style="{ height: '400px' }" :autofocus="true" :indent-with-tab="true"
+                                                    :tabSize="2" disabled></Codemirror>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                            </div>
                             <p>Error : <span class="font-bold">{{ report.errors.message }}</span></p>
                         </div>
 
