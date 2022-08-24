@@ -40,6 +40,15 @@
             </span>
             Institution
           </div>
+        <div v-else-if="notification.data.type === 'simulation'">
+            <span class="font-semibold">{{ notification.data.from.name }}</span>
+            ({{ notification.data.from.email }})
+            {{ notification.data.description }}
+            <span class="font-semibold">
+          {{ notification.data.team.name }}
+        </span>
+            Institution
+        </div>
           <div v-else>DEBUG: Unknown notification type passed</div>
         </div>
         <!-- Time -->
@@ -61,13 +70,13 @@
             </span>
             <span class="ml-3.5 font-medium text-gray-900">
               <Link
+                v-if="tag && tag.hasOwnProperty('path')"
                 :key="tag.name"
-                :href="route('objects.index')"
+                :href="route(tag.path, notification.data.contentId)"
                 class="group flex items-center text-sm font-medium rounded-md focus:outline-none"
                 @click.prevent="
                   onActionRequest(`${tag.path}`, notification.data.contentId, notification.id)
-                "
-              >
+                ">
               {{ tag.name }}
               </Link>
             </span>
@@ -83,6 +92,7 @@
 import { getFriendlyLifetime } from "@/Helpers/helpers";
 import { Link } from "@inertiajs/inertia-vue3";
 import { useStore } from "vuex";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
   props: {
@@ -99,9 +109,10 @@ export default {
   setup() {
     const store = useStore();
 
-    const onActionRequest = (route, param, uuid) => {
+    const onActionRequest = (path, param, uuid) => {
       markAsRead(uuid);
-      store.commit("objects/setShowObject", { route, param });
+      Inertia.visit(route(path, param))
+      //store.commit("objects/setShowObject", { route, param });
     };
 
     const markAsRead = (uuid) => {

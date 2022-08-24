@@ -13,6 +13,12 @@ class Simulation extends Model
 {
     use SoftDeletes, Searchable;
 
+    public const NEW = 'NEW';
+    public const IN_PREPARATION = 'IN PREPARATION';
+    public const RUNNING = 'RUNNING';
+    public const COMPLETED = 'COMPLETED';
+    public const ERROR = 'ERROR';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -25,7 +31,8 @@ class Simulation extends Model
         'target_id',
         'simulation_type_id',
         'name',
-        'simulation_metadata_id'
+        'simulation_metadata_id',
+        'requested_by'
     ];
 
     /**
@@ -112,5 +119,19 @@ class Simulation extends Model
         $array = $this->toArray();
 
         return Arr::only($array, ['id', 'status', 'project']);
+    }
+
+    /**
+     * Change Status
+     * @param $status
+     * @param bool $shouldSave
+     */
+    public function changeStatusTo($status, $shouldSave = true): void
+    {
+        $this->status = $status;
+
+        if($shouldSave) {
+            $this->save();
+        }
     }
 }

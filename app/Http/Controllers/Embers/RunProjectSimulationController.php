@@ -37,9 +37,9 @@ class RunProjectSimulationController extends Controller
         ]);
 
         $simulation->load('simulationMetadata');
-        $simulation->status = "IN PREPARATION";
+        $simulation->status = Simulation::RUNNING;
+        $simulation->requested_by = $request->user()?->id;
         $simulation->save();
-
 
         StartSimulation::dispatch($newSession);
 
@@ -59,7 +59,7 @@ class RunProjectSimulationController extends Controller
         // );
 
         if ($request->input('onRow')) {
-            return redirect()->route('my-simulations.index', ['page' => $request->query('page')])->with('success', 'Simulation is Running');
+            return redirect()->route('my-simulations.index', ['page' => $request->query('page')])->with('success', 'Simulation is Running. You will be notified when the simulation is finished');
         }
 
 
