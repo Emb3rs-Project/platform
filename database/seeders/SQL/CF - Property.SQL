@@ -109,7 +109,7 @@ INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_
 
 -- ADD ORC ELECTRICITY COST
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (102, 'Electricity price', 'number', 'text','[]','ref_system_fuel_price', 'Electricity Price to be utilized in computations');
-INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (103, 'Electricity CO2 emissions', 'text','[]','ref_system_fuel_price', 'Electricity CO2 emissions to be utilized in computations');
+INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (103, 'Electricity CO2 emissions', 'number','text','[]','ref_system_fuel_price', 'Electricity CO2 emissions to be utilized in computations');
 
 
 -- ADD BUILDING REF SYSTEM -> General
