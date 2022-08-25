@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
     }
 
     private function truncate_tables() {
-        $this->command->info('Truncating Tables...');
-        $this->command->info('Truncating Instance');
-        Instance::truncate();
+//        $this->command->info('Truncating Tables...');
+//        $this->command->info('Truncating Instance');
+//        Instance::truncate();
         $this->command->info('Truncating Instance Done!');
         $this->command->info('Truncating Template');
         Template::truncate();
