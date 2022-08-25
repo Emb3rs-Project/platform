@@ -356,7 +356,7 @@ export default {
 
           const value = props.instance.values[prop.symbolic_name];
 
-          if (value) {
+          if (typeof value != 'undefined') {
             if (prop.inputType === "select") {
               form.sink.data[prop.symbolic_name] = prop.data.options.find(
                 (o) => o.key === value
