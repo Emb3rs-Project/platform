@@ -26,7 +26,7 @@ class SimulationRequest extends FormRequest
         return [
             'name' => 'required',
             'simulation_metadata' => ['array', 'required'],
-            'extra.sinks' => ['array','required'],
+            'extra.sinks' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation'],
             'extra.sources' => ['array','required']
         ];
     }

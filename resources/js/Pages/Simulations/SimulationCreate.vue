@@ -68,7 +68,7 @@
 
                 </div>
 
-                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div v-if="isFullSimulation" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                     <div class="sm:col-span-3">
                         <div>
                             <div class="flex justify-end">
@@ -644,35 +644,45 @@ export default {
             return  form.extra.input_data.platform_storages.map((item) => item.storage)
         });
 
-        const steps = computed(() => [
-            {
-                id: "Step 1",
-                name: "Sink & Sources",
-                status: mapStepStatus(1),
-            },
-            {
-                id: "Step 2",
-                name: "GIS",
-                status: mapStepStatus(2),
-            },
-            {
-                id: "Step 3",
-                name: "TEO",
-                status: mapStepStatus(3),
-            },
-            {
-                id: "Step 4",
-                name: "Market",
-                status: mapStepStatus(4),
-            },
-            {
-                id: "Step 5",
-                name: "Business",
-                status: mapStepStatus(5),
-            },
+        const steps = computed(() => {
 
-        ]);
-
+            let steps = [
+                {
+                    id: "Step 1",
+                    name: "Sink & Sources",
+                    status: mapStepStatus(1),
+                },
+            ]
+            let fullSimulationStep = [
+                {
+                    id: "Step 2",
+                    name: "GIS",
+                    status: mapStepStatus(2),
+                },
+                {
+                    id: "Step 3",
+                    name: "TEO",
+                    status: mapStepStatus(3),
+                },
+                {
+                    id: "Step 4",
+                    name: "Market",
+                    status: mapStepStatus(4),
+                },
+                {
+                    id: "Step 5",
+                    name: "Business",
+                    status: mapStepStatus(5),
+                },
+            ]
+            if(form.simulation_metadata.data.identifier == 'demo_simulation')
+            {
+                steps = steps.concat(fullSimulationStep)
+            }
+            console.log(steps)
+            return steps
+        });
+        const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation')
         const mapStepStatus = (index) =>
             currentStep.value === index
                 ? "current"
@@ -682,7 +692,7 @@ export default {
 
         const form = useForm({
             name: "Simulation Name",
-            simulation_metadata: props.simulation_metadata[1],
+            simulation_metadata: props.simulation_metadata[0],
             extra: {
                 input_data: {
                     actorshare: [0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0, 0, 0, 0],
@@ -1041,6 +1051,7 @@ export default {
             emissions,
             platformStorages,
             confirmingSimulationCreation,
+            isFullSimulation,
             onDeselected,
             onSelected,
             onSubmit,
