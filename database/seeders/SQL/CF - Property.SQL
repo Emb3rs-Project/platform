@@ -1,7 +1,7 @@
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (1, 'Latitude', 'number', 'text','[]','latitude', 'Location latitude');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (2, 'Longitude', 'number', 'text','[]','longitude', 'Location longitude');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (3, 'Number of floors', 'number', 'text','[]','number_floor', 'Number of floors');
-INSERT INTO public.properties(id, name, "dataType", "inputType"c, data, symbolic_name, description) VALUES (4, 'Width floor', 'number', 'text','[]','width_floor', 'Building floor width');
+INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (4, 'Width floor', 'number', 'text','[]','width_floor', 'Building floor width');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (5, 'Length floor', 'number', 'text','[]','length_floor', 'Building floor length');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (6, 'Height floor', 'number', 'text','[]','height_floor', 'Building floors height');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (7, 'North facade wall ratio', 'number', 'text','[]','ratio_wall_N', 'Ratio of North wall area in the facade area (facade = wall + glass). Value between 0 and 1.');
