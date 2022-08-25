@@ -1,7 +1,7 @@
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (1, 'Latitude', 'number', 'text','[]','latitude', 'Location latitude');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (2, 'Longitude', 'number', 'text','[]','longitude', 'Location longitude');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (3, 'Number of floors', 'number', 'text','[]','number_floor', 'Number of floors');
-INSERT INTO public.properties(id, name, "dataType", "inputType"c, data, symbolic_name, description) VALUES (4, 'Width floor', 'number', 'text','[]','width_floor', 'Building floor width');
+INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (4, 'Width floor', 'number', 'text','[]','width_floor', 'Building floor width');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (5, 'Length floor', 'number', 'text','[]','length_floor', 'Building floor length');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (6, 'Height floor', 'number', 'text','[]','height_floor', 'Building floors height');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (7, 'North facade wall ratio', 'number', 'text','[]','ratio_wall_N', 'Ratio of North wall area in the facade area (facade = wall + glass). Value between 0 and 1.');
@@ -135,7 +135,7 @@ INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_
 
 
 
--- ADD FUEL PRICE AND CO2 EMISSIONS  
+-- ADD FUEL PRICE AND CO2 EMISSIONS
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (120, 'Fuel Price', 'number', 'text','[]','fuel_price', 'Equipment Fuel Price');
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (121, 'Fuel CO2 Emissions', 'number', 'text','[]','fuel_co2_emissions', 'Equipment Fuel CO2 Emissions');
 
@@ -143,7 +143,7 @@ INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_
 -- SPECIFIC FOR PINCH
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (122, 'Ref. System - Fuel Type', 'number', 'select','{"options": [{"key": "natural_gas", "value": "Natural gas"}, {"key": "fuel_oil", "value": "Fuel oil"}, {"key": "biomass", "value": "Biomass"}, {"key": "electricity", "value": "Electricity"}, {"key": "none", "value": "Nonel"}]}','ref_system_fuel_type_pinch', 'Reference system Fuel Type. The reference system is the technology currently implemented to heat/cool a stream, e.g. A hot water circuit heated by a natural gas boiler. If OTHER introduce the remaining fields.');
 
--- INTEREST RATE 
+-- INTEREST RATE
 INSERT INTO public.properties(id, name, "dataType", "inputType", data, symbolic_name, description) VALUES (123, 'Interest Rate', 'number', 'text','[]','interest_rate', 'Interest rate for Business Analysis. DEFAULT=0.04');
 
 
