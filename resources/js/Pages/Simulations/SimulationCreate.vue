@@ -746,6 +746,7 @@ export default {
                     discount_rate: [4, 5],
                     heat_capacity: 4.18,
                     horizon_basis: null,
+                    // TEO BEGIN
                     platform_sets: {
                         "REGION": [
                             "Greece"
@@ -815,6 +816,8 @@ export default {
                         ],
                         "platform_budget_limit": 150000000.0
                     },
+
+                    // TEO END
                     "start_datetime": null,
                     "is_in_community": [],
                     "prod_diff_option": null,
@@ -877,7 +880,7 @@ export default {
                         yearly_demand_rate: 0.05,
                         start_datetime: "2018-01-01",
                         prod_diff_option: "noPref",
-                        util: [0.7, 0.7, 0.66,0.66, 0.65,0.65, 0.85,0.85,0.68, 0.68, 0.69,0.69, 0.84,0.88]
+                        util: [0.7]
                     }
                 },
                 links: [],
