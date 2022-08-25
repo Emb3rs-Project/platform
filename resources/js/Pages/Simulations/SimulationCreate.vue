@@ -26,7 +26,7 @@
                 <Steps
                     :steps="steps"
                     class="p-4"
-                    @click="(val) => currentStep = val"
+                    @select="(val) => currentStep = val.currentStep+1"
                 />
                 <div :class="{ 'p-4': form.hasErrors }">
                     <Alert v-model="form.hasErrors" type="danger"
