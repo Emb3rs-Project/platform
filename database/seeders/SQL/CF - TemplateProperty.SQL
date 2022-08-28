@@ -82,7 +82,6 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (77, FALSE,15,85,5,4,FALSE);
 
 
-
 -- SIMPLE SINK
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (78, TRUE,14,63,13,2,FALSE);
 INSERT INTO public.template_properties(id, required, template_id, property_id, default_unit_id, "order", advanced)VALUES (79, TRUE,14,64,13,3,FALSE);
@@ -175,6 +174,38 @@ INSERT INTO public.template_properties(id, required, template_id, property_id, d
 
 -- TEMPLATE -> NAME
 SELECT pg_catalog.setval(pg_get_serial_sequence('template_properties', 'id'), (SELECT MAX(id) FROM template_properties)+1);
+
+-- ADD REFERENCE SYSTEM to SIMPLE SINK
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,14,  100, 9999, 12, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,14,  101, 9999, 15, FALSE);
+-- ADD REAL DATA to SIMPLE SINK
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,14,  116, 24, 16, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,14,  117, 24, 17, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,14,  118, 24, 18, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,14,  119, 24, 19, FALSE);
+
+-- ADD REFERENCE SYSTEM to  GREENHOUSE
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,8,  100, 9999, 11, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  101, 9999, 14, FALSE);
+-- ADD REAL DATA to  GREENHOUSE
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  112, 24, 17, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  113, 24, 18, FALSE);
+
+
+-- ADD REFERENCE SYSTEM to  BUILDING
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  106, 9999, 20, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  107, 9999, 23, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  110, 9999, 24, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  111, 9999, 27, FALSE);
+-- ADD REAL DATA to  BUILDING
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  112, 24, 28, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  113, 24, 29, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  114, 24, 30, FALSE);
+INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  115, 24, 31, FALSE);
+
+
+
+
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,1,  92, 9999, -1, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  92, 9999, -1, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,3,  92, 9999, -1, FALSE);
@@ -224,40 +255,12 @@ INSERT INTO public.template_properties(required, template_id, property_id, defau
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,18,118,24,13,FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,18,119,24,14,FALSE);
 
-
--- ADD REFERENCE SYSTEM to SIMPLE SINK
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,15,  100, 9999, 12, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  101, 9999, 15, FALSE);
--- ADD REAL DATA to SIMPLE SINK
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  116, 24, 16, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  117, 24, 17, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  118, 24, 18, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  119, 24, 19, FALSE);
-
-
 -- ADD REAL DATA to SIMPLE SOURCE
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  116, 24, 12, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  117, 24, 13, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  118, 24, 14, FALSE);
 INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,15,  119, 24, 15, FALSE);
 
--- ADD REFERENCE SYSTEM to  BUILDING
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  106, 9999, 20, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  107, 9999, 23, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,2,  110, 9999, 24, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  111, 9999, 27, FALSE);
--- ADD REAL DATA to  BUILDING
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  112, 24, 28, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  113, 24, 29, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  114, 24, 30, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,2,  115, 24, 31, FALSE);
-
--- ADD REFERENCE SYSTEM to  GREENHOUSE
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (TRUE,8,  100, 9999, 11, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  101, 9999, 14, FALSE);
--- ADD REAL DATA to  GREENHOUSE
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  112, 24, 17, FALSE);
-INSERT INTO public.template_properties(required, template_id, property_id, default_unit_id, "order", advanced)VALUES (FALSE,8,  113, 24, 18, FALSE);
 
 
 -- BOILER

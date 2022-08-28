@@ -43,6 +43,8 @@ class Property extends Resource
      */
     public static $search = [
         'id',
+        'name'
+
 
 
         // You can add any of this to your Laravel Nova Search

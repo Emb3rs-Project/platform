@@ -891,7 +891,14 @@ export default {
         });
 
         const onSubmit = () => {
-            form.post(route("projects.simulations.store", {id: props.project.id}), {
+            form.transform((data) => {
+                for (let index in data.extra.input_data.user.util) {
+                    data.extra.input_data.user.util[index] = Number(data.extra.input_data.user.util[index])
+                }
+
+              return data
+            }).post(route("projects.simulations.store", {id: props.project.id}), {
+
                 onError: (errors) => {
                     confirmingSimulationCreation.value = false
                 }
