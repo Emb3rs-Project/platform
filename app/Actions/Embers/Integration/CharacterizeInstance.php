@@ -101,7 +101,8 @@ class CharacterizeInstance implements CharacterizesInstances
         if ($feature) {
             $characterization = [];
             $values = $instance->values;
-            $characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
+            //$characterization["streams"] = [json_decode($feature->getStreams()), json_decode($feature->getHotStream())];
+            $characterization["streams"] = json_decode($feature->getHotStream());
             $values['characterization'] = $characterization;
             $instance->values = $values;
             $instance->save();
@@ -125,7 +126,8 @@ class CharacterizeInstance implements CharacterizesInstances
         if ($feature) {
             $characterization = [];
             $values = $instance->values;
-            $characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
+            //$characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
+            $characterization["streams"] =json_decode($feature->getHotStream());
             $values['characterization'] = $characterization;
             $instance->values = $values;
             $instance->save();
