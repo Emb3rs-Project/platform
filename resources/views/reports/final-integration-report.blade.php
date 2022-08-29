@@ -10,16 +10,16 @@
         <p class="toc_title">Summary</p>
         <ul class="toc_list">
             @foreach($reports as $report)
-            <li style="text-align: left">
-                <a href="#{{\Illuminate\Support\Str::slug($report['module'])}}">{{$report['module']}} Report</a>
-            </li>
+                <li style="text-align: left">
+                    <a href="#{{\Illuminate\Support\Str::slug($report['module'])}}">{{$report['module']}} Report</a>
+                </li>
             @endforeach
         </ul>
     </div>
 </div>
 <style>
     .full_page {
-        height: 100vh;
+        height: 1500px;
     }
 
     #toc_container {
@@ -30,7 +30,6 @@
         margin-bottom: 1em;
         padding: 20px;
         width: 100%;
-        margin-bottom: 15%;
     }
 
     .toc_title {
@@ -38,12 +37,15 @@
         text-align: center;
     }
 
-    #toc_container li, #toc_container ul, #toc_container ul li{
+    #toc_container li, #toc_container ul, #toc_container ul li {
         list-style: outside none none !important;
     }
 </style>
+
 @foreach($reports as $report)
-<div id="{{\Illuminate\Support\Str::slug($report['module'])}}">&nbsp</div>
-{!!$report['report'] !!}
-<div style="margin-top: 15%">&nbsp;</div>
+    <div id="{{\Illuminate\Support\Str::slug($report['module'])}}">&nbsp</div>
+    {!!$report['report'] !!}
+    <div style="margin-top: 15%">&nbsp;</div>
 @endforeach
+
+

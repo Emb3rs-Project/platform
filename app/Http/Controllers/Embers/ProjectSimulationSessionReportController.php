@@ -23,11 +23,11 @@ class ProjectSimulationSessionReportController extends Controller
 
     public function getFinalReport(SimulationSession $session, Request $request)
     {
-        $stepResults = IntegrationReport::where('simulation_uuid',$session->simulation_uuid)
-            ->get();
+        $stepResults = IntegrationReport::where('simulation_uuid',$session->simulation_uuid)->get();
 
         $reports = [];
         $i=0;
+
         foreach ($stepResults as $report) {
             $item = json_decode($report->output,true);
 
@@ -37,7 +37,6 @@ class ProjectSimulationSessionReportController extends Controller
                 $i++;
             }
         }
-
         return view('reports.final-integration-report', ["reports" => $reports])->render();
     }
 }
