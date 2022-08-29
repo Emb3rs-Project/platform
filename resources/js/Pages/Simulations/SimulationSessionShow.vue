@@ -13,8 +13,10 @@
 
                     <div
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-gray-50">
-                        <p>session uuid : {{ session.simulation_uuid }}</p>
-                        <p>created_at: {{ session.created_at }}</p>
+                        <p><strong>Project :</strong> {{ session.simulation.project.name }}</p>
+                        <p><strong>Simulation name :</strong> {{ session.simulation.name }}</p>
+                        <p><strong>session uuid :</strong> {{ session.simulation_uuid }}</p>
+                        <p><strong>created_at :</strong> {{ moment(session.created_at).format('DD/MM/YYYY HH:mm:ss') }}</p>
                     </div>
 
                 </div>
@@ -91,6 +93,11 @@
                              target="_blank"
                              :href="route('session.report.show', {session : session.id, report: report.id})"
                              class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full" >Report <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon></a>
+
+                                <a v-if="report.function === 'SIMULATION FINISHED' && shouldShowTheFinalReport"
+                                    target="_blank"
+                                    :href="route('session.final-report.show', {session : session.id})"
+                                    class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full" >Final Report <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon></a>
                             </div>
                         </div>
                     </div>
@@ -129,7 +136,7 @@ import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue
 import { Codemirror } from 'vue-codemirror'
 import { json } from "@codemirror/lang-json";
 import { Inertia } from "@inertiajs/inertia";
-
+import moment from 'moment'
 const props = defineProps({
     session: Object,
     reports: Array
@@ -142,6 +149,13 @@ const stepInfo = computed(() => {
 const processedReports = computed(() => {
     return props.reports.map((a) => ({ ...a, data: JSON.stringify(a.data, null, 2), output: JSON.stringify(JSON.parse(a.output), null, 2), output_data : JSON.parse(a.output) }))
 })
+
+const shouldShowTheFinalReport = computed(() => {
+    let reports = processedReports.value
+
+    return reports && reports.filter((report) => report.output_data.hasOwnProperty('report')).length >1
+});
+
 
 const extensions = [json()]
 
