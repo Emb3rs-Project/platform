@@ -37,6 +37,10 @@ class ProjectSimulationSessionReportController extends Controller
                 $i++;
             }
         }
-        return view('reports.final-integration-report', ["reports" => $reports])->render();
+        $metadata  = [
+            'project' => $session->simulation->project->name ?? '',
+            'simulation' => $session->simulation->name
+        ];
+        return view('reports.final-integration-report', ["reports" => $reports,'metadata' => $metadata])->render();
     }
 }
