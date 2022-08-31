@@ -552,6 +552,9 @@ export default {
         errorBag: "addTeamMember",
         preserveScroll: true,
         onSuccess: () => this.addTeamMemberForm.reset(),
+        onError: (error) => {
+            store.commit("objects/setNotify", {...error});
+        },
       });
     },
 
@@ -573,6 +576,9 @@ export default {
         {
           preserveScroll: true,
           onSuccess: () => (this.currentlyManagingRole = false),
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+          },
         }
       );
     },
@@ -599,6 +605,9 @@ export default {
           preserveScroll: true,
           preserveState: true,
           onSuccess: () => (this.teamMemberBeingRemoved = null),
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+          },
         }
       );
     },
@@ -630,6 +639,9 @@ export default {
           onSuccess: () => {
             this.teamRoleBeingRemoved = null;
             this.roles.splice(roleIdx, 1);
+          },
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
           },
           onFinish: (visit) => (this.confirmingRemovingTeamRole = false),
         }

@@ -122,7 +122,9 @@ const onSubmit = () => {
     console.log(form._data);
     form._data = { polygon: store.getters["map/view"] };
     form.post(route("projects.store"), {
-        onError: (e) => console.log(e),
+        onError: (error) => {
+            store.commit("objects/setNotify", {...error});
+        },
         onSuccess: () => {
             Inertia.visit(route("projects.index"));
         },

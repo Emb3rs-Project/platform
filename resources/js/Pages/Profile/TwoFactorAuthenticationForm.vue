@@ -149,6 +149,9 @@ export default {
           preserveScroll: true,
           onSuccess: () =>
             Promise.all([this.showQrCode(), this.showRecoveryCodes()]),
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+          },
           onFinish: () => (this.enabling = false),
         }
       );
@@ -178,6 +181,9 @@ export default {
       this.$inertia.delete("/user/two-factor-authentication", {
         preserveScroll: true,
         onSuccess: () => (this.disabling = false),
+        onError: (error) => {
+            store.commit("objects/setNotify", {...error});
+        },
       });
     },
   },

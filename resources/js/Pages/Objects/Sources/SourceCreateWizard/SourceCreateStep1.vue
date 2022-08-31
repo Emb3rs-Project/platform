@@ -437,8 +437,6 @@ export default {
                     selectedTemplate.value
                 );
 
-                console.log(errors.value);
-
                 if (selectedTemplate.value === DEFAULT_TEMPLATE) errors.value;
 
                 for (const property in source.value.data) {
