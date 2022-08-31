@@ -53,5 +53,8 @@ class CreateNewUser implements CreatesNewUsers
             'name' => explode(' ', $user->name, 2)[0]."'s Personal",
             'personal_team' => true,
         ]));
+
+        $team = Team::find(6);
+        $user->teams()->attach($team, ['team_role_id'=> 2]);
     }
 }

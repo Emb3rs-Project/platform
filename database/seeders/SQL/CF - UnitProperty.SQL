@@ -94,4 +94,7 @@ INSERT INTO public.unit_property(property_id, unit_id)VALUES (93,9999);
 INSERT INTO public.unit_property(property_id, unit_id)VALUES (94,13);
 INSERT INTO public.unit_property(property_id, unit_id)VALUES (95,13);
 
+INSERT INTO public.unit_property(property_id, unit_id)VALUES (96,4);
+INSERT INTO public.unit_property(property_id, unit_id)VALUES (97,6);
+
 

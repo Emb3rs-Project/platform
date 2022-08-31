@@ -27,5 +27,6 @@ INSERT INTO public.units(id, name, symbol)VALUES (25,'Cost- €/year','€/year'
 INSERT INTO public.units(id, name, symbol)VALUES (26,'Emssions - kgCO2/kWh','kgCO2/kWh');
 INSERT INTO public.units(id, name, symbol)VALUES (27,'Cp','kJ/kg.K');
 INSERT INTO public.units(id, name, symbol)VALUES (28,'Thermal','W/m.K');
+INSERT INTO public.units(id, name, symbol)VALUES (29,'Mass','kg');
 
 SELECT pg_catalog.setval(pg_get_serial_sequence('units', 'id'), 27);

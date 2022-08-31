@@ -2,8 +2,16 @@
     <SiteHead title="Projects" />
 
     <AppLayout>
-        <div class="bg-white">
+        <div>
             <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                <h1 class="mb-8 font-bold text-3xl">Projects</h1>
+
+                <div class="flex justify-end mb-5">
+                    <PrimaryLinkButton class="w-48" path="projects.create">
+                        Create a Project
+                    </PrimaryLinkButton>
+                </div>
+
                 <div class="flex flex-col gap-8">
                     <div class="shadow">
                         <div v-if="projects.length">
@@ -125,11 +133,6 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end">
-                        <PrimaryLinkButton class="w-48" path="projects.create">
-                            Create a Project
-                        </PrimaryLinkButton>
-                    </div>
                 </div>
             </div>
         </div>

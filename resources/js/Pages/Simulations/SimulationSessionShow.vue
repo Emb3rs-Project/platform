@@ -1,7 +1,7 @@
 <template>
     <AppLayout>
         <div class="bg-white h-screen overflow-y-scroll">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 h-full">
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <div class="flex justify-between">
                         <button class="bg-gray-600 hover:bg-gray-900 font-bold py-1 px-2 my-2 rounded-md text-white"
@@ -13,22 +13,43 @@
 
                     <div
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-gray-50">
-                        <p>session uuid : {{ session.simulation_uuid }}</p>
-                        <p>created_at: {{ session.created_at }}</p>
+                        <p><strong>Project :</strong> {{ session.simulation.project.name }}</p>
+                        <p><strong>Simulation name :</strong> {{ session.simulation.name }}</p>
+                        <p><strong>session uuid :</strong> {{ session.simulation_uuid }}</p>
+                        <p><strong>created_at :</strong> {{ moment(session.created_at).format('DD/MM/YYYY HH:mm:ss') }}</p>
                     </div>
 
                 </div>
 
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <h2 class="text-lg font-bold">Simulation Step Data</h2>
-                    <div v-if="reports.length == 0">
-                        <p>No Data yet...</p>
+                    <div v-if="reports.length == 0" class="flex h-full items-center justify-center">
+                        <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+                        <p>Waiting for module response...</p>
                     </div>
                     <div v-for="report of processedReports" :key="report.id">
                         <div v-if="report.errors"
                             class="border border-red-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-red-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <div class="my-2">
+                                <Disclosure v-slot="{ open }">
+                                    <DisclosureButton
+                                        class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                        <span>Input Data</span>
+                                        <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
+                                                       class="h-5 w-5 " />
+                                    </DisclosureButton>
+                                    <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                        <Codemirror v-model="report.data" :extensions="extensions"
+                                                    :style="{ height: '400px' }" :autofocus="true" :indent-with-tab="true"
+                                                    :tabSize="2" disabled></Codemirror>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                            </div>
                             <p>Error : <span class="font-bold">{{ report.errors.message }}</span></p>
                         </div>
 
@@ -72,6 +93,11 @@
                              target="_blank"
                              :href="route('session.report.show', {session : session.id, report: report.id})"
                              class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full" >Report <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon></a>
+
+                                <a v-if="report.function === 'SIMULATION FINISHED' && shouldShowTheFinalReport"
+                                    target="_blank"
+                                    :href="route('session.final-report.show', {session : session.id})"
+                                    class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full" >Final Report <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon></a>
                             </div>
                         </div>
                     </div>
@@ -110,7 +136,7 @@ import { ChevronUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/vue
 import { Codemirror } from 'vue-codemirror'
 import { json } from "@codemirror/lang-json";
 import { Inertia } from "@inertiajs/inertia";
-
+import moment from 'moment'
 const props = defineProps({
     session: Object,
     reports: Array
@@ -123,6 +149,13 @@ const stepInfo = computed(() => {
 const processedReports = computed(() => {
     return props.reports.map((a) => ({ ...a, data: JSON.stringify(a.data, null, 2), output: JSON.stringify(JSON.parse(a.output), null, 2), output_data : JSON.parse(a.output) }))
 })
+
+const shouldShowTheFinalReport = computed(() => {
+    let reports = processedReports.value
+
+    return reports && reports.filter((report) => report.output_data.hasOwnProperty('report')).length >1
+});
+
 
 const extensions = [json()]
 

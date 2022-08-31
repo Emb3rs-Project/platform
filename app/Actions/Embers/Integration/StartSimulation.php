@@ -4,12 +4,12 @@
 namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
-use App\Models\Instance;
-use App\Models\IntegrationReport;
+use App\Models\Simulation;
 use App\Models\SimulationSession;
+use App\Models\User;
+use App\Notifications\Embers\SimulationNotification;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
-use Str;
 
 class StartSimulation implements StartsSimulations
 {
@@ -17,9 +17,10 @@ class StartSimulation implements StartsSimulations
     public function run_simulation(SimulationSession $session): void
     {
         $session->load(['simulation', 'simulation.simulationMetadata']);
-
+        $host = config('grpc.grpc_manager_host');
+        $port = config('grpc.grpc_manager_port');
         $client = new ManagerClient(
-            'vali.pantherify.dev:50041',
+            "$host:$port",
             [
                 'credentials' => \Grpc\ChannelCredentials::createInsecure(),
             ]
@@ -34,15 +35,24 @@ class StartSimulation implements StartsSimulations
         $request->setInitialData(json_encode($initialData));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
 
-        list($result, $status) = $client->StartSimulation($request)->wait();
-        dump($status);
-        if ($status->code == 2) {
+        $session->simulation->changeStatusTo(Simulation::RUNNING);
 
-            // IntegrationReport::create([
-            //     "module" => "Platform",
-            //     "function" => "StartSimulation",
-            //     "errors" => ["message" => $status->details]
-            // ]);
+        list($result, $status) = $client->StartSimulation($request)->wait();
+
+        logger()?->error('[simulatison_output]:', [$status]);
+
+        if ($status->code == 2) {
+            $session->simulation->changeStatusTo(Simulation::ERROR);
+        } else {
+            $session->simulation->changeStatusTo(Simulation::COMPLETED);
         }
+
+        $user = User::find($session->simulation->requested_by);
+        $tag = [['name' => "Simulation #$session->simulation_uuid", 'path' => 'session.show']];
+        $user->notify(new SimulationNotification($user, $session->simulation->project->teams->first(),
+            $tag,
+            'The Simulation has finished',
+            $session->id
+        ));
     }
 }

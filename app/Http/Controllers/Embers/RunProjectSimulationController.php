@@ -23,9 +23,9 @@ class RunProjectSimulationController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $projectId
-     * @param  int  $simulationId
+     * @param \Illuminate\Http\Request $request
+     * @param int $projectId
+     * @param int $simulationId
      * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke(Request $request, Project $project, Simulation $simulation)
@@ -37,9 +37,9 @@ class RunProjectSimulationController extends Controller
         ]);
 
         $simulation->load('simulationMetadata');
-        $simulation->status = "IN PREPARATION";
+        $simulation->status = Simulation::RUNNING;
+        $simulation->requested_by = $request->user()?->id;
         $simulation->save();
-
 
         StartSimulation::dispatch($newSession);
 
@@ -58,6 +58,11 @@ class RunProjectSimulationController extends Controller
         //     )
         // );
 
-        return  redirect()->route('projects.simulations.show', ["project" => $project->id, "simulation" => $simulation->id]);
+        if ($request->input('onRow')) {
+            return redirect()->route('my-simulations.index', ['page' => $request->query('page')])->with('success', 'Simulation is Running. You will be notified when the simulation is finished');
+        }
+
+
+        return redirect()->route('projects.simulations.show', ["project" => $project->id, "simulation" => $simulation->id]);
     }
 }

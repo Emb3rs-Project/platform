@@ -27,6 +27,7 @@ use App\Http\Controllers\Embers\ProjectSimulationSessionReportController;
 use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
+use App\Http\Controllers\Embers\MySimulationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,11 +41,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => redirect('/login'));
-
+Route::get('/', fn() => redirect('/login'));
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::get('/storage/{disk}/{file}', function ($disk, $file) {
+        return \Illuminate\Support\Facades\Storage::disk($disk)->download($file);
+    });
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 
@@ -94,6 +98,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/sessions/{session}', [ProjectSimulationSessionController::class, 'destroy'])->name("session.delete");
 
     Route::get('/sessions/{session}/report/{report}', ProjectSimulationSessionReportController::class)->name('session.report.show');
+    Route::get('/sessions/{session}/final-report', [ProjectSimulationSessionReportController::class, 'getFinalReport'])->name('session.final-report.show');
 
     // Projects
     Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share')
@@ -101,6 +106,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::resource('/projects', ProjectController::class)
         ->whereNumber(['project']);
+
+    // My Simulations
+    Route::resource('/my-simulations', MySimulationController::class)
+        ->whereNumber(['my-simulations']);
 
     // Simulations
     Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')
