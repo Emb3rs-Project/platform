@@ -43,7 +43,7 @@ class ImportNotification extends EmbersNotification implements ShouldQueue
      */
     public function via($notifiable): array
     {
-        return ['database'];
+        return ['database', 'broadcast'];
     }
 
     /**

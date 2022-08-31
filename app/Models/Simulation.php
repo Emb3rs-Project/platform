@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Embers\SimulationUpdate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,18 @@ class Simulation extends Model
     public const COMPLETED = 'COMPLETED';
     public const ERROR = 'ERROR';
 
+    public const PROGRESS = [
+        'simulator-simulation-started' => 5,
+        'cf-module-convert-sink' => 10,
+        'cf-module-convert-source' => 15,
+        'teo-module-buildmodel' => 30,
+        'gis-module-create-network' => 45,
+        'gis-module-optimize-network' => 60,
+        'business-module-feasability' => 70,
+        'market-module-long-term' => 85,
+        'simulator-simulation-finished' => 100,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -33,6 +46,10 @@ class Simulation extends Model
         'name',
         'simulation_metadata_id',
         'requested_by'
+    ];
+
+    protected $appends = [
+        'progress'
     ];
 
     /**
@@ -130,8 +147,29 @@ class Simulation extends Model
     {
         $this->status = $status;
 
-        if($shouldSave) {
+        if ($shouldSave) {
             $this->save();
+            broadcast(new SimulationUpdate($this->id));
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function getProgressAttribute()
+    {
+        if ($this->status === 'RUNNING') {
+            $this->load('simulationSessions');
+            $session = $this->simulationSessions->last();
+            $report = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
+                ->orderBy('created_at', 'desc')->orderBy('id', 'desc')
+                ->latest()->first();
+            if ($report) {
+                $slug = \Str::slug($report->module . '-' . $report->function);
+                return self::PROGRESS[$slug];
+            }
+            return 0;
+        }
+        return 0;
     }
 }

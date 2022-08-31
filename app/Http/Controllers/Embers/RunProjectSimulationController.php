@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Embers;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Contracts\Embers\Simulations\SharesSimulations;
+use App\Events\Embers\SimulationRunning;
+use App\Events\Embers\SimulationUpdate;
 use App\Http\Controllers\Controller;
 use App\Jobs\StartSimulation;
 use App\Models\Project;
 use App\Models\Simulation;
+use App\Notifications\Embers\ImportNotification;
 use App\Nova\Actions\RunSimulationSession;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -26,7 +29,6 @@ class RunProjectSimulationController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param int $projectId
      * @param int $simulationId
-     * @return \Illuminate\Http\JsonResponse
      */
     public function __invoke(Request $request, Project $project, Simulation $simulation)
     {
@@ -59,7 +61,14 @@ class RunProjectSimulationController extends Controller
         // );
 
         if ($request->input('onRow')) {
-            return redirect()->route('my-simulations.index', ['page' => $request->query('page')])->with('success', 'Simulation is Running. You will be notified when the simulation is finished');
+            broadcast(new SimulationRunning($simulation->id));
+            broadcast(new SimulationUpdate($simulation->id));
+
+            /* $request->user()->notify(new ImportNotification($request->user(), $request->user()->currentTeam,
+                 [],
+                 'Simulation is Running. You will be notified when the simulation is finished'
+             ));*/
+            return response()->json([]);
         }
 
 

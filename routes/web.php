@@ -65,6 +65,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
     Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])->whereUuid(['notification']);
+    Route::get('/config', function () {
+        return response()->json([
+            'pusherKey' => config('broadcasting.connections.pusher.key'),
+            'pusherCluster' => config('broadcasting.connections.pusher.options.cluster'),
+            'pusherHost' => config('broadcasting.connections.pusher.options.host'),
+            'pusherTLS' => config('broadcasting.connections.pusher.options.useTLS'),
+            'pusherPort' => config('websockets.dashboard.port'),
+            'app_url' => config('app.url'),
+            'user_id' => request()->user()->id
+        ]);
+    })->name('config');
 
     // Institution
     Route::resource('/institution', InstitutionController::class)->whereNumber(['institution']);
@@ -110,6 +121,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // My Simulations
     Route::resource('/my-simulations', MySimulationController::class)
         ->whereNumber(['my-simulations']);
+
+    Route::post('/get-simulation', [MySimulationController::class, 'getSimulation']);
+    Route::get('/progress/{simulation}', [MySimulationController::class, 'progress']);
 
     // Simulations
     Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')

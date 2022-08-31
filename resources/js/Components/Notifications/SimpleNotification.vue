@@ -34,8 +34,7 @@
             <p :class="[styleClasses.title, 'text-sm font-medium']">
               {{ title }}
             </p>
-            <p :class="[styleClasses.message, 'mt-1 text-sm']">
-              {{ message }}
+            <p v-html="message" :class="[styleClasses.message, 'mt-1 text-sm']">
             </p>
           </div>
           <div class="ml-4 shrink-0 flex">

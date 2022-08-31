@@ -82,7 +82,11 @@
                                     Status
                                 </template>
                                 <template #body-status="{ item }">
-                                    <td
+                                    <td v-if="item.status === 'RUNNING'"
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 w-48">
+                                        <lv-progressbar :value="item.progress" color="#38b2ac"/>
+                                    </td>
+                                    <td v-else
                                         class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
                                     >
                                         {{ item.status }}
@@ -99,27 +103,27 @@
                                         {{ moment(item.created_at).format('DD/MM/YYYY HH:mm:ss') }}
                                     </td>
                                 </template>
+
+
                                 <!-- Actions -->
                                 <template #header-actions></template>
                                 <template #body-actions="{ item }">
                                     <td
                                         class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
 
-                                        <spinner-icon v-if="item.status === 'RUNNING'" class="text-green-600 font-medium text-sm w-5"></spinner-icon>
-                                        <Link
+                                        <spinner-icon v-if="item.status === 'RUNNING'"
+                                                      class="text-green-600 font-medium text-sm w-5"></spinner-icon>
+                                        <button
                                             v-else
-                                            method="post"
-                                            as="button"
-                                            :href="
-                                route('projects.simulations.run', {
-                                    project: item.project.id,
-                                    simulation: item.id,
-                                    onRow: true,
-                                    page: mySimulations.current_page
-                                })">
+                                            @click="runSimulation(route('projects.simulations.run', {
+                                        project: item.project.id,
+                                        simulation: item.id,
+                                        onRow: true,
+                                        page: mySimulations.current_page
+                                        }))">
                                             <play-icon class="text-green-600 font-medium text-sm w-5"></play-icon>
 
-                                        </Link>
+                                        </button>
 
                                         <Link
                                             :href="
@@ -164,7 +168,7 @@
 
                 <template #content class="my-auto">
                     <Field label="Project"
-                        hint="Select a project first to create a new a simulation">
+                           hint="Select a project first to create a new a simulation">
                         <SelectMenu v-model="currentProject" :options="projects"></SelectMenu>
                     </Field>
                 </template>
@@ -189,7 +193,7 @@
 
 <script>
 import {Link} from "@inertiajs/inertia-vue3";
-import { ref} from "vue";
+import {onBeforeUnmount, onMounted, ref, toRefs} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
 import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
@@ -199,7 +203,7 @@ import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
 import PlayIcon from "@/Components/Icons/PlayIcon.vue";
 import Pagination from "@/Components/Pagination";
-import { notify } from "@kyvg/vue3-notification";
+import {notify} from "@kyvg/vue3-notification";
 import moment from 'moment'
 import PrimaryButton from "../../Components/PrimaryButton";
 import DialogModal from "../../Jetstream/DialogModal";
@@ -208,6 +212,7 @@ import Field from "../../Components/Field";
 import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
 import {Inertia} from "@inertiajs/inertia";
 import SpinnerIcon from "../../Components/Icons/SpinnerIcon";
+import {broadcast} from "../../Mixins/vueEcho";
 
 export default {
     components: {
@@ -240,24 +245,92 @@ export default {
 
     },
     setup (props) {
-        const tableColumns = ["id", "name", "project", "metadata","created_at", "status", "actions"];
+        const tableColumns = ["id", "name", "project", "metadata", "created_at", "status", "actions"];
         const executeAction = ref(false)
         const currentProject = ref({})
+        let mySimulations = toRefs(props).mySimulations
+        const simulations = mySimulations.value.data
+        window.timeouts = []
+
+
+        const runSimulation = (route) => {
+            axios.post(route)
+        }
+
+        const reloadGrid = () => {
+            Inertia.reload({only: ['mySimulations']})
+            window.timeoutReload = setTimeout(reloadGrid, 1000)
+        }
+
+        const reloadSimulation = (id, repeat = false) => {
+            axios.post('/get-simulation', {
+                id: id
+            }).then(({data}) => {
+                let index = simulations.findIndex(({id}) => id === data.id)
+                if (index >= 0) {
+                    simulations[index] = data
+                }
+            })
+
+            if (repeat) {
+                window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 1000, id, true)
+            }
+        }
 
         const sendToCreateSimulation = () => {
-           let project = currentProject.value
+            let project = currentProject.value
             Inertia.visit(route(
                 'projects.simulations.create',
                 project.key
             ))
         }
+        const clearTimeouts = () => {
+            Object.keys(window.timeouts).forEach(timeout => {
+                clearTimeout(window.timeouts[timeout])
+            })
+            window.timeouts = []
+        }
+
+        onMounted(() => {
+            broadcast().channel('my-simulations')
+                .listen('.simulation-updated', (e) => {
+                    reloadSimulation()
+                })
+                .listen('.simulation-run', (e) => {
+                    notify({
+                        group: "notifications",
+                        title: "Simulation",
+                        text: e.data.description,
+                        data: {
+                            type: "success",
+                        },
+                    });
+                    reloadSimulation(e.data.id, true)
+                })
+                .listen('.simulation-finished', (e) => {
+                    clearTimeout(window.timeouts[`timeoutSimulationReload-${e.data.id}`])
+                    reloadSimulation(e.data.id)
+                })
+            simulations.forEach((simulation) => {
+                if (simulation.status === 'RUNNING') {
+                    reloadSimulation(simulation.id, true)
+                }
+            })
+        })
+
+        onBeforeUnmount(() => {
+            broadcast().leave('my-simulations')
+            clearTimeouts()
+
+        })
 
         return {
             tableColumns,
             executeAction,
             currentProject,
             sendToCreateSimulation,
-            moment
+            moment,
+            runSimulation
         };
     },
     watch: {

@@ -4,6 +4,8 @@
 namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
+use App\Events\Embers\SimulationFinished;
+use App\Events\Embers\SimulationUpdate;
 use App\Models\Simulation;
 use App\Models\SimulationSession;
 use App\Models\User;
@@ -49,6 +51,7 @@ class StartSimulation implements StartsSimulations
 
         $user = User::find($session->simulation->requested_by);
         $tag = [['name' => "Simulation #$session->simulation_uuid", 'path' => 'session.show']];
+        broadcast(new SimulationFinished($session->simulation->id));
         $user->notify(new SimulationNotification($user, $session->simulation->project->teams->first(),
             $tag,
             'The Simulation has finished',
