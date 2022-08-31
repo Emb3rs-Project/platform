@@ -10,7 +10,7 @@ export const transformData = (data, templateProperties, equipment = null, select
 
     if (!templateProperty) continue;
 
-    if (!data[key]) {
+    if (!data[key] && typeof data[key] !== 'number') {
       transformedData[key] = templateProperty.property.inputType === "select" ? {} : '';
 
       continue

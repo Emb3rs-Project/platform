@@ -9,7 +9,6 @@ export const validateProperies = (parent, properties, errors, index = null) => {
     const propertyName = property.property.name.toLowerCase();
 
     let propertyCopy = value;
-
     if (inputType === "select") {
       // if the property has a value, get it and re-assign the property as a string
       if (Object.keys(value).length) {
@@ -20,7 +19,7 @@ export const validateProperies = (parent, properties, errors, index = null) => {
     }
 
     if (property.required) {
-      if (!propertyCopy)
+      if (!propertyCopy && typeof propertyCopy !== 'number')
         propertyErrors.push(`The ${propertyName} field is required.`);
     }
 

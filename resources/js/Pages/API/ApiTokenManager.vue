@@ -227,7 +227,10 @@
                     onSuccess: () => {
                         this.displayingToken = true
                         this.createApiTokenForm.reset()
-                    }
+                    },
+                    onError: (error) => {
+                        store.commit("objects/setNotify", {...error});
+                    },
                 })
             },
 
@@ -242,6 +245,9 @@
                     preserveScroll: true,
                     preserveState: true,
                     onSuccess: () => (this.managingPermissionsFor = null),
+                    onError: (error) => {
+                        store.commit("objects/setNotify", {...error});
+                    },
                 })
             },
 
@@ -254,6 +260,9 @@
                     preserveScroll: true,
                     preserveState: true,
                     onSuccess: () => (this.apiTokenBeingDeleted = null),
+                    onError: (error) => {
+                        store.commit("objects/setNotify", {...error});
+                    },
                 })
             },
         },
