@@ -438,6 +438,9 @@ export default {
                         store.dispatch("map/removeMarker", true);
                         store.dispatch("objects/showSlide", { route: "objects.list" });
                     },
+                    onError: (error) => {
+                        store.commit("objects/setNotify", {...error});
+                    },
                 });
         };
 

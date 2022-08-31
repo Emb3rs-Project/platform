@@ -454,6 +454,9 @@ export default {
             });
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+          },
         });
     };
 

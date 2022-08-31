@@ -328,6 +328,10 @@ export default {
             store.dispatch("objects/showSlide", { route: "objects.list" });
             store.dispatch("source/reset");
           },
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+              nextStepRequest.value = false;
+          },
         });
     };
 

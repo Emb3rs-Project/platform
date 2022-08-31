@@ -280,6 +280,9 @@ export default {
                       type: 'success'
                   });
                 },
+                onError: (error) => {
+                    store.commit("objects/setNotify", {...error});
+                },
               }
             );
           if (type === "sink")
@@ -298,6 +301,9 @@ export default {
                       type: 'success'
                   });
                 },
+                onError: (error) => {
+                    store.commit("objects/setNotify", {...error});
+                },
               }
             );
           if (type === 'links')
@@ -315,6 +321,9 @@ export default {
                       text: "Link Deleted Successfully",
                       type: 'success'
                   });
+                },
+                onError: (error) => {
+                    store.commit("objects/setNotify", {...error});
                 },
               }
             );
