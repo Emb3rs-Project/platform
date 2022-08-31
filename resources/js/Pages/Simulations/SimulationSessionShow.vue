@@ -4,8 +4,13 @@
             <div class="grid grid-cols-2 gap-4 h-full">
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <div class="flex justify-between">
-                        <button class="bg-gray-600 hover:bg-gray-900 font-bold py-1 px-2 my-2 rounded-md text-white"
-                            @click="back"><ChevronLeftIcon class="w-6 h-6"></ChevronLeftIcon></button>
+                        <button class="bg-gray-600 hover:bg-gray-900 font-bold py-1 px-2 my-2 rounded-md text-white flex"
+                            @click="back">
+
+                            <ChevronLeftIcon class="w-6 h-6"></ChevronLeftIcon>
+                            <span>Simulation Details</span>
+
+                        </button>
                         <button class="bg-red-600 hover:bg-red-900 font-bold py-1 px-2 my-2 rounded-md text-white"
                             @click="deleteSession">Delete Session</button>
                     </div>
