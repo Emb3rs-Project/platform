@@ -305,7 +305,7 @@
                                     "
                     />
                 </Field>
-                <p> Download an example file: <a :href="`/samples/${form.action}_import_sample.xlsx`" class="font-bold text-primary">click here</a></p>
+                <p> Download an example file: <a :href="`/samples/${form.action.toLowerCase()}_import_sample.xlsx`" class="font-bold text-primary">click here</a></p>
             </template>
 
             <template #footer>
