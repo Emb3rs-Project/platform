@@ -6,6 +6,7 @@ namespace App\Actions\Embers\Integration;
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Events\Embers\SimulationFinished;
 use App\Events\Embers\SimulationUpdate;
+use App\Models\IntegrationReport;
 use App\Models\Simulation;
 use App\Models\SimulationSession;
 use App\Models\User;
@@ -42,8 +43,9 @@ class StartSimulation implements StartsSimulations
         list($result, $status) = $client->StartSimulation($request)->wait();
 
         logger()?->error('[simulatison_output]:', [$status]);
+        $reportError = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->whereNotNull('errors')->count();
 
-        if ($status->code == 2) {
+        if ($reportError > 0) {
             $session->simulation->changeStatusTo(Simulation::ERROR);
         } else {
             $session->simulation->changeStatusTo(Simulation::COMPLETED);
