@@ -42,6 +42,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', fn() => redirect('/login'));
+Route::get('/config', function () {
+    return response()->json([
+        'pusherKey' => config('broadcasting.connections.pusher.key'),
+        'pusherCluster' => config('broadcasting.connections.pusher.options.cluster'),
+        'pusherHost' => config('broadcasting.connections.pusher.options.host'),
+        'pusherTLS' => config('broadcasting.connections.pusher.options.useTLS'),
+        'pusherPort' => config('websockets.dashboard.port'),
+        'app_url' => config('app.url'),
+        'user_id' => request()->user()->id ?? null
+    ]);
+})->name('config');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
@@ -65,17 +76,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('/notifications/remove-all', RemoveAllNotificationsController::class)->name('notifications.remove-all');
     Route::post('/notifications/mark-all-as-read', MarkAllNotificationsAsReadController::class)->name('notifications.mark-all-as-read');
     Route::resource('/notifications', NotificationContoller::class)->only(['index', 'update', 'destroy'])->whereUuid(['notification']);
-    Route::get('/config', function () {
-        return response()->json([
-            'pusherKey' => config('broadcasting.connections.pusher.key'),
-            'pusherCluster' => config('broadcasting.connections.pusher.options.cluster'),
-            'pusherHost' => config('broadcasting.connections.pusher.options.host'),
-            'pusherTLS' => config('broadcasting.connections.pusher.options.useTLS'),
-            'pusherPort' => config('websockets.dashboard.port'),
-            'app_url' => config('app.url'),
-            'user_id' => request()->user()->id
-        ]);
-    })->name('config');
 
     // Institution
     Route::resource('/institution', InstitutionController::class)->whereNumber(['institution']);
