@@ -19,9 +19,8 @@
             </div>
         </div>
 
-        <SlideOver title="Create a Simulation" headerBackground="bg-purple-600" subtitleTextColor="text-gray-100"
+        <SlideOver :title="formTitle" headerBackground="bg-purple-600" subtitleTextColor="text-gray-100"
                    alwaysOpen>
-
             <template #stickyTop>
                 <Steps
                     :steps="steps"
@@ -424,7 +423,7 @@
                                 <field label="Storage heating tag"
                                     hint="Binary parameter indicating whether the thermal energy storage is connected to the district heating network. Yes if it is connected and No is if is not.">
                                     <SelectMenu
-                                        :modelValue="binaryOptions.find((item) => item.key === form.extra.input_data.platform_storages[index].tag_heating)"
+                                        :modelValue="binaryOptions.find((item) => item.key == form.extra.input_data.platform_storages[index].tag_heating)"
                                         :options="binaryOptions"
                                         @update:modelValue="(val) => form.extra.input_data.platform_storages[index].tag_heating = val.key"
                                     />
@@ -433,7 +432,7 @@
                                 <field label="Storage cooling tag"
                                 hint=" Binary parameter indicating whether the thermal energy storage is connected to the district cooling network. Yes if it is connected and No is if is not.">
                                     <SelectMenu
-                                        :modelValue="binaryOptions.find((item) => item.key === form.extra.input_data.platform_storages[index].tag_cooling)"
+                                        :modelValue="binaryOptions.find((item) => item.key == form.extra.input_data.platform_storages[index].tag_cooling)"
                                         :options="binaryOptions"
                                         @update:modelValue="(val) => form.extra.input_data.platform_storages[index].tag_cooling = val.key"
                                     />
@@ -655,7 +654,7 @@
                           Next
                         </span>
                     <span v-else @click="confirmingSimulationCreation = true">
-                          Create Simulation
+                          {{formTitle}}
                         </span>
                 </PrimaryButton>
 
@@ -675,10 +674,10 @@
                 :show="confirmingSimulationCreation"
                 @close="confirmingSimulationCreation = false"
             >
-                <template #title> Create New Simulation </template>
+                <template #title> {{ formTitle }} </template>
 
                 <template #content>
-                    are you sure you want to create a new simulation?
+                    are you sure you want to {{mode}} the simulation?
                 </template>
 
                 <template #footer>
@@ -763,6 +762,17 @@ export default {
             type: Array,
             required: true,
         },
+        mode: {
+            type: String,
+            default: 'create'
+        },
+        simulationInputs: {
+            type: Object
+        },
+        simulationId: {
+            type: Number
+        }
+
     },
 
     setup(props) {
@@ -773,6 +783,10 @@ export default {
         );
         const selectedLink = computed(
             () => store.getters["map/currentLinks"]
+        );
+
+        const formTitle = computed(
+            () => props.mode == 'update' ? 'Update Simulation' : 'Create Simulation'
         );
 
         const currentStep = ref(1);
@@ -788,7 +802,11 @@ export default {
         const emissions = ["co2"]
 
         const platformStorages = computed(() => {
-            return  form.extra.input_data.platform_storages.map((item) => item.storage)
+            if(!form.extra.input_data.platform_storages) {
+                return []
+            }
+
+            return  form.extra.input_data.platform_storages.map((item) => item.storage) || []
         });
 
         const pushNewStorage = () => {
@@ -814,7 +832,6 @@ export default {
                 }
             )
         };
-
         const removeStorage = (index) => {
             form.extra.input_data.platform_storages.splice(index, 1)
         };
@@ -1028,7 +1045,13 @@ export default {
             },
         });
 
+        if(props.simulationInputs) {
+            form.extra = props.simulationInputs
+            console.log(form.extra)
+        }
+
         const onSubmit = () => {
+
             form.transform((data) => {
                 for (let index in data.extra.input_data.user.util) {
                     data.extra.input_data.user.util[index] = Number(data.extra.input_data.user.util[index])
@@ -1040,17 +1063,27 @@ export default {
                 for (let index in data.extra.input_data.platform_sets.TIMESLICE) {
                     data.extra.input_data.platform_sets.TIMESLICE[index] = Number(data.extra.input_data.platform_sets.TIMESLICE[index])
                 }
-
                 //Select all the storage's created
-                data.extra.input_data.platform_storages = platformStorages
+                data.extra.input_data.platform_sets.STORAGE = platformStorages.value
 
               return data
-            }).post(route("projects.simulations.store", {id: props.project.id}), {
-
-                onError: (errors) => {
-                    confirmingSimulationCreation.value = false
-                }
             })
+
+            if(props.mode === 'update') {
+                form.patch(route('projects.simulations.update', {project: props.project.id, simulation: props.simulationId}), {
+                        onError: (errors) => {
+                            confirmingSimulationCreation.value = false
+                        }
+                    });
+
+            } else {
+                    form.post(route('projects.simulations.store', {id: props.project.id}), {
+                        onError: (errors) => {
+                            confirmingSimulationCreation.value = false
+                        }
+                    });
+            }
+
 
         };
 
@@ -1210,6 +1243,8 @@ export default {
             platformStorages,
             confirmingSimulationCreation,
             isFullSimulation,
+            binaryOptions,
+            formTitle,
             onDeselected,
             onSelected,
             onSubmit,
@@ -1218,8 +1253,8 @@ export default {
             selectAllSinks,
             selectAllSources,
             pushNewStorage,
-            removeStorage,
-            binaryOptions
+            removeStorage
+
         };
     },
 }

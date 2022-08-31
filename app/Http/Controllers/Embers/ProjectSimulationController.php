@@ -14,6 +14,7 @@ use App\Http\Requests\SimulationRequest;
 use App\Models\Instance;
 use App\Models\Link;
 use App\Models\Project;
+use App\Models\Simulation;
 use App\Models\SimulationMetadata;
 use Auth;
 use Illuminate\Http\Request;
@@ -134,15 +135,30 @@ class ProjectSimulationController extends Controller
      */
     public function edit(Request $request, int $projectId, int $simulationId)
     {
-        [
-            $simulation,
-            $project
-        ] = app(EditsSimulations::class)->edit($request->user(), $projectId, $simulationId);
 
-        return response()->json([
-            'simulation' => $simulation,
-            'project' => $project
+        $project = Project::find($projectId);
+        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
+        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+        $simulation = Simulation::find($simulationId);
+        $teamLinks = $request->user()->currentTeam->links->pluck('id');
+
+        $links = Link::with([
+            'geoSegments'
+        ])->whereIn('id', $teamLinks)->get();
+
+        $simulation_metadata = SimulationMetadata::all();
+
+        return Inertia::render('Simulations/SimulationCreate', [
+            'instances'             => $instances,
+            'links'                 => $links,
+            'project'               => $project,
+            'simulation_metadata'   => $simulation_metadata,
+            'mode' => 'update',
+            'simulationInputs' => $simulation->extra,
+            'simulationId' => $simulationId
         ]);
+
+        return Inertia::render('Simulations/SimulationCreate', ["project" => $project, "simulation" => $simulation]);
     }
 
     /**

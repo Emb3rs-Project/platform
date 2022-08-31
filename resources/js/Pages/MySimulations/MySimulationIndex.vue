@@ -112,17 +112,15 @@
                                         class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end">
 
                                         <spinner-icon v-if="item.status === 'RUNNING'"
-                                                      class="text-green-600 font-medium text-sm w-5"></spinner-icon>
-                                        <button
-                                            v-else
-                                            @click="runSimulation(route('projects.simulations.run', {
-                                        project: item.project.id,
-                                        simulation: item.id,
-                                        onRow: true,
-                                        page: mySimulations.current_page
-                                        }))">
-                                            <play-icon class="text-green-600 font-medium text-sm w-5"></play-icon>
+                                                      class="text-green-600 font-medium text-sm w-5"/>
 
+                                        <button v-else @click="runSimulation(route('projects.simulations.run', {
+                                            project: item.project.id,
+                                            simulation: item.id,
+                                            onRow: true,
+                                            page: mySimulations.current_page
+                                            }))">
+                                                <play-icon class="text-green-600 font-medium text-sm w-5"></play-icon>
                                         </button>
 
                                         <Link
@@ -141,6 +139,21 @@
                                             ></detail-icon>
                                         </Link>
 
+                                        <Link
+                                            :href="
+                                                            route(
+                                                                'projects.simulations.edit',
+                                                                [
+                                                                    item.project.id,
+                                                                    item.id,
+                                                                ]
+                                                            )
+                                                        "
+                                        >
+                                            <edit-icon
+                                                class="text-gray-500 font-medium text-sm w-5"
+                                            ></edit-icon>
+                                        </Link>
                                     </td>
                                 </template>
                             </AmazingIndexTable>

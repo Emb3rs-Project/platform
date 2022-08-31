@@ -9,46 +9,47 @@
                         v-if="simulation.simulation_metadata"
                         class="py-5 text-left"
                     >
-                        <h2 class="text-md font-semibold">
-                            Simulation Metadata
-                        </h2>
                         <div
                             class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 bg-gray-50 text-xs"
                         >
-                            Name :
+                            Project:
+                            <b>{{ project.name }}</b>
+                            <br />
+
+                            Name    :
+                            <b>{{ simulation.name }}</b>
+                            <br />
+
+                            Type    :
                             <b>{{ simulation.simulation_metadata.name }}</b>
                             <br />
-                            Type :
-                            <b>{{
-                                simulation.simulation_metadata.data.type
-                            }}</b>
                         </div>
 
                         <!-- Simulation Steps -->
-                        <h2 class="pt-2">
-                            Simulation Steps
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-green-100 text-gray-800"
-                            >
-                                Start
-                            </span>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-gray-100 text-gray-800"
-                            >
-                                Middle
-                            </span>
+<!--                        <h2 class="pt-2">-->
+<!--                            Simulation Steps-->
+<!--                            <span-->
+<!--                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-green-100 text-gray-800"-->
+<!--                            >-->
+<!--                                Start-->
+<!--                            </span>-->
+<!--                            <span-->
+<!--                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-gray-100 text-gray-800"-->
+<!--                            >-->
+<!--                                Middle-->
+<!--                            </span>-->
 
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-red-100 text-gray-800"
-                            >
-                                Finish
-                            </span>
-                            <span
-                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-orange-100 text-gray-800"
-                            >
-                                User
-                            </span>
-                        </h2>
+<!--                            <span-->
+<!--                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-red-100 text-gray-800"-->
+<!--                            >-->
+<!--                                Finish-->
+<!--                            </span>-->
+<!--                            <span-->
+<!--                                class="inline-flex items-center px-2.5 py-0.5 rounded-full mx-1 text-xs font-medium bg-orange-100 text-gray-800"-->
+<!--                            >-->
+<!--                                User-->
+<!--                            </span>-->
+<!--                        </h2>-->
                         <div
                             class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs"
                             :class="{
@@ -93,7 +94,7 @@
                         :key="session"
                     >
                         <p>session uuid : {{ session.simulation_uuid }}</p>
-                        <p>created_at : {{ session.created_at }}</p>
+                        <p>created_at : {{ moment(session.created_at).format('DD/MM/YYYY HH:mm:ss') }}</p>
                     </div>
                 </div>
             </div>
@@ -123,6 +124,7 @@ import { polygon, marker } from "leaflet";
 import VSelect from "vue-select";
 import { COUNTRIES } from "./data/countries";
 import { Inertia } from "@inertiajs/inertia";
+import moment from 'moment';
 
 const props = defineProps({
     project: Object,
