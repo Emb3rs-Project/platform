@@ -389,7 +389,7 @@
 
                                 <field label="Storage discount rate"
                                     hint="Storage specific value for the discount rate, expressed in decimals ">
-                                    <text-input  v-model="form.extra.input_data.platform_storages[index].discount_rate_sto"
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].dicount_rate_sto"
                                      type="number"/>
                                 </field>
 
@@ -815,7 +815,7 @@ export default {
                 {
                     "storage": "Storage"+lastStorageIndex,
                     "capital_cost_storage": 750,
-                    "discount_rate_sto": 0.04,
+                    "dicount_rate_sto": 0.04,
                     "operational_life_sto": 100,
                     "storage_max_charge": 1500,
                     "storage_max_discharge": 1500,
