@@ -942,7 +942,8 @@ export default {
                 group: "notifications",
                 title: title,
                 text: text,
-                duration: 5000,
+                duration: 7000,
+                width: 600,
                 data: {
                     type: type,
                 },
