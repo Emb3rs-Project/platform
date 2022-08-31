@@ -21,15 +21,22 @@ class Simulation extends Model
     public const ERROR = 'ERROR';
 
     public const PROGRESS = [
-        'simulator-simulation-started' => 5,
-        'cf-module-convert-sink' => 10,
-        'cf-module-convert-source' => 15,
-        'teo-module-buildmodel' => 30,
-        'gis-module-create-network' => 45,
-        'gis-module-optimize-network' => 60,
-        'business-module-feasability' => 70,
-        'market-module-long-term' => 85,
-        'simulator-simulation-finished' => 100,
+        'demo-simulation' => [
+            'simulator-simulation-started' => 5,
+            'cf-module-convert-sink' => 10,
+            'cf-module-convert-source' => 15,
+            'gis-module-create-network' => 30,
+            'gis-module-optimize-network' => 45,
+            'teo-module-buildmodel' => 60,
+            'market-module-long-term' => 70,
+            'business-module-feasability' => 85,
+            'simulator-simulation-finished' => 100
+        ],
+        'convert-orc' => [
+            'simulator-simulation-started' => 5,
+            'cf-module-convert-orc' => 50,
+            'simulator-simulation-finished' => 100
+        ]
     ];
 
     /**
@@ -159,14 +166,16 @@ class Simulation extends Model
     public function getProgressAttribute()
     {
         if ($this->status === 'RUNNING') {
-            $this->load('simulationSessions');
+            $this->load('simulationSessions', 'simulationMetadata');
             $session = $this->simulationSessions->last();
             $report = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
                 ->orderBy('created_at', 'desc')->orderBy('id', 'desc')
                 ->latest()->first();
             if ($report) {
                 $slug = \Str::slug($report->module . '-' . $report->function);
-                return self::PROGRESS[$slug];
+                $data = $this->simulationMetadata->data;
+                $keySlug = \Str::slug($data['identifier']);
+                return self::PROGRESS[$keySlug][$slug];
             }
             return 0;
         }
