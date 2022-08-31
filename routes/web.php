@@ -118,6 +118,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/projects', ProjectController::class)
         ->whereNumber(['project']);
 
+    Route::post('/import', [ProjectController::class, 'importFile']);
+
     // My Simulations
     Route::resource('/my-simulations', MySimulationController::class)
         ->whereNumber(['my-simulations']);

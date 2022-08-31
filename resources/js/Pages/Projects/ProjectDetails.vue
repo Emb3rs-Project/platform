@@ -8,6 +8,14 @@
 
         <div class="grid grid-cols-1 p-12 gap-y-10">
             <div>
+                <div class="flex  justify-end mb-5">
+                    <PrimaryButton class="w-48 mr-2 capitalize" @click="importInstance('Source')">
+                        Import Sources
+                    </PrimaryButton>
+                    <PrimaryButton class="w-48 capitalize" @click="importInstance('Sink')">
+                        Import Sinks
+                    </PrimaryButton>
+                </div>
                 <div class="grid grid-cols-3">
                     <div>
                         <h3 class="text-lg font-medium leading-6 text-gray-900">
@@ -272,13 +280,55 @@
                 >Create Simulation</Link
             >
         </div>
+
+        <DialogModal :show="executeAction" @close="closeModal">
+            <template #title>
+                Import {{form.action}}
+            </template>
+
+            <template #content class="my-auto">
+                <Field label="File"
+                       hint="Excel file for import">
+                    <input
+                        type="file"
+                        ref="file"
+                        class="
+                                        w-full
+                                        px-4
+                                        py-2
+                                        mt-2
+                                        border
+                                        rounded-md
+                                        focus:outline-none
+                                        focus:ring-1
+                                        focus:ring-blue-600
+                                    "
+                    />
+                </Field>
+                <p> Download an example file: <a :href="`/samples/${form.action}_import_sample.xlsx`" class="font-bold text-primary">click here</a></p>
+            </template>
+
+            <template #footer>
+
+                <SecondaryOutlinedButton
+                    class="mr-2"
+                    @click="closeModal">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton @click="submit">
+                    Submit
+                </PrimaryButton>
+            </template>
+
+        </DialogModal>
     </AppLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
@@ -290,6 +340,11 @@ import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import PrimaryButton from "../../Components/PrimaryButton";
+import DialogModal from "../../Jetstream/DialogModal";
+import Field from "../../Components/Field";
+import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
+import {notify} from "@kyvg/vue3-notification";
 
 const props = defineProps({
     project: {
@@ -306,6 +361,7 @@ const props = defineProps({
     },
 });
 
+const file = ref(null)
 function onSimulationDelete(project, simulation) {
     // we need to diplay a modal here
     Inertia.delete(
@@ -313,8 +369,48 @@ function onSimulationDelete(project, simulation) {
     );
 }
 
-const map = ref(null);
+const form = useForm({
+    file: null,
+    action: null,
+})
+function closeModal() {
+    executeAction.value = false
+}
 
+function submit() {
+    if (file) {
+        console.log(file)
+        form.file = file.value.files[0];
+    }
+    form.post('/import', {
+        wantsJson: true,
+        preserveState: true,
+        preserveScroll: true,
+        onSuccess: (data) => {
+            form.reset()
+            console.log(data);
+        }
+    });
+    closeModal()
+    notify({
+        group: "notifications",
+        title: "Import",
+        text: 'The file is being processed in the background. You will receive a notification when finished.',
+        data: {
+            type: "success",
+        },
+    });
+}
+
+const map = ref(null);
+const executeAction = ref(false);
+
+
+function importInstance(action) {
+    console.log(action)
+    form.action = action
+    executeAction.value = true
+}
 onMounted(() => {
     const _map = map.value.map;
 

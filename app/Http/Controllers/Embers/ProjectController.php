@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Link;
 use Auth;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -21,7 +22,7 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Inertia\Response
      */
     public function index(Request $request)
@@ -34,7 +35,7 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Inertia\Response
      */
     public function create(Request $request)
@@ -47,7 +48,7 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -60,8 +61,8 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function show(Request $request, $id)
@@ -79,8 +80,8 @@ class ProjectController extends Controller
 
         return Inertia::render('Projects/ProjectDetails', [
             'instances' => $instances,
-            'links'     => $links,
-            'project'   => $project,
+            'links' => $links,
+            'project' => $project,
 
         ]);
     }
@@ -88,8 +89,8 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function edit(Request $request, $id)
@@ -108,8 +109,8 @@ class ProjectController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -122,8 +123,8 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)
@@ -131,5 +132,20 @@ class ProjectController extends Controller
         app(DestroysProjects::class)->destroy($request->user(), $id);
 
         return redirect()->route('projects.index');
+    }
+
+
+    public function importFile(Request $request)
+    {
+        $file = $request->file('file');
+
+        $filePath = $file->store('imports');
+        list($path, $filename) = explode('/', $filePath);
+        $import = "\App\Jobs\Import{$request->input('action')}::dispatch";
+
+        call_user_func($import, $filename, $request->user());
+
+        return redirect()->back()->with('flash', ['success' => 'The file is being processed in the background. You will receive a notification when finished.']);
+        //$import::dispatch($filename, request()->user());
     }
 }
