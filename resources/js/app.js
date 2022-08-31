@@ -28,7 +28,7 @@ createInertiaApp({
                  .use(Notifications)
                  .use(echo({
                      broadcaster: 'pusher',
-                     authEndpoint: 'broadcasting/auth',
+                     authEndpoint: '/broadcasting/auth',
                      key: data.pusherKey,
                      forceTLS: data.pusherTLS,
                      wsHost: data.pusherHost,
