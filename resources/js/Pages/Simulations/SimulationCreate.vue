@@ -335,14 +335,15 @@
                              v-model="form.extra.input_data.platform_sets.EMISSION"/>
                 </field>
 
-                <!--                        <field label="TIMESLICE">-->
-                <!--                            <TextInput-->
-                <!--                                v-model="form.extra.input_data.platform_sets.TIMESLICE"-->
-                <!--                                type="text"-->
-                <!--                            />-->
-                <!--                        </field>-->
+                <field label="Time resolution (TIMESLICE)"
+                    hint="It represents the time split of each modelled year, therefore the time resolution of the model.">
+                    <VSelect
+                        taggable multiple
+                        v-model="form.extra.input_data.platform_sets.TIMESLICE"
+                    />
+                </field>
 
-                <field label="Time periodo (YEAR)"
+                <field label="Time period (YEAR)"
                     hint="It represents the time frame of the model, it contains all the years to be considered in the analysis. ">
                     <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.YEAR"
                              class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
@@ -362,15 +363,142 @@
 
                 </field>
 
-                <field label="Storage (STORAGE)"
+                <field
                        hint="It includes storage facilities in the model."
                        class="mt-1 relative rounded-md shadow-sm">
-                    <!-- TODO: add storages on backoffice -->
-                    <VSelect :options="platformStorages"
-                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-                             multiple
-                             v-model="form.extra.input_data.platform_sets.STORAGE"/>
+                    <PrimaryButton
+                     @click="pushNewStorage">
+                        Add new Storage
+                    </PrimaryButton>
 
+                    <div class="space-y-1 sm:space-y-0 sm:grid sm:col-span-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div v-for="(storage, index) in form.extra.input_data.platform_storages">
+                            <PropertyDisclosure :title="storage.storage" class="sm:col-span-3" can-delete
+                                                @onDelete="removeStorage(index)">
+
+                                <field label="Storage Name">
+                                    <text-input v-model="form.extra.input_data.platform_storages[index].storage"
+                                    />
+                                </field>
+
+                                <field label="Storage capital cost"
+                                    hint="Investment costs of storage additions, defined per unit of storage capacity.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].capital_cost_storage"
+                                                 type="number"
+                                                 unit="€/kWh"/>
+                                </field>
+
+                                <field label="Storage discount rate"
+                                    hint="Storage specific value for the discount rate, expressed in decimals ">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].discount_rate_sto"
+                                     type="number"/>
+                                </field>
+
+                                <field label="Storage operational life"
+                                    hint="Useful lifetime of the storage facility.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].operational_life_sto"
+                                     type="number"
+                                    unit="years"/>
+                                </field>
+
+                                <field label="Storage maximum charge rate"
+                                    hint="Maximum charging rate for the storage">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].storage_max_charge"
+                                    type="number"
+                                    unit="kWh"/>
+                                </field>
+
+                                <field label="Storage maximum discharge rate"
+                                    hint="Maximum discharging rate for the storage">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].storage_max_discharge"
+                                    type="number"
+                                    unit="kWh"/>
+                                </field>
+
+                                <field label="Storage length to diameter ratio"
+                                    hint="Binary parameter which indicates the length to diameter ratio of the thermal energy storage tank. Value is 0 if the L2D is 2 and is 1 if the L2D is 4.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].l2d"
+                                     type="number"/>
+                                </field>
+
+                                <field label="Storage heating tag"
+                                    hint="Binary parameter indicating whether the thermal energy storage is connected to the district heating network. Yes if it is connected and No is if is not.">
+                                    <SelectMenu
+                                        :modelValue="binaryOptions.find((item) => item.key === form.extra.input_data.platform_storages[index].tag_heating)"
+                                        :options="binaryOptions"
+                                        @update:modelValue="(val) => form.extra.input_data.platform_storages[index].tag_heating = val.key"
+                                    />
+                                </field>
+
+                                <field label="Storage cooling tag"
+                                hint=" Binary parameter indicating whether the thermal energy storage is connected to the district cooling network. Yes if it is connected and No is if is not.">
+                                    <SelectMenu
+                                        :modelValue="binaryOptions.find((item) => item.key === form.extra.input_data.platform_storages[index].tag_cooling)"
+                                        :options="binaryOptions"
+                                        @update:modelValue="(val) => form.extra.input_data.platform_storages[index].tag_cooling = val.key"
+                                    />
+                                </field>
+
+                                <field label="Storage hot water return temperature"
+                                    hint="The return water temperature in the heating grid where the thermal energy storage is connected.">
+                                    <text-input v-model="form.extra.input_data.platform_storages[index].storage_return_temp"
+                                    type="number"
+                                    unit="Cº"/>
+                                </field>
+
+                                <field label="Storage hot water supply temperature"
+                                    hint="The temperature of water inflow into thermal energy storage.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].storage_supply_temp"
+                                    type="number"
+                                    unit="C°"/>
+                                </field>
+
+                                <field label="Average ambient temperature of the region"
+                                    hint="The average ambient temperature of the locations where the thermal energy storage is located.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].storage_ambient_temp"
+                                    type="number"
+                                    unit="C°"/>
+                                </field>
+
+                                <field label="Residual storage capacity"
+                                    hint="Exogenously defined storage capacities at the start of the modeling period">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].residual_storage_capacity"
+                                    type="number"
+                                    unit="kWh"/>
+                                </field>
+
+                                <field label="Maximum storage capacity"
+                                    hint="Maximum allowed capacity of each storage in a year">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].max_storage_capacity"
+                                    type="number"
+                                    unit="kWh"/>
+                                </field>
+
+                                <field label="Starting level of storage"
+                                    hint="Level of storage at the beginning of first modelled year">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].storage_level_start"
+                                     type="number"
+                                     unit="kWh"/>
+                                </field>
+
+                                <field label="Heat transfer co-efficent of the thermal storage"
+                                    hint="Heat transfer co-efficient of the thermal energy storage tank.">
+                                    <text-input  v-model="form.extra.input_data.platform_storages[index].u_value"
+                                    type="number"
+                                    unit="W/m2  °C"/>
+                                </field>
+
+                            </PropertyDisclosure>
+                        </div>
+
+                    </div>
+
+                </field>
+
+                <field label="Annual emission limit (CO2)"
+                       hint="Annual upper limit for a specific emission generated in the whole modelled region.">
+                    <text-input  v-model="form.extra.input_data.platform_annual_emission_limit.u_value"
+                                 unit="kg"/>
                 </field>
 
                 <field label="Maximum Budget limit (platform_budget_limit)"
@@ -423,7 +551,6 @@
                     hint="How much is the demand increasing per year? Not relevant if you are simulating 1 year or less.">
                     <TextInput
                         v-model="form.extra.input_data.user.yearly_demand_rate"
-                        type="number"
                     />
                 </field>
 
@@ -442,12 +569,31 @@
                     />
                 </field>
 
-                <field label="Utility (util)"
-                hint="Monetary bid by sinks. Please, provide one value per each sink.">
-                    <VSelect taggable multiple  v-model="form.extra.input_data.user.util"
-                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
-                             sm:text-base border-gray-300 rounded-md"/>
-                </field>
+                <div class="space-y-1 sm:col-span-3">
+                    <div>
+                        <div>
+                            <div class="flex justify-between">
+                                <label for="sim_utils" class="block text-sm font-medium text-gray-700">
+                                    Maximum willingness to pay (util)
+                                </label>
+                            </div>
+                            <div id="sim_utils" class="mt-1 relative rounded-md shadow-sm">
+                                <field :label="sink.name" v-for="(sink,index) in form.extra.sinks">
+                                    <TextInput
+                                        unit="€/kWh"
+                                        v-model="form.extra.input_data.user.util[index]"
+                                    />
+                                </field>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500 text-justify">
+                                The amount to pay for energy for each source
+                            </p>
+                            <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
             <div v-show="currentStep === 5" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -637,6 +783,7 @@ export default {
         const marketProfiles = [{key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
+        const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
         const regions = COUNTRIES.map((country) => country.name)
         const emissions = ["co2"]
 
@@ -644,6 +791,33 @@ export default {
             return  form.extra.input_data.platform_storages.map((item) => item.storage)
         });
 
+        const pushNewStorage = () => {
+            let lastStorageIndex = platformStorages.value.length +1
+            form.extra.input_data.platform_storages.push(
+                {
+                    "storage": "Storage"+lastStorageIndex,
+                    "capital_cost_storage": 750,
+                    "discount_rate_sto": 0.04,
+                    "operational_life_sto": 100,
+                    "storage_max_charge": 1500,
+                    "storage_max_discharge": 1500,
+                    "l2d": 0,
+                    "tag_heating": 1,
+                    "tag_cooling": 0,
+                    "storage_return_temp": 50,
+                    "storage_supply_temp": 80,
+                    "storage_ambient_temp": 15,
+                    "residual_storage_capacity": 0,
+                    "max_storage_capacity": 1500,
+                    "storage_level_start": 0,
+                    "u_value": 0.21
+                }
+            )
+        };
+
+        const removeStorage = (index) => {
+            form.extra.input_data.platform_storages.splice(index, 1)
+        };
         const steps = computed(() => {
 
             let steps = [
@@ -679,10 +853,11 @@ export default {
             {
                 steps = steps.concat(fullSimulationStep)
             }
-            console.log(steps)
+
             return steps
         });
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation')
+
         const mapStepStatus = (index) =>
             currentStep.value === index
                 ? "current"
@@ -746,6 +921,7 @@ export default {
                     discount_rate: [4, 5],
                     heat_capacity: 4.18,
                     horizon_basis: null,
+
                     // TEO BEGIN
                     platform_sets: {
                         "REGION": [
@@ -811,9 +987,7 @@ export default {
                             1,
                             2
                         ],
-                        "STORAGE": [
-                            "tankstorage"
-                        ],
+                        "STORAGE": [],
                         "platform_budget_limit": 150000000.0
                     },
 
@@ -822,44 +996,7 @@ export default {
                     "is_in_community": [],
                     "prod_diff_option": null,
                     "project_duration": 10,
-                    "platform_storages": [
-                        {
-                            "storage": "tankstorage",
-                            "capital_cost_storage": 750,
-                            "discount_rate_sto": 0.04,
-                            "operational_life_sto": 100,
-                            "storage_max_charge": 1500,
-                            "storage_max_discharge": 1500,
-                            "l2d": 0,
-                            "tag_heating": 1,
-                            "tag_cooling": 0,
-                            "storage_return_temp": 50,
-                            "storage_supply_temp": 80,
-                            "storage_ambient_temp": 15,
-                            "residual_storage_capacity": 0,
-                            "max_storage_capacity": 1500,
-                            "storage_level_start": 0,
-                            "u_value": 0.21
-                        },
-                        {
-                            "storage": "sourcestorage",
-                            "capital_cost_storage": 450,
-                            "dicount_rate_sto": 0.04,
-                            "operational_life_sto": 25,
-                            "storage_max_charge": 1000,
-                            "storage_max_discharge": 1000,
-                            "l2d": 0,
-                            "tag_heating": 1,
-                            "tag_cooling": 0,
-                            "storage_return_temp": 50,
-                            "storage_supply_temp": 80,
-                            "storage_ambient_temp": 15,
-                            "residual_storage_capacity": 0,
-                            "max_storage_capacity": 1000,
-                            "storage_level_start": 0,
-                            "u_value": 0.22
-                        }
-                    ],
+                    "platform_storages": [],
                     community_settings: null,
                     network_resolution: "low",
                     yearly_demand_rate: 0.05,
@@ -868,6 +1005,7 @@ export default {
                     platform_annual_emission_limit: [
                         {
                             emission: "co2",
+                            u_value: 15000000000000,
                             annual_emission_limit: 15000000000000
                         }
                     ],
@@ -895,6 +1033,16 @@ export default {
                 for (let index in data.extra.input_data.user.util) {
                     data.extra.input_data.user.util[index] = Number(data.extra.input_data.user.util[index])
                 }
+                for (let index in data.extra.input_data.platform_sets.YEAR) {
+                    data.extra.input_data.platform_sets.YEAR[index] = Number(data.extra.input_data.platform_sets.YEAR[index])
+                }
+
+                for (let index in data.extra.input_data.platform_sets.TIMESLICE) {
+                    data.extra.input_data.platform_sets.TIMESLICE[index] = Number(data.extra.input_data.platform_sets.TIMESLICE[index])
+                }
+
+                //Select all the storage's created
+                data.extra.input_data.platform_storages = platformStorages
 
               return data
             }).post(route("projects.simulations.store", {id: props.project.id}), {
@@ -1068,7 +1216,10 @@ export default {
             onCancel,
             selectAllLinks,
             selectAllSinks,
-            selectAllSources
+            selectAllSources,
+            pushNewStorage,
+            removeStorage,
+            binaryOptions
         };
     },
 }

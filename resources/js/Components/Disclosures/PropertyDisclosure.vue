@@ -14,7 +14,13 @@
             :class="[open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform']"
             aria-hidden="true"
           />
+        <DangerButton class="ml-2" @click.stop="$emit('onDelete')" v-if="canDelete">
+          <TrashIcon class="text-white-600 font-medium text-sm w-5"></TrashIcon>
+
+        </DangerButton>
+
         </span>
+
       </DisclosureButton>
     </dt>
     <transition
@@ -35,9 +41,13 @@
 <script>
 import { Disclosure, DisclosureButton, DisclosurePanel } from "@headlessui/vue";
 import { ChevronDownIcon } from "@heroicons/vue/outline";
+import TrashIcon from "../Icons/TrashIcon";
+import DangerButton from "../../Jetstream/DangerButton";
 
 export default {
   components: {
+    DangerButton,
+    TrashIcon,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
@@ -45,6 +55,11 @@ export default {
   },
 
   props: {
+    canDelete: {
+        type: Boolean,
+        default: false,
+
+    },
     defaultOpen: {
       type: Boolean,
       default: false,
