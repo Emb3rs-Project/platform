@@ -33,6 +33,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,19 +66,26 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         return \Illuminate\Support\Facades\Storage::disk($disk)->download($file);
     });
 
-    Route::get('/import-sample-download', function () {
-        $templates = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->get();
+    Route::get('/import-sample-download', function (Request $request) {
+        $template = '';
+        $query = Template::with('templateProperties', 'templateProperties.property')->orderBy("order");
+        if ($request->input('id')) {
+            $query = $query->where('id', $request->input('id'));
+            $templates = $query->get();
+            $template = optional($templates[0])->name;
+        } else {
+            $templates = $query->get();
+        }
         $allProps = [
-            'template' => '',
+            'template' => $template,
             'latitude' => '',
             'longitude' => ''
         ];
         $templates->each(function ($item) use (&$allProps) {
-            $item->templateProperties->each(function ($tempProp) use (&$allProps) {
+            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$allProps) {
                 $allProps[$tempProp->property['symbolic_name']] = '';
             });
         });
-
         $header_style = (new StyleBuilder())
             ->setShouldWrapText()->setShouldShrinkToFit()
             ->build();
