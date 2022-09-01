@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redis;
 
 class CharacterizeInstance implements CharacterizesInstances
 {
-    public function characterize(Instance $instance): void
+    public function characterize(Instance $instance)
     {
         $cf_host = \Config::get("grpc.grpc_cf_host");
         $cf_port = \Config::get("grpc.grpc_cf_port");
@@ -39,14 +39,21 @@ class CharacterizeInstance implements CharacterizesInstances
                 break;
 
             default:
-                dump("NOT DEFINED!");
+                return back()->withErrors([
+                    'title' => 'Error',
+                    'text'  => 'NOT DEFINED!',
+                    'type'  => 'danger'
+                ]);
                 break;
         }
 
         if ($status->code !== 0) {
-            dump($status);
             $instance->delete();
-            exit();
+            return back()->withErrors([
+                'title' => 'Error',
+                'text'  => $status->details ?? 'General error, please try again.',
+                'type'  => 'danger'
+            ]);
         }
     }
 

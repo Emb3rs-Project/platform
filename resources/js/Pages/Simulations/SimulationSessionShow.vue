@@ -27,7 +27,15 @@
                 </div>
 
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                    <div class="flex justify-between">
                     <h2 class="text-lg font-bold">Simulation Step Data</h2>
+
+                    <span style="cursor:pointer; text-decoration: underline"
+                          class="ml-auto"
+                          @click.prevent.stop="downloadObjectAsJson(JSON.stringify(session.simulation.extra), `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`)">
+                                Download Inputs
+                            </span>
+                    </div>
                     <div v-if="reports.length == 0" class="flex h-full items-center justify-center">
                         <svg aria-hidden="true" class="mr-2 w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -45,6 +53,11 @@
                                     <DisclosureButton
                                         class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                                         <span>Input Data</span>
+                                        <span style="cursor:pointer; text-decoration: underline"
+                                              class="ml-auto mr-4"
+                                              @click.prevent.stop="downloadObjectAsJson(report.data, `${report.module}-${report.function}-INPUT`)">
+                                            Download
+                                        </span>
                                         <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
                                                        class="h-5 w-5 " />
                                     </DisclosureButton>
@@ -67,6 +80,11 @@
                                     <DisclosureButton
                                         class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                                         <span>Input Data</span>
+                                        <span style="cursor:pointer; text-decoration: underline"
+                                              class="ml-auto mr-4"
+                                              @click.prevent.stop="downloadObjectAsJson(report.data, `${report.module}-${report.function}-INPUT`)">
+                                            Download
+                                        </span>
                                         <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
                                             class="h-5 w-5 " />
                                     </DisclosureButton>
@@ -82,6 +100,7 @@
                                     <DisclosureButton
                                         class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                                         <span>Output Data</span>
+                                        <span style="cursor:pointer; text-decoration: underline" class="ml-auto mr-4" @click.prevent.stop="downloadObjectAsJson(report.output, `${report.module}-${report.function}-OUTPUT`)">Download</span>
                                         <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
                                             class="h-5 w-5 " />
                                     </DisclosureButton>
@@ -164,9 +183,36 @@ const shouldShowTheFinalReport = computed(() => {
 
 const extensions = [json()]
 
+const slug = (str) => {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    let from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+    let to   = "aaaaeeeeiiiioooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
+}
+
 const showReport = (id) => Inertia.get(route('session.report.show', {session : props.session.id, report: id}))
 const deleteSession = () => Inertia.delete(route('session.delete', props.session.id))
 const back = () => Inertia.get(route('projects.simulations.show', { project: props.session.simulation.project_id, simulation: props.session.simulation_id }))
+const downloadObjectAsJson = (exportObj , exportName) => {
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
+    let downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", slug(exportName) + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
 
 let updateInterval = 0;
 
