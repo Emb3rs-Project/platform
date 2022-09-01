@@ -1,5 +1,5 @@
 <template>
-    <SiteHead title="Projects" />
+    <SiteHead title="Projects"/>
 
     <AppLayout>
         <div>
@@ -7,6 +7,12 @@
                 <h1 class="mb-8 font-bold text-3xl">Projects</h1>
 
                 <div class="flex justify-end mb-5">
+                    <PrimaryButton class="w-48 mr-2" @click="importInstance('Source')">
+                        Import Sources
+                    </PrimaryButton>
+                    <PrimaryButton class="w-48 mr-2" @click="importInstance('Sink')">
+                        Import Sinks
+                    </PrimaryButton>
                     <PrimaryLinkButton class="w-48" path="projects.create">
                         Create a Project
                     </PrimaryLinkButton>
@@ -22,7 +28,7 @@
                                 headerClasses="shadow overflow-hidden sm:rounded-lg"
                             >
                                 <!-- ID -->
-                                <template #header-id> ID </template>
+                                <template #header-id> ID</template>
                                 <template #body-id="{ item }">
                                     <td class="text-left pl-4">
                                         {{ item.id }}
@@ -30,7 +36,7 @@
                                 </template>
 
                                 <!-- Name -->
-                                <template #header-name> Name </template>
+                                <template #header-name> Name</template>
                                 <template #body-name="{ item }">
                                     <td
                                         class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
@@ -52,7 +58,7 @@
                                 </template>
 
                                 <!-- Actions -->
-                                <template #header-actions> </template>
+                                <template #header-actions></template>
                                 <template #body-actions="{ item }">
                                     <td
                                         class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
@@ -136,11 +142,53 @@
                 </div>
             </div>
         </div>
+
+        <DialogModal :show="executeAction" @close="closeModal">
+            <template #title>
+                Import {{form.action}}
+            </template>
+
+            <template #content class="my-auto">
+                <Field label="File"
+                       hint="Excel file for import">
+                    <input
+                        type="file"
+                        ref="file"
+                        class="
+                                        w-full
+                                        px-4
+                                        py-2
+                                        mt-2
+                                        border
+                                        rounded-md
+                                        focus:outline-none
+                                        focus:ring-1
+                                        focus:ring-blue-600
+                                    "
+                    />
+                </Field>
+                <p> Download an example file: <a href="/import-sample-download" class="font-bold text-primary">click here</a></p>
+            </template>
+
+            <template #footer>
+
+                <SecondaryOutlinedButton
+                    class="mr-2"
+                    @click="closeModal">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton @click="submit">
+                    Submit
+                </PrimaryButton>
+            </template>
+
+        </DialogModal>
     </AppLayout>
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import {Link, useForm} from "@inertiajs/inertia-vue3";
 
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
@@ -149,6 +197,12 @@ import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";
 import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
+import PrimaryButton from "../../Components/PrimaryButton";
+import DialogModal from "../../Jetstream/DialogModal";
+import Field from "../../Components/Field";
+import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
+import {notify} from "@kyvg/vue3-notification";
+import { ref } from "vue";
 
 export default {
     components: {
@@ -160,6 +214,10 @@ export default {
         DetailIcon,
         PrimaryLinkButton,
         Link,
+        DialogModal,
+        Field,
+        SecondaryOutlinedButton,
+        PrimaryButton
     },
     props: {
         projects: {
@@ -167,11 +225,57 @@ export default {
             required: true,
         },
     },
-    setup(props) {
+    setup (props) {
         const tableColumns = ["id", "name", "description", "actions"];
+        const file = ref(null)
+        const form = useForm({
+            file: null,
+            action: null,
+        })
+        function closeModal() {
+            executeAction.value = false
+        }
+
+        function submit() {
+            if (file) {
+                console.log(file)
+                form.file = file.value.files[0];
+            }
+            form.post('/import', {
+                wantsJson: true,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (data) => {
+                    form.reset()
+                    console.log(data);
+                }
+            });
+            closeModal()
+            notify({
+                group: "notifications",
+                title: "Import",
+                text: 'The file is being processed in the background. You will receive a notification when finished.',
+                data: {
+                    type: "success",
+                },
+            });
+        }
+
+        const executeAction = ref(false);
+        function importInstance(action) {
+            console.log(action)
+            form.action = action
+            executeAction.value = true
+        }
 
         return {
             tableColumns,
+            file,
+            form,
+            closeModal,
+            submit,
+            executeAction,
+            importInstance
         };
     },
 };
