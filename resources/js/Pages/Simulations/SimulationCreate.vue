@@ -1004,7 +1004,7 @@ export default {
                             1,
                             2
                         ],
-                        "STORAGE": [],
+                        "STORAGE": ["tankstorage"],
                         "platform_budget_limit": 150000000.0
                     },
 
@@ -1013,7 +1013,44 @@ export default {
                     "is_in_community": [],
                     "prod_diff_option": null,
                     "project_duration": 10,
-                    "platform_storages": [],
+                    "platform_storages": [
+                        {
+                            "storage": "tankstorage",
+                            "capital_cost_storage": 750,
+                            "dicount_rate_sto": 0.04,
+                            "operational_life_sto": 100,
+                            "storage_max_charge": 1500,
+                            "storage_max_discharge": 1500,
+                            "l2d": 0,
+                            "tag_heating": 1,
+                            "tag_cooling": 0,
+                            "storage_return_temp": 50,
+                            "storage_supply_temp": 80,
+                            "storage_ambient_temp": 15,
+                            "residual_storage_capacity": 0,
+                            "max_storage_capacity": 1500,
+                            "storage_level_start": 0,
+                            "u_value": 0.21
+                        },
+                        {
+                            "storage": "sourcestorage",
+                            "capital_cost_storage": 450,
+                            "dicount_rate_sto": 0.04,
+                            "operational_life_sto": 25,
+                            "storage_max_charge": 1000,
+                            "storage_max_discharge": 1000,
+                            "l2d": 0,
+                            "tag_heating": 1,
+                            "tag_cooling": 0,
+                            "storage_return_temp": 50,
+                            "storage_supply_temp": 80,
+                            "storage_ambient_temp": 15,
+                            "residual_storage_capacity": 0,
+                            "max_storage_capacity": 1000,
+                            "storage_level_start": 0,
+                            "u_value": 0.22
+                        }
+                    ],
                     community_settings: null,
                     network_resolution: "low",
                     yearly_demand_rate: 0.05,
