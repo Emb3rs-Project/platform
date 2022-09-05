@@ -336,9 +336,10 @@
 
                 <field label="Time resolution (TIMESLICE)"
                     hint="It represents the time split of each modelled year, therefore the time resolution of the model.">
-                    <VSelect
-                        taggable multiple
-                        v-model="form.extra.input_data.platform_sets.TIMESLICE"
+                    <SelectMenu
+                        :modelValue="timeslices.find((item) => item.key == form.extra.input_data.platform_sets.TIMESLICE)"
+                        @update:modelValue="(val) => form.extra.input_data.platform_sets.TIMESLICE = val.key"
+                        :options="timeslices"
                     />
                 </field>
 
@@ -789,6 +790,8 @@ export default {
             () => props.mode == 'update' ? 'Update Simulation' : 'Create Simulation'
         );
 
+
+
         const currentStep = ref(1);
         const nextStepRequest = ref(false);
         const confirmingSimulationCreation = ref(false);
@@ -799,6 +802,9 @@ export default {
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
         const regions = COUNTRIES.map((country) => country.name)
+
+        const timeslices = [{key:'monthly', value:'Monthly'},{key: 'weekly', value: 'Weekly'},{key: 'daily', value: 'Daily'},
+            {key: 'quad-hourly', value: 'Quad-hourly'}, {key: 'bi-hourly', value: 'Bi-hourly'}, {key: 'hourly', value: 'Hourly'}]
         const emissions = ["co2"]
 
         const platformStorages = computed(() => {
@@ -957,56 +963,7 @@ export default {
                         "EMISSION": [
                             "co2"
                         ],
-                        "TIMESLICE": [
-                            1,
-                            2,
-                            3,
-                            4,
-                            5,
-                            6,
-                            7,
-                            8,
-                            9,
-                            10,
-                            11,
-                            12,
-                            13,
-                            14,
-                            15,
-                            16,
-                            17,
-                            18,
-                            19,
-                            20,
-                            21,
-                            22,
-                            23,
-                            24,
-                            25,
-                            26,
-                            27,
-                            28,
-                            29,
-                            30,
-                            31,
-                            32,
-                            33,
-                            34,
-                            35,
-                            36,
-                            37,
-                            38,
-                            39,
-                            40,
-                            41,
-                            42,
-                            43,
-                            44,
-                            45,
-                            46,
-                            47,
-                            48
-                        ],
+                        "TIMESLICE": "monthly",
                         "YEAR": [
                             2023
                         ],
@@ -1291,6 +1248,7 @@ export default {
             isFullSimulation,
             binaryOptions,
             formTitle,
+            timeslices,
             onDeselected,
             onSelected,
             onSubmit,

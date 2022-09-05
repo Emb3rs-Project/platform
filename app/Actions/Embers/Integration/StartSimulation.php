@@ -32,6 +32,13 @@ class StartSimulation implements StartsSimulations
         $initialData = $session->simulation->extra;
         $initialData["project"] = $session->simulation->project;
 
+        //Transform friendly names to simulation notation from the TEO input
+        if(array_key_exists('platform_sets', $initialData['input_data'])
+            && is_string($initialData['input_data']['platform_sets']['TIMESLICE'])) {
+
+            $initialData['input_data']['platform_sets']['TIMESLICE'] =
+                $this->convertTimeSliceFrom($initialData['input_data']['platform_sets']['TIMESLICE']);
+        }
 
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
@@ -59,5 +66,18 @@ class StartSimulation implements StartsSimulations
             'The Simulation has finished',
             $session->id
         ));
+    }
+
+    private function convertTimeSliceFrom($type) {
+        $timeslices = [
+            'monthly' => range(1,12),
+            'weekly' => range(1,48),
+            'daily' => range(1,360),
+            'quad-hourly' => range(1,2196),
+            'bi-hourly' => range(1,4392),
+            'hourly' => range(1,8784),
+        ];
+
+        return $timeslices[$type] ?? [];
     }
 }
