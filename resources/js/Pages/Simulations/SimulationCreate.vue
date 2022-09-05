@@ -496,7 +496,7 @@
 
                 <field label="Annual emission limit (CO2)"
                        hint="Annual upper limit for a specific emission generated in the whole modelled region.">
-                    <text-input  v-model="form.extra.input_data.platform_annual_emission_limit.u_value"
+                    <text-input  v-model="form.extra.input_data.platform_annual_emission_limit.annual_emission_limit"
                                  unit="kg"/>
                 </field>
 
@@ -794,7 +794,7 @@ export default {
         const confirmingSimulationCreation = ref(false);
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
-        const marketProfiles = [{key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
+        const marketProfiles = [{key:'centralized', value: 'centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
@@ -868,11 +868,21 @@ export default {
             ]
             if(form.simulation_metadata.data.identifier == 'demo_simulation')
             {
-                steps = steps.concat(fullSimulationStep)
+
+                if(form.simulation_metadata.data.hasOwnProperty('modules')) {
+                    let modules = form.simulation_metadata.data.modules
+
+                    return steps.concat(fullSimulationStep.filter((item) => modules.includes(item.name.toLowerCase()) ) )
+                } else {
+
+                    steps = steps.concat(fullSimulationStep)
+                }
+
             }
 
             return steps
         });
+
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation')
 
         const mapStepStatus = (index) =>
@@ -1059,7 +1069,6 @@ export default {
                     platform_annual_emission_limit: [
                         {
                             emission: "co2",
-                            u_value: 15000000000000,
                             annual_emission_limit: 15000000000000
                         }
                     ],
