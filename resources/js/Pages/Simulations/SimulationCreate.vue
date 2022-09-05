@@ -173,7 +173,7 @@
                     />
                 </field>
 
-                <PropertyDisclosure title="Default Properties" class="sm:col-span-3">
+                <PropertyDisclosure title="Advanced properties" class="sm:col-span-3">
 
                     <field label="Fixed Digging Cost for Street (fc_dig_st)"
                         required
@@ -595,7 +595,7 @@
                 </div>
 
             </div>
-
+            <!-- Business module -->
             <div v-show="currentStep === 5" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
                 <field label="Socio-economic and private business discount rate % (discount_rate)"
@@ -622,12 +622,6 @@
                     />
                 </field>
 
-                <!--                        <field label="RLS">-->
-                <!--                            <TextInput-->
-                <!--                                v-model="form.extra.input_data.rls"-->
-                <!--                            />-->
-                <!--                        </field>-->
-
                 <field label="Grid ownership (actorshare) %/100"
                     required
                     hint="Share of network cost shared by different actors.">
@@ -636,6 +630,22 @@
                              sm:text-base border-gray-300 rounded-md"/>
 
                 </field>
+
+                <PropertyDisclosure title="Advanced properties" class="sm:col-span-3">
+
+                        <field label="Owner / Technology" v-for="(technologyOwnership, index) in totalSinkSourcesSelected" >
+
+                            <VSelect multiple
+                                     :options="technologyOwnershipOptions"
+                                     v-model="form.extra.input_data.rls[index]"
+                                     :selectable="() => form.extra.input_data.rls[index].length < 2"
+                                     class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                             sm:text-base border-gray-300 rounded-md"
+                            />
+
+                        </field>
+                </PropertyDisclosure>
+
             </div>
 
             <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>
@@ -802,7 +812,6 @@ export default {
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
         const regions = COUNTRIES.map((country) => country.name)
-
         const timeslices = [{key:'monthly', value:'Monthly'},{key: 'weekly', value: 'Weekly'},{key: 'daily', value: 'Daily'},
             {key: 'quad-hourly', value: 'Quad-hourly'}, {key: 'bi-hourly', value: 'Bi-hourly'}, {key: 'hourly', value: 'Hourly'}]
         const emissions = ["co2"]
@@ -891,6 +900,36 @@ export default {
 
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation')
 
+        const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
+        const technologyOwnershipOptions = computed(() => {
+
+            let technologyOwnershipMap = []
+            let index = 1;
+
+            for(let sourceIndex in form.extra.sources) {
+                var ownership = 'source '+index
+                var technology =  `source ${index} ext tech`
+                technologyOwnershipMap.push(ownership)
+                technologyOwnershipMap.push(technology)
+                form.extra.input_data.rls.push([ownership, technology])
+
+                index++
+            }
+
+            for(let sinkIndex in form.extra.sinks) {
+                var ownership = 'sink '+index
+                var technology =  `sink ${index} utl tech`
+
+                technologyOwnershipMap.push(ownership)
+                technologyOwnershipMap.push(technology)
+                form.extra.input_data.rls.push([ownership, technology])
+
+                index++
+            }
+
+            return technologyOwnershipMap
+        })
+
         const mapStepStatus = (index) =>
             currentStep.value === index
                 ? "current"
@@ -905,19 +944,7 @@ export default {
                 input_data: {
                     actorshare: [0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0, 0, 0, 0],
                     md: "pool",
-                    rls: [
-                        ["source 1", "source 1 ext tech"],
-                        ["source 2", "source 2 ext tech"],
-                        ["source 3", "source 3 ext tech"],
-                        ["source 4", "source 4 ext tech"],
-                        ["sink 5", "sink 5 ext tech"],
-                        ["sink 6", "sink 6 ext tech"],
-                        ["sink 7", "sink 7 ext tech"],
-                        ["sink 8", "sink 8 ext tech"],
-                        ["sink 9", "sink 9 ext tech"],
-                        ["sink 10", "sink 10 ext tech"],
-                        ["sink 11", "sink 11 ext tech"]
-                    ],
+                    rls: [],
                     cost: null,
                     gmax: null,
                     lmax: null,
@@ -1050,7 +1077,6 @@ export default {
 
         if(props.simulationInputs) {
             form.extra = props.simulationInputs
-            console.log(form.extra)
         }
 
         const onSubmit = () => {
@@ -1063,9 +1089,6 @@ export default {
                     data.extra.input_data.platform_sets.YEAR[index] = Number(data.extra.input_data.platform_sets.YEAR[index])
                 }
 
-                for (let index in data.extra.input_data.platform_sets.TIMESLICE) {
-                    data.extra.input_data.platform_sets.TIMESLICE[index] = Number(data.extra.input_data.platform_sets.TIMESLICE[index])
-                }
                 //Select all the storage's created
                 data.extra.input_data.platform_sets.STORAGE = platformStorages.value
 
@@ -1249,6 +1272,7 @@ export default {
             binaryOptions,
             formTitle,
             timeslices,
+            totalSinkSourcesSelected,
             onDeselected,
             onSelected,
             onSubmit,
@@ -1257,7 +1281,8 @@ export default {
             selectAllSinks,
             selectAllSources,
             pushNewStorage,
-            removeStorage
+            removeStorage,
+            technologyOwnershipOptions
 
         };
     },
