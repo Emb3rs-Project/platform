@@ -32,7 +32,7 @@
 
                     <span style="cursor:pointer; text-decoration: underline"
                           class="ml-auto"
-                          @click.prevent.stop="downloadObjectAsJson(JSON.stringify(session.simulation.extra), `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`)">
+                          @click.prevent.stop="downloadObjectAsJson(JSON.stringify({...session.simulation.extra, project: {...session.simulation.project}}), `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`)">
                                 Download Inputs
                             </span>
                     </div>
