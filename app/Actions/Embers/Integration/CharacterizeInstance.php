@@ -102,6 +102,15 @@ class CharacterizeInstance implements CharacterizesInstances
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode($data));
 
+
+        if(!isset($data['real_cooling_monthly_capacity'])) {
+            unset($data['real_cooling_monthly_capacity']);
+        }
+
+        if(!isset($data['real_heating_monthly_capacity'])) {
+            unset($data['real_heating_monthly_capacity']);
+        }
+
         /** @var CharacterizationSinkOutput $feature */
         list($feature, $status) = $client->char_building($request)->wait();
 
