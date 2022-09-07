@@ -111,6 +111,16 @@ class CharacterizeInstance implements CharacterizesInstances
             unset($data['real_heating_monthly_capacity']);
         }
 
+        if(!isset($data['target_temperature_heat'])) {
+            $data['target_temperature_heat'] = 75;
+        }
+
+        if(!isset($data['supply_temperature_heat'])) {
+            $data['supply_temperature_heat'] = 75;
+        }
+
+
+
         /** @var CharacterizationSinkOutput $feature */
         list($feature, $status) = $client->char_building($request)->wait();
 
