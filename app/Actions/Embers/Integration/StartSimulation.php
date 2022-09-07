@@ -40,6 +40,13 @@ class StartSimulation implements StartsSimulations
                 $this->convertTimeSliceFrom($initialData['input_data']['platform_sets']['TIMESLICE']);
         }
 
+        //TODO: Temporary fix to detect if we have a misscalculations on the CF Module
+        foreach ($initialData['sinks'] as &$sink) {
+            $streams = $sink['values']['characterization']['streams'];
+            $sink['values']['characterization']['streams'] = [$streams[0]];
+
+        }
+
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
         $request->setInitialData(json_encode($initialData));
