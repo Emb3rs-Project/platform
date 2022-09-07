@@ -577,6 +577,8 @@
                                     Maximum willingness to pay (util)
                                 </label>
                             </div>
+                            <ToggleButton label="Use constant value" v-model="useConstantValueForMarket"/>
+
                             <div id="sim_utils" class="mt-1 relative rounded-md shadow-sm">
                                 <field :label="sink.name" v-for="(sink,index) in form.extra.sinks">
                                     <TextInput
@@ -734,9 +736,11 @@ import Alert from "../../Components/Alerts/Alert";
 import SecondaryButton from "../../Components/SecondaryButton";
 import SelectMenu from "../../Components/Forms/SelectMenu";
 import DateInput from "../../Components/DateInput";
+import ToggleButton from "../../Components/ToggleButton";
 
 export default {
     components: {
+        ToggleButton,
         DateInput,
         SelectMenu,
         SecondaryButton,
@@ -805,6 +809,7 @@ export default {
         const currentStep = ref(1);
         const nextStepRequest = ref(false);
         const confirmingSimulationCreation = ref(false);
+        const useConstantValueForMarket = ref(false)
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
         const marketProfiles = [{key:'centralized', value: 'centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
@@ -1088,6 +1093,10 @@ export default {
                 }
                 for (let index in data.extra.input_data.platform_sets.YEAR) {
                     data.extra.input_data.platform_sets.YEAR[index] = Number(data.extra.input_data.platform_sets.YEAR[index])
+                }
+
+                for (let index in data.extra.input_data.actorshare) {
+                    data.extra.input_data.actorshare[index] = Number(data.extra.input_data.actorshare[index])
                 }
 
                 //Select all the storage's created
