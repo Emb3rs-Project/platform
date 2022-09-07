@@ -577,7 +577,7 @@
                                     Maximum willingness to pay (util)
                                 </label>
                             </div>
-                            <ToggleButton label="Use constant value" v-model="useConstantValueForMarket"/>
+<!--                            <ToggleButton label="Use constant value" v-model="useConstantValueForMarket"/>-->
 
                             <div id="sim_utils" class="mt-1 relative rounded-md shadow-sm">
                                 <field :label="sink.name" v-for="(sink,index) in form.extra.sinks">
@@ -736,11 +736,9 @@ import Alert from "../../Components/Alerts/Alert";
 import SecondaryButton from "../../Components/SecondaryButton";
 import SelectMenu from "../../Components/Forms/SelectMenu";
 import DateInput from "../../Components/DateInput";
-import ToggleButton from "../../Components/ToggleButton";
 
 export default {
     components: {
-        ToggleButton,
         DateInput,
         SelectMenu,
         SecondaryButton,
