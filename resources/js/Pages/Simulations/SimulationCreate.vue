@@ -916,6 +916,12 @@ export default {
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
+                if(index === 1 ) {
+                    form.extra.input_data.actorshare.push(1)
+                } else {
+                    form.extra.input_data.actorshare.push(0)
+
+                }
 
                 index++
             }
@@ -927,7 +933,7 @@ export default {
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
-
+                form.extra.input_data.actorshare.push(0)
                 index++
             }
 
@@ -946,7 +952,7 @@ export default {
             simulation_metadata: props.simulation_metadata[0],
             extra: {
                 input_data: {
-                    actorshare: [0.5, 0.1, 0.1, 0.1, 0.1, 0.1, 0, 0, 0, 0, 0],
+                    actorshare: [],
                     md: "pool",
                     rls: [],
                     cost: null,
