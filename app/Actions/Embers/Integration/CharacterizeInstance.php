@@ -116,7 +116,7 @@ class CharacterizeInstance implements CharacterizesInstances
         }
 
         if(!isset($data['supply_temperature_heat'])) {
-            $data['supply_temperature_heat'] = 75;
+            $data['supply_temperature_heat'] = 45;
         }
 
 
