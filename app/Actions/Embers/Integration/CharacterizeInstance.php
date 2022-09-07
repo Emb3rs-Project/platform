@@ -99,25 +99,17 @@ class CharacterizeInstance implements CharacterizesInstances
         $location = $instance->location->data;
         $data["location"] = $location['center'];
 
+        if(!isset($data['target_temperature_heat'])) {
+            $data['target_temperature_heat'] = 75;
+        }
+
+        if(!isset($data['supply_temperature_heat'])) {
+            $data['supply_temperature_heat'] = 45;
+        }
+
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode($data));
 
-
-        if(!isset($data['real_cooling_monthly_capacity'])) {
-            unset($data['real_cooling_monthly_capacity']);
-        }
-
-        if(!isset($data['real_heating_monthly_capacity'])) {
-            unset($data['real_heating_monthly_capacity']);
-        }
-
-        if(!isset($data['T_cool_on'])) {
-            $data['T_cool_on'] = 75;
-        }
-
-        if(!isset($data['T_heat_on'])) {
-            $data['T_heat_on'] = 45;
-        }
 
 
 
