@@ -898,7 +898,8 @@ export default {
             return steps
         });
 
-        const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation')
+        const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation');
+        const isORCSimulation = computed(() => form.simulation_metadata.data.identifier == 'convert_orc');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
@@ -1138,7 +1139,7 @@ export default {
         );
 
         const sinks = computed(() => {
-            if (!project_instances) return [];
+            if (!project_instances || isORCSimulation.value) return [];
             return project_instances.filter((i) => i.template.category.type == "sink");
         });
 
@@ -1179,6 +1180,16 @@ export default {
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
         };
+
+        watch(
+            isORCSimulation,
+            () => {
+                if (isORCSimulation.value) {
+                    form.extra.sinks = [];
+                }
+            },
+            {immediate: true, deep: true}
+        );
 
         watch(
             form.extra,
@@ -1229,7 +1240,7 @@ export default {
                             } else {
                                 store.commit("objects/setNotify", {
                                     title: 'Sink',
-                                    text: 'Marker outside the simulation area',
+                                    text: isORCSimulation.value ? 'Locked marker in ORC simulation' : 'Marker outside the simulation area',
                                     type: 'warning'
                                 });
                             }

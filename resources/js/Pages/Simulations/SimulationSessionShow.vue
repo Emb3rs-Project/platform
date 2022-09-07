@@ -30,6 +30,12 @@
                     <div class="flex justify-between">
                     <h2 class="text-lg font-bold">Simulation Step Data</h2>
 
+                        <span style="cursor:pointer; text-decoration: underline"
+                              class="ml-auto"
+                              @click.prevent.stop="downloadFullJson">
+                                Download Data
+                            </span>
+
                     <span style="cursor:pointer; text-decoration: underline"
                           class="ml-auto"
                           @click.prevent.stop="downloadObjectAsJson(JSON.stringify({...session.simulation.extra, project: {...session.simulation.project}}), `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`)">
@@ -204,6 +210,15 @@ const slug = (str) => {
 const showReport = (id) => Inertia.get(route('session.report.show', {session : props.session.id, report: id}))
 const deleteSession = () => Inertia.delete(route('session.delete', props.session.id))
 const back = () => Inertia.get(route('projects.simulations.show', { project: props.session.simulation.project_id, simulation: props.session.simulation_id }))
+
+const downloadFullJson = () => {
+    let fullJson = []
+
+    processedReports.value.forEach(report => {
+        fullJson.push({[report.module]: {input: JSON.parse(report.data), output: JSON.parse(report.output)}})
+    })
+    downloadObjectAsJson(JSON.stringify(fullJson), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
+}
 const downloadObjectAsJson = (exportObj , exportName) => {
     let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(exportObj);
     let downloadAnchorNode = document.createElement('a');
