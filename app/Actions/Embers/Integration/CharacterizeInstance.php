@@ -111,12 +111,12 @@ class CharacterizeInstance implements CharacterizesInstances
             unset($data['real_heating_monthly_capacity']);
         }
 
-        if(!isset($data['target_temperature_heat'])) {
-            $data['target_temperature_heat'] = 75;
+        if(!isset($data['T_cool_on'])) {
+            $data['T_cool_on'] = 75;
         }
 
-        if(!isset($data['supply_temperature_heat'])) {
-            $data['supply_temperature_heat'] = 45;
+        if(!isset($data['T_heat_on'])) {
+            $data['T_heat_on'] = 45;
         }
 
 
