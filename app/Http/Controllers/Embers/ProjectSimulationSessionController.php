@@ -26,6 +26,7 @@ class ProjectSimulationSessionController extends Controller
         $session->simulation->extra = [];
         $reportsToReturn = $reports->map(function($item) {
             $item->data = "{}";
+            $item->output = "{}";
             return $item;
         });
         return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reportsToReturn]);
