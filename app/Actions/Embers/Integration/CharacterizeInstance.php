@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redis;
 
 class CharacterizeInstance implements CharacterizesInstances
 {
-    public function characterize(Instance $instance)
+    public function characterize(Instance $instance, $oldInstance = [])
     {
         $cf_host = \Config::get("grpc.grpc_cf_host");
         $cf_port = \Config::get("grpc.grpc_cf_port");
@@ -48,7 +48,11 @@ class CharacterizeInstance implements CharacterizesInstances
         }
 
         if ($status->code !== 0) {
-            $instance->delete();
+            if ($oldInstance) {
+                $instance->update($oldInstance);                
+            } else {
+                $instance->delete();
+            }
             return back()->withErrors([
                 'title' => 'Error',
                 'text'  => $status->details ?? 'General error, please try again.',

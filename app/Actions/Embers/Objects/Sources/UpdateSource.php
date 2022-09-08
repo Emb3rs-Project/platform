@@ -80,6 +80,7 @@ class UpdateSource implements UpdatesSources
      */
     protected function save(Instance $source, array $input): Instance
     {
+        $oldSource = clone $source;
         $name = Arr::get($input, 'source.data.name');
 
         if (!is_null($name)) $source->name = $name;
@@ -109,7 +110,7 @@ class UpdateSource implements UpdatesSources
 
         $source->update($input);
 
-        app(CharacterizesInstances::class)->characterize($source);
+        app(CharacterizesInstances::class)->characterize($source, $oldSource->getOriginal());
 
         return $source;
     }
