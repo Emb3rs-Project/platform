@@ -24,7 +24,7 @@ class ProjectSimulationSessionController extends Controller
             ->orderBy('created_at')
             ->get();
 
-        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reports]);
+        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reports->except('data')]);
     }
 
     /**
