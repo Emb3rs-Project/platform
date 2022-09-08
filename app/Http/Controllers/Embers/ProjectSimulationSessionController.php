@@ -25,7 +25,6 @@ class ProjectSimulationSessionController extends Controller
             ->get();
         $session->simulation->extra = [];
         $reportsToReturn = $reports->map(function($item) {
-            $item->data = "{}";
             $item->output = "{}";
             return $item;
         });
