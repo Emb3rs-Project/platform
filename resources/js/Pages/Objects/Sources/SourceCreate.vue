@@ -79,6 +79,10 @@
       </PrimaryButton>
     </template>
   </SlideOver>
+  <ErrorTemplateModal
+    v-model="errorTemplateModalIsVisible"
+    :error="errorTemplateModal"
+  />
 </template>
 
 <script>
@@ -97,6 +101,7 @@ import BulletSteps from "@/Components/Wizards/BulletSteps.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import ErrorTemplateModal from "@/Components/Modals/ErrorTemplateModal.vue";
 
 export default {
   components: {
@@ -111,6 +116,7 @@ export default {
     SecondaryOutlinedButton,
     SecondaryButton,
     PrimaryButton,
+    ErrorTemplateModal,
   },
 
   props: {
@@ -152,6 +158,9 @@ export default {
     const processes = computed(() => store.getters["source/selectedProcesses"]);
     const template = computed(() => store.getters["source/template"]);
     const location = computed(() => store.getters["source/location"]);
+    const errorTemplateModalIsVisible = ref(false);
+
+    const errorTemplateModal = ref([]);
 
     const form = useForm({
       source: {
@@ -329,8 +338,9 @@ export default {
             store.dispatch("source/reset");
           },
           onError: (error) => {
-              store.commit("objects/setNotify", {...error});
-              nextStepRequest.value = false;
+            errorTemplateModal.value = {...error};
+            errorTemplateModalIsVisible.value = true;
+            nextStepRequest.value = false;
           },
         });
     };
@@ -347,6 +357,8 @@ export default {
       nextStepRequest,
       incompleteStepAlert,
       steps,
+      errorTemplateModalIsVisible,
+      errorTemplateModal,
       onPreviousStep,
       onNextStep,
       onCompleted,

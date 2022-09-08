@@ -74,6 +74,7 @@ class UpdateSink implements UpdatesSinks
      */
     protected function save(Instance $sink, array $input): Instance
     {
+        $oldSink = clone $sink;
         $name = Arr::get($input, 'sink.data.name');
 
         if (!is_null($name)) $sink->name = $name;
@@ -100,7 +101,7 @@ class UpdateSink implements UpdatesSinks
 
         $sink->update($input);
 
-        app(CharacterizesInstances::class)->characterize($sink);
+        app(CharacterizesInstances::class)->characterize($sink, $oldSink->getOriginal());
 
         return $sink;
     }
