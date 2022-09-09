@@ -514,9 +514,9 @@
                 <field label="Market Design (md)"
                  hint="centralized or decentralized are the options; Select centralized for the simplest simulation.">
                     <SelectMenu
-                        :modelValue="marketProfiles.find((item) => item.key === form.extra.input_data.md)"
+                        :modelValue="marketProfiles.find((item) => item.key === form.extra.input_data.user.md)"
                         :options="marketProfiles"
-                        @update:modelValue="(val) => form.extra.input_data.md = val.key"
+                        @update:modelValue="(val) => form.extra.input_data.user.md = val.key"
                     />
                 </field>
 
@@ -573,13 +573,17 @@
                     <div>
                         <div>
                             <div class="flex justify-between">
-                                <label for="sim_utils" class="block text-sm font-medium text-gray-700">
-                                    Maximum willingness to pay (util)
+                                <label for="sim_utils" class="block text-sm font-medium text-gray-700 flex gap-2">
+                                    Maximum willingness to pay (util) <ToggleButton label="Use constant value" v-model="form.extra.isConstantUtil"/>
                                 </label>
                             </div>
-<!--                            <ToggleButton label="Use constant value" v-model="useConstantValueForMarket"/>-->
 
-                            <div id="sim_utils" class="mt-1 relative rounded-md shadow-sm">
+                            <TextInput v-if="form.extra.isConstantUtil"
+                                unit="€/kWh"
+                                v-model="form.extra.input_data.user.util[0]"
+                            />
+
+                            <div v-else id="sim_utils" class="mt-1 relative rounded-md shadow-sm" >
                                 <field :label="sink.name" v-for="(sink,index) in form.extra.sinks">
                                     <TextInput
                                         unit="€/kWh"
@@ -588,7 +592,7 @@
                                 </field>
                             </div>
                             <p class="mt-2 text-sm text-gray-500 text-justify">
-                                The amount to pay for energy for each source
+                                The amount to pay for energy for each sink
                             </p>
                             <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
                         </div>
@@ -624,13 +628,26 @@
                     />
                 </field>
 
-                <field label="Grid ownership (actorshare) %/100"
+                <field label="Grid ownership (actorshare)"
                     required
-                    hint="Share of network cost shared by different actors.">
-                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"
-                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
-                             sm:text-base border-gray-300 rounded-md"/>
+                    hint="Grid ownership structure represents how the cost of the heat distribution network will be shared among the actors.
+                    Actors represents the company/entities involved. If you are not sure about actors involed in your project, then each source and sink is an actor.
+                    For example, if there are two sources and one sink then there are 3 actors in total.
+                    Grid ownership represents how the cost of network will be divided among these actors.
+                    If two sources share the cost of grid then input to grid ownership will be 50% cost goes to source 1 and 50% goes to source 2, while 0% to sink.
+                    The input should look like this [0.5, 0.5, 0].
 
+                    The sum of grid ownership array/input should be equal to 1.">
+                    <TextInput
+                        unit="%/100"
+                        v-model="form.extra.input_data.actorshare"
+
+                    />
+
+                    <!--                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"-->
+<!--                             :createOption="pushNewOptions"-->
+<!--                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full-->
+<!--                             sm:text-base border-gray-300 rounded-md"/>-->
                 </field>
 
                 <PropertyDisclosure title="Advanced properties" class="sm:col-span-3">
@@ -671,15 +688,12 @@
                         </span>
                 </PrimaryButton>
 
-<!--                <PrimaryButton-->
-<!--                    class="bg-green-600 "-->
-<!--                    type="button"-->
-<!--                    @click="confirmingSimulationCreation = true"-->
-<!--                    :disabled="form.processing">-->
-<!--                        <span >-->
-<!--                          Run Simulation-->
-<!--                        </span>-->
-<!--                </PrimaryButton>-->
+                <PrimaryButton v-if="mode == 'update'"
+                    type="button">
+                    <span @click="confirmingSimulationCreation = true">
+                          {{formTitle}}
+                    </span>
+                </PrimaryButton>
             </template>
 
             <!-- create Simulation Confirmation Modal -->
@@ -736,9 +750,11 @@ import Alert from "../../Components/Alerts/Alert";
 import SecondaryButton from "../../Components/SecondaryButton";
 import SelectMenu from "../../Components/Forms/SelectMenu";
 import DateInput from "../../Components/DateInput";
+import ToggleButton from "../../Components/ToggleButton";
 
 export default {
     components: {
+        ToggleButton,
         DateInput,
         SelectMenu,
         SecondaryButton,
@@ -803,14 +819,15 @@ export default {
         );
 
 
-
+        const pushNewOptions = (item) => {
+            return {label: item, value: Math.floor(Math.random() * 100)}
+        }
         const currentStep = ref(1);
         const nextStepRequest = ref(false);
         const confirmingSimulationCreation = ref(false);
-        const useConstantValueForMarket = ref(false)
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
-        const marketProfiles = [{key:'centralized', value: 'centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
+        const marketProfiles = [{key:'centralized', value: 'Centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
@@ -853,6 +870,7 @@ export default {
         const removeStorage = (index) => {
             form.extra.input_data.platform_storages.splice(index, 1)
         };
+
         const steps = computed(() => {
 
             let steps = [
@@ -909,20 +927,12 @@ export default {
 
             let technologyOwnershipMap = []
             let index = 1;
-
             for(let sourceIndex in form.extra.sources) {
                 var ownership = 'source '+index
                 var technology =  `source ${index} ext tech`
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
-                if(index === 1 ) {
-                    form.extra.input_data.actorshare.push(1)
-                } else {
-                    form.extra.input_data.actorshare.push(0)
-
-                }
-
                 index++
             }
 
@@ -933,7 +943,6 @@ export default {
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
-                form.extra.input_data.actorshare.push(0)
                 index++
             }
 
@@ -951,9 +960,9 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
+                isConstantUtil: true,
                 input_data: {
-                    actorshare: [],
-                    md: "pool",
+                    actorshare: "[1]",
                     rls: [],
                     cost: null,
                     gmax: null,
@@ -961,7 +970,6 @@ export default {
                     util: null,
                     fc_pip: 50,
                     vc_pip: 700,
-                    network: null,
                     chp_pars: null,
                     el_price: null,
                     agent_ids: null,
@@ -1056,7 +1064,7 @@ export default {
                         }
                     ],
                     community_settings: null,
-                    network_resolution: "low",
+                    network_resolution: "high",
                     yearly_demand_rate: 0.05,
                     factor_street_terrain: 0.1,
                     factor_street_overland: 0.4,
@@ -1089,18 +1097,51 @@ export default {
             form.extra = props.simulationInputs
         }
 
+        const completeActorShare = (data) => {
+            let list = JSON.parse(data)
+            if(list) {
+                for(var i = list.length; i < totalSinkSourcesSelected.value; i++) {
+                    list[i] = 0
+                }
+            }
+
+            return JSON.stringify(list)
+        }
+
+        const convertListToNumeric = (input)  => {
+            for (let index in input) {
+                input[index] = Number(input[index])
+            }
+            return input;
+        }
+
         const onSubmit = () => {
 
             form.transform((data) => {
-                for (let index in data.extra.input_data.user.util) {
-                    data.extra.input_data.user.util[index] = Number(data.extra.input_data.user.util[index])
-                }
-                for (let index in data.extra.input_data.platform_sets.YEAR) {
-                    data.extra.input_data.platform_sets.YEAR[index] = Number(data.extra.input_data.platform_sets.YEAR[index])
-                }
 
-                for (let index in data.extra.input_data.actorshare) {
-                    data.extra.input_data.actorshare[index] = Number(data.extra.input_data.actorshare[index])
+                data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
+                data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
+                data.extra.input_data.actorshare = completeActorShare(data.extra.input_data.actorshare)
+
+                //IF the user select to use a constant value the we should repeat the util value value for each stream
+                if(form.extra.isConstantUtil) {
+
+                    let totalOfStreams = 0
+                    let constantValue = data.extra.input_data.user.util[0]
+                    try {
+                        totalOfStreams = form.extra.sinks.reduce(
+                            (previous, current) => previous + current.values.characterization.streams.length,
+                            0
+                        )
+
+                        for( let i=0; i < totalOfStreams; i++) {
+                            data.extra.input_data.user.util[i] = Number(constantValue)
+                        }
+                    } catch (e) {
+                        console.log(e)
+                    }
+
+
                 }
 
                 //Select all the storage's created
@@ -1126,6 +1167,8 @@ export default {
 
 
         };
+
+
 
         const onCancel = () => {
             form.extra.links.forEach((link) => onDeselected(link));
@@ -1193,6 +1236,7 @@ export default {
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
         };
+
 
         watch(
             isORCSimulation,
@@ -1306,6 +1350,9 @@ export default {
             selectAllSources,
             pushNewStorage,
             removeStorage,
+            convertListToNumeric,
+            pushNewOptions,
+            completeActorShare,
             technologyOwnershipOptions
 
         };
