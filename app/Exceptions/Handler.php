@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Inertia\Inertia;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -51,5 +52,46 @@ class Handler extends ExceptionHandler
         //     }
         //     return parent::render($request, $e);
         // });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        $response = parent::render($request, $e);
+
+        if (!app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403, 419])) {
+            switch ($response->status()) {
+                case 503:
+                    $title = '503: Service Unavailable';
+                    $message = 'Sorry, we are doing some maintenance. Please check back soon.';
+                    break;
+                case 500:
+                    $title = '500: Server Error';
+                    $message = 'Whoops, something went wrong on our servers.';
+                    break;
+                case 404:
+                    $title = '404: Page Not Found';
+                    $message = 'Sorry, the page you are looking for could not be found.';
+                    break;
+                case 403:
+                    $title = '403: Forbidden';
+                    $message = 'Sorry, you are forbidden from accessing this page.';
+                    break;
+                case 419:
+                    $title = '419: Page expired';
+                    $message = 'The page expired, please try again.';
+                    break;
+                default:
+                    $title = 'General Error';
+                    $message = 'General error, please try again.';
+                    break;
+            }
+            return back()->withErrors([
+                'title' => $title,
+                'text'  => $message,
+                'type'  => 'danger'
+            ]);
+        }
+
+        return $response;
     }
 }

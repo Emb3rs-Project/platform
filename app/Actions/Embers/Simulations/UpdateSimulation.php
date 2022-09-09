@@ -78,7 +78,12 @@ class UpdateSimulation implements UpdatesSimulations
             $simulation->simulation_type_id = $input['simulation_type_id'];
         }
 
+        if (!empty($input['extra'])) {
+            $simulation->extra = $input['extra'];
+        }
+
         $simulation->save();
+
 
         return $simulation;
     }

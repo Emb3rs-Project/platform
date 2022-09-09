@@ -189,6 +189,9 @@ export default {
       this.$inertia.delete(route("current-user-photo.destroy"), {
         preserveScroll: true,
         onSuccess: () => (this.photoPreview = null),
+        onError: (error) => {
+            store.commit("objects/setNotify", {...error});
+        },
       });
     },
   },

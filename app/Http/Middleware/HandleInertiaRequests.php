@@ -65,6 +65,13 @@ class HandleInertiaRequests extends Middleware
                     return 'empty'; // used in javascript to disable back button behavior
                 }
             },
-        ]);
+            'flash' => function () use ($request) {
+                return [
+                    'success' => $request->session()->get('success'),
+                    'error' => $request->session()->get('error')
+                ];
+            }
+        ],
+        );
     }
 }

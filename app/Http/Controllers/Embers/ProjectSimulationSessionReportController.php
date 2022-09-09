@@ -20,4 +20,27 @@ class ProjectSimulationSessionReportController extends Controller
         $data = json_decode($report->output);
         return view('reports.integration-report', ["report" => $data])->render();
     }
+
+    public function getFinalReport(SimulationSession $session, Request $request)
+    {
+        $stepResults = IntegrationReport::where('simulation_uuid',$session->simulation_uuid)->get();
+
+        $reports = [];
+        $i=0;
+
+        foreach ($stepResults as $report) {
+            $item = json_decode($report->output,true);
+
+            if(array_key_exists('report',$item)) {
+                $reports[$i]['module'] = $report->module;
+                $reports[$i]['report'] = $item['report'];
+                $i++;
+            }
+        }
+        $metadata  = [
+            'project' => $session->simulation->project->name ?? '',
+            'simulation' => $session->simulation->name
+        ];
+        return view('reports.final-integration-report', ["reports" => $reports,'metadata' => $metadata])->render();
+    }
 }

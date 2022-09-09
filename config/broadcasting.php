@@ -37,10 +37,15 @@ return [
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
-            ],
-            'client_options' => [
-                // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
+                'useTLS' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http') !== 'http',
+                'encrypt' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http') !== 'http',
+                'host' => env('LARAVEL_WEBSOCKETS_HOST', parse_url(env('APP_URL'), PHP_URL_HOST)),
+                'port' => env('LARAVEL_WEBSOCKETS_PORT', 80),
+                'scheme' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http'),
+                'curl_options' => [
+                    CURLOPT_SSL_VERIFYHOST => 0,
+                    CURLOPT_SSL_VERIFYPEER => 0,
+                ]
             ],
         ],
 

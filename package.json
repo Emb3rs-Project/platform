@@ -42,7 +42,12 @@
     "dependencies": {
         "@codemirror/fold": "^0.19.4",
         "@codemirror/lang-json": "^0.20.0",
+        "laravel-echo": "^1.13.1",
+        "lightvue": "^1.4.9",
+        "moment": "^2.29.4",
+        "pusher-js": "^7.4.0",
         "vue-codemirror": "^5.0.1",
-        "vue-select": "^4.0.0-beta.3"
+        "vue-select": "^4.0.0-beta.3",
+        "vue3-echo-client": "^1.0.4"
     }
 }

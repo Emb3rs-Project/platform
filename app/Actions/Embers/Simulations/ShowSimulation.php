@@ -27,6 +27,7 @@ class ShowSimulation implements ShowsSimulations
 
         $simulation = Simulation::query()->with(['project', 'simulationMetadata', 'simulationSessions'])->findOrFail($simulationId);
 
+        $simulation->extra = [];
         return [
             $simulation,
             $project,

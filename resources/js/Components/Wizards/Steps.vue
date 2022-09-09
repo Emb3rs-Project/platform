@@ -2,9 +2,10 @@
   <nav aria-label="Progress">
     <ol class="space-y-4 md:flex md:space-y-0 md:space-x-8">
       <li
-        v-for="step in steps"
+        @click="$emit('select', {currentStep: index})"
+        v-for="(step, index) in steps"
         :key="step.name"
-        class="md:flex-1"
+        class="md:flex-1 cursor-pointer"
       >
         <div
           v-if="step.status === 'complete'"

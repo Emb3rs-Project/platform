@@ -27,7 +27,13 @@ use App\Http\Controllers\Embers\ProjectSimulationSessionReportController;
 use App\Http\Controllers\Embers\QuerySearchController;
 use App\Http\Controllers\Embers\RemoveAllNotificationsController;
 use App\Http\Controllers\Embers\SearchController;
+use App\Http\Controllers\Embers\MySimulationController;
+use App\Models\Template;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,11 +46,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', fn () => redirect('/login'));
-
+Route::get('/', fn() => redirect('/login'));
+Route::get('/config', function () {
+    return response()->json([
+        'pusherKey' => config('broadcasting.connections.pusher.key'),
+        'pusherCluster' => config('broadcasting.connections.pusher.options.cluster'),
+        'pusherHost' => config('broadcasting.connections.pusher.options.host'),
+        'pusherTLS' => config('broadcasting.connections.pusher.options.useTLS'),
+        'pusherPort' => config('websockets.dashboard.port'),
+        'app_url' => config('app.url'),
+        'user_id' => request()->user()->id ?? null
+    ]);
+})->name('config');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+
+    Route::get('/storage/{disk}/{file}', function ($disk, $file) {
+        return \Illuminate\Support\Facades\Storage::disk($disk)->download($file);
+    });
+
+    Route::get('/import-sample-download', function (Request $request) {
+        $template = '';
+        $query = Template::with('templateProperties', 'templateProperties.property')->orderBy("order");
+        if ($request->input('id')) {
+            $query = $query->where('id', $request->input('id'));
+            $templates = $query->get();
+            $template = optional($templates[0])->name;
+        } else {
+            $templates = $query->get();
+        }
+        $allProps = [
+            'template' => $template,
+            'latitude' => '',
+            'longitude' => ''
+        ];
+        $templates->each(function ($item) use (&$allProps) {
+            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$allProps) {
+                $allProps[$tempProp->property['symbolic_name']] = '';
+            });
+        });
+        $header_style = (new StyleBuilder())
+            ->setShouldWrapText()->setShouldShrinkToFit()
+            ->build();
+
+        return (new FastExcel([$allProps]))
+            ->headerStyle($header_style)
+            ->download('import_sample.xlsx');
+    });
     // Map data
     Route::resource('/map-data', MapDataController::class)->only(['index', 'store']);
 
@@ -94,6 +143,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/sessions/{session}', [ProjectSimulationSessionController::class, 'destroy'])->name("session.delete");
 
     Route::get('/sessions/{session}/report/{report}', ProjectSimulationSessionReportController::class)->name('session.report.show');
+    Route::get('/sessions/{session}/final-report', [ProjectSimulationSessionReportController::class, 'getFinalReport'])->name('session.final-report.show');
 
     // Projects
     Route::get('/projects/{project}/share', ShareProjectController::class)->name('projects.share')
@@ -101,6 +151,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::resource('/projects', ProjectController::class)
         ->whereNumber(['project']);
+
+    Route::post('/import', [ProjectController::class, 'importFile']);
+
+    // My Simulations
+    Route::resource('/my-simulations', MySimulationController::class)
+        ->whereNumber(['my-simulations']);
+
+    Route::post('/get-simulation', [MySimulationController::class, 'getSimulation']);
+    Route::get('/progress/{simulation}', [MySimulationController::class, 'progress']);
 
     // Simulations
     Route::get('/projects/{project}/simulations/{simulation}/share', ShareProjectSimulationController::class)->name('projects.simulations.share')

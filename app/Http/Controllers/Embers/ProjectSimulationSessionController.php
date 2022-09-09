@@ -23,8 +23,11 @@ class ProjectSimulationSessionController extends Controller
         $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
             ->orderBy('created_at')
             ->get();
-
-        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reports]);
+        $session->simulation->extra = [];
+        $reportsToReturn = $reports->map(function($item) {
+            return $item;
+        });
+        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reportsToReturn]);
     }
 
     /**

@@ -272,21 +272,20 @@
                 >Create Simulation</Link
             >
         </div>
+
+
     </AppLayout>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/inertia-vue3";
 
 import AppLayout from "@/Layouts/AppLayout";
 import LeafletMap from "@/Components/LeafletMap";
 import InputRow from "@/Components/InputRow";
 import DateInput from "@/Components/DateInput";
-import PrimaryLinkButton from "@/Components/PrimaryLinkButton";
-import SecondaryButton from "@/Components/SecondaryButton";
-import SecondaryLinkButton from "@/Components/SecondaryLinkButton";
 import TrashIcon from "@/Components/Icons/TrashIcon.vue";
 import EditIcon from "@/Components/Icons/EditIcon.vue";
 import DetailIcon from "@/Components/Icons/DetailIcon.vue";

@@ -8,13 +8,13 @@ INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (7, 
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (8, 'Greenhouse', 3, '[]',6);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (9, 'Grid Connection Point', 3, '[]',4);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (10, 'Inflow', 0, '[]',5);
-INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (11, 'Maintenance', 0, '[]',5);
+INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (11, 'Set Point Maintenance/Evaporation', 0, '[]',5);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (12, 'Outflow', 0, '[]',5);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (13, 'Process', 0, '[]',5);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (14, 'Simple Sink', 1, '[]',6);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (15, 'Simple Source', 1, '[]',7);
-INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (16, 'Startup', 0, '[]',5);
+INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (16, 'Startup DEPRECATED', 0, '[]',5);
 INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (17, 'ORC', 0, '[]',8);
-INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (18, 'Pinch', 0, '[]',8);
+INSERT INTO public.templates(id, name,"order", "values", category_id)VALUES (18, 'Pinch - Isolated Streams', 0, '[]',8);
 
 SELECT pg_catalog.setval(pg_get_serial_sequence('templates', 'id'), (SELECT MAX(id) FROM templates)+1);

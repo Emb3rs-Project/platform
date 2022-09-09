@@ -331,6 +331,7 @@ export default {
     watch(
         selectedTemplate,
         (template) => {
+          if (linkList.value[templateKey]) {
             withAdvancedProperties.value[templateKey] = false;
             form.segments = linkList.value[templateKey];
 
@@ -364,6 +365,7 @@ export default {
             })
 
             linkList.value[templateKey].data = form.segments.data;
+          }
         },
         { immediate: true, deep: true }
     );
@@ -392,8 +394,16 @@ export default {
         });
         return;
       }
-        
 
+      if (!linkList.value.length) {
+        store.commit("objects/setNotify", {
+            title: `Link`,
+            text: 'The link segment is required.',
+            type: 'danger'
+        });
+        return;
+      }
+        
       linkList.value.forEach((value, key) => {
         const errors = validateProperies(
           value,
@@ -479,7 +489,9 @@ export default {
             //store.commit("objects/closeSlide");
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
-          onError: (e) => console.log(e),
+          onError: (error) => {
+              store.commit("objects/setNotify", {...error});
+          },
         });
     };
 
