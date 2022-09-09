@@ -239,6 +239,10 @@
     v-model="infoTemplateModalIsVisible"
     :info="selectedTemplate.info"
   />
+  <ErrorTemplateModal
+    v-model="errorTemplateModalIsVisible"
+    :error="errorTemplateModal"
+  />
 </template>
 
 <script>
@@ -260,6 +264,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import InfoIcon from "@/Components/Icons/InfoIcon.vue";
 import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
+import ErrorTemplateModal from "@/Components/Modals/ErrorTemplateModal.vue";
 
 import { sortProperties, validateProperies } from "@/Utils/helpers";
 
@@ -278,6 +283,7 @@ export default {
     SecondaryOutlinedButton,
     InfoIcon,
     InfoTemplateModal,
+    ErrorTemplateModal
   },
 
   props: {
@@ -301,6 +307,9 @@ export default {
     // TODO: make this enabled by defualt if at least one adv prop is already in place
     const withAdvancedProperties = ref(false);
     const infoTemplateModalIsVisible = ref(false);
+    const errorTemplateModalIsVisible = ref(false);
+
+    const errorTemplateModal = ref([]);
 
     const form = useForm({
       sink: {
@@ -455,7 +464,8 @@ export default {
             store.dispatch("objects/showSlide", { route: "objects.list" });
           },
           onError: (error) => {
-              store.commit("objects/setNotify", {...error});
+            errorTemplateModal.value = {...error};
+            errorTemplateModalIsVisible.value = true;
           },
         });
     };
@@ -483,6 +493,8 @@ export default {
       properties,
       advancedProperties,
       infoTemplateModalIsVisible,
+      errorTemplateModalIsVisible,
+      errorTemplateModal,
       updateMarker,
       submit,
       onCancel,
