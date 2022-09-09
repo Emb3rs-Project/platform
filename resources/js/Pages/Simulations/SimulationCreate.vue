@@ -1095,6 +1095,7 @@ export default {
 
         if(props.simulationInputs) {
             form.extra = props.simulationInputs
+            form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
         }
 
         const completeActorShare = (data) => {
@@ -1105,7 +1106,7 @@ export default {
                 }
             }
 
-            return JSON.stringify(list)
+            return list
         }
 
         const convertListToNumeric = (input)  => {
