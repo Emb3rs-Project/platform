@@ -107,22 +107,12 @@
                                             />
                                         </Link>
 
-                                        <Link
-                                            :href="
-                                                route(
-                                                    'projects.destroy',
-                                                    item.id
-                                                )
-                                            "
-                                            method="delete"
-                                            as="button"
-                                            type="button"
+                                        <button 
                                             class="focus:outline-none"
+                                            @click="showModal(item, DeleteModal)"
                                         >
-                                            <TrashIcon
-                                                class="text-red-500 font-medium text-sm w-5"
-                                            />
-                                        </Link>
+                                            <TrashIcon class="text-red-500 font-medium text-sm w-5" />
+                                        </button>
                                     </td>
                                 </template>
                             </AmazingIndexTable>
@@ -185,10 +175,19 @@
 
         </DialogModal>
     </AppLayout>
+    <component
+        class="z-50"
+        :is="modalComponent"
+        v-if="modalComponent"
+        v-model="modalIsOpen"
+        @confirmation="onConfirmation"
+    >
+    </component>
 </template>
 
 <script>
 import {Link, useForm} from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
@@ -201,8 +200,9 @@ import PrimaryButton from "../../Components/PrimaryButton";
 import DialogModal from "../../Jetstream/DialogModal";
 import Field from "../../Components/Field";
 import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
+import DeleteModal from "@/Components/Modals/DeleteModal.vue";
 import {notify} from "@kyvg/vue3-notification";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 export default {
     components: {
@@ -217,7 +217,8 @@ export default {
         DialogModal,
         Field,
         SecondaryOutlinedButton,
-        PrimaryButton
+        PrimaryButton,
+        DeleteModal
     },
     props: {
         projects: {
@@ -227,7 +228,14 @@ export default {
     },
     setup (props) {
         const tableColumns = ["id", "name", "description", "actions"];
-        const file = ref(null)
+        const file = ref(null);
+        const modalIsOpen = ref(false);
+        const currentModal = ref(null);
+        const itemToDelete = ref(null);
+
+        const modalComponent = computed(() =>
+            currentModal.value ? currentModal.value : false
+        );
         const form = useForm({
             file: null,
             action: null,
@@ -235,6 +243,47 @@ export default {
         function closeModal() {
             executeAction.value = false
         }
+        const showModal = (item, modal) => {
+            currentModal.value = modal;
+            itemToDelete.value = item;
+
+            modalIsOpen.value = true;
+        };
+
+        const onConfirmation = (modalType) => {
+            switch (modalType) {
+                case "delete":
+                Inertia.delete(
+                    route(`projects.destroy`, itemToDelete.value.id),
+                    {
+                        onSuccess: (data) => {
+                            notify({
+                                group: "notifications",
+                                title: "Project",
+                                text: 'Project Deleted Successfully',
+                                data: {
+                                    type: "success",
+                                },
+                            });
+                        },
+                        onError: (error) => {
+                            notify({
+                                group: "notifications",
+                                title: "Project",
+                                text: 'General error, please try again.',
+                                data: {
+                                    type: "danger",
+                                },
+                            });
+                        },
+                    }
+                );
+                break;
+
+                default:
+                break;
+            }
+        };
 
         function submit() {
             if (file) {
@@ -272,10 +321,15 @@ export default {
             tableColumns,
             file,
             form,
+            modalIsOpen,
+            modalComponent,
+            showModal,
             closeModal,
+            onConfirmation,
             submit,
             executeAction,
-            importInstance
+            importInstance,
+            DeleteModal
         };
     },
 };
