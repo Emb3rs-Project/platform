@@ -1101,7 +1101,7 @@ export default {
         const completeActorShare = (data) => {
             let list = JSON.parse(data)
             if(list) {
-                for(var i = list.length; i < totalSinkSourcesSelected.value; i++) {
+                for(var i = list.length; i < form.extra.sources.length; i++) {
                     list[i] = 0
                 }
             }
