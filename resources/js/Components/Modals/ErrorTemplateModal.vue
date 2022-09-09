@@ -40,6 +40,19 @@
           leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
         >
           <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full sm:p-6">
+            <div class="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
+              <button
+                type="button"
+                class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                @click="open = false"
+              >
+                <span class="sr-only">Close</span>
+                <XIcon
+                  class="h-6 w-6"
+                  aria-hidden="true"
+                />
+              </button>
+            </div>
             <div>
               <div class="mt-3 sm:mt-5">
                 <DialogTitle
@@ -65,15 +78,15 @@
                 </div>
               </div>
             </div>
-            <div class="mt-5 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-              <SecondaryOutlinedButton
+            <div class="mt-5 sm:mt-12 sm:grid sm:grid-cols-1 sm:gap-3 sm:grid-flow-row-dense">
+              <PrimaryButton
                 type="button"
                 @click="open = false"
                 ref="cancelButtonRef"
                 class="sm:col-start-2"
               >
                 Close
-              </SecondaryOutlinedButton>
+              </PrimaryButton>
             </div>
           </div>
         </TransitionChild>
@@ -92,8 +105,8 @@ import {
   TransitionChild,
   TransitionRoot,
 } from "@headlessui/vue";
-import { XCircleIcon } from "@heroicons/vue/outline";
-import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import { XCircleIcon, XIcon } from "@heroicons/vue/outline";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 export default {
   components: {
@@ -101,9 +114,10 @@ export default {
     DialogOverlay,
     DialogTitle,
     XCircleIcon,
+    XIcon,
     TransitionChild,
     TransitionRoot,
-    SecondaryOutlinedButton,   
+    PrimaryButton,   
   },
 
   props: {
