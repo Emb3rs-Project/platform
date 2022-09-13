@@ -155,6 +155,8 @@
 <!--                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>-->
 <!--                </div>-->
             </div>
+
+            <!-- GIS -->
             <div v-show="currentStep === 2" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                 <field label="Network Resolution (network_resolution)"
                     required
@@ -166,44 +168,112 @@
                     />
                 </field>
 
-                <field label="Investment Costs for Pumps (invest_pumps)"
-                       hint="Investment costs for pumps in EUR.">
+                <field label="Average Flow Temperature (flow_temp)"
+                       required
+                       hint="Yearly average flow temperature in °C.">
                     <TextInput
-                        v-model="form.extra.input_data.invest_pumps"
+                        v-model="form.extra.input_data.flow_temp"
+                        unit="ºC"
                     />
                 </field>
 
+                <field label="Average Return Temperature (return_temp)"
+                       required
+                       hint="Yearly average return temperature in °C.">
+                    <TextInput
+                        v-model="form.extra.input_data.return_temp"
+                        unit="ºC"
+                    />
+                </field>
+
+                <field label="Average Ambient Temperature (ambient_temp)"
+                       required
+                       hint="Yearly average ambient temperature in °C.">
+                    <TextInput
+                        v-model="form.extra.input_data.ambient_temp"
+                        unit="ºC"
+                    />
+                </field>
+
+                <field label="Average Ground Temperature (ground_temp)"
+                       required
+                       hint="Yearly average ground temperature in °C.">
+                    <TextInput
+                        v-model="form.extra.input_data.ground_temp"
+                        unit="ºC"
+                    />
+                </field>
+
+                <field>
+                    The simplified formula for cost calculation is: <br>
+
+                    <img src="/images/function.png"/> <br>
+
+                    This cost function is valid for all variables below.
+                </field>
+
+                <field label="Fixed Digging Cost for Street (fc_dig_st)"
+                       required
+                       hint="Fixed digging cost for streets in EUR/m.">
+                    <TextInput
+                        v-model="form.extra.input_data.fc_dig_st"
+                        unit="EUR/m"
+                    />
+                </field>
+
+                <field label="Variable Digging Cost for Street (vc_dig_st)"
+                       required
+                       hint="Variable digging cost for streets in EUR/m².">
+                    <TextInput
+                        v-model="form.extra.input_data.vc_dig_st"
+                        unit="EUR/m²"
+                    />
+                </field>
+
+                <field label="Exponent Street (vc_dig_st_ex)"
+                       required
+                       hint="Exponent of the digging cost for street.">
+                    <TextInput
+                        v-model="form.extra.input_data.vc_dig_st_ex"
+                    />
+                </field>
+
+                <field label="Fixed Piping Cost (fc_pip)"
+                       required
+                       hint="Fixed component of the piping cost in EUR/m.">
+                    <TextInput
+                        v-model="form.extra.input_data.fc_pip"
+                        unit="EUR/m"
+                    />
+                </field>
+
+                <field label="Variable Piping Cost (vc_pip)"
+                       required
+                       hint="Fixed component of the piping cost in EUR/m².">
+                    <TextInput
+                        v-model="form.extra.input_data.vc_pip"
+                        unit="EUR/m²"
+                    />
+                </field>
+
+                <field label="Exponent Piping (vc_pip_ex)"
+                       required
+                       hint="Exponent of the piping cost.">
+                    <TextInput
+                        v-model="form.extra.input_data.vc_pip_ex"
+                    />
+                </field>
+
+
                 <PropertyDisclosure title="Advanced properties" class="sm:col-span-3">
 
-                    <field label="Fixed Digging Cost for Street (fc_dig_st)"
-                        required
-                        hint="Fixed digging cost for streets in EUR/m.">
-                        <TextInput
-                            v-model="form.extra.input_data.fc_dig_st"
-                        />
-                    </field>
-
-                    <field label="Variable Digging Cost for Street (vc_dig_st)"
-                        required
-                        hint="Variable digging cost for streets in EUR/m².">
-                        <TextInput
-                            v-model="form.extra.input_data.vc_dig_st"
-                        />
-                    </field>
-
-                    <field label="Exponent Street (vc_dig_st_ex)"
-                        required
-                        hint="Exponent of the digging cost for street.">
-                        <TextInput
-                            v-model="form.extra.input_data.vc_dig_st_ex"
-                        />
-                    </field>
 
                     <field label="Fixed Digging Cost for Terrain (fc_dig_tr)"
                         required
                         hint="Fixed digging cost for terrains in EUR/m.">
                         <TextInput
                             v-model="form.extra.input_data.fc_dig_tr"
+                            unit="EUR/m"
                         />
                     </field>
 
@@ -212,6 +282,7 @@
                         hint="Variable digging cost for terrains in EUR/m².">
                         <TextInput
                             v-model="form.extra.input_data.vc_dig_tr"
+                            unit="EUR/m²"
                         />
                     </field>
 
@@ -223,43 +294,12 @@
                         />
                     </field>
 
-                    <field label="Average Ambient Temperature (ambient_temp)"
-                        required
-                        hint="Yearly average ambient temperature in °C.">
-                        <TextInput
-                            v-model="form.extra.input_data.ambient_temp"
-                        />
-                    </field>
-
-                    <field label="Average Ground Temperature (ground_temp)"
-                        required
-                        hint="Yearly average ground temperature in °C.">
-                        <TextInput
-                            v-model="form.extra.input_data.ground_temp"
-                        />
-                    </field>
-
-                    <field label="Average Flow Temperature (flow_temp)"
-                        required
-                        hint="Yearly average flow temperature in °C.">
-                        <TextInput
-                            v-model="form.extra.input_data.flow_temp"
-                        />
-                    </field>
-
-                    <field label="Average Return Temperature (return_temp)"
-                        required
-                        hint="Yearly average return temperature in °C.">
-                        <TextInput
-                            v-model="form.extra.input_data.return_temp"
-                        />
-                    </field>
-
                     <field label="Heat Capacity (heat_capacity)"
                         required
                         hint="Heat capacity in J/kgK at a certain temperature (average of flow and return temperatures).">
                         <TextInput
                             v-model="form.extra.input_data.heat_capacity"
+                            unit="J/kgK"
                         />
                     </field>
 
@@ -268,30 +308,7 @@
                         hint="Water density in kg/m3 at a certain temperature (average of flow and return temperatures).">
                         <TextInput
                             v-model="form.extra.input_data.water_den"
-                        />
-                    </field>
-
-                    <field label="Fixed Piping Cost (fc_pip)"
-                        required
-                        hint="Fixed component of the piping cost in EUR/m.">
-                        <TextInput
-                            v-model="form.extra.input_data.fc_pip"
-                        />
-                    </field>
-
-                    <field label="Variable Piping Cost (vc_pip)"
-                        required
-                        hint="Fixed component of the piping cost in EUR/m².">
-                        <TextInput
-                            v-model="form.extra.input_data.vc_pip"
-                        />
-                    </field>
-
-                    <field label="Exponent Piping (vc_pip_ex)"
-                        required
-                        hint="Exponent of the piping cost.">
-                        <TextInput
-                            v-model="form.extra.input_data.vc_pip_ex"
+                            unit="kg/m3"
                         />
                     </field>
 
@@ -300,6 +317,7 @@
                         hint="Determines how much cheaper it is to lay 1 m of pipe into a terrain than into a street. Expressed in decimals: 0.1 means it is 10% cheaper.">
                         <TextInput
                             v-model="form.extra.input_data.factor_street_terrain"
+                            unit="%/100"
                         />
                     </field>
 
@@ -308,9 +326,17 @@
                         hint="Determines how much cheaper it is to place 1 m of the pipe over the ground than putting it into the street. Expressed in decimals: 0.4 means it is 40% cheaper.">
                         <TextInput
                             v-model="form.extra.input_data.factor_street_overland"
+                            unit="%/100"
                         />
                     </field>
 
+                    <field label="Investment Costs for Pumps (invest_pumps)"
+                           hint="Investment costs for pumps in EUR.">
+                        <TextInput
+                            v-model="form.extra.input_data.invest_pumps"
+                            unit="€"
+                        />
+                    </field>
                 </PropertyDisclosure>
 
             </div>
@@ -497,7 +523,7 @@
 
                 <field label="Annual emission limit (CO2)"
                        hint="Annual upper limit for a specific emission generated in the whole modelled region.">
-                    <text-input  v-model="form.extra.input_data.platform_annual_emission_limit.annual_emission_limit"
+                    <text-input  v-model="form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit"
                                  unit="kg"/>
                 </field>
 
