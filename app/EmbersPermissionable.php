@@ -48,7 +48,7 @@ trait EmbersPermissionable
     {
         $actionName = $this->getShortActionName();
 
-        return Str::of($actionName)->kebab()->replace('-', ' ');
+        return Str::of($actionName)->kebab()->replace('destroy', 'delete')->replace('-', ' ');
     }
 
     /**
