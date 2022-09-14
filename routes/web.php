@@ -143,6 +143,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/sessions/{session}', [ProjectSimulationSessionController::class, 'destroy'])->name("session.delete");
 
     Route::get('/sessions/{session}/report/{report}', ProjectSimulationSessionReportController::class)->name('session.report.show');
+    Route::get('/sessions/{session}/map', [ProjectSimulationSessionReportController::class, 'getMapData'])->name('session.map.show');
     Route::get('/sessions/{session}/final-report', [ProjectSimulationSessionReportController::class, 'getFinalReport'])->name('session.final-report.show');
 
     // Projects
