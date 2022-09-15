@@ -215,7 +215,9 @@ const shouldShowTheFinalReport = computed(() => {
     //let reports = processedReports.value
 
     //return reports && reports.filter((report) => report.output_data.hasOwnProperty('report')).length > 1
-    return props.reportsHtml && props.reportsHtml.length > 1
+    let reportsObject = {...props.reportsHtml}
+    let reportCount = Object.values(reportsObject).filter(report => report)
+    return props.reportsHtml && reportCount.length > 1
 });
 
 
@@ -275,7 +277,7 @@ const downloadObjectAsJson = async (exportObj, exportName, id = null, type = nul
 const getJsonFrom = async (type, id, convert = true) => {
     let report = props.reports.find(report => report.id === id)
     if (report[type][0] === 'Loading...' || report[type] === '["Loading..."]') {
-       return axios.post(`/json-report/${type}/${id}`)
+        return axios.post(`/json-report/${type}/${id}`)
             .then(({data}) => {
                 if (convert) {
                     report[type] = JSON.stringify(data)
