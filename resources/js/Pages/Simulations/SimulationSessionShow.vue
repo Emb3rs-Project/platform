@@ -212,9 +212,10 @@ const processedReports = computed(() => {
 })
 
 const shouldShowTheFinalReport = computed(() => {
-    let reports = processedReports.value
+    //let reports = processedReports.value
 
-    return reports && reports.filter((report) => report.output_data.hasOwnProperty('report')).length > 1
+    //return reports && reports.filter((report) => report.output_data.hasOwnProperty('report')).length > 1
+    return props.reportsHtml && props.reportsHtml.length > 1
 });
 
 
