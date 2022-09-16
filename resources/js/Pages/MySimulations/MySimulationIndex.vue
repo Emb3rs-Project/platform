@@ -154,6 +154,13 @@
                                                 class="text-gray-500 font-medium text-sm w-5"
                                             ></edit-icon>
                                         </Link>
+
+                                        <button
+                                            class="focus:outline-none"
+                                            @click=" showModal(item, DeleteModal)"
+                                        >
+                                            <TrashIcon class="text-red-500 font-medium text-sm w-5" />
+                                        </button>
                                     </td>
                                 </template>
                             </AmazingIndexTable>
@@ -206,7 +213,7 @@
 
 <script>
 import {Link} from "@inertiajs/inertia-vue3";
-import {onBeforeUnmount, onMounted, ref, toRefs} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref, toRefs} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
 import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
@@ -226,6 +233,7 @@ import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
 import {Inertia} from "@inertiajs/inertia";
 import SpinnerIcon from "../../Components/Icons/SpinnerIcon";
 import {broadcast} from "../../Mixins/vueEcho";
+import DeleteModal from '../../Components/Modals/DeleteModal';
 
 export default {
     components: {
@@ -244,7 +252,8 @@ export default {
         DetailIcon,
         PrimaryLinkButton,
         Link,
-        Pagination
+        Pagination,
+        DeleteModal
     },
     props: {
         mySimulations: {
@@ -265,6 +274,12 @@ export default {
         const simulations = mySimulations.value.data
         window.timeouts = []
 
+        const modalIsOpen = ref(false);
+        const currentModal = ref(null);
+        const itemToDelete = ref(null);
+        const modalComponent = computed(() =>
+            currentModal.value ? currentModal.value : false
+        );
 
         const runSimulation = (route) => {
             axios.post(route)
@@ -337,10 +352,22 @@ export default {
 
         })
 
+        const showModal = (item, modal) => {
+            console.log(item)
+            currentModal.value = modal;
+            itemToDelete.value = item;
+
+            modalIsOpen.value = true;
+        };
+
+
         return {
             tableColumns,
             executeAction,
             currentProject,
+            modalComponent,
+            modalIsOpen,
+            showModal,
             sendToCreateSimulation,
             moment,
             runSimulation

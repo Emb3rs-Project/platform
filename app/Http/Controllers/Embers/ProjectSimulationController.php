@@ -84,24 +84,24 @@ class ProjectSimulationController extends Controller
      */
     public function store(SimulationRequest $request, Project $project)
     {
-//        $data = $request->extra;
-//        $rules = [
-//          'sinks' => ['array','required'],
-//           'sources' =>['array','required'],
-//        ];
-//
-//        $validator = Validator::make($data,$rules);
-//
-//        if(!$validator->passes()) {
-//            return response()->json($validator->errors()->all(),422);
-//        }
-//
+
+
+        $extras = $request->except(['extra.links'])['extra'];
+        $simulationMetadata = $request->get('simulation_metadata');
+        $simulationType = $simulationMetadata['data']['type'];
+
+        //If we have a standalone simulation all input will come from the json file
+        if($simulationType === 'standalone') {
+            $extras['input_data'] = json_decode(file_get_contents($extras['file']),true);
+            $extras['sinks'] = [];
+            $extras['sources'] = [];
+        }
 
         $project->simulations()->create([
             "status" => "NEW",
             "name" => $request->get('name'),
-            "simulation_metadata_id" => $request->get('simulation_metadata')["id"],
-            "extra" => $request->except(['extra.links'])['extra']
+            "simulation_metadata_id" => $simulationMetadata["id"],
+            "extra" => $extras
         ]);
 
         return redirect()->route('my-simulations.index');

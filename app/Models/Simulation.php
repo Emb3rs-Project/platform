@@ -175,10 +175,24 @@ class Simulation extends Model
                 $slug = \Str::slug($report->module . '-' . $report->function);
                 $data = $this->simulationMetadata->data;
                 $keySlug = \Str::slug($data['identifier']);
-                return self::PROGRESS[$keySlug][$slug];
+                return self::PROGRESS[$keySlug][$slug] ?? 100;
             }
             return 0;
         }
         return 0;
+    }
+
+    public function createStepFor($sessionUUID, $module, $function, $data = [], $output= [], $errors=null) {
+        IntegrationReport::create([
+            'module' => $module,
+            'function' => $function,
+            'data' => $data,
+            'output' => json_encode($output),
+            'errors' => $errors,
+            'simulation_uuid' => $sessionUUID,
+            'step_uuid' => $sessionUUID,
+            'simulation_id' => $this->id
+        ]);
+
     }
 }

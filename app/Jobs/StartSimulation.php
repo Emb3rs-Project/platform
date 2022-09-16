@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Actions\Embers\Integration\MarketShortTermSimulation;
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Models\SimulationSession;
 use Illuminate\Bus\Queueable;
@@ -39,6 +40,12 @@ class StartSimulation implements ShouldQueue
      */
     public function handle()
     {
-        app(StartsSimulations::class)->run_simulation($this->session);
+        $simulation = $this->session->simulation;
+
+        if($simulation->simulationMetadata->data['type'] === 'standalone') {
+            (new MarketShortTermSimulation())->run_simulation($this->session);
+        } else {
+            app(StartsSimulations::class)->run_simulation($this->session);
+        }
     }
 }

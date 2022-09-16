@@ -67,64 +67,85 @@
 
                 </div>
 
-                <div v-if="isFullSimulation" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                    <div class="sm:col-span-3">
-                        <div>
-                            <div class="flex justify-end">
-                                <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSinks">
-                                    Select All
-                                </button>
+                <template v-if="form.simulation_metadata.data.type == 'standalone'">
+                    <Field label="Input File"
+                           class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                           hint="JSON file with the necessary inputs for the module">
+                        <input
+                            type="file"
+                            ref="file"
+                            class="
+                                        border
+                                        rounded-md
+                                        focus:outline-none
+                                        focus:ring-1
+                                        focus:ring-blue-600
+                                    "
+                        />
+                    </Field>
+                </template>
+                <template v-else>
+
+                    <div v-if="isFullSimulation" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div class="sm:col-span-3">
+                            <div>
+                                <div class="flex justify-end">
+                                    <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSinks">
+                                        Select All
+                                    </button>
+                                </div>
+                                <div class="flex justify-between">
+                                    <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
+                                        Sinks
+                                    </label>
+                                    <span class="text-sm text-gray-500" id="input-required">
+                                        Required
+                                    </span>
+                                </div>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <VSelect :options="sinks" label="name" value="id" :multiple="true"
+                                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                             v-model="form.extra.sinks"/>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500 text-justify">
+                                    Sinks to use in this Simulation
+                                </p>
+                                <JetInputError v-show="form.errors['extra.sinks']" :message="form.errors['extra.sinks']" class="mt-2"/>
                             </div>
-                            <div class="flex justify-between">
-                                <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
-                                    Sinks
-                                </label>
-                                <span class="text-sm text-gray-500" id="input-required">
-                                    Required
-                                </span>
-                            </div>
-                            <div class="mt-1 relative rounded-md shadow-sm">
-                                <VSelect :options="sinks" label="name" value="id" :multiple="true"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-                                         v-model="form.extra.sinks"/>
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500 text-justify">
-                                Sinks to use in this Simulation
-                            </p>
-                            <JetInputError v-show="form.errors['extra.sinks']" :message="form.errors['extra.sinks']" class="mt-2"/>
                         </div>
+
                     </div>
 
-                </div>
-
-                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                    <div class="sm:col-span-3">
-                        <div>
-                            <div class="flex justify-end">
-                                <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
-                                    Select All
-                                </button>
+                    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div class="sm:col-span-3">
+                            <div>
+                                <div class="flex justify-end">
+                                    <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
+                                        Select All
+                                    </button>
+                                </div>
+                                <div class="flex justify-between">
+                                    <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
+                                        Sources
+                                    </label>
+                                    <span class="text-sm text-gray-500" id="input-required">
+                                        Required
+                                    </span>
+                                </div>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <VSelect :options="sources" label="name" value="id" :multiple="true"
+                                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                             v-model="form.extra.sources"/>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500 text-justify">
+                                    Sinks to use in this Simulation
+                                </p>
+                                <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
                             </div>
-                            <div class="flex justify-between">
-                                <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
-                                    Sources
-                                </label>
-                                <span class="text-sm text-gray-500" id="input-required">
-                                    Required
-                                </span>
-                            </div>
-                            <div class="mt-1 relative rounded-md shadow-sm">
-                                <VSelect :options="sources" label="name" value="id" :multiple="true"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-                                         v-model="form.extra.sources"/>
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500 text-justify">
-                                Sinks to use in this Simulation
-                            </p>
-                            <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
                         </div>
                     </div>
-                </div>
+                </template>
+
 
 <!--                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">-->
 <!--                    <div class="sm:col-span-3">-->
@@ -851,6 +872,7 @@ export default {
         const currentStep = ref(1);
         const nextStepRequest = ref(false);
         const confirmingSimulationCreation = ref(false);
+        const file = ref(null);
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
         const marketProfiles = [{key:'centralized', value: 'Centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
@@ -861,6 +883,7 @@ export default {
         const timeslices = [{key:'monthly', value:'Monthly'},{key: 'weekly', value: 'Weekly'},{key: 'daily', value: 'Daily'},
             {key: 'quad-hourly', value: 'Quad-hourly'}, {key: 'bi-hourly', value: 'Bi-hourly'}, {key: 'hourly', value: 'Hourly'}]
         const emissions = ["co2"]
+
 
         const platformStorages = computed(() => {
             if(!form.extra.input_data.platform_storages) {
@@ -928,6 +951,7 @@ export default {
                     status: mapStepStatus(5),
                 },
             ]
+
             if(form.simulation_metadata.data.identifier == 'demo_simulation')
             {
 
@@ -986,6 +1010,7 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
+                file: null,
                 isConstantUtil: true,
                 input_data: {
                     actorshare: "[1]",
@@ -1122,12 +1147,20 @@ export default {
         if(props.simulationInputs) {
             form.extra = props.simulationInputs
             form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
+            if(!form.extra.input_data.user) {
+                form.extra.input_data.user = {"util": []}
+            }
         }
 
         const completeActorShare = (data) => {
+            let totalOfStreams = 0
+            totalOfStreams = form.extra.sinks.reduce(
+                (previous, current) => previous + current.values.characterization.streams.length,
+                0
+            )
             let list = JSON.parse(data)
             if(list) {
-                for(var i = list.length; i < form.extra.sources.length; i++) {
+                for(var i = list.length; i < (totalOfStreams+form.extra.sources.length); i++) {
                     list[i] = 0
                 }
             }
@@ -1143,6 +1176,9 @@ export default {
         }
 
         const onSubmit = () => {
+            if(file) {
+                form.extra.file = file.value.files[0]
+            }
 
             form.transform((data) => {
 
@@ -1368,6 +1404,7 @@ export default {
             formTitle,
             timeslices,
             totalSinkSourcesSelected,
+            file,
             onDeselected,
             onSelected,
             onSubmit,

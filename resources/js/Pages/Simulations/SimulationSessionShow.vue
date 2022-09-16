@@ -203,12 +203,7 @@ const stepInfo = computed(() => {
 });
 
 const processedReports = computed(() => {
-    return props.reports.map((a) => ({
-        ...a,
-        data: JSON.stringify(a.data, null, 2),
-        output: JSON.stringify(JSON.parse(a.output), null, 2),
-        output_data: JSON.parse(a.output)
-    }))
+    return props.reports.map((a) => ({ ...a, data: JSON.stringify(a.data, null, 2), output: JSON.stringify(JSON.parse(a.output), null, 2), output_data : JSON.parse(a.output) || [] }))
 })
 
 const shouldShowTheFinalReport = computed(() => {

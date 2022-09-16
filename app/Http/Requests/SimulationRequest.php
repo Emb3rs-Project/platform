@@ -27,7 +27,7 @@ class SimulationRequest extends FormRequest
             'name' => 'required',
             'simulation_metadata' => ['array', 'required'],
             'extra.sinks' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation'],
-            'extra.sources' => ['array','required']
+            'extra.sources' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation']
         ];
     }
 }

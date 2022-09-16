@@ -16,7 +16,12 @@ class IntegrationReport extends Model
         'data',
         'type',
         'errors',
-        'step_uuid'
+        'output',
+        'step_uuid',
+        'module',
+        'function',
+        'simulation_id',
+        'simulation_uuid'
     ];
 
     /**

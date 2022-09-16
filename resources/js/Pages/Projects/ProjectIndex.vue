@@ -107,7 +107,7 @@
                                             />
                                         </Link>
 
-                                        <button 
+                                        <button
                                             class="focus:outline-none"
                                             @click="showModal(item, DeleteModal)"
                                         >
@@ -287,7 +287,6 @@ export default {
 
         function submit() {
             if (file) {
-                console.log(file)
                 form.file = file.value.files[0];
             }
             form.post('/import', {
@@ -312,7 +311,6 @@ export default {
 
         const executeAction = ref(false);
         function importInstance(action) {
-            console.log(action)
             form.action = action
             executeAction.value = true
         }
