@@ -1176,7 +1176,7 @@ export default {
         }
 
         const onSubmit = () => {
-            if(file) {
+            if(file && file.value) {
                 form.extra.file = file.value.files[0]
             }
 
