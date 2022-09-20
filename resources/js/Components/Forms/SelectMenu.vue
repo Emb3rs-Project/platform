@@ -24,7 +24,7 @@
         ]"
       >
         <span class="block truncate">
-          {{ selected.value ?? "Select an option..." }}
+          {{ selected.value ?? placeholder }}
         </span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           <SelectorIcon
@@ -127,6 +127,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    placeholder:{
+      type: String,
+      default: "Select an option..."
+    }
   },
 
   emits: ["update:modelValue"],

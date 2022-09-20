@@ -32,12 +32,11 @@
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <div class="flex justify-between">
                         <h2 class="text-lg font-bold">Simulation Step Data</h2>
-
-                        <span style="cursor:pointer; text-decoration: underline"
-                              class="ml-auto"
-                              @click.prevent.stop="downloadFullJson">
-                                Download Data
-                            </span>
+                        <Field class="px-2 ml-auto" label="Download Data"
+                               hint="Download Data">
+                            <SelectMenu placeholder="Download Data"
+                                        @update:modelValue="downloadData" :options="downloadOptions"></SelectMenu>
+                        </Field>
 
                         <span style="cursor:pointer; text-decoration: underline"
                               class="ml-auto"
@@ -170,7 +169,7 @@ import CheckboxRow from "@/Components/CheckboxRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, getCurrentInstance} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -196,6 +195,10 @@ const props = defineProps({
     reportsHtml: Array
 });
 
+let downloadOption = ref({})
+const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'json'}]
+
+
 const modulesJson = []
 
 const stepInfo = computed(() => {
@@ -203,7 +206,12 @@ const stepInfo = computed(() => {
 });
 
 const processedReports = computed(() => {
-    return props.reports.map((a) => ({ ...a, data: JSON.stringify(a.data, null, 2), output: JSON.stringify(JSON.parse(a.output), null, 2), output_data : JSON.parse(a.output) || [] }))
+    return props.reports.map((a) => ({
+        ...a,
+        data: JSON.stringify(a.data, null, 2),
+        output: JSON.stringify(JSON.parse(a.output), null, 2),
+        output_data: JSON.parse(a.output) || []
+    }))
 })
 
 const shouldShowTheFinalReport = computed(() => {
@@ -251,6 +259,15 @@ const downloadFullJson = () => {
     })
     downloadObjectAsJson(JSON.stringify(fullJson), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
 }
+
+const downloadData = (event) => {
+    if (event && event.value === 'json') {
+        downloadFullJson()
+    } else if (event && event.value === 'csv') {
+
+    }
+}
+
 const downloadObjectAsJson = async (exportObj, exportName, id = null, type = null) => {
     let isEmpty = exportObj === '[\n' +
         '  "Loading..."\n' +
