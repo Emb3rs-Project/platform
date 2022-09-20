@@ -141,6 +141,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/sessions/{session}', [ProjectSimulationSessionController::class, 'show'])->name("session.show");
     Route::post('/json-report/{type}/{id}', [ProjectSimulationSessionController::class, 'jsonReport'])->name("session.json");
+    Route::post('/csv-report/{session}', [ProjectSimulationSessionController::class, 'csvReport'])->name("session.csv");
     Route::delete('/sessions/{session}', [ProjectSimulationSessionController::class, 'destroy'])->name("session.delete");
 
     Route::get('/sessions/{session}/report/{report}', ProjectSimulationSessionReportController::class)->name('session.report.show');

@@ -188,6 +188,7 @@ import {json} from "@codemirror/lang-json";
 import {Inertia} from "@inertiajs/inertia";
 import axios from 'axios'
 import moment from 'moment'
+import JSZip from 'jszip'
 
 const props = defineProps({
     session: Object,
@@ -251,20 +252,32 @@ const back = () => Inertia.get(route('projects.simulations.show', {
     simulation: props.session.simulation_id
 }))
 
-const downloadFullJson = () => {
-    let fullJson = []
-
-    processedReports.value.forEach(report => {
-        fullJson.push({[report.module]: {input: JSON.parse(report.data), output: JSON.parse(report.output)}})
+const downloadFullJson = (isJson) => {
+    return axios.post('/csv-report/'+props.session.id, {
+        isJson
     })
-    downloadObjectAsJson(JSON.stringify(fullJson), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
+        .then(({data}) => {
+            return data
+        })
 }
 
-const downloadData = (event) => {
+const downloadData = async (event) => {
     if (event && event.value === 'json') {
-        downloadFullJson()
+        let data = await downloadFullJson(true)
+        await downloadObjectAsJson(JSON.stringify(data), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
     } else if (event && event.value === 'csv') {
+        let data = await downloadFullJson(false)
+        const zip = new JSZip();
+        await zip.loadAsync(data, {base64: true});
+        const blob = await zip.generateAsync({type:"blob"});
 
+        const element = document.createElement("a");
+        element.setAttribute("href", window.URL.createObjectURL(blob));
+        element.setAttribute("download", 'data.zip');
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 }
 
