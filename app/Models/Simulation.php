@@ -156,7 +156,7 @@ class Simulation extends Model
 
         if ($shouldSave) {
             $this->save();
-            broadcast(new SimulationUpdate($this->id));
+            //broadcast(new SimulationUpdate($this->id));
         }
     }
 

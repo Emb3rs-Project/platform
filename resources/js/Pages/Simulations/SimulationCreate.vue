@@ -145,7 +145,30 @@
                                 <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
                             </div>
                         </div>
+
+                        <!-- ORC Advanced Field -->
+                        <template v-if="form.simulation_metadata.data.identifier === 'convert_orc'">
+
+                            <field label="Number of best conversion cases">
+                                <TextInput type="number" v-model="form.extra.input_data.get_best_number"/>
+                            </field>
+
+                            <field label="ORC working years">
+                                <TextInput  type="number" v-model="form.extra.input_data.orc_years_working" unit="Years"/>
+                            </field>
+
+                            <field label="ORC evaporator temperature">
+                                <TextInput type="number" v-model="form.extra.input_data.orc_T_evap" unit="ºC"/>
+                            </field>
+
+                            <field label="ORC cond temperature">
+                                <TextInput type="number" v-model="form.extra.input_data.orc_T_cond" unit="ºC"/>
+                            </field>
+
+
+                        </template>
                     </div>
+
 
                     <template v-if="isPinchAnalysisSimulation">
                         <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
@@ -990,9 +1013,9 @@ export default {
             return steps
         });
 
-        const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation');
-        const isORCSimulation = computed(() => form.simulation_metadata.data.identifier == 'convert_orc');
-        const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier == 'pinch_analysis');
+        const isFullSimulation = computed(() => form.simulation_metadata.data.identifier === 'demo_simulation');
+        const isORCSimulation  = computed(() => form.simulation_metadata.data.identifier === 'convert_orc');
+        const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_analysis');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
@@ -1039,6 +1062,10 @@ export default {
                       interest_rate: '',
                       pinch_delta_T_min: ''
                     },
+                    get_best_number: 3,
+                    orc_years_working: 25,
+                    orc_T_evap:110,
+                    orc_T_cond:35,
                     actorshare: "[1]",
                     rls: [],
                     cost: null,
@@ -1435,6 +1462,7 @@ export default {
             timeslices,
             totalSinkSourcesSelected,
             file,
+            technologyOwnershipOptions,
             onDeselected,
             onSelected,
             onSubmit,
@@ -1447,7 +1475,7 @@ export default {
             convertListToNumeric,
             pushNewOptions,
             completeActorShare,
-            technologyOwnershipOptions
+
 
         };
     },
