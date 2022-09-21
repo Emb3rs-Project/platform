@@ -161,7 +161,7 @@
                                 <TextInput type="number" v-model="form.extra.input_data.orc_T_evap" unit="ºC"/>
                             </field>
 
-                            <field label="ORC cond temperature">
+                            <field label="ORC Condenser temperature">
                                 <TextInput type="number" v-model="form.extra.input_data.orc_T_cond" unit="ºC"/>
                             </field>
 
@@ -1199,7 +1199,8 @@ export default {
 
         if(props.simulationInputs) {
             form.simulation_metadata = props.simulation_metadata.find((item) => item.id === props.simulationMetadataId)
-            form.extra = JSON.parse(JSON.stringify(props.simulationInputs));
+            form.name = props.simulationInputs.name
+            form.extra = JSON.parse(JSON.stringify(props.simulationInputs.extra));
             nextTick(() => {
                 form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
                 if(!form.extra.input_data.user) {
