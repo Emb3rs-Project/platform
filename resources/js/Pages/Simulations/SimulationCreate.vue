@@ -1215,7 +1215,7 @@ export default {
 
                     data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
                     data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
-                    //data.extra.input_data.actorshare = completeActorShare(data.extra.input_data.actorshare)
+                    data.extra.input_data.actorshare = JSON.parse(data.extra.input_data.actorshare)
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
                     if(form.extra.isConstantUtil) {
