@@ -170,33 +170,6 @@
                         <!-- Pinch Analysys Advanced Field -->
                         <template v-if="isPinchAnalysisSimulation">
 
-                            <div class="sm:col-span-3" v-if="form.extra.sources.length > 0">
-                                <div>
-                                    <div class="flex justify-end">
-                                        <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
-                                            Select All
-                                        </button>
-                                    </div>
-                                    <div class="flex justify-between">
-                                        <label for="source_metadata" class="block text-sm font-medium text-gray-700">
-                                            Streams to analyze
-                                        </label>
-                                        <span class="text-sm text-gray-500" id="input-required">
-                                        Required
-                                    </span>
-                                    </div>
-                                    <div class="mt-1 relative rounded-md shadow-sm" id="source_metadata">
-                                        <VSelect :options="form.extra.sources[0].values.characterization.streams" label="name" value="id" :multiple="isFullSimulation"
-                                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-                                                 v-model="form.extra.sources"/>
-                                    </div>
-                                    <p class="mt-2 text-sm text-gray-500 text-justify">
-                                        Select the streams for simulation
-                                    </p>
-                                    <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
-                                </div>
-                            </div>
-
                             <field label="Pinch Temperature Difference"
                                    hint="Minimum delta temperature for pinch analysis"
                                    required>
