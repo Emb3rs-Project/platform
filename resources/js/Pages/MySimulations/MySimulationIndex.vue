@@ -287,7 +287,7 @@ export default {
 
         const reloadGrid = () => {
             Inertia.reload({only: ['mySimulations']})
-            //window.timeoutReload = setTimeout(reloadGrid, 3000)
+            window.timeoutReload = setTimeout(reloadGrid, 2000)
         }
 
         const reloadSimulation = (id, repeat = false) => {
@@ -301,7 +301,7 @@ export default {
             })
 
             if (repeat) {
-                //window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 1000, id, true)
+                window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 2000, id, true)
             }
         }
 
