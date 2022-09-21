@@ -33,6 +33,8 @@
                            :dismissable="false"/>
                 </div>
             </template>
+
+            <!-- sinks & sources -->
             <div v-show="currentStep === 1">
                 <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                     <div class="sm:col-span-3">
@@ -64,7 +66,6 @@
                             <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
                         </div>
                     </div>
-
                 </div>
 
                 <template v-if="form.simulation_metadata.data.type == 'standalone'">
@@ -95,15 +96,15 @@
                                     </button>
                                 </div>
                                 <div class="flex justify-between">
-                                    <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
+                                    <label for="sink_metadata" class="block text-sm font-medium text-gray-700">
                                         Sinks
                                     </label>
                                     <span class="text-sm text-gray-500" id="input-required">
                                         Required
                                     </span>
                                 </div>
-                                <div class="mt-1 relative rounded-md shadow-sm">
-                                    <VSelect :options="sinks" label="name" value="id" :multiple="true"
+                                <div class="mt-1 relative rounded-md shadow-sm" id="sink_metadata">
+                                    <VSelect  :options="sinks" label="name" value="id" :multiple="true"
                                              class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                              v-model="form.extra.sinks"/>
                                 </div>
@@ -120,61 +121,71 @@
                         <div class="sm:col-span-3">
                             <div>
                                 <div class="flex justify-end">
-                                    <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
+                                    <button v-if="isFullSimulation" class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
                                         Select All
                                     </button>
                                 </div>
                                 <div class="flex justify-between">
-                                    <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
+                                    <label for="source_metadata" class="block text-sm font-medium text-gray-700">
                                         Sources
                                     </label>
                                     <span class="text-sm text-gray-500" id="input-required">
                                         Required
                                     </span>
                                 </div>
-                                <div class="mt-1 relative rounded-md shadow-sm">
+                                <div class="mt-1 relative rounded-md shadow-sm" id="source_metadata">
                                     <VSelect :options="sources" label="name" value="id" :multiple="true"
                                              class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                              v-model="form.extra.sources"/>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500 text-justify">
-                                    Sinks to use in this Simulation
+                                    Sources to use in this Simulation
                                 </p>
                                 <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
                             </div>
                         </div>
                     </div>
+
+                    <template v-if="isPinchAnalysisSimulation">
+                        <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                            <div class="sm:col-span-3" v-if="form.extra.sources.length > 0">
+                                <div>
+                                    <div class="flex justify-end">
+                                        <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
+                                            Select All
+                                        </button>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <label for="source_metadata" class="block text-sm font-medium text-gray-700">
+                                            Streams to analyze
+                                        </label>
+                                        <span class="text-sm text-gray-500" id="input-required">
+                                            Required
+                                        </span>
+                                    </div>
+                                    <div class="mt-1 relative rounded-md shadow-sm" id="source_metadata">
+                                        <VSelect :options="form.extra.sources[0].values.characterization.streams" label="name" value="id" :multiple="isFullSimulation"
+                                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                                 v-model="form.extra.sources"/>
+                                    </div>
+                                    <p class="mt-2 text-sm text-gray-500 text-justify">
+                                        Select the streams for simulation
+                                    </p>
+                                    <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
+                                </div>
+                            </div>
+
+                            <field label="Pinch Temperature Difference" required>
+                                <TextInput v-model="form.extra.input_data.pinch_analysis.pinch_delta_T_min" unit="Cº"/>
+                            </field>
+
+                            <field label="Interest rate" required>
+                                <TextInput v-model="form.extra.input_data.pinch_analysis.interest_rate" unit="%/100º"/>
+                            </field>
+
+                        </div>
+                    </template>
                 </template>
-
-
-<!--                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">-->
-<!--                    <div class="sm:col-span-3">-->
-<!--                        <div>-->
-<!--                            <div class="flex justify-end">-->
-<!--                                <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllLinks">-->
-<!--                                    Select All-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                            <div class="flex justify-between">-->
-<!--                                <label for="sim_metadata" class="block text-sm font-medium text-gray-700">-->
-<!--                                    Links-->
-<!--                                </label>-->
-<!--                                <span class="text-sm text-gray-500" id="input-required">-->
-<!--                                    Required-->
-<!--                                </span>-->
-<!--                            </div>-->
-<!--                            <div class="mt-1 relative rounded-md shadow-sm">-->
-<!--                                <VSelect :options="links" label="name" value="id" :multiple="true"-->
-<!--                                         @option:deselected="onDeselected" @option:selected="onSelected"-->
-<!--                                         v-model="form.extra.links"/>-->
-<!--                            </div>-->
-<!--                            <p class="mt-2 text-sm text-gray-500 text-justify">-->
-<!--                                Links to use in this Simulation-->
-<!--                            </p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <JetInputError v-show="form.errors.name" :message="form.errors.name" class="mt-2"/>-->
-<!--                </div>-->
             </div>
 
             <!-- GIS -->
@@ -361,6 +372,7 @@
                 </PropertyDisclosure>
 
             </div>
+            <!-- TEO -->
             <div v-show="currentStep === 3" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
                 <field label="Regions"  class="mt-1 relative rounded-md shadow-sm"
@@ -556,6 +568,7 @@
                     />
                 </field>
             </div>
+            <!-- MARKET -->
             <div v-show="currentStep === 4" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
                 <field label="Market Design (md)"
@@ -735,7 +748,7 @@
                         </span>
                 </PrimaryButton>
 
-                <PrimaryButton v-if="mode == 'update'"
+                <PrimaryButton v-if="mode == 'update' && currentStep !== steps.length"
                     type="button">
                     <span @click="confirmingSimulationCreation = true">
                           {{formTitle}}
@@ -778,7 +791,7 @@ import {useStore} from "vuex";
 import AppLayout from "@/Layouts/AppLayout";
 import JetInputError from "@/Jetstream/InputError";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
-import {computed, ref, watch} from "vue";
+import {computed, ref, watch, nextTick} from "vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
 import TextInput from "@/Components/Forms/TextInput.vue";
@@ -845,6 +858,10 @@ export default {
         simulationInputs: {
             type: Object
         },
+        simulationMetadataId: {
+            type: Number
+        },
+
         simulationId: {
             type: Number
         }
@@ -971,6 +988,7 @@ export default {
 
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier == 'demo_simulation');
         const isORCSimulation = computed(() => form.simulation_metadata.data.identifier == 'convert_orc');
+        const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier == 'pinch_analysis');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
@@ -1013,6 +1031,10 @@ export default {
                 file: null,
                 isConstantUtil: true,
                 input_data: {
+                    pinch_analysis: {
+                      interest_rate: '',
+                      pinch_delta_T_min: ''
+                    },
                     actorshare: "[1]",
                     rls: [],
                     cost: null,
@@ -1145,11 +1167,15 @@ export default {
         });
 
         if(props.simulationInputs) {
-            form.extra = props.simulationInputs
-            form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
-            if(!form.extra.input_data.user) {
-                form.extra.input_data.user = {"util": []}
-            }
+            form.simulation_metadata = props.simulation_metadata.find((item) => item.id === props.simulationMetadataId)
+            form.extra = JSON.parse(JSON.stringify(props.simulationInputs));
+            nextTick(() => {
+                form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
+                if(!form.extra.input_data.user) {
+                    form.extra.input_data.user = {"util": []}
+                }
+            })
+
         }
 
         const completeActorShare = (data) => {
@@ -1299,8 +1325,6 @@ export default {
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
         };
-
-
         watch(
             isORCSimulation,
             () => {
@@ -1383,7 +1407,6 @@ export default {
             },
             {immediate: true, deep: true}
         );
-
         return {
             form,
             links,
@@ -1400,6 +1423,7 @@ export default {
             platformStorages,
             confirmingSimulationCreation,
             isFullSimulation,
+            isPinchAnalysisSimulation,
             binaryOptions,
             formTitle,
             timeslices,

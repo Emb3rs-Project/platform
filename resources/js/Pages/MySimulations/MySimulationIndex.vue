@@ -287,7 +287,7 @@ export default {
 
         const reloadGrid = () => {
             Inertia.reload({only: ['mySimulations']})
-            window.timeoutReload = setTimeout(reloadGrid, 1000)
+            //window.timeoutReload = setTimeout(reloadGrid, 3000)
         }
 
         const reloadSimulation = (id, repeat = false) => {
@@ -301,7 +301,7 @@ export default {
             })
 
             if (repeat) {
-                window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 1000, id, true)
+                //window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 1000, id, true)
             }
         }
 
@@ -312,6 +312,7 @@ export default {
                 project.key
             ))
         }
+
         const clearTimeouts = () => {
             Object.keys(window.timeouts).forEach(timeout => {
                 clearTimeout(window.timeouts[timeout])
@@ -359,7 +360,6 @@ export default {
 
             modalIsOpen.value = true;
         };
-
 
         return {
             tableColumns,

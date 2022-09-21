@@ -155,6 +155,7 @@ class ProjectSimulationController extends Controller
             'simulation_metadata'   => $simulation_metadata,
             'mode' => 'update',
             'simulationInputs' => $simulation->extra,
+            'simulationMetadataId' => $simulation->simulation_metadata_id,
             'simulationId' => $simulationId
         ]);
 
