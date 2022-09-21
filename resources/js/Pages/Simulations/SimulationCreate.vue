@@ -1032,7 +1032,7 @@ export default {
 
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier === 'demo_simulation');
         const isORCSimulation  = computed(() => form.simulation_metadata.data.identifier === 'convert_orc');
-        const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_analysis');
+        const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_simulation');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
