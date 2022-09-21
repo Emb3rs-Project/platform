@@ -32,12 +32,11 @@
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                     <div class="flex justify-between">
                         <h2 class="text-lg font-bold">Simulation Step Data</h2>
-
-                        <span style="cursor:pointer; text-decoration: underline"
-                              class="ml-auto"
-                              @click.prevent.stop="downloadFullJson">
-                                Download Data
-                            </span>
+                        <Field class="px-2 ml-auto" label="Download Data"
+                               hint="Download Data">
+                            <SelectMenu placeholder="Download Data"
+                                        @update:modelValue="downloadData" :options="downloadOptions"></SelectMenu>
+                        </Field>
 
                         <span style="cursor:pointer; text-decoration: underline"
                               class="ml-auto"
@@ -170,7 +169,7 @@ import CheckboxRow from "@/Components/CheckboxRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, getCurrentInstance} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -189,12 +188,17 @@ import {json} from "@codemirror/lang-json";
 import {Inertia} from "@inertiajs/inertia";
 import axios from 'axios'
 import moment from 'moment'
+import JSZip from 'jszip'
 
 const props = defineProps({
     session: Object,
     reports: Array,
     reportsHtml: Array
 });
+
+let downloadOption = ref({})
+const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'json'}]
+
 
 const modulesJson = []
 
@@ -203,7 +207,12 @@ const stepInfo = computed(() => {
 });
 
 const processedReports = computed(() => {
-    return props.reports.map((a) => ({ ...a, data: JSON.stringify(a.data, null, 2), output: JSON.stringify(JSON.parse(a.output), null, 2), output_data : JSON.parse(a.output) || [] }))
+    return props.reports.map((a) => ({
+        ...a,
+        data: JSON.stringify(a.data, null, 2),
+        output: JSON.stringify(JSON.parse(a.output), null, 2),
+        output_data: JSON.parse(a.output) || []
+    }))
 })
 
 const shouldShowTheFinalReport = computed(() => {
@@ -243,14 +252,35 @@ const back = () => Inertia.get(route('projects.simulations.show', {
     simulation: props.session.simulation_id
 }))
 
-const downloadFullJson = () => {
-    let fullJson = []
-
-    processedReports.value.forEach(report => {
-        fullJson.push({[report.module]: {input: JSON.parse(report.data), output: JSON.parse(report.output)}})
+const downloadFullJson = (isJson) => {
+    return axios.post('/csv-report/'+props.session.id, {
+        isJson
     })
-    downloadObjectAsJson(JSON.stringify(fullJson), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
+        .then(({data}) => {
+            return data
+        })
 }
+
+const downloadData = async (event) => {
+    if (event && event.value === 'json') {
+        let data = await downloadFullJson(true)
+        await downloadObjectAsJson(JSON.stringify(data), `${props.session.simulation.project.name}-${props.session.simulation.name}-${props.session.simulation_uuid}-FULL`)
+    } else if (event && event.value === 'csv') {
+        let data = await downloadFullJson(false)
+        const zip = new JSZip();
+        await zip.loadAsync(data, {base64: true});
+        const blob = await zip.generateAsync({type:"blob"});
+
+        const element = document.createElement("a");
+        element.setAttribute("href", window.URL.createObjectURL(blob));
+        element.setAttribute("download", 'data.zip');
+        element.style.display = "none";
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+}
+
 const downloadObjectAsJson = async (exportObj, exportName, id = null, type = null) => {
     let isEmpty = exportObj === '[\n' +
         '  "Loading..."\n' +

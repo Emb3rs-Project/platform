@@ -7,6 +7,7 @@ use App\Models\IntegrationReport;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use MongoDB\Driver\Session;
 
 class ProjectSimulationSessionController extends Controller
 {
@@ -62,6 +63,83 @@ class ProjectSimulationSessionController extends Controller
         $report = IntegrationReport::find($id);
 
         return $report[$type];
+    }
+
+    public function csvReport(Request $request, SimulationSession $session)
+    {
+        $isJson = $request->input('isJson');
+        $session->load('simulation');
+
+        if ($isJson) {
+            return $this->downloadJson($session);
+        }
+
+        $jsonans = $session->simulation->extra;
+        $zip_file = 'data.zip';
+
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+
+        $csv = 'sink.csv';
+        $file_pointer = fopen($csv, 'w');
+        $keys = collect($jsonans['sinks'][0]['values'])->except('characterization')->keys()->toArray();
+        $keys[] = 'template';
+        $keys[] = 'latitude';
+        $keys[] = 'logitude';
+        fputcsv($file_pointer, $keys);
+        foreach ($jsonans['sinks'] as $i) {
+            $data = collect($i['values'])->except('characterization')->toArray();
+            $data['template'] = $i['template']['name'];
+            $data['latitude'] = $i['location']['data']['center'][0];
+            $data['longitude'] = $i['location']['data']['center'][1];
+            // Write the data to the CSV file
+            fputcsv($file_pointer, $data);
+        }
+
+        $zip->addFile('sink.csv', 'sink.csv');
+        fclose($file_pointer);
+
+        $csv = 'source.csv';
+        $file_pointer = fopen($csv, 'w');
+        $keys = collect($jsonans['sources'][0]['values']['properties'])->keys()->toArray();
+        $keys[] = 'template';
+        $keys[] = 'latitude';
+        $keys[] = 'logitude';
+        fputcsv($file_pointer, $keys);
+        foreach ($jsonans['sources'] as $i) {
+            $data = collect($i['values']['properties'])->toArray();
+            $data['template'] = $i['template']['name'];
+
+            $data['latitude'] = $i['location']['data']['center'][0];
+            $data['longitude'] = $i['location']['data']['center'][1];
+            // Write the data to the CSV file
+            fputcsv($file_pointer, $data);
+        }
+        $zip->addFile($csv, $csv);
+        fclose($file_pointer);
+
+        $zip->close();
+        unlink('source.csv');
+        unlink('sink.csv');
+        $base = base64_encode(file_get_contents('data.zip'));
+        unlink('data.zip');
+        return $base;
+    }
+
+
+    protected function downloadJson($session)
+    {
+        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->get();
+        $fullJSON = [];
+        foreach ($reports as $report) {
+            $fullJSON[$report->module][$report->function] = [
+                'input' => $report->data,
+                'output' => json_decode($report->output)
+            ];
+        }
+
+        return $fullJSON;
     }
 
 
