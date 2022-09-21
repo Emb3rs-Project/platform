@@ -167,11 +167,9 @@
 
 
                         </template>
-                    </div>
+                        <!-- Pinch Analysys Advanced Field -->
+                        <template v-if="isPinchAnalysisSimulation">
 
-
-                    <template v-if="isPinchAnalysisSimulation">
-                        <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                             <div class="sm:col-span-3" v-if="form.extra.sources.length > 0">
                                 <div>
                                     <div class="flex justify-end">
@@ -184,8 +182,8 @@
                                             Streams to analyze
                                         </label>
                                         <span class="text-sm text-gray-500" id="input-required">
-                                            Required
-                                        </span>
+                                        Required
+                                    </span>
                                     </div>
                                     <div class="mt-1 relative rounded-md shadow-sm" id="source_metadata">
                                         <VSelect :options="form.extra.sources[0].values.characterization.streams" label="name" value="id" :multiple="isFullSimulation"
@@ -199,16 +197,36 @@
                                 </div>
                             </div>
 
-                            <field label="Pinch Temperature Difference" required>
+                            <field label="Pinch Temperature Difference"
+                                   hint="Minimum delta temperature for pinch analysis"
+                                   required>
                                 <TextInput v-model="form.extra.input_data.pinch_analysis.pinch_delta_T_min" unit="Cº"/>
                             </field>
 
-                            <field label="Interest rate" required>
+                            <field label="Interest rate"
+                                   required
+                                   hint="Interest rate considered for BM">
                                 <TextInput v-model="form.extra.input_data.pinch_analysis.interest_rate" unit="%/100º"/>
                             </field>
 
-                        </div>
-                    </template>
+                            <field label="Lifetime"
+                                   required
+                                   hint="Heat exchangers lifetime.">
+                                <TextInput v-model="form.extra.input_data.pinch_analysis.lifetime" type="number"/>
+                            </field>
+
+                            <field label="Number of output options"
+                                   required
+                                   hint="Number of solutions of each category to return.">
+                                <TextInput v-model="form.extra.input_data.pinch_analysis.number_output_options"
+                                           type="number"/>
+                            </field>
+
+                        </template>
+                    </div>
+
+
+
                 </template>
             </div>
 
@@ -786,8 +804,7 @@
             <!-- create Simulation Confirmation Modal -->
             <jet-confirmation-modal
                 :show="confirmingSimulationCreation"
-                @close="confirmingSimulationCreation = false"
-            >
+                @close="confirmingSimulationCreation = false">
                 <template #title> {{ formTitle }} </template>
 
                 <template #content>
@@ -1059,8 +1076,10 @@ export default {
                 isConstantUtil: true,
                 input_data: {
                     pinch_analysis: {
-                      interest_rate: '',
-                      pinch_delta_T_min: ''
+                      interest_rate: 0.04,
+                      pinch_delta_T_min: 20,
+                      lifetime: 20,
+                      number_output_options: 3,
                     },
                     get_best_number: 3,
                     orc_years_working: 25,
