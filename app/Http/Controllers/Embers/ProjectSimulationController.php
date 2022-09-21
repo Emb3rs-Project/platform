@@ -149,7 +149,7 @@ class ProjectSimulationController extends Controller
         $simulation_metadata = SimulationMetadata::all();
 
         return Inertia::render('Simulations/SimulationCreate', [
-            'instances'             => $instances,
+            'instances'             => $instances ?? [],
             'links'                 => $links,
             'project'               => $project,
             'simulation_metadata'   => $simulation_metadata,
