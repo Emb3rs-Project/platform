@@ -40,7 +40,7 @@
 
                         <span style="cursor:pointer; text-decoration: underline"
                               class="ml-auto"
-                              @click.prevent.stop="downloadObjectAsJson(JSON.stringify({...session.simulation.extra, project: {...session.simulation.project}}), `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`)">
+                              @click.prevent.stop="downloadInputs({ project: {...session.simulation.project}}, `${session.simulation.project.name}-${session.simulation.name}-${session.simulation_uuid}-INPUTS`, session.simulation.id)">
                                 Download Inputs
                             </span>
                     </div>
@@ -281,6 +281,12 @@ const downloadData = async (event) => {
     }
 }
 
+const downloadInputs = async (data,exportName, simulationId) => {
+    const extra = await getJsonFrom('extra', simulationId)
+    console.log(extra)
+    downloadObjectAsJson(JSON.stringify({...extra, ...data}), exportName)
+}
+
 const downloadObjectAsJson = async (exportObj, exportName, id = null, type = null) => {
     let isEmpty = exportObj === '[\n' +
         '  "Loading..."\n' +
@@ -301,9 +307,12 @@ const downloadObjectAsJson = async (exportObj, exportName, id = null, type = nul
 
 const getJsonFrom = async (type, id, convert = true) => {
     let report = props.reports.find(report => report.id === id)
-    if (report[type][0] === 'Loading...' || report[type] === '["Loading..."]') {
+    if (type ===  'extra' || (report[type] && report[type][0] === 'Loading...' || report[type] === '["Loading..."]')) {
         return axios.post(`/json-report/${type}/${id}`)
             .then(({data}) => {
+                if (type === 'extra') {
+                    return data
+                }
                 if (convert) {
                     report[type] = JSON.stringify(data)
                 } else {

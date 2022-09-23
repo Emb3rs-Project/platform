@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Embers;
 
 use App\Http\Controllers\Controller;
 use App\Models\IntegrationReport;
+use App\Models\Simulation;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -60,6 +61,10 @@ class ProjectSimulationSessionController extends Controller
 
     public function jsonReport($type, $id)
     {
+        if ($type === 'extra') {
+            $simulation = Simulation::find($id);
+            return $simulation->extra;
+        }
         $report = IntegrationReport::find($id);
 
         return $report[$type];
