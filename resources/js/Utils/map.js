@@ -1,4 +1,5 @@
 import L from 'leaflet';
+import SelectArea from 'leaflet-area-select';
 
 export default {
   init(id = 'map', center = [38.7181959, -9.1975417], zoom = 13, options = { drawControl: true }) {
@@ -69,6 +70,10 @@ export default {
           layer.setLatLng([location.lat, location.lng])
       } 
     });
+  },
+  setArea(option) {
+    map.selectArea.enable();
+    map.selectArea.setControlKey(!option);
   },
   setMarker(instances) {
     map.eachLayer(function (layer) {

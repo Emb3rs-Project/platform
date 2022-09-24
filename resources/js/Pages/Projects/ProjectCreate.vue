@@ -56,8 +56,8 @@
                 >
                     Cancel
                 </SecondaryOutlinedButton>
-                <PrimaryButton @click="onSubmit" :disabled="form.processing">
-                    Save
+                <PrimaryButton @click="selectArea.length ? onSubmit() : onSelectArea()" :disabled="form.processing">
+                    {{ selectArea.length ? 'Save' : 'Select Area' }}
                 </PrimaryButton>
             </template>
         </SlideOver>
@@ -69,6 +69,7 @@ import { ref, computed, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-vue3";
 
+import mapUtils from "@/Utils/map.js";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
@@ -106,6 +107,12 @@ const locations = computed(() =>
     }))
 );
 
+const selectArea = computed(() => store.getters["map/selectedArea"]);
+const onSelectArea = () => {
+    mapUtils.setArea(true);
+    store.dispatch("map/startArea", true);
+};
+
 const onCancel = () => {
     Inertia.visit(route("projects.index"));
 };
@@ -120,7 +127,7 @@ watch(
 
 const onSubmit = () => {
     console.log(form._data);
-    form._data = { polygon: store.getters["map/view"] };
+    form._data = { polygon: store.getters["map/selectedArea"] };
     form.post(route("projects.store"), {
         onError: (error) => {
             store.commit("objects/setNotify", {...error});
