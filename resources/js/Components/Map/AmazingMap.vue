@@ -3,6 +3,16 @@
 
     <button
         type="button"
+        title="Select Area"
+        class="fixed left-4 lg:left-[17rem] top-40 lg:top-20 z-10 inline-flex items-center border-2 shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
+        :class="[selectArea ? 'border-blue-400' : 'border-gray-400']"
+        @click="onSelectArea"
+    >
+        <CursorClickIcon class="h-6 w-auto" :class="[selectArea ? 'text-blue-500' : 'text-gray-500']" aria-hidden="true" />
+    </button>
+
+    <button
+        type="button"
         class="fixed left-16 lg:left-80 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
         @click="onDefaultLocation"
     >
@@ -33,7 +43,7 @@ import "leaflet-contextmenu";
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
 
-import { BookmarkIcon, BellIcon } from "@heroicons/vue/solid";
+import { BookmarkIcon, BellIcon, CursorClickIcon } from "@heroicons/vue/solid";
 
 import { notify } from "@kyvg/vue3-notification";
 
@@ -41,6 +51,7 @@ export default {
     components: {
         BookmarkIcon,
         BellIcon,
+        CursorClickIcon,
     },
 
     props: {
@@ -74,6 +85,7 @@ export default {
             circleLinks: null,
         });
 
+        const selectArea = ref(false);
         const instances = ref([]);
         const links = ref([]);
 
@@ -594,6 +606,11 @@ export default {
             });
         };
 
+        const onSelectArea = () => {
+            selectArea.value = !selectArea.value;
+            mapUtils.setArea(selectArea.value);
+        };
+
         const onDefaultLocation = () => {
             if (!defaultLocation.value) {
                 notify({
@@ -960,6 +977,17 @@ export default {
             { immediate: true }
         );
 
+        watch(
+            () => store.getters["map/startArea"],
+            (e) => {
+                if (e) {
+                    onSelectArea();
+                    store.dispatch("map/startArea", false);
+                }
+            },
+            { immediate: true }
+        );
+
         onMounted(() => {
             map.value = mapUtils.init("map", center.value, zoom.value, {
                 drawControl: true,
@@ -969,6 +997,14 @@ export default {
             });
 
             window.map = map.value;
+
+            const areaSelected = ref();
+            map.value.on('areaselected', (e) => {
+               store.dispatch("map/setSelectedArea", e.bounds);
+                if (areaSelected.value) 
+                    map.value.removeLayer(areaSelected.value);
+                areaSelected.value = L.rectangle(e.bounds, { color: "blue", weight: 1 }).addTo(map.value);
+            });
 
             map.value.on("moveend", ({ target: map }) => {
                 lazilyGetMapCenter(map);
@@ -1044,6 +1080,8 @@ export default {
         };
 
         return {
+            selectArea,
+            onSelectArea,
             onDefaultLocation,
             showTestNotification,
         };

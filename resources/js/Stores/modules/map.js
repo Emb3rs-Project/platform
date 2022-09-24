@@ -17,6 +17,8 @@ const _state = () => ({
     zoom: null,
     defaultLocation: [],
     view: [],
+    selectedArea: [],
+    startArea: false,
 });
 
 const getters = {
@@ -34,6 +36,8 @@ const getters = {
     zoom: (state) => state.zoom,
     defaultLocation: (state) => state.defaultLocation,
     view: (state) => state.view,
+    selectedArea: (state) => state.selectedArea,
+    startArea: (state) => state.startArea,
 };
 
 const actions = {
@@ -126,6 +130,16 @@ const actions = {
             [SW.lat, SW.lng],
         ]);
     },
+    setSelectedArea: async (ctx, payload) => {
+        const NE = payload.getNorthEast();
+        const SW = payload.getSouthWest();
+
+        ctx.commit("setSelectedArea", [
+            [NE.lat, NE.lng],
+            [SW.lat, SW.lng],
+        ]);
+    },
+    startArea: ({ commit }, startArea) => commit("startArea", startArea ),
 };
 
 const mutations = {
@@ -146,6 +160,8 @@ const mutations = {
     setDefaultLocation: (state, location) =>
         (state.defaultLocation = [location.lat, location.lng]),
     setView: (state, view) => (state.view = view),
+    setSelectedArea: (state, selectedArea) => (state.selectedArea = selectedArea),
+    startArea: (state, startArea) => {(state.startArea = startArea)},
 };
 
 export default {

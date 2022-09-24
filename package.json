@@ -43,6 +43,7 @@
         "@codemirror/fold": "^0.19.4",
         "@codemirror/lang-json": "^0.20.0",
         "laravel-echo": "^1.13.1",
+        "leaflet-area-select": "^1.0.5",
         "lightvue": "^1.4.9",
         "moment": "^2.29.4",
         "pusher-js": "^7.4.0",
