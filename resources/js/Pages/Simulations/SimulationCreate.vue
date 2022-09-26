@@ -1008,32 +1008,7 @@ export default {
         const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_simulation');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
-        const technologyOwnershipOptions = computed(() => {
-
-            let technologyOwnershipMap = []
-            let index = 1;
-            for(let sourceIndex in form.extra.sources) {
-                var ownership = 'source '+index
-                var technology =  `source ${index} ext tech`
-                technologyOwnershipMap.push(ownership)
-                technologyOwnershipMap.push(technology)
-                form.extra.input_data.rls.push([ownership, technology])
-                index++
-            }
-
-            for(let sinkIndex in form.extra.sinks) {
-                var ownership = 'sink '+index
-                var technology =  `sink ${index} utl tech`
-
-                technologyOwnershipMap.push(ownership)
-                technologyOwnershipMap.push(technology)
-                form.extra.input_data.rls.push([ownership, technology])
-                index++
-            }
-
-            return technologyOwnershipMap
-        })
-
+        const technologyOwnershipOptions = ref([])
         const mapStepStatus = (index) =>
             currentStep.value === index
                 ? "current"
@@ -1236,7 +1211,6 @@ export default {
                     data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
                     data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
                     data.extra.input_data.actorshare = JSON.parse(data.extra.input_data.actorshare)
-                    if(form.extra.hasOwnProperty('platform_annual_emission_limit'))
                     form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit = Number(
                         form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit
                     )
@@ -1375,6 +1349,30 @@ export default {
                         marker: null,
                         type: null,
                     });
+
+                    let technologyOwnershipMap = []
+                    let index = 1;
+                    for(let sourceIndex in form.extra.sources) {
+                        var ownership = 'source '+index
+                        var technology =  `source ${index} ext tech`
+                        technologyOwnershipMap.push(ownership)
+                        technologyOwnershipMap.push(technology)
+                        form.extra.input_data.rls.push([ownership, technology])
+                        index++
+                    }
+
+                    for(let sinkIndex in form.extra.sinks) {
+                        var ownership = 'sink '+index
+                        var technology =  `sink ${index} utl tech`
+
+                        technologyOwnershipMap.push(ownership)
+                        technologyOwnershipMap.push(technology)
+                        form.extra.input_data.rls.push([ownership, technology])
+                        index++
+                    }
+
+                    technologyOwnershipOptions.value = technologyOwnershipMap
+
                 }
             },
             {immediate: true, deep: true}
