@@ -35,14 +35,14 @@ import L from "leaflet";
 import { usePage } from "@inertiajs/inertia-vue3";
 import route from "ziggy";
 
-import mapUtils from "@/Utils/map.js";
+
 
 import "beautifymarker";
 import "leaflet-contextmenu";
 // CSS for Markers
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
-
+import mapUtils from "@/Utils/map.js";
 import { BookmarkIcon, BellIcon, CursorClickIcon } from "@heroicons/vue/solid";
 
 import { notify } from "@kyvg/vue3-notification";
@@ -242,7 +242,7 @@ export default {
                         borderClass:
                             "border-" + store.getters["map/selectedMarkerColor"],
                     });
-                    
+
                     selectedMarker.value.on('dragend', (event) => {
                         store.dispatch("map/setSelectedMarkerPosition", { position: event.target.getLatLng() })
                     });
@@ -260,7 +260,7 @@ export default {
                         lng: centerValue[1]
                     }
                 };
-                
+
                 if (marker === 'sinks') {
                    onCreateSink(value);
                 } else if (marker === 'sources') {
@@ -325,7 +325,7 @@ export default {
                 if(show.route != '') {
                     setTimeout(() => store.dispatch("objects/showSlide", { route: show.route, props: show.param }), 500);
                     store.commit("objects/setShowObject", { route: '', param: '' });
-                } 
+                }
             },
             { immediate: true }
         );
@@ -344,7 +344,7 @@ export default {
                 });
                 store.dispatch("source/reset");
                 store.dispatch("objects/showSlide", { route: "objects.list" });
-            }     
+            }
         };
 
         const onCreateLink = (value, newSegment = false) => {
@@ -359,13 +359,13 @@ export default {
                 mapObjects.value.circleLinks = L.layerGroup(circleLinks);
             }
 
-            currentSegment.from = value.latlng ?? value.getLatLng();            
-    
+            currentSegment.from = value.latlng ?? value.getLatLng();
+
             if (!newSegment) {
                 currentLinkSegments.map((element) => map.value.removeLayer(element));
                 store.commit("map/startLinks");
             }
-                
+
             map.value.contextmenu.removeAllItems();
 
             for (const _contextItem of linkCreationMapContext) {
@@ -417,7 +417,7 @@ export default {
                     color: 'green'
                 }).addTo(map.value).on("dblclick", () => onNextPoint(e)).bringToBack();
 
-                lineLink.push(segment);                
+                lineLink.push(segment);
             });
         };
 
@@ -470,7 +470,7 @@ export default {
             store.dispatch("objects/showSlide", {
                 route: "objects.links.create",
                 props: {},
-            });            
+            });
         };
 
         const onFinishMarker = (value) => {
@@ -568,7 +568,7 @@ export default {
             ).bringToBack();
 
             let circle = '';
-            
+
             circle = mapUtils.addCircle(map.value, currentSegment.from);
             circle.bindContextMenu({
                 contextmenu: true,
@@ -853,9 +853,9 @@ export default {
 
         const loadMarkers = (markers = null) => {
             if (!instances.value.length) return;
-            
+
             mapUtils.removeAllInstances(map.value, mapObjects.value);
-            if (props.preview) {    
+            if (props.preview) {
                 if (localStorage.getItem('objectsSources') == 'false') {
                     instances.value.forEach((element, index) => {
                         if (element.template.category.type == 'source') {
@@ -871,7 +871,7 @@ export default {
                     });
                 }
             }
-            
+
             mapUtils.addInstances(
                 map.value,
                 markers ?? instances.value,
@@ -905,7 +905,7 @@ export default {
             if (!links.value.length) return;
 
             mapUtils.removeAllLinks(map.value, mapObjects.value);
-            if (props.preview) { 
+            if (props.preview) {
                 if (localStorage.getItem('objectsLinks') == 'false') {
                     links.value = [];
                 }
@@ -1001,7 +1001,7 @@ export default {
             const areaSelected = ref();
             map.value.on('areaselected', (e) => {
                store.dispatch("map/setSelectedArea", e.bounds);
-                if (areaSelected.value) 
+                if (areaSelected.value)
                     map.value.removeLayer(areaSelected.value);
                 areaSelected.value = L.rectangle(e.bounds, { color: "blue", weight: 1 }).addTo(map.value);
             });
