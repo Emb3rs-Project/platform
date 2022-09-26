@@ -1008,7 +1008,32 @@ export default {
         const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_simulation');
 
         const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
-        const technologyOwnershipOptions = ref([])
+        const technologyOwnershipOptions = computed(() => {
+
+            let technologyOwnershipMap = []
+            let index = 1;
+            for(let sourceIndex in form.extra.sources) {
+                var ownership = 'source '+index
+                var technology =  `source ${index} ext tech`
+                technologyOwnershipMap.push(ownership)
+                technologyOwnershipMap.push(technology)
+                form.extra.input_data.rls.push([ownership, technology])
+                index++
+            }
+
+            for(let sinkIndex in form.extra.sinks) {
+                var ownership = 'sink '+index
+                var technology =  `sink ${index} utl tech`
+
+                technologyOwnershipMap.push(ownership)
+                technologyOwnershipMap.push(technology)
+                form.extra.input_data.rls.push([ownership, technology])
+                index++
+            }
+
+            return technologyOwnershipMap
+        })
+
         const mapStepStatus = (index) =>
             currentStep.value === index
                 ? "current"
@@ -1349,30 +1374,6 @@ export default {
                         marker: null,
                         type: null,
                     });
-
-                    let technologyOwnershipMap = []
-                    let index = 1;
-                    for(let sourceIndex in form.extra.sources) {
-                        var ownership = 'source '+index
-                        var technology =  `source ${index} ext tech`
-                        technologyOwnershipMap.push(ownership)
-                        technologyOwnershipMap.push(technology)
-                        form.extra.input_data.rls.push([ownership, technology])
-                        index++
-                    }
-
-                    for(let sinkIndex in form.extra.sinks) {
-                        var ownership = 'sink '+index
-                        var technology =  `sink ${index} utl tech`
-
-                        technologyOwnershipMap.push(ownership)
-                        technologyOwnershipMap.push(technology)
-                        form.extra.input_data.rls.push([ownership, technology])
-                        index++
-                    }
-
-                    technologyOwnershipOptions.value = technologyOwnershipMap
-
                 }
             },
             {immediate: true, deep: true}
