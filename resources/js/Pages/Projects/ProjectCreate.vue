@@ -48,6 +48,47 @@
                 />
             </div>
 
+            <!-- Project Area -->
+            <div class="divide-y">
+                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                    <div class="block text-base font-medium text-gray-900 sm:pt-1">
+                        <p>Project Area</p>
+                    </div>
+                </div>
+                <div class="space-y-1 px-4 sm:space-y-0 sm:gap-4 sm:px-6 sm:py-5">
+                    <div class="sm:grid sm:grid-cols-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-500 sm:pt-1 pb-10">
+                                NorthEast
+                            </label>
+                            <label class="block text-sm font-medium text-gray-500 sm:pt-1">
+                                SouthWest
+                            </label>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="block text-sm font-medium text-gray-900 sm:pt-1 pb-4" v-if="selectArea[1]">
+                                <p>lat: {{ selectArea[0][0] }}</p>
+                                <p>lng: {{ selectArea[0][1] }}</p>
+                            </div>
+                            <div class="block text-sm font-medium text-gray-900 sm:pt-1" v-if="selectArea[1]">
+                                <p>lat: {{ selectArea[1][0] }}</p>
+                                <p>lng: {{ selectArea[1][1] }}</p>
+                            </div>
+                        </div>
+                        <div class="flex place-content-center">
+                            <SecondaryButton
+                                variant="location"
+                                type="button"
+                                @click="onSelectArea()"
+                            >
+                                Select Area
+                                <CursorClickIcon class="h-6 w-auto text-blue-500" aria-hidden="true" />
+                            </SecondaryButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <template #actions>
                 <SecondaryOutlinedButton
                     type="button"
@@ -56,8 +97,8 @@
                 >
                     Cancel
                 </SecondaryOutlinedButton>
-                <PrimaryButton @click="selectArea.length ? onSubmit() : onSelectArea()" :disabled="form.processing">
-                    {{ selectArea.length ? 'Save' : 'Select Area' }}
+                <PrimaryButton @click="onSubmit()" :disabled="form.processing">
+                    Save
                 </PrimaryButton>
             </template>
         </SlideOver>
@@ -70,6 +111,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { useForm } from "@inertiajs/inertia-vue3";
 
 import mapUtils from "@/Utils/map.js";
+import { CursorClickIcon } from "@heroicons/vue/solid";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
@@ -79,6 +121,7 @@ import SelectMenu from "@/Components/Forms/SelectMenu.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { useStore } from "vuex";
 
 const store = useStore();
@@ -126,6 +169,14 @@ watch(
 );
 
 const onSubmit = () => {
+    if (!selectArea.value[0]) {
+        store.commit("objects/setNotify", {
+            title: 'Select Area',
+            text: 'Please, select area on the map.',
+            type: 'danger'
+        });
+        return;
+    }
     console.log(form._data);
     form._data = { polygon: store.getters["map/selectedArea"] };
     form.post(route("projects.store"), {
