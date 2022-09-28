@@ -9,7 +9,8 @@ const state = () => ({
   processes: [],
   template: null,
   location: null,
-  withAdvancedProperties: null
+  withAdvancedProperties: null,
+  additionalStreams: []
 });
 
 // https://next.vuex.vuejs.org/api/#getters
@@ -22,6 +23,7 @@ const getters = {
   template: (state) => state.template,
   location: (state) => state.location,
   withAdvancedProperties: (state) => state.withAdvancedProperties,
+  additionalStreams: (state) => state.additionalStreams,
 };
 
 // https://next.vuex.vuejs.org/api/#actions
@@ -35,6 +37,7 @@ const actions = {
     ctx.commit('setProcesses', { processes: [] });
     ctx.commit('setSelectedProcesses', { selectedProcesses: [] });
     ctx.commit('setAdvancedPropertiesOption', { withAdvancedProperties: null });
+    ctx.commit('setAdditionalStreams', { additionalStreams: [] });
   }
 };
 
@@ -47,7 +50,8 @@ const mutations = {
   setSelectedEquipment: (state, payload) => state.selectedEquipment = payload.selectedEquipment,
   setProcesses: (state, payload) => state.processes = payload.processes,
   setSelectedProcesses: (state, payload) => state.selectedProcesses = payload.selectedProcesses,
-  setAdvancedPropertiesOption: (state, payload) => state.withAdvancedProperties = payload.withAdvancedProperties
+  setAdvancedPropertiesOption: (state, payload) => state.withAdvancedProperties = payload.withAdvancedProperties,
+  setAdditionalStreams: (state, payload) => state.additionalStreams = payload.additionalStreams,
 };
 
 export default {

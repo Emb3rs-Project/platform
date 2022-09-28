@@ -49,7 +49,7 @@ class CharacterizeInstance implements CharacterizesInstances
 
         if ($status->code !== 0) {
             if ($oldInstance) {
-                $instance->update($oldInstance);                
+                $instance->update($oldInstance);
             } else {
                 $instance->delete();
             }
@@ -75,11 +75,12 @@ class CharacterizeInstance implements CharacterizesInstances
             }
         }
 
-
+        $additionalStreams = collect($instance->values['additional_streams']);
+        $streams = $additionalStreams->pluck('data')->all();
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode([
             "type_of_object" => $type,
-            "streams" => [$data]
+            "streams" => array_merge([$data],$streams)
         ]));
 
         /** @var CharacterizationSourceOutput $feature */

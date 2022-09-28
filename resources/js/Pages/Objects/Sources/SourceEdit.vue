@@ -51,6 +51,16 @@
       @completed="onCompleted"
       @incompleted="onIncompleted"
     />
+    <SourceEditStep4
+      v-if="currentStep === 4"
+      :instance="instance"
+      :templates="templates"
+      :streams ="instance.values.additional_streams"
+      :nextStepRequest="nextStepRequest"
+      @completed="onCompleted"
+      @incompleted="onIncompleted"
+    />
+
 
     <template #actions>
       <SecondaryOutlinedButton
@@ -105,6 +115,8 @@ import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import ErrorTemplateModal from "@/Components/Modals/ErrorTemplateModal.vue";
+import SourceCreateStep4 from "./SourceCreateWizard/SourceCreateStep4";
+import SourceEditStep4 from "./SourceEditWizard/SourceEditStep4";
 
 export default {
   components: {
@@ -115,6 +127,7 @@ export default {
     SourceEditStep1,
     SourceEditStep2,
     SourceEditStep3,
+    SourceEditStep4,
     BulletSteps,
     SecondaryOutlinedButton,
     SecondaryButton,
@@ -169,6 +182,7 @@ export default {
     const processes = computed(() => store.getters["source/processes"]);
     const template = computed(() => store.getters["source/template"]);
     const location = computed(() => store.getters["source/location"]);
+    const additionalStreams = computed(() => store.getters["source/additionalStreams"]);
     const errorTemplateModalIsVisible = ref(false);
 
     const errorTemplateModal = ref([]);
@@ -205,6 +219,11 @@ export default {
         id: "Step 3",
         name: "Processes",
         status: mapStepStatus(3),
+      },
+      {
+         id: "Step 4",
+         name: "Additional Streams",
+         status: mapStepStatus(4),
       },
     ]);
 
@@ -258,7 +277,41 @@ export default {
           }
           deepCopyOfFormData.source = deepCopyOfSource;
 
-          // equipment
+
+            // source.data additional stream
+            const deepCopyOfAdditionalStreams = window._.cloneDeep(additionalStreams.value);
+            if (additionalStreams.value.length) {
+                for (const [index, stream] of additionalStreams.value.entries()) {
+
+                    console.log(deepCopyOfAdditionalStreams, stream)
+                    if (!Object.keys(stream.data).length) continue;
+
+                    for (const property of template.value.properties) {
+                        const prop = property.property;
+                        const key = prop.symbolic_name;
+                        const dataType = prop.dataType.toLowerCase();
+
+                        if (!deepCopyOfAdditionalStreams[index].data.hasOwnProperty(key)) continue;
+
+                        deepCopyOfAdditionalStreams[index].data.id= index+10
+                        if (prop.inputType === "select") {
+                            // if the property has a value, get it and re-assign the property as a string
+                            if (Object.keys(deepCopyOfAdditionalStreams[index].data[key]).length) {
+                                deepCopyOfAdditionalStreams[index].data[key] =
+                                    deepCopyOfAdditionalStreams[index].data[key].key;
+                            } else {
+                                delete deepCopyOfAdditionalStreams[index].data[key]
+                            }
+                        }
+                    }
+                }
+            }
+
+            deepCopyOfFormData.additionalStreams = deepCopyOfAdditionalStreams;
+
+
+
+            // equipment
           const deepCopyOfEquipment = window._.cloneDeep(equipment.value);
           if (equipment.value.length) {
             for (const [index, equip] of equipment.value.entries()) {
@@ -373,6 +426,7 @@ export default {
       steps,
       errorTemplateModalIsVisible,
       errorTemplateModal,
+      additionalStreams,
       onPreviousStep,
       onNextStep,
       onCompleted,

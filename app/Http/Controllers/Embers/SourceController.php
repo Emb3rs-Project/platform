@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Embers;
 use App\Contracts\Embers\Objects\Sources\CreatesSources;
 use App\Contracts\Embers\Objects\Sources\DestroysSources;
 use App\Contracts\Embers\Objects\Sources\EditsSources;
-use App\Contracts\Embers\Objects\Sources\IndexesSources;
 use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;

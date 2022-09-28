@@ -60,7 +60,8 @@ class ShowSource implements ShowsSources
         return [
             $source,
             $equipmentTemplates,
-            $processesTemplates
+            $processesTemplates,
+            $source->values['additional_streams']
         ];
     }
 }

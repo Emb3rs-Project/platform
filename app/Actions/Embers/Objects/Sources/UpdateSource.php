@@ -89,6 +89,7 @@ class UpdateSource implements UpdatesSources
             'properties' => Arr::get($input, 'source.data'),
             'equipment' => Arr::get($input, 'equipment'),
             'processes' => Arr::get($input, 'processes'),
+            'additional_streams' => Arr::get($input, 'additionalStreams', []),
         ];
 
         if (!is_null(Arr::get($input, 'location'))) {

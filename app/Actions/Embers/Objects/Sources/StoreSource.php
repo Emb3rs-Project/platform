@@ -105,6 +105,7 @@ class StoreSource implements StoresSources
                 'properties' => Arr::get($validated, 'source.data'),
                 'equipment' => Arr::get($validated, 'equipment'),
                 'processes' => Arr::get($validated, 'processes'),
+                'additional_streams' => Arr::get($validated, 'additionalStreams'),
             ],
             'template_id' => Arr::get($validated, 'template_id'),
             'location_id' => Arr::get($validated, 'location_id')
