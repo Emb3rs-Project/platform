@@ -75,8 +75,12 @@ class CharacterizeInstance implements CharacterizesInstances
             }
         }
 
-        $additionalStreams = collect($instance->values['additional_streams']);
-        $streams = $additionalStreams->pluck('data')->all();
+        $streams = [];
+        if(array_key_exists('additional_streams', $instance->values)) {
+            $additionalStreams = collect($instance->values['additional_streams']);
+            $streams = $additionalStreams->pluck('data')->all();
+        }
+
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode([
             "type_of_object" => $type,
