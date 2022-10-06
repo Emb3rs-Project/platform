@@ -727,7 +727,7 @@
     <!--                             sm:text-base border-gray-300 rounded-md"/>-->
                     </field>
 
-                    <PropertyDisclosure title="Advanced properties" class="sm:col-span-3">
+                    <PropertyDisclosure title="Advanced properties" class="sm:col-span-3" default-open>
 
                             <field label="Owner / Technology" v-for="(technologyOwnership, index) in totalSinkSourcesSelected" >
 
@@ -740,6 +740,19 @@
                                 />
 
                             </field>
+
+                        <field label="Owner Map " v-for="(technologyOwnership, index) in totalSinkSourcesSelected" >
+
+                            <VSelect multiple
+                                     :options="technologyOwnershipOptions"
+                                     v-model="form.extra.input_data.rls_map[index]"
+                                     :selectable="() => form.extra.input_data.rls_map[index].length < 2"
+                                     class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                                 sm:text-base border-gray-300 rounded-md"
+                            />
+
+                        </field>
+
                     </PropertyDisclosure>
 
                 </div>
@@ -1011,23 +1024,31 @@ export default {
         const technologyOwnershipOptions = computed(() => {
 
             let technologyOwnershipMap = []
+            form.extra.input_data.rls = []
+            form.extra.input_data.rls_map = []
             let index = 1;
             for(let sourceIndex in form.extra.sources) {
-                var ownership = 'source '+index
-                var technology =  `source ${index} ext tech`
+                let sourceId = form.extra.sources[sourceIndex].id
+                let sourceName = form.extra.sources[sourceIndex].name
+                var ownership = 'source '+sourceId
+                var technology =  `source ${sourceId} ext tech`
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
+                form.extra.input_data.rls_map.push([ownership, sourceName])
                 index++
             }
 
             for(let sinkIndex in form.extra.sinks) {
-                var ownership = 'sink '+index
-                var technology =  `sink ${index} utl tech`
+                let sinkId = form.extra.sinks[sinkIndex].id
+                let sinkName = form.extra.sinks[sinkIndex].name
+                var ownership = 'sink '+sinkId
+                var technology =  `sink ${sinkId} utl tech`
 
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
+                form.extra.input_data.rls_map.push([ownership, sinkName])
                 index++
             }
 
@@ -1060,6 +1081,7 @@ export default {
                     orc_T_cond:35,
                     actorshare: "[1]",
                     rls: [],
+                    rls_map: [],
                     cost: null,
                     gmax: null,
                     lmax: null,
