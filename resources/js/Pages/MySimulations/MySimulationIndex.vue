@@ -209,6 +209,14 @@
             </DialogModal>
         </div>
     </AppLayout>
+    <component
+        class="z-50"
+        :is="modalComponent"
+        v-if="modalComponent"
+        v-model="modalIsOpen"
+        @confirmation="onConfirmation"
+    >
+    </component>
 </template>
 
 <script>
@@ -234,6 +242,7 @@ import {Inertia} from "@inertiajs/inertia";
 import SpinnerIcon from "../../Components/Icons/SpinnerIcon";
 import {broadcast} from "../../Mixins/vueEcho";
 import DeleteModal from '../../Components/Modals/DeleteModal';
+
 
 export default {
     components: {
@@ -354,12 +363,39 @@ export default {
         })
 
         const showModal = (item, modal) => {
-            console.log(item)
             currentModal.value = modal;
             itemToDelete.value = item;
 
             modalIsOpen.value = true;
         };
+
+        const onConfirmation = () => {
+            Inertia.delete(
+                route("projects.simulations.destroy", [itemToDelete.value.project.id, itemToDelete.value.id]),
+                {
+                    onSuccess: (data) => {
+                        notify({
+                            group: "notifications",
+                            title: "Simulation",
+                            text: 'Simulation Deleted Successfully',
+                            data: {
+                                type: "success",
+                            },
+                        });
+                    },
+                    onError: (error) => {
+                        notify({
+                            group: "notifications",
+                            title: "Simulation",
+                            text: 'General error, please try again.',
+                            data: {
+                                type: "danger",
+                            },
+                        });
+                    },
+                }
+            );
+        }
 
         return {
             tableColumns,
@@ -367,6 +403,8 @@ export default {
             currentProject,
             modalComponent,
             modalIsOpen,
+            DeleteModal,
+            onConfirmation,
             showModal,
             sendToCreateSimulation,
             moment,

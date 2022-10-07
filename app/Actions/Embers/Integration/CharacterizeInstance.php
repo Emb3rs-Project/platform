@@ -67,13 +67,16 @@ class CharacterizeInstance implements CharacterizesInstances
         $type = $template->category->type;
 
         $data = $instance->values;
+
         // TODO: Normalize Values Structure
         if ($template->id == 15) {
             $data = $instance->values["properties"];
-            if(!isset($data['real_hourly_capacity'])) {
-                unset($data['real_hourly_capacity']);
-            }
         }
+
+        if(array_key_exists('real_hourly_capacity', $data) && !isset($data['real_hourly_capacity'])) {
+            unset($data['real_hourly_capacity']);
+        }
+
 
         $streams = [];
         if(array_key_exists('additional_streams', $instance->values)) {
@@ -84,8 +87,8 @@ class CharacterizeInstance implements CharacterizesInstances
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode([
             "type_of_object" => $type,
-            "streams" => array_merge([$data],$streams)
-        ]));
+            "streams" => array_merge([$data], $streams)
+        ], JSON_THROW_ON_ERROR));
 
         /** @var CharacterizationSourceOutput $feature */
         list($feature, $status) = $client->char_simple($request)->wait();

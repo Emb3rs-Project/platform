@@ -197,6 +197,6 @@ class ProjectSimulationController extends Controller
     {
         app(DestroysSimulations::class)->destroy($request->user(), $projectId, $simulationId);
 
-        return redirect()->route('projects.show', $projectId);
+        return redirect()->route('my-simulations.index',['page'=> $request->get('page')]);
     }
 }
