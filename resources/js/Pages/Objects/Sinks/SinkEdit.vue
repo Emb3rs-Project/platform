@@ -43,7 +43,7 @@
               >
                   <InfoIcon class="font-medium text-sm w-5" />
               </button>
-          </div>          
+          </div>
         </div>
         <div class="space-y-1 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:py-5">
           <div class="col-span-2">
@@ -88,7 +88,7 @@
                   for="custom-marker"
                   class="ml-2 block text-sm text-gray-900"
                   >
-                  Custom Marker
+                  Fill in your own coordinates
                   </label>
               </div>
           </div>

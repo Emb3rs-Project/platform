@@ -12,7 +12,7 @@
                         label="Template"
                     />
                 </div>
-                
+
                 <div class="mt-6" v-if="selectedTemplate.info">
                   <button
                     title="Info"
@@ -74,7 +74,7 @@
                         for="custom-marker"
                         class="ml-2 block text-sm text-gray-900"
                     >
-                        Custom Marker
+                        Fill in your own coordinates
                     </label>
                 </div>
             </div>
@@ -279,7 +279,7 @@ export default {
         const custom = ref(false);
         const storeSource = computed(() => store.getters["source/source"]);
         const storeTemplate = computed(() => store.getters["source/template"]);
-        
+
         const selectedMarker = store.getters["map/selectedMarker"];
 
         const infoTemplateModalIsVisible = ref(false);
@@ -406,7 +406,7 @@ export default {
         );
 
         const commitSource = window._.debounce(
-            () => 
+            () =>
                 store.commit("source/setSourceData", {
                     data: window._.cloneDeep(source.value.data),
                 }),

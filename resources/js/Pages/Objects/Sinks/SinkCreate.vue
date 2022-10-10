@@ -82,7 +82,7 @@
                             for="custom-marker"
                             class="ml-2 block text-sm text-gray-900"
                         >
-                            Custom Marker
+                            Fill in your own coordinates
                         </label>
                     </div>
                 </div>
