@@ -1,15 +1,16 @@
 <template>
     <div id="map" class="min-h-screen min-w-full z-0"></div>
 
-    <button
-        type="button"
-        title="Select Area"
-        class="fixed left-4 lg:left-[17rem] top-40 lg:top-20 z-10 inline-flex items-center border-2 shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
-        :class="[selectArea ? 'border-blue-400' : 'border-gray-400']"
-        @click="onSelectArea"
-    >
-        <CursorClickIcon class="h-6 w-auto" :class="[selectArea ? 'text-blue-500' : 'text-gray-500']" aria-hidden="true" />
-    </button>
+<!--    <button-->
+<!--        type="button"-->
+<!--        title="Select Area"-->
+<!--        style="top: 8em!important;"-->
+<!--        class="fixed left-4 lg:left-[17rem] top-50 lg:top-20 z-10 inline-flex items-center border-2 shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"-->
+<!--        :class="[selectArea ? 'border-blue-400' : 'border-gray-400']"-->
+<!--        @click="onSelectArea"-->
+<!--    >-->
+<!--        <CursorClickIcon class="h-6 w-auto" :class="[selectArea ? 'text-blue-500' : 'text-gray-500']" aria-hidden="true" />-->
+<!--    </button>-->
 
     <button
         type="button"
@@ -18,16 +19,137 @@
     >
         <BookmarkIcon class="h-8 w-auto text-blue-500" aria-hidden="true" />
     </button>
-
-    <button
-        type="button"
-        class="fixed left-16 lg:left-96 top-20 lg:top-4 z-10 inline-flex items-center p-2 border-2 border-gray-400 rounded-full shadow-sm text-gray-200 bg-gray-50 hover:bg-gray-100"
-        @click="showTestNotification"
-    >
-        <BellIcon class="h-8 w-auto text-blue-500" aria-hidden="true" />
-    </button>
 </template>
+<style>
+.leaflet-control-geocoder {
+    border-radius: 4px;
+    background: white;
+    min-width: 26px;
+    min-height: 26px;
+}
 
+.leaflet-touch .leaflet-control-geocoder {
+    min-width: 30px;
+    min-height: 30px;
+    margin-right: 95px!important;
+}
+
+.leaflet-control-geocoder a,
+.leaflet-control-geocoder .leaflet-control-geocoder-icon {
+    border-bottom: none;
+    display: inline-block;
+}
+
+.leaflet-control-geocoder .leaflet-control-geocoder-alternatives a {
+    width: inherit;
+    height: inherit;
+    line-height: inherit;
+}
+
+.leaflet-control-geocoder a:hover,
+.leaflet-control-geocoder .leaflet-control-geocoder-icon:hover {
+    border-bottom: none;
+    display: inline-block;
+}
+
+.leaflet-control-geocoder-form {
+    display: none;
+    vertical-align: middle;
+}
+.leaflet-control-geocoder-expanded .leaflet-control-geocoder-form {
+    display: inline-block;
+}
+.leaflet-control-geocoder-form input {
+    font-size: 120%;
+    border: 0;
+    background-color: transparent;
+    width: 246px;
+}
+
+.leaflet-control-geocoder-icon {
+    border-radius: 4px;
+    width: 26px;
+    height: 26px;
+    border: none;
+    background-color: white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.2 13l3.4 6.6c.6 1.1 2.5-.4 2-1.2l-4-6.2z'/%3E%3Ccircle cx='10.8' cy='8.9' r='3.9' fill='none' stroke='%23000' stroke-width='1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
+.leaflet-touch .leaflet-control-geocoder-icon {
+    width: 30px;
+    height: 30px;
+}
+
+.leaflet-control-geocoder-throbber .leaflet-control-geocoder-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' stroke='%23000' stroke-linecap='round' stroke-width='1.6' viewBox='0 0 24 24'%3E%3Cdefs/%3E%3Cg%3E%3Cpath stroke-opacity='.1' d='M14 8.4l3-5'/%3E%3Cpath stroke-opacity='.2' d='M15.6 10l5-3'/%3E%3Cpath stroke-opacity='.3' d='M16.2 12H22'/%3E%3Cpath stroke-opacity='.4' d='M15.6 14l5 3m-6.5-1.4l2.9 5'/%3E%3Cpath stroke-opacity='.5' d='M12 16.2V22m-2-6.4l-3 5'/%3E%3Cpath stroke-opacity='.6' d='M8.4 14l-5 3'/%3E%3Cpath stroke-opacity='.7' d='M7.8 12H2'/%3E%3Cpath stroke-opacity='.8' d='M8.4 10l-5-3'/%3E%3Cpath stroke-opacity='.9' d='M10 8.4l-3-5'/%3E%3Cpath d='M12 7.8V2'/%3E%3CanimateTransform attributeName='transform' calcMode='discrete' dur='1s' repeatCount='indefinite' type='rotate' values='0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.leaflet-control-geocoder-form-no-error {
+    display: none;
+}
+
+.leaflet-control-geocoder-form input:focus {
+    outline: none;
+}
+
+.leaflet-control-geocoder-form button {
+    display: none;
+}
+.leaflet-control-geocoder-error {
+    margin-top: 8px;
+    margin-left: 8px;
+    display: block;
+    color: #444;
+}
+.leaflet-control-geocoder-alternatives {
+    display: block;
+    width: 272px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.leaflet-control-geocoder-alternatives-minimized {
+    display: none;
+    height: 0;
+}
+.leaflet-control-geocoder-alternatives li {
+    white-space: nowrap;
+    display: block;
+    overflow: hidden;
+    padding: 5px 8px;
+    text-overflow: ellipsis;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.leaflet-control-geocoder-alternatives li a,
+.leaflet-control-geocoder-alternatives li a:hover {
+    width: inherit;
+    height: inherit;
+    line-height: inherit;
+    background: inherit;
+    border-radius: inherit;
+    text-align: left;
+}
+
+.leaflet-control-geocoder-alternatives li:last-child {
+    border-bottom: none;
+}
+.leaflet-control-geocoder-alternatives li:hover,
+.leaflet-control-geocoder-selected {
+    background-color: #f5f5f5;
+}
+.leaflet-control-geocoder-address-detail {
+}
+.leaflet-control-geocoder-address-context {
+    color: #666;
+}
+
+</style>
 <script>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
@@ -39,9 +161,11 @@ import route from "ziggy";
 
 import "beautifymarker";
 import "leaflet-contextmenu";
+
 // CSS for Markers
 import "beautifymarker/leaflet-beautify-marker-icon.css";
 import "leaflet-contextmenu/dist/leaflet.contextmenu.min.css";
+
 import mapUtils from "@/Utils/map.js";
 import { BookmarkIcon, BellIcon, CursorClickIcon } from "@heroicons/vue/solid";
 

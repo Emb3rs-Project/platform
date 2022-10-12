@@ -625,6 +625,7 @@
                     </field>
 
                     <field label="Yearly Demand Rate (yearly_demand_rate)"
+                           v-show="isGreaterThanOneYear"
                         hint="How much is the demand increasing per year? Not relevant if you are simulating 1 year or less.">
                         <TextInput
                             v-model="form.extra.input_data.user.yearly_demand_rate"
@@ -640,10 +641,14 @@
                     </field>
 
                     <field label="Product Differentiation Option (prod_diff_option)"
+                        v-show="form.extra.input_data.user.md !== 'centralized'"
                         hint="in case md=decentralized, this is relevant, otherwise not. noPref, co2Emissions or networkDistance are the options.">
-                        <TextInput
-                            v-model="form.extra.input_data.user.prod_diff_option"
+                        <SelectMenu
+                            :modelValue="productDiffProfiles.find((item) => item.key === form.extra.input_data.user.prod_diff_option)"
+                            :options="productDiffProfiles"
+                            @update:modelValue="(val) => form.extra.input_data.user.prod_diff_option = val.key"
                         />
+
                     </field>
 
                     <div class="space-y-1 sm:col-span-3">
@@ -925,6 +930,7 @@ export default {
         const marketProfiles = [{key:'centralized', value: 'Centralized'},{key:'decentralized', value: 'Decentralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
+        const productDiffProfiles= [{key: 'noPref', value: 'noPref'},{key:'co2Emissions', value:'Co2 Emissions'},{key:'networkDistance', value:'Network Distance'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
         const regions = COUNTRIES.map((country) => country.name)
         const timeslices = [{key:'monthly', value:'Monthly'},{key: 'weekly', value: 'Weekly'},{key: 'daily', value: 'Daily'},
@@ -1458,6 +1464,25 @@ export default {
             },
             {immediate: true, deep: true}
         );
+
+       const isGreaterThanOneYear = computed( () => {
+
+            let result = false
+           switch (form.extra.input_data.user.horizon_basis) {
+               case "weekly":
+                   result = (form.extra.input_data.user.recurrence > 52)
+                   break
+               case "monthly":
+                   result = (form.extra.input_data.user.recurrence > 12)
+                   break
+               case "years":
+                   result = (form.extra.input_data.user.recurrence > 1)
+                   break
+           }
+            console.log(form.extra.input_data.user.horizon_basis, result)
+            return result
+       })
+
         return {
             form,
             links,
@@ -1469,6 +1494,7 @@ export default {
             marketProfiles,
             dataProfiles,
             horizonBasisProfiles,
+            productDiffProfiles,
             regions,
             emissions,
             platformStorages,
@@ -1481,6 +1507,7 @@ export default {
             totalSinkSourcesSelected,
             file,
             technologyOwnershipOptions,
+            isGreaterThanOneYear,
             onDeselected,
             onSelected,
             onSubmit,

@@ -1,5 +1,8 @@
 import L from 'leaflet';
 import SelectArea from 'leaflet-area-select';
+import 'leaflet-control-geocoder';
+
+
 
 export default {
   init(id = 'map', center = [38.7181959, -9.1975417], zoom = 13, options = { drawControl: true }) {
@@ -21,6 +24,15 @@ export default {
       }
     ).addTo(map);
 
+      L.Control.geocoder({
+          position: 'topleft',
+          placeholder: 'Search a location',
+          defaultMarkGeocode: false,
+          geocoder: L.Control.Geocoder.nominatim()
+      }).on('markgeocode', function(e) {
+          var result = e.geocode.bbox;
+          map.fitBounds(result)
+      }).addTo(map);
     return map;
   },
   centerAtLocation(map, { type, data }) {
@@ -68,7 +80,7 @@ export default {
     map.eachLayer(function (layer) {
       if (layer.options.alt == id) {
           layer.setLatLng([location.lat, location.lng])
-      } 
+      }
     });
   },
   setArea(option) {
@@ -154,7 +166,7 @@ export default {
   },
   addLinks(map, links = [], mapObjects = { sources: null, sinks: null, links: null }, onClick = () => { }, simulation = false, selectedLink = null) {
     const linksLayer = [];
-    
+
     for (const _link of links.filter((l) => l.selected)) {
       const latLngs = [_link.geo_segments.map((gs) => ([
         gs.data.from, gs.data.to
@@ -300,6 +312,6 @@ export default {
     return linksInView;
   },
   setBoundaryView(map, boundingBox) {
-      
+
   }
 }
