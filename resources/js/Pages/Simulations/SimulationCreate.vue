@@ -922,7 +922,7 @@ export default {
         const file = ref(null);
 
         const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
-        const marketProfiles = [{key:'centralized', value: 'Centralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
+        const marketProfiles = [{key:'centralized', value: 'Centralized'},{key:'decentralized', value: 'Decentralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
         const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
