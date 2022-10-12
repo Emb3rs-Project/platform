@@ -45,8 +45,10 @@ class BroadCastClient {
                     });
                 })
             console.log('[echo]: connected')
+            global.wsON = true
             return process;
         } catch (error) {
+            global.wsON = false
             console.log(`[echo]: ${error}`)
         }
     }

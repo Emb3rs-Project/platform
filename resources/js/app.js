@@ -39,6 +39,9 @@ createInertiaApp({
                  }))
                  .component('lv-progressbar', lvProgressbar)
                  .mount(el);
+             if (!data.user_id){
+                 global.wsON = false
+             }
          })
     },
 });
