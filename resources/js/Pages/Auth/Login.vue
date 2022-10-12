@@ -153,7 +153,12 @@ export default {
           remember: this.form.remember ? "on" : "",
         }))
         .post(this.route("login"), {
-          onFinish: () => this.form.reset("password"),
+          onFinish: () => {
+              this.form.reset("password")
+              if(!global.wsON) {
+                  window.location = '/'
+              }
+          },
         });
     },
   },
