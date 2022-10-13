@@ -121,6 +121,8 @@ import { Link } from "@inertiajs/inertia-vue3";
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 import JetCheckbox from "@/Jetstream/Checkbox";
 import JetValidationErrors from "@/Jetstream/ValidationErrors";
+import axios from "axios";
+import {echo} from '../../Mixins/vueEcho'
 
 export default {
   components: {
@@ -156,7 +158,19 @@ export default {
           onFinish: () => {
               this.form.reset("password")
               if(!global.wsON) {
-                  window.location = '/'
+                  axios.get('/config').then(({data}) => {
+                      this.$.appContext.app.use(echo({
+                          broadcaster: 'pusher',
+                          authEndpoint: '/broadcasting/auth',
+                          key: data.pusherKey,
+                          forceTLS: data.pusherTLS,
+                          wsHost: data.pusherHost,
+                          wsPort: data.pusherPort,
+                          wssPort: data.pusherPort,
+                          disableStats: true,
+                          user_id: data.user_id
+                      }))
+                  })
               }
           },
         });
