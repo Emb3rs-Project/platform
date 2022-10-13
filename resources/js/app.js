@@ -13,6 +13,7 @@ import Notifications from "@kyvg/vue3-notification";
 import lvProgressbar from 'lightvue/progress-bar';
 import {echo} from './Mixins/vueEcho'
 import axios from "axios";
+import VueTippy from 'vue-tippy'
 
 require("./bootstrap");
 
@@ -26,6 +27,15 @@ createInertiaApp({
                  .use(plugin)
                  .use(store)
                  .use(Notifications)
+                 .use(VueTippy, {
+                         directive: 'tippy', // => v-tippy
+                         component: 'tippy', // => <tippy/>
+                         componentSingleton: 'tippy-singleton', // => <tippy-singleton/>,
+                         defaultProps: {
+                             placement: 'auto-end',
+                             allowHTML: true,
+                         }, // => Global default options * see all props
+                  })
                  .use(echo({
                      broadcaster: 'pusher',
                      authEndpoint: '/broadcasting/auth',

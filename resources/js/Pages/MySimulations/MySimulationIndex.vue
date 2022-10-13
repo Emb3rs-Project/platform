@@ -9,7 +9,7 @@
                 <h1 class="mb-8 font-bold text-3xl">My Simulations</h1>
 
                 <div class="flex justify-end mb-5">
-                    <PrimaryButton class="w-48" @click="executeAction = true">
+                    <PrimaryButton v-tippy="'Create a new simulation'" class="w-48" @click="executeAction = true">
                         New Simulation
                     </PrimaryButton>
                 </div>
@@ -114,7 +114,7 @@
                                         <spinner-icon v-if="item.status === 'RUNNING'"
                                                       class="text-green-600 font-medium text-sm w-5"/>
 
-                                        <button v-else @click="runSimulation(route('projects.simulations.run', {
+                                        <button v-else v-tippy="'Run Simulation'" @click="runSimulation(route('projects.simulations.run', {
                                             project: item.project.id,
                                             simulation: item.id,
                                             onRow: true,
@@ -124,6 +124,7 @@
                                         </button>
 
                                         <Link
+                                            v-tippy="'View simulation'"
                                             :href="
                                                             route(
                                                                 'projects.simulations.show',
@@ -140,6 +141,7 @@
                                         </Link>
 
                                         <Link
+                                            v-tippy="'Edit simulation'"
                                             :href="
                                                             route(
                                                                 'projects.simulations.edit',
@@ -156,6 +158,7 @@
                                         </Link>
 
                                         <button
+                                            v-tippy="'Delete simulation'"
                                             class="focus:outline-none"
                                             @click=" showModal(item, DeleteModal)"
                                         >

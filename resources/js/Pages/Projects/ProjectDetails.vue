@@ -201,6 +201,7 @@
                                                     class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex gap-2 float-right"
                                                 >
                                                     <Link
+                                                        v-tippy="'View simulation'"
                                                         :href="
                                                             route(
                                                                 'projects.simulations.show',
@@ -216,6 +217,7 @@
                                                         ></detail-icon>
                                                     </Link>
                                                     <Link
+                                                        v-tippy="'Edit simulation'"
                                                         :href="
                                                             route(
                                                                 'projects.simulations.edit',
@@ -231,6 +233,7 @@
                                                         ></edit-icon>
                                                     </Link>
                                                     <button
+                                                        v-tippy="'Delete simulation'"
                                                         class="focus:outline-none"
                                                         @click="
                                                             onSimulationDelete(
@@ -267,6 +270,7 @@
 
         <div class="w-full my-5 px-16 flex justify-end gap-x-10">
             <Link
+                v-tippy="'Create a new simulation'"
                 class="px-5 py-2 bg-slate-500 font-semibold text-white rounded-sm"
                 :href="route('projects.simulations.create', { id: project.id })"
                 >Create Simulation</Link

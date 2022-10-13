@@ -7,13 +7,13 @@
                 <h1 class="mb-8 font-bold text-3xl">Projects</h1>
 
                 <div class="flex justify-end mb-5">
-                    <PrimaryButton class="w-48 mr-2" @click="importInstance('Source')">
+                    <PrimaryButton v-tippy="'Import sources'" class="w-48 mr-2" @click="importInstance('Source')">
                         Import Sources
                     </PrimaryButton>
-                    <PrimaryButton class="w-48 mr-2" @click="importInstance('Sink')">
+                    <PrimaryButton v-tippy="'Import Sinks'" class="w-48 mr-2" @click="importInstance('Sink')">
                         Import Sinks
                     </PrimaryButton>
-                    <PrimaryLinkButton class="w-48" path="projects.create">
+                    <PrimaryLinkButton v-tippy="'Create a Project'" class="w-48" path="projects.create">
                         Create a Project
                     </PrimaryLinkButton>
                 </div>
@@ -82,6 +82,7 @@
                                         />
 
                                         <Link
+                                            v-tippy="'Show Project'"
                                             :href="
                                                 route('projects.show', item.id)
                                             "
@@ -95,6 +96,7 @@
                                         </Link>
 
                                         <Link
+                                            v-tippy="'Edit Project'"
                                             :href="
                                                 route('projects.edit', item.id)
                                             "
@@ -108,6 +110,7 @@
                                         </Link>
 
                                         <button
+                                            v-tippy="'Delete Project'"
                                             class="focus:outline-none"
                                             @click="showModal(item, DeleteModal)"
                                         >

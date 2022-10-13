@@ -544,6 +544,7 @@ import {ref, onBeforeUnmount} from "vue";
 import {Inertia} from "@inertiajs/inertia";
 import {Link} from "@inertiajs/inertia-vue3";
 import {useStore} from "vuex";
+import 'tippy.js/dist/tippy.css'; // optional for styling
 
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import QuickSearch from "@/Components/Search/QuickSearch.vue";
