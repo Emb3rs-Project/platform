@@ -77,6 +77,11 @@ class CharacterizeInstance implements CharacterizesInstances
             unset($data['real_hourly_capacity']);
         }
 
+        if(array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
+            unset($data['u_floor']);
+        }
+
+
 
         $streams = [];
         if(array_key_exists('additional_streams', $instance->values)) {
