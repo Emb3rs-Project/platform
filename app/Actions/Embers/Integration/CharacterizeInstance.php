@@ -124,6 +124,9 @@ class CharacterizeInstance implements CharacterizesInstances
             $data['T_heat_on'] = 45;
         }
 
+        if(array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
+            unset($data['u_floor']);
+        }
 
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode($data));
