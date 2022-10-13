@@ -46,6 +46,7 @@
         "jsonexport": "^3.2.0",
         "jszip": "^3.10.1",
         "laravel-echo": "^1.13.1",
+        "leaflet-control-geocoder": "^2.4.0",
         "lightvue": "^1.4.9",
         "moment": "^2.29.4",
         "pusher-js": "^7.4.0",
