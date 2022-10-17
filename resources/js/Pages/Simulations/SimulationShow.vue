@@ -3,6 +3,16 @@
         <div class="bg-white h-screen overflow-y-scroll">
             <div class="grid grid-cols-2 gap-4">
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                    <div class="flex justify-between">
+                        <button
+                            class="bg-gray-600 hover:bg-gray-900 font-bold py-1 px-2 my-2 rounded-md text-white flex"
+                            @click="back">
+
+                            <ChevronLeftIcon class="w-6 h-6"></ChevronLeftIcon>
+                            <span>My Simulations</span>
+
+                        </button>
+                    </div>
                     <h2 class="text-lg font-bold">Simulation Details</h2>
 
                     <div
@@ -111,7 +121,7 @@ import CheckboxRow from "@/Components/CheckboxRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-import { computed, ref } from "vue";
+import {computed, onMounted, ref} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -125,11 +135,30 @@ import VSelect from "vue-select";
 import { COUNTRIES } from "./data/countries";
 import { Inertia } from "@inertiajs/inertia";
 import moment from 'moment';
+import {broadcast} from "../../Mixins/vueEcho";
+import {notify} from "@kyvg/vue3-notification";
+import {ChevronLeftIcon} from '@heroicons/vue/solid'
 
 const props = defineProps({
     project: Object,
     simulation: Object,
 });
+
+const back = () => Inertia.get(route('my-simulations.index'))
+
+onMounted(() => {
+    broadcast().channel('my-simulations')
+        .listen('.simulation-run', (e) => {
+            notify({
+                group: "notifications",
+                title: "Simulation",
+                text: e.data.description,
+                data: {
+                    type: "success",
+                },
+            });
+        })
+})
 
 const stepInfo = computed(() => {
     return []

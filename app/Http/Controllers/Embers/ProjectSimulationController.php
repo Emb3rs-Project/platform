@@ -97,14 +97,17 @@ class ProjectSimulationController extends Controller
             $extras['sources'] = [];
         }
 
-        $project->simulations()->create([
+       $simulation = $project->simulations()->create([
             "status" => "NEW",
             "name" => $request->get('name'),
             "simulation_metadata_id" => $simulationMetadata["id"],
             "extra" => $extras
         ]);
 
-        return redirect()->route('my-simulations.index');
+        return redirect()->route('projects.simulations.show', [
+            $project->id,
+            $simulation->id
+        ]);
     }
 
     /**

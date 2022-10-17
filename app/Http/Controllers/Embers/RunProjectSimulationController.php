@@ -59,9 +59,9 @@ class RunProjectSimulationController extends Controller
         //         0
         //     )
         // );
-
+        broadcast(new SimulationRunning($simulation->id));
         if ($request->input('onRow')) {
-            broadcast(new SimulationRunning($simulation->id));
+
             broadcast(new SimulationUpdate($simulation->id));
 
             /* $request->user()->notify(new ImportNotification($request->user(), $request->user()->currentTeam,
