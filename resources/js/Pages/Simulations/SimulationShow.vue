@@ -121,7 +121,7 @@ import CheckboxRow from "@/Components/CheckboxRow";
 import SelectRow from "@/Components/SelectRow";
 import JetButton from "@/Jetstream/Button";
 import JetInputError from "@/Jetstream/InputError";
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeUnmount, onMounted, ref} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AmazingMap from "@/Components/Map/AmazingMap.vue";
 import SlideOver from "@/Components/SlideOver.vue";
@@ -175,4 +175,8 @@ const stepInfo = computed(() => {
 });
 
 const navigateTo = (path) => Inertia.get(path);
+
+onBeforeUnmount(() => {
+    broadcast().leave('my-simulations')
+})
 </script>

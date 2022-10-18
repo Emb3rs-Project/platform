@@ -313,7 +313,7 @@ export default {
             })
 
             if (repeat) {
-                window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 2000, id, true)
+                window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 5000, id, true)
             }
         }
 
