@@ -151,7 +151,7 @@ export default {
             storeTemplate.value ?? templates.value.find((t) => t.key === props.instance.template_id)
         );
 
-        const additionalStreams = ref(window._.cloneDeep(storeAdditionalStreams.value));
+        const additionalStreams = ref(window._.cloneDeep(storeAdditionalStreams.value) || []) ;
 
 
 
