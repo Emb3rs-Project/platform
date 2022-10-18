@@ -57,11 +57,16 @@ class ShowSource implements ShowsSources
             ])
             ->get();
 
+        $additionalStreams = [];
+        if(array_key_exists('additional_streams',$source->values)) {
+            $additionalStreams = $source->values['additional_streams'];
+        }
+
         return [
             $source,
             $equipmentTemplates,
             $processesTemplates,
-            $source->values['additional_streams']
+            $additionalStreams
         ];
     }
 }
