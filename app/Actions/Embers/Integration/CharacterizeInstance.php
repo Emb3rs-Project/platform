@@ -41,8 +41,8 @@ class CharacterizeInstance implements CharacterizesInstances
             default:
                 return back()->withErrors([
                     'title' => 'Error',
-                    'text'  => 'NOT DEFINED!',
-                    'type'  => 'danger'
+                    'text' => 'NOT DEFINED!',
+                    'type' => 'danger'
                 ]);
                 break;
         }
@@ -55,8 +55,8 @@ class CharacterizeInstance implements CharacterizesInstances
             }
             return back()->withErrors([
                 'title' => 'Error',
-                'text'  => $status->details ?? 'General error, please try again.',
-                'type'  => 'danger'
+                'text' => $status->details ?? 'General error, please try again.',
+                'type' => 'danger'
             ]);
         }
     }
@@ -73,18 +73,17 @@ class CharacterizeInstance implements CharacterizesInstances
             $data = $instance->values["properties"];
         }
 
-        if(array_key_exists('real_hourly_capacity', $data) && !isset($data['real_hourly_capacity'])) {
+        if (array_key_exists('real_hourly_capacity', $data) && !isset($data['real_hourly_capacity'])) {
             unset($data['real_hourly_capacity']);
         }
 
-        if(array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
+        if (array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
             unset($data['u_floor']);
         }
 
 
-
         $streams = [];
-        if(array_key_exists('additional_streams', $instance->values)) {
+        if (array_key_exists('additional_streams', $instance->values)) {
             $additionalStreams = collect($instance->values['additional_streams']);
             $streams = $additionalStreams->pluck('data')->all();
         }
@@ -116,22 +115,26 @@ class CharacterizeInstance implements CharacterizesInstances
         $location = $instance->location->data;
         $data["location"] = $location['center'];
 
-        if(!isset($data['T_cool_on'])) {
+        if (!isset($data['T_cool_on'])) {
             $data['T_cool_on'] = 75;
         }
 
-        if(!isset($data['T_heat_on'])) {
+        if (!isset($data['T_heat_on'])) {
             $data['T_heat_on'] = 45;
         }
 
-        if(array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
-            unset($data['u_floor']);
+
+        foreach ($data as $key => $value) {
+            if (array_key_exists($key, $data) && (!isset($data[$key]) || empty($data[$key]))) {
+                if (!in_array($key, ['saturday_on', 'sunday_on', 'shutdown_periods'])) {
+                    unset($data[$key]);
+                }
+            }
+
         }
 
         $request = new CharacterizationInput();
         $request->setPlatform(json_encode($data));
-
-
 
 
         /** @var CharacterizationSinkOutput $feature */
@@ -166,7 +169,7 @@ class CharacterizeInstance implements CharacterizesInstances
             $characterization = [];
             $values = $instance->values;
             //$characterization["streams"] = [json_decode($feature->getColdStream()), json_decode($feature->getHotStream())];
-            $characterization["streams"] =json_decode($feature->getHotStream());
+            $characterization["streams"] = json_decode($feature->getHotStream());
             $values['characterization'] = $characterization;
             $instance->values = $values;
             $instance->save();

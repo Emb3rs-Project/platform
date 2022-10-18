@@ -110,7 +110,7 @@ class SinkController extends Controller
     public function update(Request $request, int $id)
     {
         $sink = app(UpdatesSinks::class)->update($request->user(), $id, $request->all());
-        
+
         $sinkName = $sink->name;
         $team = $request->user()->currentTeam;
         $message = 'updated a new Sink at';

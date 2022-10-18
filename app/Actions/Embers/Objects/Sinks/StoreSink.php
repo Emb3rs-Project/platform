@@ -63,6 +63,9 @@ class StoreSink implements StoresSinks
                 'integer',
                 'exists:locations,id'
             ],
+            'sink.data.name' => [
+                'regex:/[a-z]/',      // must contain at least one lowercase letter
+            ],
             'location' => [
                 Rule::requiredIf(function () use ($input) {
                     return !Arr::has($input, 'location_id') || Arr::get($input, 'location_id') === null;
@@ -75,12 +78,12 @@ class StoreSink implements StoresSinks
             'location.lng' => ['required_with:location', 'numeric', new Coordinates],
         ]);
 
-        // $validated = $validator->validate();
+        $validated = $validator->validate();
 
         // $this->checkIfPropertiesAreValid($validated);
 
         // return $validated;
-        return $input;
+        return $validated;
     }
 
     /**

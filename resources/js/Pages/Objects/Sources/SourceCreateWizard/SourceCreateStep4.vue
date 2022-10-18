@@ -22,7 +22,7 @@
     >
         <PropertyDisclosure canDelete :title="`Stream ${streamIndex+1}`"
                             v-for="(stream, streamIndex) in additionalStreams"
-                            @onDelete="onRemoveStream(index)">
+                            @onDelete="onRemoveStream(streamIndex)">
             <div
                 class="my-6"
                 v-for="(property, propertyIdx) in properties"

@@ -71,7 +71,9 @@
                         />
                       </div>
                       <div class="ml-3">
-                        <p class="text-red-700 text-sm">{{error.text}}</p>
+
+                        <p v-if="error.text" class="text-red-700 text-sm">{{error.text}}</p>
+                        <p v-else class="text-red-700 text-sm">Please, correct all the errors before saving.</p>
                       </div>
                     </div>
                   </div>
@@ -117,7 +119,7 @@ export default {
     XIcon,
     TransitionChild,
     TransitionRoot,
-    PrimaryButton,   
+    PrimaryButton,
   },
 
   props: {
@@ -133,7 +135,7 @@ export default {
 
   emits: ["update:modelValue"],
 
-  setup(props, { emit }) {  
+  setup(props, { emit }) {
     const open = computed({
       get: () => props.modelValue,
       set: (value) => emit("update:modelValue", value),
@@ -142,6 +144,6 @@ export default {
     return {
       open,
     };
-  }, 
+  },
 };
 </script>

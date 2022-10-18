@@ -34,9 +34,9 @@ class UpdateSink implements UpdatesSinks
 
         $sink = Instance::query()->findOrFail($id);
 
-        //$validated = $this->validate($input, $sink);
+        $validated = $this->validate($input, $sink);
 
-        $sink = $this->save($sink, $input);
+        $sink = $this->save($sink, $validated);
 
         return $sink;
     }
@@ -54,13 +54,17 @@ class UpdateSink implements UpdatesSinks
     {
         $validator = Validator::make($input, [
             'sink' => ['filled', 'array:data'],
+            'sink.data.name' => 'regex:/[a-z]/', // must contain at least one lowercase letter
+
             'template_id' => ['filled', 'numeric', 'integer', 'exists:templates,id'],
             'location_id' => ['filled', 'numeric', 'integer', 'exists:locations,id'],
-        ]);
+        ],
+            ['sink.data.name' => 'Name should have at least one letter',]);
+
 
         $validated = $validator->validate();
 
-        $this->checkIfPropertiesAreValid($validated, $sink->template_id);
+       // $this->checkIfPropertiesAreValid($validated, $sink->template_id);
 
         return $validated;
     }

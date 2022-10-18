@@ -114,6 +114,16 @@
                             class="mt-2" />
                     </div>
                 </div>
+
+<!--                <div class="my-6">-->
+<!--                    <div class="my-6">-->
+<!--                        <FileInput-->
+<!--                            v-model="form.sink.data['real_daily_capacity']"-->
+<!--                            label="File test"-->
+<!--                        />-->
+<!--                    </div>-->
+
+<!--                </div>-->
             </PropertyDisclosure>
         </div>
 
@@ -211,9 +221,11 @@ import {
     validateProperies,
     DEFAULT_TEMPLATE,
 } from "@/Utils/helpers";
+import FileInput from "../../../Components/Forms/FileInput";
 
 export default {
     components: {
+        FileInput,
         JetCheckbox,
         AppLayout,
         SiteHead,
