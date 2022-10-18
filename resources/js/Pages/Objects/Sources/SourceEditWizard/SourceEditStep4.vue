@@ -21,7 +21,7 @@
     >
         <PropertyDisclosure canDelete :title="`Stream ${streamIndex+1}`"
                             v-for="(stream, streamIndex) in additionalStreams"
-                            @onDelete="onRemoveStream(index)">
+                            @onDelete="onRemoveStream(streamIndex)">
 
 
 
@@ -151,7 +151,7 @@ export default {
             storeTemplate.value ?? templates.value.find((t) => t.key === props.instance.template_id)
         );
 
-        const additionalStreams = ref(window._.cloneDeep(storeAdditionalStreams.value) || []) ;
+        const additionalStreams = ref(window._.cloneDeep(storeAdditionalStreams.value) || []);
 
 
 
@@ -174,7 +174,10 @@ export default {
 
 
 
-        const onRemoveStream = (index) => additionalStreams.value.splice(index, 1);
+        const onRemoveStream = (index) => {
+            additionalStreams.value.splice(index, 1);
+            commitAdditionalStreams()
+        }
 
         watch(
             () => props.nextStepRequest,
