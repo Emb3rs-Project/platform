@@ -168,16 +168,18 @@ class Simulation extends Model
         if ($this->status === 'RUNNING') {
             $this->load('simulationSessions', 'simulationMetadata');
             $session = $this->simulationSessions->last();
-            $report = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
-                ->orderBy('created_at', 'desc')->orderBy('id', 'desc')
-                ->latest()->first();
-            if ($report) {
-                $slug = \Str::slug($report->module . '-' . $report->function);
-                $data = $this->simulationMetadata->data;
-                $keySlug = \Str::slug($data['identifier']);
-                return self::PROGRESS[$keySlug][$slug] ?? 100;
+            if ($session) {
+                $report = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
+                    ->orderBy('created_at', 'desc')->orderBy('id', 'desc')
+                    ->latest()->first();
+                if ($report) {
+                    $slug = \Str::slug($report->module . '-' . $report->function);
+                    $data = $this->simulationMetadata->data;
+                    $keySlug = \Str::slug($data['identifier']);
+                    return self::PROGRESS[$keySlug][$slug] ?? 100;
+                }
+                return 0;
             }
-            return 0;
         }
         return 0;
     }
