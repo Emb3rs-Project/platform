@@ -223,6 +223,7 @@
                            if it's defined as 0 then there won't have a time limit and the simulation may take longer time">
                         <TextInput
                             v-model="form.extra.input_data.time_limit"
+                            type="number"
                             unit="Min"
                         />
                     </field>
