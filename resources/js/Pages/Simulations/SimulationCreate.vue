@@ -223,7 +223,7 @@
                            if it's defined as 0 then there won't have a time limit and the simulation may take longer time">
                         <TextInput
                             v-model="form.extra.input_data.time_limit"
-                            type="number"
+                            type="text"
                             unit="Min"
                         />
                     </field>
@@ -1291,6 +1291,7 @@ export default {
                     data.extra.input_data.fc_pip = Number(data.extra.input_data.fc_pip)
                     data.extra.input_data.vc_pip = Number(data.extra.input_data.vc_pip)
                     data.extra.input_data.vc_pip_ex = Number(data.extra.input_data.vc_pip_ex)
+                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
 
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
