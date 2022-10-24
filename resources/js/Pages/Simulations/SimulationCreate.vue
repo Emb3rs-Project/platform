@@ -223,7 +223,7 @@
                            if it's defined as 0 then there won't have a time limit and the simulation may take longer time">
                         <TextInput
                             v-model="form.extra.input_data.time_limit"
-                            type="text"
+                            type="number"
                             unit="Min"
                         />
                     </field>
@@ -1280,7 +1280,7 @@ export default {
                         form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit
                     )
 
-                    // Numeric -> GIS Parameter
+                    // Numb GIS Parameter
                     data.extra.input_data.flow_temp = Number(data.extra.input_data.flow_temp)
                     data.extra.input_data.return_temp = Number(data.extra.input_data.return_temp)
                     data.extra.input_data.ambient_temp = Number(data.extra.input_data.ambient_temp)
