@@ -217,6 +217,17 @@
                         />
                     </field>
 
+                    <field label="Resolution timeout limit"
+                           required
+                           hint="Defines the timeout limit, when the GIS reach this limit it will return the best solution so far.
+                           if it's defined as 0 then there won't have a time limit and the simulation may take longer time">
+                        <TextInput
+                            v-model="form.extra.input_data.time_limit"
+                            type="text"
+                            unit="Min"
+                        />
+                    </field>
+
                     <field label="Average Flow Temperature (flow_temp)"
                            required
                            hint="Yearly average flow temperature in °C.">
@@ -1189,6 +1200,7 @@ export default {
                     ],
                     community_settings: null,
                     network_resolution: "high",
+                    time_limit: 0,
                     yearly_demand_rate: 0.05,
                     factor_street_terrain: 0.1,
                     factor_street_overland: 0.4,
@@ -1267,6 +1279,20 @@ export default {
                     form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit = Number(
                         form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit
                     )
+
+                    // Numb GIS Parameter
+                    data.extra.input_data.flow_temp = Number(data.extra.input_data.flow_temp)
+                    data.extra.input_data.return_temp = Number(data.extra.input_data.return_temp)
+                    data.extra.input_data.ambient_temp = Number(data.extra.input_data.ambient_temp)
+                    data.extra.input_data.ground_temp = Number(data.extra.input_data.ground_temp)
+                    data.extra.input_data.fc_dig_st = Number(data.extra.input_data.fc_dig_st)
+                    data.extra.input_data.vc_dig_st = Number(data.extra.input_data.vc_dig_st)
+                    data.extra.input_data.vc_dig_st_ex = Number(data.extra.input_data.vc_dig_st_ex)
+                    data.extra.input_data.fc_pip = Number(data.extra.input_data.fc_pip)
+                    data.extra.input_data.vc_pip = Number(data.extra.input_data.vc_pip)
+                    data.extra.input_data.vc_pip_ex = Number(data.extra.input_data.vc_pip_ex)
+                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
+
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
                     if(form.extra.isConstantUtil) {
