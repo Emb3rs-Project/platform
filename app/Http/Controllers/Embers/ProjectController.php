@@ -12,10 +12,14 @@ use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Link;
+use App\Models\Template;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use Rap2hpoutre\FastExcel\FastExcel;
+use Rap2hpoutre\FastExcel\SheetCollection;
 
 class ProjectController extends Controller
 {
@@ -147,5 +151,50 @@ class ProjectController extends Controller
 
         return redirect()->back()->with('flash', ['success' => 'The file is being processed in the background. You will receive a notification when finished.']);
         //$import::dispatch($filename, request()->user());
+    }
+
+    public function downloadImportFile(Request $request)
+    {
+        $templates = Template::with('templateProperties', 'templateProperties.property')->get();
+        $allProps = [];
+        $helpers = [];
+        if ($request->query('type') === 'Source') {
+            $allProps['sourceID'] = '';
+        }
+        $allProps['template'] = '';
+        $allProps['latitude'] = '';
+        $allProps['longitude'] = '';
+        $templates->each(function ($item) use (&$helpers, &$allProps) {
+            $item->templateProperties->each(function ($tempProp) use (&$allProps, &$helpers, $item) {
+                // dump($tempProp->property->toArray());
+                $field = [
+                    'field' => $tempProp->property['name'],
+                    'options' => '',
+                    'info' => $tempProp->property['description']
+                ];
+                if ($tempProp->property['inputType'] === 'select' && $tempProp->property['data']) {
+                    $field['options'] = collect($tempProp->property['data']['options'])->pluck('key')->join(' or ');
+                }
+                $helpers[] = $field;
+                $allProps[$tempProp->property['name']] = '';
+            });
+        });
+        $sheetName = [
+            'import' => collect([$allProps]),
+            'helper' => $helpers
+        ];
+        if ($request->query('type') === 'Source') {
+            $sheetName['AdditionalStreams'] = collect([$allProps]);
+        }
+
+        $sheets = new SheetCollection($sheetName);
+
+        $header_style = (new StyleBuilder())
+            ->setShouldWrapText()->setShouldShrinkToFit()
+            ->build();
+
+        return (new FastExcel($sheets))
+            ->headerStyle($header_style)
+            ->download('import_sample.xlsx');
     }
 }
