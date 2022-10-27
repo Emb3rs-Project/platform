@@ -33,6 +33,10 @@
                             Type    :
                             <b>{{ simulation.simulation_metadata.name }}</b>
                             <br />
+                            <div v-if="simulation.status === 'RUNNING'"
+                                class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500 w-48">
+                                <lv-progressbar :value="simulation.progress" color="#38b2ac"/>
+                            </div>
                         </div>
 
                         <!-- Simulation Steps -->
@@ -143,11 +147,18 @@ const props = defineProps({
     project: Object,
     simulation: Object,
 });
+window.timeouts = []
 
 const back = () => Inertia.get(route('my-simulations.index'))
 
 onMounted(() => {
     broadcast().channel('my-simulations')
+        .listen('.simulation-updated', (e) => {
+            reloadSimulation(props.simulation.id)
+        }).listen('.simulation-finished', (e) => {
+            clearTimeout(window.timeouts[`timeoutSimulationReload-${e.data.id}`])
+            reloadSimulation(e.data.id)
+        })
         .listen('.simulation-run', (e) => {
             notify({
                 group: "notifications",
@@ -157,7 +168,11 @@ onMounted(() => {
                     type: "success",
                 },
             });
+            reloadSimulation(e.data.id, true)
         })
+    if (props.simulation.status === 'RUNNING') {
+        reloadSimulation(props.simulation.id, true)
+    }
 })
 
 const stepInfo = computed(() => {
@@ -176,7 +191,31 @@ const stepInfo = computed(() => {
 
 const navigateTo = (path) => Inertia.get(path);
 
+const reloadSimulation = (id, repeat = false) => {
+    axios.post('/get-simulation', {
+        id: id
+    }).then(({data}) => {
+            if(data) {
+                props.simulation.status = data.status
+                props.simulation.progress = data.progress
+            }
+    })
+
+    if (repeat) {
+        window.timeouts[`timeoutSimulationReload-${id}`] = setTimeout(reloadSimulation, 5000, id, true)
+    }
+}
+
+const clearTimeouts = () => {
+    Object.keys(window.timeouts).forEach(timeout => {
+        clearTimeout(window.timeouts[timeout])
+    })
+    window.timeouts = []
+}
+
+
 onBeforeUnmount(() => {
     broadcast().leave('my-simulations')
+    clearTimeouts()
 })
 </script>

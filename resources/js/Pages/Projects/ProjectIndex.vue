@@ -160,7 +160,7 @@
                                     "
                     />
                 </Field>
-                <p> Download an example file: <a href="/import-sample-download" class="font-bold text-primary">click here</a></p>
+                <p> Download an example file: <a :href="`/sample-import?type=${form.action}`" class="font-bold text-primary">click here</a></p>
             </template>
 
             <template #footer>

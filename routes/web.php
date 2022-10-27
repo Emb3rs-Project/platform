@@ -156,6 +156,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->whereNumber(['project']);
 
     Route::post('/import', [ProjectController::class, 'importFile']);
+    Route::get('/sample-import', [ProjectController::class, 'downloadImportFile']);
 
     // My Simulations
     Route::resource('/my-simulations', MySimulationController::class)

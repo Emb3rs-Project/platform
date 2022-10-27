@@ -50,7 +50,7 @@ class ImportSink extends Action
             File::make('Excel file')->disk('imports'),
             Heading::make('<p>' .
                 __('Download an example file:') .
-                ' <a href="/samples/sink_import_sample.xlsx" class="font-bold text-primary">' .
+                ' <a href="/sample-import" class="font-bold text-primary">' .
                 __('click here') .
                 '</a></p>')->asHtml()
         ];

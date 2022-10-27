@@ -48,16 +48,60 @@ class ImportSource implements ShouldQueue
         $errors = [];
         $lineCount = 1;
         $data = (FastExcel::import(Storage::disk('imports')->path($this->filename)));
+        $additionalData = (FastExcel::sheet(3)->import(Storage::disk('imports')->path($this->filename)));
 
-        list($rules, $props) = $this->getPropsAndRules();
+        list($rules, $props, $bindProps) = $this->getPropsAndRules();
         $rules = array_merge([
             'template' => ['required', 'exists:templates,name'],
             'latitude' => ['required', 'numeric', new Coordinates],
             'longitude' => ['required', 'numeric', new Coordinates]
         ], $rules);
 
-        $data->each(function ($line) use (&$errors, &$lineCount, $rules, $props) {
-            $line = collect($line)->toArray();
+
+        $additionalSheet = [];
+
+        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet) {
+            $bindLineAdd = [];
+            collect($addLine)->each(function ($value, $key) use (&$bindLineAdd, $bindProps) {
+                if (array_key_exists($key, $bindProps)) {
+                    $bindLineAdd[$bindProps[$key]] = $value;
+                } else {
+                    $bindLineAdd[$key] = $value;
+                }
+
+            });
+            $addLine = $bindLineAdd;
+            $values=[];
+            foreach ($props as $prop) {
+                if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
+                    $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop], "[]");
+                } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
+                    $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop]) === 'yes' ? 1 : 0;
+                } else {
+                    $values['data'][$bindProps[$prop]] = empty(Arr::get($addLine, $bindProps[$prop])) ? null : Arr::get($addLine, $bindProps[$prop]);
+                }
+            }
+
+            foreach ($values['data'] as $key => $value) {
+                if ($value === null || $value === '') {
+                    unset($values['data'][$key]);
+                }
+            }
+
+            $additionalSheet[Arr::get($addLine, 'sourceID')][] = $values;
+         });
+
+        $data->each(function ($line) use (&$errors, &$lineCount, $rules, $props, $bindProps, $additionalSheet) {
+            $bindLine = [];
+            collect($line)->each(function ($value, $key) use (&$bindLine, $bindProps) {
+                if (array_key_exists($key, $bindProps)) {
+                    $bindLine[$bindProps[$key]] = $value;
+                } else {
+                    $bindLine[$key] = $value;
+                }
+
+            });
+            $line = $bindLine;
             $validator = Validator::make($line, $rules);
 
             if ($validator->fails()) {
@@ -66,19 +110,25 @@ class ImportSource implements ShouldQueue
                     collect($validator->getMessageBag()->getMessages())->flatten(0)->join(' '),
                     $lineCount);
             } else {
+                $sourceID = Arr::get($line, 'sourceID');
+                $addStreams = [];
+                if ($additionalSheet && array_key_exists($sourceID, $additionalSheet)  && $additionalSheet[$sourceID]) {
+                    $addStreams = $additionalSheet[$sourceID];
+                }
                 try {
                     $values = [
                         'properties' => [],
                         'equipment' => [],
                         'processes' => [],
+                        'additional_streams' => $addStreams,
                     ];
                     foreach ($props as $prop) {
-                        if (in_array($prop, ['shutdown_periods', 'daily_periods'])) {
-                            $values['properties'][$prop] = Arr::get($line, $prop, "[]");
+                        if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
+                            $values['properties'][$bindProps[$prop]] = Arr::get($line, $bindProps[$prop], "[]");
                         } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
-                            $values['properties'][$prop] = Arr::get($line, $prop) === 'yes' ? 1 : 0;
+                            $values['properties'][$bindProps[$prop]] = Arr::get($line, $bindProps[$prop]) === 'yes' ? 1 : 0;
                         } else {
-                            $values['properties'][$prop] = empty(Arr::get($line, $prop)) ? null : Arr::get($line, $prop);
+                            $values['properties'][$bindProps[$prop]] = empty(Arr::get($line, $bindProps[$prop])) ? null : Arr::get($line, $bindProps[$prop]);
                         }
                     }
 
@@ -202,15 +252,17 @@ class ImportSource implements ShouldQueue
         $templates = Template::with('templateProperties', 'templateProperties.property')->get();
         $rules = [];
         $allProps = [];
-        $templates->each(function ($item) use (&$rules, &$allProps) {
-            $item->templateProperties->each(function ($tempProp) use (&$allProps, &$rules, $item) {
+        $propsBind = [];
+        $templates->each(function ($item) use (&$rules, &$allProps, &$propsBind) {
+            $item->templateProperties->each(function ($tempProp) use (&$allProps, &$rules, $item, &$propsBind) {
                 if ($tempProp->required) {
                     $rules[$tempProp->property['symbolic_name']][] = 'required_if:template,' . $item->name;
                 }
-                $allProps[] = $tempProp->property['symbolic_name'];
+                $allProps[] = $tempProp->property['name'];
+                $propsBind[$tempProp->property['name']] = $tempProp->property['symbolic_name'];
             });
         });
 
-        return [$rules, array_unique($allProps)];
+        return [$rules, array_unique($allProps), $propsBind];
     }
 }
