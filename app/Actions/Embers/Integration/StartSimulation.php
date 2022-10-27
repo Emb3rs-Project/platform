@@ -40,6 +40,10 @@ class StartSimulation implements StartsSimulations
                 $this->convertTimeSliceFrom($initialData['input_data']['platform_sets']['TIMESLICE']);
         }
 
+        if(!array_key_exists('time_limit', $initialData['input_data'])) {
+            $initialData['input_data']['time_limit'] = 0;
+        }
+
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
         $request->setInitialData(json_encode($initialData));
