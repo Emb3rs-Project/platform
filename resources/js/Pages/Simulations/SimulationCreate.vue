@@ -1281,6 +1281,7 @@ export default {
                     )
 
                     // Numb GIS Parameter
+                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
                     data.extra.input_data.flow_temp = Number(data.extra.input_data.flow_temp)
                     data.extra.input_data.return_temp = Number(data.extra.input_data.return_temp)
                     data.extra.input_data.ambient_temp = Number(data.extra.input_data.ambient_temp)
@@ -1291,7 +1292,14 @@ export default {
                     data.extra.input_data.fc_pip = Number(data.extra.input_data.fc_pip)
                     data.extra.input_data.vc_pip = Number(data.extra.input_data.vc_pip)
                     data.extra.input_data.vc_pip_ex = Number(data.extra.input_data.vc_pip_ex)
-                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
+                    data.extra.input_data.fc_dig_tr = Number(data.extra.input_data.fc_dig_tr)
+                    data.extra.input_data.vc_dig_tr = Number(data.extra.input_data.vc_dig_tr)
+                    data.extra.input_data.vc_dig_tr_ex = Number(data.extra.input_data.vc_dig_tr_ex)
+                    data.extra.input_data.heat_capacity = Number(data.extra.input_data.heat_capacity)
+                    data.extra.input_data.water_den = Number(data.extra.input_data.water_den)
+                    data.extra.input_data.factor_street_terrain = Number(data.extra.input_data.factor_street_terrain)
+                    data.extra.input_data.factor_street_overland = Number(data.extra.input_data.factor_street_overland)
+                    data.extra.input_data.invest_pumps = Number(data.extra.input_data.invest_pumps)
 
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
