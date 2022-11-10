@@ -9,14 +9,26 @@ use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Http\Controllers\Controller;
+use App\Models\Instance;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SourceController extends Controller
 {
+
+    public function index()
+    {
+
+        $sources = Instance::whereIn('template_id', [15])
+            ->orderBy('created_at', 'desc')->get();
+        return Inertia::render('Objects/Sources/SourceIndex',
+            ['sources' => $sources]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array<string, mixed>
      */
     public function create(Request $request)
@@ -46,7 +58,7 @@ class SourceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -65,8 +77,8 @@ class SourceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function show(Request $request, $id)
@@ -90,8 +102,8 @@ class SourceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function edit(Request $request, $id)
@@ -123,8 +135,8 @@ class SourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -144,8 +156,8 @@ class SourceController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, $id)

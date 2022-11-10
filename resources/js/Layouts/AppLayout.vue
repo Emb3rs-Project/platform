@@ -581,6 +581,9 @@ import {
     CogIcon,
 } from "@heroicons/vue/solid";
 
+import SinkIcon from "../Components/Icons/SinkIcon";
+import SourceIcon from "../Components/Icons/SourceIcon";
+
 window.Pusher = require('pusher-js')
 
 const navigation = [
@@ -654,6 +657,22 @@ const navigation = [
             },
         },
         icon: SupportIcon,
+    },{
+        name: "Sinks",
+        href: {
+            index: {
+                location: "sinks.index",
+            },
+        },
+        icon: SinkIcon,
+    },{
+        name: "Sources",
+        href: {
+            index: {
+                location: "sources.index",
+            },
+        },
+        icon: SourceIcon,
     },
 ];
 
@@ -675,6 +694,7 @@ export default {
         PencilAltIcon,
         SearchIcon,
         SelectorIcon,
+
         XIcon,
         ApplicationLogo,
         CogIcon,

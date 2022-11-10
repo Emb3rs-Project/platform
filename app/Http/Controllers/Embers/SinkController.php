@@ -10,14 +10,30 @@ use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Http\Controllers\Controller;
+use App\Models\Instance;
+use App\Models\Simulation;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class SinkController extends Controller
 {
+
+    /**
+     * @return \Inertia\Response
+     */
+    public function index()
+    {
+
+        $sinks = Instance::whereIn('template_id', [14])
+            ->orderBy('created_at', 'desc')->get();
+        return Inertia::render('Objects/Sinks/SinkIndex',
+            ['sinks' => $sinks]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array<string, mixed>
      */
     public function create(Request $request)
@@ -39,7 +55,7 @@ class SinkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -58,8 +74,8 @@ class SinkController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function show(Request $request, int $id)
@@ -78,8 +94,8 @@ class SinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function edit(Request $request, int $id)
@@ -103,8 +119,8 @@ class SinkController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, int $id)
@@ -123,8 +139,8 @@ class SinkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, int $id)
@@ -138,5 +154,31 @@ class SinkController extends Controller
         app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $id);
 
         return redirect()->route('objects.index');
+    }
+
+    public function export(Request $request)
+    {
+        $sinks = Instance::whereIn('id', $request->input('ids'))->get();
+        $csv = 'sink.csv';
+        $file_pointer = fopen($csv, 'w');
+
+        $keys = collect($sinks[0]['values'])->except('characterization')->keys()->toArray();
+        $keys[] = 'template';
+        $keys[] = 'latitude';
+        $keys[] = 'logitude';
+        fputcsv($file_pointer, $keys);
+        foreach ($sinks as $i) {
+            $data = collect($i['values'])->except('characterization')->toArray();
+            $data['template'] = $i['template']['name'];
+            $data['latitude'] = $i['location']['data']['center'][0];
+            $data['longitude'] = $i['location']['data']['center'][1];
+            // Write the data to the CSV file
+            fputcsv($file_pointer, $data);
+        }
+
+
+        $base = base64_encode(file_get_contents('sink.csv'));
+        unlink('sink.csv');
+        return $base;
     }
 }

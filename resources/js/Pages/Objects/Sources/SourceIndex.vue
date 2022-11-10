@@ -1,0 +1,260 @@
+<template>
+    <SiteHead title="Sources"/>
+
+    <AppLayout>
+
+        <div>
+
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                <h1 class="mb-8 font-bold text-3xl">Sources</h1>
+
+                <div class="flex justify-end mb-5">
+                    <PrimaryButton v-tippy="'Export Sources'" class="w-48" @click="executeAction = true">
+                        Export Sources
+                    </PrimaryButton>
+                </div>
+
+                <div class="flex flex-col gap-8">
+                    <div class="shadow">
+                        <div v-if="sources.length">
+                            <AmazingIndexTable
+                                v-model="sources"
+                                :columns="tableColumns"
+                                :hasCheckbox="true"
+                                headerClasses="shadow overflow-hidden sm:rounded-lg"
+                            >
+                                <!-- ID -->
+                                <template #header-id> ID</template>
+                                <template #body-id="{ item }">
+                                    <td class="text-left pl-4">
+                                        {{ item.id }}
+                                    </td>
+                                </template>
+
+                                <!-- Name -->
+                                <template #header-name> Name</template>
+                                <template #body-name="{ item }">
+                                    <td
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    >
+                                        {{ item.name }}
+                                    </td>
+                                </template>
+
+
+                                <!-- Created at -->
+                                <template #header-created_at>
+                                    Created at
+                                </template>
+                                <template #body-created_at="{ item }">
+                                    <td
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                    >
+                                        {{ moment(item.created_at).format('DD/MM/YYYY HH:mm:ss') }}
+                                    </td>
+                                </template>
+
+
+                                <!-- Actions -->
+                                <template #header-actions></template>
+                                <template #body-actions="{ item }">
+
+                                </template>
+                            </AmazingIndexTable>
+                        </div>
+                        <div
+                            v-else
+                            class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
+                        >
+                            <h1 class="text-2xl font-extrabold text-gray-300 uppercase">
+                                Empty
+                            </h1>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </AppLayout>
+    <DialogModal :show="executeAction" @close="closeModal">
+        <template #title>
+            Export sources
+        </template>
+
+        <template #content class="my-auto">
+            sources selected {{ pluck(sources.filter((itm) => itm.selected),'id') }}
+        </template>
+
+        <template #footer>
+
+            <SecondaryOutlinedButton
+                class="mr-2"
+                @click="closeModal">
+                Cancel
+            </SecondaryOutlinedButton>
+
+            <PrimaryButton @click="submit">
+                Submit
+            </PrimaryButton>
+        </template>
+
+    </DialogModal>
+    <component
+        class="z-50"
+        :is="modalComponent"
+        v-if="modalComponent"
+        v-model="modalIsOpen"
+        @confirmation="onConfirmation"
+    >
+    </component>
+</template>
+
+<script>
+import {Link} from "@inertiajs/inertia-vue3";
+import {computed, onBeforeUnmount, onMounted, ref, toRefs} from "vue";
+import SiteHead from "@/Components/SiteHead.vue";
+import AppLayout from "@/Layouts/AppLayout";
+import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
+import TrashIcon from "@/Components/Icons/TrashIcon.vue";
+import EditIcon from "@/Components/Icons/EditIcon.vue";
+import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
+import PlayIcon from "@/Components/Icons/PlayIcon.vue";
+import Pagination from "@/Components/Pagination";
+import {notify} from "@kyvg/vue3-notification";
+import moment from 'moment'
+import PrimaryButton from "../../../Components/PrimaryButton";
+import DialogModal from "../../../Jetstream/DialogModal";
+import SelectMenu from "../../../Components/Forms/SelectMenu";
+import Field from "../../../Components/Field";
+import SecondaryOutlinedButton from "../../../Components/SecondaryOutlinedButton";
+import {Inertia} from "@inertiajs/inertia";
+import DeleteModal from '../../../Components/Modals/DeleteModal';
+
+
+export default {
+    components: {
+        SecondaryOutlinedButton,
+        Field,
+        SelectMenu,
+        DialogModal,
+        PrimaryButton,
+        SiteHead,
+        AppLayout,
+        AmazingIndexTable,
+        TrashIcon,
+        EditIcon,
+        PlayIcon,
+        DetailIcon,
+        PrimaryLinkButton,
+        Link,
+        Pagination,
+        DeleteModal
+    },
+    props: {
+        sources: {
+            type: [Array, Object],
+            required: true,
+        },
+
+    },
+    setup (props) {
+        const tableColumns = ["id", "name", "created_at", "actions"];
+        const executeAction = ref(false)
+        const currentProject = ref({})
+        let sources = toRefs(props).sources
+        const SourceData = sources.value
+        window.timeouts = []
+
+        const modalIsOpen = ref(false);
+        const currentModal = ref(null);
+        const modalComponent = computed(() =>
+            currentModal.value ? currentModal.value : false
+        );
+
+
+
+
+        const showModal = (item, modal) => {
+            currentModal.value = modal;
+            itemToDelete.value = item;
+
+            modalIsOpen.value = true;
+        };
+
+        function closeModal() {
+            executeAction.value = false
+        }
+
+        function submit() {
+            console.log(sources.filter((itm) => itm.selected))
+        }
+
+        const onConfirmation = () => {
+            Inertia.delete(
+                route("projects.simulations.destroy", [itemToDelete.value.project.id, itemToDelete.value.id]),
+                {
+                    onSuccess: (data) => {
+                        notify({
+                            group: "notifications",
+                            title: "Simulation",
+                            text: 'Simulation Deleted Successfully',
+                            data: {
+                                type: "success",
+                            },
+                        });
+                    },
+                    onError: (error) => {
+                        notify({
+                            group: "notifications",
+                            title: "Simulation",
+                            text: 'General error, please try again.',
+                            data: {
+                                type: "danger",
+                            },
+                        });
+                    },
+                }
+            );
+        }
+
+        function pluck(array, key) {
+            return array.map(function(obj) {
+                return obj[key];
+            });
+        }
+
+        return {
+            tableColumns,
+            executeAction,
+            currentProject,
+            modalComponent,
+            modalIsOpen,
+            DeleteModal,
+            onConfirmation,
+            showModal,
+            moment,
+            SourceData,
+            closeModal,
+            submit,
+            pluck
+        };
+    },
+    watch: {
+        '$page.props.flash': {
+            handler (flash) {
+                if (flash.success) {
+                    notify({
+                        group: "notifications",
+                        title: "Simulation",
+                        text: flash.success,
+                        data: {
+                            type: "success",
+                        },
+                    });
+                }
+            }
+        }
+    }
+};
+</script>
