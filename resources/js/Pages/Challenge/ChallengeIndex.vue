@@ -1,274 +1,158 @@
 <template>
-  <AppLayout>
-    <div class="flex flex-col p-5 h-full gap-5">
-      <div>
-        <div class="bg-white shadow overflow-hidden sm:rounded-md">
-          <ul class="divide-y divide-gray-200">
-            <li>
-              <a
-                href="#"
-                class="block hover:bg-gray-50"
-              >
-                <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div class="truncate">
-                      <div class="flex text-sm">
-                        <p class="font-medium text-indigo-600 truncate">
-                          Back End Developer
-                        </p>
-                        <p class="ml-1 shrink-0 font-normal text-gray-500">
-                          in Engineering
-                        </p>
-                      </div>
-                      <div class="mt-2 flex">
-                        <div class="flex items-center text-sm text-gray-500">
-                          <!-- Heroicon name: solid/calendar -->
-                          <svg
-                            class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                          <p>
-                            Closing on
-                            <time datetime="2020-01-07">January 7, 2020</time>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mt-4 shrink-0 sm:mt-0 sm:ml-5">
-                      <div class="flex overflow-hidden">
-                        <img
-                          class="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-5 shrink-0">
-                    <!-- Heroicon name: solid/chevron-right -->
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </li>
+    <SiteHead title="Challenges"/>
 
-            <li>
-              <a
-                href="#"
-                class="block hover:bg-gray-50"
-              >
-                <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div class="truncate">
-                      <div class="flex text-sm">
-                        <p class="font-medium text-indigo-600 truncate">
-                          Back End Developer
-                        </p>
-                        <p class="ml-1 shrink-0 font-normal text-gray-500">
-                          in Engineering
-                        </p>
-                      </div>
-                      <div class="mt-2 flex">
-                        <div class="flex items-center text-sm text-gray-500">
-                          <!-- Heroicon name: solid/calendar -->
-                          <svg
-                            class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                          <p>
-                            Closing on
-                            <time datetime="2020-01-07">January 7, 2020</time>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mt-4 shrink-0 sm:mt-0 sm:ml-5">
-                      <div class="flex overflow-hidden">
-                        <img
-                          class="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-5 shrink-0">
-                    <!-- Heroicon name: solid/chevron-right -->
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </a>
-            </li>
+    <AppLayout>
+        <div>
+            <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
+                <h1 class="mb-8 font-bold text-3xl">Challenges</h1>
 
-            <li>
-              <a
-                href="#"
-                class="block hover:bg-gray-50"
-              >
-                <div class="px-4 py-4 flex items-center sm:px-6">
-                  <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div class="truncate">
-                      <div class="flex text-sm">
-                        <p class="font-medium text-indigo-600 truncate">
-                          Back End Developer
-                        </p>
-                        <p class="ml-1 shrink-0 font-normal text-gray-500">
-                          in Engineering
-                        </p>
-                      </div>
-                      <div class="mt-2 flex">
-                        <div class="flex items-center text-sm text-gray-500">
-                          <!-- Heroicon name: solid/calendar -->
-                          <svg
-                            class="shrink-0 mr-1.5 h-5 w-5 text-gray-400"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                              clip-rule="evenodd"
-                            />
-                          </svg>
-                          <p>
-                            Closing on
-                            <time datetime="2020-01-07">January 7, 2020</time>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="mt-4 shrink-0 sm:mt-0 sm:ml-5">
-                      <div class="flex overflow-hidden">
-                        <img
-                          class="inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <img
-                          class="-ml-1 inline-block h-6 w-6 rounded-full ring-2 ring-white"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixqx=NiG9rqZKjG&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ml-5 shrink-0">
-                    <!-- Heroicon name: solid/chevron-right -->
-                    <svg
-                      class="h-5 w-5 text-gray-400"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
+                <div class="flex justify-end mb-5">
+                    <PrimaryLinkButton v-if="1!==1" class="w-48" path="challenges.create">
+                        Create a Challenge
+                    </PrimaryLinkButton>
                 </div>
-              </a>
-            </li>
-          </ul>
+
+                <div class="flex flex-col gap-8">
+                    <div class="shadow">
+                        <div v-if="challenges.length">
+                            <AmazingIndexTable
+                                v-model="challenges"
+                                :columns="tableColumns"
+                                :hasCheckbox="false"
+                                headerClasses="shadow overflow-hidden sm:rounded-lg"
+                            >
+                                <!-- ID -->
+                                <template #header-id> ID</template>
+                                <template #body-id="{ item }">
+                                    <td class="text-left pl-4">
+                                        {{ item.id }}
+                                    </td>
+                                </template>
+
+                                <!-- Name -->
+                                <template #header-name> Name</template>
+                                <template #body-name="{ item }">
+                                    <td
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                    >
+                                        {{ item.name }}
+                                    </td>
+                                </template>
+
+                                <!-- Description -->
+                                <template #header-description>
+                                    Description
+                                </template>
+                                <template #body-description="{ item }">
+                                    <td
+                                        class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                    >
+                                        {{ item.description }}
+                                    </td>
+                                </template>
+
+                                <!-- Actions -->
+                                <template #header-actions></template>
+                                <template #body-actions="{ item }">
+                                    <td
+                                        class="pr-6 py-4 whitespace-nowrap text-sm font-medium flex gap-2 justify-end"
+                                    >
+                                        <Link
+                                            v-tippy="'View Challenge'"
+                                            :href="
+                                                route('challenges.show', item.id)
+                                            "
+                                            as="button"
+                                            type="button"
+                                            class="focus:outline-none"
+                                        >
+                                            <DetailIcon
+                                                class="text-gray-500 font-medium text-sm w-5"
+                                            />
+                                        </Link>
+                                        <Link
+                                            v-tippy="'Edit Challenge'"
+                                            :href="
+                                                route('challenges.edit', item.id)
+                                            "
+                                            as="button"
+                                            type="button"
+                                            class="focus:outline-none"
+                                        >
+                                            <EditIcon
+                                                class="text-gray-500 font-medium text-sm w-5"
+                                            />
+                                        </Link>
+
+                                    </td>
+                                </template>
+                            </AmazingIndexTable>
+                        </div>
+                        <div
+                            v-else
+                            class="flex items-center place-content-center bg-gray-50 h-20 md:h-64"
+                        >
+                            <h1
+                                class="text-2xl font-extrabold text-gray-300 uppercase"
+                            >
+                                No Challenges Found
+                            </h1>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </AppLayout>
+
+    </AppLayout>
 </template>
 
 <script>
+import {Link, useForm} from "@inertiajs/inertia-vue3";
+import {Inertia} from "@inertiajs/inertia";
+
+import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
+import AmazingIndexTable from "@/Components/Tables/AmazingIndexTable.vue";
+import TrashIcon from "@/Components/Icons/TrashIcon.vue";
+import EditIcon from "@/Components/Icons/EditIcon.vue";
+import DetailIcon from "@/Components/Icons/DetailIcon.vue";
+import PrimaryLinkButton from "@/Components/PrimaryLinkButton.vue";
+import PrimaryButton from "../../Components/PrimaryButton";
+import DialogModal from "../../Jetstream/DialogModal";
+import Field from "../../Components/Field";
+import SecondaryOutlinedButton from "../../Components/SecondaryOutlinedButton";
+import DeleteModal from "@/Components/Modals/DeleteModal.vue";
+import {notify} from "@kyvg/vue3-notification";
+import {computed, ref} from "vue";
 
 export default {
-  components: {
-    AppLayout,
-  },
+    components: {
+        SiteHead,
+        AppLayout,
+        AmazingIndexTable,
+        TrashIcon,
+        EditIcon,
+        DetailIcon,
+        PrimaryLinkButton,
+        Link,
+        DialogModal,
+        Field,
+        SecondaryOutlinedButton,
+        PrimaryButton,
+        DeleteModal
+    },
+
+    props: ["challenges"],
+
+    setup (props, context) {
+        const tableColumns = ["id", "name", "description", "actions"];
+        console.log(props.challenges);
+
+        return {
+            tableColumns
+        }
+    },
 };
 </script>
 
