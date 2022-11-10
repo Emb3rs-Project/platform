@@ -7,7 +7,7 @@
                 <h1 class="mb-8 font-bold text-3xl">Challenges</h1>
 
                 <div class="flex justify-end mb-5">
-                    <PrimaryLinkButton v-if="1!==1" class="w-48" path="challenges.create">
+                    <PrimaryLinkButton class="w-48" path="challenges.create">
                         Create a Challenge
                     </PrimaryLinkButton>
                 </div>
