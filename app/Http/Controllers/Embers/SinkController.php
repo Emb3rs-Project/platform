@@ -12,8 +12,10 @@ use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Simulation;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class SinkController extends Controller
 {
@@ -158,27 +160,34 @@ class SinkController extends Controller
 
     public function export(Request $request)
     {
-        $sinks = Instance::whereIn('id', $request->input('ids'))->get();
-        $csv = 'sink.csv';
-        $file_pointer = fopen($csv, 'w');
+        $sinks = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', 14)->get();
 
-        $keys = collect($sinks[0]['values'])->except('characterization')->keys()->toArray();
-        $keys[] = 'template';
-        $keys[] = 'latitude';
-        $keys[] = 'logitude';
-        fputcsv($file_pointer, $keys);
+        $keys = [];
+        $props->each(function ($item) use (&$keys) {
+            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$keys) {
+                $keys[$tempProp->property['symbolic_name']] = $tempProp->property['name'];
+            });
+        });
+
+        $keys['template'] = 'template';
+        $keys['latitude'] = 'latitude';
+        $keys['longitude'] = 'longitude';
+
+        $alldata = [];
+
         foreach ($sinks as $i) {
-            $data = collect($i['values'])->except('characterization')->toArray();
+            foreach ($keys as $column => $title) {
+                $data[$title] = array_key_exists($column, $i['values']) ? $i['values'][$column] : '';
+            }
             $data['template'] = $i['template']['name'];
+
             $data['latitude'] = $i['location']['data']['center'][0];
             $data['longitude'] = $i['location']['data']['center'][1];
-            // Write the data to the CSV file
-            fputcsv($file_pointer, $data);
+
+            $alldata[] = $data;
         }
 
-
-        $base = base64_encode(file_get_contents('sink.csv'));
-        unlink('sink.csv');
-        return $base;
+        return (new FastExcel(collect($alldata)))->download('source.xlsx');
     }
 }

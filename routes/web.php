@@ -186,8 +186,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/sinks', SinkController::class)
         ->whereNumber(['sink']);
 
+    Route::post('/sinks/export', [SinkController::class, 'export']);
+
     Route::resource('/sources', SourceController::class)
         ->whereNumber(['source']);
+
+    Route::post('/sources/export', [SourceController::class, 'export']);
 
     // News
     Route::resource('/news', NewsController::class)->only(['index', 'show'])

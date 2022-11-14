@@ -130,6 +130,7 @@ import Field from "../../../Components/Field";
 import SecondaryOutlinedButton from "../../../Components/SecondaryOutlinedButton";
 import {Inertia} from "@inertiajs/inertia";
 import DeleteModal from '../../../Components/Modals/DeleteModal';
+import axios from "axios";
 
 
 export default {
@@ -187,7 +188,19 @@ export default {
         }
 
         function submit() {
-            console.log(sources.filter((itm) => itm.selected))
+            console.log(sources)
+            axios.post('/sources/export', {
+                ids: pluck(sources.value.filter((itm) => itm.selected),'id')
+            },{responseType: 'blob'})
+                .then(({data}) => {
+                    const url = window.URL.createObjectURL(new Blob([data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'sources.xlsx'); //or any other extension
+                    document.body.appendChild(link);
+                    link.click();
+                    closeModal()
+                })
         }
 
         const onConfirmation = () => {

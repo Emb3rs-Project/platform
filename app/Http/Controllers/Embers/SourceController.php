@@ -10,8 +10,10 @@ use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Http\Controllers\Controller;
 use App\Models\Instance;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class SourceController extends Controller
 {
@@ -171,5 +173,39 @@ class SourceController extends Controller
         app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $source->id);
 
         return redirect()->route('objects.index');
+    }
+
+    public function export(Request $request)
+    {
+        $sources = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+
+        $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', 15)->get();
+
+
+        $keys = [];
+        $props->each(function ($item) use (&$keys) {
+            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$keys) {
+                $keys[$tempProp->property['symbolic_name']] = $tempProp->property['name'];
+            });
+        });
+        $keys['template'] = 'template';
+        $keys['latitude'] = 'latitude';
+        $keys['longitude'] = 'longitude';
+
+        $alldata = [];
+
+        foreach ($sources as $i) {
+            foreach ($keys as $column => $title) {
+                $data[$title] = array_key_exists($column, $i['values']['properties']) ? $i['values']['properties'][$column] : '';
+            }
+            $data['template'] = $i['template']['name'];
+
+            $data['latitude'] = $i['location']['data']['center'][0];
+            $data['longitude'] = $i['location']['data']['center'][1];
+
+            $alldata[] = $data;
+        }
+
+        return (new FastExcel(collect($alldata)))->download('source.xlsx');
     }
 }
