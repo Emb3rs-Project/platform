@@ -68,6 +68,30 @@
                         </div>
                     </div>
                 </div>
+                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                    <div class="sm:col-span-3">
+                        <div>
+                            <div class="flex justify-between">
+                                <label for="sim_solver" class="block text-sm font-medium text-gray-700">
+                                    Solver
+                                </label>
+                                <span class="text-sm text-gray-500" id="input-required">
+                                    Required
+                                </span>
+                            </div>
+                            <div class="mt-1 relative rounded-md shadow-sm">
+                                <VSelect :options="solvers"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                         label="name" value="id"
+                                         v-model="form.extra.solver"/>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500 text-justify">
+                                The simulation resolver
+                            </p>
+                            <JetInputError v-show="form.errors['extra.solver']" :message="form.errors['extra.solver']" class="mt-2"/>
+                        </div>
+                    </div>
+                </div>
 
                 <template v-if="form.simulation_metadata.data.type == 'standalone'">
                     <Field label="Input File"
@@ -1083,6 +1107,7 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
+                solver: 'SCIP',
                 file: null,
                 isConstantUtil: true,
                 input_data: {
@@ -1413,6 +1438,11 @@ export default {
             });
         };
 
+        const solvers = [
+            {name: 'SCIP', id: 'SCIP'},
+            {name: 'GUROBI', id: 'GUROBI'},
+        ]
+
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
         };
@@ -1554,6 +1584,7 @@ export default {
             convertListToNumeric,
             pushNewOptions,
             completeActorShare,
+            solvers
 
 
         };
