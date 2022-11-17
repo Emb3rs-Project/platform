@@ -2,7 +2,12 @@
 
 namespace App\Providers;
 
+use App\Actions\Embers\Challenges\ShowChallenge;
+use App\Actions\Embers\Challenges\UpdateChallenge;
+use App\Contracts\Embers\Challenges\ShowsChallenges;
+use App\Contracts\Embers\Challenges\UpdatesChallenges;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Nova\Testing\Browser\Pages\Update;
 
 class ActionServiceProvider extends ServiceProvider
 {
@@ -80,6 +85,8 @@ class ActionServiceProvider extends ServiceProvider
         \App\Contracts\Embers\Integration\ReportsSimulationFinishes::class => \App\Actions\Embers\Integration\ReportSimulationFinish::class,
         \App\Contracts\Embers\Integration\ReportsCharacterizationFinishes::class => \App\Actions\Embers\Integration\ReportCharacterizationFinish::class,
         \App\Contracts\Embers\Integration\StartsSimulations::class => \App\Actions\Embers\Integration\StartSimulation::class,
-        \App\Contracts\Embers\Simulations\MySimulations::class => \App\Actions\Embers\Simulations\MySimulation::class
+        \App\Contracts\Embers\Simulations\MySimulations::class => \App\Actions\Embers\Simulations\MySimulation::class,
+        ShowsChallenges::class => ShowChallenge::class,
+        UpdatesChallenges::class => UpdateChallenge::class
     ];
 }

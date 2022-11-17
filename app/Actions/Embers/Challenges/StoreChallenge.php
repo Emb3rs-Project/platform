@@ -34,6 +34,7 @@ class StoreChallenge implements StoresChallenges
         $validator = Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'goal_id' => ['nullable', 'numeric'],
         ]);
 
         return $validator->validate();
@@ -47,6 +48,7 @@ class StoreChallenge implements StoresChallenges
         $challenge = Challenge::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
+            'goal_id' => $validated['goal_id'] ?? null,
         ]);
 
 

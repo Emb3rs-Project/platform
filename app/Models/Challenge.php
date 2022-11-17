@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Challenge extends Model
 {
@@ -14,6 +16,26 @@ class Challenge extends Model
      */
     protected $fillable = [
         'name',
-        'description'
+        'description',
+        'goal_id'
     ];
+
+    /**
+     * @return BelongsToMany
+     */
+    public function restrictions(): BelongsToMany
+    {
+        return $this->belongsToMany(ChallengeRestriction::class)
+            ->using(ChallengeChallengeRestriction::class)
+            ->withPivot(['id', 'value']);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+
+    public function goal(): BelongsTo
+    {
+        return $this->belongsTo(ChallengeGoal::class);
+    }
 }

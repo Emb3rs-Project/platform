@@ -81,7 +81,7 @@
                         class="focus:outline-none mr-4"
                         @click="removeRestriction(index)"
                     >
-                        <TrashIcon class="text-red-500 font-medium text-sm w-5" />
+                        <TrashIcon class="text-red-500 font-medium text-sm w-5"/>
                     </button>
                 </div>
             </template>
@@ -107,7 +107,7 @@
                 class="mr-4"
                 @click="onSubmit"
                 :disabled="form.processing">
-                Save
+                Update
             </PrimaryButton>
         </div>
     </AppLayout>
@@ -128,6 +128,10 @@ import TrashIcon from "../../Components/Icons/TrashIcon";
 
 
 const props = defineProps({
+    challenge: {
+        type: Object,
+        required: true,
+    },
     goals: {
         type: Array,
         default: []
@@ -143,17 +147,27 @@ const form = useForm({
     name: "",
     description: "",
     goal: {},
-    restrictions: [
-        {
-            restriction: {},
-            value: ''
-        }
-    ]
+    restrictions: []
 });
 
+form.name = props.challenge.name
+form.description = props.challenge.description
+form.goal = {
+    id: props.challenge.goal.id,
+    value: props.challenge.goal.name
+}
+props.challenge.restrictions.forEach((item) => {
+    form.restrictions.push({
+        restriction: {
+            id: item.id,
+            value: item.name
+        },
+        value: item.pivot.value
+    })
+})
 
 const onCancel = () => {
-    Inertia.visit(route("challenges.index.index"));
+    Inertia.visit(route("challenges.index"));
 };
 
 const addRestriction = () => {
@@ -170,13 +184,12 @@ const removeRestriction = (index) => {
 }
 
 const onSubmit = () => {
-    console.log(form);
-    form.post(route("challenges.store"), {
+    form.patch(route("challenges.update", props.challenge.id), {
         onError: (error) => {
             store.commit("objects/setNotify", {...error});
         },
         onSuccess: () => {
-            Inertia.visit(route("challenges.index"));
+            Inertia.visit(route("challenges.show", props.challenge.id));
         },
     });
 };
