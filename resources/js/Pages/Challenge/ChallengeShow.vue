@@ -32,7 +32,6 @@
                                     v-model="challenge.name"
                                     :disabled="true"
                                 >
-                                    Name
                                 </input-row>
 
                                 <input-row
@@ -41,7 +40,6 @@
                                     :disabled="true"
                                     class="mt-14"
                                 >
-                                    Description
                                 </input-row>
 
                                 <input-row
