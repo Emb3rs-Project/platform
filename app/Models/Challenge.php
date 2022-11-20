@@ -38,4 +38,14 @@ class Challenge extends Model
     {
         return $this->belongsTo(ChallengeGoal::class);
     }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function participants(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class)
+            ->using(ChallengeUser::class)
+            ->withPivot(['id', 'created_at']);
+    }
 }

@@ -11,7 +11,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Challenge;
 use App\Models\ChallengeGoal;
 use App\Models\ChallengeRestriction;
+use App\Models\Instance;
+use App\Models\Link;
+use App\Models\SimulationSession;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -82,8 +86,23 @@ class ChallengeController extends Controller
     public function show(Request $request, $id)
     {
         $challenge = app(ShowChallenge::class)->show($request->user(), $id);
+        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
+        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+
+        $isEnrolled = $challenge->whereHas('participants', function ($query) {
+            return $query->where('user_id', Auth::id());
+        })->get();
+
+        $teamLinks = $request->user()->currentTeam->links->pluck('id');
+
+        $links = Link::with([
+            'geoSegments'
+        ])->whereIn('id', $teamLinks)->get();
         return Inertia::render('Challenge/ChallengeShow', [
-            'challenge' => $challenge
+            'challenge' => $challenge,
+            'instances' => $instances,
+            'links' => $links,
+            'isEnrolled' => $isEnrolled->count() > 0
         ]);
     }
 
@@ -142,5 +161,38 @@ class ChallengeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function enroll(Request $request)
+    {
+        $challenge = Challenge::find($request->input('challenge'));
+        if ($challenge) {
+            $challenge->participants()->attach($request->input('user'));
+            return [
+                'error' => false
+            ];
+        }
+
+        return [
+            'error' => true
+        ];
+    }
+
+    public function submit(Request $request)
+    {
+        $session = SimulationSession::find($request->input('session'));
+
+        if ($session) {
+            $session->challenge()->attach($request->input('challenge'), [
+                'challenge_user_id' => $request->input('challenge_user')
+            ]);
+
+            return [
+                'error' => false
+            ];
+        }
+        return [
+            'error' => true
+        ];
     }
 }

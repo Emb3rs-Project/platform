@@ -27,7 +27,7 @@ export default {
         },
         markers: {
             type: Array,
-            required: true,
+            required: false,
         },
         marker: {
             type: Object,

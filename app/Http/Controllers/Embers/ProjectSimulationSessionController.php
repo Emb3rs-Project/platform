@@ -8,6 +8,7 @@ use App\Models\Simulation;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 use MongoDB\Driver\Session;
 
 class ProjectSimulationSessionController extends Controller
@@ -16,16 +17,16 @@ class ProjectSimulationSessionController extends Controller
      * Display the specified resource.
      *
      * @param int $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function show($id)
+    public function show(Request $request, $id): Response
     {
         $session = SimulationSession::findOrFail($id);
-        $session->load(['simulation', 'simulation.project']);
+        $session->load(['simulation', 'simulation.project', 'challenge']);
         $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
             ->orderBy('created_at')
             ->get();
-
+        $challenges = $request->user()->challenges()->get();
         $session->simulation->extra = [];
         $reportsHTML = [];
         $reportsToReturn = $reports->map(function ($item) use (&$reportsHTML) {
@@ -36,7 +37,12 @@ class ProjectSimulationSessionController extends Controller
             $item->output = '["Loading..."]';
             return $item;
         });
-        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reportsToReturn, 'reportsHtml' => $reportsHTML]);
+        return Inertia::render('Simulations/SimulationSessionShow', [
+            "session" => $session,
+            "reports" => $reportsToReturn,
+            'reportsHtml' => $reportsHTML,
+            'challenges' => $challenges
+        ]);
     }
 
     /**

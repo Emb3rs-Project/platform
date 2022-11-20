@@ -51,6 +51,7 @@ class ChallengeRestriction extends Resource
             ID::make(__('ID'), 'id')->sortable(),
             Text::make(__('Name'), 'name'),
             Text::make(__('Description'), 'description'),
+            Text::make(__('Output Reference'), 'output'),
         ];
     }
 

@@ -24,7 +24,8 @@ class ShowChallenge implements ShowsChallenges
 
         $challenge = Challenge::with([
             'goal',
-            'restrictions'
+            'restrictions',
+            'participants'
         ])->findOrFail($id);
 
         return $challenge;
