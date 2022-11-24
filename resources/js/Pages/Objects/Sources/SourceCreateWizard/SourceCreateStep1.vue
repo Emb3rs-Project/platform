@@ -101,6 +101,8 @@
                         :placeholder="property.property.name"
                         :required="property.required"
                     />
+                    <excel-uploader @input="(value) =>{ source.data[property.property.symbolic_name] = value }"
+                                    v-if="showUploader(property.property.name)"></excel-uploader>
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                     <SelectMenu
@@ -239,6 +241,7 @@ import TextInput from "@/Components/Forms/TextInput.vue";
 import JetInputError from "@/Jetstream/InputError.vue";
 import InfoIcon from "@/Components/Icons/InfoIcon.vue";
 import InfoTemplateModal from "@/Components/Modals/InfoTemplateModal.vue";
+import ExcelUploader from "../../../../Components/ExcelUploader";
 
 import {
     sortProperties,
@@ -255,6 +258,7 @@ export default {
         JetInputError,
         InfoIcon,
         InfoTemplateModal,
+        ExcelUploader
     },
 
     props: {
@@ -477,6 +481,17 @@ export default {
             mapUtils.setPoint(selectedLocation.value.key, 'instance')
         };
 
+        const showUploader = (field) => {
+            let fields = [
+                'Real Hourly Capacity',
+                'Real Daily Capacity',
+                'Real Monthly Capacity',
+                'Real Yearly Capacity',
+            ]
+
+            return fields.includes(field)
+        }
+
         return {
             selectedMarker,
             userSelectedProperties,
@@ -492,6 +507,7 @@ export default {
             custom,
             infoTemplateModalIsVisible,
             updateMarker,
+            showUploader
         };
     },
 };

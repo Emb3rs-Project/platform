@@ -1,12 +1,12 @@
 <template>
-    <SiteHead title="Create a Sink" />
+    <SiteHead title="Create a Sink"/>
     <SlideOver type="sink" title="New Sink"
-        subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution.">
+               subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution.">
         <!-- Alert -->
         <template #stickyTop>
             <div :class="{ 'p-4': form.hasErrors }">
                 <Alert v-model="form.hasErrors" type="danger" message="Please, correct all the errors before saving."
-                    :dismissable="false" />
+                       :dismissable="false"/>
             </div>
         </template>
 
@@ -20,9 +20,9 @@
                 <div class="my-4 flex">
                     <div class="w-full">
                         <SelectMenu :class="{'w-5/6': selectedTemplate.info}"
-                            v-model="selectedTemplate"
-                            :options="templates"
-                            label="Template"
+                                    v-model="selectedTemplate"
+                                    :options="templates"
+                                    label="Template"
                         />
                     </div>
                     <div class="mt-6" v-if="selectedTemplate.info">
@@ -32,44 +32,44 @@
                             class="inline-flex items-center h-10 px-2.5 py-2 border border-transparent text-xs font-medium border-gray-300 rounded shadow-sm text-blue-600 hover:text-white bg-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             @click="infoTemplateModalIsVisible = true"
                         >
-                            <InfoIcon class="font-medium text-sm w-5" />
+                            <InfoIcon class="font-medium text-sm w-5"/>
                         </button>
                     </div>
                     <div v-for="(error, key) in form.errors" :key="key">
-                        <jet-input-error v-show="key.includes('template')" :message="error" class="mt-2" />
+                        <jet-input-error v-show="key.includes('template')" :message="error" class="mt-2"/>
                     </div>
                 </div>
                 <div class="space-y-1 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:py-5">
                     <div class="col-span-2">
-                    <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
-                        Location
-                    </label>
+                        <label class="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-3">
+                            Location
+                        </label>
                     </div>
                     <div class="sm:col-span-1">
-                    <div>
-                        <TextInput
-                            v-model="form.location.lat"
-                            @update:modelValue="updateMarker()"
-                            :disabled="!form.custom"
-                            min="-90"
-                            max="90"
-                            type="number"
-                            unit="lat"
-                        />
-                    </div>
+                        <div>
+                            <TextInput
+                                v-model="form.location.lat"
+                                @update:modelValue="updateMarker()"
+                                :disabled="!form.custom"
+                                min="-90"
+                                max="90"
+                                type="number"
+                                unit="lat"
+                            />
+                        </div>
                     </div>
                     <div class="sm:col-span-1">
-                    <div>
-                        <TextInput
-                            v-model="form.location.lng"
-                            @update:modelValue="updateMarker()"
-                            :disabled="!form.custom"
-                            min="-180"
-                            max="180"
-                            type="number"
-                            unit="lng"
-                        />
-                    </div>
+                        <div>
+                            <TextInput
+                                v-model="form.location.lng"
+                                @update:modelValue="updateMarker()"
+                                :disabled="!form.custom"
+                                min="-180"
+                                max="180"
+                                type="number"
+                                unit="lng"
+                            />
+                        </div>
                     </div>
                     <div class="flex items-center">
                         <jet-checkbox
@@ -99,31 +99,34 @@
                 <div class="my-6" v-for="(property, propertyIdx) in properties" :key="propertyIdx">
                     <div v-if="property.property.inputType === 'text'">
                         <TextInput v-model="form.sink.data[property.property.symbolic_name]"
-                            :unit="property.unit.symbol" :description="property.property.description"
-                            :label="property.property.name" :placeholder="property.property.name"
-                            :required="property.required" />
+                                   :unit="property.unit.symbol" :description="property.property.description"
+                                   :label="property.property.name" :placeholder="property.property.name"
+                                   :required="property.required"/>
+                        <excel-uploader @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"
+                                        v-if="showUploader(property.property.name)"></excel-uploader>
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                         <SelectMenu v-model="form.sink.data[property.property.symbolic_name]"
-                            :options="property.property.data.options" :description="property.property.description"
-                            :disabled="selectedTemplate ? false : true" :required="property.required"
-                            :label="property.property.name" />
+                                    :options="property.property.data.options"
+                                    :description="property.property.description"
+                                    :disabled="selectedTemplate ? false : true" :required="property.required"
+                                    :label="property.property.name"/>
                     </div>
                     <div v-for="(error, key) in form.errors" :key="key">
                         <jet-input-error v-show="key.includes(property.property.symbolic_name)" :message="error"
-                            class="mt-2" />
+                                         class="mt-2"/>
                     </div>
                 </div>
 
-<!--                <div class="my-6">-->
-<!--                    <div class="my-6">-->
-<!--                        <FileInput-->
-<!--                            v-model="form.sink.data['real_daily_capacity']"-->
-<!--                            label="File test"-->
-<!--                        />-->
-<!--                    </div>-->
+                <!--                <div class="my-6">-->
+                <!--                    <div class="my-6">-->
+                <!--                        <FileInput-->
+                <!--                            v-model="form.sink.data['real_daily_capacity']"-->
+                <!--                            label="File test"-->
+                <!--                        />-->
+                <!--                    </div>-->
 
-<!--                </div>-->
+                <!--                </div>-->
             </PropertyDisclosure>
         </div>
 
@@ -139,9 +142,9 @@
                         <div class="relative flex items-start">
                             <div class="flex items-center h-5">
                                 <input id="advancedProperties" aria-describedby="advancedProperties-description"
-                                    name="advancedProperties" type="checkbox" class="rounded
+                                       name="advancedProperties" type="checkbox" class="rounded
                                     focus:ring-indigo-500 h-4 w-4 text-blue-600 border-gray-300"
-                                    v-model="withAdvancedProperties"
+                                       v-model="withAdvancedProperties"
                                 />
                             </div>
                             <div class="ml-3 text-sm">
@@ -153,23 +156,25 @@
                     </fieldset>
                 </div>
                 <div class="my-6" v-for="(advancedProperty, advancedPropertyIdx) in advancedProperties"
-                    :key="advancedPropertyIdx">
+                     :key="advancedPropertyIdx">
                     <div v-if="advancedProperty.property.inputType === 'text'">
                         <TextInput v-model="form.sink.data[advancedProperty.property.symbolic_name]"
-                            :unit="advancedProperty.unit.symbol" :description="advancedProperty.property.description"
-                            :label="advancedProperty.property.name" :placeholder="advancedProperty.property.name"
-                            :required="advancedProperty.required" :disabled="!withAdvancedProperties" />
+                                   :unit="advancedProperty.unit.symbol"
+                                   :description="advancedProperty.property.description"
+                                   :label="advancedProperty.property.name" :placeholder="advancedProperty.property.name"
+                                   :required="advancedProperty.required" :disabled="!withAdvancedProperties"/>
                     </div>
                     <div v-else-if="advancedProperty.property.inputType === 'select'">
                         <SelectMenu v-model="form.sink.data[advancedProperty.property.symbolic_name]"
-                            :options="advancedProperty.property.data.options"
-                            :description="advancedProperty.property.description" :required="advancedProperty.required"
-                            :label="advancedProperty.property.name" :disabled="!withAdvancedProperties" />
+                                    :options="advancedProperty.property.data.options"
+                                    :description="advancedProperty.property.description"
+                                    :required="advancedProperty.required"
+                                    :label="advancedProperty.property.name" :disabled="!withAdvancedProperties"/>
                     </div>
                     <div v-if="form.hasErrors">
                         <div v-for="(error, key) in form.errors" :key="key">
                             <jet-input-error v-show="key.includes(advancedProperty.property.symbolic_name)"
-                                :message="error" class="mt-2" />
+                                             :message="error" class="mt-2"/>
                         </div>
                     </div>
                 </div>
@@ -186,19 +191,19 @@
         </template>
     </SlideOver>
     <InfoTemplateModal
-      v-model="infoTemplateModalIsVisible"
-      :info="selectedTemplate.info"
+        v-model="infoTemplateModalIsVisible"
+        :info="selectedTemplate.info"
     />
     <ErrorTemplateModal
-      v-model="errorTemplateModalIsVisible"
-      :error="errorTemplateModal"
+        v-model="errorTemplateModalIsVisible"
+        :error="errorTemplateModal"
     />
 </template>
 
 <script>
-import { ref, watch, computed } from "vue";
-import { useStore } from "vuex";
-import { useForm } from "@inertiajs/inertia-vue3";
+import {ref, watch, computed} from "vue";
+import {useStore} from "vuex";
+import {useForm} from "@inertiajs/inertia-vue3";
 
 import mapUtils from "@/Utils/map.js";
 import JetCheckbox from "@/Jetstream/Checkbox";
@@ -222,9 +227,11 @@ import {
     DEFAULT_TEMPLATE,
 } from "@/Utils/helpers";
 import FileInput from "../../../Components/Forms/FileInput";
+import ExcelUploader from "../../../Components/ExcelUploader";
 
 export default {
     components: {
+        ExcelUploader,
         FileInput,
         JetCheckbox,
         AppLayout,
@@ -253,7 +260,7 @@ export default {
         },
     },
 
-    setup(props) {
+    setup (props) {
         const store = useStore();
 
         const withAdvancedProperties = ref(false);
@@ -261,6 +268,17 @@ export default {
         const errorTemplateModalIsVisible = ref(false);
 
         const errorTemplateModal = ref([]);
+
+        const showUploader = (field) => {
+            let fields = [
+                'Real Hourly Capacity',
+                'Real Daily Capacity',
+                'Real Monthly Capacity',
+                'Real Yearly Capacity',
+            ]
+
+            return fields.includes(field)
+        }
 
         const form = useForm({
             sink: {
@@ -314,7 +332,7 @@ export default {
                 }
                 selectedLocation.value = locations.value[0];
             },
-            { immediate: true }
+            {immediate: true}
         );
         watch(
             selectedLocation,
@@ -335,7 +353,7 @@ export default {
 
                 form.location_id = location.key;
             },
-            { immediate: true, deep: true }
+            {immediate: true, deep: true}
         );
 
         const selectedMarkerLatlng = computed(
@@ -367,7 +385,7 @@ export default {
                     }
                 }
             },
-            { immediate: true }
+            {immediate: true}
         );
 
         const properties = computed(() =>
@@ -456,7 +474,7 @@ export default {
                             type: 'success'
                         });
                         store.dispatch("map/removeMarker", true);
-                        store.dispatch("objects/showSlide", { route: "objects.list" });
+                        store.dispatch("objects/showSlide", {route: "objects.list"});
                     },
                     onError: (error) => {
                         errorTemplateModal.value = {...error};
@@ -496,6 +514,7 @@ export default {
             updateMarker,
             submit,
             onCancel,
+            showUploader
         };
     },
 };

@@ -11,6 +11,7 @@
 
 <script>
 import {XlsxRead, XlsxJson} from "vue3-xlsx";
+import {notify} from "@kyvg/vue3-notification";
 
 export default {
     components: {
@@ -28,8 +29,22 @@ export default {
             this.file = event.target.files ? event.target.files[0] : null;
         },
         setCollection (collection) {
-            this.data = collection
-            this.$emit('input', collection)
+            if (collection.length > 0 && collection[0].hasOwnProperty('capacity')) {
+                let newCollection = collection.map(({capacity}) => capacity)
+                this.$emit('input', JSON.stringify(newCollection))
+                return
+            }
+
+            notify({
+                group: "notifications",
+                title: "Error",
+                text: "Invalid XLSX, please check the columns",
+                data: {
+                    type: "danger",
+                },
+            });
+            this.file = null
+            this.$emit('input', '')
         }
     }
 };
