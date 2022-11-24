@@ -68,30 +68,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-                    <div class="sm:col-span-3">
-                        <div>
-                            <div class="flex justify-between">
-                                <label for="sim_solver" class="block text-sm font-medium text-gray-700">
-                                    Solver
-                                </label>
-                                <span class="text-sm text-gray-500" id="input-required">
-                                    Required
-                                </span>
-                            </div>
-                            <div class="mt-1 relative rounded-md shadow-sm">
-                                <VSelect :options="solvers"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
-                                         label="name" value="id"
-                                         v-model="form.extra.solver"/>
-                            </div>
-                            <p class="mt-2 text-sm text-gray-500 text-justify">
-                                The simulation resolver
-                            </p>
-                            <JetInputError v-show="form.errors['extra.solver']" :message="form.errors['extra.solver']" class="mt-2"/>
-                        </div>
-                    </div>
-                </div>
 
                 <template v-if="form.simulation_metadata.data.type == 'standalone'">
                     <Field label="Input File"
@@ -251,6 +227,31 @@
                             unit="Min"
                         />
                     </field>
+
+                    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div class="sm:col-span-3">
+                            <div>
+                                <div class="flex justify-between">
+                                    <label for="sim_solver" class="block text-sm font-medium text-gray-700">
+                                        Solver
+                                    </label>
+                                    <span class="text-sm text-gray-500" id="input-required">
+                                    Required
+                                </span>
+                                </div>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <VSelect :options="solvers"
+                                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                             label="name" value="id"
+                                             v-model="form.extra.solver_gis"/>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500 text-justify">
+                                    The simulation resolver
+                                </p>
+                                <JetInputError v-show="form.errors['extra.solver_gis']" :message="form.errors['extra.solver_gis']" class="mt-2"/>
+                            </div>
+                        </div>
+                    </div>
 
                     <field label="Average Flow Temperature (flow_temp)"
                            required
@@ -463,6 +464,30 @@
                             Type a year in the select to add a new one
                         </p>
                     </field>
+                    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div class="sm:col-span-3">
+                            <div>
+                                <div class="flex justify-between">
+                                    <label for="sim_solver" class="block text-sm font-medium text-gray-700">
+                                        Solver
+                                    </label>
+                                    <span class="text-sm text-gray-500" id="input-required">
+                                    Required
+                                </span>
+                                </div>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <VSelect :options="solvers"
+                                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                             label="name" value="id"
+                                             v-model="form.extra.solver_teo"/>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500 text-justify">
+                                    The simulation resolver
+                                </p>
+                                <JetInputError v-show="form.errors['extra.solver_teo']" :message="form.errors['extra.solver_teo']" class="mt-2"/>
+                            </div>
+                        </div>
+                    </div>
 
                     <field label="Mode of operation (MODE_OF_OPERATION)"
                         hint="It defines the number of modes of operation that the technologies can have. If a technology can have various input or output fuels and it can choose the mix (i.e. any linear combination) of these input or output fuels, each mix can be accounted as a separate mode of operation.  The user must input at least 1 mode of operation. There muts be two modes of operation if storage is used in the model">
@@ -649,6 +674,30 @@
                             type="number"
                         />
                     </field>
+                    <div class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                        <div class="sm:col-span-3">
+                            <div>
+                                <div class="flex justify-between">
+                                    <label for="sim_solver" class="block text-sm font-medium text-gray-700">
+                                        Solver
+                                    </label>
+                                    <span class="text-sm text-gray-500" id="input-required">
+                                    Required
+                                </span>
+                                </div>
+                                <div class="mt-1 relative rounded-md shadow-sm">
+                                    <VSelect :options="solvers"
+                                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                             label="name" value="id"
+                                             v-model="form.extra.solver_market"/>
+                                </div>
+                                <p class="mt-2 text-sm text-gray-500 text-justify">
+                                    The simulation resolver
+                                </p>
+                                <JetInputError v-show="form.errors['extra.solver_market']" :message="form.errors['extra.solver_market']" class="mt-2"/>
+                            </div>
+                        </div>
+                    </div>
 
                     <field label="Data Profile (data_profile)"
                            hint="hourly or daily? If you want to check hourly or daily results.">
@@ -1107,7 +1156,9 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
-                solver: 'SCIP',
+                solver_teo: 'SCIP',
+                solver_gis: 'SCIP',
+                solver_market: 'SCIP',
                 file: null,
                 isConstantUtil: true,
                 input_data: {
@@ -1441,6 +1492,7 @@ export default {
         const solvers = [
             {name: 'SCIP', id: 'SCIP'},
             {name: 'GUROBI', id: 'GUROBI'},
+            {name: 'HIGHS', id: 'HIGHS'},
         ]
 
         const onDeselected = (value) => {
