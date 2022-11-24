@@ -274,7 +274,7 @@ export default {
                 'Real Hourly Capacity',
                 'Real Daily Capacity',
                 'Real Monthly Capacity',
-                'Real Yearly Capacity',
+                // 'Real Yearly Capacity',
             ]
 
             return fields.includes(field)
