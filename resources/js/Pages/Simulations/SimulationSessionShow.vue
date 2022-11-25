@@ -64,7 +64,7 @@
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
-                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
+<!--                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>-->
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -96,7 +96,7 @@
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
-                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
+<!--                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>-->
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
