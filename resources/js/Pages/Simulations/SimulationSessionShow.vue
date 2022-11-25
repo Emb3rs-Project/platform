@@ -64,7 +64,7 @@
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
-                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -96,7 +96,7 @@
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
-                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -208,18 +208,18 @@ const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'j
 
 
 const modulesJson = []
-const first = ref(props.session.created_at)
+let first = props.session.created_at
 
 const bench = (date, functi) => {
     if (functi === 'SIMULATION STARTED') {
-        first.value = date
+        first = date
         return '0:00:00'
     }
 
-    let ms = moment(date).diff(moment(first.value));
+    let ms = moment(date).diff(moment(first));
     let d = moment.duration(ms);
     let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
-    first.value = date
+    first = date
     return s
 }
 
