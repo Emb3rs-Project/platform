@@ -63,6 +63,7 @@
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
                             <p>Bench : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
@@ -94,6 +95,7 @@
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
                             <p>Bench : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
@@ -197,7 +199,8 @@ import JSZip from 'jszip'
 const props = defineProps({
     session: Object,
     reports: Array,
-    reportsHtml: Array
+    reportsHtml: Array,
+    solverModules: Object,
 });
 
 let downloadOption = ref({})
@@ -212,12 +215,8 @@ const bench = (date, functi) => {
         first.value = date
         return '0:00:00'
     }
-    // if (first.value === null) {
-    //     first.value = date
-    //     return ''
-    // }
+
     let ms = moment(date).diff(moment(first.value));
-    console.log(ms)
     let d = moment.duration(ms);
     let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
     first.value = date

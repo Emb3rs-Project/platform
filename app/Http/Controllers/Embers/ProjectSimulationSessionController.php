@@ -25,7 +25,11 @@ class ProjectSimulationSessionController extends Controller
         $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
             ->orderBy('created_at')
             ->get();
-
+        $solverModules = [
+            'GIS Module' => optional($session->simulation->extra)['solver_gis'],
+            'TEO Module' => optional($session->simulation->extra)['solver_teo'],
+            'Market Module' => optional($session->simulation->extra)['solver_market']
+        ];
         $session->simulation->extra = [];
         $reportsHTML = [];
         $reportsToReturn = $reports->map(function ($item) use (&$reportsHTML) {
@@ -36,7 +40,7 @@ class ProjectSimulationSessionController extends Controller
             $item->output = '["Loading..."]';
             return $item;
         });
-        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reportsToReturn, 'reportsHtml' => $reportsHTML]);
+        return Inertia::render('Simulations/SimulationSessionShow', ["session" => $session, "reports" => $reportsToReturn, 'reportsHtml' => $reportsHTML, 'solverModules' => $solverModules]);
     }
 
     /**
