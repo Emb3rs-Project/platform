@@ -63,7 +63,8 @@
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
-                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
                             <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
@@ -95,7 +96,8 @@
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
                             <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
-                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">Solver : {{ solverModules[report.module] }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
                             <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
@@ -209,13 +211,18 @@ const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'j
 
 const modulesJson = []
 let first = props.session.created_at
+let start = null
 
 const bench = (date, functi) => {
     if (functi === 'SIMULATION STARTED') {
         first = date
+        start = date
         return '0:00:00'
+    } else if (functi === 'SIMULATION FINISHED') {
+        let ms = moment(date).diff(moment(start));
+        let d = moment.duration(ms);
+        return Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
     }
-
     let ms = moment(date).diff(moment(first));
     let d = moment.duration(ms);
     let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
