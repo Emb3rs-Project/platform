@@ -232,7 +232,8 @@
                         <VSelect :options="solvers"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                  label="name" value="id"
-                                 v-model="form.extra.solver_gis"/>
+                                 @update:modelValue="(val) => { form.extra.solver_gis = val.id }"
+                                 :modelValue="form.extra.solver_gis"/>
                         <p class="mt-2 text-sm text-gray-500 text-justify">
                             The simulation solver
                         </p>
@@ -454,7 +455,8 @@
                         <VSelect :options="solvers"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                  label="name" value="id"
-                                 v-model="form.extra.solver_teo"/>
+                                 @update:modelValue="(val) => { form.extra.solver_teo = val.id }"
+                                 :modelValue="form.extra.solver_teo"/>
                         <p class="mt-2 text-sm text-gray-500 text-justify">
                             The simulation solver
                         </p>
@@ -650,7 +652,8 @@
                         <VSelect :options="solvers"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                  label="name" value="id"
-                                 v-model="form.extra.solver_market"/>
+                                 @update:modelValue="(val) => { form.extra.solver_market = val.id }"
+                                 :modelValue="form.extra.solver_market"/>
                         <p class="mt-2 text-sm text-gray-500 text-justify">
                             The simulation solver
                         </p>
