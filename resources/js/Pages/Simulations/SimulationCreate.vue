@@ -967,7 +967,7 @@ export default {
         const confirmingSimulationCreation = ref(false);
         const file = ref(null);
 
-        const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
+        const resolutions = [{key: 'low', value: 'Low'},{key:'medium_low', value: 'Medium Low'},{key:'medium_high', value: 'Medium High'},{key:'high', value:'High'}]
         const marketProfiles = [{key:'centralized', value: 'Centralized'},{key:'decentralized', value: 'Decentralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
