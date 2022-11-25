@@ -62,6 +62,8 @@
                              class="border border-red-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-red-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -91,6 +93,8 @@
                              class="border border-green-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-green-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p>Bench : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -201,6 +205,24 @@ const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'j
 
 
 const modulesJson = []
+const first = ref(props.session.created_at)
+
+const bench = (date, functi) => {
+    if (functi === 'SIMULATION STARTED') {
+        first.value = date
+        return '0:00:00'
+    }
+    // if (first.value === null) {
+    //     first.value = date
+    //     return ''
+    // }
+    let ms = moment(date).diff(moment(first.value));
+    console.log(ms)
+    let d = moment.duration(ms);
+    let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+    first.value = date
+    return s
+}
 
 const stepInfo = computed(() => {
     return []
@@ -253,7 +275,7 @@ const back = () => Inertia.get(route('projects.simulations.show', {
 }))
 
 const downloadFullJson = (isJson) => {
-    return axios.post('/csv-report/'+props.session.id, {
+    return axios.post('/csv-report/' + props.session.id, {
         isJson
     })
         .then(({data}) => {
@@ -269,7 +291,7 @@ const downloadData = async (event) => {
         let data = await downloadFullJson(false)
         const zip = new JSZip();
         await zip.loadAsync(data, {base64: true});
-        const blob = await zip.generateAsync({type:"blob"});
+        const blob = await zip.generateAsync({type: "blob"});
 
         const element = document.createElement("a");
         element.setAttribute("href", window.URL.createObjectURL(blob));
@@ -281,7 +303,7 @@ const downloadData = async (event) => {
     }
 }
 
-const downloadInputs = async (data,exportName, simulationId) => {
+const downloadInputs = async (data, exportName, simulationId) => {
     const extra = await getJsonFrom('extra', simulationId)
     console.log(extra)
     downloadObjectAsJson(JSON.stringify({...extra, ...data}), exportName)
@@ -307,7 +329,7 @@ const downloadObjectAsJson = async (exportObj, exportName, id = null, type = nul
 
 const getJsonFrom = async (type, id, convert = true) => {
     let report = props.reports.find(report => report.id === id)
-    if (type ===  'extra' || (report[type] && report[type][0] === 'Loading...' || report[type] === '["Loading..."]')) {
+    if (type === 'extra' || (report[type] && report[type][0] === 'Loading...' || report[type] === '["Loading..."]')) {
         return axios.post(`/json-report/${type}/${id}`)
             .then(({data}) => {
                 if (type === 'extra') {
