@@ -12,6 +12,7 @@ use App\Models\Challenge;
 use App\Models\ChallengeGoal;
 use App\Models\ChallengeRestriction;
 use App\Models\Instance;
+use App\Models\IntegrationReport;
 use App\Models\Link;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
@@ -95,11 +96,43 @@ class ChallengeController extends Controller
 
         $teamLinks = $request->user()->currentTeam->links->pluck('id');
 
+        $participants = [];
+
+        $challenge->participants->each(function ($participant) use (&$participants, $challenge) {
+            if ($participant->pivot->sessions->count() > 0) {
+                $participant->pivot->sessions->each(function ($session) use ($participant, &$participants, $challenge) {
+                    $reports = IntegrationReport::where(
+                        'simulation_uuid',
+                        'like',
+                        $session->simulation_uuid
+                    )
+                        ->orderBy('created_at')
+                        ->get();
+                    $arr = [];
+                    $reports->each(function ($report) use (&$arr) {
+                        $arr = array_merge($arr, json_decode($report->output, true));
+                    });
+                    $dot = new \Adbar\Dot($arr);
+                    $customData = [];
+                    $customData['goal_value'] = 0;
+                    $customData['session_id'] = $session->id;
+                    $customData['session_url'] = route('session.show',$session->id);
+                    if (!empty($challenge->goal->output)) {
+                        $customData['goal_value'] = $dot->get($challenge->goal->output, 0);
+                    }
+                    $participants[] = array_merge($participant->toArray(), $customData);
+                });
+            } else {
+                $participant['goal_value'] = 0;
+                $participants[] = $participant;
+            }
+        });
         $links = Link::with([
             'geoSegments'
         ])->whereIn('id', $teamLinks)->get();
         return Inertia::render('Challenge/ChallengeShow', [
             'challenge' => $challenge,
+            'participants' => $participants,
             'instances' => $instances,
             'links' => $links,
             'isEnrolled' => $isEnrolled->count() > 0

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class ChallengeUser extends Pivot
 {
@@ -25,6 +26,13 @@ class ChallengeUser extends Pivot
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function sessions(): BelongsToMany
+    {
+        return $this->belongsToMany(SimulationSession::class, 'challenge_session', 'challenge_user_id', 'simulation_session_id')
+            ->using(ChallengeSession::class)
+            ->withPivot(['challenge_id']);
     }
 
 }

@@ -108,7 +108,7 @@
                         >
                             <div class="px-4 py-5 sm:p-6">
                                 <AmazingIndexTable
-                                    v-model="challenge.participants"
+                                    v-model="participants"
                                     :columns="tableColumns"
                                     :hasCheckbox="false"
                                     headerClasses="shadow overflow-hidden sm:rounded-lg"
@@ -117,7 +117,7 @@
                                     <template #header-id> ID</template>
                                     <template #body-id="{ item }">
                                         <td class="text-left pl-4">
-                                            {{ item.pivot.id }}
+                                            {{ item.session_id || item.pivot.id }}
                                         </td>
                                     </template>
 
@@ -151,7 +151,7 @@
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
                                         >
-                                            {{ }}
+                                            {{ item.goal_value }}
                                         </td>
                                     </template>
 
@@ -163,7 +163,12 @@
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
                                         >
-                                            {{ }}
+                                            <Link
+                                                method="get"
+                                                class="px-5 py-2 bg-slate-500 font-semibold text-white rounded-sm"
+                                                as="button"
+                                                :href="item.session_url"
+                                            >Report</Link>
                                         </td>
                                     </template>
 
@@ -210,11 +215,16 @@ import {onMounted, ref} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
+import {Link} from "@inertiajs/inertia-vue3";
 import moment from 'moment';
 
 const props = defineProps({
     challenge: {
         type: Object,
+        required: true,
+    },
+    participants: {
+        type: Array,
         required: true,
     },
     instances: {

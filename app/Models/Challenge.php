@@ -48,4 +48,5 @@ class Challenge extends Model
             ->using(ChallengeUser::class)
             ->withPivot(['id', 'created_at']);
     }
+
 }
