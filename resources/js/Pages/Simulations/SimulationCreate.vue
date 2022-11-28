@@ -228,6 +228,17 @@
                         />
                     </field>
 
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_gis = val.id }"
+                                 :modelValue="form.extra.solver_gis"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
+                    </field>
+
                     <field label="Average Flow Temperature (flow_temp)"
                            required
                            hint="Yearly average flow temperature in °C.">
@@ -440,6 +451,17 @@
                         </p>
                     </field>
 
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_teo = val.id }"
+                                 :modelValue="form.extra.solver_teo"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
+                    </field>
+
                     <field label="Mode of operation (MODE_OF_OPERATION)"
                         hint="It defines the number of modes of operation that the technologies can have. If a technology can have various input or output fuels and it can choose the mix (i.e. any linear combination) of these input or output fuels, each mix can be accounted as a separate mode of operation.  The user must input at least 1 mode of operation. There muts be two modes of operation if storage is used in the model">
 
@@ -624,6 +646,17 @@
                             v-model="form.extra.input_data.user.recurrence"
                             type="number"
                         />
+                    </field>
+
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_market = val.id }"
+                                 :modelValue="form.extra.solver_market"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
                     </field>
 
                     <field label="Data Profile (data_profile)"
@@ -937,7 +970,7 @@ export default {
         const confirmingSimulationCreation = ref(false);
         const file = ref(null);
 
-        const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
+        const resolutions = [{key: 'low', value: 'Low'},{key:'medium_low', value: 'Medium Low'},{key:'medium_high', value: 'Medium High'},{key:'high', value:'High'}]
         const marketProfiles = [{key:'centralized', value: 'Centralized'},{key:'decentralized', value: 'Decentralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
         const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
@@ -1083,6 +1116,9 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
+                solver_teo: 'SCIP',
+                solver_gis: 'SCIP',
+                solver_market: 'SCIP',
                 file: null,
                 isConstantUtil: true,
                 input_data: {
@@ -1281,6 +1317,7 @@ export default {
                     )
 
                     // Numb GIS Parameter
+                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
                     data.extra.input_data.flow_temp = Number(data.extra.input_data.flow_temp)
                     data.extra.input_data.return_temp = Number(data.extra.input_data.return_temp)
                     data.extra.input_data.ambient_temp = Number(data.extra.input_data.ambient_temp)
@@ -1291,7 +1328,14 @@ export default {
                     data.extra.input_data.fc_pip = Number(data.extra.input_data.fc_pip)
                     data.extra.input_data.vc_pip = Number(data.extra.input_data.vc_pip)
                     data.extra.input_data.vc_pip_ex = Number(data.extra.input_data.vc_pip_ex)
-                    data.extra.input_data.time_limit = Number(data.extra.input_data.time_limit)
+                    data.extra.input_data.fc_dig_tr = Number(data.extra.input_data.fc_dig_tr)
+                    data.extra.input_data.vc_dig_tr = Number(data.extra.input_data.vc_dig_tr)
+                    data.extra.input_data.vc_dig_tr_ex = Number(data.extra.input_data.vc_dig_tr_ex)
+                    data.extra.input_data.heat_capacity = Number(data.extra.input_data.heat_capacity)
+                    data.extra.input_data.water_den = Number(data.extra.input_data.water_den)
+                    data.extra.input_data.factor_street_terrain = Number(data.extra.input_data.factor_street_terrain)
+                    data.extra.input_data.factor_street_overland = Number(data.extra.input_data.factor_street_overland)
+                    data.extra.input_data.invest_pumps = Number(data.extra.input_data.invest_pumps)
 
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
@@ -1404,6 +1448,12 @@ export default {
                 }
             });
         };
+
+        const solvers = [
+            {name: 'SCIP', id: 'SCIP'},
+            {name: 'GUROBI', id: 'GUROBI'},
+            {name: 'HIGHS', id: 'HIGHS'},
+        ]
 
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
@@ -1546,6 +1596,7 @@ export default {
             convertListToNumeric,
             pushNewOptions,
             completeActorShare,
+            solvers
 
 
         };

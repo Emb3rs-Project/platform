@@ -74,6 +74,10 @@
                              class="border border-red-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-red-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -103,6 +107,10 @@
                              class="border border-green-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-green-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -229,7 +237,8 @@ const props = defineProps({
     session: Object,
     reports: Array,
     reportsHtml: Array,
-    challenges: Array
+    challenges: Array,s
+    solverModules: Object,
 });
 
 let downloadOption = ref({})
@@ -253,6 +262,25 @@ const enroll = () => {
 }
 
 const modulesJson = []
+let first = props.session.created_at
+let start = null
+
+const bench = (date, functi) => {
+    if (functi === 'SIMULATION STARTED') {
+        first = date
+        start = date
+        return '0:00:00'
+    } else if (functi === 'SIMULATION FINISHED') {
+        let ms = moment(date).diff(moment(start));
+        let d = moment.duration(ms);
+        return Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+    }
+    let ms = moment(date).diff(moment(first));
+    let d = moment.duration(ms);
+    let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+    first = date
+    return s
+}
 
 const stepInfo = computed(() => {
     return []

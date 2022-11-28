@@ -97,6 +97,16 @@ class ProjectSimulationController extends Controller
             $extras['sources'] = [];
         }
 
+        $solvers = ['solver_teo','solver_gis','solver_market'];
+        foreach ($solvers as $solver) {
+            if (is_array($extras[$solver])){
+                $extras[$solver] = $extras[$solver]['id'];
+            }
+
+        }
+
+
+
        $simulation = $project->simulations()->create([
             "status" => "NEW",
             "name" => $request->get('name'),

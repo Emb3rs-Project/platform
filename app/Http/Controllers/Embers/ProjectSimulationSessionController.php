@@ -27,6 +27,11 @@ class ProjectSimulationSessionController extends Controller
             ->orderBy('created_at')
             ->get();
         $challenges = $request->user()->challenges()->get();
+        $solverModules = [
+            'GIS Module' => optional($session->simulation->extra)['solver_gis'],
+            'TEO Module' => optional($session->simulation->extra)['solver_teo'],
+            'Market Module' => optional($session->simulation->extra)['solver_market']
+        ];
         $session->simulation->extra = [];
         $reportsHTML = [];
         $reportsToReturn = $reports->map(function ($item) use (&$reportsHTML) {
@@ -41,7 +46,7 @@ class ProjectSimulationSessionController extends Controller
             "session" => $session,
             "reports" => $reportsToReturn,
             'reportsHtml' => $reportsHTML,
-            'challenges' => $challenges
+            'challenges' => $challenges,
         ]);
     }
 
