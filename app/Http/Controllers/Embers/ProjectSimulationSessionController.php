@@ -47,6 +47,8 @@ class ProjectSimulationSessionController extends Controller
             "reports" => $reportsToReturn,
             'reportsHtml' => $reportsHTML,
             'challenges' => $challenges,
+            'solverModules' => $solverModules
+
         ]);
     }
 
@@ -67,7 +69,7 @@ class ProjectSimulationSessionController extends Controller
 
         $session->delete();
 
-        return redirect()->route('projects.simulations.show', ['simulation' => $simulation->id, 'project' => $simulation->project_id]);
+        return redirect()->route('projects . simulations . show', ['simulation' => $simulation->id, 'project' => $simulation->project_id]);
     }
 
     public function jsonReport($type, $id)
@@ -91,13 +93,13 @@ class ProjectSimulationSessionController extends Controller
         }
 
         $jsonans = $session->simulation->extra;
-        $zip_file = 'data.zip';
+        $zip_file = 'data . zip';
 
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
 
-        $csv = 'sink.csv';
+        $csv = 'sink . csv';
         $file_pointer = fopen($csv, 'w');
         $keys = collect($jsonans['sinks'][0]['values'])->except('characterization')->keys()->toArray();
         $keys[] = 'template';
@@ -113,10 +115,10 @@ class ProjectSimulationSessionController extends Controller
             fputcsv($file_pointer, $data);
         }
 
-        $zip->addFile('sink.csv', 'sink.csv');
+        $zip->addFile('sink . csv', 'sink . csv');
         fclose($file_pointer);
 
-        $csv = 'source.csv';
+        $csv = 'source . csv';
         $file_pointer = fopen($csv, 'w');
         $keys = collect($jsonans['sources'][0]['values']['properties'])->keys()->toArray();
         $keys[] = 'template';
@@ -136,10 +138,10 @@ class ProjectSimulationSessionController extends Controller
         fclose($file_pointer);
 
         $zip->close();
-        unlink('source.csv');
-        unlink('sink.csv');
-        $base = base64_encode(file_get_contents('data.zip'));
-        unlink('data.zip');
+        unlink('source . csv');
+        unlink('sink . csv');
+        $base = base64_encode(file_get_contents('data . zip'));
+        unlink('data . zip');
         return $base;
     }
 

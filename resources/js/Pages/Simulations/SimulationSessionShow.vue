@@ -237,7 +237,7 @@ const props = defineProps({
     session: Object,
     reports: Array,
     reportsHtml: Array,
-    challenges: Array,s
+    challenges: Array,
     solverModules: Object,
 });
 
