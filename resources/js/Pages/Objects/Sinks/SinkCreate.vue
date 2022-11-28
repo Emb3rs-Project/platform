@@ -99,9 +99,11 @@
                 <div class="my-6" v-for="(property, propertyIdx) in properties" :key="propertyIdx">
                     <div v-if="property.property.inputType === 'text'">
                         <TextInput v-model="form.sink.data[property.property.symbolic_name]"
-                            :unit="property.unit.symbol" :description="property.property.description"
-                            :label="property.property.name" :placeholder="property.property.name"
-                            :required="property.required" />
+                                   :unit="property.unit.symbol" :description="property.property.description"
+                                   :label="property.property.name" :placeholder="property.property.name"
+                                   :required="property.required"/>
+                        <excel-uploader @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"
+                                        v-if="showUploader(property.property.name)"></excel-uploader>
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                         <SelectMenu v-model="form.sink.data[property.property.symbolic_name]"
@@ -222,9 +224,11 @@ import {
     DEFAULT_TEMPLATE,
 } from "@/Utils/helpers";
 import FileInput from "../../../Components/Forms/FileInput";
+import ExcelUploader from "../../../Components/ExcelUploader";
 
 export default {
     components: {
+        ExcelUploader,
         FileInput,
         JetCheckbox,
         AppLayout,
@@ -261,6 +265,17 @@ export default {
         const errorTemplateModalIsVisible = ref(false);
 
         const errorTemplateModal = ref([]);
+
+        const showUploader = (field) => {
+            let fields = [
+                'Real Hourly Capacity',
+                'Real Daily Capacity',
+                'Real Monthly Capacity',
+                // 'Real Yearly Capacity',
+            ]
+
+            return fields.includes(field)
+        }
 
         const form = useForm({
             sink: {
@@ -496,6 +511,7 @@ export default {
             updateMarker,
             submit,
             onCancel,
+            showUploader
         };
     },
 };

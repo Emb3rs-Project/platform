@@ -179,6 +179,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/challenges', ChallengeController::class)
         ->whereNumber(['chalenge']);
 
+    Route::post('/enroll-challenge',[ChallengeController::class, 'enroll']);
+    Route::post('/submit-challenge',[ChallengeController::class, 'submit']);
+
     // Help
     Route::resource('/help', HelpController::class)->only(['index'])
         ->whereNumber(['help']);

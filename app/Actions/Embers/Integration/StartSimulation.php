@@ -76,7 +76,7 @@ class StartSimulation implements StartsSimulations
         $timeslices = [
             'monthly' => range(1,12),
             'weekly' => range(1,48),
-            'daily' => range(1,360),
+            'daily' => range(1,366),
             'quad-hourly' => range(1,2196),
             'bi-hourly' => range(1,4392),
             'hourly' => range(1,8784),

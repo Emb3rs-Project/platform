@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Laravel\Nova\Actions\Actionable;
 
 class SimulationSession extends Model
@@ -35,5 +36,14 @@ class SimulationSession extends Model
     public function simulation(): BelongsTo
     {
         return $this->belongsTo(Simulation::class, 'simulation_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function challenge(): BelongsToMany
+    {
+        return $this->belongsToMany(Challenge::class, 'challenge_session')
+            ->using(ChallengeSession::class);
     }
 }

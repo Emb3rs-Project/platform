@@ -1,6 +1,7 @@
 <template>
   <Listbox
     as="div"
+    :class="class"
     v-model="selected"
     :disabled="disabled"
   >
@@ -130,6 +131,10 @@ export default {
     placeholder:{
       type: String,
       default: "Select an option..."
+    },
+    class: {
+        type: String,
+        default: ''
     }
   },
 
