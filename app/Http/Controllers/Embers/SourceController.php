@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -20,8 +21,9 @@ class SourceController extends Controller
 
     public function index()
     {
-
+        $instances = Auth::user()->currentTeam->instances->pluck('id');
         $sources = Instance::whereIn('template_id', [15])
+            ->whereIn('id', $instances)
             ->orderBy('created_at', 'desc')->get();
         return Inertia::render('Objects/Sources/SourceIndex',
             ['sources' => $sources]);
