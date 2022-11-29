@@ -2,11 +2,26 @@
     <SiteHead title="Challenge Create"/>
 
     <AppLayout>
-
-        <!-- {{ form.errors }} -->
-        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:py-8 lg:px-8">
-            <h1 class="mb-8 font-bold text-3xl">Create Challenge</h1>
-        </div>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Challenge Update
+            </h2>
+        </template>
+        <div class="grid grid-cols-1 p-12 gap-y-10">
+            <div>
+                <div class="grid grid-cols-3">
+                    <div>
+                        <div class="flex items-center gap-1">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">
+                                Challenge Update
+                            </h3>
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <div
+                            class="bg-white overflow-hidden shadow sm:rounded-lg"
+                        >
+                            <div class="px-4 py-5 sm:p-6">
         <!-- Project Name -->
         <div
             class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -109,6 +124,12 @@
                 :disabled="form.processing">
                 Update
             </PrimaryButton>
+        </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>

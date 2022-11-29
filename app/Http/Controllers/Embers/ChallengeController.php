@@ -64,14 +64,16 @@ class ChallengeController extends Controller
         $restrictions = $request->input('restrictions');
         $data = $request->only('name', 'description');
         if ($goal) {
-            $data['goal_id'] = $goal['id'];
+            $data['goal_id'] = $goal['id'] ?? null;
         }
         $challenge = app(StoresChallenges::class)->store($request->user(), $data);
 
         foreach ($restrictions as $item) {
-            $challenge->restrictions()->attach($item['restriction']['id'], [
-                'value' => $item['value']
-            ]);
+            if (array_key_exists('id', $item['restriction'])) {
+                $challenge->restrictions()->attach($item['restriction']['id'], [
+                    'value' => $item['value']
+                ]);
+            }
         }
 
         return redirect()->route('challenges.index');
@@ -116,7 +118,7 @@ class ChallengeController extends Controller
                     $customData = [];
                     $customData['goal_value'] = 0;
                     $customData['session_id'] = $session->id;
-                    $customData['session_url'] = route('session.show',$session->id);
+                    $customData['session_url'] = route('session.show', $session->id);
                     if (!empty($challenge->goal->output)) {
                         $customData['goal_value'] = $dot->get($challenge->goal->output, 0);
                     }

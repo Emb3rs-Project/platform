@@ -32,8 +32,8 @@ class UpdateChallenge implements UpdatesChallenges
     {
         $validator = Validator::make($input, [
             'name' => ['filled', 'string', 'max:255'],
-            'description' => ['filled', 'string'],
-            'goal_id' => ['nullable', 'numeric'],
+            'description' => ['nullable', 'string'],
+            'goal_id' => ['required', 'numeric'],
         ]);
 
         return $validator->validate();
