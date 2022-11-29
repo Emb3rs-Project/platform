@@ -232,6 +232,7 @@ import moment from 'moment'
 import JSZip from 'jszip'
 import JetLabel from "@/Jetstream/Label";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
+import {notify} from "@kyvg/vue3-notification";
 
 const props = defineProps({
     session: Object,
@@ -255,6 +256,14 @@ const enroll = () => {
         session: props.session.id
     }).then(({data}) => {
         if (!data.error) {
+            notify({
+                group: "notifications",
+                title: "Challenge",
+                text: 'Simulation submitted.',
+                data: {
+                    type: "success",
+                },
+            });
             Inertia.get(route('session.show', {id: props.session.id}))
         }
         confirmEnroll.value = false

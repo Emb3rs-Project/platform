@@ -92,8 +92,8 @@ class ChallengeController extends Controller
         $instances_id = Auth::user()->currentTeam->instances->pluck("id");
         $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
 
-        $isEnrolled = $challenge->whereHas('participants', function ($query) {
-            return $query->where('user_id', Auth::id());
+        $isEnrolled = $challenge->whereHas('participants', function ($query) use ($id){
+            return $query->where('user_id', Auth::id())->where('challenge_id', $id);
         })->get();
 
         $teamLinks = $request->user()->currentTeam->links->pluck('id');

@@ -168,7 +168,8 @@
                                                 class="px-5 py-2 bg-slate-500 font-semibold text-white rounded-sm"
                                                 as="button"
                                                 :href="item.session_url"
-                                            >Report</Link>
+                                            >Report
+                                            </Link>
                                         </td>
                                     </template>
 
@@ -217,6 +218,7 @@ import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
 import {Link} from "@inertiajs/inertia-vue3";
 import moment from 'moment';
+import {notify} from "@kyvg/vue3-notification";
 
 const props = defineProps({
     challenge: {
@@ -260,6 +262,14 @@ const enroll = () => {
         user: props.user.id
     }).then(({data}) => {
         if (!data.error) {
+            notify({
+                group: "notifications",
+                title: "Enroll",
+                text: 'Enrolled with success.',
+                data: {
+                    type: "success",
+                },
+            });
             Inertia.get(route('challenges.show', {id: props.challenge.id}))
         }
         confirmEnroll.value = false
