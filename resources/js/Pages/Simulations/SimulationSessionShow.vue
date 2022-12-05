@@ -30,7 +30,7 @@
                         <jet-label value="Challenge Participation: "/> &nbsp;
                         <jet-label :value="session.challenge[0].name"/>
                     </div>
-                    <div v-else class="flex">
+                    <div v-else-if="isEnrolled" class="flex">
                         <jet-label value="Submit Challenge Participation"/>
                         <VSelect :options="challenges"
 
@@ -240,6 +240,7 @@ const props = defineProps({
     reportsHtml: Array,
     challenges: Array,
     solverModules: Object,
+    isEnrolled: Boolean
 });
 
 let downloadOption = ref({})

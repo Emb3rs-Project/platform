@@ -72,7 +72,7 @@ class CharacterizeInstance implements CharacterizesInstances
         if ($template->id == 15) {
             $data = $instance->values["properties"];
         }
-        ;
+
         if (array_key_exists('real_hourly_capacity', $data) && !isset($data['real_hourly_capacity'])) {
             unset($data['real_hourly_capacity']);
         }
@@ -108,6 +108,7 @@ class CharacterizeInstance implements CharacterizesInstances
 
         /** @var CharacterizationSourceOutput $feature */
         list($feature, $status) = $client->char_simple($request)->wait();
+        info('charrr', [$feature, $status]);
 
         if ($feature) {
             $characterization = [];

@@ -27,6 +27,7 @@ class ProjectSimulationSessionController extends Controller
             ->orderBy('created_at')
             ->get();
         $challenges = $request->user()->challenges()->get();
+        $isEnrolled = $request->user()->whereHas('challenges')->count() > 0;
         $solverModules = [
             'GIS Module' => optional($session->simulation->extra)['solver_gis'],
             'TEO Module' => optional($session->simulation->extra)['solver_teo'],
@@ -47,7 +48,8 @@ class ProjectSimulationSessionController extends Controller
             "reports" => $reportsToReturn,
             'reportsHtml' => $reportsHTML,
             'challenges' => $challenges,
-            'solverModules' => $solverModules
+            'solverModules' => $solverModules,
+            'isEnrolled' => $isEnrolled
 
         ]);
     }

@@ -59,8 +59,8 @@ class ImportSource implements ShouldQueue
 
 
         $additionalSheet = [];
-
-        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet) {
+        $i = 1;
+        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet,&$i) {
             $bindLineAdd = [];
             collect($addLine)->each(function ($value, $key) use (&$bindLineAdd, $bindProps) {
                 if (array_key_exists($key, $bindProps)) {
@@ -81,6 +81,8 @@ class ImportSource implements ShouldQueue
                     $values['data'][$bindProps[$prop]] = empty(Arr::get($addLine, $bindProps[$prop])) ? null : Arr::get($addLine, $bindProps[$prop]);
                 }
             }
+            $values['data']['id'] = $i;
+            $i++;
 
             foreach ($values['data'] as $key => $value) {
                 if ($value === null || $value === '') {
@@ -133,7 +135,7 @@ class ImportSource implements ShouldQueue
                     }
 
                     foreach ($values['properties'] as $key => $value) {
-                        if ($value === null || $value === '') {
+                        if (($value === null || $value === '')) {
                             unset($values['properties'][$key]);
                         }
                     }

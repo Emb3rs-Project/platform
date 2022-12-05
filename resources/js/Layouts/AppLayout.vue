@@ -1,4 +1,4 @@
-<template>
+x<template>
     <div class="h-screen flex overflow-hidden bg-white">
         <TransitionRoot
             as="template"
@@ -629,7 +629,7 @@ const navigation = [
         icon: ViewListIcon,
     },
     {
-        name: "Challenge",
+        name: "Challenges",
         href: {
             index: {
                 location: "challenges.index",
