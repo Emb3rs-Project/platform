@@ -157,7 +157,13 @@ class ProjectController extends Controller
     {
         $templates = Template::with('templateProperties', 'templateProperties.property')->get();
         $allProps = [];
-        $helpers = [];
+        $helpers = [
+            [
+                'field' => 'template',
+                'options' => 'Simple Source or Simple Sink',
+                'info' => ''
+            ]
+        ];
         if ($request->query('type') === 'Source') {
             $allProps['sourceID'] = '';
         }
