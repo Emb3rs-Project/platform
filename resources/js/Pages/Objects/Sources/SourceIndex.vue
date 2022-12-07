@@ -9,6 +9,9 @@
                 <h1 class="mb-8 font-bold text-3xl">Sources</h1>
 
                 <div class="flex justify-end mb-5">
+                    <PrimaryButton v-tippy="'Import sources'" class="w-48 mr-2" @click="importInstance('Source')">
+                        Import Sources
+                    </PrimaryButton>
                     <PrimaryButton v-tippy="'Export Sources'" class="w-48" @click="executeAction = true">
                         Export Sources
                     </PrimaryButton>
@@ -99,6 +102,47 @@
         </template>
 
     </DialogModal>
+    <DialogModal :show="executeActionImport" @close="closeModalImport">
+        <template #title>
+            Import {{form.action}}
+        </template>
+
+        <template #content class="my-auto">
+            <Field label="File"
+                   hint="Excel file for import">
+                <input
+                    type="file"
+                    ref="file"
+                    class="
+                                        w-full
+                                        px-4
+                                        py-2
+                                        mt-2
+                                        border
+                                        rounded-md
+                                        focus:outline-none
+                                        focus:ring-1
+                                        focus:ring-blue-600
+                                    "
+                />
+            </Field>
+            <p> Download an example file: <a :href="`/sample-import?type=${form.action}`" class="font-bold text-primary">click here</a></p>
+        </template>
+
+        <template #footer>
+
+            <SecondaryOutlinedButton
+                class="mr-2"
+                @click="closeModalImport">
+                Cancel
+            </SecondaryOutlinedButton>
+
+            <PrimaryButton @click="submitImport">
+                Submit
+            </PrimaryButton>
+        </template>
+
+    </DialogModal>
     <component
         class="z-50"
         :is="modalComponent"
@@ -110,7 +154,7 @@
 </template>
 
 <script>
-import {Link} from "@inertiajs/inertia-vue3";
+import {Link, useForm} from "@inertiajs/inertia-vue3";
 import {computed, onBeforeUnmount, onMounted, ref, toRefs} from "vue";
 import SiteHead from "@/Components/SiteHead.vue";
 import AppLayout from "@/Layouts/AppLayout";
@@ -162,6 +206,7 @@ export default {
     setup (props) {
         const tableColumns = ["id", "name", "created_at", "actions"];
         const executeAction = ref(false)
+        const executeActionImport = ref(false)
         const currentProject = ref({})
         let sources = toRefs(props).sources
         const SourceData = sources.value
@@ -185,6 +230,10 @@ export default {
 
         function closeModal() {
             executeAction.value = false
+        }
+
+        function closeModalImport() {
+            executeActionImport.value = false
         }
 
         function submit() {
@@ -236,6 +285,40 @@ export default {
                 return obj[key];
             });
         }
+        const file = ref(null);
+
+        function importInstance(action) {
+            form.action = action
+            executeActionImport.value = true
+        }
+
+        function submitImport() {
+            if (file) {
+                form.file = file.value.files[0];
+            }
+            form.post('/import', {
+                wantsJson: true,
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: (data) => {
+                    form.reset()
+                    console.log(data);
+                }
+            });
+            closeModalImport()
+            notify({
+                group: "notifications",
+                title: "Import",
+                text: 'The file is being processed in the background. You will receive a notification when finished.',
+                data: {
+                    type: "success",
+                },
+            });
+        }
+        const form = useForm({
+            file: null,
+            action: null,
+        })
 
         return {
             tableColumns,
@@ -250,7 +333,13 @@ export default {
             SourceData,
             closeModal,
             submit,
-            pluck
+            pluck,
+            importInstance,
+            submitImport,
+            executeActionImport,
+            form,
+            closeModalImport,
+            file
         };
     },
     watch: {
