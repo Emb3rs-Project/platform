@@ -75,7 +75,7 @@ class ImportSource implements ShouldQueue
             foreach ($props as $prop) {
                 if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
                     $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop], "[]");
-                } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
+                } else if (in_array($bindProps[$prop], ['sunday_on', 'saturday_on'])) {
                     $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop]) === 'yes' ? 1 : 0;
                 } else {
                     $values['data'][$bindProps[$prop]] = empty(Arr::get($addLine, $bindProps[$prop])) ? null : Arr::get($addLine, $bindProps[$prop]);
