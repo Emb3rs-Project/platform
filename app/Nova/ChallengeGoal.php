@@ -52,6 +52,7 @@ class ChallengeGoal extends Resource
             Text::make(__('Name'), 'name'),
             Text::make(__('Description'), 'description'),
             Text::make(__('Output'), 'output'),
+            Text::make(__('Unit'), 'unit'),
         ];
     }
 

@@ -9,6 +9,7 @@ class ChallengeGoal extends Model
     protected $fillable = [
         'name',
         'description',
-        'output'
+        'output',
+        'unit'
     ];
 }

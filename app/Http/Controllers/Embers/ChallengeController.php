@@ -117,6 +117,7 @@ class ChallengeController extends Controller
                     $dot = new \Adbar\Dot($arr);
                     $customData = [];
                     $customData['goal_value'] = 0;
+                    $customData['goal_unit'] = $challenge->goal->unit;
                     $customData['session_id'] = $session->id;
                     $customData['session_url'] = route('session.show', $session->id);
                     if (!empty($challenge->goal->output)) {

@@ -151,7 +151,8 @@
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
                                         >
-                                            {{ item.goal_value }}
+                                            {{ item.goal_value }} <span
+                                            v-if="item.goal_unit"> ({{ item.goal_unit }})</span>
                                         </td>
                                     </template>
 
