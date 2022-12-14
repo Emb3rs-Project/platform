@@ -162,6 +162,7 @@
                                 </a>
                                 <a v-if="report.function === 'optimize_network'"
                                    target="_blank"
+                                   style="margin-top: 10px"
                                    :href="route('session.map.show', {session : report.id})"
                                    class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full">Network
                                     Report
