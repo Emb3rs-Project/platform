@@ -141,7 +141,7 @@
 
 
 
-    let polylinePoints = edges.flatMap( (edge) => [edge.fromCoord, edge.toCoord])
+    let polylinePoints = edges.flatMap( (edge) => [edge.toCoord, edge.fromCoord])
     let polyline = new L.polyline(polylinePoints, {
         color: 'red',
         weight: 3,
