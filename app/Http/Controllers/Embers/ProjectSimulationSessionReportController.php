@@ -44,20 +44,25 @@ class ProjectSimulationSessionReportController extends Controller
         return view('reports.final-integration-report', ["reports" => $reports, 'metadata' => $metadata])->render();
     }
 
-    public function getMapData(SimulationSession $session, Request $request)
+    public function getMapData(IntegrationReport $session, Request $request)
     {
-        $polygon = $session?->simulation?->project?->data;
-        $edges = \Storage::disk('public')->get('edges.json');
+
+        $output = json_decode($session->output,true);
+        $data = $session->data;
+
+        $edges = json_encode($output['edges']);
+        $nodes = json_encode($output['nodes']);
         $edgesSolution = \Storage::disk('public')->get('edges_solution.json');
-        $sinksToMap = \Storage::disk('public')->get('sinks_to_map.json');
-        $sourcesToMap = \Storage::disk('public')->get('sources_to_map.json');
+        $sinksToMap = json_encode($data['cf_module']['n_demand_list']);
+        $sourcesToMap = json_encode($data['cf_module']['n_supply_list']);
 
         return view('reports.map', [
             "edges" => $edges,
+            "nodes" => $nodes,
             "edgesSolution" => $edgesSolution,
             "sinksToMap" => $sinksToMap,
             "sourcesToMap" => $sourcesToMap,
-            "polygon" => $polygon
+
         ])->render();
     }
 }
