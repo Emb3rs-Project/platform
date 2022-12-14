@@ -51,7 +51,7 @@ class ProjectSimulationSessionReportController extends Controller
         $data = $session->data;
 
         $edges = json_encode($output['network_solution_edges']);
-        $nodes = json_encode($output['potential_nodes']);
+        $nodes = json_encode($output['network_solution_nodes']);
         $edgesSolution = \Storage::disk('public')->get('edges_solution.json');
         $sinksToMap = json_encode($data['cf_module']['n_demand_list']);
         $sourcesToMap = json_encode($data['cf_module']['n_supply_list']);
