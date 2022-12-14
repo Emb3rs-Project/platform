@@ -40,7 +40,7 @@ return [
                 'useTLS' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http') !== 'http',
                 'encrypt' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http') !== 'http',
                 'host' => env('LARAVEL_WEBSOCKETS_HOST', parse_url(env('APP_URL'), PHP_URL_HOST)),
-                'port' => env('LARAVEL_WEBSOCKETS_PORT', 80),
+                'port' => env('PUSHER_PORT', env('LARAVEL_WEBSOCKETS_PORT', 80)),
                 'scheme' => env('LARAVEL_WEBSOCKETS_SCHEME', 'http'),
                 'curl_options' => [
                     CURLOPT_SSL_VERIFYHOST => 0,
