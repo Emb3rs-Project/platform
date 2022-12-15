@@ -141,15 +141,15 @@
 
 
 
-    let polylinePoints = edges.flatMap( (edge) => [edge.toCoord, edge.fromCoord])
-    let polyline = new L.polyline(polylinePoints, {
-        color: 'red',
-        weight: 3,
+    let polylinePoints = edges.forEach( (edge) => {
+        new L.polyline([edge.toCoord, edge.fromCoord], {
+            color: 'red',
+            weight: 3,
 
-        smoothFactor: 1
+            smoothFactor: 1
+        }).addTo(map)
+
     })
-
-    polyline.addTo(map)
 
     let sourceIcon = L.AwesomeMarkers.icon(
         {
@@ -198,7 +198,6 @@
     var overlays = {
         "Sources": L.layerGroup(sources),
         "Sinks": L.layerGroup(sinks),
-        "Base network": polyline
     };
 
     L.control.layers({}, overlays).addTo(map);
