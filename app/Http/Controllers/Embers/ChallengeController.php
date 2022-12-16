@@ -106,6 +106,7 @@ class ChallengeController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $user = $request->user();
         $challenge = app(ShowChallenge::class)->show($request->user(), $id);
         $instances_id = Auth::user()->currentTeam->instances->pluck("id");
         $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
@@ -156,7 +157,11 @@ class ChallengeController extends Controller
             'participants' => $participants,
             'instances' => $instances,
             'links' => $links,
-            'isEnrolled' => $isEnrolled->count() > 0
+            'isEnrolled' => $isEnrolled->count() > 0,
+            'projects' => $user->currentTeam->projects?->map(fn($item) => [
+                'key' => $item->id,
+                'value' => $item->name,
+            ])
         ]);
     }
 
@@ -224,8 +229,19 @@ class ChallengeController extends Controller
 
     public function enroll(Request $request)
     {
+        $user = $request->user();
         $challenge = Challenge::find($request->input('challenge'));
         if ($challenge) {
+            $project = $request->input('project');
+            if ($project) {
+                $projectModel = Project::find($project['key']);
+                if ($projectModel) {
+                    $cloneProject = $projectModel->replicate();
+                    $cloneProject->name = 'Challenge ' . $challenge->name . ' - ' . $projectModel->name;
+                    $cloneProject->push();
+                    $cloneProject->teams()->attach($user->currentTeam);
+                }
+            }
             $challenge->participants()->attach($request->input('user'));
             return [
                 'error' => false

@@ -196,6 +196,12 @@
 
             <template #content>
                 are you sure you want to enroll the challenge?
+
+                <Field label="Project"
+                       class="mt-2"
+                       hint="Select a project to enroll">
+                    <SelectMenu v-model="currentProject" :options="projects"></SelectMenu>
+                </Field>
             </template>
 
             <template #footer>
@@ -228,6 +234,8 @@ import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
 import {Link} from "@inertiajs/inertia-vue3";
 import moment from 'moment';
 import {notify} from "@kyvg/vue3-notification";
+import Field from "../../Components/Field.vue";
+import SelectMenu from "../../Components/Forms/SelectMenu.vue";
 
 const props = defineProps({
     challenge: {
@@ -253,6 +261,10 @@ const props = defineProps({
     isEnrolled: {
         type: Boolean,
         default: false
+    },
+    projects: {
+        type: Array,
+        required: true,
     }
 })
 const tableColumns = ["id", "name", 'submit_date', 'goal_value', 'report'];
@@ -268,10 +280,12 @@ if (props.challenge.restrictions) {
     }).join('\n')
 }
 const confirmEnroll = ref(false);
+const currentProject = ref();
 const enroll = () => {
     axios.post('/enroll-challenge', {
         challenge: props.challenge.id,
-        user: props.user.id
+        user: props.user.id,
+        project: currentProject.value
     }).then(({data}) => {
         if (!data.error) {
             notify({
