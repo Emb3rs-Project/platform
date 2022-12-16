@@ -259,7 +259,7 @@ const tableColumns = ["id", "name", 'submit_date', 'goal_value', 'report'];
 const back = () => Inertia.get(route('challenges.index'))
 const unit = props.challenge.goal && props.challenge.goal.unit ? '(' + props.challenge.goal.unit + ')' : ''
 const goal = props.challenge.goal ? props.challenge.goal.name + unit : ''
-const project = props.challenge.goal ? props.challenge.project.name : ''
+const project = props.challenge.project ? props.challenge.project.name : ''
 let restrictions = ''
 if (props.challenge.restrictions) {
     restrictions = props.challenge.restrictions.flatMap((restriction) => {
@@ -292,9 +292,10 @@ const map = ref(null);
 
 onMounted(() => {
     const _map = map.value.map;
-
-    const {data} = props.challenge.project;
-    _map.fitBounds(data.polygon);
+    if (props.challenge.project) {
+        const {data} = props.challenge.project;
+        _map.fitBounds(data.polygon);
+    }
 });
 
 </script>
