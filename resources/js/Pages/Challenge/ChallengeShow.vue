@@ -263,7 +263,8 @@ const project = props.challenge.goal ? props.challenge.project.name : ''
 let restrictions = ''
 if (props.challenge.restrictions) {
     restrictions = props.challenge.restrictions.flatMap((restriction) => {
-        return restriction.name + ': ' + restriction.pivot.value
+        let unit = restriction.unit ? '(' + restriction.unit + ')' : ''
+        return restriction.name + ': ' + restriction.pivot.value + unit
     }).join('\n')
 }
 const confirmEnroll = ref(false);

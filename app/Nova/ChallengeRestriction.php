@@ -52,6 +52,7 @@ class ChallengeRestriction extends Resource
             Text::make(__('Name'), 'name'),
             Text::make(__('Description'), 'description'),
             Text::make(__('Output Reference'), 'output'),
+            Text::make(__('Unit'), 'unit'),
         ];
     }
 
