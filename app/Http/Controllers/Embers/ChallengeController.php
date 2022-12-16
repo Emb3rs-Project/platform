@@ -46,8 +46,8 @@ class ChallengeController extends Controller
     {
         $user = $request->user();
         app(CreatesChallenges::class)->create($request->user());
-        $challengeGoals = ChallengeGoal::all()->map(fn($goal) => ['value' => $goal->name, 'id' => $goal->id]);
-        $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name, 'id' => $restriction->id]);
+        $challengeGoals = ChallengeGoal::all()->map(fn($goal) => ['value' => $goal->name . ($goal->unit ? '(' . $goal->unit . ')' : ''), 'id' => $goal->id]);
+        $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name. ($restriction->unit ? '(' . $restriction->unit . ')' : ''), 'id' => $restriction->id]);
         return Inertia::render('Challenge/ChallengeCreate', [
             'goals' => $challengeGoals,
             'restrictions' => $challengeRestrictions,
