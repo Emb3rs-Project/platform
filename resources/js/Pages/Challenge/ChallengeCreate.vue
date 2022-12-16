@@ -58,6 +58,18 @@
                                             class="mt-2"
                                         />
                                     </div>
+                                    <div
+                                        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
+                                    >
+                                        <div class="sm:col-span-3">
+                                            <SelectMenu label="Project" v-model="form.project" :options="projects"></SelectMenu>
+                                        </div>
+                                        <JetInputError
+                                            v-show="form.errors.project"
+                                            :message="form.errors.project"
+                                            class="mt-2"
+                                        />
+                                    </div>
                                     <!-- Project Description -->
                                     <div
                                         class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
@@ -157,6 +169,10 @@ const props = defineProps({
     restrictions: {
         type: Array,
         default: []
+    },
+    projects: {
+        type: Array,
+        default: []
     }
 })
 const store = useStore();
@@ -164,6 +180,7 @@ const store = useStore();
 const form = useForm({
     name: "",
     description: "",
+    project: {},
     goal: {},
     restrictions: [
         {

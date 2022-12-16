@@ -17,7 +17,8 @@ class Challenge extends Model
     protected $fillable = [
         'name',
         'description',
-        'goal_id'
+        'goal_id',
+        'project_id',
     ];
 
     /**
@@ -47,6 +48,11 @@ class Challenge extends Model
         return $this->belongsToMany(User::class)
             ->using(ChallengeUser::class)
             ->withPivot(['id', 'created_at']);
+    }
+
+    public function project(): belongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
 }

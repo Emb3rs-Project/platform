@@ -35,6 +35,7 @@ class StoreChallenge implements StoresChallenges
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'goal_id' => ['required', 'numeric'],
+            'project_id' => ['required', 'numeric'],
         ]);
 
         return $validator->validate();
@@ -49,6 +50,7 @@ class StoreChallenge implements StoresChallenges
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
             'goal_id' => $validated['goal_id'] ?? null,
+            'project_id' => $validated['project_id'] ?? null,
         ]);
 
 

@@ -43,6 +43,14 @@
                                 </input-row>
 
                                 <input-row
+                                    desc="Project"
+                                    v-model="project"
+                                    :disabled="true"
+                                    class="mt-14"
+                                >
+                                </input-row>
+
+                                <input-row
                                     desc="Challenge Goal"
                                     v-model="goal"
                                     :disabled="true"
@@ -250,6 +258,7 @@ const props = defineProps({
 const tableColumns = ["id", "name", 'submit_date', 'goal_value', 'report'];
 const back = () => Inertia.get(route('challenges.index'))
 const goal = props.challenge.goal ? props.challenge.goal.name : ''
+const project = props.challenge.goal ? props.challenge.project.name : ''
 let restrictions = ''
 if (props.challenge.restrictions) {
     restrictions = props.challenge.restrictions.flatMap((restriction) => {
@@ -278,6 +287,13 @@ const enroll = () => {
 }
 
 const map = ref(null);
+
+onMounted(() => {
+    const _map = map.value.map;
+
+    const { data } = props.challenge.project;
+    _map.fitBounds(data.polygon);
+});
 
 </script>
 

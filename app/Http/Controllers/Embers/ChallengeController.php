@@ -14,6 +14,7 @@ use App\Models\ChallengeRestriction;
 use App\Models\Instance;
 use App\Models\IntegrationReport;
 use App\Models\Link;
+use App\Models\Project;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,12 +44,17 @@ class ChallengeController extends Controller
      */
     public function create(Request $request)
     {
+        $user = $request->user();
         app(CreatesChallenges::class)->create($request->user());
         $challengeGoals = ChallengeGoal::all()->map(fn($goal) => ['value' => $goal->name, 'id' => $goal->id]);
         $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name, 'id' => $restriction->id]);
         return Inertia::render('Challenge/ChallengeCreate', [
             'goals' => $challengeGoals,
-            'restrictions' => $challengeRestrictions
+            'restrictions' => $challengeRestrictions,
+            'projects' => $user->currentTeam->projects?->map(fn($item) => [
+                'key' => $item->id,
+                'value' => $item->name,
+            ])
         ]);
     }
 
@@ -60,11 +66,23 @@ class ChallengeController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
         $goal = $request->input('goal');
+        $project = $request->input('project');
         $restrictions = $request->input('restrictions');
         $data = $request->only('name', 'description');
         if ($goal) {
             $data['goal_id'] = $goal['id'] ?? null;
+        }
+        if ($project) {
+            $projectModel = Project::find($project['key']);
+            if ($projectModel) {
+                $cloneProject = $projectModel->replicate();
+                $cloneProject->name = 'Challenge ' . $data['name'] . ' - ' . $projectModel->name;
+                $cloneProject->push();
+                $cloneProject->teams()->attach($user->currentTeam);
+                $data['project_id'] = $cloneProject->id;
+            }
         }
         $challenge = app(StoresChallenges::class)->store($request->user(), $data);
 
@@ -92,7 +110,7 @@ class ChallengeController extends Controller
         $instances_id = Auth::user()->currentTeam->instances->pluck("id");
         $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
 
-        $isEnrolled = $challenge->whereHas('participants', function ($query) use ($id){
+        $isEnrolled = $challenge->whereHas('participants', function ($query) use ($id) {
             return $query->where('user_id', Auth::id())->where('challenge_id', $id);
         })->get();
 
@@ -152,13 +170,18 @@ class ChallengeController extends Controller
     public function edit(Request $request, $id)
     {
         $challenge = app(ShowChallenge::class)->show($request->user(), $id);
+        $user = $request->user();
 
         $challengeGoals = ChallengeGoal::all()->map(fn($goal) => ['value' => $goal->name, 'id' => $goal->id]);
         $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name, 'id' => $restriction->id]);
         return Inertia::render('Challenge/ChallengeEdit', [
             'challenge' => $challenge,
             'goals' => $challengeGoals,
-            'restrictions' => $challengeRestrictions
+            'restrictions' => $challengeRestrictions,
+            'projects' => $user->currentTeam->projects?->map(fn($item) => [
+                'key' => $item->id,
+                'value' => $item->name,
+            ])
         ]);
     }
 
