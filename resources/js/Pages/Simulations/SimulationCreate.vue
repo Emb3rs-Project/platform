@@ -64,7 +64,8 @@
                             <p class="mt-2 text-sm text-gray-500 text-justify">
                                 The simulation Metadata to use
                             </p>
-                            <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
+                            <JetInputError v-show="form.errors.simulation_metadata"
+                                           :message="form.errors.simulation_metadata" class="mt-2"/>
                         </div>
                     </div>
                 </div>
@@ -88,11 +89,13 @@
                 </template>
                 <template v-else>
 
-                    <div v-if="isFullSimulation" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                    <div v-if="isFullSimulation"
+                         class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                         <div class="sm:col-span-3">
                             <div>
                                 <div class="flex justify-end">
-                                    <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSinks">
+                                    <button class="bg-green-600 py-1 px-2 my-2 rounded-md text-white"
+                                            @click="selectAllSinks">
                                         Select All
                                     </button>
                                 </div>
@@ -105,14 +108,15 @@
                                     </span>
                                 </div>
                                 <div class="mt-1 relative rounded-md shadow-sm" id="sink_metadata">
-                                    <VSelect  :options="sinks" label="name" value="id" :multiple="true"
+                                    <VSelect :options="sinks" label="name" value="id" :multiple="true"
                                              class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                              v-model="form.extra.sinks"/>
                                 </div>
                                 <p class="mt-2 text-sm text-gray-500 text-justify">
                                     Sinks to use in this Simulation
                                 </p>
-                                <JetInputError v-show="form.errors['extra.sinks']" :message="form.errors['extra.sinks']" class="mt-2"/>
+                                <JetInputError v-show="form.errors['extra.sinks']" :message="form.errors['extra.sinks']"
+                                               class="mt-2"/>
                             </div>
                         </div>
 
@@ -122,7 +126,9 @@
                         <div class="sm:col-span-3">
                             <div>
                                 <div class="flex justify-end">
-                                    <button v-if="isFullSimulation" class="bg-green-600 py-1 px-2 my-2 rounded-md text-white" @click="selectAllSources">
+                                    <button v-if="isFullSimulation"
+                                            class="bg-green-600 py-1 px-2 my-2 rounded-md text-white"
+                                            @click="selectAllSources">
                                         Select All
                                     </button>
                                 </div>
@@ -142,7 +148,8 @@
                                 <p class="mt-2 text-sm text-gray-500 text-justify">
                                     Sources to use in this Simulation
                                 </p>
-                                <JetInputError v-show="form.errors['extra.sources']" :message="form.errors['extra.sources']" class="mt-2"/>
+                                <JetInputError v-show="form.errors['extra.sources']"
+                                               :message="form.errors['extra.sources']" class="mt-2"/>
                             </div>
                         </div>
 
@@ -154,7 +161,8 @@
                             </field>
 
                             <field label="ORC working years">
-                                <TextInput  type="number" v-model="form.extra.input_data.orc_years_working" unit="Years"/>
+                                <TextInput type="number" v-model="form.extra.input_data.orc_years_working"
+                                           unit="Years"/>
                             </field>
 
                             <field label="ORC evaporator temperature">
@@ -199,17 +207,17 @@
                     </div>
 
 
-
                 </template>
             </div>
 
             <template v-if="form.simulation_metadata.data.type !== 'standalone'">
 
                 <!-- GIS -->
-                <div v-show="currentStep === 2" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div v-show="currentStep === 2"
+                     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                     <field label="Network Resolution (network_resolution)"
-                        required
-                        hint="Defines if network resolution is high or low, i.e. how detailed the streets are loaded. If a large network is used, network resolution should be set to low to decrease computational time.">
+                           required
+                           hint="Defines if network resolution is high or low, i.e. how detailed the streets are loaded. If a large network is used, network resolution should be set to low to decrease computational time.">
                         <SelectMenu
                             :modelValue="resolutions.find((item) => item.key === form.extra.input_data.network_resolution)"
                             :options="resolutions"
@@ -226,6 +234,17 @@
                             type="text"
                             unit="Min"
                         />
+                    </field>
+
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_gis = val.id }"
+                                 :modelValue="form.extra.solver_gis"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
                     </field>
 
                     <field label="Average Flow Temperature (flow_temp)"
@@ -329,8 +348,8 @@
 
 
                         <field label="Fixed Digging Cost for Terrain (fc_dig_tr)"
-                            required
-                            hint="Fixed digging cost for terrains in EUR/m.">
+                               required
+                               hint="Fixed digging cost for terrains in EUR/m.">
                             <TextInput
                                 v-model="form.extra.input_data.fc_dig_tr"
                                 unit="EUR/m"
@@ -338,8 +357,8 @@
                         </field>
 
                         <field label="Variable Digging Cost for Terrain (vc_dig_tr)"
-                            required
-                            hint="Variable digging cost for terrains in EUR/m².">
+                               required
+                               hint="Variable digging cost for terrains in EUR/m².">
                             <TextInput
                                 v-model="form.extra.input_data.vc_dig_tr"
                                 unit="EUR/m²"
@@ -347,16 +366,16 @@
                         </field>
 
                         <field label="Exponent Terrain (vc_dig_tr_ex)"
-                            required
-                            hint="Exponent of the digging cost for terrain.">
+                               required
+                               hint="Exponent of the digging cost for terrain.">
                             <TextInput
                                 v-model="form.extra.input_data.vc_dig_tr_ex"
                             />
                         </field>
 
                         <field label="Heat Capacity (heat_capacity)"
-                            required
-                            hint="Heat capacity in J/kgK at a certain temperature (average of flow and return temperatures).">
+                               required
+                               hint="Heat capacity in J/kgK at a certain temperature (average of flow and return temperatures).">
                             <TextInput
                                 v-model="form.extra.input_data.heat_capacity"
                                 unit="J/kgK"
@@ -364,8 +383,8 @@
                         </field>
 
                         <field label="Water Density (water_den)"
-                            required
-                            hint="Water density in kg/m3 at a certain temperature (average of flow and return temperatures).">
+                               required
+                               hint="Water density in kg/m3 at a certain temperature (average of flow and return temperatures).">
                             <TextInput
                                 v-model="form.extra.input_data.water_den"
                                 unit="kg/m3"
@@ -373,8 +392,8 @@
                         </field>
 
                         <field label="Cost Factor Street vs Terrain (factor_street_terrain)"
-                            required
-                            hint="Determines how much cheaper it is to lay 1 m of pipe into a terrain than into a street. Expressed in decimals: 0.1 means it is 10% cheaper.">
+                               required
+                               hint="Determines how much cheaper it is to lay 1 m of pipe into a terrain than into a street. Expressed in decimals: 0.1 means it is 10% cheaper.">
                             <TextInput
                                 v-model="form.extra.input_data.factor_street_terrain"
                                 unit="%/100"
@@ -382,8 +401,8 @@
                         </field>
 
                         <field label="Cost Factor Street vs Overland (factor_street_overland)"
-                            required
-                            hint="Determines how much cheaper it is to place 1 m of the pipe over the ground than putting it into the street. Expressed in decimals: 0.4 means it is 40% cheaper.">
+                               required
+                               hint="Determines how much cheaper it is to place 1 m of the pipe over the ground than putting it into the street. Expressed in decimals: 0.4 means it is 40% cheaper.">
                             <TextInput
                                 v-model="form.extra.input_data.factor_street_overland"
                                 unit="%/100"
@@ -401,10 +420,11 @@
 
                 </div>
                 <!-- TEO -->
-                <div v-show="currentStep === 3"  class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div v-show="currentStep === 3"
+                     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
-                    <field label="Regions"  class="mt-1 relative rounded-md shadow-sm"
-                        hint="It sets the regions to be modelled, e.g. different countries, cities, counties etc. For the prupose of this analysis it is enough to have one region name. For each of them, the supply-demand balances for all the energy vectors are ensured. In some occasions it might be computationally more convenient to model different countries within the same region and differentiate them simply by creating ad hoc fuels and technologies for each of them.">
+                    <field label="Regions" class="mt-1 relative rounded-md shadow-sm"
+                           hint="It sets the regions to be modelled, e.g. different countries, cities, counties etc. For the prupose of this analysis it is enough to have one region name. For each of them, the supply-demand balances for all the energy vectors are ensured. In some occasions it might be computationally more convenient to model different countries within the same region and differentiate them simply by creating ad hoc fuels and technologies for each of them.">
 
                         <VSelect :options="regions"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
@@ -413,7 +433,7 @@
                     </field>
 
                     <field label="Emissions" class="mt-1 relative rounded-md shadow-sm"
-                        hint="It includes any kind of emission potentially deriving from the operation of the defined technologies. Typical examples would include atmospheric emissions of greenhouse gasses, such as CO2. The user must fill in 'co2' as a mandatory entry. Other entries are also allowed">
+                           hint="It includes any kind of emission potentially deriving from the operation of the defined technologies. Typical examples would include atmospheric emissions of greenhouse gasses, such as CO2. The user must fill in 'co2' as a mandatory entry. Other entries are also allowed">
 
                         <VSelect :options="emissions"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
@@ -422,7 +442,7 @@
                     </field>
 
                     <field label="Time resolution (TIMESLICE)"
-                        hint="It represents the time split of each modelled year, therefore the time resolution of the model.">
+                           hint="It represents the time split of each modelled year, therefore the time resolution of the model.">
                         <SelectMenu
                             :modelValue="timeslices.find((item) => item.key == form.extra.input_data.platform_sets.TIMESLICE)"
                             @update:modelValue="(val) => form.extra.input_data.platform_sets.TIMESLICE = val.key"
@@ -431,8 +451,8 @@
                     </field>
 
                     <field label="Time period (YEAR)"
-                        hint="It represents the time frame of the model, it contains all the years to be considered in the analysis. ">
-                        <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.YEAR"
+                           hint="It represents the time frame of the model, it contains all the years to be considered in the analysis. ">
+                        <VSelect taggable multiple v-model="form.extra.input_data.platform_sets.YEAR"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                         ></VSelect>
                         <p class="mt-2 text-sm text-gray-500 text-justify">
@@ -440,10 +460,21 @@
                         </p>
                     </field>
 
-                    <field label="Mode of operation (MODE_OF_OPERATION)"
-                        hint="It defines the number of modes of operation that the technologies can have. If a technology can have various input or output fuels and it can choose the mix (i.e. any linear combination) of these input or output fuels, each mix can be accounted as a separate mode of operation.  The user must input at least 1 mode of operation. There muts be two modes of operation if storage is used in the model">
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_teo = val.id }"
+                                 :modelValue="form.extra.solver_teo"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
+                    </field>
 
-                        <VSelect taggable multiple  v-model="form.extra.input_data.platform_sets.MODE_OF_OPERATION"
+                    <field label="Mode of operation (MODE_OF_OPERATION)"
+                           hint="It defines the number of modes of operation that the technologies can have. If a technology can have various input or output fuels and it can choose the mix (i.e. any linear combination) of these input or output fuels, each mix can be accounted as a separate mode of operation.  The user must input at least 1 mode of operation. There muts be two modes of operation if storage is used in the model">
+
+                        <VSelect taggable multiple v-model="form.extra.input_data.platform_sets.MODE_OF_OPERATION"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
                                  sm:text-base border-gray-300 rounded-md"
                         />
@@ -451,10 +482,10 @@
                     </field>
 
                     <field
-                           hint="It includes storage facilities in the model."
-                           class="mt-1 relative rounded-md shadow-sm">
+                        hint="It includes storage facilities in the model."
+                        class="mt-1 relative rounded-md shadow-sm">
                         <PrimaryButton
-                         @click="pushNewStorage">
+                            @click="pushNewStorage">
                             Add new Storage
                         </PrimaryButton>
 
@@ -469,47 +500,52 @@
                                     </field>
 
                                     <field label="Storage capital cost"
-                                        hint="Investment costs of storage additions, defined per unit of storage capacity.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].capital_cost_storage"
-                                                     type="number"
-                                                     unit="€/kWh"/>
+                                           hint="Investment costs of storage additions, defined per unit of storage capacity.">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].capital_cost_storage"
+                                            type="number"
+                                            unit="€/kWh"/>
                                     </field>
 
                                     <field label="Storage discount rate"
-                                        hint="Storage specific value for the discount rate, expressed in decimals ">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].dicount_rate_sto"
-                                         type="number"/>
+                                           hint="Storage specific value for the discount rate, expressed in decimals ">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].dicount_rate_sto"
+                                            type="number"/>
                                     </field>
 
                                     <field label="Storage operational life"
-                                        hint="Useful lifetime of the storage facility.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].operational_life_sto"
-                                         type="number"
-                                        unit="years"/>
+                                           hint="Useful lifetime of the storage facility.">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].operational_life_sto"
+                                            type="number"
+                                            unit="years"/>
                                     </field>
 
                                     <field label="Storage maximum charge rate"
-                                        hint="Maximum charging rate for the storage">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].storage_max_charge"
-                                        type="number"
-                                        unit="kWh"/>
+                                           hint="Maximum charging rate for the storage">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_max_charge"
+                                            type="number"
+                                            unit="kWh"/>
                                     </field>
 
                                     <field label="Storage maximum discharge rate"
-                                        hint="Maximum discharging rate for the storage">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].storage_max_discharge"
-                                        type="number"
-                                        unit="kWh"/>
+                                           hint="Maximum discharging rate for the storage">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_max_discharge"
+                                            type="number"
+                                            unit="kWh"/>
                                     </field>
 
                                     <field label="Storage length to diameter ratio"
-                                        hint="Binary parameter which indicates the length to diameter ratio of the thermal energy storage tank. Value is 0 if the L2D is 2 and is 1 if the L2D is 4.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].l2d"
-                                         type="number"/>
+                                           hint="Binary parameter which indicates the length to diameter ratio of the thermal energy storage tank. Value is 0 if the L2D is 2 and is 1 if the L2D is 4.">
+                                        <text-input v-model="form.extra.input_data.platform_storages[index].l2d"
+                                                    type="number"/>
                                     </field>
 
                                     <field label="Storage heating tag"
-                                        hint="Binary parameter indicating whether the thermal energy storage is connected to the district heating network. Yes if it is connected and No is if is not.">
+                                           hint="Binary parameter indicating whether the thermal energy storage is connected to the district heating network. Yes if it is connected and No is if is not.">
                                         <SelectMenu
                                             :modelValue="binaryOptions.find((item) => item.key == form.extra.input_data.platform_storages[index].tag_heating)"
                                             :options="binaryOptions"
@@ -518,7 +554,7 @@
                                     </field>
 
                                     <field label="Storage cooling tag"
-                                    hint=" Binary parameter indicating whether the thermal energy storage is connected to the district cooling network. Yes if it is connected and No is if is not.">
+                                           hint=" Binary parameter indicating whether the thermal energy storage is connected to the district cooling network. Yes if it is connected and No is if is not.">
                                         <SelectMenu
                                             :modelValue="binaryOptions.find((item) => item.key == form.extra.input_data.platform_storages[index].tag_cooling)"
                                             :options="binaryOptions"
@@ -527,52 +563,58 @@
                                     </field>
 
                                     <field label="Storage hot water return temperature"
-                                        hint="The return water temperature in the heating grid where the thermal energy storage is connected.">
-                                        <text-input v-model="form.extra.input_data.platform_storages[index].storage_return_temp"
-                                        type="number"
-                                        unit="Cº"/>
+                                           hint="The return water temperature in the heating grid where the thermal energy storage is connected.">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_return_temp"
+                                            type="number"
+                                            unit="Cº"/>
                                     </field>
 
                                     <field label="Storage hot water supply temperature"
-                                        hint="The temperature of water inflow into thermal energy storage.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].storage_supply_temp"
-                                        type="number"
-                                        unit="C°"/>
+                                           hint="The temperature of water inflow into thermal energy storage.">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_supply_temp"
+                                            type="number"
+                                            unit="C°"/>
                                     </field>
 
                                     <field label="Average ambient temperature of the region"
-                                        hint="The average ambient temperature of the locations where the thermal energy storage is located.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].storage_ambient_temp"
-                                        type="number"
-                                        unit="C°"/>
+                                           hint="The average ambient temperature of the locations where the thermal energy storage is located.">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_ambient_temp"
+                                            type="number"
+                                            unit="C°"/>
                                     </field>
 
                                     <field label="Residual storage capacity"
-                                        hint="Exogenously defined storage capacities at the start of the modeling period">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].residual_storage_capacity"
-                                        type="number"
-                                        unit="kWh"/>
+                                           hint="Exogenously defined storage capacities at the start of the modeling period">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].residual_storage_capacity"
+                                            type="number"
+                                            unit="kWh"/>
                                     </field>
 
                                     <field label="Maximum storage capacity"
-                                        hint="Maximum allowed capacity of each storage in a year">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].max_storage_capacity"
-                                        type="number"
-                                        unit="kWh"/>
+                                           hint="Maximum allowed capacity of each storage in a year">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].max_storage_capacity"
+                                            type="number"
+                                            unit="kWh"/>
                                     </field>
 
                                     <field label="Starting level of storage"
-                                        hint="Level of storage at the beginning of first modelled year">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].storage_level_start"
-                                         type="number"
-                                         unit="kWh"/>
+                                           hint="Level of storage at the beginning of first modelled year">
+                                        <text-input
+                                            v-model="form.extra.input_data.platform_storages[index].storage_level_start"
+                                            type="number"
+                                            unit="kWh"/>
                                     </field>
 
                                     <field label="Heat transfer co-efficent of the thermal storage"
-                                        hint="Heat transfer co-efficient of the thermal energy storage tank.">
-                                        <text-input  v-model="form.extra.input_data.platform_storages[index].u_value"
-                                        type="number"
-                                        unit="W/m2  °C"/>
+                                           hint="Heat transfer co-efficient of the thermal energy storage tank.">
+                                        <text-input v-model="form.extra.input_data.platform_storages[index].u_value"
+                                                    type="number"
+                                                    unit="W/m2  °C"/>
                                     </field>
 
                                 </PropertyDisclosure>
@@ -584,8 +626,9 @@
 
                     <field label="Annual emission limit (CO2)"
                            hint="Annual upper limit for a specific emission generated in the whole modelled region.">
-                        <text-input  v-model="form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit"
-                                     unit="kg"/>
+                        <text-input
+                            v-model="form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit"
+                            unit="kg"/>
                     </field>
 
                     <field label="Maximum Budget limit (platform_budget_limit)"
@@ -597,10 +640,11 @@
                     </field>
                 </div>
                 <!-- MARKET -->
-                <div v-show="currentStep === 4" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div v-show="currentStep === 4"
+                     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
                     <field label="Market Design (md)"
-                     hint="centralized or decentralized are the options; Select centralized for the simplest simulation.">
+                           hint="centralized or decentralized are the options; Select centralized for the simplest simulation.">
                         <SelectMenu
                             :modelValue="marketProfiles.find((item) => item.key === form.extra.input_data.user.md)"
                             :options="marketProfiles"
@@ -609,7 +653,7 @@
                     </field>
 
                     <field label="Horizon Basis(horizon_basis)"
-                        hint="weeks, months, or years. ">
+                           hint="weeks, months, or years. ">
                         <SelectMenu
                             :modelValue="horizonBasisProfiles.find((item) => item.key === form.extra.input_data.user.horizon_basis)"
                             :options="horizonBasisProfiles"
@@ -619,11 +663,22 @@
                     </field>
 
                     <field label="Recurrence Period (recurrence)"
-                        hint="how many of those horizons do you want to simulate ">
+                           hint="how many of those horizons do you want to simulate ">
                         <TextInput
                             v-model="form.extra.input_data.user.recurrence"
                             type="number"
                         />
+                    </field>
+
+                    <field label="Solver" required>
+                        <VSelect :options="solvers"
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="id"
+                                 @update:modelValue="(val) => { form.extra.solver_market = val.id }"
+                                 :modelValue="form.extra.solver_market"/>
+                        <p class="mt-2 text-sm text-gray-500 text-justify">
+                            The simulation solver
+                        </p>
                     </field>
 
                     <field label="Data Profile (data_profile)"
@@ -637,14 +692,14 @@
 
                     <field label="Yearly Demand Rate (yearly_demand_rate)"
                            v-show="isGreaterThanOneYear"
-                        hint="How much is the demand increasing per year? Not relevant if you are simulating 1 year or less.">
+                           hint="How much is the demand increasing per year? Not relevant if you are simulating 1 year or less.">
                         <TextInput
                             v-model="form.extra.input_data.user.yearly_demand_rate"
                         />
                     </field>
 
                     <field label="Date (start_datetime)"
-                        hint="What date does your input data start? what day do you want to start from?">
+                           hint="What date does your input data start? what day do you want to start from?">
                         <!-- TODO: datetime component -->
                         <TextInput
                             v-model="form.extra.input_data.user.start_datetime"
@@ -652,8 +707,8 @@
                     </field>
 
                     <field label="Product Differentiation Option (prod_diff_option)"
-                        v-show="form.extra.input_data.user.md !== 'centralized'"
-                        hint="in case md=decentralized, this is relevant, otherwise not. noPref, co2Emissions or networkDistance are the options.">
+                           v-show="form.extra.input_data.user.md !== 'centralized'"
+                           hint="in case md=decentralized, this is relevant, otherwise not. noPref, co2Emissions or networkDistance are the options.">
                         <SelectMenu
                             :modelValue="productDiffProfiles.find((item) => item.key === form.extra.input_data.user.prod_diff_option)"
                             :options="productDiffProfiles"
@@ -667,16 +722,17 @@
                             <div>
                                 <div class="flex justify-between">
                                     <label for="sim_utils" class="block text-sm font-medium text-gray-700 flex gap-2">
-                                        Maximum willingness to pay (util) <ToggleButton label="Use constant value" v-model="form.extra.isConstantUtil"/>
+                                        Maximum willingness to pay (util)
+                                        <ToggleButton label="Use constant value" v-model="form.extra.isConstantUtil"/>
                                     </label>
                                 </div>
 
                                 <TextInput v-if="form.extra.isConstantUtil"
-                                    unit="€/kWh"
-                                    v-model="form.extra.input_data.user.util[0]"
+                                           unit="€/kWh"
+                                           v-model="form.extra.input_data.user.util[0]"
                                 />
 
-                                <div v-else id="sim_utils" class="mt-1 relative rounded-md shadow-sm" >
+                                <div v-else id="sim_utils" class="mt-1 relative rounded-md shadow-sm">
                                     <field :label="sink.name" v-for="(sink,index) in form.extra.sinks">
                                         <TextInput
                                             unit="€/kWh"
@@ -687,7 +743,8 @@
                                 <p class="mt-2 text-sm text-gray-500 text-justify">
                                     The amount to pay for energy for each sink
                                 </p>
-                                <JetInputError v-show="form.errors.simulation_metadata" :message="form.errors.simulation_metadata" class="mt-2"/>
+                                <JetInputError v-show="form.errors.simulation_metadata"
+                                               :message="form.errors.simulation_metadata" class="mt-2"/>
                             </div>
                         </div>
 
@@ -695,25 +752,26 @@
 
                 </div>
                 <!-- Business module -->
-                <div v-show="currentStep === 5" class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+                <div v-show="currentStep === 5"
+                     class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
 
                     <field label="Socio-economic and private business discount rate % (discount_rate)"
-                       required
-                        hint="unit %">
+                           required
+                           hint="unit %">
                         <VSelect taggable multiple v-model="form.extra.input_data.discount_rate"
                                  class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
                                  sm:text-base border-gray-300 rounded-md"/>
 
                     </field>
                     <field label="Life time in years of the project (project_duration)"
-                        required
-                        hint="unit Years">
+                           required
+                           hint="unit Years">
                         <TextInput
                             v-model="form.extra.input_data.project_duration"
                         />
                     </field>
                     <field label="CO2 intensity of the existing supply at the sink (co2_intensity)"
-                        hint="The co2 intensity of the heat supply being used at sinks before the excess heat utilization project">
+                           hint="The co2 intensity of the heat supply being used at sinks before the excess heat utilization project">
                         <TextInput
                             unit="kg/kWh"
                             v-model="form.extra.input_data.co2_intensity"
@@ -722,8 +780,8 @@
                     </field>
 
                     <field label="Grid ownership (actorshare)"
-                        required
-                        hint="Grid ownership structure represents how the cost of the heat distribution network will be shared among the actors.
+                           required
+                           hint="Grid ownership structure represents how the cost of the heat distribution network will be shared among the actors.
                         Actors represents the company/entities involved. If you are not sure about actors involed in your project, then each source and sink is an actor.
                         For example, if there are two sources and one sink then there are 3 actors in total.
                         Grid ownership represents how the cost of network will be divided among these actors.
@@ -738,26 +796,27 @@
                         />
 
                         <!--                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"-->
-    <!--                             :createOption="pushNewOptions"-->
-    <!--                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full-->
-    <!--                             sm:text-base border-gray-300 rounded-md"/>-->
+                        <!--                             :createOption="pushNewOptions"-->
+                        <!--                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full-->
+                        <!--                             sm:text-base border-gray-300 rounded-md"/>-->
                     </field>
 
                     <PropertyDisclosure title="Advanced properties" class="sm:col-span-3" default-open>
 
-                            <field label="Owner / Technology" v-for="(technologyOwnership, index) in totalSinkSourcesSelected" >
+                        <field label="Owner / Technology"
+                               v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
 
-                                <VSelect multiple
-                                         :options="technologyOwnershipOptions"
-                                         v-model="form.extra.input_data.rls[index]"
-                                         :selectable="() => form.extra.input_data.rls[index].length < 2"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                            <VSelect multiple
+                                     :options="technologyOwnershipOptions"
+                                     v-model="form.extra.input_data.rls[index]"
+                                     :selectable="() => form.extra.input_data.rls[index].length < 2"
+                                     class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
                                  sm:text-base border-gray-300 rounded-md"
-                                />
+                            />
 
-                            </field>
+                        </field>
 
-                        <field label="Owner Map " v-for="(technologyOwnership, index) in totalSinkSourcesSelected" >
+                        <field label="Owner Map " v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
 
                             <VSelect multiple
                                      :options="technologyOwnershipOptions"
@@ -791,14 +850,14 @@
                           Next
                         </span>
                     <span v-else @click="confirmingSimulationCreation = true">
-                          {{formTitle}}
+                          {{ formTitle }}
                         </span>
                 </PrimaryButton>
 
                 <PrimaryButton v-if="mode == 'update' && currentStep !== steps.length"
-                    type="button">
+                               type="button">
                     <span @click="confirmingSimulationCreation = true">
-                          {{formTitle}}
+                          {{ formTitle }}
                     </span>
                 </PrimaryButton>
             </template>
@@ -807,10 +866,10 @@
             <jet-confirmation-modal
                 :show="confirmingSimulationCreation"
                 @close="confirmingSimulationCreation = false">
-                <template #title> {{ formTitle }} </template>
+                <template #title> {{ formTitle }}</template>
 
                 <template #content>
-                    are you sure you want to {{mode}} the simulation?
+                    are you sure you want to {{ mode }} the simulation?
                 </template>
 
                 <template #footer>
@@ -914,7 +973,7 @@ export default {
 
     },
 
-    setup(props) {
+    setup (props) {
         const store = useStore();
 
         const selectedMarker = computed(
@@ -937,31 +996,49 @@ export default {
         const confirmingSimulationCreation = ref(false);
         const file = ref(null);
 
-        const resolutions = [{key: 'low', value: 'Low'},{key:'high', value:'High'}]
-        const marketProfiles = [{key:'centralized', value: 'Centralized'},{key:'decentralized', value: 'Decentralized'}, {key: 'pool', value: 'Pool'},{key:'p2p', value:'P2P'},{key:'community', value:'Community'}]
-        const dataProfiles = [{key: 'hourly', value: 'Hourly'},{key:'daily', value:'Daily'}]
-        const horizonBasisProfiles= [{key: 'weekly', value: 'Weekly'},{key:'monthly', value:'Monthly'},{key:'years', value:'Years'} ]
-        const productDiffProfiles= [{key: 'noPref', value: 'noPref'},{key:'co2Emissions', value:'Co2 Emissions'},{key:'networkDistance', value:'Network Distance'} ]
-        const binaryOptions = [{key: '1', value: 'Yes'},{key:'0', value:'No'}]
+        const resolutions = [{key: 'low', value: 'Low'}, {key: 'medium_low', value: 'Medium Low'}, {
+            key: 'medium_high',
+            value: 'Medium High'
+        }, {key: 'high', value: 'High'}]
+        const marketProfiles = [{key: 'centralized', value: 'Centralized'}, {
+            key: 'decentralized',
+            value: 'Decentralized'
+        }, {key: 'pool', value: 'Pool'}, {key: 'p2p', value: 'P2P'}, {key: 'community', value: 'Community'}]
+        const dataProfiles = [{key: 'hourly', value: 'Hourly'}, {key: 'daily', value: 'Daily'}]
+        const horizonBasisProfiles = [{key: 'weekly', value: 'Weekly'}, {
+            key: 'monthly',
+            value: 'Monthly'
+        }, {key: 'years', value: 'Years'}]
+        const productDiffProfiles = [{key: 'noPref', value: 'noPref'}, {
+            key: 'co2Emissions',
+            value: 'Co2 Emissions'
+        }, {key: 'networkDistance', value: 'Network Distance'}]
+        const binaryOptions = [{key: '1', value: 'Yes'}, {key: '0', value: 'No'}]
         const regions = COUNTRIES.map((country) => country.name)
-        const timeslices = [{key:'monthly', value:'Monthly'},{key: 'weekly', value: 'Weekly'},{key: 'daily', value: 'Daily'},
-            {key: 'quad-hourly', value: 'Quad-hourly'}, {key: 'bi-hourly', value: 'Bi-hourly'}, {key: 'hourly', value: 'Hourly'}]
+        const timeslices = [{key: 'monthly', value: 'Monthly'}, {key: 'weekly', value: 'Weekly'}, {
+            key: 'daily',
+            value: 'Daily'
+        },
+            {key: 'quad-hourly', value: 'Quad-hourly'}, {key: 'bi-hourly', value: 'Bi-hourly'}, {
+                key: 'hourly',
+                value: 'Hourly'
+            }]
         const emissions = ["co2"]
 
 
         const platformStorages = computed(() => {
-            if(!form.extra.input_data.platform_storages) {
+            if (!form.extra.input_data.platform_storages) {
                 return []
             }
 
-            return  form.extra.input_data.platform_storages.map((item) => item.storage) || []
+            return form.extra.input_data.platform_storages.map((item) => item.storage) || []
         });
 
         const pushNewStorage = () => {
-            let lastStorageIndex = platformStorages.value.length +1
+            let lastStorageIndex = platformStorages.value.length + 1
             form.extra.input_data.platform_storages.push(
                 {
-                    "storage": "Storage"+lastStorageIndex,
+                    "storage": "Storage" + lastStorageIndex,
                     "capital_cost_storage": 750,
                     "dicount_rate_sto": 0.04,
                     "operational_life_sto": 100,
@@ -1016,13 +1093,12 @@ export default {
                 },
             ]
 
-            if(form.simulation_metadata.data.identifier == 'demo_simulation')
-            {
+            if (form.simulation_metadata.data.identifier == 'demo_simulation') {
 
-                if(form.simulation_metadata.data.hasOwnProperty('modules')) {
+                if (form.simulation_metadata.data.hasOwnProperty('modules')) {
                     let modules = form.simulation_metadata.data.modules
 
-                    return steps.concat(fullSimulationStep.filter((item) => modules.includes(item.name.toLowerCase()) ) )
+                    return steps.concat(fullSimulationStep.filter((item) => modules.includes(item.name.toLowerCase())))
                 } else {
 
                     steps = steps.concat(fullSimulationStep)
@@ -1034,21 +1110,21 @@ export default {
         });
 
         const isFullSimulation = computed(() => form.simulation_metadata.data.identifier === 'demo_simulation');
-        const isORCSimulation  = computed(() => form.simulation_metadata.data.identifier === 'convert_orc');
+        const isORCSimulation = computed(() => form.simulation_metadata.data.identifier === 'convert_orc');
         const isPinchAnalysisSimulation = computed(() => form.simulation_metadata.data.identifier === 'pinch_simulation');
 
-        const totalSinkSourcesSelected = computed( () => form.extra.sinks.length + form.extra.sources.length)
+        const totalSinkSourcesSelected = computed(() => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
 
             let technologyOwnershipMap = []
             form.extra.input_data.rls = []
             form.extra.input_data.rls_map = []
             let index = 1;
-            for(let sourceIndex in form.extra.sources) {
+            for (let sourceIndex in form.extra.sources) {
                 let sourceId = form.extra.sources[sourceIndex].id
                 let sourceName = form.extra.sources[sourceIndex].name
-                var ownership = 'source '+sourceId
-                var technology =  `source ${sourceId} ext tech`
+                var ownership = 'source ' + sourceId
+                var technology = `source ${sourceId} ext tech`
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
                 form.extra.input_data.rls.push([ownership, technology])
@@ -1056,11 +1132,11 @@ export default {
                 index++
             }
 
-            for(let sinkIndex in form.extra.sinks) {
+            for (let sinkIndex in form.extra.sinks) {
                 let sinkId = form.extra.sinks[sinkIndex].id
                 let sinkName = form.extra.sinks[sinkIndex].name
-                var ownership = 'sink '+sinkId
-                var technology =  `sink ${sinkId} utl tech`
+                var ownership = 'sink ' + sinkId
+                var technology = `sink ${sinkId} utl tech`
 
                 technologyOwnershipMap.push(ownership)
                 technologyOwnershipMap.push(technology)
@@ -1083,19 +1159,22 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
+                solver_teo: 'SCIP',
+                solver_gis: 'SCIP',
+                solver_market: 'SCIP',
                 file: null,
                 isConstantUtil: true,
                 input_data: {
                     pinch_analysis: {
-                      interest_rate: 0.04,
-                      pinch_delta_T_min: 20,
-                      lifetime: 20,
-                      number_output_options: 3,
+                        interest_rate: 0.04,
+                        pinch_delta_T_min: 20,
+                        lifetime: 20,
+                        number_output_options: 3,
                     },
                     get_best_number: 3,
                     orc_years_working: 25,
-                    orc_T_evap:110,
-                    orc_T_cond:35,
+                    orc_T_evap: 110,
+                    orc_T_cond: 35,
                     actorshare: "[1]",
                     rls: [],
                     rls_map: [],
@@ -1229,13 +1308,13 @@ export default {
             },
         });
 
-        if(props.simulationInputs) {
+        if (props.simulationInputs) {
             form.simulation_metadata = props.simulation_metadata.find((item) => item.id === props.simulationMetadataId)
             form.name = props.simulationInputs.name
             form.extra = JSON.parse(JSON.stringify(props.simulationInputs.extra));
             nextTick(() => {
                 form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
-                if(!form.extra.input_data.user) {
+                if (!form.extra.input_data.user) {
                     form.extra.input_data.user = {"util": []}
                 }
             })
@@ -1249,8 +1328,8 @@ export default {
                 0
             )
             let list = JSON.parse(data)
-            if(list) {
-                for(var i = list.length; i < (totalOfStreams+form.extra.sources.length); i++) {
+            if (list) {
+                for (var i = list.length; i < (totalOfStreams + form.extra.sources.length); i++) {
                     list[i] = 0
                 }
             }
@@ -1258,7 +1337,7 @@ export default {
             return list
         }
 
-        const convertListToNumeric = (input)  => {
+        const convertListToNumeric = (input) => {
             for (let index in input) {
                 input[index] = Number(input[index])
             }
@@ -1266,12 +1345,12 @@ export default {
         }
 
         const onSubmit = () => {
-            if(file && file.value) {
+            if (file && file.value) {
                 form.extra.file = file.value.files[0]
             }
 
             form.transform((data) => {
-                if(form.simulation_metadata.data.type !== 'standalone') {
+                if (form.simulation_metadata.data.type !== 'standalone') {
 
                     data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
                     data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
@@ -1303,7 +1382,7 @@ export default {
 
 
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
-                    if(form.extra.isConstantUtil) {
+                    if (form.extra.isConstantUtil) {
 
                         let totalOfStreams = 0
                         let constantValue = data.extra.input_data.user.util[0]
@@ -1313,7 +1392,7 @@ export default {
                                 0
                             )
 
-                            for( let i=0; i < totalOfStreams; i++) {
+                            for (let i = 0; i < totalOfStreams; i++) {
                                 data.extra.input_data.user.util[i] = Number(constantValue)
                             }
                         } catch (e) {
@@ -1327,27 +1406,29 @@ export default {
                     data.extra.input_data.platform_sets.STORAGE = platformStorages.value
                 }
 
-              return data
+                return data
             })
 
-            if(props.mode === 'update') {
-                form.patch(route('projects.simulations.update', {project: props.project.id, simulation: props.simulationId}), {
-                        onError: (errors) => {
-                            confirmingSimulationCreation.value = false
-                        }
-                    });
+            if (props.mode === 'update') {
+                form.patch(route('projects.simulations.update', {
+                    project: props.project.id,
+                    simulation: props.simulationId
+                }), {
+                    onError: (errors) => {
+                        confirmingSimulationCreation.value = false
+                    }
+                });
 
             } else {
-                    form.post(route('projects.simulations.store', {id: props.project.id}), {
-                        onError: (errors) => {
-                            confirmingSimulationCreation.value = false
-                        }
-                    });
+                form.post(route('projects.simulations.store', {id: props.project.id}), {
+                    onError: (errors) => {
+                        confirmingSimulationCreation.value = false
+                    }
+                });
             }
 
 
         };
-
 
 
         const onCancel = () => {
@@ -1412,6 +1493,13 @@ export default {
                 }
             });
         };
+
+        const solvers = [
+            {name: 'SCIP', id: 'SCIP'},
+            {name: 'GUROBI', id: 'GUROBI'},
+            {name: 'HIGHS', id: 'HIGHS'},
+            {name: 'COPT', id: 'COPT'}
+        ]
 
         const onDeselected = (value) => {
             store.dispatch("map/unsetLink", value.id);
@@ -1499,23 +1587,23 @@ export default {
             {immediate: true, deep: true}
         );
 
-       const isGreaterThanOneYear = computed( () => {
+        const isGreaterThanOneYear = computed(() => {
 
             let result = false
-           switch (form.extra.input_data.user.horizon_basis) {
-               case "weekly":
-                   result = (form.extra.input_data.user.recurrence > 52)
-                   break
-               case "monthly":
-                   result = (form.extra.input_data.user.recurrence > 12)
-                   break
-               case "years":
-                   result = (form.extra.input_data.user.recurrence > 1)
-                   break
-           }
+            switch (form.extra.input_data.user.horizon_basis) {
+                case "weekly":
+                    result = (form.extra.input_data.user.recurrence > 52)
+                    break
+                case "monthly":
+                    result = (form.extra.input_data.user.recurrence > 12)
+                    break
+                case "years":
+                    result = (form.extra.input_data.user.recurrence > 1)
+                    break
+            }
             console.log(form.extra.input_data.user.horizon_basis, result)
             return result
-       })
+        })
 
         return {
             form,
@@ -1554,6 +1642,7 @@ export default {
             convertListToNumeric,
             pushNewOptions,
             completeActorShare,
+            solvers
 
 
         };

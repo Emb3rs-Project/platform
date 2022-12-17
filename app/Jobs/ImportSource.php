@@ -59,8 +59,8 @@ class ImportSource implements ShouldQueue
 
 
         $additionalSheet = [];
-
-        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet) {
+        $i = 1;
+        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet,&$i) {
             $bindLineAdd = [];
             collect($addLine)->each(function ($value, $key) use (&$bindLineAdd, $bindProps) {
                 if (array_key_exists($key, $bindProps)) {
@@ -75,12 +75,14 @@ class ImportSource implements ShouldQueue
             foreach ($props as $prop) {
                 if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
                     $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop], "[]");
-                } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
+                } else if (in_array($bindProps[$prop], ['sunday_on', 'saturday_on'])) {
                     $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop]) === 'yes' ? 1 : 0;
                 } else {
                     $values['data'][$bindProps[$prop]] = empty(Arr::get($addLine, $bindProps[$prop])) ? null : Arr::get($addLine, $bindProps[$prop]);
                 }
             }
+            $values['data']['id'] = $i;
+            $i++;
 
             foreach ($values['data'] as $key => $value) {
                 if ($value === null || $value === '') {
@@ -133,7 +135,7 @@ class ImportSource implements ShouldQueue
                     }
 
                     foreach ($values['properties'] as $key => $value) {
-                        if ($value === null || $value === '') {
+                        if (($value === null || $value === '')) {
                             unset($values['properties'][$key]);
                         }
                     }
@@ -147,13 +149,21 @@ class ImportSource implements ShouldQueue
 
                     if (!is_null(Arr::get($line, 'latitude')) && !is_null(Arr::get($line, 'longitude'))) {
                         // A new location was selected to be used for this Source
+                        $lat = Arr::get($line, 'latitude');
+                        $lng = Arr::get($line, 'longitude');
+                        if (str_contains($lat, ',')) {
+                            $lat = str_replace(',', '.', $lat);
+                        }
+                        if (str_contains($lng, ',')) {
+                            $lng = str_replace(',', '.', $lng);
+                        }
                         $location = Location::create([
                             'name' => Arr::get($line, 'name'),
                             'type' => 'point',
                             'data' => [
                                 "center" => [
-                                    Arr::get($line, 'latitude'),
-                                    Arr::get($line, 'longitude')
+                                    $lat,
+                                    $lng
                                 ]
                             ]
                         ]);

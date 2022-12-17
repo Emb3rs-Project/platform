@@ -26,7 +26,19 @@
                         <p><strong>created_at :</strong> {{ moment(session.created_at).format('DD/MM/YYYY HH:mm:ss') }}
                         </p>
                     </div>
+                    <div v-if="session.challenge.length > 0" class="flex">
+                        <jet-label value="Challenge Participation: "/> &nbsp;
+                        <jet-label :value="session.challenge[0].name"/>
+                    </div>
+                    <div v-else-if="isEnrolled" class="flex">
+                        <jet-label value="Submit Challenge Participation"/>
+                        <VSelect :options="challenges"
 
+                                 class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
+                                 label="name" value="pivot.id"
+                                 @update:modelValue="confirmEnroll = true"
+                                 v-model="challenge"/>
+                    </div>
                 </div>
 
                 <div class="py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
@@ -62,6 +74,10 @@
                              class="border border-red-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-red-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -91,6 +107,10 @@
                              class="border border-green-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 text-xs bg-green-50">
                             <p>Module : {{ report.module }} </p>
                             <p>Function : {{ report.function }} </p>
+                            <p>created_at : {{ moment(report.created_at).format('DD/MM/YYYY HH:mm:ss') }} </p>
+                            <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
+                                Solver : {{ solverModules[report.module] }} </p>
+                            <p>duration : {{ bench(report.created_at, report.function) }} </p>
                             <div class="my-2">
                                 <Disclosure v-slot="{ open }">
                                     <DisclosureButton
@@ -140,7 +160,14 @@
                                     class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full">Report
                                     <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon>
                                 </a>
-
+                                <a v-if="report.function === 'optimize_network'"
+                                   target="_blank"
+                                   style="margin-top: 10px"
+                                   :href="route('session.map.show', {session : report.id})"
+                                   class="bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full">Network
+                                    Report
+                                    <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon>
+                                </a>
                                 <a v-if="report.function === 'SIMULATION FINISHED' && shouldShowTheFinalReport"
                                    target="_blank"
                                    :href="route('session.final-report.show', {session : session.id})"
@@ -157,6 +184,27 @@
                 </div>
             </div>
         </div>
+        <jet-confirmation-modal
+            :show="confirmEnroll"
+            @close="confirmEnroll = false">
+            <template #title> Challenge Submit</template>
+
+            <template #content>
+                are you sure you want to submit to {{ challenge?.name }}?
+            </template>
+
+            <template #footer>
+                <SecondaryOutlinedButton @click="confirmEnroll = false">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton
+                    class="ml-2"
+                    @click="enroll">
+                    Confirm
+                </PrimaryButton>
+            </template>
+        </jet-confirmation-modal>
     </AppLayout>
 </template>
 
@@ -189,18 +237,67 @@ import {Inertia} from "@inertiajs/inertia";
 import axios from 'axios'
 import moment from 'moment'
 import JSZip from 'jszip'
+import JetLabel from "@/Jetstream/Label";
+import JetConfirmationModal from "@/Jetstream/ConfirmationModal";
+import {notify} from "@kyvg/vue3-notification";
 
 const props = defineProps({
     session: Object,
     reports: Array,
-    reportsHtml: Array
+    reportsHtml: Array,
+    challenges: Array,
+    solverModules: Object,
+    isEnrolled: Boolean
 });
 
 let downloadOption = ref({})
+let challenge = ref(null)
 const downloadOptions = [{label: 'CSV', value: 'csv'}, {label: 'JSON', value: 'json'}]
 
+const confirmEnroll = ref(false);
+const enroll = () => {
+    confirmEnroll.value = false
+    let value = challenge.value
+    axios.post('/submit-challenge', {
+        challenge_user: value?.pivot?.id,
+        challenge: value?.id,
+        session: props.session.id
+    }).then(({data}) => {
+        if (!data.error) {
+            notify({
+                group: "notifications",
+                title: "Challenge",
+                text: 'Simulation submitted.',
+                data: {
+                    type: "success",
+                },
+            });
+            Inertia.get(route('session.show', {id: props.session.id}))
+        }
+        confirmEnroll.value = false
+    })
+}
 
 const modulesJson = []
+let first = props.session.created_at
+let start = null
+
+const bench = (date, functi) => {
+    if (functi === 'SIMULATION STARTED') {
+        first = date
+        start = date
+        return '0:00:00'
+    } else if (functi === 'SIMULATION FINISHED') {
+        let ms = moment(date).diff(moment(start));
+        let d = moment.duration(ms);
+        return Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+    }
+    let ms = moment(date).diff(moment(first));
+    let d = moment.duration(ms);
+    let s = Math.floor(d.asHours()) + moment.utc(ms).format(":mm:ss");
+    first = date
+    return s
+}
 
 const stepInfo = computed(() => {
     return []
@@ -253,7 +350,7 @@ const back = () => Inertia.get(route('projects.simulations.show', {
 }))
 
 const downloadFullJson = (isJson) => {
-    return axios.post('/csv-report/'+props.session.id, {
+    return axios.post('/csv-report/' + props.session.id, {
         isJson
     })
         .then(({data}) => {
@@ -269,7 +366,7 @@ const downloadData = async (event) => {
         let data = await downloadFullJson(false)
         const zip = new JSZip();
         await zip.loadAsync(data, {base64: true});
-        const blob = await zip.generateAsync({type:"blob"});
+        const blob = await zip.generateAsync({type: "blob"});
 
         const element = document.createElement("a");
         element.setAttribute("href", window.URL.createObjectURL(blob));
@@ -281,7 +378,7 @@ const downloadData = async (event) => {
     }
 }
 
-const downloadInputs = async (data,exportName, simulationId) => {
+const downloadInputs = async (data, exportName, simulationId) => {
     const extra = await getJsonFrom('extra', simulationId)
     console.log(extra)
     downloadObjectAsJson(JSON.stringify({...extra, ...data}), exportName)
@@ -307,7 +404,7 @@ const downloadObjectAsJson = async (exportObj, exportName, id = null, type = nul
 
 const getJsonFrom = async (type, id, convert = true) => {
     let report = props.reports.find(report => report.id === id)
-    if (type ===  'extra' || (report[type] && report[type][0] === 'Loading...' || report[type] === '["Loading..."]')) {
+    if (type === 'extra' || (report[type] && report[type][0] === 'Loading...' || report[type] === '["Loading..."]')) {
         return axios.post(`/json-report/${type}/${id}`)
             .then(({data}) => {
                 if (type === 'extra') {

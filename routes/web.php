@@ -179,9 +179,22 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('/challenges', ChallengeController::class)
         ->whereNumber(['chalenge']);
 
+    Route::post('/enroll-challenge',[ChallengeController::class, 'enroll']);
+    Route::post('/submit-challenge',[ChallengeController::class, 'submit']);
+
     // Help
     Route::resource('/help', HelpController::class)->only(['index'])
         ->whereNumber(['help']);
+
+    Route::resource('/sinks', SinkController::class)
+        ->whereNumber(['sink']);
+
+    Route::post('/sinks/export', [SinkController::class, 'export']);
+
+    Route::resource('/sources', SourceController::class)
+        ->whereNumber(['source']);
+
+    Route::post('/sources/export', [SourceController::class, 'export']);
 
     // News
     Route::resource('/news', NewsController::class)->only(['index', 'show'])

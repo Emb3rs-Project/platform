@@ -1,4 +1,4 @@
-<template>
+x<template>
     <div class="h-screen flex overflow-hidden bg-white">
         <TransitionRoot
             as="template"
@@ -581,6 +581,9 @@ import {
     CogIcon,
 } from "@heroicons/vue/solid";
 
+import SinkIcon from "../Components/Icons/SinkIcon";
+import SourceIcon from "../Components/Icons/SourceIcon";
+
 window.Pusher = require('pusher-js')
 
 const navigation = [
@@ -626,7 +629,7 @@ const navigation = [
         icon: ViewListIcon,
     },
     {
-        name: "Challenge",
+        name: "Challenges",
         href: {
             index: {
                 location: "challenges.index",
@@ -654,6 +657,22 @@ const navigation = [
             },
         },
         icon: SupportIcon,
+    },{
+        name: "Sinks",
+        href: {
+            index: {
+                location: "sinks.index",
+            },
+        },
+        icon: SinkIcon,
+    },{
+        name: "Sources",
+        href: {
+            index: {
+                location: "sources.index",
+            },
+        },
+        icon: SourceIcon,
     },
 ];
 
@@ -675,6 +694,7 @@ export default {
         PencilAltIcon,
         SearchIcon,
         SelectorIcon,
+
         XIcon,
         ApplicationLogo,
         CogIcon,

@@ -73,25 +73,37 @@
 <script>
 
     let edges = JSON.parse(@json($edges));
-    let edgesSolution = JSON.parse(@json($edgesSolution));
-    let sinksToMap = JSON.parse(@json($sinksToMap));
+    let nodes = JSON.parse(@json($nodes));
     let sourcesToMap = JSON.parse(@json($sourcesToMap));
-    let polygon = @json($polygon);
+    let sinksToMap = JSON.parse(@json($sinksToMap));
+
+    function getLatLongFrom(osmid) {
+
+        let n = nodes.find((node) => node.osmid === osmid)
+        return [n.lat, n.lon]
+    }
+
+    edges.map( function (edge) {
+        edge.fromCoord = getLatLongFrom(edge.from)
+        edge.toCoord = getLatLongFrom(edge.to)
+        return edge
+    })
 
     const style = {
         "fillColor": "#00FF00",
         "color": "#00FF00",
     }
 
+
     const map = L.map(document.getElementById('map'),
         {
-            center: polygon.polygon[0],
-            crs: L.CRS.EPSG3857,
-            zoom: 11,
+            center:sinksToMap[0].coords,
+            zoom: 13,
             zoomControl: true,
             preferCanvas: false,
         })
     L.control.scale().addTo(map);
+
     L.tileLayer(
         "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
         {
@@ -106,6 +118,9 @@
             "tms": false
         }
     ).addTo(map);
+
+
+
 
 
     function styler (feature) {
@@ -124,18 +139,16 @@
         });
     };
 
-    // console.log(L)
-    //let polygonMap = L.polygon(polygon.polygon).addTo(map);
 
-    const wholeArea = L.geoJson(edges.features, {
-        onEachFeature: onEachFeature,
-        style: styler,
-    })
 
-    console.log(edgesSolution)
-    const path = L.geoJson(edgesSolution, {
-        onEachFeature: onEachFeature,
-        style: styler,
+    let polylinePoints = edges.forEach( (edge) => {
+        new L.polyline([edge.toCoord, edge.fromCoord], {
+            color: 'red',
+            weight: 3,
+
+            smoothFactor: 1
+        }).addTo(map)
+
     })
 
     let sourceIcon = L.AwesomeMarkers.icon(
@@ -147,16 +160,46 @@
             "prefix": "glyphicon"
         }
     );
-    sourcesToMap.features.forEach((source) => {
-        L.marker([source.properties.lat, source.properties.lon]).addTo(map).setIcon(sourceIcon);
+
+    let sources = []
+    sourcesToMap.forEach((source) => {
+        let sourceMark = L.marker(source.coords,  {title: source.name})
+            .bindPopup(source.name)
+            .addTo(map)
+            .setIcon(sourceIcon);
+
+        sources.push(sourceMark)
     })
 
-    const sinks = L.geoJson(sinksToMap, {
-        onEachFeature: onEachFeature,
-        style: styler,
+
+    let sinkIcon = L.AwesomeMarkers.icon(
+        {
+            "tilte":"teste",
+            "extraClasses": "fa-rotate-0",
+            "icon": "leaf",
+            "iconColor": "white",
+            "markerColor": "green",
+            "prefix": "glyphicon"
+        }
+    );
+
+    let sinks = []
+    sinksToMap.forEach((sink) => {
+
+        let sinkMarker = L.marker(sink.coords, {title: sink.name})
+            .bindPopup(sink.name)
+            .addTo(map)
+            .setIcon(sinkIcon);
+
+        sinks.push(sinkMarker)
     })
 
-    path.addTo(map)
-    wholeArea.addTo(map)
-    sinks.addTo(map)
+
+    var overlays = {
+        "Sources": L.layerGroup(sources),
+        "Sinks": L.layerGroup(sinks),
+    };
+
+    L.control.layers({}, overlays).addTo(map);
+
 </script>

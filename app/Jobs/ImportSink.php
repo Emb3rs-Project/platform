@@ -103,13 +103,21 @@ class ImportSink implements ShouldQueue
 
                     if (!is_null(Arr::get($line, 'latitude')) && !is_null(Arr::get($line, 'longitude'))) {
                         // A new location was selected to be used for this Sink
+                        $lat = Arr::get($line, 'latitude');
+                        $lng = Arr::get($line, 'longitude');
+                        if (str_contains($lat, ',')) {
+                            $lat = str_replace(',', '.', $lat);
+                        }
+                        if (str_contains($lng, ',')) {
+                            $lng = str_replace(',', '.', $lng);
+                        }
                         $location = Location::create([
                             'name' => Arr::get($line, 'name'),
                             'type' => 'point',
                             'data' => [
                                 "center" => [
-                                    Arr::get($line, 'latitude'),
-                                    Arr::get($line, 'longitude')
+                                    $lat,
+                                    $lng
                                 ]
                             ]
                         ]);

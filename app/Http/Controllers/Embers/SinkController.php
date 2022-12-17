@@ -10,14 +10,34 @@ use App\Contracts\Embers\Objects\Sinks\ShowsSinks;
 use App\Contracts\Embers\Objects\Sinks\StoresSinks;
 use App\Contracts\Embers\Objects\Sinks\UpdatesSinks;
 use App\Http\Controllers\Controller;
+use App\Models\Instance;
+use App\Models\Simulation;
+use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class SinkController extends Controller
 {
+
+    /**
+     * @return \Inertia\Response
+     */
+    public function index()
+    {
+        $instances = Auth::user()->currentTeam->instances->pluck('id');
+        $sinks = Instance::whereIn('template_id', [14])
+            ->whereIn('id', $instances)
+            ->orderBy('created_at', 'desc')->get();
+        return Inertia::render('Objects/Sinks/SinkIndex',
+            ['sinks' => $sinks]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array<string, mixed>
      */
     public function create(Request $request)
@@ -39,7 +59,7 @@ class SinkController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -58,8 +78,8 @@ class SinkController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function show(Request $request, int $id)
@@ -78,8 +98,8 @@ class SinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return array<string, mixed>
      */
     public function edit(Request $request, int $id)
@@ -103,8 +123,8 @@ class SinkController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, int $id)
@@ -123,8 +143,8 @@ class SinkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Request $request, int $id)
@@ -138,5 +158,38 @@ class SinkController extends Controller
         app(NotificationContoller::class)->objectNotify($request->user(), $team, $tag, $message, $id);
 
         return redirect()->route('objects.index');
+    }
+
+    public function export(Request $request)
+    {
+        $sinks = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', 14)->get();
+
+        $keys = [];
+        $props->each(function ($item) use (&$keys) {
+            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$keys) {
+                $keys[$tempProp->property['symbolic_name']] = $tempProp->property['name'];
+            });
+        });
+
+        $keys['template'] = 'template';
+        $keys['latitude'] = 'latitude';
+        $keys['longitude'] = 'longitude';
+
+        $alldata = [];
+
+        foreach ($sinks as $i) {
+            foreach ($keys as $column => $title) {
+                $data[$title] = array_key_exists($column, $i['values']) ? $i['values'][$column] : '';
+            }
+            $data['template'] = $i['template']['name'];
+
+            $data['latitude'] = $i['location']['data']['center'][0];
+            $data['longitude'] = $i['location']['data']['center'][1];
+
+            $alldata[] = $data;
+        }
+
+        return (new FastExcel(collect($alldata)))->download('source.xlsx');
     }
 }
