@@ -106,7 +106,7 @@
 
                                     <!-- Left section, set by justify-start and sm:pr-8 -->
                                     <!-- Right section, set by justify-end and sm:pl-8 -->
-                                    <div class="mt-6 sm:mt-0 sm:mb-12" v-for="(report,index ) of processedReports" :key="report.id">
+                                    <div class=" sm:mt-0 " v-for="(report,index ) of processedReports" :key="report.id">
                                         <div class="flex flex-col sm:flex-row items-center">
                                             <div class="flex  w-full mx-auto items-center" :class="{'justify-start': index%2 === 0, 'justify-end': index%2 !== 0 }">
                                                 <div class="w-full sm:w-1/2" :class="{'sm:pr-8': index%2 === 0, 'sm:pl-8': index%2 !== 0 }">
