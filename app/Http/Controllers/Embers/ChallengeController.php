@@ -47,7 +47,7 @@ class ChallengeController extends Controller
         $user = $request->user();
         app(CreatesChallenges::class)->create($request->user());
         $challengeGoals = ChallengeGoal::all()->map(fn($goal) => ['value' => $goal->name . ($goal->unit ? '(' . $goal->unit . ')' : ''), 'id' => $goal->id]);
-        $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name. ($restriction->unit ? '(' . $restriction->unit . ')' : ''), 'id' => $restriction->id]);
+        $challengeRestrictions = ChallengeRestriction::all()->map(fn($restriction) => ['value' => $restriction->name . ($restriction->unit ? '(' . $restriction->unit . ')' : ''), 'id' => $restriction->id]);
         return Inertia::render('Challenge/ChallengeCreate', [
             'goals' => $challengeGoals,
             'restrictions' => $challengeRestrictions,
@@ -71,6 +71,7 @@ class ChallengeController extends Controller
         $project = $request->input('project');
         $restrictions = $request->input('restrictions');
         $data = $request->only('name', 'description');
+        $data['created_by'] = $user->id;
         if ($goal) {
             $data['goal_id'] = $goal['id'] ?? null;
         }
@@ -240,7 +241,11 @@ class ChallengeController extends Controller
                     $cloneProject->name = 'Challenge ' . $challenge->name . ' - ' . $projectModel->name;
                     $cloneProject->push();
                     $cloneProject->teams()->attach($user->currentTeam);
+                    $cloneProject->teams()->attach($challenge->createdBy?->currentTeam);
                 }
+            }
+            if ($challenge->project) {
+                $challenge->project->teams()->attach($user->currentTeam);
             }
             $challenge->participants()->attach($request->input('user'));
             return [

@@ -19,6 +19,7 @@ class Challenge extends Model
         'description',
         'goal_id',
         'project_id',
+        'created_by'
     ];
 
     /**
@@ -50,9 +51,20 @@ class Challenge extends Model
             ->withPivot(['id', 'created_at']);
     }
 
+    /**
+     * @return BelongsTo
+     */
     public function project(): belongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function createdBy(): belongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
 }
