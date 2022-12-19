@@ -60,14 +60,14 @@ class ImportSink implements ShouldQueue
             $bindLine = [];
             collect($line)->each(function ($value, $key) use (&$bindLine, $bindProps) {
                 if (array_key_exists($key, $bindProps)) {
-                    $bindLine[$bindProps[$key]] = $value;
+                    $bindLine[$bindProps[$key]['att']] = $value;
                 } else {
                     $bindLine[$key] = $value;
                 }
 
             });
             $line = $bindLine;
-            info('import', $line);
+
             $validator = Validator::make($line, $rules);
 
             if ($validator->fails()) {
@@ -79,12 +79,12 @@ class ImportSink implements ShouldQueue
                 try {
                     $values = [];
                     foreach ($props as $prop) {
-                        if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
-                            $values[$bindProps[$prop]] = Arr::get($line, $bindProps[$prop], "[]");
-                        } else if (in_array($bindProps[$prop], ['sunday_on', 'saturday_on'])) {
-                            $values[$bindProps[$prop]] = Arr::get($line, $bindProps[$prop]) === 'yes' ? 1 : 0;
+                        if (in_array($bindProps[$prop]['att'], ['shutdown_periods', 'daily_periods'])) {
+                            $values[$bindProps[$prop]['att']] = Arr::get($line, $bindProps[$prop]['att'], "[]");
+                        } else if (in_array($bindProps[$prop]['att'], ['sunday_on', 'saturday_on'])) {
+                            $values[$bindProps[$prop]['att']] = Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value']) === 'yes' ? 1 : 0;
                         } else {
-                            $values[$bindProps[$prop]] = empty(Arr::get($line, $bindProps[$prop])) ? null : Arr::get($line, $bindProps[$prop]);
+                            $values[$bindProps[$prop]['att']] = empty(Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value'])) ? null : Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value']);
                         }
                     }
 
@@ -93,7 +93,6 @@ class ImportSink implements ShouldQueue
                             unset($values[$key]);
                         }
                     }
-
                     $template = Template::whereName(Arr::get($line, 'template'))->first()->toArray();
                     $newInstance = [
                         'name' => Arr::get($line, 'name'),
@@ -223,7 +222,7 @@ class ImportSink implements ShouldQueue
                     $rules[$tempProp->property['symbolic_name']][] = 'required_if:template,' . $item->name;
                 }
                 $allProps[] = $tempProp->property['name'];
-                $propsBind[$tempProp->property['name']] = $tempProp->property['symbolic_name'];
+                $propsBind[$tempProp->property['name']] = ['att' =>$tempProp->property['symbolic_name'], 'default_value' => $tempProp->default_value ?? null];
             });
         });
 
