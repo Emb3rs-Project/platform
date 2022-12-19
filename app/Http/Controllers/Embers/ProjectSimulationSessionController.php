@@ -71,7 +71,7 @@ class ProjectSimulationSessionController extends Controller
 
         $session->delete();
 
-        return redirect()->route('projects . simulations . show', ['simulation' => $simulation->id, 'project' => $simulation->project_id]);
+        return redirect()->route('projects.simulations.show', ['simulation' => $simulation->id, 'project' => $simulation->project_id]);
     }
 
     public function jsonReport($type, $id)
