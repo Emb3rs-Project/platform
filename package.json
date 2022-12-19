@@ -43,6 +43,7 @@
     "dependencies": {
         "@codemirror/fold": "^0.19.4",
         "@codemirror/lang-json": "^0.20.0",
+        "@vuepic/vue-datepicker": "^3.6.3",
         "jsonexport": "^3.2.0",
         "jszip": "^3.10.1",
         "laravel-echo": "^1.13.1",

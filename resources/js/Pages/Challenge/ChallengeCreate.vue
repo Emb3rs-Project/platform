@@ -9,14 +9,8 @@
             </template>
             <div class="grid grid-cols-1 p-12 gap-y-10">
                 <div>
-                    <div class="grid grid-cols-3">
-                        <div>
-                            <div class="flex items-center gap-1">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900">
-                                    Challenge
-                                </h3>
-                            </div>
-                        </div>
+                    <div class="grid grid-cols-1">
+
                         <div class="col-span-2">
                             <div
                                 class="bg-white overflow-hidden shadow sm:rounded-lg"

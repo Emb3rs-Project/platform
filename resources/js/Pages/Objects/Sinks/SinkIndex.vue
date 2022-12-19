@@ -8,14 +8,18 @@
             <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-20 lg:px-8">
                 <h1 class="mb-8 font-bold text-3xl">Sinks</h1>
 
-                <div class="flex justify-end mb-5">
+                <div class="flex justify-end">
 
-                    <PrimaryButton v-tippy="'Import Sinks'" class="w-48 mr-2" @click="importInstance('Sink')">
-                        Import Sinks
-                    </PrimaryButton>
-                    <PrimaryButton v-tippy="'Export Sinks'" class="w-48" @click="executeAction = true">
-                        Export Sinks
-                    </PrimaryButton>
+
+                    <div class="mb-5">
+
+                        <PrimaryButton v-tippy="'Import Sinks'" class="w-48 mr-2" @click="importInstance('Sink')">
+                            Import Sinks
+                        </PrimaryButton>
+                        <PrimaryButton v-tippy="'Export Sinks'" class="w-48" @click="executeAction = true">
+                            Export Sinks
+                        </PrimaryButton>
+                    </div>
                 </div>
 
                 <div class="flex flex-col gap-8">
