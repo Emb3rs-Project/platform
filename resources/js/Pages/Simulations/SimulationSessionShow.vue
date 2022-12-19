@@ -13,7 +13,7 @@
 
                         </button>
                         <button class="bg-red-600 hover:bg-red-900 font-bold py-1 px-2 my-2 rounded-md text-white"
-                                @click="deleteSession">Delete Session
+                                @click="shouldDelete = true">Delete Session
                         </button>
                     </div>
                     <h2 class="text-lg font-bold">Simulation Session Details</h2>
@@ -373,6 +373,28 @@
                 </PrimaryButton>
             </template>
         </jet-confirmation-modal>
+
+        <jet-confirmation-modal
+            :show="shouldDelete"
+            @close="shouldDelete = false">
+            <template #title> Delete Simulation Session</template>
+
+            <template #content>
+                Are you sure you want to remove this simulation session ?
+            </template>
+
+            <template #footer>
+                <SecondaryOutlinedButton @click="shouldDelete = false">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton
+                    class="ml-2"
+                    @click="deleteSession">
+                    Confirm
+                </PrimaryButton>
+            </template>
+        </jet-confirmation-modal>
     </AppLayout>
 </template>
 
@@ -411,6 +433,7 @@ let downloadOption = ref({})
 let challenge = ref(null)
 const downloadOptions = [{value: 'Download in CSV', key: 'csv'}, {value: 'Download in JSON', key: 'json'}]
 const advancedMode = ref(false)
+const shouldDelete = ref(false)
 
 const confirmEnroll = ref(false);
 const enroll = () => {
