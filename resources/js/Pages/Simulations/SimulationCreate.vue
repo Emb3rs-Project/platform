@@ -31,6 +31,7 @@
                     <Alert v-model="form.hasErrors" type="danger"
                            message="Please, correct all the errors before saving."
                            :dismissable="false"/>
+
                     <Alert v-model="form.hasErrors" v-for="error in form.errors" type="danger"
                            :message="error"
                            :dismissable="true"/>
