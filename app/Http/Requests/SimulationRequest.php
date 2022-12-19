@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\MarketStartDateRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SimulationRequest extends FormRequest
@@ -27,7 +28,9 @@ class SimulationRequest extends FormRequest
             'name' => 'required',
             'simulation_metadata' => ['array', 'required'],
             'extra.sinks' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation'],
-            'extra.sources' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation']
+            'extra.sources' => ['array','required_if:simulation_metadata.data.identifier,demo_simulation'],
+            'extra.input_data.user.start_datetime' => [new MarketStartDateRule()]
+
         ];
     }
 }

@@ -31,6 +31,10 @@
                     <Alert v-model="form.hasErrors" type="danger"
                            message="Please, correct all the errors before saving."
                            :dismissable="false"/>
+                    <Alert v-model="form.hasErrors" v-for="error in form.errors" type="danger"
+                           :message="error"
+                           :dismissable="true"/>
+
                 </div>
             </template>
 
@@ -700,10 +704,11 @@
 
                     <field label="Date (start_datetime)"
                            hint="What date does your input data start? what day do you want to start from?">
-                        <!-- TODO: datetime component -->
-                        <TextInput
+                        <DateInput
                             v-model="form.extra.input_data.user.start_datetime"
                         />
+                        <JetInputError v-if="form.errors['extra.input_data.user.start_datetime']"
+                                       :message="form.errors['extra.input_data.user.start_datetime']" class="mt-2"/>
                     </field>
 
                     <field label="Product Differentiation Option (prod_diff_option)"
@@ -914,7 +919,7 @@ import Steps from "../../Components/Wizards/Steps";
 import Alert from "../../Components/Alerts/Alert";
 import SecondaryButton from "../../Components/SecondaryButton";
 import SelectMenu from "../../Components/Forms/SelectMenu";
-import DateInput from "../../Components/DateInput";
+import DateInput from "../../Components/Forms/DateInput";
 import ToggleButton from "../../Components/ToggleButton";
 
 export default {
@@ -1159,9 +1164,9 @@ export default {
             name: "Simulation Name",
             simulation_metadata: props.simulation_metadata[0],
             extra: {
-                solver_teo: 'SCIP',
-                solver_gis: 'SCIP',
-                solver_market: 'SCIP',
+                solver_teo: 'COPT',
+                solver_gis: 'COPT',
+                solver_market: 'COPT',
                 file: null,
                 isConstantUtil: true,
                 input_data: {
@@ -1296,7 +1301,7 @@ export default {
                         recurrence: 1,
                         data_profile: "hourly",
                         yearly_demand_rate: 0.05,
-                        start_datetime: "2018-01-01",
+                        start_datetime: "2023-01-01",
                         prod_diff_option: "noPref",
                         util: [0.7]
                     }

@@ -606,6 +606,24 @@ const navigation = [
         icon: TemplateIcon,
     },
     {
+        name: "Sinks",
+        href: {
+            index: {
+                location: "sinks.index",
+            },
+        },
+        icon: SinkIcon,
+    },
+    {
+        name: "Sources",
+        href: {
+            index: {
+                location: "sources.index",
+            },
+        },
+        icon: SourceIcon,
+    },
+    {
         name: "Projects",
         href: {
             index: {
@@ -657,22 +675,6 @@ const navigation = [
             },
         },
         icon: SupportIcon,
-    },{
-        name: "Sinks",
-        href: {
-            index: {
-                location: "sinks.index",
-            },
-        },
-        icon: SinkIcon,
-    },{
-        name: "Sources",
-        href: {
-            index: {
-                location: "sources.index",
-            },
-        },
-        icon: SourceIcon,
     },
 ];
 
