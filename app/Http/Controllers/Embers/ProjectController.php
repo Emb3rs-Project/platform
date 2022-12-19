@@ -10,6 +10,7 @@ use App\Contracts\Embers\Projects\ShowsProjects;
 use App\Contracts\Embers\Projects\StoresProjects;
 use App\Contracts\Embers\Projects\UpdatesProjects;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Link;
 use App\Models\Template;
@@ -157,16 +158,19 @@ class ProjectController extends Controller
     {
         $templates = Template::with('templateProperties', 'templateProperties.property')->get();
         $allProps = [];
+        if ($request->query('type') === 'Source') {
+            $optionsTemplate = Template::where('category_id', Category::SOURCE)->get();
+            $allProps['sourceID'] = '';
+        } else {
+            $optionsTemplate = Template::where('category_id', Category::SINK)->get();
+        }
         $helpers = [
             [
                 'field' => 'template',
-                'options' => 'Simple Source or Simple Sink',
+                'options' => $optionsTemplate->pluck('name')->join(' or '),
                 'info' => ''
             ]
         ];
-        if ($request->query('type') === 'Source') {
-            $allProps['sourceID'] = '';
-        }
         $allProps['template'] = '';
         $allProps['latitude'] = '';
         $allProps['longitude'] = '';

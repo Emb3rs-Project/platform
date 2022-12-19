@@ -13,6 +13,9 @@ class Category extends Model
 {
     use SoftDeletes;
 
+    public const SINK = 6;
+    public const SOURCE = 7;
+
     /**
      * The Categories that this Category has as its parent.
      *

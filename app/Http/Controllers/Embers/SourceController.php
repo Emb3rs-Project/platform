@@ -9,6 +9,7 @@ use App\Contracts\Embers\Objects\Sources\ShowsSources;
 use App\Contracts\Embers\Objects\Sources\StoresSources;
 use App\Contracts\Embers\Objects\Sources\UpdatesSources;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Instance;
 use App\Models\Template;
 use Illuminate\Http\Request;
@@ -22,7 +23,7 @@ class SourceController extends Controller
     public function index()
     {
         $instances = Auth::user()->currentTeam->instances->pluck('id');
-        $sources = Instance::whereIn('template_id', [15])
+        $sources = Instance::whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))
             ->whereIn('id', $instances)
             ->orderBy('created_at', 'desc')->get();
         return Inertia::render('Objects/Sources/SourceIndex',

@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Instance;
 use App\Models\Simulation;
 use App\Models\Template;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -27,7 +28,7 @@ class SinkController extends Controller
     public function index()
     {
         $instances = Auth::user()->currentTeam->instances->pluck('id');
-        $sinks = Instance::whereIn('template_id', [14])
+        $sinks = Instance::whereHas('template', fn($query) => $query->where('category_id', Category::SINK))
             ->whereIn('id', $instances)
             ->orderBy('created_at', 'desc')->get();
         return Inertia::render('Objects/Sinks/SinkIndex',

@@ -67,7 +67,7 @@ class ImportSink implements ShouldQueue
 
             });
             $line = $bindLine;
-
+            info('import', $line);
             $validator = Validator::make($line, $rules);
 
             if ($validator->fails()) {
