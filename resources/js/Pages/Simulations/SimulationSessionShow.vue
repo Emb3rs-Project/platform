@@ -96,7 +96,7 @@
 
                     <template v-if="!advancedMode">
                         <!-- component -->
-                        <div class=" py-6 flex flex-col justify-center sm:py-12">
+                        <div class=" py-6 flex flex-col justify-center sm:py-12 bg-gray-200">
                             <div class="py-3 sm:max-w-xl sm:mx-auto w-full px-2 sm:px-0">
 
                                 <div class="relative text-gray-700 antialiased text-sm font-semibold">
