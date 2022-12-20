@@ -143,10 +143,18 @@ class ChallengeController extends Controller
                     if (!empty($challenge->goal->output)) {
                         $customData['goal_value'] = $dot->get($challenge->goal->output, 0);
                     }
+                    $customData['hasRestriction'] = false;
+                    $customData['restrictions'] = [];
+                    $challenge->restrictions->each(function ($restriction) use (&$customData, $challenge, $dot) {
+                        if ($restriction->output && $dot->get($restriction->output, 0) >= $restriction->pivot->value) {
+                            $customData['restrictions'][] = $restriction->name;
+                            $customData['hasRestriction'] = true;
+                        }
+                    });
                     $participants[] = array_merge($participant->toArray(), $customData);
                 });
             } else {
-                $participant['goal_value'] = 0;
+                $participant['goal_value'] = '';
                 $participants[] = $participant;
             }
         });

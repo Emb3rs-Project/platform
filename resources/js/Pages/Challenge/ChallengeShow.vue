@@ -124,7 +124,7 @@
                                     <!-- ID -->
                                     <template #header-id> ID</template>
                                     <template #body-id="{ item }">
-                                        <td class="text-left pl-4">
+                                        <td class="text-left pl-4" :class="{'text-red-500': item.hasRestriction}">
                                             {{ item.session_id || item.pivot.id }}
                                         </td>
                                     </template>
@@ -134,6 +134,7 @@
                                     <template #body-name="{ item }">
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                            :class="{'text-red-500': item.hasRestriction}"
                                         >
                                             {{ item.name }}
                                         </td>
@@ -146,6 +147,7 @@
                                     <template #body-submit_date="{ item }">
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                            :class="{'text-red-500': item.hasRestriction}"
                                         >
                                             {{ moment(item.pivot.created_at).format('DD/MM/YYYY') }}
                                         </td>
@@ -158,9 +160,22 @@
                                     <template #body-goal_value="{ item }">
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                            :class="{'text-red-500': item.hasRestriction}"
                                         >
                                             {{ item.goal_value }} <span
                                             v-if="item.goal_unit"> ({{ item.goal_unit }})</span>
+                                        </td>
+                                    </template>
+
+                                    <template #header-restrictions>
+                                        Restriction
+                                    </template>
+                                    <template #body-restrictions="{ item }">
+                                        <td
+                                            class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                            :class="{'text-red-500': item.hasRestriction}"
+                                        >
+                                            {{ item.restrictions.join(', ')}}
                                         </td>
                                     </template>
 
@@ -171,8 +186,10 @@
                                     <template #body-report="{ item }">
                                         <td
                                             class="text-left px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500"
+                                            :class="{'text-red-500': item.hasRestriction}"
                                         >
                                             <Link
+                                                v-if="item.session_url"
                                                 method="get"
                                                 class="px-5 py-2 bg-slate-500 font-semibold text-white rounded-sm"
                                                 as="button"
@@ -267,7 +284,7 @@ const props = defineProps({
         required: true,
     }
 })
-const tableColumns = ["id", "name", 'submit_date', 'goal_value', 'report'];
+const tableColumns = ["id", "name", 'submit_date', 'goal_value', 'report', 'restrictions'];
 const back = () => Inertia.get(route('challenges.index'))
 const unit = props.challenge.goal && props.challenge.goal.unit ? '(' + props.challenge.goal.unit + ')' : ''
 const goal = props.challenge.goal ? props.challenge.goal.name + unit : ''
