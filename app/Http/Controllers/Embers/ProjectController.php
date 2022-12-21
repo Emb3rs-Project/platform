@@ -156,6 +156,13 @@ class ProjectController extends Controller
 
     public function downloadImportFile(Request $request)
     {
+
+        $profile_sample = $this->getProfileSamples($request->query('type'));
+        if($profile_sample) {
+            return response()->download(public_path('samples/'.$profile_sample));
+        }
+
+
         $templates = Template::with('templateProperties', 'templateProperties.property')->get();
         $allProps = [];
         if ($request->query('type') === 'Source') {
@@ -207,4 +214,24 @@ class ProjectController extends Controller
             ->headerStyle($header_style)
             ->download('import_sample.xlsx');
     }
+
+    private function getProfileSamples($field)
+    {
+        $profile = null;
+        switch ($field) {
+            case 'Real Hourly Capacity':
+                $profile = 'hourly_profile_sample.xlsx';
+                break;
+            case 'Real Daily Capacity':
+                $profile = 'daily_profile_sample.xlsx';
+                break;
+            case 'Real Monthly Capacity':
+                $profile = 'monthly_profile_sample.xlsx';
+                break;
+        }
+
+        return $profile;
+    }
 }
+
+

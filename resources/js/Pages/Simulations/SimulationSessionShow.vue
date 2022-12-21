@@ -38,7 +38,6 @@
 
                             <field label="Submit Challenge Participation" v-else-if="isEnrolled">
                                 <VSelect :options="challenges"
-
                                          class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full sm:text-base border-gray-300 rounded-md"
                                          label="name" value="pivot.id"
                                          @update:modelValue="confirmEnroll = true"
@@ -46,7 +45,6 @@
 
                             </field>
                         </div>
-
 
                     </div>
 

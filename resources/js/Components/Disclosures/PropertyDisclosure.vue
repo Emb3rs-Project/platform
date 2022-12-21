@@ -31,7 +31,7 @@
       leave-from-class="transform scale-100 opacity-100"
       leave-to-class="transform scale-95 opacity-0"
     >
-      <DisclosurePanel as="dd">
+      <DisclosurePanel as="dd" :class="{'grid grid-cols-3 gap-4': maximized}">
         <slot></slot>
       </DisclosurePanel>
     </transition>
@@ -55,6 +55,11 @@ export default {
   },
 
   props: {
+    maximized:{
+        type: Boolean,
+        default: false,
+
+    },
     canDelete: {
         type: Boolean,
         default: false,
