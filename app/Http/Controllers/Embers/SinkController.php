@@ -164,22 +164,26 @@ class SinkController extends Controller
     public function export(Request $request)
     {
         $sinks = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
-        $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', 14)->get();
-
-        $keys = [];
-        $props->each(function ($item) use (&$keys) {
-            $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$keys) {
-                $keys[$tempProp->property['symbolic_name']] = $tempProp->property['name'];
-            });
-        });
-
-        $keys['template'] = 'template';
-        $keys['latitude'] = 'latitude';
-        $keys['longitude'] = 'longitude';
 
         $alldata = [];
 
         foreach ($sinks as $i) {
+            $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', $i['template_id'])->get();
+            $keys = [];
+            $props->each(function ($item) use (&$keys) {
+                $item->templateProperties->sortBy('order')->each(function ($tempProp) use (&$keys) {
+                    $keys[$tempProp->property['symbolic_name']] = $tempProp->property['name'];
+                });
+            });
+
+            $keys['template'] = 'template';
+            $keys['latitude'] = 'latitude';
+            $keys['longitude'] = 'longitude';
+            $mergeStreams = [];
+            if ($i['values'] && $i['values']['characterization'] && $i['values']['characterization']['streams']) {
+                $i['values']['characterization']['streams'][count($i['values']['characterization']['streams']) - 1];
+            }
+            $i['values'] = array_merge($mergeStreams, $i['values']);;
             foreach ($keys as $column => $title) {
                 $data[$title] = array_key_exists($column, $i['values']) ? $i['values'][$column] : '';
             }
