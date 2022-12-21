@@ -60,7 +60,7 @@ class ImportSource implements ShouldQueue
 
         $additionalSheet = [];
         $i = 1;
-        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet,&$i) {
+        $additionalData->each(function ($addLine) use (&$errors, &$lineCount, $props, $bindProps, &$additionalSheet, &$i) {
             $bindLineAdd = [];
             collect($addLine)->each(function ($value, $key) use (&$bindLineAdd, $bindProps) {
                 if (array_key_exists($key, $bindProps)) {
@@ -71,18 +71,18 @@ class ImportSource implements ShouldQueue
 
             });
             $addLine = $bindLineAdd;
-            $values=[];
+            $values = [];
             foreach ($props as $prop) {
                 if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
                     $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop], "[]");
                 } else if (in_array($bindProps[$prop], ['sunday_on', 'saturday_on'])) {
-                    $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop]) === 'yes' ? 1 : 0;
+                    $values['data'][$bindProps[$prop]] = Arr::get($addLine, $bindProps[$prop]);
                 } else {
                     $values['data'][$bindProps[$prop]] = empty(Arr::get($addLine, $bindProps[$prop])) ? null : Arr::get($addLine, $bindProps[$prop]);
                 }
             }
             $values['data']['id'] = $i;
-            $i++;
+            $i ++;
 
             foreach ($values['data'] as $key => $value) {
                 if ($value === null || $value === '') {
@@ -91,7 +91,7 @@ class ImportSource implements ShouldQueue
             }
 
             $additionalSheet[Arr::get($addLine, 'sourceID')][] = $values;
-         });
+        });
 
         $data->each(function ($line) use (&$errors, &$lineCount, $rules, $props, $bindProps, $additionalSheet) {
             $bindLine = [];
@@ -114,7 +114,7 @@ class ImportSource implements ShouldQueue
             } else {
                 $sourceID = Arr::get($line, 'sourceID');
                 $addStreams = [];
-                if ($additionalSheet && array_key_exists($sourceID, $additionalSheet)  && $additionalSheet[$sourceID]) {
+                if ($additionalSheet && array_key_exists($sourceID, $additionalSheet) && $additionalSheet[$sourceID]) {
                     $addStreams = $additionalSheet[$sourceID];
                 }
                 try {
@@ -127,8 +127,8 @@ class ImportSource implements ShouldQueue
                     foreach ($props as $prop) {
                         if (in_array($bindProps[$prop], ['shutdown_periods', 'daily_periods'])) {
                             $values['properties'][$bindProps[$prop]] = Arr::get($line, $bindProps[$prop], "[]");
-                        } else if (in_array($prop, ['sunday_on', 'saturday_on'])) {
-                            $values['properties'][$bindProps[$prop]] = Arr::get($line, $bindProps[$prop]) === 'yes' ? 1 : 0;
+                        } else if (in_array($bindProps[$prop], ['sunday_on', 'saturday_on'])) {
+                            $values['properties'][$bindProps[$prop]] = Arr::get($line, $bindProps[$prop]);
                         } else {
                             $values['properties'][$bindProps[$prop]] = empty(Arr::get($line, $bindProps[$prop])) ? null : Arr::get($line, $bindProps[$prop]);
                         }

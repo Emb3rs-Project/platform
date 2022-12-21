@@ -82,7 +82,7 @@ class ImportSink implements ShouldQueue
                         if (in_array($bindProps[$prop]['att'], ['shutdown_periods', 'daily_periods'])) {
                             $values[$bindProps[$prop]['att']] = Arr::get($line, $bindProps[$prop]['att'], "[]");
                         } else if (in_array($bindProps[$prop]['att'], ['sunday_on', 'saturday_on'])) {
-                            $values[$bindProps[$prop]['att']] = Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value']) === 'yes' ? 1 : 0;
+                            $values[$bindProps[$prop]['att']] = Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value']);
                         } else {
                             $values[$bindProps[$prop]['att']] = empty(Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value'])) ? null : Arr::get($line, $bindProps[$prop]['att'], $bindProps[$prop]['default_value']);
                         }
