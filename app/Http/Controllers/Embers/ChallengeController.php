@@ -147,7 +147,7 @@ class ChallengeController extends Controller
                     $customData['restrictions'] = [];
                     $challenge->restrictions->each(function ($restriction) use (&$customData, $challenge, $dot) {
                         if ($restriction->output && $dot->get($restriction->output, 0) >= $restriction->pivot->value) {
-                            $customData['restrictions'][] = $restriction->name;
+                            $customData['restrictions'][] = $restriction->name.':  '.$dot->get($restriction->output, 0).'('.$restriction->unit.') > '.$restriction->pivot->value.'('.$restriction->unit.')';
                             $customData['hasRestriction'] = true;
                         }
                     });
