@@ -103,8 +103,11 @@
                                    :unit="property.unit.symbol" :description="property.property.description"
                                    :label="property.property.name" :placeholder="property.property.name"
                                    :required="property.required"/>
-                        <excel-uploader @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"
-                                        v-if="showUploader(property.property.name)"></excel-uploader>
+
+                        <excel-uploader
+                            v-if="showUploader(property.property.name)"
+                            :field-name="property.property.name"
+                            @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"/>
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                         <SelectMenu v-model="form.sink.data[property.property.symbolic_name]"

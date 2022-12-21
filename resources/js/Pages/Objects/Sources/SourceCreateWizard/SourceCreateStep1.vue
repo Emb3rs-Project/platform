@@ -102,9 +102,10 @@
                         :required="property.required"
                     />
                     <template v-if="showUploader(property.property.name)">
-                        <excel-uploader @input="(value) =>{ source.data[property.property.symbolic_name] = value }"
-                                        ></excel-uploader>
-                        <p> Download an example file: <a :href="`/sample-import?type=${property.property.name}`" class="font-bold text-primary">click here</a></p>
+                        <excel-uploader
+                            :field-name="property.property.name"
+                            @input="(value) =>{ source.data[property.property.symbolic_name] = value }"/>
+
                     </template>
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
