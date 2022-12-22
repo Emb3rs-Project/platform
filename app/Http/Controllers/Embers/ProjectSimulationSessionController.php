@@ -51,7 +51,7 @@ class ProjectSimulationSessionController extends Controller
             'challenges' => $challenges,
             'solverModules' => $solverModules,
             'isEnrolled' => $isEnrolled,
-            'network_resolution' => $networkResolution
+            'networkResolution' => $networkResolution
 
         ]);
     }
