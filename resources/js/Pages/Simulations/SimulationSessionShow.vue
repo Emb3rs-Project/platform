@@ -116,6 +116,7 @@
                                                             <p>Module : {{ report.module }} </p>
                                                             <p>Function : {{ report.function }} </p>
                                                             <p>Created_at : {{ moment(report.created_at).format('DD/MM/YYYY') }} </p>
+                                                            <p>Resolution : {{ network_resolution }} </p>
                                                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
                                                                 Solver : {{ solverModules[report.module] }} </p>
                                                             <p>Duration : {{ bench(report.created_at, report.function) }} </p>
@@ -424,7 +425,8 @@ const props = defineProps({
     reportsHtml: Array,
     challenges: Array,
     solverModules: Object,
-    isEnrolled: Boolean
+    isEnrolled: Boolean,
+    networkResolution: String
 });
 
 let downloadOption = ref({})
