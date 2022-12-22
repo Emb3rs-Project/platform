@@ -33,6 +33,7 @@ class ProjectSimulationSessionController extends Controller
             'TEO Module' => optional($session->simulation->extra)['solver_teo'],
             'Market Module' => optional($session->simulation->extra)['solver_market']
         ];
+        $networkResolution = $session->simulation->extra['input_data']['network_resolution'];
         $session->simulation->extra = [];
         $reportsHTML = [];
         $reportsToReturn = $reports->map(function ($item) use (&$reportsHTML) {
@@ -49,7 +50,8 @@ class ProjectSimulationSessionController extends Controller
             'reportsHtml' => $reportsHTML,
             'challenges' => $challenges,
             'solverModules' => $solverModules,
-            'isEnrolled' => $isEnrolled
+            'isEnrolled' => $isEnrolled,
+            'networkResolution' => $networkResolution
 
         ]);
     }

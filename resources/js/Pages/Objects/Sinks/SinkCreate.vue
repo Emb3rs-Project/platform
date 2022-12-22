@@ -1,6 +1,7 @@
 <template>
     <SiteHead title="Create a Sink" />
     <SlideOver type="sink" title="New Sink"
+        @maximized="(val) => maximized = val"
         subtitle="Get started by filling in the information below to create your new Sink. This Sink will be attached to your currently selected Institution.">
         <!-- Alert -->
         <template #stickyTop>
@@ -95,15 +96,18 @@
         px-4
         sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 sm:px-6 sm:py-5
       ">
-            <PropertyDisclosure defaultOpen title="Properties">
-                <div class="my-6" v-for="(property, propertyIdx) in properties" :key="propertyIdx">
+            <PropertyDisclosure defaultOpen title="Properties" class="row" :maximized="maximized">
+                <div class="my-6 col-6" v-for="(property, propertyIdx) in properties" :key="propertyIdx">
                     <div v-if="property.property.inputType === 'text'">
                         <TextInput v-model="form.sink.data[property.property.symbolic_name]"
                                    :unit="property.unit.symbol" :description="property.property.description"
                                    :label="property.property.name" :placeholder="property.property.name"
                                    :required="property.required"/>
-                        <excel-uploader @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"
-                                        v-if="showUploader(property.property.name)"></excel-uploader>
+
+                        <excel-uploader
+                            v-if="showUploader(property.property.name)"
+                            :field-name="property.property.name"
+                            @input="(value) =>{ form.sink.data[property.property.symbolic_name] = value }"/>
                     </div>
                     <div v-else-if="property.property.inputType === 'select'">
                         <SelectMenu v-model="form.sink.data[property.property.symbolic_name]"
@@ -496,6 +500,8 @@ export default {
             //store.dispatch("objects/showSlide", { route: "objects.list" });
         };
 
+        const maximized = ref(false)
+
         return {
             form,
             templates,
@@ -508,6 +514,7 @@ export default {
             infoTemplateModalIsVisible,
             errorTemplateModalIsVisible,
             errorTemplateModal,
+            maximized,
             updateMarker,
             submit,
             onCancel,

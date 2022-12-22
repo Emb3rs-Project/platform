@@ -101,8 +101,12 @@
                         :placeholder="property.property.name"
                         :required="property.required"
                     />
-                    <excel-uploader @input="(value) =>{ source.data[property.property.symbolic_name] = value }"
-                                    v-if="showUploader(property.property.name)"></excel-uploader>
+                    <template v-if="showUploader(property.property.name)">
+                        <excel-uploader
+                            :field-name="property.property.name"
+                            @input="(value) =>{ source.data[property.property.symbolic_name] = value }"/>
+
+                    </template>
                 </div>
                 <div v-else-if="property.property.inputType === 'select'">
                     <SelectMenu

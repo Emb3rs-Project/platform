@@ -180,7 +180,7 @@ class SinkController extends Controller
             $keys['latitude'] = 'latitude';
             $keys['longitude'] = 'longitude';
             $mergeStreams = [];
-            if ($i['values'] && $i['values']['characterization'] && $i['values']['characterization']['streams']) {
+            if ($i['values'] && array_key_exists('characterization', $i['values']) && $i['values']['characterization'] && $i['values']['characterization']['streams']) {
                 $i['values']['characterization']['streams'][count($i['values']['characterization']['streams']) - 1];
             }
             $i['values'] = array_merge($mergeStreams, $i['values']);;

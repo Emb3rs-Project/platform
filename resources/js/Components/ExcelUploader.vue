@@ -5,6 +5,8 @@
             <xlsx-json @parsed="setCollection">
             </xlsx-json>
         </xlsx-read>
+
+        <p v-if="fieldName"> Download an example file: <a :href="`/sample-import?type=${fieldName}`" class="font-bold text-primary">click here</a></p>
     </div>
 </template>
 
@@ -18,6 +20,7 @@ export default {
         XlsxRead,
         XlsxJson
     },
+    props: ['fieldName'],
     data () {
         return {
             file: null,
