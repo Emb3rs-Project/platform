@@ -30,13 +30,21 @@ class ProjectSimulationSessionReportController extends Controller
 
         foreach ($stepResults as $report) {
             $item = json_decode($report->output, true);
+            $weight = [
+                'GIS Module' => 1,
+                'TEO Module' => 2,
+                'Market Module' => 3,
+                'Business Module' => 4,
 
+            ];
             if (array_key_exists('report', $item)) {
                 $reports[$i]['module'] = $report->module;
                 $reports[$i]['report'] = $item['report'];
+                $reports[$i]['weight'] = $weight[$report->module] ?? 999;
                 $i ++;
             }
         }
+        $reports = collect($reports)->sortBy('weight')->toArray();
         $metadata = [
             'project' => $session->simulation->project->name ?? '',
             'simulation' => $session->simulation->name

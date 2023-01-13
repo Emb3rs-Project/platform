@@ -723,6 +723,20 @@
 
                     </field>
 
+<!--                    <field label="FBP Time"-->
+<!--                           hint="">-->
+<!--                        <TextInput-->
+<!--                            v-model="form.extra.input_data.user.fbp_time"-->
+<!--                        />-->
+<!--                    </field>-->
+
+<!--                    <field label="FBP Agent"-->
+<!--                           hint="">-->
+<!--                        <TextInput-->
+<!--                            v-model="form.extra.input_data.user.fbp_agent"-->
+<!--                        />-->
+<!--                    </field>-->
+
                     <div class="space-y-1 sm:col-span-3">
                         <div>
                             <div>
@@ -1304,7 +1318,9 @@ export default {
                         yearly_demand_rate: 0.05,
                         start_datetime: "2023-01-01",
                         prod_diff_option: "noPref",
-                        util: [0.7]
+                        util: [0.7],
+                        // fbp_agent: 'None',
+                        // fbp_time: 'None',
                     }
                 },
                 links: [],
