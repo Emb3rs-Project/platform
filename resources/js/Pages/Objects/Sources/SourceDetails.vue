@@ -18,21 +18,21 @@
             :instance="instance"
         />
 
-        <SourceDetailsStep2
-            v-if="currentStep === 2"
-            :instance="instance"
-            :equipment="equipment"
-        />
+<!--        <SourceDetailsStep2-->
+<!--            v-if="currentStep === 2"-->
+<!--            :instance="instance"-->
+<!--            :equipment="equipment"-->
+<!--        />-->
 
-        <SourceDetailsStep3
-            v-if="currentStep === 3"
-            :instance="instance"
-            :processes="processes"
-            :equipment="equipment"
-        />
+<!--        <SourceDetailsStep3-->
+<!--            v-if="currentStep === 3"-->
+<!--            :instance="instance"-->
+<!--            :processes="processes"-->
+<!--            :equipment="equipment"-->
+<!--        />-->
 
         <SourceDetailsStep4
-            v-if="currentStep === 4"
+            v-if="currentStep === 2"
             :instance="instance"
         />
 
@@ -165,20 +165,20 @@ export default {
                 name: "Information & Properties",
                 status: mapStepStatus(1), // status: current | complete | upcoming
             },
-            {
-                id: "Equipment",
-                name: "Equipment Information",
-                status: mapStepStatus(2),
-            },
-            {
-                id: "Processes",
-                name: "Processes Information",
-                status: mapStepStatus(3),
-            },
+            // {
+            //     id: "Equipment",
+            //     name: "Equipment Information",
+            //     status: mapStepStatus(2),
+            // },
+            // {
+            //     id: "Processes",
+            //     name: "Processes Information",
+            //     status: mapStepStatus(3),
+            // },
             {
                 id: "Streams",
                 name: "Additional Streams",
-                status: mapStepStatus(4),
+                status: mapStepStatus(2),
             },
 
         ]);

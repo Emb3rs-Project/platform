@@ -29,28 +29,28 @@
             @incompleted="onIncompleted"
         />
 
-        <SourceCreateStep2
-            v-if="currentStep === 2"
-            :equipmentCategories="equipmentCategories"
-            :equipment="equipment"
-            :nextStepRequest="nextStepRequest"
-            :templates="templates"
-            @completed="onCompleted"
-            @incompleted="onIncompleted"
-        />
+<!--        <SourceCreateStep2-->
+<!--            v-if="currentStep === 2"-->
+<!--            :equipmentCategories="equipmentCategories"-->
+<!--            :equipment="equipment"-->
+<!--            :nextStepRequest="nextStepRequest"-->
+<!--            :templates="templates"-->
+<!--            @completed="onCompleted"-->
+<!--            @incompleted="onIncompleted"-->
+<!--        />-->
 
-        <SourceCreateStep3
-            v-if="currentStep === 3"
-            :processesCategories="processesCategories"
-            :processes="processes"
-            :nextStepRequest="nextStepRequest"
-            :templates="templates"
-            @completed="onCompleted"
-            @incompleted="onIncompleted"
-        />
+<!--        <SourceCreateStep3-->
+<!--            v-if="currentStep === 3"-->
+<!--            :processesCategories="processesCategories"-->
+<!--            :processes="processes"-->
+<!--            :nextStepRequest="nextStepRequest"-->
+<!--            :templates="templates"-->
+<!--            @completed="onCompleted"-->
+<!--            @incompleted="onIncompleted"-->
+<!--        />-->
 
         <SourceCreateStep4
-            v-if="currentStep === 4"
+            v-if="currentStep === 2"
             :templates="templates"
             :streams = additionalStreams
             :nextStepRequest="nextStepRequest"
@@ -198,20 +198,20 @@ export default {
                 name: "Properties",
                 status: mapStepStatus(1),
             },
+            // {
+            //     id: "Step 2",
+            //     name: "Equipments",
+            //     status: mapStepStatus(2),
+            // },
+            // {
+            //     id: "Step 3",
+            //     name: "Processes",
+            //     status: mapStepStatus(3),
+            // },
             {
                 id: "Step 2",
-                name: "Equipments",
-                status: mapStepStatus(2),
-            },
-            {
-                id: "Step 3",
-                name: "Processes",
-                status: mapStepStatus(3),
-            },
-            {
-                id: "Step 4",
                 name: "Additional Streams",
-                status: mapStepStatus(4),
+                status: mapStepStatus(2),
             },
         ]);
 
