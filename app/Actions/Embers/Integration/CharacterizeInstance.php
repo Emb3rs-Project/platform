@@ -8,11 +8,20 @@ use App\Models\Instance;
 use Cf\CFModuleClient;
 use Cf\CharacterizationInput;
 use Cf\CharacterizationSinkOutput;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redis;
 
 class CharacterizeInstance implements CharacterizesInstances
 {
-    public function characterize(Instance $instance, $oldInstance = [])
+    /**
+     * @param Instance $instance
+     * @param array $oldInstance
+     * @param bool $throw
+     * @return RedirectResponse|void
+     * @throws \JsonException
+     * @throws \Exception
+     */
+    public function characterize(Instance $instance, array $oldInstance = [], bool $throw = false)
     {
         $cf_host = \Config::get("grpc.grpc_cf_host");
         $cf_port = \Config::get("grpc.grpc_cf_port");
@@ -52,6 +61,9 @@ class CharacterizeInstance implements CharacterizesInstances
                 $instance->update($oldInstance);
             } else {
                 $instance->delete();
+                if ($throw) {
+                    throw new \Exception($status->details ?? 'General error, please try again.');
+                }
             }
             return back()->withErrors([
                 'title' => 'Error',

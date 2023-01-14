@@ -174,11 +174,12 @@ class ImportSource implements ShouldQueue
                     $instance = Instance::create($newInstance);
                     $instance->teams()->attach($this->user->currentTeam);
 
-                    app(CharacterizesInstances::class)->characterize($instance);
+                    app(CharacterizesInstances::class)->characterize($instance, [], true);
                 } catch (Exception $e) {
+                    $errorMessage = 'Error: ' . $e->getMessage();
                     info('Error Import Source: create source: ', [$line]);
-                    info('Error: ' . $e->getMessage());
-                    $errors[] = $this->fillErrors($line, 'Server Error', $lineCount);
+                    info($errorMessage);
+                    $errors[] = $this->fillErrors($line, $errorMessage, $lineCount);
                 }
 
             }
