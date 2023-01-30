@@ -54,10 +54,15 @@ class ProjectSimulationSessionReportController extends Controller
 
     public function getMapData(IntegrationReport $session, Request $request)
     {
-
-        $output = json_decode($session->output,true);
+        $createSession = IntegrationReport::where('simulation_id', $session->simulation_id)
+            ->where('simulation_uuid', $session->simulation_uuid)
+            ->where('module', $session->module)
+            ->where('function', 'create_network')->first();
+        $output = json_decode($session->output, true);
+        $outputCreate = json_decode($createSession->output, true);
         $data = $session->data;
-
+        $createEdges = json_encode($outputCreate['edges']);
+        $createNodes = json_encode($outputCreate['nodes']);
         $edges = json_encode($output['network_solution_edges']);
         $nodes = json_encode($output['network_solution_nodes']);
         $edgesSolution = \Storage::disk('public')->get('edges_solution.json');
@@ -65,6 +70,8 @@ class ProjectSimulationSessionReportController extends Controller
         $sourcesToMap = json_encode($data['cf_module']['n_supply_list']);
 
         return view('reports.map', [
+            "createEdges" => $createEdges,
+            "createNodes" => $createNodes,
             "edges" => $edges,
             "nodes" => $nodes,
             "edgesSolution" => $edgesSolution,

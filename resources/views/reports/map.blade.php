@@ -72,20 +72,39 @@
 </body>
 <script>
 
+    let createNodes = JSON.parse(@json($createNodes));
+    let createEdges = JSON.parse(@json($createEdges));
     let edges = JSON.parse(@json($edges));
     let nodes = JSON.parse(@json($nodes));
     let sourcesToMap = JSON.parse(@json($sourcesToMap));
     let sinksToMap = JSON.parse(@json($sinksToMap));
 
-    function getLatLongFrom(osmid) {
+    function getLatLongFrom (osmid, object) {
 
-        let n = nodes.find((node) => node.osmid === osmid)
+        let n = object.find((node) => node.osmid === osmid)
         return [n.lat, n.lon]
     }
 
-    edges.map( function (edge) {
-        edge.fromCoord = getLatLongFrom(edge.from)
-        edge.toCoord = getLatLongFrom(edge.to)
+    function objToString (obj) {
+        let str = "";
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key) && key !== "to" && key !== "from") {
+                str += `<b>${key}</b>: ${JSON.stringify(obj[key])}<br>`;
+            }
+        }
+        return str;
+    }
+
+
+    edges.map(function (edge) {
+        edge.fromCoord = getLatLongFrom(edge.from, nodes)
+        edge.toCoord = getLatLongFrom(edge.to, nodes)
+        return edge
+    })
+
+    createEdges.map(function (edge) {
+        edge.fromCoord = getLatLongFrom(edge.from, createNodes)
+        edge.toCoord = getLatLongFrom(edge.to, createNodes)
         return edge
     })
 
@@ -97,7 +116,7 @@
 
     const map = L.map(document.getElementById('map'),
         {
-            center:sinksToMap[0].coords,
+            center: sinksToMap[0].coords,
             zoom: 13,
             zoomControl: true,
             preferCanvas: false,
@@ -120,9 +139,6 @@
     ).addTo(map);
 
 
-
-
-
     function styler (feature) {
         return {
             stroke: true,
@@ -140,16 +156,34 @@
     };
 
 
-
-    let polylinePoints = edges.forEach( (edge) => {
-        new L.polyline([edge.toCoord, edge.fromCoord], {
+    let createPolyEdges = [];
+    createEdges.forEach((edge) => {
+        let polyline = L.polyline([edge.toCoord, edge.fromCoord], {
             color: 'red',
             weight: 3,
-
             smoothFactor: 1
-        }).addTo(map)
-
+        }).addTo(map).bindPopup(objToString(edge))
+        createPolyEdges.push(polyline)
     })
+
+    let polyEdges = [];
+    edges.forEach((edge) => {
+        let polyline = L.polyline([edge.toCoord, edge.fromCoord], {
+            color: 'green',
+            weight: 3,
+            smoothFactor: 1
+        }).addTo(map).bindPopup(objToString(edge))
+        polyEdges.push(polyline)
+    })
+    // let polylinePoints = edges.forEach( (edge) => {
+    //     new L.polyline([edge.toCoord, edge.fromCoord], {
+    //         color: 'red',
+    //         weight: 3,
+    //
+    //         smoothFactor: 1
+    //     }).addTo(map)
+    //
+    // })
 
     let sourceIcon = L.AwesomeMarkers.icon(
         {
@@ -163,7 +197,7 @@
 
     let sources = []
     sourcesToMap.forEach((source) => {
-        let sourceMark = L.marker(source.coords,  {title: source.name})
+        let sourceMark = L.marker(source.coords, {title: source.name})
             .bindPopup(source.name)
             .addTo(map)
             .setIcon(sourceIcon);
@@ -174,7 +208,7 @@
 
     let sinkIcon = L.AwesomeMarkers.icon(
         {
-            "tilte":"teste",
+            "tilte": "teste",
             "extraClasses": "fa-rotate-0",
             "icon": "leaf",
             "iconColor": "white",
@@ -198,6 +232,8 @@
     var overlays = {
         "Sources": L.layerGroup(sources),
         "Sinks": L.layerGroup(sinks),
+        "optimize network Edges": L.layerGroup(polyEdges),
+        "create network edges": L.layerGroup(createPolyEdges),
     };
 
     L.control.layers({}, overlays).addTo(map);
