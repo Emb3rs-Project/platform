@@ -703,14 +703,14 @@
                         />
                     </field>
 
-<!--                    <field label="Date (start_datetime)"-->
-<!--                           hint="What date does your input data start? what day do you want to start from?">-->
-<!--                        <DateInput-->
-<!--                            v-model="form.extra.input_data.user.start_datetime"-->
-<!--                        />-->
-<!--                        <JetInputError v-if="form.errors['extra.input_data.user.start_datetime']"-->
-<!--                                       :message="form.errors['extra.input_data.user.start_datetime']" class="mt-2"/>-->
-<!--                    </field>-->
+                    <!--                    <field label="Date (start_datetime)"-->
+                    <!--                           hint="What date does your input data start? what day do you want to start from?">-->
+                    <!--                        <DateInput-->
+                    <!--                            v-model="form.extra.input_data.user.start_datetime"-->
+                    <!--                        />-->
+                    <!--                        <JetInputError v-if="form.errors['extra.input_data.user.start_datetime']"-->
+                    <!--                                       :message="form.errors['extra.input_data.user.start_datetime']" class="mt-2"/>-->
+                    <!--                    </field>-->
 
                     <field label="Product Differentiation Option (prod_diff_option)"
                            v-show="form.extra.input_data.user.md !== 'centralized'"
@@ -724,6 +724,7 @@
                     </field>
 
                     <field label="FBP Time"
+                           v-if="form.extra.input_data.user.md === 'centralized'"
                            hint="This feature finds the price that a source should submit in the market to ensure the highest
                             revenue. Please select the agent and the period to  ind the best price.">
                         <TextInput
@@ -732,6 +733,7 @@
                     </field>
 
                     <field label="FBP Agent"
+                           v-if="form.extra.input_data.user.md === 'centralized'"
                            hint="This feature finds the price that a source should submit in the market to ensure the highest
                             revenue. Please select the agent and the period to  ind the best price.">
                         <TextInput
