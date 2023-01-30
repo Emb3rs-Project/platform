@@ -703,14 +703,14 @@
                         />
                     </field>
 
-                    <field label="Date (start_datetime)"
-                           hint="What date does your input data start? what day do you want to start from?">
-                        <DateInput
-                            v-model="form.extra.input_data.user.start_datetime"
-                        />
-                        <JetInputError v-if="form.errors['extra.input_data.user.start_datetime']"
-                                       :message="form.errors['extra.input_data.user.start_datetime']" class="mt-2"/>
-                    </field>
+<!--                    <field label="Date (start_datetime)"-->
+<!--                           hint="What date does your input data start? what day do you want to start from?">-->
+<!--                        <DateInput-->
+<!--                            v-model="form.extra.input_data.user.start_datetime"-->
+<!--                        />-->
+<!--                        <JetInputError v-if="form.errors['extra.input_data.user.start_datetime']"-->
+<!--                                       :message="form.errors['extra.input_data.user.start_datetime']" class="mt-2"/>-->
+<!--                    </field>-->
 
                     <field label="Product Differentiation Option (prod_diff_option)"
                            v-show="form.extra.input_data.user.md !== 'centralized'"
@@ -723,19 +723,21 @@
 
                     </field>
 
-<!--                    <field label="FBP Time"-->
-<!--                           hint="">-->
-<!--                        <TextInput-->
-<!--                            v-model="form.extra.input_data.user.fbp_time"-->
-<!--                        />-->
-<!--                    </field>-->
+                    <field label="FBP Time"
+                           hint="This feature finds the price that a source should submit in the market to ensure the highest
+                            revenue. Please select the agent and the period to  ind the best price.">
+                        <TextInput
+                            v-model="form.extra.input_data.user.fbp_time"
+                        />
+                    </field>
 
-<!--                    <field label="FBP Agent"-->
-<!--                           hint="">-->
-<!--                        <TextInput-->
-<!--                            v-model="form.extra.input_data.user.fbp_agent"-->
-<!--                        />-->
-<!--                    </field>-->
+                    <field label="FBP Agent"
+                           hint="This feature finds the price that a source should submit in the market to ensure the highest
+                            revenue. Please select the agent and the period to  ind the best price.">
+                        <TextInput
+                            v-model="form.extra.input_data.user.fbp_agent"
+                        />
+                    </field>
 
                     <div class="space-y-1 sm:col-span-3">
                         <div>
@@ -1316,11 +1318,11 @@ export default {
                         recurrence: 1,
                         data_profile: "hourly",
                         yearly_demand_rate: 0.05,
-                        start_datetime: "2023-01-01",
+                        // start_datetime: "2023-01-01",
                         prod_diff_option: "noPref",
                         util: [0.7],
-                        // fbp_agent: 'None',
-                        // fbp_time: 'None',
+                        fbp_agent: 'None',
+                        fbp_time: 'None',
                     }
                 },
                 links: [],
