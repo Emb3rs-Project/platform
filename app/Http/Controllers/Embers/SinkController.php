@@ -16,6 +16,7 @@ use App\Models\Template;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -127,6 +128,7 @@ class SinkController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\RedirectResponse
+     * @throws ValidationException
      */
     public function update(Request $request, int $id)
     {
@@ -183,7 +185,7 @@ class SinkController extends Controller
             if ($i['values'] && array_key_exists('characterization', $i['values']) && $i['values']['characterization'] && $i['values']['characterization']['streams']) {
                 $i['values']['characterization']['streams'][count($i['values']['characterization']['streams']) - 1];
             }
-            $i['values'] = array_merge($mergeStreams, $i['values']);;
+            $i['values'] = array_merge($mergeStreams, $i['values']);
             foreach ($keys as $column => $title) {
                 $data[$title] = array_key_exists($column, $i['values']) ? $i['values'][$column] : '';
             }

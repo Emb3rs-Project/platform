@@ -7,6 +7,7 @@ use App\Models\IntegrationReport;
 use App\Models\Simulation;
 use App\Models\SimulationSession;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 use Inertia\Inertia;
 use Inertia\Response;
 use MongoDB\Driver\Session;
@@ -163,6 +164,12 @@ class ProjectSimulationSessionController extends Controller
         }
 
         return $fullJSON;
+    }
+
+    public function getTechnologies(Request $request, $simulationUid)
+    {
+        $simulationData = json_decode(Redis::get($simulationUid),true) ?? [];
+        return $simulationData['river_data']['buildmodel_platform_input']['platform_technologies'];
     }
 
 

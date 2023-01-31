@@ -14,7 +14,7 @@ use App\Notifications\Embers\SimulationNotification;
 use Manager\ManagerClient;
 use Manager\StartSimulationRequest;
 
-class StartSimulation implements StartsSimulations
+class UpdateSimulation implements StartsSimulations
 {
 
     public function run_simulation(SimulationSession $session): void
@@ -33,18 +33,16 @@ class StartSimulation implements StartsSimulations
         $initialData["project"] = $session->simulation->project;
 
         //Transform friendly names to simulation notation from the TEO input
-        if(array_key_exists('platform_sets', $initialData['input_data'])
+        if (array_key_exists('platform_sets', $initialData['input_data'])
             && is_string($initialData['input_data']['platform_sets']['TIMESLICE'])) {
 
             $initialData['input_data']['platform_sets']['TIMESLICE'] =
                 $this->convertTimeSliceFrom($initialData['input_data']['platform_sets']['TIMESLICE']);
         }
 
-        if(!array_key_exists('time_limit', $initialData['input_data'])) {
+        if (!array_key_exists('time_limit', $initialData['input_data'])) {
             $initialData['input_data']['time_limit'] = 0;
         }
-
-        $initialData['intermediate_steps'] = 1;
 
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
@@ -74,14 +72,15 @@ class StartSimulation implements StartsSimulations
         ));
     }
 
-    private function convertTimeSliceFrom($type) {
+    private function convertTimeSliceFrom($type)
+    {
         $timeslices = [
-            'monthly' => range(1,12),
-            'weekly' => range(1,48),
-            'daily' => range(1,366),
-            'quad-hourly' => range(1,2196),
-            'bi-hourly' => range(1,4392),
-            'hourly' => range(1,8784),
+            'monthly' => range(1, 12),
+            'weekly' => range(1, 48),
+            'daily' => range(1, 366),
+            'quad-hourly' => range(1, 2196),
+            'bi-hourly' => range(1, 4392),
+            'hourly' => range(1, 8784),
         ];
 
         return $timeslices[$type] ?? [];

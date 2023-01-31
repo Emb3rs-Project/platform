@@ -124,7 +124,7 @@
                                                             <div class="my-2" v-if="!report.errors">
                                                                 <div class="gap-2 flex justify-around">
 
-                                                                    <template v-if="!['SIMULATION STARTED', 'SIMULATION FINISHED'].includes(report.function)">
+                                                                    <template v-if="!['SIMULATION STARTED', 'SIMULATION FINISHED', 'SIMULATION PAUSED'].includes(report.function)">
                                                                         <button class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-gray-700 rounded-full focus:shadow-outline hover:bg-gray-600"
                                                                                 v-tippy="'Download Input Data'"
                                                                                 @click.prevent.stop="downloadObjectAsJson(report.data, `${report.module}-${report.function}-INPUT`,report.id, 'data')">
@@ -158,7 +158,7 @@
 
                                                                     </a>
 
-                                                                    <a v-if="report.function === 'optimize_network'"
+                                                                    <a v-if="report.function.includes('optimize_network')"
                                                                        class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-cyan-700 rounded-full focus:shadow-outline over:bg-cyan-900"
                                                                        target="_blank"
                                                                        v-tippy="'Show Network Report'"
@@ -169,6 +169,13 @@
                                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                                                                         </svg>
 
+                                                                    </a>
+
+                                                                    <a v-if="report.function === 'SIMULATION PAUSED'"
+                                                                       target="_blank"
+                                                                       @click="openIntermediateStep"
+                                                                       class="cursor-pointer bg-cyan-700 hover:bg-cyan-900 py-2 text-left font-medium text-sm px-4 rounded-lg text-white block w-full">TEO Input
+                                                                        <ChevronRightIcon class="w-5 h-5 float-right"></ChevronRightIcon>
                                                                     </a>
 
                                                                     <a v-if="report.function === 'SIMULATION FINISHED' && shouldShowTheFinalReport"
@@ -209,7 +216,7 @@
 
 
                                         <!-- Loading -->
-                                        <div class="mt-6 sm:mt-0 sm:mb-12" v-if="index === Object.keys(processedReports).length -1 && report.function !== 'SIMULATION FINISHED'">
+                                        <div class="mt-6 sm:mt-0 sm:mb-12" v-if="index === Object.keys(processedReports).length -1 && !['SIMULATION FINISHED', 'SIMULATION PAUSED'].includes(report.function)">
                                             <div class="flex flex-col sm:flex-row items-center">
                                                 <div class="flex justify-start w-full mx-auto items-center">
                                                     <div class="w-full sm:w-1/2 sm:pr-8" >
@@ -374,6 +381,28 @@
         </jet-confirmation-modal>
 
         <jet-confirmation-modal
+            :show="confirmTeoTech"
+            @close="confirmTeoTech = false">
+            <template #title>Resume Simulation</template>
+
+            <template #content>
+                are you sure you want to resume this simulations?
+            </template>
+
+            <template #footer>
+                <SecondaryOutlinedButton @click="confirmTeoTech = false">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton
+                    class="ml-2"
+                    @click="resumeSimulation">
+                    Confirm
+                </PrimaryButton>
+            </template>
+        </jet-confirmation-modal>
+
+        <jet-confirmation-modal
             :show="shouldDelete"
             @close="shouldDelete = false">
             <template #title> Delete Simulation Session</template>
@@ -394,6 +423,70 @@
                 </PrimaryButton>
             </template>
         </jet-confirmation-modal>
+
+        <DialogModal :show="executeAction" @close="executeAction = false" style="max-height: 670px; overflow: scroll">
+            <template #title>
+                <strong>TEO intermediate step</strong>
+            </template>
+
+            <template #content class="my-auto">
+
+                <div class="bg-gray-100 space-y-1 sm:space-y-0 sm:grid sm:col-span-3 sm:gap-4 sm:px-6 sm:py-5" style="max-height: 670px; overflow: scroll">
+                    <div v-for="(tech, index) in teoTechnologies">
+                        <PropertyDisclosure :title="`Technology: ${tech.technology}`" class="sm:col-span-3">
+
+                            <field label="Availability factor">
+                                <text-input type="number" v-model="tech.availability_factor" />
+                            </field>
+                            <field label="Technology discount rate">
+                                <text-input type="number" v-model="tech.discount_rate_tech"/>
+                            </field>
+                            <field label="Capacity to Activity ratio">
+                                <text-input type="number" v-model="tech.capacity_to_activity" unit="kWh/kW"/>
+                            </field>
+                            <field label="Residual capacity">
+                                <text-input type="number" v-model="tech.residual_capacity" unit="kW"/>
+                            </field>
+                            <field label="Maximum annual capacity addition">
+                                <text-input type="number" v-model="tech.max_capacity_investment" unit="kW"/>
+                            </field>
+                            <field label="Minimum capacity ">
+                                <text-input type="number" v-model="tech.min_capacity" unit="kW"/>
+                            </field>
+                            <field label="Minimum annual capacity addition">
+                                <text-input type="number" v-model="tech.min_capacity_investment" unit="kW"/>
+                            </field>
+                            <field label="Minimum annual heat generation">
+                                <text-input type="number" v-model="tech.annual_activity_lower_limit" unit="kWh"/>
+                            </field>
+                            <field label="Minimum model period heat generation">
+                                <text-input type="number" v-model="tech.model_period_activity_lower_limit" unit="kWh"/>
+                            </field>
+                            <field label="Maximum model period heat generation">
+                                <text-input type="number" v-model="tech.model_period_activity_upper_limit" unit="kWh"/>
+                            </field>
+                        </PropertyDisclosure>
+                    </div>
+
+                </div>
+
+
+            </template>
+
+            <template #footer>
+
+                <SecondaryOutlinedButton
+                    class="mr-2"
+                    @click="executeAction = false">
+                    Cancel
+                </SecondaryOutlinedButton>
+
+                <PrimaryButton @click="executeAction = false; confirmTeoTech = true">
+                    Resume Simulation
+                </PrimaryButton>
+            </template>
+
+        </DialogModal>
     </AppLayout>
 </template>
 
@@ -418,6 +511,9 @@ import DownloadIcon from "../../Components/Icons/DownloadIcon.vue";
 import Button from "../../Jetstream/Button.vue";
 import Field from "../../Components/Field.vue";
 import ToggleButton from "../../Components/ToggleButton.vue";
+import DialogModal from "../../Jetstream/DialogModal.vue";
+import PropertyDisclosure from "../../Components/Disclosures/PropertyDisclosure.vue";
+import TextInput from "../../Components/Forms/TextInput.vue";
 
 const props = defineProps({
     session: Object,
@@ -432,8 +528,11 @@ const props = defineProps({
 let downloadOption = ref({})
 let challenge = ref(null)
 const downloadOptions = [{value: 'Download in CSV', key: 'csv'}, {value: 'Download in JSON', key: 'json'}]
-const advancedMode = ref(false)
-const shouldDelete = ref(false)
+const advancedMode    = ref(false)
+const shouldDelete    = ref(false)
+const executeAction   = ref(false)
+const confirmTeoTech  = ref(false)
+const teoTechnologies = ref([])
 
 const confirmEnroll = ref(false);
 const enroll = () => {
@@ -456,6 +555,19 @@ const enroll = () => {
             Inertia.get(route('session.show', {id: props.session.id}))
         }
         confirmEnroll.value = false
+    })
+}
+
+const openIntermediateStep = () => {
+    executeAction.value = true
+    axios.get('/teo-technology-from/'+props.session.simulation_uuid).then(({data}) => {
+        teoTechnologies.value = data
+    })
+}
+
+const resumeSimulation = () => {
+    axios.get('/teo-technology-from/'+props.session.simulation_uuid).then(({data}) => {
+
     })
 }
 
