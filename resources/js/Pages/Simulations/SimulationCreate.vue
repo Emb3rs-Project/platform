@@ -827,28 +827,38 @@
 
                     <PropertyDisclosure title="Advanced properties" class="sm:col-span-3" default-open>
 
-                        <field label="Owner / Technology"
-                               v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
-
-                            <VSelect multiple
-                                     :options="technologyOwnershipOptions"
-                                     v-model="form.extra.input_data.rls[index]"
-                                     :selectable="() => form.extra.input_data.rls[index].length < 2"
-                                     class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                        <field label="Owner / Technology">
+                            <div class="flex gap-2" v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
+                                <VSelect :options="technologyOwnershipOptions.ownershipMap"
+                                         v-model="form.extra.input_data.rls[index][0]"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
                                  sm:text-base border-gray-300 rounded-md"
-                            />
+                                />
+                                <VSelect :options="technologyOwnershipOptions.technologyMap"
+                                         v-model="form.extra.input_data.rls[index][1]"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
+                                 sm:text-base border-gray-300 rounded-md"
+                                />
+                            </div>
 
                         </field>
 
-                        <field label="Owner Map " v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
-
-                            <VSelect multiple
-                                     :options="technologyOwnershipOptions"
-                                     v-model="form.extra.input_data.rls_map[index]"
-                                     :selectable="() => form.extra.input_data.rls_map[index].length < 2"
-                                     class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full
+                        <field label="Owner Map ">
+                            <div class="flex gap-2" v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
+                                <VSelect
+                                    :options="technologyOwnershipOptions.ownershipMap"
+                                    v-model="form.extra.input_data.rls_map[index][0]"
+                                    class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
                                  sm:text-base border-gray-300 rounded-md"
-                            />
+                                />
+                                <VSelect
+                                    :options="technologyOwnershipOptions.nameMap"
+                                    v-model="form.extra.input_data.rls_map[index][1]"
+                                    class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
+                                 sm:text-base border-gray-300 rounded-md"
+                                />
+                            </div>
+
 
                         </field>
 
@@ -1140,7 +1150,9 @@ export default {
         const totalSinkSourcesSelected = computed(() => form.extra.sinks.length + form.extra.sources.length)
         const technologyOwnershipOptions = computed(() => {
 
-            let technologyOwnershipMap = []
+            let ownershipMap = []
+            let technologyMap = []
+            let nameMap = []
             form.extra.input_data.rls = []
             form.extra.input_data.rls_map = []
             let index = 1;
@@ -1149,8 +1161,9 @@ export default {
                 let sourceName = form.extra.sources[sourceIndex].name
                 var ownership = 'source ' + sourceId
                 var technology = `source ${sourceId} ext tech`
-                technologyOwnershipMap.push(ownership)
-                technologyOwnershipMap.push(technology)
+                ownershipMap.push(ownership)
+                technologyMap.push(technology)
+                nameMap.push(sourceName)
                 form.extra.input_data.rls.push([ownership, technology])
                 form.extra.input_data.rls_map.push([ownership, sourceName])
                 index++
@@ -1161,23 +1174,38 @@ export default {
                 let sinkName = form.extra.sinks[sinkIndex].name
                 var ownership = 'sink ' + sinkId
                 var technology = `sink ${sinkId} utl tech`
-
-                technologyOwnershipMap.push(ownership)
-                technologyOwnershipMap.push(technology)
+                ownershipMap.push(ownership)
+                technologyMap.push(technology)
+                nameMap.push(sinkName)
                 form.extra.input_data.rls.push([ownership, technology])
                 form.extra.input_data.rls_map.push([ownership, sinkName])
                 index++
             }
 
-            return technologyOwnershipMap
+
+            return {ownershipMap, technologyMap, nameMap}
         })
 
-        const mapStepStatus = (index) =>
-            currentStep.value === index
+        const fillActorShare = () => {
+            const sources = form.extra.sources || [];
+            const sinks = form.extra.sinks || [];
+            const totalSourcesAndSinks = sources.length + sinks.length;
+            const actorShare = Array(totalSourcesAndSinks).fill(0);
+            actorShare[0] = 1;
+            form.extra.input_data.actorshare = JSON.stringify(actorShare);
+        };
+
+
+        const mapStepStatus = (index) => {
+            if (currentStep.value === 5) {
+                fillActorShare()
+            }
+            return currentStep.value === index
                 ? "current"
                 : currentStep.value < index
                     ? "upcoming"
                     : "complete";
+        }
 
         const form = useForm({
             name: "Simulation Name",
@@ -1199,7 +1227,7 @@ export default {
                     orc_years_working: 25,
                     orc_T_evap: 110,
                     orc_T_cond: 35,
-                    actorshare: "[1]",
+                    actorshare: null,
                     rls: [],
                     rls_map: [],
                     cost: null,
