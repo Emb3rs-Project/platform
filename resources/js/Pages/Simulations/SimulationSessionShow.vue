@@ -353,8 +353,6 @@
                             </div>
                         </div>
                     </template>
-
-
                 </div>
             </div>
         </div>
@@ -469,7 +467,6 @@
                     </div>
 
                 </div>
-
 
             </template>
 
@@ -612,9 +609,11 @@ const openIntermediateStep = () => {
 }
 
 const resumeSimulation = () => {
-    axios.get('/teo-technology-from/'+props.session.simulation_uuid).then(({data}) => {
-
-    })
+    axios.post(route('projects.simulations.run.update', {
+        project: props.session.simulation.project_id,
+        simulation: props.session.simulation_id,
+    }), {simulation_uuid: props.session.simulation_uuid})
+    confirmTeoTech.value = false
 }
 
 const modulesJson = []

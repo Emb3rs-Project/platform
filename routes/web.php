@@ -174,6 +174,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::post('/projects/{project}/simulations/{simulation}/run', RunProjectSimulationController::class)->name('projects.simulations.run')
         ->whereNumber(['project', 'simulation']);
+    Route::post('/projects/{project}/simulations/{simulation}/update', \App\Http\Controllers\Embers\UpdateProjectSimulationController::class)->name('projects.simulations.run.update')
+        ->whereNumber(['project', 'simulation']);
+
     Route::get('/teo-technology-from/{simulationUid}', [ProjectSimulationSessionController::class, 'getTechnologies'])->name('simulations.teo.technologies');
     // Challenge
     Route::resource('/challenges', ChallengeController::class)

@@ -5,19 +5,18 @@ namespace App\Actions\Embers\Integration;
 
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Events\Embers\SimulationFinished;
-use App\Events\Embers\SimulationUpdate;
 use App\Models\IntegrationReport;
 use App\Models\Simulation;
 use App\Models\SimulationSession;
 use App\Models\User;
 use App\Notifications\Embers\SimulationNotification;
 use Manager\ManagerClient;
-use Manager\StartSimulationRequest;
+use Manager\UpdateSimulationRequest;
 
 class UpdateSimulation implements StartsSimulations
 {
 
-    public function run_simulation(SimulationSession $session): void
+    public function run_simulation(SimulationSession $session, $payload = []): void
     {
         $session->load(['simulation', 'simulation.simulationMetadata']);
         $host = config('grpc.grpc_manager_host');
@@ -29,29 +28,17 @@ class UpdateSimulation implements StartsSimulations
             ]
         );
 
-        $initialData = $session->simulation->extra;
-        $initialData["project"] = $session->simulation->project;
 
-        //Transform friendly names to simulation notation from the TEO input
-        if (array_key_exists('platform_sets', $initialData['input_data'])
-            && is_string($initialData['input_data']['platform_sets']['TIMESLICE'])) {
+        $initialData['buildmodel']['platform_technologies'] = $payload['river_data']['buildmodel_platform_input']['platform_technologies'];
 
-            $initialData['input_data']['platform_sets']['TIMESLICE'] =
-                $this->convertTimeSliceFrom($initialData['input_data']['platform_sets']['TIMESLICE']);
-        }
-
-        if (!array_key_exists('time_limit', $initialData['input_data'])) {
-            $initialData['input_data']['time_limit'] = 0;
-        }
-
-        $request = new StartSimulationRequest();
+        $request = new UpdateSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
-        $request->setInitialData(json_encode($initialData));
         $request->setSimulationMetadata(json_encode($session->simulation->simulationMetadata->data));
+        $request->setData(json_encode($initialData));
 
         $session->simulation->changeStatusTo(Simulation::RUNNING);
 
-        list($result, $status) = $client->StartSimulation($request)->wait();
+        list($result, $status) = $client->UpdateSimulation($request)->wait();
 
         logger()?->error('[simulatison_output]:', [$status]);
         $reportError = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->whereNotNull('errors')->count();

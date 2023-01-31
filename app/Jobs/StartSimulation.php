@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Actions\Embers\Integration\MarketShortTermSimulation;
+use App\Actions\Embers\Integration\UpdateSimulation;
 use App\Contracts\Embers\Integration\StartsSimulations;
 use App\Models\SimulationSession;
 use Illuminate\Bus\Queueable;
@@ -20,17 +21,20 @@ class StartSimulation implements ShouldQueue
 
 
     protected SimulationSession $session;
-
+    protected $update = false;
+    protected $payload = [];
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(SimulationSession $session)
+    public function __construct(SimulationSession $session, $update = false , $payload = [])
     {
         $session->load(['simulation', 'simulation.simulationMetadata']);
         $this->session = $session;
+        $this->update  = $update;
+        $this->payload = $payload;
     }
 
     /**
@@ -44,6 +48,8 @@ class StartSimulation implements ShouldQueue
 
         if($simulation->simulationMetadata->data['type'] === 'standalone') {
             (new MarketShortTermSimulation())->run_simulation($this->session);
+        } else if ($this->update){
+            (new UpdateSimulation())->run_simulation($this->session, $this->payload);
         } else {
             app(StartsSimulations::class)->run_simulation($this->session);
         }
