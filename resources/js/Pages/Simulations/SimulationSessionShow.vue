@@ -523,50 +523,50 @@ const props = defineProps({
     networkResolution: String
 });
 
-onMounted(() => {
-    broadcast().channel('my-simulations')
-        .listen('.simulation-updated', (e) => {
-            reloadSimulation()
-        }).listen('.simulation-finished', (e) => {
-        clearTimeout(window.timeouts[`timeoutSimulationReload-${props.session.id}`])
-        reloadSimulation()
-    })
-        .listen('.simulation-run', (e) => {
-            notify({
-                group: "notifications",
-                title: "Simulation",
-                text: e.data.description,
-                data: {
-                    type: "success",
-                },
-            });
-            reloadSimulation(true)
-        })
-    if (props.session.simulation.status === 'RUNNING') {
-        reloadSimulation(true)
-    }
-})
+// onMounted(() => {
+//     broadcast().channel('my-simulations')
+//         .listen('.simulation-updated', (e) => {
+//             reloadSimulation()
+//         }).listen('.simulation-finished', (e) => {
+//         clearTimeout(window.timeouts[`timeoutSimulationReload-${props.session.id}`])
+//         reloadSimulation()
+//     })
+//         .listen('.simulation-run', (e) => {
+//             notify({
+//                 group: "notifications",
+//                 title: "Simulation",
+//                 text: e.data.description,
+//                 data: {
+//                     type: "success",
+//                 },
+//             });
+//             reloadSimulation(true)
+//         })
+//     if (props.session.simulation.status === 'RUNNING') {
+//         reloadSimulation(true)
+//     }
+// })
 
-const reloadSimulation = ( repeat = false) => {
+// const reloadSimulation = ( repeat = false) => {
+//
+//     Inertia.reload({ only: ['session', 'reports'] })
+//     if (repeat) {
+//         window.timeouts[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
+//     }
+// }
 
-    Inertia.reload({ only: ['session', 'reports'] })
-    if (repeat) {
-        window.timeouts[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
-    }
-}
-
-const clearTimeouts = () => {
-    Object.keys(window.timeouts).forEach(timeout => {
-        clearTimeout(window.timeouts[timeout])
-    })
-    window.timeouts = []
-}
-
-
-onBeforeUnmount(() => {
-    broadcast().leave('my-simulations')
-    clearTimeouts()
-})
+// const clearTimeouts = () => {
+//     Object.keys(window.timeouts).forEach(timeout => {
+//         clearTimeout(window.timeouts[timeout])
+//     })
+//     window.timeouts = []
+// }
+//
+//
+// onBeforeUnmount(() => {
+//     broadcast().leave('my-simulations')
+//     clearTimeouts()
+// })
 
 let downloadOption = ref({})
 let challenge = ref(null)
