@@ -399,7 +399,7 @@
 
 <script setup>
 import AppLayout from "@/Layouts/AppLayout";
-import {computed, onMounted, onUnmounted, ref, getCurrentInstance} from "vue";
+import {computed, onMounted, onUnmounted, ref, getCurrentInstance, onBeforeUnmount} from "vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryOutlinedButton from "@/Components/SecondaryOutlinedButton.vue";
 import VSelect from "vue-select";
@@ -418,6 +418,7 @@ import DownloadIcon from "../../Components/Icons/DownloadIcon.vue";
 import Button from "../../Jetstream/Button.vue";
 import Field from "../../Components/Field.vue";
 import ToggleButton from "../../Components/ToggleButton.vue";
+import {broadcast} from "../../Mixins/vueEcho";
 
 const props = defineProps({
     session: Object,
@@ -428,6 +429,51 @@ const props = defineProps({
     isEnrolled: Boolean,
     networkResolution: String
 });
+
+onMounted(() => {
+    broadcast().channel('my-simulations')
+        .listen('.simulation-updated', (e) => {
+            reloadSimulation()
+        }).listen('.simulation-finished', (e) => {
+        clearTimeout(window.timeouts[`timeoutSimulationReload-${props.session.id}`])
+        reloadSimulation()
+    })
+        .listen('.simulation-run', (e) => {
+            notify({
+                group: "notifications",
+                title: "Simulation",
+                text: e.data.description,
+                data: {
+                    type: "success",
+                },
+            });
+            reloadSimulation(true)
+        })
+    if (props.session.simulation.status === 'RUNNING') {
+        reloadSimulation(true)
+    }
+})
+
+const reloadSimulation = ( repeat = false) => {
+
+    Inertia.reload({ only: ['session', 'reports'] })
+    if (repeat) {
+        window.timeouts[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
+    }
+}
+
+const clearTimeouts = () => {
+    Object.keys(window.timeouts).forEach(timeout => {
+        clearTimeout(window.timeouts[timeout])
+    })
+    window.timeouts = []
+}
+
+
+onBeforeUnmount(() => {
+    broadcast().leave('my-simulations')
+    clearTimeouts()
+})
 
 let downloadOption = ref({})
 let challenge = ref(null)
