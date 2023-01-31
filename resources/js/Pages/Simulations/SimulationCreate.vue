@@ -446,6 +446,12 @@
                                  v-model="form.extra.input_data.platform_sets.EMISSION"/>
                     </field>
 
+                    <field label="Emission penalty (CO2)"
+                           hint="">
+                        <text-input
+                            v-model="form.extra.input_data.platform_sets.emission_penalty"/>
+                    </field>
+
                     <field label="Time resolution (TIMESLICE)"
                            hint="It represents the time split of each modelled year, therefore the time resolution of the model.">
                         <SelectMenu
@@ -1274,6 +1280,7 @@ export default {
                         "EMISSION": [
                             "co2"
                         ],
+                        "emission_penalty": 15,
                         "TIMESLICE": "monthly",
                         "YEAR": [
                             2023
