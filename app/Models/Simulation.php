@@ -19,7 +19,7 @@ class Simulation extends Model
     public const RUNNING = 'RUNNING';
     public const COMPLETED = 'COMPLETED';
     public const ERROR = 'ERROR';
-    public const INPUT_NEEDED = 'INPUT NEEDED';
+    public const INPUT_NEEDED = 'WAITING FOR USER';
 
     public const PROGRESS = [
         'demo-simulation' => [
