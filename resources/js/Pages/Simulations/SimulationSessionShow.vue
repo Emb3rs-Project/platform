@@ -529,7 +529,7 @@ onMounted(() => {
         .listen('.simulation-updated', (e) => {
             reloadSimulation()
         }).listen('.simulation-finished', (e) => {
-        clearTimeout(window.timeoutsSession[`timeoutSimulationReload-${props.session.id}`])
+        clearTimeout(window.timeoutsSession[`timeoutSimulationReload-${e.data.id}`])
         reloadSimulation()
     })
         .listen('.simulation-run', (e) => {
@@ -552,7 +552,7 @@ const reloadSimulation = ( repeat = false) => {
 
     Inertia.reload({ only: ['session', 'reports'] })
     if (repeat) {
-        window.timeoutsSession[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
+        window.timeoutsSession[`timeoutSimulationReload-${props.session.simulation.id}`] = setTimeout(reloadSimulation, 5000, true)
     }
 }
 
