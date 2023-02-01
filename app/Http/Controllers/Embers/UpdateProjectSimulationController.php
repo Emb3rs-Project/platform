@@ -2,24 +2,14 @@
 
 namespace App\Http\Controllers\Embers;
 
-use App\Contracts\Embers\Integration\StartsSimulations;
-use App\Contracts\Embers\Simulations\SharesSimulations;
 use App\Events\Embers\SimulationRunning;
 use App\Events\Embers\SimulationUpdate;
 use App\Http\Controllers\Controller;
 use App\Jobs\StartSimulation;
 use App\Models\Project;
 use App\Models\Simulation;
-use App\Notifications\Embers\ImportNotification;
-use App\Nova\Actions\RunSimulationSession;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
-use Laravel\Nova\Actions\ActionMethod;
-use Laravel\Nova\Actions\CallQueuedAction;
-use Laravel\Nova\Fields\ActionFields;
-use Queue;
-use Ramsey\Uuid\Uuid;
 
 class UpdateProjectSimulationController extends Controller
 {
