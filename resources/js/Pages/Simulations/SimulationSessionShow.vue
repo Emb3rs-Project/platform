@@ -516,57 +516,58 @@ import TextInput from "../../Components/Forms/TextInput.vue";
 const props = defineProps({
     session: Object,
     reports: Array,
-    reportsHtml: Array,
+    reportsHtml: [Array, Object],
     challenges: Array,
     solverModules: Object,
     isEnrolled: Boolean,
     networkResolution: String
 });
+window.timeoutsSession = []
 
-// onMounted(() => {
-//     broadcast().channel('my-simulations')
-//         .listen('.simulation-updated', (e) => {
-//             reloadSimulation()
-//         }).listen('.simulation-finished', (e) => {
-//         clearTimeout(window.timeouts[`timeoutSimulationReload-${props.session.id}`])
-//         reloadSimulation()
-//     })
-//         .listen('.simulation-run', (e) => {
-//             notify({
-//                 group: "notifications",
-//                 title: "Simulation",
-//                 text: e.data.description,
-//                 data: {
-//                     type: "success",
-//                 },
-//             });
-//             reloadSimulation(true)
-//         })
-//     if (props.session.simulation.status === 'RUNNING') {
-//         reloadSimulation(true)
-//     }
-// })
+onMounted(() => {
+    broadcast().channel('my-simulations')
+        .listen('.simulation-updated', (e) => {
+            reloadSimulation()
+        }).listen('.simulation-finished', (e) => {
+        clearTimeout(window.timeoutsSession[`timeoutSimulationReload-${props.session.id}`])
+        reloadSimulation()
+    })
+        .listen('.simulation-run', (e) => {
+            notify({
+                group: "notifications",
+                title: "Simulation",
+                text: e.data.description,
+                data: {
+                    type: "success",
+                },
+            });
+            reloadSimulation(true)
+        })
+    if (props.session.simulation.status === 'RUNNING') {
+        reloadSimulation(true)
+    }
+})
 
-// const reloadSimulation = ( repeat = false) => {
-//
-//     Inertia.reload({ only: ['session', 'reports'] })
-//     if (repeat) {
-//         window.timeouts[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
-//     }
-// }
+const reloadSimulation = ( repeat = false) => {
 
-// const clearTimeouts = () => {
-//     Object.keys(window.timeouts).forEach(timeout => {
-//         clearTimeout(window.timeouts[timeout])
-//     })
-//     window.timeouts = []
-// }
-//
-//
-// onBeforeUnmount(() => {
-//     broadcast().leave('my-simulations')
-//     clearTimeouts()
-// })
+    Inertia.reload({ only: ['session', 'reports'] })
+    if (repeat) {
+        window.timeoutsSession[`timeoutSimulationReload-${props.session.id}`] = setTimeout(reloadSimulation, 5000, true)
+    }
+}
+
+const clearTimeouts = () => {
+    Object.keys(window.timeoutsSession).forEach(timeout => {
+        clearTimeout(window.timeoutsSession[timeout])
+    })
+    window.timeoutsSession = []
+}
+
+
+onBeforeUnmount(() => {
+    broadcast().leave('my-simulations')
+    clearTimeouts()
+})
 
 let downloadOption = ref({})
 let challenge = ref(null)
