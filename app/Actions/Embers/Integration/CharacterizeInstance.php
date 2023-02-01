@@ -89,16 +89,28 @@ class CharacterizeInstance implements CharacterizesInstances
             unset($data['real_hourly_capacity']);
         }
 
+        if (array_key_exists('real_daily_capacity', $data) && !isset($data['real_daily_capacity'])) {
+            unset($data['real_daily_capacity']);
+        }
+
+        if (array_key_exists('real_monthly_capacity', $data) && !isset($data['real_monthly_capacity'])) {
+            unset($data['real_monthly_capacity']);
+        }
+
+        if (array_key_exists('real_yearly_capacity', $data) && !isset($data['real_yearly_capacity'])) {
+            unset($data['real_yearly_capacity']);
+        }
+
         if (array_key_exists('real_daily_capacity', $data) && isset($data['real_daily_capacity'])) {
-            $data['real_daily_capacity'] = json_decode($data['real_daily_capacity']);
+            $data['real_daily_capacity'] = json_decode($data['real_daily_capacity'], true);
         }
 
         if (array_key_exists('real_hourly_capacity', $data) && isset($data['real_hourly_capacity'])) {
-            $data['real_hourly_capacity'] = json_decode($data['real_hourly_capacity']);
+            $data['real_hourly_capacity'] = json_decode($data['real_hourly_capacity'], true);
         }
 
         if (array_key_exists('real_monthly_capacity', $data) && isset($data['real_monthly_capacity'])) {
-            $data['real_monthly_capacity'] = json_decode($data['real_monthly_capacity']);
+            $data['real_monthly_capacity'] = json_decode($data['real_monthly_capacity'], true);
         }
 
         if (array_key_exists('u_floor', $data) && !isset($data['u_floor'])) {
