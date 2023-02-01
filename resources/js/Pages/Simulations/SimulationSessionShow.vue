@@ -116,7 +116,7 @@
                                                             <p>Module : {{ report.module }} </p>
                                                             <p>Function : {{ report.function }} </p>
                                                             <p>Created_at : {{ moment(report.created_at).format('DD/MM/YYYY') }} </p>
-                                                            <p v-if="report.function === 'create_network'">Resolution : {{ networkResolution }} </p>
+                                                            <p v-if="report.function.includes('create_network')">Resolution : {{ networkResolution }} </p>
                                                             <p v-if="solverModules.hasOwnProperty(report.module) && solverModules[report.module] !== null">
                                                                 Solver : {{ solverModules[report.module] }} </p>
                                                             <p>Duration : {{ bench(report.created_at, report.function) }} </p>
@@ -147,7 +147,7 @@
 
                                                                     <a class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-cyan-700 rounded-full focus:shadow-outline over:bg-cyan-900"
                                                                             v-tippy="'Show Report'"
-                                                                        v-if="reportsHtml[report.id]"
+                                                                        v-if="reportsHtml[report.id] || report.output.report"
                                                                         target="_blank"
                                                                         :href="route('session.report.show', {session : session.id, report: report.id})">
 
@@ -610,11 +610,14 @@ const openIntermediateStep = () => {
 }
 
 const resumeSimulation = () => {
+
     axios.post(route('projects.simulations.run.update', {
         project: props.session.simulation.project_id,
         simulation: props.session.simulation_id,
-    }), {simulation_uuid: props.session.simulation_uuid})
+    }), {simulation_uuid: props.session.simulation_uuid, technologies: teoTechnologies.value})
+
     confirmTeoTech.value = false
+
 }
 
 const modulesJson = []

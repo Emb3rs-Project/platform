@@ -44,6 +44,7 @@ class UpdateProjectSimulationController extends Controller
         $simulation->save();
 
         $simulationData = json_decode(Redis::get($simulationUid),true) ?? [];
+        $simulationData['river_data']['buildmodel_platform_input']['platform_technologies'] = $request->input('technologies');
         $payload = $simulationData;
 
 
