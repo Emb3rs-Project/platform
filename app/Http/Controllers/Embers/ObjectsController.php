@@ -14,15 +14,12 @@ class ObjectsController extends Controller
 {
     public function index(Request $request)
     {
-        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
+        $instances = $request->user()->currentTeam->instances()->with([
+            'template',
+            'template.category',
+            'location',
+        ])->get();
 
-        $instances = Instance::query()
-            ->with([
-                'template',
-                'template.category',
-                'location',
-            ])->whereIn('id', $teamInstances)
-            ->get();
 
         $links = $request->user()->currentTeam->links;
         return [
@@ -36,13 +33,15 @@ class ObjectsController extends Controller
 
     public function map(Request $request): Response
     {
-        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
-
-        $instances = Instance::with([
-            'template',
-            'template.category',
-            'location',
-        ])->whereIn('id', $teamInstances)->get();
+        $instances = $request->user()
+            ->currentTeam
+            ->instances()
+            ->with([
+                'template',
+                'template.category',
+                'location',
+            ])
+            ->get();
 
 
         return Inertia::render('Objects/Objects', ['instances' => cleanCharacterization($instances)]);
@@ -50,19 +49,14 @@ class ObjectsController extends Controller
 
     public function markers(Request $request)
     {
-        $teamInstances = $request->user()->currentTeam->instances->pluck('id');
-        $teamLinks = $request->user()->currentTeam->links->pluck('id');
-
-        $instances = Instance::with([
+        $instances = $request->user()->currentTeam->instances()->with([
             'template',
             'template.category',
             'location',
-        ])->whereIn('id', $teamInstances)
-        ->get();
-
-        $links = Link::with([
+        ])->get();
+        $links = $request->user()->currentTeam->links()->with([
             'geoSegments'
-        ])->whereIn('id', $teamLinks)->get();
+        ])->get();
 
         return [
             "instances" => cleanCharacterization($instances),

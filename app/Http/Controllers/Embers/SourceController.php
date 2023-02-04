@@ -22,12 +22,15 @@ class SourceController extends Controller
 
     public function index()
     {
-        $instances = Auth::user()->currentTeam->instances->pluck('id');
-        $sources = Instance::whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))
-            ->whereIn('id', $instances)
-            ->orderBy('created_at', 'desc')->get();
+        $sources = Auth::user()
+            ->currentTeam
+            ->instances()
+            ->whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return Inertia::render('Objects/Sources/SourceIndex',
-            ['sources' => $sources]);
+            ['sources' => cleanCharacterization($sources)]);
     }
 
     /**

@@ -24,10 +24,10 @@ class IndexLink implements IndexesLinks
     {
         $this->authorize($user);
 
-        $teamLinks = $user->currentTeam->links->pluck('id');
-
-        $links = Link::query()->with(['geoSegments'])->whereIn('id', $teamLinks)->get();
-
-        return $links;
+        return $user
+            ->currentTeam
+            ->links()
+            ->with(['geoSegments'])
+            ->get();
     }
 }

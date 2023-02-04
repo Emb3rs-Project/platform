@@ -8,6 +8,7 @@ use App\Models\Instance;
 use App\Models\News;
 use App\Models\Template;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,30 +24,20 @@ class DashboardController extends Controller
     {
         $currentTeam = $request->user()->currentTeam;
         $users = $currentTeam->allUsers();
-        $teamInstances = $currentTeam->instances()->get()->pluck('id');
+        $teamInstances = $currentTeam->instances();
 
-        $sourceCategories = Category::whereType('source')
-            ->get('id');
-        $templates = Template::whereIn('category_id', $sourceCategories)
-            ->get('id');
-        $sources = Instance::whereIn('template_id', $templates)
-            ->whereIn('id', $teamInstances)
+        $sources = $teamInstances->whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))
             ->with(['location', 'template', 'template.category'])
-            ->get();
+            ->orderBy('created_at', 'desc')->get();
 
-        $sinkCategories = Category::whereType('sink')
-            ->get('id');
-        $templates = Template::whereIn('category_id', $sinkCategories)
-            ->get('id');
-        $sinks = Instance::whereIn('template_id', $templates)
-            ->whereIn('id', $teamInstances)
+        $sinks = $teamInstances->whereHas('template', fn($query) => $query->where('category_id', Category::SINK))
             ->with(['location', 'template', 'template.category'])
-            ->get();
+            ->orderBy('created_at', 'desc')->get();
 
         return Inertia::render('Dashboard', [
             'users' => $users,
-            'sources' => $sources,
-            'sinks' => $sinks
+            'sources' => cleanCharacterization($sources),
+            'sinks' => cleanCharacterization($sinks)
         ]);
     }
 

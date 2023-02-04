@@ -72,19 +72,22 @@ class ProjectController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
-        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+        $instances = Auth::user()
+            ->currentTeam
+            ->instances()
+            ->with('location', 'template', 'template.category')
+            ->get();
 
-        $teamLinks = $request->user()->currentTeam->links->pluck('id');
-
-        $links = Link::with([
-            'geoSegments'
-        ])->whereIn('id', $teamLinks)->get();
+        $links = $request->user()
+            ->currentTeam->
+            links()->with([
+                'geoSegments'
+            ])->get();
 
         $project = app(ShowsProjects::class)->show($request->user(), $id);
 
         return Inertia::render('Projects/ProjectDetails', [
-            'instances' => $instances,
+            'instances' => cleanCharacterization($instances),
             'links' => $links,
             'project' => $project,
 
@@ -158,8 +161,8 @@ class ProjectController extends Controller
     {
 
         $profile_sample = $this->getProfileSamples($request->query('type'));
-        if($profile_sample) {
-            return response()->download(public_path('samples/'.$profile_sample));
+        if ($profile_sample) {
+            return response()->download(public_path('samples/' . $profile_sample));
         }
 
 

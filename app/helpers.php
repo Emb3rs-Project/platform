@@ -12,7 +12,7 @@ if (!function_exists('closetags')) {
             return $html;
         }
         $openedtags = array_reverse($openedtags);
-        for ($i = 0; $i < $len_opened; $i++) {
+        for ($i = 0; $i < $len_opened; $i ++) {
             if (!in_array($openedtags[$i], $closedtags)) {
                 $html .= '</' . $openedtags[$i] . '>';
             } else {
@@ -24,16 +24,18 @@ if (!function_exists('closetags')) {
 }
 
 if (!function_exists('cleanCharacterization')) {
-    function cleanCharacterization($collection)
+    function cleanCharacterization($collection, $withStreamsCount = false)
     {
-        return $collection->map(function($i) {
+        return $collection->map(function ($i) use ($withStreamsCount) {
             if (Arr::has($i['values'], 'characterization')) {
-                //$i['values']['characterization'] = "";
                 $values = $i['values'];
+                if ($withStreamsCount && Arr::has($i['values']['characterization'], 'streams')) {
+                    $values['streams_length'] = count($values['characterization']['streams']);
+                }
                 $values['characterization'] = null;
                 $i['values'] = $values;
             }
             return $i;
-         });
+        });
     }
 }

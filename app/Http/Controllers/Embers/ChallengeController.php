@@ -109,14 +109,19 @@ class ChallengeController extends Controller
     {
         $user = $request->user();
         $challenge = app(ShowChallenge::class)->show($request->user(), $id);
-        $instances_id = Auth::user()->currentTeam->instances->pluck("id");
-        $instances = Instance::with('location', 'template', 'template.category')->whereIn('id', $instances_id)->get();
+        $instances = Auth::user()
+            ->currentTeam
+            ->instances()
+            ->with('location', 'template', 'template.category')
+            ->get();
 
         $isEnrolled = $challenge->whereHas('participants', function ($query) use ($id) {
             return $query->where('user_id', Auth::id())->where('challenge_id', $id);
         })->get();
 
-        $teamLinks = $request->user()->currentTeam->links->pluck('id');
+        $links = $request->user()->currentTeam->links()->with([
+            'geoSegments'
+        ])->get();
 
         $participants = [];
 
@@ -147,7 +152,7 @@ class ChallengeController extends Controller
                     $customData['restrictions'] = [];
                     $challenge->restrictions->each(function ($restriction) use (&$customData, $challenge, $dot) {
                         if ($restriction->output && $dot->get($restriction->output, 0) >= $restriction->pivot->value) {
-                            $customData['restrictions'][] = $restriction->name.':  '.$dot->get($restriction->output, 0).'('.$restriction->unit.') > '.$restriction->pivot->value.'('.$restriction->unit.')';
+                            $customData['restrictions'][] = $restriction->name . ':  ' . $dot->get($restriction->output, 0) . '(' . $restriction->unit . ') > ' . $restriction->pivot->value . '(' . $restriction->unit . ')';
                             $customData['hasRestriction'] = true;
                         }
                     });
@@ -158,13 +163,10 @@ class ChallengeController extends Controller
                 $participants[] = $participant;
             }
         });
-        $links = Link::with([
-            'geoSegments'
-        ])->whereIn('id', $teamLinks)->get();
         return Inertia::render('Challenge/ChallengeShow', [
             'challenge' => $challenge,
             'participants' => $participants,
-            'instances' => $instances,
+            'instances' => cleanCharacterization($instances),
             'links' => $links,
             'isEnrolled' => $isEnrolled->count() > 0,
             'projects' => $user->currentTeam->projects?->map(fn($item) => [

@@ -1385,7 +1385,7 @@ export default {
         const completeActorShare = (data) => {
             let totalOfStreams = 0
             totalOfStreams = form.extra.sinks.reduce(
-                (previous, current) => previous + current.values.characterization.streams.length,
+                (previous, current) => previous + current.values.streams_length,
                 0
             )
             let list = JSON.parse(data)
@@ -1449,7 +1449,7 @@ export default {
                         let constantValue = data.extra.input_data.user.util[0]
                         try {
                             totalOfStreams = form.extra.sinks.reduce(
-                                (previous, current) => previous + current.values.characterization.streams.length,
+                                (previous, current) => previous + current.values.streams_length,
                                 0
                             )
 
