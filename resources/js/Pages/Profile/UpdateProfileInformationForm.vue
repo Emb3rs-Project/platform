@@ -100,14 +100,8 @@
       </div>
 
         <div class="col-span-6 sm:col-span-4">
-            <TextInput
-                v-model="form.allow_email_notification"
-                label="Receive notification by Email"
-            />
-            <JetInputError
-                :message="form.errors.allow_email_notification"
-                class="mt-2"
-            />
+
+                Receive notification by Email <input type="checkbox"/>
 
         </div>
     </template>
