@@ -7,7 +7,7 @@
                 <!-- <h2 class="text-lg font-bold">Simulation Details</h2> -->
 
                 <div class="py-5 text-left">
-                    <h2 class="text-md font-semibold">Simulation Metadata</h2>
+                    <h2 class="text-md font-semibold">Simulation Type</h2>
                     <div
                         class="border border-gray-300 shadow-md p-5 my-2 rounded-md font-mono text-gray-500 bg-gray-50 text-xs">
                         Name : <b>{{ form.simulation_metadata.name }}</b> <br/>
@@ -53,7 +53,7 @@
                         <div>
                             <div class="flex justify-between">
                                 <label for="sim_metadata" class="block text-sm font-medium text-gray-700">
-                                    Simulation Metadata
+                                    Simulation Type
                                 </label>
                                 <span class="text-sm text-gray-500" id="input-required">
                                     Required
@@ -67,7 +67,7 @@
                                          v-model="form.simulation_metadata"/>
                             </div>
                             <p class="mt-2 text-sm text-gray-500 text-justify">
-                                The simulation Metadata to use
+                                The simulation Type to use
                             </p>
                             <JetInputError v-show="form.errors.simulation_metadata"
                                            :message="form.errors.simulation_metadata" class="mt-2"/>
