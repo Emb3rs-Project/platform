@@ -161,7 +161,7 @@ class ProjectSimulationController extends Controller
             ->with('location', 'template', 'template.category')
             ->get();
         $simulation = Simulation::find($simulationId);
-        $links = $request->user()->currentTeam->links->with([
+        $links = $request->user()->currentTeam->links()->with([
             'geoSegments'
         ])->get();
 
