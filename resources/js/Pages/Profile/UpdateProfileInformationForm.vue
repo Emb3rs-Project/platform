@@ -98,6 +98,18 @@
           class="mt-2"
         />
       </div>
+
+        <div class="col-span-6 sm:col-span-4">
+            <TextInput
+                v-model="form.allow_email_notification"
+                label="Receive notification by Email"
+            />
+            <JetInputError
+                :message="form.errors.allow_email_notification"
+                class="mt-2"
+            />
+
+        </div>
     </template>
 
     <template #actions>
