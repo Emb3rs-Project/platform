@@ -738,12 +738,16 @@
                         />
                     </field>
 
+
                     <field label="FBP Agent"
                            v-if="form.extra.input_data.user.md === 'centralized'"
                            hint="This feature finds the price that a source should submit in the market to ensure the highest
                             revenue. Please select the agent and the period to  ind the best price.">
-                        <TextInput
+                        <VSelect
+                            :options="fbpAgents"
                             v-model="form.extra.input_data.user.fbp_agent"
+                            class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block
+                                 sm:text-base border-gray-300 rounded-md"
                         />
                     </field>
 
@@ -1190,6 +1194,20 @@ export default {
 
 
             return {ownershipMap, technologyMap, nameMap}
+        })
+
+        const fbpAgents = computed(() => {
+
+
+            let nameMap = ['None']
+            for (let sourceIndex in form.extra.sources) {
+                let sourceName = form.extra.sources[sourceIndex].name
+                nameMap.push(sourceName)
+            }
+
+
+
+            return nameMap
         })
 
         const fillActorShare = () => {
@@ -1703,7 +1721,8 @@ export default {
             convertListToNumeric,
             pushNewOptions,
             completeActorShare,
-            solvers
+            solvers,
+            fbpAgents
 
 
         };
