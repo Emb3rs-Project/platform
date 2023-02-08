@@ -98,6 +98,12 @@
           class="mt-2"
         />
       </div>
+
+        <div class="col-span-6 sm:col-span-4">
+
+                Receive notification by Email <input type="checkbox"/>
+
+        </div>
     </template>
 
     <template #actions>
