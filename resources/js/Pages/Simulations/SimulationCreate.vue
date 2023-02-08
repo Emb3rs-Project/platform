@@ -1460,6 +1460,11 @@ export default {
                     data.extra.input_data.invest_pumps = Number(data.extra.input_data.invest_pumps)
 
 
+                    if (form.extra.input_data.user.fbp_time !== 'None') {
+                        data.extra.input_data.user.fbp_time = Number(data.extra.input_data.user.fbp_time)
+                    }
+
+
                     //IF the user select to use a constant value the we should repeat the util value value for each stream
                     if (form.extra.isConstantUtil) {
 
