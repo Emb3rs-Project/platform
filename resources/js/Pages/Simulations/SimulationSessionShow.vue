@@ -291,7 +291,7 @@
                                         </DisclosurePanel>
                                     </Disclosure>
                                 </div>
-                                <p>Error: <span class="font-bold">{{ report.errors.detail }}</span></p>
+                                <p>Error : <span class="font-bold">{{ report.errors.detail }}</span></p>
                             </div>
 
                             <div v-if="!report.errors"
