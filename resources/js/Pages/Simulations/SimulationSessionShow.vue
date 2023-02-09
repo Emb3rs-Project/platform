@@ -274,7 +274,24 @@
                                         </DisclosurePanel>
                                     </Disclosure>
                                 </div>
-                                <p>Error : <span class="font-bold">{{ report.errors.detail }}</span></p>
+                                <div v-if="report.errors.trace" class="my-2">
+                                    <Disclosure v-slot="{ open }">
+                                        <DisclosureButton
+                                            @click="getJsonFrom('data', report.id, false)"
+                                            class="flex w-full justify-between rounded-lg bg-gray-700 px-4 py-2 text-left text-sm font-medium text-white hover:bg-gray-600 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                                            <span>Trace Error</span>
+                                            <ChevronUpIcon :class="open ? 'rotate-180 transform' : ''"
+                                                           class="h-5 w-5 "/>
+                                        </DisclosureButton>
+                                        <DisclosurePanel class="px-4 pt-4 pb-2 text-sm text-gray-500">
+                                            <Codemirror v-model="report.errors.trace" :extensions="extensions"
+                                                        :style="{ height: '400px' }" :autofocus="true"
+                                                        :indent-with-tab="true"
+                                                        :tabSize="2" disabled></Codemirror>
+                                        </DisclosurePanel>
+                                    </Disclosure>
+                                </div>
+                                <p>Error: <span class="font-bold">{{ report.errors.detail }}</span></p>
                             </div>
 
                             <div v-if="!report.errors"
