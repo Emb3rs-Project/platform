@@ -63,7 +63,11 @@ class StartSimulation implements StartsSimulations
         if ($reportError > 0) {
             $session->simulation->changeStatusTo(Simulation::ERROR);
         } else {
-            $session->simulation->changeStatusTo(Simulation::INPUT_NEEDED);
+            if($initialData['intermediate_steps']) {
+                $session->simulation->changeStatusTo(Simulation::INPUT_NEEDED);
+            } else {
+                $session->simulation->changeStatusTo(Simulation::COMPLETED);
+            }
         }
 
         $user = User::find($session->simulation->requested_by);
