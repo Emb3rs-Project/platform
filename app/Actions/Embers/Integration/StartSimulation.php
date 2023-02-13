@@ -44,7 +44,9 @@ class StartSimulation implements StartsSimulations
             $initialData['input_data']['time_limit'] = 0;
         }
 
-        $initialData['intermediate_steps'] = 1;
+        $identifier = $session->simulation->simulationMetadata->data['identifier'];
+        $initialData['intermediate_steps'] = $identifier === 'demo_simulation'? 1 : 0;
+
 
         $request = new StartSimulationRequest();
         $request->setSimulationUuid(str($session->simulation_uuid)->toString());
