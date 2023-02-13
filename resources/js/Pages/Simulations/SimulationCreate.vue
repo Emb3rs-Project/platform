@@ -1049,8 +1049,8 @@ export default {
             value: 'Decentralized'
         }, {key: 'pool', value: 'Pool'}, {key: 'p2p', value: 'P2P'}, {key: 'community', value: 'Community'}]
         const dataProfiles = [{key: 'hourly', value: 'Hourly'}, {key: 'daily', value: 'Daily'}]
-        const horizonBasisProfiles = [{key: 'weekly', value: 'Weekly'}, {
-            key: 'monthly',
+        const horizonBasisProfiles = [{key: 'weeks', value: 'Weekly'}, {
+            key: 'months',
             value: 'Monthly'
         }, {key: 'years', value: 'Years'}]
         const productDiffProfiles = [{key: 'noPref', value: 'noPref'}, {
