@@ -1458,6 +1458,7 @@ export default {
                     data.extra.input_data.factor_street_terrain = Number(data.extra.input_data.factor_street_terrain)
                     data.extra.input_data.factor_street_overland = Number(data.extra.input_data.factor_street_overland)
                     data.extra.input_data.invest_pumps = Number(data.extra.input_data.invest_pumps)
+                    data.extra.input_data.project_duration = Number(data.extra.input_data.project_duration)
 
 
                     if (form.extra.input_data.user.fbp_time !== 'None') {
