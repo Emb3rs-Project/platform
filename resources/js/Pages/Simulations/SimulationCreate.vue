@@ -813,41 +813,48 @@
                         />
                     </field>
 
-                    <field label="Grid ownership (actorshare)"
-                           required
-                           hint="Grid ownership structure represents how the cost of the heat distribution network will be shared among the actors.
-                        Actors represents the company/entities involved. If you are not sure about actors involed in your project, then each source and sink is an actor.
-                        For example, if there are two sources and one sink then there are 3 actors in total.
-                        Grid ownership represents how the cost of network will be divided among these actors.
-                        If two sources share the cost of grid then input to grid ownership will be 50% cost goes to source 1 and 50% goes to source 2, while 0% to sink.
-                        The input should look like this [0.5, 0.5, 0].
+<!--                    <field label="Grid ownership (actorshare)"-->
+<!--                           required-->
+<!--                           hint="Grid ownership structure represents how the cost of the heat distribution network will be shared among the actors.-->
+<!--                        Actors represents the company/entities involved. If you are not sure about actors involed in your project, then each source and sink is an actor.-->
+<!--                        For example, if there are two sources and one sink then there are 3 actors in total.-->
+<!--                        Grid ownership represents how the cost of network will be divided among these actors.-->
+<!--                        If two sources share the cost of grid then input to grid ownership will be 50% cost goes to source 1 and 50% goes to source 2, while 0% to sink.-->
+<!--                        The input should look like this [0.5, 0.5, 0].-->
 
-                        The sum of grid ownership array/input should be equal to 1.">
-                        <TextInput
-                            unit="%/100"
-                            v-model="form.extra.input_data.actorshare"
+<!--                        The sum of grid ownership array/input should be equal to 1.">-->
+<!--                        <TextInput-->
+<!--                            unit="%/100"-->
+<!--                            v-model="form.extra.input_data.actorshare"-->
 
-                        />
+<!--                        />-->
 
-                        <!--                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"-->
-                        <!--                             :createOption="pushNewOptions"-->
-                        <!--                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full-->
-                        <!--                             sm:text-base border-gray-300 rounded-md"/>-->
-                    </field>
+<!--                        &lt;!&ndash;                    <VSelect taggable multiple v-model="form.extra.input_data.actorshare"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                             :createOption="pushNewOptions"&ndash;&gt;-->
+<!--                        &lt;!&ndash;                             class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-full&ndash;&gt;-->
+<!--                        &lt;!&ndash;                             sm:text-base border-gray-300 rounded-md"/>&ndash;&gt;-->
+<!--                    </field>-->
 
                     <PropertyDisclosure title="Advanced properties" class="sm:col-span-3" default-open>
 
-                        <field label="Owner / Technology">
-                            <div class="flex gap-2" v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
+                        <field label="Actor Share / Owner / Technology">
+
+                            <div class="flex gap-2 items-center" v-for="(technologyOwnership, index) in totalSinkSourcesSelected">
+                                <TextInput
+                                    unit="%/100"
+                                    style="width: 13%"
+                                    type="number"
+                                    v-if="form.extra.input_data.actorshare"
+                                    v-model="form.extra.input_data.actorshare[index]"/>
                                 <VSelect :options="technologyOwnershipOptions.ownershipMap"
                                          v-model="form.extra.input_data.rls[index][0]"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/3
                                  sm:text-base border-gray-300 rounded-md"
                                 />
                                 <VSelect :options="technologyOwnershipOptions.technologyMap"
                                          v-model="form.extra.input_data.rls[index][1]"
-                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block w-1/2
-                                 sm:text-base border-gray-300 rounded-md"
+                                         class="focus:ring-indigo-500 bg-white focus:border-indigo-500 block
+                                 sm:text-base border-gray-300 rounded-md w-1/2"
                                 />
                             </div>
 
@@ -1216,7 +1223,7 @@ export default {
             const totalSourcesAndSinks = sources.length + sinks.length;
             const actorShare = Array(totalSourcesAndSinks).fill(0);
             actorShare[0] = 1;
-            form.extra.input_data.actorshare = JSON.stringify(actorShare);
+            form.extra.input_data.actorshare = actorShare;
         };
 
 
@@ -1392,7 +1399,7 @@ export default {
             form.name = props.simulationInputs.name
             form.extra = JSON.parse(JSON.stringify(props.simulationInputs.extra));
             nextTick(() => {
-                form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
+                // form.extra.input_data.actorshare = JSON.stringify(form.extra.input_data.actorshare)
                 if (!form.extra.input_data.user) {
                     form.extra.input_data.user = {"util": []}
                 }
@@ -1406,7 +1413,7 @@ export default {
                 (previous, current) => previous + current.values.streams_length,
                 0
             )
-            let list = JSON.parse(data)
+            let list = data
             if (list) {
                 for (var i = list.length; i < (totalOfStreams + form.extra.sources.length); i++) {
                     list[i] = 0
@@ -1433,7 +1440,7 @@ export default {
 
                     data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
                     data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
-                    data.extra.input_data.actorshare = JSON.parse(data.extra.input_data.actorshare)
+                    // data.extra.input_data.actorshare = JSON.parse(data.extra.input_data.actorshare)
                     form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit = Number(
                         form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit
                     )
