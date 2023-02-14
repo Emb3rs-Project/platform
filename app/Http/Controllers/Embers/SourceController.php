@@ -27,10 +27,10 @@ class SourceController extends Controller
             ->instances()
             ->whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         return Inertia::render('Objects/Sources/SourceIndex',
-            ['sources' => cleanCharacterization($sources)]);
+            ['sources' => $sources]);
     }
 
     /**
@@ -183,7 +183,15 @@ class SourceController extends Controller
 
     public function export(Request $request)
     {
-        $sources = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        if (count($request->input('ids')) === 0){
+            $sources = Auth::user()
+                ->currentTeam
+                ->instances()
+                ->with('template', 'location')
+                ->whereHas('template', fn($query) => $query->where('category_id', Category::SOURCE))->get();
+        } else{
+            $sources = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        }
 
         $props = Template::with('templateProperties', 'templateProperties.property')->orderBy("order")->where('id', 15)->get();
 

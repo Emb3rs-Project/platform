@@ -31,10 +31,10 @@ class SinkController extends Controller
     {
         $sinks = Auth::user()->currentTeam->instances()->with('template')
             ->whereHas('template', fn($query) => $query->where('category_id', Category::SINK))
-            ->orderBy('created_at', 'desc')->get();
+            ->orderBy('created_at', 'desc')->paginate(10);
 
         return Inertia::render('Objects/Sinks/SinkIndex',
-            ['sinks' => cleanCharacterization($sinks)]);
+            ['sinks' => $sinks]);
     }
 
     /**
@@ -166,7 +166,13 @@ class SinkController extends Controller
 
     public function export(Request $request)
     {
-        $sinks = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        if (count($request->input('ids')) === 0) {
+            $sinks = Auth::user()->currentTeam->instances()->with('template', 'location')
+                ->whereHas('template', fn($query) => $query->where('category_id', Category::SINK))
+                ->orderBy('created_at', 'desc')->get();
+        } else {
+            $sinks = Instance::with('template', 'location')->whereIn('id', $request->input('ids'))->get();
+        }
 
         $alldata = [];
 

@@ -19,9 +19,9 @@
 
                 <div class="flex flex-col gap-8">
                     <div class="shadow">
-                        <div v-if="sources.length">
+                        <div v-if="sources.data.length">
                             <AmazingIndexTable
-                                v-model="sources"
+                                v-model="sources.data"
                                 :columns="tableColumns"
                                 :hasCheckbox="true"
                                 headerClasses="shadow overflow-hidden sm:rounded-lg"
@@ -74,6 +74,9 @@
                             </h1>
                         </div>
                     </div>
+                    <div class="flex justify-end">
+                        <pagination class="mt-6" :links="sources.links"/>
+                    </div>
 
                 </div>
             </div>
@@ -85,7 +88,7 @@
         </template>
 
         <template #content class="my-auto">
-            sources selected {{ pluck(sources.filter((itm) => itm.selected),'id') }}
+            sources selected: {{ pluck(sources.data.filter((itm) => itm.selected),'id').length > 0 ? pluck(sources.data.filter((itm) => itm.selected),'id') : 'ALL' }}
         </template>
 
         <template #footer>
@@ -239,7 +242,7 @@ export default {
         function submit() {
             console.log(sources)
             axios.post('/sources/export', {
-                ids: pluck(sources.value.filter((itm) => itm.selected),'id')
+                ids: pluck(sources.value.data.filter((itm) => itm.selected),'id')
             },{responseType: 'blob'})
                 .then(({data}) => {
                     const url = window.URL.createObjectURL(new Blob([data]));
