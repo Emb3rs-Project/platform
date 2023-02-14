@@ -45,6 +45,17 @@ class ProjectSimulationSessionController extends Controller
             $item->output = '["Loading..."]';
             return $item;
         });
+
+        $lastItem = $reportsToReturn->filter(function ($item) {
+            return $item['function'] === 'SIMULATION FINISHED';
+        })->first();
+
+        $reportsToReturn = $reportsToReturn->reject(function ($item) {
+            return $item['function'] === 'SIMULATION FINISHED';
+        });
+
+        $reportsToReturn = $reportsToReturn->concat([$lastItem]);
+
         return Inertia::render('Simulations/SimulationSessionShow', [
             "session" => $session,
             "reports" => $reportsToReturn,
