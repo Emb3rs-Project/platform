@@ -24,9 +24,7 @@ class ProjectSimulationSessionController extends Controller
     {
         $session = SimulationSession::findOrFail($id);
         $session->load(['simulation', 'simulation.project', 'challenge']);
-        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)
-            ->orderBy('created_at')
-            ->get();
+        $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->orderBy('created_at')->get();
         $challenges = $request->user()->challenges()->get();
         $isEnrolled = $request->user()->whereHas('challenges')->count() > 0;
         $solverModules = [
@@ -37,6 +35,17 @@ class ProjectSimulationSessionController extends Controller
         $networkResolution = $session->simulation->extra['input_data']['network_resolution'];
         $session->simulation->extra = [];
         $reportsHTML = [];
+        $lastItem = $reports->filter(function ($item) {
+            return $item['function'] === 'SIMULATION FINISHED';
+        })->first();
+
+        if ($lastItem) {
+            $reports = $reports->filter(function ($item) {
+                return $item['function'] !== 'SIMULATION FINISHED';
+            });
+
+            $reports = $reports->concat([$lastItem])->values();
+        }
         $reportsToReturn = $reports->map(function ($item) use (&$reportsHTML) {
 
             $output = collect(json_decode($item->output, true));
@@ -46,17 +55,6 @@ class ProjectSimulationSessionController extends Controller
             return $item;
         });
 
-        $lastItem = $reportsToReturn->filter(function ($item) {
-            return $item['function'] === 'SIMULATION FINISHED';
-        })->first();
-
-        if ($lastItem) {
-            $reportsToReturn = $reportsToReturn->reject(function ($item) {
-                return $item['function'] === 'SIMULATION FINISHED';
-            });
-
-            $reportsToReturn = $reportsToReturn->concat([$lastItem]);
-        }
 
 
 
