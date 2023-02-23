@@ -23,7 +23,7 @@ class ProjectSimulationSessionReportController extends Controller
 
     public function getFinalReport(SimulationSession $session, Request $request)
     {
-        $stepResults = IntegrationReport::where('simulation_uuid', $session->simulation_uuid)->get();
+        $stepResults = IntegrationReport::where('simulation_uuid', $session->simulation_uuid)->orderBy('created_at')->get();
 
         $reports = [];
         $i = 0;
