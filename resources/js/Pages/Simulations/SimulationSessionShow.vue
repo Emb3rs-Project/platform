@@ -147,7 +147,7 @@
 
                                                                     <a class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-cyan-700 rounded-full focus:shadow-outline over:bg-cyan-900"
                                                                             v-tippy="'Show Report'"
-                                                                        v-if="reportsHtml[report.id] || report.output.report"
+                                                                        v-if="(reportsHtml[report.id] || report.output.report) && !report.function.includes('interation')"
                                                                         target="_blank"
                                                                         :href="route('session.report.show', {session : session.id, report: report.id})">
 

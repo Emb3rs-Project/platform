@@ -44,7 +44,7 @@ class ProjectSimulationSessionReportController extends Controller
                 $i ++;
             }
         }
-        $reports = collect($reports)->sortBy('weight')->toArray();
+        $reports = collect($reports)->sortBy('weight')->groupBy('module')->map->last()->toArray();
         $metadata = [
             'project' => $session->simulation->project->name ?? '',
             'simulation' => $session->simulation->name
