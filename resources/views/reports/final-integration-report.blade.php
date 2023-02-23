@@ -29,7 +29,7 @@
         <ul class="toc_list">
             @foreach($reports as $report)
                 <li style="text-align: left">
-                    <a href="#{{\Illuminate\Support\Str::slug($report['module'])}}">{{$report['module']}} Report</a>
+                    <a href="#{{\Illuminate\Support\Str::slug($report['module'])}}">{{$report['module']}} Report - {{$report['function']}}</a>
                 </li>
             @endforeach
         </ul>

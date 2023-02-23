@@ -39,6 +39,7 @@ class ProjectSimulationSessionReportController extends Controller
             ];
             if (array_key_exists('report', $item)) {
                 $reports[$i]['module'] = $report->module;
+                $reports[$i]['function'] = $report->function;
                 $reports[$i]['report'] = $item['report'];
                 $reports[$i]['weight'] = $weight[$report->module] ?? 999;
                 $i ++;
