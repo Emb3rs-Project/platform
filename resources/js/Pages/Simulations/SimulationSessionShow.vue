@@ -124,7 +124,7 @@
                                                             <div class="my-2" v-if="!report.errors">
                                                                 <div class="gap-2 flex justify-around">
 
-                                                                    <template v-if="!['SIMULATION STARTED', 'SIMULATION FINISHED', 'SIMULATION PAUSED', 'iteration'].includes(report.function)">
+                                                                    <template v-if="!['SIMULATION STARTED', 'SIMULATION FINISHED', 'SIMULATION PAUSED'].includes(report.function)">
                                                                         <button class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-gray-700 rounded-full focus:shadow-outline hover:bg-gray-600"
                                                                                 v-tippy="'Download Input Data'"
                                                                                 @click.prevent.stop="downloadObjectAsJson(report.data, `${report.module}-${report.function}-INPUT`,report.id, 'data')">
@@ -147,7 +147,7 @@
 
                                                                     <a class="inline-flex items-center justify-center w-8 h-8 mr-2 text-pink-100 transition-colors duration-150 bg-cyan-700 rounded-full focus:shadow-outline over:bg-cyan-900"
                                                                             v-tippy="'Show Report'"
-                                                                        v-if="reportsHtml[report.id] || report.output.report"
+                                                                        v-if="(reportsHtml[report.id] || report.output.report) && !['iteration'].includes(report.function)"
                                                                         target="_blank"
                                                                         :href="route('session.report.show', {session : session.id, report: report.id})">
 
