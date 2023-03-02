@@ -23,7 +23,7 @@ class ProjectSimulationSessionReportController extends Controller
 
     public function getFinalReport(SimulationSession $session, Request $request)
     {
-        $stepResults = IntegrationReport::where('simulation_uuid', $session->simulation_uuid)->get();
+        $stepResults = IntegrationReport::where('simulation_uuid', $session->simulation_uuid)->orderBy('created_at')->get();
 
         $reports = [];
         $i = 0;
@@ -39,12 +39,13 @@ class ProjectSimulationSessionReportController extends Controller
             ];
             if (array_key_exists('report', $item)) {
                 $reports[$i]['module'] = $report->module;
+                $reports[$i]['function'] = $report->function;
                 $reports[$i]['report'] = $item['report'];
                 $reports[$i]['weight'] = $weight[$report->module] ?? 999;
                 $i ++;
             }
         }
-        $reports = collect($reports)->sortBy('weight')->toArray();
+        $reports = collect($reports)->sortBy('weight')->groupBy('module')->map->last()->toArray();
         $metadata = [
             'project' => $session->simulation->project->name ?? '',
             'simulation' => $session->simulation->name

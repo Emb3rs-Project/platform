@@ -24,9 +24,9 @@
 
                 <div class="flex flex-col gap-8">
                     <div class="shadow">
-                        <div v-if="sinks.length">
+                        <div v-if="sinks.data.length">
                             <AmazingIndexTable
-                                v-model="sinks"
+                                v-model="sinks.data"
                                 :columns="tableColumns"
                                 :hasCheckbox="true"
                                 headerClasses="shadow overflow-hidden sm:rounded-lg"
@@ -79,6 +79,9 @@
                             </h1>
                         </div>
                     </div>
+                    <div class="flex justify-end">
+                        <pagination class="mt-6" :links="sinks.links"/>
+                    </div>
 
                 </div>
             </div>
@@ -90,7 +93,7 @@
         </template>
 
         <template #content class="my-auto">
-            sinks selected {{ pluck(sinks.filter((itm) => itm.selected),'id') }}
+            sinks selected: {{ pluck(sinks.data.filter((itm) => itm.selected),'id').length > 0 ? pluck(sinks.data.filter((itm) => itm.selected),'id') : 'ALL' }}
         </template>
 
         <template #footer>
@@ -213,7 +216,7 @@ export default {
         const executeAction = ref(false)
         const currentProject = ref({})
         let sinks = toRefs(props).sinks
-        const SinkData = sinks.value
+        const SinkData = sinks.value.data
         window.timeouts = []
 
         const modalIsOpen = ref(false);
@@ -238,7 +241,7 @@ export default {
 
         function submit() {
             axios.post('/sinks/export', {
-                ids: pluck(sinks.value.filter((itm) => itm.selected),'id')
+                ids: pluck(sinks.value.data.filter((itm) => itm.selected),'id')
             },{responseType: 'blob'})
                 .then(({data}) => {
                     const url = window.URL.createObjectURL(new Blob([data]));
