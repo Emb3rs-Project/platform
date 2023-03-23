@@ -1363,7 +1363,7 @@ export default {
                     ],
                     community_settings: null,
                     network_resolution: "high",
-                    time_limit: 0,
+                    time_limit: 15,
                     yearly_demand_rate: 0.05,
                     factor_street_terrain: 0.1,
                     factor_street_overland: 0.4,
