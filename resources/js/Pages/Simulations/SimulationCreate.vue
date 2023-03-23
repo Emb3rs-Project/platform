@@ -1440,6 +1440,7 @@ export default {
 
                     data.extra.input_data.user.util = convertListToNumeric(data.extra.input_data.user.util)
                     data.extra.input_data.platform_sets.YEAR = convertListToNumeric(data.extra.input_data.platform_sets.YEAR)
+                    data.extra.input_data.discount_rate = convertListToNumeric(data.extra.input_data.discount_rate)
                     // data.extra.input_data.actorshare = JSON.parse(data.extra.input_data.actorshare)
                     form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit = Number(
                         form.extra.input_data.platform_annual_emission_limit[0].annual_emission_limit
