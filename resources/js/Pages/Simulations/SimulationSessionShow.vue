@@ -569,7 +569,7 @@ const reloadSimulation = ( repeat = false) => {
 
     Inertia.reload({ only: ['session', 'reports', 'reportsHtml'] })
     if (repeat) {
-        window.timeoutsSession[`timeoutSimulationReload-${props.session.simulation.id}`] = setTimeout(reloadSimulation, 5000, true)
+        window.timeoutsSession[`timeoutSimulationReload-${props.session.simulation.id}`] = setTimeout(reloadSimulation, 10000, true)
     }
 }
 
