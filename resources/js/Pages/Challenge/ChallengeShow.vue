@@ -35,7 +35,7 @@
                                 </input-row>
 
                                 <input-row
-                                    desc="Challenge Description"
+                                    desc="Description"
                                     v-model="challenge.description"
                                     :disabled="true"
                                     class="mt-14"
@@ -66,43 +66,21 @@
                                     class="mt-14"
                                 >
                                 </input-row>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex sm:col-span-3 justify-start">
-                    <PrimaryButton
-                        v-if="!isEnrolled"
-                        class="mr-4"
-                        @click="confirmEnroll = true">
-                        Enroll Challenge
-                    </PrimaryButton>
-                </div>
-            </div>
-            <div>
-                <div class="grid grid-cols-3">
-                    <div>
-                        <h3 class="text-lg font-medium leading-6 text-gray-900">
-                            Map
-                        </h3>
-                        <p class="mt-1 text-sm text-gray-600">Area</p>
-                    </div>
-                    <div class="col-span-2">
-                        <div
-                            class="bg-white overflow-hidden shadow sm:rounded-lg"
-                        >
-                            <div class="px-4 py-5 sm:p-6">
-                                <LeafletMap
-                                    ref="map"
-                                    :instances="instances"
-                                    :links="links"
-                                ></LeafletMap>
+
+                                <div class="flex sm:col-span-3 justify-center">
+                                    <PrimaryButton
+                                        v-if="!isEnrolled"
+                                        class="mr-4"
+                                        @click="confirmEnroll = true">
+                                        Enroll Challenge
+                                    </PrimaryButton>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
+            <div v-if="user.id == challenge.created_by">
                 <div class="grid grid-cols-3">
                     <div>
                         <h3 class="text-lg font-medium leading-6 text-gray-900">
@@ -199,8 +177,30 @@
                                             </Link>
                                         </td>
                                     </template>
-
                                 </AmazingIndexTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="grid grid-cols-3">
+                    <div>
+                        <h3 class="text-lg font-medium leading-6 text-gray-900">
+                            Challenge Scope
+                        </h3>
+                        <p class="mt-1 text-sm text-gray-600">Area</p>
+                    </div>
+                    <div class="col-span-2">
+                        <div
+                            class="bg-white overflow-hidden shadow sm:rounded-lg"
+                        >
+                            <div class="px-4 py-5 sm:p-6">
+                                <LeafletMap
+                                    ref="map"
+                                    :instances="instances"
+                                    :links="links"
+                                ></LeafletMap>
                             </div>
                         </div>
                     </div>

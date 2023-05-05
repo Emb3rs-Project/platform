@@ -181,7 +181,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Challenge
     Route::resource('/challenges', ChallengeController::class)
         ->whereNumber(['chalenge']);
-
+    Route::get('/my-challenges', [ChallengeController::class, 'myChallenges'])->name('challenges.my-challenges');
     Route::post('/enroll-challenge',[ChallengeController::class, 'enroll']);
     Route::post('/submit-challenge',[ChallengeController::class, 'submit']);
 

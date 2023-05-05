@@ -168,6 +168,7 @@ class ChallengeController extends Controller
             'participants' => $participants,
             'instances' => cleanCharacterization($instances),
             'links' => $links,
+            'isTheOwner' => $challenge->created_by === $user->id,
             'isEnrolled' => $isEnrolled->count() > 0,
             'projects' => $user->currentTeam->projects?->map(fn($item) => [
                 'key' => $item->id,
@@ -284,5 +285,18 @@ class ChallengeController extends Controller
         return [
             'error' => true
         ];
+    }
+
+    public function myChallenges(Request $request)
+    {
+        $user = $request->user();
+        $challenges = $user->challenges()->get();
+        $challengesAvailable = Challenge::whereStatus(1)->wheredoesntHave('participants', function($q){
+            return $q->where('challenge_user.user_id', auth()->user()->id);
+        })->get();
+        return Inertia::render('Challenge/MyChallenges', [
+            'challenges' => $challenges,
+            'challengesAvailable' => $challengesAvailable,
+        ]);
     }
 }

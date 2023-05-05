@@ -1,6 +1,4 @@
 <template>
-    <SiteHead title="Challenge Create"/>
-
     <AppLayout>
             <template #header>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -56,18 +54,20 @@
                                         class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
                                     >
                                         <div class="sm:col-span-3">
-                                            <SelectMenu label="Project" v-model="form.project" :options="projects"></SelectMenu>
+                                            <SelectMenu label="Project"
+                                                        v-model="form.project"
+                                                        required
+                                                        :options="projects"></SelectMenu>
                                         </div>
                                         <JetInputError
-                                            v-show="form.errors.project"
-                                            :message="form.errors.project"
+                                            v-show="form.errors.project_id"
+                                            :message="form.errors.project_id"
                                             class="mt-2"
                                         />
                                     </div>
                                     <!-- Project Description -->
                                     <div
-                                        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
-                                    >
+                                        class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
                                         <div class="col-span-6 sm:col-span-4">
                                             <SelectMenu
                                                 v-model="form.goal"
@@ -76,7 +76,8 @@
                                                 :required="true"
                                             ></SelectMenu>
                                             <jet-input-error
-                                                :message="form.errors.goal"
+                                                v-show="form.errors.goal_id"
+                                                :message="form.errors.goal_id"
                                                 class="mt-2"
                                             />
                                         </div>
@@ -85,16 +86,20 @@
 
                                         class="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5"
                                     >
+                                        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                                            Restrictions
+                                        </h2>
+
                                         <template v-for="(item, index) in form.restrictions">
                                             <div class="flex gap-2  col-span-6 sm:col-span-4">
                                                 <SelectMenu
-                                                    class="w-1/3"
+                                                    class="w-1/2"
                                                     v-model="item.restriction"
                                                     :options="restrictions"
                                                     label="Restriction"
                                                 ></SelectMenu>
                                                 <TextInput
-                                                    class="w-1/3"
+                                                    class="w-1/2"
                                                     v-model="item.value"
                                                     label="Value"
                                                 />

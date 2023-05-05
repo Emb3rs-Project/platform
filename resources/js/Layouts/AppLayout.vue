@@ -656,6 +656,15 @@ const navigation = [
         icon: UserGroupIcon,
     },
     {
+        name: "My Challenges",
+        href: {
+            index: {
+                location: "challenges.my-challenges",
+            },
+        },
+        icon: UserGroupIcon,
+    },
+    {
         name: "News",
         href: {
             index: {

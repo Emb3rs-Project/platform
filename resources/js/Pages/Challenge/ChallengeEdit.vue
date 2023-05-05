@@ -1,4 +1,4 @@
-<template>
+    <template>
     <SiteHead title="Challenge Create"/>
 
     <AppLayout>
@@ -160,6 +160,10 @@ const props = defineProps({
     restrictions: {
         type: Array,
         default: []
+    },
+    isTheOwner: {
+        type: Boolean,
+        default: true
     }
 })
 const store = useStore();
