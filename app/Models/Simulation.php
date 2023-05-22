@@ -200,7 +200,7 @@ class Simulation extends Model
     }
 
     public function scopeOnInstitutionFor($query, $user) {
-        $teamProjects = $user->team?->projects->pluck('id')->toArray() ?? [];
+        $teamProjects = $user->currentTeam?->projects->pluck('id') ?? [];
         return $query->whereIn('project_id', $teamProjects);
     }
 }
