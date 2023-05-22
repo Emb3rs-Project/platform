@@ -6,6 +6,7 @@ use App\Contracts\Embers\Simulations\ShowsSimulations;
 use App\EmbersPermissionable;
 use App\Models\Project;
 use App\Models\Simulation;
+use App\Models\User;
 
 class ShowSimulation implements ShowsSimulations
 {
@@ -25,7 +26,9 @@ class ShowSimulation implements ShowsSimulations
 
         $project = Project::query()->findOrFail($projectId);
 
-        $simulation = Simulation::query()->with(['project', 'simulationMetadata', 'simulationSessions'])->findOrFail($simulationId);
+        $simulation = Simulation::query()->with(['project', 'simulationMetadata', 'simulationSessions'])
+            ->onInstitutionFor($user)
+            ->findOrFail($simulationId);
 
         $simulation->extra = [];
         return [

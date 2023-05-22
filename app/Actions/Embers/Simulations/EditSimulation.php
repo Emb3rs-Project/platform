@@ -25,7 +25,9 @@ class EditSimulation implements EditsSimulations
 
         $project = Project::query()->findOrFail($projectId);
 
-        $simulation = Simulation::query()->with(['project', 'target', 'simulationType'])->findOrFail($simulationId);
+        $simulation = Simulation::query()->with(['project', 'target', 'simulationType'])
+            ->onInstitutionFor($user)
+            ->findOrFail($simulationId);
 
         return [
             $simulation,

@@ -19,14 +19,12 @@ class MySimulation implements MySimulations
     {
         $this->authorize($user);
 
-        $teamProjects = $user->currentTeam->projects->pluck('id');
-
         return Simulation::with([
             'project',
             'simulationType',
             'simulationType.unit',
             'simulationMetadata'
-        ])->whereIn('project_id', $teamProjects)
+        ])->onInstitutionFor($user)
             ->orderBy('created_at','desc')
             ->paginate(5);
 
