@@ -40,11 +40,11 @@
 </div>
 
 <script>
-    // Quick and simple export target #table_id into a csv
-    function download_table_as_csv( separator = ',') {
+    function download_table_as_csv_by_element(table, index=0,separator = ',') {
         var table_id = 'export'
         // Select rows from table_id
-        var rows = document.querySelectorAll('table tr');
+
+        var rows = table.querySelectorAll('tr');
         // Construct csv
         var csv = [];
         for (var i = 0; i < rows.length; i++) {
@@ -71,6 +71,73 @@
         link.click();
         document.body.removeChild(link);
     }
+
+    // Quick and simple export target #table_id into a csv
+    function download_multi_table_as_csv(selector='table tr', index=0,separator = ',') {
+        var table_id = 'export'
+        // Select rows from table_id
+        var table = document.querySelectorAll(selector)[index]
+
+        var rows = table.querySelectorAll('tr');
+        // Construct csv
+        var csv = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll('td, th');
+            for (var j = 0; j < cols.length; j++) {
+                // Clean innertext to remove multiple spaces and jumpline (break csv)
+                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                data = data.replace(/"/g, '""');
+                // Push escaped string
+                row.push('"' + data + '"');
+            }
+            csv.push(row.join(separator));
+        }
+        var csv_string = csv.join('\n');
+        // Download it
+        var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('target', '_blank');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    // Quick and simple export target #table_id into a csv
+    function download_table_as_csv(selector='table tr', separator = ',') {
+        var table_id = 'export'
+        // Select rows from table_id
+        var rows = document.querySelectorAll(selector);
+        // Construct csv
+        var csv = [];
+        for (var i = 0; i < rows.length; i++) {
+            var row = [], cols = rows[i].querySelectorAll('td, th');
+            for (var j = 0; j < cols.length; j++) {
+                // Clean innertext to remove multiple spaces and jumpline (break csv)
+                var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                data = data.replace(/"/g, '""');
+                // Push escaped string
+                row.push('"' + data + '"');
+            }
+            csv.push(row.join(separator));
+        }
+        var csv_string = csv.join('\n');
+        // Download it
+        var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        link.setAttribute('target', '_blank');
+        link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
 </script>
 <style>
     .full_page {
@@ -109,4 +176,84 @@
     </div>
 @endforeach
 
+<script>
+    document.getElementById("gis_datatable_1").innerHTML +=
+        "<button onclick=\"download_table_as_csv('#gis_datatable_1 table tr')\">Export Table</button>";
+
+    document.getElementById("gis_datatable_2").innerHTML +=
+        "<button onclick=\"download_table_as_csv('#gis_datatable_2 table tr')\">Export Table</button>";
+
+    document.getElementById("teo_datatable_1").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_1 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_2").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_2 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_3").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_3 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_4").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_4 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_5").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_5 table',0)\">Export Table</button>";
+
+    //document.getElementById("teo_datatable_6").firstElementChild.innerHTML +=
+    //            "<button onclick=\"download_multi_table_as_csv('#teo_datatable_6 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_7").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_7 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_8").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_8 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_10").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_10 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_11").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_11 table',0)\">Export Table</button>";
+
+    document.getElementById("teo_datatable_12").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_12 table',0)\">Export Table</button>";
+
+
+    document.getElementById("teo_datatable_13").firstElementChild.innerHTML +=
+        "<button onclick=\"download_multi_table_as_csv('#teo_datatable_13 table',0)\">Export Table</button>";
+
+    document.getElementById("market_datatable_1").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_1').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_2").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_2').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_3").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_3').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_4").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_4').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_5").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_5').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_6").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_6').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_7").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_7').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_8").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_8').nextSibling)\">Export Table</button>";
+
+    document.getElementById("market_datatable_9").nextSibling.innerHTML +=
+        "<button onclick=\"download_table_as_csv_by_element(document.getElementById('market_datatable_9').nextSibling)\">Export Table</button>";
+
+
+    document.getElementById("BM_datatable_1").innerHTML +=
+        "<button onclick=\"download_table_as_csv('#BM_datatable_1 tr')\">Export Table</button>";
+
+    document.getElementById("BM_datatable_2").innerHTML +=
+        "<button onclick=\"download_table_as_csv('#BM_datatable_2 tr')\">Export Table</button>";
+
+
+</script>
 

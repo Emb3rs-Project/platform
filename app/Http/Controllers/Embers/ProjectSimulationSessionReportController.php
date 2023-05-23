@@ -17,12 +17,20 @@ class ProjectSimulationSessionReportController extends Controller
      */
     public function __invoke(SimulationSession $session, IntegrationReport $report)
     {
+        if($session->simulation()->onInstitutionFor(auth()->user())->count() === 0) {
+            abort(403);
+        }
+
         $data = json_decode($report->output);
         return view('reports.integration-report', ["report" => $data])->render();
     }
 
     public function getFinalReport(SimulationSession $session, Request $request)
     {
+        if($session->simulation()->onInstitutionFor($request->user())->count() === 0) {
+            abort(403);
+        }
+
         $stepResults = IntegrationReport::where('simulation_uuid', $session->simulation_uuid)->orderBy('created_at')->get();
 
         $reports = [];

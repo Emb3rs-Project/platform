@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
 use Inertia\Inertia;
 use Inertia\Response;
-use MongoDB\Driver\Session;
 
 class ProjectSimulationSessionController extends Controller
 {
@@ -22,7 +21,9 @@ class ProjectSimulationSessionController extends Controller
      */
     public function show(Request $request, $id): Response
     {
-        $session = SimulationSession::findOrFail($id);
+        $session = SimulationSession::whereHas('simulation', static function($q) use ($request) {
+            $q->onInstitutionFor($request->user());
+        })->findOrFail($id);
         $session->load(['simulation', 'simulation.project', 'challenge']);
         $reports = IntegrationReport::where('simulation_uuid', 'like', $session->simulation_uuid)->orderBy('created_at')->get();
         $challenges = $request->user()->challenges()->get();

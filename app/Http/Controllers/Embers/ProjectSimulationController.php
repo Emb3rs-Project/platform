@@ -154,14 +154,15 @@ class ProjectSimulationController extends Controller
     public function edit(Request $request, int $projectId, int $simulationId)
     {
 
+        $user = $request->user();
         $project = Project::find($projectId);
-        $instances = Auth::user()
+        $instances = $user
             ->currentTeam
             ->instances()
             ->with('location', 'template', 'template.category')
             ->get();
-        $simulation = Simulation::find($simulationId);
-        $links = $request->user()->currentTeam->links()->with([
+        $simulation = Simulation::onInstitutionFor($user)->findOrFail($simulationId);
+        $links = $user->currentTeam->links()->with([
             'geoSegments'
         ])->get();
 
