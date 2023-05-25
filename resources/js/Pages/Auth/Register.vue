@@ -95,7 +95,18 @@
                 />
               </div>
             </div>
-
+              <div class="mt-4">
+                  <jet-label for="terms">
+                      <div class="flex items-center">
+                          <jet-checkbox v-model="form.terms" name="terms" id="terms" />
+                          <div class="ml-2">
+                              I agree to the <a target="_blank" href="/terms-of-service" class="underline text-sm text-gray-600 hover:text-gray-900">Terms of Service</a>
+                              and
+                              <a target="_blank" href="/privacy-policy" class="underline text-sm text-gray-600 hover:text-gray-900">Privacy Policy</a>
+                          </div>
+                      </div>
+                  </jet-label>
+              </div>
             <div>
               <button
                 type="submit"
@@ -127,10 +138,14 @@ import { Link } from "@inertiajs/inertia-vue3";
 
 import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo";
 import JetValidationErrors from "@/Jetstream/ValidationErrors";
+import JetCheckbox from "@/Jetstream/Checkbox";
+import JetLabel from "@/Jetstream/Label";
 
 export default {
   components: {
     Link,
+    JetCheckbox,
+    JetLabel,
     JetAuthenticationCardLogo,
     JetValidationErrors,
   },
