@@ -100,7 +100,7 @@
                       <div class="flex items-center">
                           <jet-checkbox v-model="form.terms" name="terms" id="terms" />
                           <div class="ml-2">
-                              I agree to the <a target="_blank" href="/terms-of-service" class="underline text-sm text-gray-600 hover:text-gray-900">Terms of Service</a>
+                              I agree to the <a target="_blank" href="https://www.pdmfc.com/privacy_policy.html" class="underline text-sm text-gray-600 hover:text-gray-900">Terms of Service</a>
                               and
                               <a target="_blank" href="/privacy-policy" class="underline text-sm text-gray-600 hover:text-gray-900">Privacy Policy</a>
                           </div>
