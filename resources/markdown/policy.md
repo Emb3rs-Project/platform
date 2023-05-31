@@ -36,7 +36,7 @@ The data will be stored safely on PDMFC servers located in Lisbon, Portugal. No 
 
 
 
-All the data provided by you will in principle be recorded indefinitely unless you decide to permanently delete it. At the same time, PDM can decide to delete your data at any point and for any reason without needing to provide a justification or compensation.
+All the data provided by you will in principle be recorded indefinitely unless you decide to permanently delete it. At the same time, PDMFC can decide to delete your data at any point and for any reason without needing to provide a justification or compensation.
 
 For PDMFC’s data protection policy, see here.
 
@@ -50,8 +50,4 @@ Name: Francisco Loureiro
 
 Role: Data Protection Officer
 
-Email: francisco.loureiro@pdmfc.com
-
-### CONSENT FORM
-
-By clicking this box, you are consenting to processing of your data as described on this page.  
+Email: dpo@pdmfc.com
